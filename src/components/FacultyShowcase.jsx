@@ -29,7 +29,7 @@ export default function FacultyShowcase({ faculty, title }) {
         </div>
 
         {/* Scroll Navigation Controls */}
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
           <button
             type="button"
             onClick={() => scroll('left')}

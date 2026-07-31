@@ -110,7 +110,7 @@ export default function WhyEzer() {
           </div>
 
           {/* Navigation Arrows */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
             <button
               type="button"
               onClick={() => handleScroll('left')}

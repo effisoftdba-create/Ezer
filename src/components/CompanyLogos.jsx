@@ -321,7 +321,7 @@ export default function CompanyLogos() {
           </div>
 
           {/* Interactive Left & Right Manual Scroll Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
             <button
               type="button"
               onClick={() => handleManualScroll('left')}

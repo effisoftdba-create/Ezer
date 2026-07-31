@@ -34,7 +34,7 @@ export default function CourseCard({ course, onOpenDemoModal }) {
       {/* Compact Image Banner Header */}
       <div style={{ position: 'relative', height: '120px', overflow: 'hidden', background: '#000648' }}>
         <img 
-          src={course.image} 
+          src={course.image?.startsWith('http') ? course.image : `${import.meta.env.BASE_URL || '/'}${course.image?.replace(/^\//, '')}`} 
           alt={course.title}
           style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.92 }}
         />

@@ -39,7 +39,7 @@ export default function TestimonialsSliderTrack() {
           </div>
 
           {/* Navigation Controls */}
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', gap: '10px', marginLeft: 'auto' }}>
             <button
               type="button"
               onClick={() => handleScroll('left')}
