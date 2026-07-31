@@ -13,7 +13,7 @@ export default function PopupHeader({ onClose }) {
       }}
     >
       <img
-        src="/logo.jpg"
+        src={`${import.meta.env.BASE_URL || '/'}logo.jpg`}
         alt="EZER Learning Solutions"
         style={{
           height: '36px',

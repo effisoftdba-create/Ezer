@@ -48,7 +48,7 @@ export default function Navbar({ onOpenDemoModal }) {
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
             <img 
-              src="/logo.jpg" 
+              src={`${import.meta.env.BASE_URL || '/'}logo.jpg`} 
               alt="EZER Learning Solutions" 
               style={{ height: '42px', width: 'auto', objectFit: 'contain', borderRadius: '4px' }} 
               onError={(e) => {

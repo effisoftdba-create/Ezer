@@ -2,27 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { HiArrowRight, HiOutlineShieldCheck, HiOutlineUserGroup, HiOutlineClock, HiOutlineAcademicCap, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
+const baseUrl = import.meta.env.BASE_URL || '/';
+
 const slides = [
   {
-    url: '/images/hero/hero_students_group.png',
+    url: `${baseUrl}images/hero/hero_students_group.png`,
     headline: 'Learn Live. Build Real Skills. Get Placed.',
     sub: 'Live online classes led by working corporate professionals, hands-on labs on industry tools, and placement support that continues after graduation.',
     badge: 'Outcome-Driven IT Training',
   },
   {
-    url: '/images/hero/hero_devops_lab.png',
+    url: `${baseUrl}images/hero/hero_devops_lab.png`,
     headline: 'Deploy, Automate, and Scale Like a Real DevOps Engineer',
     sub: 'Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with hands-on production labs.',
     badge: 'Cloud & DevOps Masterclass',
   },
   {
-    url: '/images/hero/hero_qa_testing.png',
+    url: `${baseUrl}images/hero/hero_qa_testing.png`,
     headline: 'Test Smarter With Modern Automation Frameworks',
     sub: 'From manual testing fundamentals to full Playwright automation and CI/CD integration.',
     badge: 'Playwright Automation Program',
   },
   {
-    url: '/images/hero/hero_ai_ml_team.png',
+    url: `${baseUrl}images/hero/hero_ai_ml_team.png`,
     headline: 'From Python Basics to Deploying Real ML Models',
     sub: 'A hands-on, project-based path into AI & Machine Learning — live, instructor-led, and practical.',
     badge: 'AI & Data Science Track',

@@ -23,7 +23,7 @@ export default function Footer() {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
               <img 
-                src="/logo.jpg" 
+                src={`${import.meta.env.BASE_URL || '/'}logo.jpg`} 
                 alt="EZER" 
                 style={{ height: '40px', width: 'auto', borderRadius: '4px' }} 
               />
