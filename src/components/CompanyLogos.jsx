@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
-const corporateLogos = [
+const baseLogos = [
   {
     id: 'tcs',
     name: 'TCS',
@@ -151,6 +151,13 @@ const corporateLogos = [
   }
 ];
 
+// Tripled logo array for continuous infinite scroll
+const marqueeLogos = [
+  ...baseLogos.map((l) => ({ ...l, uniqueKey: l.id + '-1' })),
+  ...baseLogos.map((l) => ({ ...l, uniqueKey: l.id + '-2' })),
+  ...baseLogos.map((l) => ({ ...l, uniqueKey: l.id + '-3' }))
+];
+
 const WIPE_DURATION = 0.92;
 const WIPE_TIMES = [0, 0.4, 1];
 
@@ -182,19 +189,19 @@ function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone, shouldRe
                 duration: WIPE_DURATION,
                 times: WIPE_TIMES,
                 ease: ["easeIn", [0.16, 1, 0.3, 1]],
-                delay: index * stagger,
+                delay: (index % baseLogos.length) * stagger,
               },
               filter: {
                 duration: WIPE_DURATION * 0.9,
                 times: WIPE_TIMES,
                 ease: "easeInOut",
-                delay: index * stagger,
+                delay: (index % baseLogos.length) * stagger,
               },
               opacity: {
                 duration: WIPE_DURATION * 0.85,
                 times: WIPE_TIMES,
                 ease: "easeInOut",
-                delay: index * stagger,
+                delay: (index % baseLogos.length) * stagger,
               },
             }
           : {
@@ -236,18 +243,40 @@ function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone, shouldRe
 
 export default function CompanyLogos() {
   const [waving, setWaving] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const scrollRef = useRef(null);
   const shouldReduceMotion = useReducedMotion();
 
+  // Waving animation trigger
   useEffect(() => {
     if (shouldReduceMotion) return;
-    const id = setInterval(() => setWaving(true), 3800);
+    const id = setInterval(() => setWaving(true), 4000);
     return () => clearInterval(id);
   }, [shouldReduceMotion]);
 
+  // Continuous Auto-Scroll Engine (Left-to-Right / Right-to-Left loop)
+  useEffect(() => {
+    if (shouldReduceMotion) return;
+
+    let animationFrameId;
+    const autoScroll = () => {
+      if (scrollRef.current && !isPaused) {
+        scrollRef.current.scrollLeft += 1.2;
+        // Infinite seamless reset when reaching half scroll width
+        if (scrollRef.current.scrollLeft >= scrollRef.current.scrollWidth / 2) {
+          scrollRef.current.scrollLeft = 0;
+        }
+      }
+      animationFrameId = requestAnimationFrame(autoScroll);
+    };
+
+    animationFrameId = requestAnimationFrame(autoScroll);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isPaused, shouldReduceMotion]);
+
   const handleManualScroll = (direction) => {
     if (scrollRef.current) {
-      const scrollAmount = direction === 'left' ? -280 : 280;
+      const scrollAmount = direction === 'left' ? -300 : 300;
       scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
     }
   };
@@ -291,7 +320,7 @@ export default function CompanyLogos() {
             </h3>
           </div>
 
-          {/* Scroll Buttons */}
+          {/* Interactive Left & Right Manual Scroll Buttons */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <button
               type="button"
@@ -336,10 +365,12 @@ export default function CompanyLogos() {
           </div>
         </div>
 
-        {/* Waving Interactive Logo Cloud Track */}
+        {/* Continuous Auto-Scrolling & Hover-Pausable Logo Track */}
         <div
           ref={scrollRef}
           className="no-scrollbar"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
           style={{
             display: 'flex',
             gap: '16px',
@@ -348,16 +379,18 @@ export default function CompanyLogos() {
             padding: '6px 20px 16px',
             width: '100%',
             boxSizing: 'border-box',
+            maskImage: 'linear-gradient(to right, transparent, black 3%, black 97%, transparent)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent, black 3%, black 97%, transparent)',
           }}
         >
-          {corporateLogos.map((logo, i) => (
+          {marqueeLogos.map((logo, i) => (
             <LogoItem
-              key={logo.id}
+              key={logo.uniqueKey}
               logo={logo}
               index={i}
               isWaving={waving}
-              stagger={0.1}
-              totalCount={corporateLogos.length}
+              stagger={0.08}
+              totalCount={marqueeLogos.length}
               onDone={() => setWaving(false)}
               shouldReduceMotion={shouldReduceMotion}
             />
