@@ -29,93 +29,6 @@ const slides = [
   },
 ];
 
-export default function Hero({ onOpenDemoModal }) {
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const t = setInterval(() => setActive((p) => (p + 1) % slides.length), 6000);
-    return () => clearInterval(t);
-  }, []);
-
-  const handleNext = () => setActive((prev) => (prev + 1) % slides.length);
-  const handlePrev = () => setActive((prev) => (prev - 1 + slides.length) % slides.length);
-
-  return (
-    <section style={{ 
-      position: 'relative', 
-      width: '100%', 
-      background: 'linear-gradient(135deg, #ffffff 0%, #f8fafc 100%)',
-      padding: '40px 0 48px',
-      overflow: 'hidden',
-      borderBottom: '1px solid #e2e8f0'
-    }}>
-      <div className="container">
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1.05fr)',
-          gap: '36px',
-          alignItems: 'center',
-        }} className="hero-grid">
-
-          {/* Left Text Content */}
-          <div style={{ display: 'flex', flexDirection: 'column', zIndex: 10 }}>
-            {/* Tagline Badge */}
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '6px',
-              padding: '6px 14px', borderRadius: '50px',
-              background: '#000648', color: '#f2b733',
-              fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase',
-              letterSpacing: '0.06em', marginBottom: '16px', width: 'fit-content',
-              boxShadow: '0 2px 8px rgba(0,6,72,0.12)',
-            }}>
-              <HiOutlineShieldCheck size={15} style={{ color: '#f2b733' }} />
-              {slides[active].badge}
-            </div>
-
-            {/* Main Headline */}
-            <h1 style={{
-              fontSize: 'clamp(1.6rem, 2.6vw, 2.1rem)', fontWeight: 900,
-              color: '#000648', lineHeight: 1.2, marginBottom: '14px',
-              letterSpacing: '-0.02em', fontFamily: "'DM Sans', sans-serif"
-            }}>
-              {slides[active].headline}
-            </h1>
-
-            {/* Subhead */}
-            <p style={{
-              fontSize: '0.88rem', color: '#475569',
-              lineHeight: 1.6, marginBottom: '24px', maxWidth: '540px',
-              fontWeight: 500
-            }}>
-              {slides[active].sub}
-            </p>
-
-            {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '32px' }}>
-              <Link to="/courses" className="btn btn-primary" style={{
-                padding: '12px 26px', borderRadius: '8px',
-                fontWeight: 800, fontSize: '0.86rem',
-              }}>
-                Explore Courses <HiArrowRight size={16} />
-              </Link>
-              <button 
-                type="button" 
-                onClick={onOpenDemoModal} 
-                className="btn btn-secondary"
-                style={{
-                  padding: '12px 26px', borderRadius: '8px',
-                  fontWeight: 800, fontSize: '0.86rem',
-                }}
-              >
-                Book a Free Demo Class
-              </button>
-            </div>
-
-            {/* Key Trust Signals — Styled with Floating Glowing Cards & Hover Micro-Animations */}
-            <div style={{
-              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px',
-              paddingTop: '24px', borderTop: '1.5px solid #e2e8f0'
-            }}>
 const trustSignals = [
   {
     title: 'Up to 1-Year Placement Support',
@@ -440,4 +353,3 @@ export default function Hero({ onOpenDemoModal }) {
     </section>
   );
 }
-
