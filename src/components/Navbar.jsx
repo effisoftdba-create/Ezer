@@ -170,7 +170,7 @@ export default function Navbar({ onOpenDemoModal }) {
           <button 
             type="button" 
             onClick={onOpenDemoModal} 
-            className="btn btn-secondary"
+            className="btn btn-secondary hidden-mobile"
             style={{
               padding: '9px 18px', fontSize: '0.8rem', fontWeight: 800,
               borderRadius: '7px', cursor: 'pointer',

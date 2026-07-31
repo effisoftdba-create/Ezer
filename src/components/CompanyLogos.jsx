@@ -1,12 +1,13 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
-// Authentic high-fidelity corporate brand SVG logos
 const corporateLogos = [
   {
-    name: "TCS",
-    svg: (
-      <svg viewBox="0 0 190 50" style={{ height: '36px' }}>
+    id: 'tcs',
+    name: 'TCS',
+    icon: (
+      <svg viewBox="0 0 190 50" style={{ height: '32px' }}>
         <path d="M10 12 L45 12 M27.5 12 L27.5 40" stroke="#000648" strokeWidth="6" strokeLinecap="square" />
         <text x="50" y="38" fontFamily="DM Sans, sans-serif" fontSize="30" fontWeight="900" fill="#000648" letterSpacing="-0.5px">TCS</text>
         <rect x="115" y="16" width="3" height="24" fill="#f2b733" />
@@ -15,17 +16,19 @@ const corporateLogos = [
     )
   },
   {
-    name: "Infosys",
-    svg: (
-      <svg viewBox="0 0 150 50" style={{ height: '36px' }}>
+    id: 'infosys',
+    name: 'Infosys',
+    icon: (
+      <svg viewBox="0 0 150 50" style={{ height: '32px' }}>
         <text x="5" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#006699" letterSpacing="-1px">Infosys</text>
       </svg>
     )
   },
   {
-    name: "Wipro",
-    svg: (
-      <svg viewBox="0 0 150 50" style={{ height: '36px' }}>
+    id: 'wipro',
+    name: 'Wipro',
+    icon: (
+      <svg viewBox="0 0 150 50" style={{ height: '32px' }}>
         <circle cx="16" cy="18" r="5" fill="#e42528" />
         <circle cx="28" cy="18" r="5" fill="#f2b733" />
         <circle cx="16" cy="30" r="5" fill="#006699" />
@@ -35,18 +38,20 @@ const corporateLogos = [
     )
   },
   {
-    name: "HCLTech",
-    svg: (
-      <svg viewBox="0 0 170 50" style={{ height: '36px' }}>
+    id: 'hcltech',
+    name: 'HCLTech',
+    icon: (
+      <svg viewBox="0 0 170 50" style={{ height: '32px' }}>
         <text x="5" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#00529b">HCL</text>
         <text x="80" y="36" fontFamily="Inter, sans-serif" fontSize="24" fontWeight="800" fill="#f2b733">Tech</text>
       </svg>
     )
   },
   {
-    name: "Zoho",
-    svg: (
-      <svg viewBox="0 0 160 50" style={{ height: '36px' }}>
+    id: 'zoho',
+    name: 'Zoho',
+    icon: (
+      <svg viewBox="0 0 160 50" style={{ height: '32px' }}>
         <rect x="4" y="10" width="28" height="28" rx="6" fill="#e42528" />
         <text x="11" y="32" fontFamily="sans-serif" fontSize="20" fontWeight="900" fill="#fff">Z</text>
         <rect x="36" y="10" width="28" height="28" rx="6" fill="#006699" />
@@ -59,35 +64,39 @@ const corporateLogos = [
     )
   },
   {
-    name: "Capgemini",
-    svg: (
-      <svg viewBox="0 0 190 50" style={{ height: '34px' }}>
+    id: 'capgemini',
+    name: 'Capgemini',
+    icon: (
+      <svg viewBox="0 0 190 50" style={{ height: '30px' }}>
         <path d="M12 25 C12 15, 25 10, 25 25 C25 40, 38 35, 38 25" stroke="#0070ad" strokeWidth="5" fill="none" strokeLinecap="round" />
         <text x="48" y="34" fontFamily="DM Sans, sans-serif" fontSize="26" fontWeight="900" fill="#0070ad">Capgemini</text>
       </svg>
     )
   },
   {
-    name: "Accenture",
-    svg: (
-      <svg viewBox="0 0 180 50" style={{ height: '34px' }}>
+    id: 'accenture',
+    name: 'Accenture',
+    icon: (
+      <svg viewBox="0 0 180 50" style={{ height: '30px' }}>
         <text x="5" y="36" fontFamily="DM Sans, sans-serif" fontSize="28" fontWeight="900" fill="#000648">accenture</text>
         <path d="M136 12 L150 22 L136 32" stroke="#a100ff" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   },
   {
-    name: "Cognizant",
-    svg: (
-      <svg viewBox="0 0 170 50" style={{ height: '34px' }}>
+    id: 'cognizant',
+    name: 'Cognizant',
+    icon: (
+      <svg viewBox="0 0 170 50" style={{ height: '30px' }}>
         <text x="5" y="35" fontFamily="DM Sans, sans-serif" fontSize="27" fontWeight="900" fill="#0033a0">Cognizant</text>
       </svg>
     )
   },
   {
-    name: "Amazon",
-    svg: (
-      <svg viewBox="0 0 150 50" style={{ height: '36px' }}>
+    id: 'amazon',
+    name: 'Amazon',
+    icon: (
+      <svg viewBox="0 0 150 50" style={{ height: '32px' }}>
         <text x="5" y="32" fontFamily="DM Sans, sans-serif" fontSize="28" fontWeight="900" fill="#131921">amazon</text>
         <path d="M10 38 Q 55 46, 95 35" fill="none" stroke="#ff9900" strokeWidth="3.5" strokeLinecap="round" />
         <path d="M90 32 L98 35 L93 40" fill="none" stroke="#ff9900" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -95,9 +104,10 @@ const corporateLogos = [
     )
   },
   {
-    name: "Google",
-    svg: (
-      <svg viewBox="0 0 150 50" style={{ height: '36px' }}>
+    id: 'google',
+    name: 'Google',
+    icon: (
+      <svg viewBox="0 0 150 50" style={{ height: '32px' }}>
         <text x="5" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#4285F4">G</text>
         <text x="34" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#EA4335">o</text>
         <text x="56" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#FBBC05">o</text>
@@ -108,9 +118,10 @@ const corporateLogos = [
     )
   },
   {
-    name: "Microsoft",
-    svg: (
-      <svg viewBox="0 0 170 50" style={{ height: '34px' }}>
+    id: 'microsoft',
+    name: 'Microsoft',
+    icon: (
+      <svg viewBox="0 0 170 50" style={{ height: '30px' }}>
         <rect x="5" y="10" width="13" height="13" fill="#f25022" />
         <rect x="21" y="10" width="13" height="13" fill="#7fba00" />
         <rect x="5" y="26" width="13" height="13" fill="#00a4ef" />
@@ -120,17 +131,19 @@ const corporateLogos = [
     )
   },
   {
-    name: "IBM",
-    svg: (
-      <svg viewBox="0 0 130 50" style={{ height: '36px' }}>
+    id: 'ibm',
+    name: 'IBM',
+    icon: (
+      <svg viewBox="0 0 130 50" style={{ height: '32px' }}>
         <text x="5" y="36" fontFamily="monospace" fontSize="36" fontWeight="900" fill="#052FAD" letterSpacing="2px">IBM</text>
       </svg>
     )
   },
   {
-    name: "Freshworks",
-    svg: (
-      <svg viewBox="0 0 180 50" style={{ height: '34px' }}>
+    id: 'freshworks',
+    name: 'Freshworks',
+    icon: (
+      <svg viewBox="0 0 180 50" style={{ height: '30px' }}>
         <circle cx="18" cy="25" r="12" fill="#ff5a5f" />
         <text x="36" y="34" fontFamily="DM Sans, sans-serif" fontSize="24" fontWeight="900" fill="#000648">freshworks</text>
       </svg>
@@ -138,35 +151,93 @@ const corporateLogos = [
   }
 ];
 
-// Static triple corporate logos list in module scope with unique IDs
-const marqueeList = [
-  ...corporateLogos.map(c => ({ ...c, uniqueId: c.name + '-set1' })),
-  ...corporateLogos.map(c => ({ ...c, uniqueId: c.name + '-set2' })),
-  ...corporateLogos.map(c => ({ ...c, uniqueId: c.name + '-set3' }))
-];
+const WIPE_DURATION = 0.92;
+const WIPE_TIMES = [0, 0.4, 1];
+
+function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone }) {
+  return (
+    <motion.div
+      aria-label={logo.name}
+      animate={
+        isWaving
+          ? {
+              clipPath: [
+                "inset(0 0% 0 0)",
+                "inset(0 100% 0 0)",
+                "inset(0 0% 0 0)",
+              ],
+              filter: ["blur(0px)", "blur(6px)", "blur(0px)"],
+              opacity: [1, 0.3, 1],
+            }
+          : {
+              clipPath: "inset(0 0% 0 0)",
+              filter: "blur(0px)",
+              opacity: 1,
+            }
+      }
+      transition={
+        isWaving
+          ? {
+              clipPath: {
+                duration: WIPE_DURATION,
+                times: WIPE_TIMES,
+                ease: ["easeIn", [0.16, 1, 0.3, 1]],
+                delay: index * stagger,
+              },
+              filter: {
+                duration: WIPE_DURATION * 0.9,
+                times: WIPE_TIMES,
+                ease: "easeInOut",
+                delay: index * stagger,
+              },
+              opacity: {
+                duration: WIPE_DURATION * 0.85,
+                times: WIPE_TIMES,
+                ease: "easeInOut",
+                delay: index * stagger,
+              },
+            }
+          : {
+              duration: 0.3,
+              ease: "easeOut",
+            }
+      }
+      onAnimationComplete={() => {
+        if (isWaving && index === totalCount - 1) onDone();
+      }}
+      whileHover={{
+        scale: 1.07,
+        opacity: 1,
+        filter: "blur(0px)",
+        transition: { type: "spring", stiffness: 340, damping: 24 },
+      }}
+      style={{
+        height: '56px',
+        padding: '8px 20px',
+        background: '#ffffff',
+        borderRadius: '14px',
+        border: '1.5px solid #e2e8f0',
+        boxShadow: '0 4px 14px rgba(0, 6, 72, 0.06)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+        cursor: 'pointer'
+      }}
+    >
+      {logo.icon}
+    </motion.div>
+  );
+}
 
 export default function CompanyLogos() {
+  const [waving, setWaving] = useState(false);
   const scrollRef = useRef(null);
-  const [isPaused, setIsPaused] = useState(false);
 
-  // JavaScript Continuous Auto-Scroll Engine
   useEffect(() => {
-    let animationFrameId;
-
-    const autoScroll = () => {
-      if (scrollRef.current && !isPaused) {
-        scrollRef.current.scrollLeft += 1.2;
-        // Loop back when reached half width
-        if (scrollRef.current.scrollLeft >= scrollRef.current.scrollWidth / 2) {
-          scrollRef.current.scrollLeft = 0;
-        }
-      }
-      animationFrameId = requestAnimationFrame(autoScroll);
-    };
-
-    animationFrameId = requestAnimationFrame(autoScroll);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [isPaused]);
+    const id = setInterval(() => setWaving(true), 3800);
+    return () => clearInterval(id);
+  }, []);
 
   const handleManualScroll = (direction) => {
     if (scrollRef.current) {
@@ -178,52 +249,42 @@ export default function CompanyLogos() {
   return (
     <section
       style={{
-        padding: '24px 0 28px',
+        padding: '28px 0 32px',
         background: '#ffffff',
-        borderBottom: '1px solid var(--border)',
+        borderBottom: '1px solid #e2e8f0',
         overflow: 'hidden',
         position: 'relative',
       }}
     >
-      <style>{`
-        .hide-scroll-bar::-webkit-scrollbar {
-          display: none !important;
-          width: 0 !important;
-          height: 0 !important;
-        }
-        .hide-scroll-bar {
-          -ms-overflow-style: none !important;
-          scrollbar-width: none !important;
-        }
-      `}</style>
-
       <div
         className="container"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: '16px',
+          marginBottom: '20px',
           flexWrap: 'wrap',
           gap: '12px',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div>
+          <span className="section-tag" style={{ fontSize: '0.68rem', padding: '3px 10px' }}>
+            Corporate Hiring Partners
+          </span>
           <h3
             style={{
-              fontSize: '0.85rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              color: '#64748b',
-              margin: 0,
+              fontSize: '0.96rem',
+              fontWeight: 800,
+              color: '#000648',
+              marginTop: '4px',
+              letterSpacing: '-0.01em',
             }}
           >
-            Our Graduates Work At Leading Technology Companies
+            Our Graduates Are Hired At Top Global Technology Companies
           </h3>
         </div>
 
-        {/* Interactive Left & Right Scroll Buttons */}
+        {/* Scroll Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button
             type="button"
@@ -268,42 +329,30 @@ export default function CompanyLogos() {
         </div>
       </div>
 
-      {/* Auto & Manual Scrollable Container Track without visual scrollbar */}
+      {/* Waving Interactive Logo Cloud Track */}
       <div
         ref={scrollRef}
-        className="hide-scroll-bar"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
+        className="no-scrollbar"
         style={{
           display: 'flex',
-          gap: '20px',
+          gap: '16px',
           overflowX: 'auto',
           scrollBehavior: 'smooth',
-          padding: '4px 24px 12px',
+          padding: '6px 20px 16px',
           width: '100%',
           boxSizing: 'border-box',
-          maskImage: 'linear-gradient(to right, transparent, black 4%, black 96%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent, black 4%, black 96%, transparent)',
         }}
       >
-        {marqueeList.map((company) => (
-          <div
-            key={company.uniqueId}
-            style={{
-              height: '56px',
-              padding: '8px 24px',
-              background: '#ffffff',
-              borderRadius: '14px',
-              border: '1.5px solid #e2e8f0',
-              boxShadow: '0 4px 14px rgba(0, 6, 72, 0.06)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-            }}
-          >
-            {company.svg}
-          </div>
+        {corporateLogos.map((logo, i) => (
+          <LogoItem
+            key={logo.id}
+            logo={logo}
+            index={i}
+            isWaving={waving}
+            stagger={0.1}
+            totalCount={corporateLogos.length}
+            onDone={() => setWaving(false)}
+          />
         ))}
       </div>
     </section>
