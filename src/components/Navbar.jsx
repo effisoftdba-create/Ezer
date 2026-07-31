@@ -44,26 +44,14 @@ export default function Navbar({ onOpenDemoModal }) {
     >
       <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
 
-        {/* Brand Logo (Removed "Incubated by IIT Madras" badge as requested) */}
+        {/* Brand Logo */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
             <img 
               src={`${import.meta.env.BASE_URL || '/'}logo.jpg`} 
               alt="EZER Learning Solutions" 
-              style={{ height: '42px', width: 'auto', objectFit: 'contain', borderRadius: '4px' }} 
-              onError={(e) => {
-                // Fallback to text logo if image fails
-                e.target.style.display = 'none';
-              }}
+              style={{ height: '46px', width: 'auto', objectFit: 'contain', borderRadius: '6px' }} 
             />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', letterSpacing: '0.04em', lineHeight: 1 }}>
-                EZER
-              </span>
-              <span style={{ fontSize: '0.62rem', fontWeight: 800, color: '#f2b733', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
-                Learning Solutions
-              </span>
-            </div>
           </Link>
         </div>
 
