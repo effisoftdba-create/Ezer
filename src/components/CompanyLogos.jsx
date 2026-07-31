@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
 const corporateLogos = [
@@ -154,12 +154,12 @@ const corporateLogos = [
 const WIPE_DURATION = 0.92;
 const WIPE_TIMES = [0, 0.4, 1];
 
-function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone }) {
+function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone, shouldReduceMotion }) {
   return (
-    <motion.div
+    <m.div
       aria-label={logo.name}
       animate={
-        isWaving
+        isWaving && !shouldReduceMotion
           ? {
               clipPath: [
                 "inset(0 0% 0 0)",
@@ -176,7 +176,7 @@ function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone }) {
             }
       }
       transition={
-        isWaving
+        isWaving && !shouldReduceMotion
           ? {
               clipPath: {
                 duration: WIPE_DURATION,
@@ -205,12 +205,16 @@ function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone }) {
       onAnimationComplete={() => {
         if (isWaving && index === totalCount - 1) onDone();
       }}
-      whileHover={{
-        scale: 1.07,
-        opacity: 1,
-        filter: "blur(0px)",
-        transition: { type: "spring", stiffness: 340, damping: 24 },
-      }}
+      whileHover={
+        shouldReduceMotion
+          ? undefined
+          : {
+              scale: 1.07,
+              opacity: 1,
+              filter: "blur(0px)",
+              transition: { type: "spring", stiffness: 340, damping: 24 },
+            }
+      }
       style={{
         height: '56px',
         padding: '8px 20px',
@@ -226,18 +230,20 @@ function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone }) {
       }}
     >
       {logo.icon}
-    </motion.div>
+    </m.div>
   );
 }
 
 export default function CompanyLogos() {
   const [waving, setWaving] = useState(false);
   const scrollRef = useRef(null);
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
+    if (shouldReduceMotion) return;
     const id = setInterval(() => setWaving(true), 3800);
     return () => clearInterval(id);
-  }, []);
+  }, [shouldReduceMotion]);
 
   const handleManualScroll = (direction) => {
     if (scrollRef.current) {
@@ -247,114 +253,117 @@ export default function CompanyLogos() {
   };
 
   return (
-    <section
-      style={{
-        padding: '28px 0 32px',
-        background: '#ffffff',
-        borderBottom: '1px solid #e2e8f0',
-        overflow: 'hidden',
-        position: 'relative',
-      }}
-    >
-      <div
-        className="container"
+    <LazyMotion features={domAnimation}>
+      <section
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          marginBottom: '20px',
-          flexWrap: 'wrap',
-          gap: '12px',
+          padding: '28px 0 32px',
+          background: '#ffffff',
+          borderBottom: '1px solid #e2e8f0',
+          overflow: 'hidden',
+          position: 'relative',
         }}
       >
-        <div>
-          <span className="section-tag" style={{ fontSize: '0.68rem', padding: '3px 10px' }}>
-            Corporate Hiring Partners
-          </span>
-          <h3
-            style={{
-              fontSize: '0.96rem',
-              fontWeight: 800,
-              color: '#000648',
-              marginTop: '4px',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            Our Graduates Are Hired At Top Global Technology Companies
-          </h3>
+        <div
+          className="container"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginBottom: '20px',
+            flexWrap: 'wrap',
+            gap: '12px',
+          }}
+        >
+          <div>
+            <span className="section-tag" style={{ fontSize: '0.68rem', padding: '3px 10px' }}>
+              Corporate Hiring Partners
+            </span>
+            <h3
+              style={{
+                fontSize: '0.96rem',
+                fontWeight: 800,
+                color: '#000648',
+                marginTop: '4px',
+                letterSpacing: '-0.01em',
+              }}
+            >
+              Our Graduates Are Hired At Top Global Technology Companies
+            </h3>
+          </div>
+
+          {/* Scroll Buttons */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={() => handleManualScroll('left')}
+              aria-label="Scroll Left"
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                border: '1.5px solid #000648',
+                background: '#ffffff',
+                color: '#000648',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)',
+              }}
+            >
+              <HiChevronLeft size={18} />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleManualScroll('right')}
+              aria-label="Scroll Right"
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '50%',
+                border: '1.5px solid #000648',
+                background: '#000648',
+                color: '#f2b733',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.15)',
+              }}
+            >
+              <HiChevronRight size={18} />
+            </button>
+          </div>
         </div>
 
-        {/* Scroll Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <button
-            type="button"
-            onClick={() => handleManualScroll('left')}
-            aria-label="Scroll Left"
-            style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '50%',
-              border: '1.5px solid #000648',
-              background: '#ffffff',
-              color: '#000648',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)',
-            }}
-          >
-            <HiChevronLeft size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={() => handleManualScroll('right')}
-            aria-label="Scroll Right"
-            style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '50%',
-              border: '1.5px solid #000648',
-              background: '#000648',
-              color: '#f2b733',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              boxShadow: '0 2px 6px rgba(0, 6, 72, 0.15)',
-            }}
-          >
-            <HiChevronRight size={18} />
-          </button>
+        {/* Waving Interactive Logo Cloud Track */}
+        <div
+          ref={scrollRef}
+          className="no-scrollbar"
+          style={{
+            display: 'flex',
+            gap: '16px',
+            overflowX: 'auto',
+            scrollBehavior: 'smooth',
+            padding: '6px 20px 16px',
+            width: '100%',
+            boxSizing: 'border-box',
+          }}
+        >
+          {corporateLogos.map((logo, i) => (
+            <LogoItem
+              key={logo.id}
+              logo={logo}
+              index={i}
+              isWaving={waving}
+              stagger={0.1}
+              totalCount={corporateLogos.length}
+              onDone={() => setWaving(false)}
+              shouldReduceMotion={shouldReduceMotion}
+            />
+          ))}
         </div>
-      </div>
-
-      {/* Waving Interactive Logo Cloud Track */}
-      <div
-        ref={scrollRef}
-        className="no-scrollbar"
-        style={{
-          display: 'flex',
-          gap: '16px',
-          overflowX: 'auto',
-          scrollBehavior: 'smooth',
-          padding: '6px 20px 16px',
-          width: '100%',
-          boxSizing: 'border-box',
-        }}
-      >
-        {corporateLogos.map((logo, i) => (
-          <LogoItem
-            key={logo.id}
-            logo={logo}
-            index={i}
-            isWaving={waving}
-            stagger={0.1}
-            totalCount={corporateLogos.length}
-            onDone={() => setWaving(false)}
-          />
-        ))}
-      </div>
-    </section>
+      </section>
+    </LazyMotion>
   );
 }
