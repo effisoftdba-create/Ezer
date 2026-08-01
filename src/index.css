@@ -158,6 +158,33 @@ img { max-width: 100%; display: block; }
   .section, .section-alt { padding: 32px 0; }
   input, select, textarea { font-size: 16px !important; } /* Prevents iOS auto-zoom on input focus */
   .no-scrollbar { -webkit-overflow-scrolling: touch; }
+
+  /* Mobile Timeline Roadmap Fix */
+  .timeline-step-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding-left: 44px !important;
+    margin-bottom: 24px !important;
+  }
+  .timeline-side-left, .timeline-side-right {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    justify-content: flex-start !important;
+  }
+  .timeline-side-left > div, .timeline-side-right > div {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  .timeline-center-node {
+    left: 18px !important;
+    transform: translateX(-50%) !important;
+    top: 16px !important;
+  }
+  .timeline-line {
+    left: 18px !important;
+    transform: translateX(-50%) !important;
+  }
 }
 
 /* Accessibility: WCAG 2.3.3 Reduced Motion */

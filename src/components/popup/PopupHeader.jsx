@@ -5,30 +5,42 @@ export default function PopupHeader({ onClose }) {
   return (
     <div
       style={{
-        padding: '16px 20px 12px',
+        padding: '20px 24px 16px',
         textAlign: 'center',
-        borderBottom: '1px solid var(--border)',
+        borderBottom: '1.5px solid #e2e8f0',
         position: 'relative',
-        background: 'var(--off-white)',
+        background: '#000648',
+        color: '#ffffff',
+        borderTopLeftRadius: '16px',
+        borderTopRightRadius: '16px',
       }}
     >
-      <img
-        src={`${import.meta.env.BASE_URL || '/'}logo.jpg?v=2`}
-        alt="EZER Learning Solutions"
-        style={{
-          height: '36px',
-          margin: '0 auto 6px',
-          borderRadius: '6px',
-          objectFit: 'contain',
-          background: '#fff',
-          padding: '2px',
-        }}
-      />
-      <h3 style={{ fontSize: '1.25rem', color: 'var(--primary)', fontWeight: 800, margin: '0 0 2px' }}>
-        Register Now
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '8px' }}>
+        <img
+          src={`${import.meta.env.BASE_URL || '/'}images/logo.png`}
+          alt="EZER Learning Solutions Crest Logo"
+          style={{
+            height: '42px',
+            width: 'auto',
+            objectFit: 'contain',
+            filter: 'drop-shadow(0 2px 8px rgba(242, 183, 51, 0.4))',
+          }}
+        />
+        <div style={{ textAlign: 'left' }}>
+          <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1 }}>
+            EZER
+          </div>
+          <div style={{ fontSize: '0.58rem', fontWeight: 800, color: '#f2b733', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px' }}>
+            Learning Solutions
+          </div>
+        </div>
+      </div>
+
+      <h3 style={{ fontSize: '1.25rem', color: '#f2b733', fontWeight: 900, margin: '6px 0 2px' }}>
+        Register For Free Demo
       </h3>
-      <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
-        Book your free live demo class & counselling session
+      <p style={{ fontSize: '0.82rem', color: 'rgba(255,255,255,0.85)', margin: 0 }}>
+        Book your free live demo class & 1-on-1 career counselling session
       </p>
 
       {/* High-Contrast Visible Close Button */}
@@ -37,12 +49,12 @@ export default function PopupHeader({ onClose }) {
         onClick={onClose}
         style={{
           position: 'absolute',
-          top: '10px',
-          right: '10px',
-          background: '#000648',
-          border: '2px solid #f2b733',
+          top: '12px',
+          right: '12px',
+          background: 'rgba(255,255,255,0.15)',
+          border: '1.5px solid #f2b733',
           fontSize: '1.2rem',
-          color: '#ffffff',
+          color: '#f2b733',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
@@ -51,7 +63,7 @@ export default function PopupHeader({ onClose }) {
           height: '32px',
           borderRadius: '50%',
           boxShadow: '0 4px 10px rgba(0,6,72,0.3)',
-          transition: 'transform 0.2s ease, background-color 0.2s ease',
+          transition: 'transform 0.2s ease, background-color 0.2s ease, color 0.2s ease',
           zIndex: 10,
         }}
         aria-label="Close modal"
@@ -62,8 +74,8 @@ export default function PopupHeader({ onClose }) {
         }}
         onMouseLeave={(e) => {
           e.currentTarget.style.transform = 'scale(1)';
-          e.currentTarget.style.background = '#000648';
-          e.currentTarget.style.color = '#ffffff';
+          e.currentTarget.style.background = 'rgba(255,255,255,0.15)';
+          e.currentTarget.style.color = '#f2b733';
         }}
       >
         <HiX />
