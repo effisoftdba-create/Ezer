@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { HiChevronLeft, HiChevronRight, HiArrowDown, HiBriefcase } from 'react-icons/hi';
+import React, { useRef } from 'react';
+import { HiChevronLeft, HiChevronRight, HiArrowDown } from 'react-icons/hi';
 
 const learnerJourneys = [
   {
@@ -50,150 +50,113 @@ export default function TransformedLives() {
   };
 
   return (
-    <section className="section-alt" style={{ padding: '72px 0', background: '#f8fafc' }}>
+    <section className="section-alt" style={{ padding: '64px 0', background: '#f8fafc' }}>
       <div className="container">
-        {/* Section Header */}
-        <div className="section-title">
-          <span className="section-tag">Career Outcomes</span>
-          <h2>Alumni Career Transformations</h2>
-          <p>Enabling non-IT graduates and career gap switchers to secure high-growth software engineering roles.</p>
+        {/* Section Header with Right-Aligned Controls */}
+        <div style={{
+          display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
+          marginBottom: '28px', flexWrap: 'wrap', gap: '16px'
+        }}>
+          <div>
+            <span className="section-tag">Career Outcomes</span>
+            <h2 style={{ color: '#000648', marginTop: '4px' }}>Alumni Career Transformations</h2>
+            <p style={{ color: '#475569', fontSize: '0.88rem', maxWidth: '560px', marginTop: '4px' }}>
+              Enabling non-IT graduates and career gap switchers to secure high-growth software engineering roles.
+            </p>
+          </div>
+
+          {/* Right-Aligned Arrow Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
+            <button
+              type="button"
+              onClick={() => handleScroll('left')}
+              aria-label="Previous story"
+              style={{
+                width: '38px', height: '38px', borderRadius: '50%',
+                border: '1.5px solid #000648', background: '#ffffff',
+                color: '#000648', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)',
+              }}
+            >
+              <HiChevronLeft size={20} />
+            </button>
+            <button
+              type="button"
+              onClick={() => handleScroll('right')}
+              aria-label="Next story"
+              style={{
+                width: '38px', height: '38px', borderRadius: '50%',
+                border: '1.5px solid #000648', background: '#000648',
+                color: '#f2b733', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.15)',
+              }}
+            >
+              <HiChevronRight size={20} />
+            </button>
+          </div>
         </div>
 
-        {/* Horizontal Slider Cards Track */}
+        {/* Horizontal Slider Track */}
         <div
           ref={sliderRef}
           className="no-scrollbar"
           style={{
-            display: 'flex',
-            gap: '20px',
-            overflowX: 'auto',
-            scrollSnapType: 'x mandatory',
-            paddingBottom: '16px',
-            maxWidth: '100%',
-            boxSizing: 'border-box',
+            display: 'flex', gap: '20px', overflowX: 'auto',
+            scrollBehavior: 'smooth', padding: '6px 0 16px', width: '100%',
           }}
         >
           {learnerJourneys.map((item) => (
             <div
               key={item.id}
               style={{
-                flex: '0 0 280px',
-                minWidth: '280px',
-                scrollSnapAlign: 'start',
-                background: '#ffffff',
-                border: '1.5px solid #e2e8f0',
-                borderRadius: '16px',
-                padding: '24px 20px',
-                boxShadow: '0 4px 16px rgba(0, 6, 72, 0.04)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                textAlign: 'center',
-                position: 'relative',
+                flex: '0 0 280px', background: '#ffffff', borderRadius: '16px',
+                border: '1.5px solid #e2e8f0', padding: '24px 20px', textAlign: 'center',
+                boxShadow: '0 4px 14px rgba(0, 6, 72, 0.05)',
+                display: 'flex', flexDirection: 'column', alignItems: 'center'
               }}
             >
-              {/* Top Circular Portrait */}
-              <div
+              <img
+                src={item.image}
+                alt={item.name}
                 style={{
-                  width: '76px',
-                  height: '76px',
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  marginBottom: '14px',
-                  border: '2.5px solid #f2b733',
-                  boxShadow: '0 4px 12px rgba(242, 183, 51, 0.25)',
+                  width: '76px', height: '76px', borderRadius: '50%',
+                  objectFit: 'cover', border: '3px solid #f2b733', marginBottom: '12px'
                 }}
-              >
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </div>
-
-              {/* Name & Placed Company */}
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#000648', marginBottom: '2px' }}>
+              />
+              <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', marginBottom: '2px' }}>
                 {item.name}
               </h3>
-              <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#f2b733', background: '#000648', padding: '3px 10px', borderRadius: '50px', marginBottom: '16px' }}>
+              <span style={{
+                fontSize: '0.7rem', fontWeight: 800, background: '#000648', color: '#f2b733',
+                padding: '2px 10px', borderRadius: '50px', marginBottom: '16px', display: 'inline-block'
+              }}>
                 Placed @ {item.company}
-              </div>
+              </span>
 
-              {/* Career Transition Path */}
-              <div style={{ width: '100%', background: '#f8fafc', padding: '14px 12px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>Previous Role</div>
-                <div style={{ fontSize: '0.875rem', fontWeight: 700, color: '#000648', marginBottom: '6px' }}>{item.beforeRole}</div>
-                <HiArrowDown size={14} style={{ color: '#f2b733', margin: '2px 0' }} />
-                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, marginTop: '4px' }}>Placed Role</div>
-                <div style={{ fontSize: '0.875rem', fontWeight: 800, color: '#000648' }}>{item.afterRole}</div>
+              <div style={{
+                background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px',
+                padding: '12px', width: '100%', display: 'flex', flexDirection: 'column', gap: '4px'
+              }}>
+                <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Previous Role
+                </div>
+                <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155' }}>
+                  {item.beforeRole}
+                </div>
+                <HiArrowDown size={12} style={{ color: '#f2b733', margin: '2px auto' }} />
+                <div style={{ fontSize: '0.68rem', color: '#000648', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Placed Role
+                </div>
+                <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#000648' }}>
+                  {item.afterRole}
+                </div>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Controls */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '20px' }}>
-          <button
-            type="button"
-            onClick={() => handleScroll('left')}
-            aria-label="Previous"
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              border: '1.5px solid #000648',
-              background: '#ffffff',
-              color: '#000648',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s ease, color 0.2s ease',
-              boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#000648';
-              e.currentTarget.style.color = '#f2b733';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#ffffff';
-              e.currentTarget.style.color = '#000648';
-            }}
-          >
-            <HiChevronLeft size={20} />
-          </button>
-          <button
-            type="button"
-            onClick={() => handleScroll('right')}
-            aria-label="Next"
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              border: '1.5px solid #000648',
-              background: '#000648',
-              color: '#f2b733',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s ease, color 0.2s ease',
-              boxShadow: '0 2px 6px rgba(0, 6, 72, 0.15)',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#f2b733';
-              e.currentTarget.style.color = '#000648';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#000648';
-              e.currentTarget.style.color = '#f2b733';
-            }}
-          >
-            <HiChevronRight size={20} />
-          </button>
         </div>
       </div>
     </section>
   );
 }
-

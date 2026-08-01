@@ -118,77 +118,95 @@ export default function About({ onOpenDemoModal }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px' }}>
             
             {/* Our Mission Card */}
-            <div style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '2px solid #f2b733',
-              borderRadius: '16px',
-              padding: '36px 28px',
-              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.3)',
-              display: 'flex', flexDirection: 'column',
-              transition: 'transform 0.3s ease',
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
-            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+            <div 
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '2px solid #f2b733',
+                borderRadius: '16px',
+                padding: '36px 28px',
+                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
+                display: 'flex', flexDirection: 'column',
+                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-6px) scale(1.01)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(242,183,51,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.4)';
+              }}
             >
               <div style={{
-                width: '48px', height: '48px', borderRadius: '12px',
+                width: '52px', height: '52px', borderRadius: '14px',
                 background: '#f2b733', color: '#000648',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: '20px', boxShadow: '0 4px 16px rgba(242,183,51,0.3)'
+                marginBottom: '20px', boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
+                transition: 'transform 0.3s ease'
               }}>
-                <HiLightBulb size={26} />
+                <HiLightBulb size={28} />
               </div>
-              <h3 style={{ color: '#f2b733', fontSize: '1.35rem', fontWeight: 900, marginBottom: '12px', letterSpacing: '-0.01em' }}>
+              <h3 style={{ color: '#f2b733', fontSize: '1.4rem', fontWeight: 900, marginBottom: '12px', letterSpacing: '-0.01em' }}>
                 Our Mission
               </h3>
-              <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '20px', flexGrow: 1 }}>
+              <p style={{ color: 'rgba(255,255,255,0.92)', fontSize: '0.96rem', lineHeight: 1.7, marginBottom: '22px', flexGrow: 1 }}>
                 "To make high-growth IT careers accessible to every aspiring learner through live, practical, mentor-led training — backed by outcome support that extends well beyond the classroom."
               </p>
               
-              <div style={{ borderTop: '1px solid rgba(242,183,51,0.2)', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#f2b733', fontWeight: 700 }}>
-                  <HiCheckCircle size={16} /> 100% Live Instructor-Led Classes
+              <div style={{ borderTop: '1px solid rgba(242,183,51,0.25)', paddingTop: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#f2b733', fontWeight: 800 }}>
+                  <HiCheckCircle size={18} /> 100% Live Instructor-Led Classes
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#f2b733', fontWeight: 700 }}>
-                  <HiCheckCircle size={16} /> Practical Corporate Toolchain Labs
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#f2b733', fontWeight: 800 }}>
+                  <HiCheckCircle size={18} /> Practical Corporate Toolchain Labs
                 </div>
               </div>
             </div>
 
             {/* Our Vision Card */}
-            <div style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '2px solid #f2b733',
-              borderRadius: '16px',
-              padding: '36px 28px',
-              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.3)',
-              display: 'flex', flexDirection: 'column',
-              transition: 'transform 0.3s ease',
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-4px)'}
-            onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+            <div 
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '2px solid #f2b733',
+                borderRadius: '16px',
+                padding: '36px 28px',
+                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
+                display: 'flex', flexDirection: 'column',
+                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
+                cursor: 'pointer'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-6px) scale(1.01)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(242,183,51,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.4)';
+              }}
             >
               <div style={{
-                width: '48px', height: '48px', borderRadius: '12px',
+                width: '52px', height: '52px', borderRadius: '14px',
                 background: '#f2b733', color: '#000648',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: '20px', boxShadow: '0 4px 16px rgba(242,183,51,0.3)'
+                marginBottom: '20px', boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
+                transition: 'transform 0.3s ease'
               }}>
-                <HiShieldCheck size={26} />
+                <HiShieldCheck size={28} />
               </div>
-              <h3 style={{ color: '#f2b733', fontSize: '1.35rem', fontWeight: 900, marginBottom: '12px', letterSpacing: '-0.01em' }}>
+              <h3 style={{ color: '#f2b733', fontSize: '1.4rem', fontWeight: 900, marginBottom: '12px', letterSpacing: '-0.01em' }}>
                 Our Vision
               </h3>
-              <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.95rem', lineHeight: 1.7, marginBottom: '20px', flexGrow: 1 }}>
+              <p style={{ color: 'rgba(255,255,255,0.92)', fontSize: '0.96rem', lineHeight: 1.7, marginBottom: '22px', flexGrow: 1 }}>
                 "To become India's most trusted outcome-driven IT training institute, recognized as much for the long-term career support we provide after placement as for our curriculum excellence."
               </p>
               
-              <div style={{ borderTop: '1px solid rgba(242,183,51,0.2)', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#f2b733', fontWeight: 700 }}>
-                  <HiCheckCircle size={16} /> 1-Year Post-Employment Assistance
+              <div style={{ borderTop: '1px solid rgba(242,183,51,0.25)', paddingTop: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#f2b733', fontWeight: 800 }}>
+                  <HiCheckCircle size={18} /> 1-Year Post-Employment Assistance
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: '#f2b733', fontWeight: 700 }}>
-                  <HiCheckCircle size={16} /> 3-Year Active Alumni Network
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#f2b733', fontWeight: 800 }}>
+                  <HiCheckCircle size={18} /> 3-Year Active Alumni Network
                 </div>
               </div>
             </div>

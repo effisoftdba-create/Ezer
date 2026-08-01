@@ -185,9 +185,9 @@ export default function Footer() {
           alignItems: 'center', gap: '12px', fontSize: '0.75rem', color: '#94a3b8',
         }}>
           <div>&copy; {new Date().getFullYear()} EZER Learning Solutions. All rights reserved.</div>
-          <div style={{ display: 'flex', gap: '16px' }}>
-            <Link to="/faq" style={{ color: '#f2b733', textDecoration: 'none' }}>Privacy Policy</Link>
-            <Link to="/faq" style={{ color: '#f2b733', textDecoration: 'none' }}>Terms of Service</Link>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+            <Link to="/privacy-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Privacy Policy</Link>
+            <Link to="/student-admission-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Student Admission Policy & Agreement</Link>
           </div>
         </div>
       </div>

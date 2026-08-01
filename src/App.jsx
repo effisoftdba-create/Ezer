@@ -11,6 +11,8 @@ import CourseDetail from './pages/CourseDetail';
 import TestimonialsPage from './pages/Testimonials';
 import FAQPage from './pages/FAQ';
 import Contact from './pages/Contact';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import StudentAdmissionPolicy from './pages/StudentAdmissionPolicy';
 
 export default function App() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -53,6 +55,8 @@ export default function App() {
           <Route path="/testimonials" element={<TestimonialsPage onOpenDemoModal={handleOpenDemoModal} />} />
           <Route path="/faq" element={<FAQPage onOpenDemoModal={handleOpenDemoModal} />} />
           <Route path="/contact" element={<Contact onOpenDemoModal={handleOpenDemoModal} />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy onOpenDemoModal={handleOpenDemoModal} />} />
+          <Route path="/student-admission-policy" element={<StudentAdmissionPolicy onOpenDemoModal={handleOpenDemoModal} />} />
         </Routes>
       </main>
 
