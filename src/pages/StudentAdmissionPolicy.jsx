@@ -38,7 +38,7 @@ export default function StudentAdmissionPolicy({ onOpenDemoModal }) {
                 background: activeTab === 'policy' ? '#f2b733' : 'rgba(255,255,255,0.1)',
                 color: activeTab === 'policy' ? '#000648' : '#ffffff',
                 border: activeTab === 'policy' ? 'none' : '1px solid rgba(255,255,255,0.3)',
-                cursor: 'pointer', transition: 'all 0.2s ease',
+                cursor: 'pointer', transition: 'background-color 0.2s ease, color 0.2s ease',
               }}
             >
               Institute Admission Policies
@@ -51,7 +51,7 @@ export default function StudentAdmissionPolicy({ onOpenDemoModal }) {
                 background: activeTab === 'agreement' ? '#f2b733' : 'rgba(255,255,255,0.1)',
                 color: activeTab === 'agreement' ? '#000648' : '#ffffff',
                 border: activeTab === 'agreement' ? 'none' : '1px solid rgba(255,255,255,0.3)',
-                cursor: 'pointer', transition: 'all 0.2s ease',
+                cursor: 'pointer', transition: 'background-color 0.2s ease, color 0.2s ease',
               }}
             >
               Student Admission Agreement Document

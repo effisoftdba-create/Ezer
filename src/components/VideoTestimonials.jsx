@@ -153,7 +153,7 @@ export default function VideoTestimonials() {
                 flex: '0 0 200px', background: activeIdx === idx ? '#000648' : '#ffffff',
                 border: activeIdx === idx ? '2px solid #f2b733' : '1.5px solid #e2e8f0',
                 borderRadius: '12px', padding: '10px', textAlign: 'left',
-                cursor: 'pointer', transition: 'all 0.2s ease',
+                cursor: 'pointer', transition: 'background-color 0.2s ease, border-color 0.2s ease',
               }}
             >
               <div style={{ fontSize: '0.82rem', fontWeight: 800, color: activeIdx === idx ? '#ffffff' : '#000648', marginBottom: '2px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
