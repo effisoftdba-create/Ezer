@@ -21,12 +21,20 @@ export default function Footer() {
         }}>
           {/* Brand */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '14px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
               <img 
-                src={`${import.meta.env.BASE_URL || '/'}logo.jpg?v=2`} 
-                alt="EZER Learning Solutions" 
-                style={{ height: '48px', width: 'auto', borderRadius: '6px', border: '1px solid rgba(242, 183, 51, 0.4)' }} 
+                src={`${import.meta.env.BASE_URL || '/'}images/logo.png`} 
+                alt="EZER Learning Solutions Crest Logo" 
+                style={{ height: '48px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(242, 183, 51, 0.3))' }} 
               />
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                  EZER
+                </span>
+                <span style={{ fontSize: '0.6rem', fontWeight: 800, color: '#f2b733', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px' }}>
+                  Learning Solutions
+                </span>
+              </div>
             </div>
 
             <p style={{ fontSize: '0.78rem', lineHeight: 1.6, color: '#cbd5e1', marginBottom: '16px' }}>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HiMenu, HiX, HiPhone, HiChevronDown, HiSparkles, HiCloud, HiTerminal, HiChip, HiServer } from 'react-icons/hi';
+import { HiMenu, HiX, HiChevronDown, HiSparkles, HiCloud, HiTerminal, HiChip, HiServer } from 'react-icons/hi';
+import { motion, AnimatePresence } from 'framer-motion';
 import { phase1Courses } from '../data/courses';
 
 const navLinks = [
@@ -38,20 +39,45 @@ export default function Navbar({ onOpenDemoModal }) {
         position: 'sticky', top: 0, zIndex: 1000,
         background: '#ffffff',
         borderBottom: isScrolled ? '1px solid #e2e8f0' : '1px solid #f1f5f9',
-        boxShadow: isScrolled ? '0 4px 20px rgba(0, 6, 72, 0.08)' : 'none',
+        boxShadow: isScrolled ? '0 4px 24px rgba(0, 6, 72, 0.1)' : 'none',
         transition: 'box-shadow 0.25s ease, border-bottom-color 0.25s ease',
       }}
     >
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '64px' }}>
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
 
-        {/* Brand Logo */}
+        {/* Animated Brand Crest Logo */}
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img 
-              src={`${import.meta.env.BASE_URL || '/'}logo.jpg?v=2`} 
-              alt="EZER Learning Solutions" 
-              style={{ height: '46px', width: 'auto', objectFit: 'contain', borderRadius: '6px' }} 
-            />
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+            <motion.div
+              whileHover={{ scale: 1.06, rotate: [0, -2, 2, 0] }}
+              transition={{ duration: 0.3 }}
+              style={{
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <img 
+                src={`${import.meta.env.BASE_URL || '/'}images/logo.png`} 
+                alt="EZER Learning Solutions Crest Logo" 
+                style={{
+                  height: '48px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 4px 10px rgba(0, 6, 72, 0.2))',
+                }} 
+              />
+            </motion.div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                EZER
+              </span>
+              <span style={{ fontSize: '0.62rem', fontWeight: 800, color: '#d9a02a', letterSpacing: '0.14em', textTransform: 'uppercase', marginTop: '2px' }}>
+                Learning Solutions
+              </span>
+            </div>
           </Link>
         </div>
 
@@ -68,7 +94,7 @@ export default function Navbar({ onOpenDemoModal }) {
                 >
                   <Link to={link.path} style={{
                     color: isActive ? '#000648' : '#334155',
-                    fontWeight: isActive ? 800 : 600, fontSize: '0.85rem',
+                    fontWeight: isActive ? 800 : 600, fontSize: '0.86rem',
                     display: 'flex', alignItems: 'center', gap: '4px',
                     borderBottom: isActive ? '2px solid #f2b733' : '2px solid transparent',
                     padding: '8px 0', transition: 'color 0.15s ease, border-bottom-color 0.15s ease',
@@ -84,65 +110,72 @@ export default function Navbar({ onOpenDemoModal }) {
                   </Link>
 
                   {/* Enhanced Styled LIVE Classes Dropdown */}
-                  {dropdownOpen && (
-                    <div style={{
-                      position: 'absolute', top: '100%', left: '-12px', width: '360px',
-                      background: '#000648', border: '1.5px solid #f2b733', borderRadius: '12px',
-                      boxShadow: '0 16px 40px rgba(0, 6, 72, 0.35)', padding: '12px', zIndex: 100,
-                      animation: 'fadeIn 0.2s ease-in-out',
-                    }}>
-                      <div style={{
-                        fontSize: '0.68rem', fontWeight: 800, color: '#f2b733',
-                        padding: '6px 12px 10px', textTransform: 'uppercase', letterSpacing: '0.08em',
-                        borderBottom: '1px solid rgba(242, 183, 51, 0.2)', marginBottom: '8px',
-                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      }}>
-                        <span>LIVE Cohort Programs</span>
-                        <span style={{ fontSize: '0.6rem', background: '#f2b733', color: '#000648', padding: '2px 6px', borderRadius: '4px', fontWeight: 700 }}>2026 Batches</span>
-                      </div>
-                      
-                      {phase1Courses.map((course) => {
-                        const icon = courseIcons[course.slug] || <HiSparkles size={18} />;
-                        return (
-                          <Link key={course.id} to={`/courses/${course.slug}`}
-                            onClick={() => { setDropdownOpen(false); setMobileMenuOpen(false); }}
-                            style={{
-                              display: 'flex', alignItems: 'flex-start', gap: '10px',
-                              padding: '10px 12px', borderRadius: '8px',
-                              transition: 'background-color 0.15s ease, border-left-color 0.15s ease, transform 0.15s ease', textDecoration: 'none',
-                              borderLeft: '3px solid transparent',
-                              marginBottom: '2px',
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background = 'rgba(242, 183, 51, 0.14)';
-                              e.currentTarget.style.borderLeftColor = '#f2b733';
-                              e.currentTarget.style.transform = 'translateX(2px)';
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background = 'transparent';
-                              e.currentTarget.style.borderLeftColor = 'transparent';
-                              e.currentTarget.style.transform = 'translateX(0)';
-                            }}
-                          >
-                            <div style={{
-                              color: '#f2b733', marginTop: '2px', flexShrink: 0,
-                              background: 'rgba(242, 183, 51, 0.15)', padding: '6px', borderRadius: '6px'
-                            }}>
-                              {icon}
-                            </div>
-                            <div>
-                              <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#ffffff', lineHeight: 1.2 }}>
-                                {course.title}
+                  <AnimatePresence>
+                    {dropdownOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                        transition={{ duration: 0.18, ease: "easeOut" }}
+                        style={{
+                          position: 'absolute', top: '100%', left: '-12px', width: '360px',
+                          background: '#000648', border: '1.5px solid #f2b733', borderRadius: '14px',
+                          boxShadow: '0 18px 48px rgba(0, 6, 72, 0.4)', padding: '14px', zIndex: 100,
+                        }}
+                      >
+                        <div style={{
+                          fontSize: '0.68rem', fontWeight: 800, color: '#f2b733',
+                          padding: '6px 12px 10px', textTransform: 'uppercase', letterSpacing: '0.08em',
+                          borderBottom: '1px solid rgba(242, 183, 51, 0.2)', marginBottom: '8px',
+                          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                        }}>
+                          <span>LIVE Cohort Programs</span>
+                          <span style={{ fontSize: '0.6rem', background: '#f2b733', color: '#000648', padding: '2px 6px', borderRadius: '4px', fontWeight: 800 }}>2026 Batches</span>
+                        </div>
+                        
+                        {phase1Courses.map((course) => {
+                          const icon = courseIcons[course.slug] || <HiSparkles size={18} />;
+                          return (
+                            <Link key={course.id} to={`/courses/${course.slug}`}
+                              onClick={() => { setDropdownOpen(false); setMobileMenuOpen(false); }}
+                              style={{
+                                display: 'flex', alignItems: 'flex-start', gap: '10px',
+                                padding: '10px 12px', borderRadius: '8px',
+                                transition: 'background-color 0.15s ease, border-left-color 0.15s ease, transform 0.15s ease', textDecoration: 'none',
+                                borderLeft: '3px solid transparent',
+                                marginBottom: '2px',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.background = 'rgba(242, 183, 51, 0.14)';
+                                e.currentTarget.style.borderLeftColor = '#f2b733';
+                                e.currentTarget.style.transform = 'translateX(3px)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.background = 'transparent';
+                                e.currentTarget.style.borderLeftColor = 'transparent';
+                                e.currentTarget.style.transform = 'translateX(0)';
+                              }}
+                            >
+                              <div style={{
+                                color: '#f2b733', marginTop: '2px', flexShrink: 0,
+                                background: 'rgba(242, 183, 51, 0.15)', padding: '6px', borderRadius: '6px'
+                              }}>
+                                {icon}
                               </div>
-                              <div style={{ fontSize: '0.72rem', color: '#cbd5e1', marginTop: '3px', lineHeight: 1.3 }}>
-                                {course.tagline}
+                              <div>
+                                <div style={{ fontSize: '0.84rem', fontWeight: 700, color: '#ffffff', lineHeight: 1.2 }}>
+                                  {course.title}
+                                </div>
+                                <div style={{ fontSize: '0.72rem', color: '#cbd5e1', marginTop: '3px', lineHeight: 1.3 }}>
+                                  {course.tagline}
+                                </div>
                               </div>
-                            </div>
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  )}
+                            </Link>
+                          );
+                        })}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               );
             }
@@ -152,7 +185,7 @@ export default function Navbar({ onOpenDemoModal }) {
                 onClick={() => setMobileMenuOpen(false)}
                 style={{
                   color: isActive ? '#000648' : '#334155',
-                  fontWeight: isActive ? 800 : 600, fontSize: '0.85rem',
+                  fontWeight: isActive ? 800 : 600, fontSize: '0.86rem',
                   borderBottom: isActive ? '2px solid #f2b733' : '2px solid transparent',
                   padding: '8px 0', transition: 'color 0.15s ease, border-bottom-color 0.15s ease',
                 }}
@@ -165,19 +198,22 @@ export default function Navbar({ onOpenDemoModal }) {
           })}
         </nav>
 
-        {/* Right Actions with High-Contrast Hover Styles */}
+        {/* Right Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-          <button 
+          <motion.button 
+            whileHover={{ scale: 1.04 }}
+            whileTap={{ scale: 0.98 }}
             type="button" 
             onClick={onOpenDemoModal} 
             className="btn btn-secondary hidden-mobile"
             style={{
-              padding: '9px 18px', fontSize: '0.8rem', fontWeight: 800,
-              borderRadius: '7px', cursor: 'pointer',
+              padding: '10px 20px', fontSize: '0.82rem', fontWeight: 800,
+              borderRadius: '8px', cursor: 'pointer',
+              boxShadow: '0 4px 14px rgba(242, 183, 51, 0.25)'
             }}
           >
             Book Free Demo Class
-          </button>
+          </motion.button>
 
           <button 
             type="button" 
@@ -192,26 +228,33 @@ export default function Navbar({ onOpenDemoModal }) {
       </div>
 
       {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div style={{ background: '#000648', borderTop: '1px solid #f2b733', padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {navLinks.map((link) => (
-            <Link key={link.name} to={link.path} onClick={() => setMobileMenuOpen(false)}
-              style={{ color: location.pathname === link.path ? '#f2b733' : '#ffffff', fontWeight: 700, fontSize: '0.92rem', textDecoration: 'none' }}
-            >
-              {link.name}
-            </Link>
-          ))}
-          <button 
-            type="button" 
-            onClick={() => { setMobileMenuOpen(false); onOpenDemoModal(); }}
-            className="btn btn-primary"
-            style={{ width: '100%', marginTop: '6px', padding: '12px', borderRadius: '8px', fontWeight: 800, fontSize: '0.88rem' }}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.2 }}
+            style={{ background: '#000648', borderTop: '1px solid #f2b733', padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: '14px', overflow: 'hidden' }}
           >
-            Book Free Demo Class
-          </button>
-        </div>
-      )}
+            {navLinks.map((link) => (
+              <Link key={link.name} to={link.path} onClick={() => setMobileMenuOpen(false)}
+                style={{ color: location.pathname === link.path ? '#f2b733' : '#ffffff', fontWeight: 700, fontSize: '0.92rem', textDecoration: 'none' }}
+              >
+                {link.name}
+              </Link>
+            ))}
+            <button 
+              type="button" 
+              onClick={() => { setMobileMenuOpen(false); onOpenDemoModal(); }}
+              className="btn btn-primary"
+              style={{ width: '100%', marginTop: '6px', padding: '12px', borderRadius: '8px', fontWeight: 800, fontSize: '0.88rem' }}
+            >
+              Book Free Demo Class
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
-
