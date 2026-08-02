@@ -22,16 +22,17 @@ export default function HiredCompaniesGrid({ transitions }) {
               key={item.name}
               style={{
                 background: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '12px',
+                border: '1.5px solid #000648',
+                borderRadius: '16px',
                 overflow: 'hidden',
-                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.05)',
+                boxShadow: '0 8px 24px rgba(0, 6, 72, 0.12)',
                 textAlign: 'center',
                 display: 'flex',
                 flexDirection: 'column',
               }}
             >
-              <div style={{ background: '#0f172a', padding: '24px 16px 16px', color: '#ffffff' }}>
+              {/* Dark Navy Top Header matching Reference Image 1 */}
+              <div style={{ background: '#000648', padding: '24px 20px 20px', color: '#ffffff', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <img
                   src={item.image}
                   alt={item.name}
@@ -41,22 +42,35 @@ export default function HiredCompaniesGrid({ transitions }) {
                     borderRadius: '50%',
                     objectFit: 'cover',
                     margin: '0 auto 12px',
-                    border: '2px solid rgba(255, 255, 255, 0.2)',
+                    border: '3px solid #f2b733',
+                    boxShadow: '0 4px 14px rgba(242, 183, 51, 0.4)',
                   }}
                 />
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff', marginBottom: '2px' }}>
+                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
                   {item.name}
                 </h3>
-                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#93c5fd' }}>
+                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#60a5fa' }}>
                   Placed @ {item.company}
                 </div>
               </div>
 
-              <div style={{ padding: '16px', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px', background: '#f8fafc' }}>
-                <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 500 }}>
-                  Before: <span style={{ color: '#0f172a', fontWeight: 600 }}>{item.beforeRole}</span>
+              {/* White Bottom Body Section matching Reference Image 1 */}
+              <div style={{ padding: '20px 18px 22px', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '14px', background: '#ffffff' }}>
+                <div style={{ fontSize: '0.88rem', color: '#64748b' }}>
+                  Before: <strong style={{ color: '#000648', fontWeight: 800 }}>{item.beforeRole}</strong>
                 </div>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#1e40af', background: '#eff6ff', padding: '6px 10px', borderRadius: '6px', border: '1px solid #bfdbfe' }}>
+                <div style={{
+                  width: '100%',
+                  padding: '12px 14px',
+                  borderRadius: '12px',
+                  border: '1.5px solid #000648',
+                  background: 'rgba(0, 6, 72, 0.04)',
+                  fontSize: '0.9rem',
+                  fontWeight: 900,
+                  color: '#000648',
+                  textAlign: 'center',
+                  boxSizing: 'border-box'
+                }}>
                   After: {item.afterRole}
                 </div>
               </div>
