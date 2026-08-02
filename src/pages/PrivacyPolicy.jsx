@@ -1,89 +1,182 @@
-import React from 'react';
-import { HiShieldCheck, HiLockClosed, HiCheckCircle } from 'react-icons/hi';
+import React, { useState } from 'react';
+import { HiShieldCheck, HiLockClosed, HiCheckCircle, HiMail, HiDocumentText, HiUser } from 'react-icons/hi';
 import CTABanner from '../components/CTABanner';
 
+const policies = [
+  {
+    id: 'collection',
+    title: '1. Information We Collect',
+    icon: HiDocumentText,
+    content: 'We collect personal information when you register for a course, request a counselling demo call, or access our Learning Management System (LMS). This includes your full name, email address, phone number, academic qualification, payment transaction references, and LMS course progress data.'
+  },
+  {
+    id: 'usage',
+    title: '2. How We Use Your Data',
+    icon: HiUser,
+    content: 'Your data is exclusively utilized to deliver live online training, configure your LMS portal access, issue accredited certificates of completion, and coordinate post-graduation placement assistance with corporate hiring partners.',
+    bulletPoints: [
+      'Course delivery, live class scheduling notifications, and attendance verification.',
+      'LMS portal credential generation and recording access for up to 1 year.',
+      'Resume reviews, mock interview scheduling, and direct job referral submission.'
+    ]
+  },
+  {
+    id: 'security',
+    title: '3. LMS Security & Data Protection',
+    icon: HiLockClosed,
+    content: 'We implement strict technical and organizational security measures to safeguard student records against unauthorized access. Student LMS credentials, assignment submissions, and assessment scores are stored in encrypted cloud databases. We maintain a zero-tolerance policy against selling or sharing student data for third-party advertising.'
+  },
+  {
+    id: 'disclosure',
+    title: '4. Third-Party Disclosures',
+    icon: HiShieldCheck,
+    content: 'Personal data is shared only with verified service providers necessary for course execution (such as secure payment gateways, LMS hosting infrastructure, and direct corporate recruitment teams upon your explicit permission during placement drives).'
+  },
+  {
+    id: 'governance',
+    title: '5. Data Rights & Governance Contact',
+    icon: HiMail,
+    content: 'Under applicable privacy regulations, students have the right to request access to their stored personal data, request corrections, or request data deletion upon program completion where legally permissible. For any data governance queries, contact info@ezerlearning.com.'
+  }
+];
+
 export default function PrivacyPolicy({ onOpenDemoModal }) {
+  const [activeSection, setActiveSection] = useState('all');
+
   return (
     <div style={{ background: '#ffffff' }}>
 
       {/* Header Banner */}
       <section style={{
-        background: '#000648', padding: '64px 0 48px', color: '#ffffff', textAlign: 'center',
-        borderBottom: '3px solid #f2b733'
+        background: '#000648',
+        padding: '72px 0 56px',
+        color: '#ffffff',
+        textAlign: 'center',
+        borderBottom: '3px solid #f2b733',
+        backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(242,183,51,0.12) 0%, transparent 70%)'
       }}>
         <div className="container">
           <span style={{
-            background: 'rgba(242,183,51,0.15)', border: '1px solid rgba(242,183,51,0.4)',
-            color: '#f2b733', fontSize: '0.75rem', fontWeight: 800, padding: '4px 14px',
-            borderRadius: '50px', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'inline-block', marginBottom: '12px'
+            background: 'rgba(242,183,51,0.15)',
+            border: '1.5px solid rgba(242,183,51,0.4)',
+            color: '#f2b733',
+            fontSize: '0.75rem',
+            fontWeight: 800,
+            padding: '5px 16px',
+            borderRadius: '50px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            display: 'inline-block',
+            marginBottom: '14px'
           }}>
-            Data Protection & Compliance
+            Data Governance & Compliance
           </span>
-          <h1 style={{ color: '#ffffff', fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: 900, marginBottom: '12px' }}>
+          <h1 style={{ color: '#ffffff', fontSize: 'clamp(2.2rem, 3.8vw, 3.2rem)', fontWeight: 900, marginBottom: '14px' }}>
             Privacy Policy
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.96rem', maxWidth: '650px', margin: '0 auto', lineHeight: 1.6 }}>
-            EZER Learning Solutions is committed to protecting your personal information, LMS user data, and privacy in compliance with Indian IT Act rules.
+          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '1rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6 }}>
+            EZER Learning Solutions is committed to protecting your personal information, LMS credentials, and academic records in full compliance with data protection laws.
           </p>
         </div>
       </section>
 
       {/* Main Content Area */}
-      <section className="section" style={{ padding: '56px 0' }}>
-        <div className="container" style={{ maxWidth: '840px', margin: '0 auto' }}>
+      <section className="section" style={{ padding: '64px 0', background: '#f8fafc' }}>
+        <div className="container" style={{ maxWidth: '880px', margin: '0 auto' }}>
           
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', color: '#334155', fontSize: '0.94rem', lineHeight: 1.75 }}>
-            
-            <div style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '24px' }}>
-              <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-                1. Information We Collect
-              </h2>
-              <p style={{ margin: 0 }}>
-                We collect personal information when you register for a course, request a counselling demo call, or access our Learning Management System (LMS). This includes your full name, email address, phone number, academic qualification, payment transaction references, and LMS course progress data.
+          {/* Compliance Guarantee Callout */}
+          <div style={{
+            background: '#ffffff',
+            border: '2px solid #000648',
+            borderRadius: '16px',
+            padding: '24px 28px',
+            marginBottom: '36px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '20px',
+            boxShadow: '0 4px 20px rgba(0,6,72,0.06)'
+          }}>
+            <div style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '12px',
+              background: '#000648',
+              color: '#f2b733',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <HiShieldCheck size={28} />
+            </div>
+            <div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                Strict Data Protection & Student Privacy Assurance
+              </h3>
+              <p style={{ fontSize: '0.88rem', color: '#475569', margin: 0, lineHeight: 1.5 }}>
+                Your data is stored securely in encrypted cloud infrastructure. We never sell, rent, or trade your personal information to marketing aggregators.
               </p>
             </div>
+          </div>
 
-            <div style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '24px' }}>
-              <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-                2. How We Use Your Data
-              </h2>
-              <p style={{ marginBottom: '10px' }}>
-                Your data is exclusively utilized to deliver live online training, configure your LMS portal access, issue accredited certificates of completion, and coordinate post-graduation placement assistance with corporate hiring partners.
-              </p>
-              <ul style={{ paddingLeft: '20px', margin: 0 }}>
-                <li>Course delivery, live class scheduling notifications, and attendance verification.</li>
-                <li>LMS portal credential generation and recording access.</li>
-                <li>Resume reviews, mock interview scheduling, and job referral submission.</li>
-              </ul>
-            </div>
-
-            <div style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '24px' }}>
-              <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-                3. LMS Security & Data Protection
-              </h2>
-              <p style={{ margin: 0 }}>
-                We implement strict technical and organizational measures to safeguard student records against unauthorized access. Student LMS credentials, assignment submissions, and assessment scores are stored in encrypted cloud databases. We do not sell or trade student contact lists to third-party marketing agencies.
-              </p>
-            </div>
-
-            <div style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '24px' }}>
-              <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-                4. Third-Party Disclosures
-              </h2>
-              <p style={{ margin: 0 }}>
-                Personal data is shared only with verified service providers necessary for course execution (such as secure payment gateways, LMS hosting infrastructure, and direct corporate recruitment teams upon your explicit permission during placement drives).
-              </p>
-            </div>
-
-            <div style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '24px' }}>
-              <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-                5. Contact & Privacy Inquiries
-              </h2>
-              <p style={{ margin: 0 }}>
-                For any data access requests, corrections, or privacy queries, please contact our Data Governance Officer at <strong>support@ezerlearningsolutions.com</strong> or call our institute support line.
-              </p>
-            </div>
-
+          {/* Policy Cards */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            {policies.map((p) => {
+              const IconComp = p.icon;
+              return (
+                <div
+                  key={p.id}
+                  style={{
+                    background: '#ffffff',
+                    border: '1.5px solid #e2e8f0',
+                    borderRadius: '16px',
+                    padding: '28px',
+                    boxShadow: '0 2px 10px rgba(0,6,72,0.04)',
+                    transition: 'border-color 0.2s ease, transform 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = '#000648';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = '#e2e8f0';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px' }}>
+                    <div style={{
+                      background: '#000648',
+                      color: '#f2b733',
+                      width: '36px',
+                      height: '36px',
+                      borderRadius: '10px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0
+                    }}>
+                      <IconComp size={20} />
+                    </div>
+                    <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#000648', margin: 0 }}>
+                      {p.title}
+                    </h2>
+                  </div>
+                  <p style={{ color: '#475569', fontSize: '0.94rem', lineHeight: 1.7, margin: 0 }}>
+                    {p.content}
+                  </p>
+                  {p.bulletPoints && (
+                    <ul style={{ marginTop: '14px', paddingLeft: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {p.bulletPoints.map((bp, idx) => (
+                        <li key={`${p.id}-bp-${idx}`} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem', color: '#334155' }}>
+                          <HiCheckCircle size={18} style={{ color: '#000648', flexShrink: 0, marginTop: '2px' }} />
+                          <span>{bp}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
         </div>
@@ -93,3 +186,4 @@ export default function PrivacyPolicy({ onOpenDemoModal }) {
     </div>
   );
 }
+

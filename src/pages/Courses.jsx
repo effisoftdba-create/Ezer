@@ -1,5 +1,6 @@
 import React from 'react';
 import TrendingSkills from '../components/TrendingSkills';
+import EzerDefinition from '../components/EzerDefinition';
 import CTABanner from '../components/CTABanner';
 import CompanyLogos from '../components/CompanyLogos';
 import { phase2Courses } from '../data/courses';
@@ -45,6 +46,9 @@ export default function Courses({ onOpenDemoModal }) {
 
       {/* Main Course Listing Grid */}
       <TrendingSkills onOpenDemoModal={onOpenDemoModal} />
+
+      {/* EZER Platform Definition Section (Reference Image 2) */}
+      <EzerDefinition />
 
       {/* Phase 2 Upcoming Courses Grid */}
       <section className="section-alt" style={{ padding: '56px 0', background: '#f7f8fa' }}>
