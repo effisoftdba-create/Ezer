@@ -4,6 +4,28 @@ import CTABanner from '../components/CTABanner';
 
 export default function StudentAdmissionPolicy({ onOpenDemoModal }) {
   const [activeTab, setActiveTab] = useState('policy'); // 'policy' | 'agreement'
+  
+  // Real-time automatic date calculation
+  const todayDate = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  const [formData, setFormData] = useState({
+    studentName: '',
+    admissionNo: `EZER-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+    courseName: 'Cloud DevOps with AI',
+    batchCode: `COHORT-${new Date().toLocaleString('en-US', { month: 'short' }).toUpperCase()}-${new Date().getFullYear()}`,
+    admissionDate: todayDate,
+    studentSignature: '',
+    authorizedSignatory: 'EZER Academic Admissions Desk'
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   return (
     <div style={{ background: '#ffffff' }}>
@@ -165,7 +187,7 @@ export default function StudentAdmissionPolicy({ onOpenDemoModal }) {
 
             </div>
           ) : (
-            /* Student Admission Agreement Formal Document View */
+            /* Interactive Student Admission Agreement Formal Document View */
             <div style={{
               background: '#ffffff', border: '2px solid #000648', borderRadius: '16px',
               padding: '36px', boxShadow: '0 12px 32px rgba(0,6,72,0.08)'
@@ -182,17 +204,99 @@ export default function StudentAdmissionPolicy({ onOpenDemoModal }) {
                 </p>
               </div>
 
-              {/* Student Details Form Block */}
-              <div style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '10px', padding: '18px', marginBottom: '24px' }}>
-                <h3 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#000648', marginBottom: '12px', textTransform: 'uppercase' }}>
-                  Student Details
+              {/* Interactive Student Details Form Block */}
+              <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '20px', marginBottom: '24px' }}>
+                <h3 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#000648', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Student Details (Fillable Form)
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', fontSize: '0.88rem', color: '#334155' }}>
-                  <div><strong>Student Name:</strong> ________________________</div>
-                  <div><strong>Admission No.:</strong> ________________________</div>
-                  <div><strong>Course Name:</strong> ________________________</div>
-                  <div><strong>Batch Code:</strong> ________________________</div>
-                  <div><strong>Admission Date:</strong> ________________________</div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                      Student Name *
+                    </label>
+                    <input
+                      type="text"
+                      name="studentName"
+                      value={formData.studentName}
+                      onChange={handleInputChange}
+                      placeholder="Enter your full legal name"
+                      style={{
+                        width: '100%', padding: '9px 12px', borderRadius: '8px',
+                        border: '1.5px solid #000648', fontSize: '0.88rem', fontWeight: 700,
+                        color: '#000648', outline: 'none', background: '#ffffff'
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                      Admission No.
+                    </label>
+                    <input
+                      type="text"
+                      name="admissionNo"
+                      value={formData.admissionNo}
+                      onChange={handleInputChange}
+                      style={{
+                        width: '100%', padding: '9px 12px', borderRadius: '8px',
+                        border: '1.5px solid #cbd5e1', fontSize: '0.88rem', fontWeight: 700,
+                        color: '#000648', outline: 'none', background: '#f1f5f9'
+                      }}
+                    />
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                      Course Name *
+                    </label>
+                    <select
+                      name="courseName"
+                      value={formData.courseName}
+                      onChange={handleInputChange}
+                      style={{
+                        width: '100%', padding: '9px 12px', borderRadius: '8px',
+                        border: '1.5px solid #000648', fontSize: '0.88rem', fontWeight: 700,
+                        color: '#000648', outline: 'none', background: '#ffffff'
+                      }}
+                    >
+                      <option value="Cloud DevOps with AI">Cloud DevOps with AI</option>
+                      <option value="IITD VLSI Physical Design">IITD VLSI Physical Design</option>
+                      <option value="Software Testing – Playwright">Software Testing – Playwright</option>
+                      <option value="AI & Machine Learning">AI & Machine Learning</option>
+                      <option value="IT Infrastructure & SysAdmin">IT Infrastructure & SysAdmin</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                      Batch Code
+                    </label>
+                    <input
+                      type="text"
+                      name="batchCode"
+                      value={formData.batchCode}
+                      onChange={handleInputChange}
+                      style={{
+                        width: '100%', padding: '9px 12px', borderRadius: '8px',
+                        border: '1.5px solid #cbd5e1', fontSize: '0.88rem', fontWeight: 700,
+                        color: '#000648', outline: 'none', background: '#f1f5f9'
+                      }}
+                    />
+                  </div>
+
+                  <div style={{ gridColumn: 'span 1' }}>
+                    <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                      Admission Date (Auto Real-time)
+                    </label>
+                    <div style={{
+                      padding: '9px 12px', borderRadius: '8px',
+                      background: 'rgba(242, 183, 51, 0.15)', border: '1.5px solid #f2b733',
+                      fontSize: '0.88rem', fontWeight: 900, color: '#000648'
+                    }}>
+                      📅 {formData.admissionDate}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -232,40 +336,69 @@ export default function StudentAdmissionPolicy({ onOpenDemoModal }) {
                 </p>
               </div>
 
-              {/* Declaration & Signatures */}
+              {/* Declaration & Digital Signatures */}
               <div style={{ borderTop: '2px solid #e2e8f0', paddingTop: '20px' }}>
                 <h3 style={{ fontSize: '0.94rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
                   Declaration
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: '#334155', lineHeight: 1.6, marginBottom: '28px' }}>
+                <p style={{ fontSize: '0.88rem', color: '#334155', lineHeight: 1.6, marginBottom: '24px' }}>
                   I have read and understood the Institute’s policies and agree to abide by all rules and regulations set forth in this agreement.
                 </p>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '20px', paddingTop: '16px', borderTop: '1px dashed #cbd5e1', fontSize: '0.84rem', color: '#334155' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', paddingTop: '16px', borderTop: '1px dashed #cbd5e1', fontSize: '0.84rem', color: '#334155' }}>
                   <div>
-                    <div style={{ marginBottom: '40px' }}>Student Signature:</div>
-                    <div style={{ borderBottom: '1.5px solid #000648', width: '100%' }}></div>
+                    <label style={{ display: 'block', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
+                      Student Digital Signature *
+                    </label>
+                    <input
+                      type="text"
+                      name="studentSignature"
+                      value={formData.studentSignature}
+                      onChange={handleInputChange}
+                      placeholder="Type your name to sign"
+                      style={{
+                        width: '100%', padding: '8px 12px', borderRadius: '6px',
+                        border: '1.5px solid #000648', fontFamily: "'Dancing Script', 'DM Sans', cursive, sans-serif",
+                        fontSize: '1rem', fontWeight: 700, color: '#000648', outline: 'none'
+                      }}
+                    />
+                    <div style={{ borderBottom: '1.5px solid #000648', marginTop: '6px', width: '100%' }}></div>
+                    <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '4px' }}>
+                      Signed by: {formData.studentSignature || '________________________'}
+                    </div>
                   </div>
+
                   <div>
-                    <div style={{ marginBottom: '40px' }}>Authorized Signatory:</div>
-                    <div style={{ borderBottom: '1.5px solid #000648', width: '100%' }}></div>
+                    <label style={{ display: 'block', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
+                      Authorized Signatory
+                    </label>
+                    <div style={{ padding: '8px 12px', background: '#f1f5f9', borderRadius: '6px', fontWeight: 800, color: '#000648', fontSize: '0.88rem' }}>
+                      {formData.authorizedSignatory}
+                    </div>
+                    <div style={{ borderBottom: '1.5px solid #000648', marginTop: '6px', width: '100%' }}></div>
                   </div>
+
                   <div>
-                    <div style={{ marginBottom: '40px' }}>Date:</div>
-                    <div style={{ borderBottom: '1.5px solid #000648', width: '100%' }}></div>
+                    <label style={{ display: 'block', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
+                      Agreement Execution Date (Auto)
+                    </label>
+                    <div style={{ padding: '8px 12px', background: 'rgba(242,183,51,0.15)', border: '1px solid #f2b733', borderRadius: '6px', fontWeight: 900, color: '#000648', fontSize: '0.88rem' }}>
+                      📅 {formData.admissionDate}
+                    </div>
+                    <div style={{ borderBottom: '1.5px solid #000648', marginTop: '6px', width: '100%' }}></div>
                   </div>
                 </div>
               </div>
 
-              {/* Print Action Button */}
-              <div style={{ textAlign: 'center', marginTop: '32px' }}>
+              {/* Action Buttons: Print / Save Document */}
+              <div style={{ textAlign: 'center', marginTop: '32px', display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
                 <button
                   type="button"
                   onClick={() => window.print()}
                   className="btn btn-secondary"
-                  style={{ padding: '10px 24px', borderRadius: '8px', fontSize: '0.86rem', fontWeight: 800 }}
+                  style={{ padding: '12px 28px', borderRadius: '8px', fontSize: '0.9rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px' }}
                 >
-                  <HiPrinter size={18} /> Print Admission Agreement
+                  <HiPrinter size={20} /> Print Signed Agreement
                 </button>
               </div>
 
