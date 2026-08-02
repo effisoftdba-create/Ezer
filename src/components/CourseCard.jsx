@@ -122,25 +122,23 @@ export default function CourseCard({ course, onOpenDemoModal }) {
           </div>
         </div>
 
-        {/* Reference Image 1 Action Buttons */}
+        {/* Reference Image 1 Action Buttons with EZER #000648 & #f2b733 Palette */}
         <div style={{ display: 'flex', gap: '10px', marginTop: 'auto', paddingTop: '14px' }}>
           <button 
             type="button"
             onClick={() => onOpenDemoModal(course.title)}
             style={{
               flex: 1, padding: '10px 0', borderRadius: '8px',
-              fontSize: '0.86rem', fontWeight: 700, textAlign: 'center',
-              background: 'transparent', border: '1.5px solid #4d4d4d',
-              color: '#1f2937', cursor: 'pointer',
+              fontSize: '0.86rem', fontWeight: 800, textAlign: 'center',
+              background: '#ffffff', border: '1.5px solid #000648',
+              color: '#000648', cursor: 'pointer',
               transition: 'background-color 0.2s ease, border-color 0.2s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#f8fafc';
-              e.currentTarget.style.borderColor = '#000648';
+              e.currentTarget.style.background = 'rgba(0, 6, 72, 0.05)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'transparent';
-              e.currentTarget.style.borderColor = '#4d4d4d';
+              e.currentTarget.style.background = '#ffffff';
             }}
           >
             Syllabus
@@ -150,19 +148,21 @@ export default function CourseCard({ course, onOpenDemoModal }) {
             to={`/courses/${course.slug}`} 
             style={{
               flex: 1.1, padding: '10px 0', borderRadius: '8px',
-              fontSize: '0.86rem', fontWeight: 800, textAlign: 'center',
-              background: '#0dba4b', color: '#ffffff',
-              border: 'none', textDecoration: 'none',
+              fontSize: '0.86rem', fontWeight: 900, textAlign: 'center',
+              background: '#000648', color: '#f2b733',
+              border: '1.5px solid #000648', textDecoration: 'none',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px',
-              boxShadow: '0 3px 10px rgba(13, 186, 75, 0.25)',
-              transition: 'background-color 0.2s ease, transform 0.2s ease'
+              boxShadow: '0 4px 12px rgba(0, 6, 72, 0.2)',
+              transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#099d3e';
+              e.currentTarget.style.background = '#f2b733';
+              e.currentTarget.style.color = '#000648';
               e.currentTarget.style.transform = 'translateY(-1px)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#0dba4b';
+              e.currentTarget.style.background = '#000648';
+              e.currentTarget.style.color = '#f2b733';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >

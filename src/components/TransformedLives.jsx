@@ -165,26 +165,26 @@ export default function TransformedLives() {
                       borderBottom: '1px solid #f1f5f9'
                     }}
                   >
-                    {/* Circle Avatar with Ring */}
+                    {/* Circle Avatar with Gold Ring */}
                     <div style={{ position: 'relative', display: 'inline-block', marginBottom: '12px' }}>
                       <img
                         src={item.image}
                         alt={item.name}
                         style={{
                           width: '84px', height: '84px', borderRadius: '50%',
-                          objectFit: 'cover', border: '3px solid #e2e8f0',
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)'
+                          objectFit: 'cover', border: '3.5px solid #f2b733',
+                          boxShadow: '0 4px 14px rgba(242, 183, 51, 0.35)'
                         }}
                       />
                     </div>
 
                     {/* Student Name matching Reference Image 3 */}
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#1f2937', marginBottom: '4px' }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
                       {item.name}
                     </h3>
 
                     {/* Placed @ Company Subtitle */}
-                    <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2563eb' }}>
+                    <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#000648' }}>
                       Placed @ {item.company}
                     </div>
                   </div>
@@ -212,7 +212,7 @@ export default function TransformedLives() {
                             border: '2px solid #cbd5e1', background: '#ffffff', flexShrink: 0
                           }} 
                         />
-                        <span style={{ fontSize: '0.86rem', fontWeight: 700, color: '#1f2937' }}>
+                        <span style={{ fontSize: '0.86rem', fontWeight: 700, color: '#334155' }}>
                           {item.beforeRole}
                         </span>
                       </div>
@@ -224,32 +224,33 @@ export default function TransformedLives() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '2px 0' }}>
                         <div 
                           style={{
-                            width: '22px', height: '22px', borderRadius: '50%',
-                            background: '#0dba4b', color: '#ffffff', fontWeight: 900,
-                            fontSize: '0.7rem', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                            width: '24px', height: '24px', borderRadius: '50%',
+                            background: '#000648', color: '#f2b733', fontWeight: 900,
+                            fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            border: '1px solid #f2b733', boxShadow: '0 2px 6px rgba(0,6,72,0.2)'
                           }}
                         >
                           e
                         </div>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#4b5563' }}>
+                        <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#000648' }}>
                           After EZER
                         </span>
                       </div>
 
                       {/* Vertical Dashed Line Connector with Arrow */}
-                      <div style={{ height: '12px', borderLeft: '2px dashed #cbd5e1' }} />
-                      <div style={{ color: '#0dba4b', marginTop: '-4px', marginBottom: '2px' }}>
+                      <div style={{ height: '12px', borderLeft: '2px dashed #000648' }} />
+                      <div style={{ color: '#000648', marginTop: '-4px', marginBottom: '2px' }}>
                         <HiArrowDown size={14} />
                       </div>
 
-                      {/* Bottom Node: Placed Role (Selected State matching Reference Image 3) */}
+                      {/* Bottom Node: Placed Role (Selected State in EZER #000648 & #f2b733 Palette) */}
                       <div 
                         style={{
                           width: '100%',
                           padding: '12px 14px',
                           borderRadius: '12px',
-                          border: '1.5px solid #0dba4b',
-                          background: '#e6f7ec',
+                          border: '1.5px solid #000648',
+                          background: 'rgba(0, 6, 72, 0.05)',
                           display: 'flex',
                           alignItems: 'center',
                           gap: '12px'
@@ -258,10 +259,10 @@ export default function TransformedLives() {
                         <div 
                           style={{
                             width: '16px', height: '16px', borderRadius: '50%',
-                            border: '5px solid #0dba4b', background: '#ffffff', flexShrink: 0
+                            border: '4px solid #000648', background: '#f2b733', flexShrink: 0
                           }} 
                         />
-                        <span style={{ fontSize: '0.88rem', fontWeight: 800, color: '#000648' }}>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 900, color: '#000648' }}>
                           {item.afterRole}
                         </span>
                       </div>
