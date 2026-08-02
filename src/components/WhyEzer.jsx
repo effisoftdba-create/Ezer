@@ -237,10 +237,20 @@ export default function WhyEzer() {
                   </p>
                 </div>
 
-                {/* Bullet Points */}
+                {/* Bullet Points - Static Rectangle Shape (Height & Width) matching User Spec */}
                 <div style={{ 
-                  background: '#f8fafc', padding: '12px 14px', borderRadius: '10px', 
-                  border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', gap: '8px' 
+                  width: '100%',
+                  height: '115px',
+                  minHeight: '115px',
+                  boxSizing: 'border-box',
+                  background: '#f8fafc',
+                  padding: '12px 14px',
+                  borderRadius: '10px', 
+                  border: '1.5px solid #e2e8f0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  gap: '8px' 
                 }}>
                   {r.bullets.map((bullet) => (
                     <div key={bullet} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.76rem', fontWeight: 700, color: '#000648' }}>

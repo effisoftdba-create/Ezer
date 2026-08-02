@@ -120,23 +120,41 @@ export default function VideoTestimonials() {
                     background: 'linear-gradient(180deg, rgba(0, 6, 72, 0.3) 0%, rgba(0, 6, 72, 0.7) 100%)',
                   }}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setIsPlaying(true)}
-                    style={{
-                      width: '72px', height: '72px', borderRadius: '50%',
-                      background: '#f2b733', color: '#000648',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      boxShadow: '0 8px 24px rgba(242, 183, 51, 0.5)',
-                      cursor: 'pointer', border: 'none',
-                      transition: 'transform 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                    aria-label="Play testimonial video"
-                  >
-                    <HiPlay size={36} style={{ marginLeft: '4px' }} />
-                  </button>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+                    <button
+                      type="button"
+                      onClick={() => setIsPlaying(true)}
+                      style={{
+                        width: '76px', height: '54px', borderRadius: '14px',
+                        background: '#ff0000', color: '#ffffff',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: '0 8px 24px rgba(255, 0, 0, 0.45)',
+                        cursor: 'pointer', border: 'none',
+                        transition: 'transform 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                      aria-label="Play testimonial video on YouTube"
+                    >
+                      <HiPlay size={36} style={{ marginLeft: '2px' }} />
+                    </button>
+
+                    <a
+                      href={currentVideo.embedUrl.replace('/embed/', '/watch?v=')}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '6px',
+                        padding: '6px 14px', borderRadius: '50px',
+                        background: 'rgba(0, 0, 0, 0.75)', color: '#ffffff',
+                        fontSize: '0.82rem', fontWeight: 800, textDecoration: 'none',
+                        border: '1px solid rgba(255, 255, 255, 0.3)',
+                        backdropFilter: 'blur(4px)'
+                      }}
+                    >
+                      Watch on YouTube ↗
+                    </a>
+                  </div>
                 </div>
               </>
             )}

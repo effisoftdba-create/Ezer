@@ -33,19 +33,13 @@ export default function CourseCard({ course, onOpenDemoModal }) {
         e.currentTarget.style.transform = 'translateY(0)';
       }}
     >
-      {/* Enhanced Image Banner Header matching Reference Image 1 */}
-      <div style={{ position: 'relative', height: '175px', overflow: 'hidden', background: '#000648' }}>
+      {/* Clear Image Banner Header without dark color overlays */}
+      <div style={{ position: 'relative', height: '175px', overflow: 'hidden', background: '#ffffff' }}>
         <img 
           src={course.image?.startsWith('http') ? course.image : `${import.meta.env.BASE_URL || '/'}${course.image?.replace(/^\//, '')}`} 
           alt={course.title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.95 }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 1 }}
         />
-        
-        {/* Subtle Tech Gradient Overlay */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'linear-gradient(180deg, rgba(0,6,72,0.15) 0%, rgba(0,6,72,0.65) 100%)'
-        }} />
 
         {/* Category Badge */}
         <span style={{

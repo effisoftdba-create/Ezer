@@ -216,11 +216,8 @@ export default function EzerDefinition() {
                 boxShadow: '0 4px 16px rgba(0, 6, 72, 0.15)'
               }}
             >
-              <span style={{ background: '#f2b733', color: '#000648', padding: '3px 10px', borderRadius: '50px', fontWeight: 900, fontSize: '0.85rem' }}>
-                EZER Definition
-              </span>
               <span>
-                <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>E</strong>mpowering <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>Z</strong>ero-to-Hero <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>E</strong>ducation & <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>R</strong>eal Career Transformations
+                <strong style={{ color: '#f2b733', fontSize: '1.05rem', marginRight: '6px' }}>EZER —</strong> <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>E</strong>mpowering <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>Z</strong>ero-to-Hero <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>E</strong>ducation & <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>R</strong>eal Career Transformations
               </span>
             </div>
 

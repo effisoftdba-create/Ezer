@@ -308,23 +308,70 @@ export default function Hero({ onOpenDemoModal }) {
                 </m.div>
               </AnimatePresence>
 
-              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '32px' }}>
-                <m.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
-                  <Link to="/courses" className="btn btn-primary" style={{
-                    padding: '12px 26px', borderRadius: '8px',
-                    fontWeight: 800, fontSize: '0.86rem',
-                  }}>
-                    Explore Courses <HiArrowRight size={16} />
+              {/* Hero Action Buttons - Identical Dimensions & Distinct Hover States */}
+              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', marginBottom: '32px' }}>
+                <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <Link 
+                    to="/courses" 
+                    style={{
+                      width: '230px',
+                      height: '52px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      borderRadius: '10px',
+                      fontWeight: 800,
+                      fontSize: '0.9rem',
+                      background: '#000648',
+                      color: '#ffffff',
+                      border: '2px solid #000648',
+                      boxShadow: '0 4px 14px rgba(0, 6, 72, 0.2)',
+                      textDecoration: 'none',
+                      transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#0a1478';
+                      e.currentTarget.style.borderColor = '#0a1478';
+                      e.currentTarget.style.color = '#f2b733';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#000648';
+                      e.currentTarget.style.borderColor = '#000648';
+                      e.currentTarget.style.color = '#ffffff';
+                    }}
+                  >
+                    Explore Courses <HiArrowRight size={18} style={{ color: '#f2b733' }} />
                   </Link>
                 </m.div>
-                <m.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}>
+
+                <m.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                   <button 
                     type="button" 
                     onClick={onOpenDemoModal} 
-                    className="btn btn-secondary"
                     style={{
-                      padding: '12px 26px', borderRadius: '8px',
-                      fontWeight: 800, fontSize: '0.86rem',
+                      width: '230px',
+                      height: '52px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderRadius: '10px',
+                      fontWeight: 800,
+                      fontSize: '0.9rem',
+                      background: '#f2b733',
+                      color: '#000648',
+                      border: '2px solid #f2b733',
+                      boxShadow: '0 4px 14px rgba(242, 183, 51, 0.3)',
+                      cursor: 'pointer',
+                      transition: 'background-color 0.2s ease, border-color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#d99b1a';
+                      e.currentTarget.style.borderColor = '#d99b1a';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#f2b733';
+                      e.currentTarget.style.borderColor = '#f2b733';
                     }}
                   >
                     Book a Free Demo Class
