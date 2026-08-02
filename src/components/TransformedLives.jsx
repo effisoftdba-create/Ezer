@@ -147,135 +147,75 @@ export default function TransformedLives() {
                     flex: '0 0 280px',
                     background: '#ffffff',
                     borderRadius: '16px',
-                    border: '1px solid #e2e8f0',
-                    boxShadow: '0 4px 20px rgba(0, 6, 72, 0.05)',
+                    border: '1.5px solid #000648',
+                    boxShadow: '0 8px 24px rgba(0, 6, 72, 0.12)',
                     overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
                   }}
                 >
-                  {/* Top Avatar Header with Subtle Grid Pattern matching Reference Image 3 */}
+                  {/* Dark Navy Top Header Section matching Reference Image 1 */}
                   <div 
                     style={{
-                      padding: '24px 20px 18px',
+                      padding: '24px 20px 20px',
                       textAlign: 'center',
-                      backgroundImage: 'radial-gradient(#e2e8f0 1px, transparent 1px)',
-                      backgroundSize: '14px 14px',
-                      backgroundColor: '#ffffff',
-                      borderBottom: '1px solid #f1f5f9'
+                      backgroundColor: '#000648',
+                      color: '#ffffff',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center'
                     }}
                   >
-                    {/* Circle Avatar with Gold Ring */}
+                    {/* Circle Avatar with Gold Border matching Image 1 */}
                     <div style={{ position: 'relative', display: 'inline-block', marginBottom: '12px' }}>
                       <img
                         src={item.image}
                         alt={item.name}
                         style={{
-                          width: '84px', height: '84px', borderRadius: '50%',
-                          objectFit: 'cover', border: '3.5px solid #f2b733',
-                          boxShadow: '0 4px 14px rgba(242, 183, 51, 0.35)'
+                          width: '80px', height: '80px', borderRadius: '50%',
+                          objectFit: 'cover', border: '3px solid #f2b733',
+                          boxShadow: '0 4px 14px rgba(242, 183, 51, 0.4)'
                         }}
                       />
                     </div>
 
-                    {/* Student Name matching Reference Image 3 */}
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                    {/* Student Name in White Bold Text matching Image 1 */}
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
                       {item.name}
                     </h3>
 
-                    {/* Placed @ Company Subtitle */}
-                    <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#000648' }}>
+                    {/* Placed @ Company Subtitle matching Image 1 */}
+                    <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#60a5fa' }}>
                       Placed @ {item.company}
                     </div>
                   </div>
 
-                  {/* Career Transition Vertical Flow Container matching Reference Image 3 */}
-                  <div style={{ padding: '18px 16px 20px', background: '#ffffff', flexGrow: 1 }}>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      
-                      {/* Top Node: Before Role (Static Height & Centered Content) */}
-                      <div 
-                        style={{
-                          width: '100%',
-                          height: '56px',
-                          minHeight: '56px',
-                          padding: '0 14px',
-                          borderRadius: '14px',
-                          border: '1.5px solid #e2e8f0',
-                          background: '#f8fafc',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '10px',
-                          boxSizing: 'border-box'
-                        }}
-                      >
-                        <div 
-                          style={{
-                            width: '16px', height: '16px', borderRadius: '50%',
-                            border: '2px solid #cbd5e1', background: '#ffffff', flexShrink: 0
-                          }} 
-                        />
-                        <span style={{ fontSize: '0.86rem', fontWeight: 700, color: '#334155', textAlign: 'center', lineHeight: 1.2 }}>
-                          {item.beforeRole}
-                        </span>
-                      </div>
-
-                      {/* Vertical Dashed Line Connector */}
-                      <div style={{ height: '16px', borderLeft: '2px dashed #cbd5e1', margin: '2px 0' }} />
-
-                      {/* Middle Node: After EZER Badge */}
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '2px 0' }}>
-                        <div 
-                          style={{
-                            width: '24px', height: '24px', borderRadius: '50%',
-                            background: '#000648', color: '#f2b733', fontWeight: 900,
-                            fontSize: '0.75rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            border: '1px solid #f2b733', boxShadow: '0 2px 6px rgba(0,6,72,0.2)'
-                          }}
-                        >
-                          e
-                        </div>
-                        <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#000648' }}>
-                          After EZER
-                        </span>
-                      </div>
-
-                      {/* Vertical Dashed Line Connector with Arrow */}
-                      <div style={{ height: '12px', borderLeft: '2px dashed #000648' }} />
-                      <div style={{ color: '#000648', marginTop: '-4px', marginBottom: '2px' }}>
-                        <HiArrowDown size={14} />
-                      </div>
-
-                      {/* Bottom Node: Placed Role (Static Height & Centered Content - Reference Image 2) */}
-                      <div 
-                        style={{
-                          width: '100%',
-                          height: '56px',
-                          minHeight: '56px',
-                          padding: '0 14px',
-                          borderRadius: '14px',
-                          border: '1.5px solid #000648',
-                          background: 'rgba(0, 6, 72, 0.05)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '10px',
-                          boxSizing: 'border-box'
-                        }}
-                      >
-                        <div 
-                          style={{
-                            width: '16px', height: '16px', borderRadius: '50%',
-                            border: '4px solid #000648', background: '#f2b733', flexShrink: 0
-                          }} 
-                        />
-                        <span style={{ fontSize: '0.88rem', fontWeight: 900, color: '#000648', textAlign: 'center', lineHeight: 1.2 }}>
-                          {item.afterRole}
-                        </span>
-                      </div>
-
+                  {/* White Bottom Body Section matching Reference Image 1 */}
+                  <div style={{ padding: '20px 18px 22px', background: '#ffffff', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: '14px' }}>
+                    
+                    {/* Before Role Line matching Image 1 */}
+                    <div style={{ fontSize: '0.88rem', color: '#64748b' }}>
+                      Before: <strong style={{ color: '#000648', fontWeight: 800 }}>{item.beforeRole}</strong>
                     </div>
+
+                    {/* After Role Badge Box matching Image 1 */}
+                    <div 
+                      style={{
+                        width: '100%',
+                        padding: '12px 14px',
+                        borderRadius: '12px',
+                        border: '1.5px solid #000648',
+                        background: 'rgba(0, 6, 72, 0.04)',
+                        fontSize: '0.9rem',
+                        fontWeight: 900,
+                        color: '#000648',
+                        textAlign: 'center',
+                        boxSizing: 'border-box'
+                      }}
+                    >
+                      After: {item.afterRole}
+                    </div>
+
                   </div>
                 </m.div>
               ))}
