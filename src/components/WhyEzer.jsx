@@ -197,64 +197,67 @@ export default function WhyEzer() {
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              {/* Image Banner Header */}
-              <div style={{ height: '140px', overflow: 'hidden', position: 'relative', background: '#000648' }}>
+              {/* Image Banner Header matching Reference Image */}
+              <div style={{ height: '145px', overflow: 'hidden', position: 'relative', background: '#000648' }}>
                 <img 
                   src={r.image} 
                   alt={r.title} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.9, objectPosition: 'center top' }} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.95, objectPosition: 'center top' }} 
                 />
                 
-                {/* Floating Glowing Icon Box */}
+                {/* Floating Glowing Icon Box matching Reference Image */}
                 <div style={{
                   position: 'absolute', bottom: '12px', left: '16px',
-                  width: '42px', height: '42px', borderRadius: '10px',
-                  background: '#000648', border: '1.5px solid #f2b733', display: 'flex',
+                  width: '44px', height: '44px', borderRadius: '12px',
+                  background: '#000648', border: '2px solid #f2b733', display: 'flex',
                   alignItems: 'center', justifyContent: 'center',
-                  color: '#f2b733', boxShadow: '0 6px 14px rgba(0,6,72,0.4)',
+                  color: '#f2b733', boxShadow: '0 8px 18px rgba(0, 6, 72, 0.45)',
+                  zIndex: 3
                 }}>
                   {r.icon}
                 </div>
 
+                {/* Subtitle Badge matching Reference Image */}
                 <div style={{
                   position: 'absolute', top: '10px', right: '12px',
-                  background: 'rgba(0,6,72,0.85)', backdropFilter: 'blur(4px)',
-                  color: '#f2b733', fontSize: '0.65rem', fontWeight: 800,
-                  padding: '3px 10px', borderRadius: '50px', border: '1px solid rgba(242,183,51,0.4)'
+                  background: '#000648', color: '#f2b733', fontSize: '0.68rem', fontWeight: 800,
+                  padding: '4px 12px', borderRadius: '50px', border: '1.5px solid #f2b733',
+                  boxShadow: '0 4px 12px rgba(0, 6, 72, 0.3)'
                 }}>
                   {r.subtitle}
                 </div>
               </div>
 
-              {/* Enhanced Detailed Content Body */}
-              <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between' }}>
+              {/* Enhanced Detailed Content Body matching Reference Image */}
+              <div style={{ padding: '22px 20px 20px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between', background: '#ffffff' }}>
                 <div>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginBottom: '8px', lineHeight: 1.3 }}>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#000648', marginBottom: '8px', lineHeight: 1.3 }}>
                     {r.title}
                   </h3>
-                  <p style={{ fontSize: '0.82rem', color: '#475569', lineHeight: 1.6, marginBottom: '16px' }}>
+                  <p style={{ fontSize: '0.84rem', color: '#475569', lineHeight: 1.6, marginBottom: '18px' }}>
                     {r.desc}
                   </p>
                 </div>
 
-                {/* Bullet Points - Static Rectangle Shape (Height & Width) matching User Spec */}
+                {/* Static Inner Rectangle Box matching Reference Image */}
                 <div style={{ 
                   width: '100%',
-                  height: '115px',
-                  minHeight: '115px',
+                  height: '120px',
+                  minHeight: '120px',
                   boxSizing: 'border-box',
                   background: '#f8fafc',
-                  padding: '12px 14px',
-                  borderRadius: '10px', 
+                  padding: '14px 16px',
+                  borderRadius: '12px', 
                   border: '1.5px solid #e2e8f0',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
-                  gap: '8px' 
+                  gap: '10px',
+                  boxShadow: '0 2px 8px rgba(0, 6, 72, 0.03)'
                 }}>
                   {r.bullets.map((bullet) => (
-                    <div key={bullet} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.76rem', fontWeight: 700, color: '#000648' }}>
-                      <HiCheckCircle size={15} style={{ color: '#f2b733', flexShrink: 0 }} />
+                    <div key={bullet} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.78rem', fontWeight: 800, color: '#000648' }}>
+                      <HiCheckCircle size={17} style={{ color: '#f2b733', flexShrink: 0 }} />
                       <span>{bullet}</span>
                     </div>
                   ))}
