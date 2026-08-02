@@ -197,12 +197,12 @@ export default function WhyEzer() {
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              {/* Image Banner Header matching Reference Image */}
-              <div style={{ height: '145px', overflow: 'hidden', position: 'relative', background: '#000648' }}>
+              {/* Image Banner Header matching Course Card Height (175px) */}
+              <div style={{ height: '175px', overflow: 'hidden', position: 'relative', background: '#000648' }}>
                 <img 
                   src={r.image} 
                   alt={r.title} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.95, objectPosition: 'center top' }} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 1, objectPosition: 'center top' }} 
                 />
                 
                 {/* Floating Glowing Icon Box matching Reference Image */}
