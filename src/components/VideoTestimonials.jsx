@@ -4,12 +4,19 @@ import { videoStories } from '../data/testimonials';
 
 export default function VideoTestimonials() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
   const trackRef = useRef(null);
   const currentVideo = videoStories[activeIdx] || videoStories[0];
+
+  const handleSelectVideo = (idx) => {
+    setActiveIdx(idx);
+    setIsPlaying(false);
+  };
 
   const handleNext = () => {
     const nextIdx = (activeIdx + 1) % videoStories.length;
     setActiveIdx(nextIdx);
+    setIsPlaying(false);
     if (trackRef.current) {
       trackRef.current.scrollTo({ left: nextIdx * 200, behavior: 'smooth' });
     }
@@ -18,6 +25,7 @@ export default function VideoTestimonials() {
   const handlePrev = () => {
     const prevIdx = (activeIdx - 1 + videoStories.length) % videoStories.length;
     setActiveIdx(prevIdx);
+    setIsPlaying(false);
     if (trackRef.current) {
       trackRef.current.scrollTo({ left: prevIdx * 200, behavior: 'smooth' });
     }
@@ -72,7 +80,7 @@ export default function VideoTestimonials() {
           </div>
         </div>
 
-        {/* Featured Main Video Player Container */}
+        {/* Featured Main Video Player Container with YouTube iFrame */}
         <div
           style={{
             maxWidth: '850px',
@@ -84,40 +92,54 @@ export default function VideoTestimonials() {
             boxShadow: '0 12px 28px rgba(0, 6, 72, 0.1)',
           }}
         >
-          <div style={{ position: 'relative', paddingBottom: '48%', background: '#000326' }}>
-            <img
-              src={currentVideo.thumbnail}
-              alt={currentVideo.title}
-              style={{
-                position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                objectFit: 'cover', opacity: 0.85,
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute', inset: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: 'rgba(0, 6, 72, 0.35)',
-              }}
-            >
-              <a
-                href={currentVideo.videoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+          <div style={{ position: 'relative', paddingBottom: '52%', background: '#000326' }}>
+            {isPlaying ? (
+              <iframe
+                src={`${currentVideo.embedUrl}?autoplay=1&rel=0`}
+                title={currentVideo.title}
                 style={{
-                  width: '64px', height: '64px', borderRadius: '50%',
-                  background: '#f2b733', color: '#000648',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 8px 24px rgba(242, 183, 51, 0.5)',
-                  transition: 'transform 0.2s ease', textDecoration: 'none',
+                  position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none'
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                aria-label="Play testimonial video"
-              >
-                <HiPlay size={32} style={{ marginLeft: '4px' }} />
-              </a>
-            </div>
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <>
+                <img
+                  src={currentVideo.thumbnail}
+                  alt={currentVideo.title}
+                  style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    objectFit: 'cover', opacity: 0.88,
+                  }}
+                />
+                <div
+                  style={{
+                    position: 'absolute', inset: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'linear-gradient(180deg, rgba(0, 6, 72, 0.3) 0%, rgba(0, 6, 72, 0.7) 100%)',
+                  }}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setIsPlaying(true)}
+                    style={{
+                      width: '72px', height: '72px', borderRadius: '50%',
+                      background: '#f2b733', color: '#000648',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      boxShadow: '0 8px 24px rgba(242, 183, 51, 0.5)',
+                      cursor: 'pointer', border: 'none',
+                      transition: 'transform 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
+                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+                    aria-label="Play testimonial video"
+                  >
+                    <HiPlay size={36} style={{ marginLeft: '4px' }} />
+                  </button>
+                </div>
+              </>
+            )}
           </div>
 
           <div style={{ padding: '20px 24px', background: '#000648', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
@@ -148,7 +170,7 @@ export default function VideoTestimonials() {
             <button
               key={story.id}
               type="button"
-              onClick={() => setActiveIdx(idx)}
+              onClick={() => handleSelectVideo(idx)}
               style={{
                 flex: '0 0 200px', background: activeIdx === idx ? '#000648' : '#ffffff',
                 border: activeIdx === idx ? '2px solid #f2b733' : '1.5px solid #e2e8f0',

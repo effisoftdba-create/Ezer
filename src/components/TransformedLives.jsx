@@ -193,17 +193,21 @@ export default function TransformedLives() {
                   <div style={{ padding: '18px 16px 20px', background: '#ffffff', flexGrow: 1 }}>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       
-                      {/* Top Node: Before Role */}
+                      {/* Top Node: Before Role (Static Height & Centered Content) */}
                       <div 
                         style={{
                           width: '100%',
-                          padding: '12px 14px',
-                          borderRadius: '12px',
-                          border: '1px solid #e2e8f0',
+                          height: '56px',
+                          minHeight: '56px',
+                          padding: '0 14px',
+                          borderRadius: '14px',
+                          border: '1.5px solid #e2e8f0',
                           background: '#f8fafc',
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '12px'
+                          justifyContent: 'center',
+                          gap: '10px',
+                          boxSizing: 'border-box'
                         }}
                       >
                         <div 
@@ -212,7 +216,7 @@ export default function TransformedLives() {
                             border: '2px solid #cbd5e1', background: '#ffffff', flexShrink: 0
                           }} 
                         />
-                        <span style={{ fontSize: '0.86rem', fontWeight: 700, color: '#334155' }}>
+                        <span style={{ fontSize: '0.86rem', fontWeight: 700, color: '#334155', textAlign: 'center', lineHeight: 1.2 }}>
                           {item.beforeRole}
                         </span>
                       </div>
@@ -243,17 +247,21 @@ export default function TransformedLives() {
                         <HiArrowDown size={14} />
                       </div>
 
-                      {/* Bottom Node: Placed Role (Selected State in EZER #000648 & #f2b733 Palette) */}
+                      {/* Bottom Node: Placed Role (Static Height & Centered Content - Reference Image 2) */}
                       <div 
                         style={{
                           width: '100%',
-                          padding: '12px 14px',
-                          borderRadius: '12px',
+                          height: '56px',
+                          minHeight: '56px',
+                          padding: '0 14px',
+                          borderRadius: '14px',
                           border: '1.5px solid #000648',
                           background: 'rgba(0, 6, 72, 0.05)',
                           display: 'flex',
                           alignItems: 'center',
-                          gap: '12px'
+                          justifyContent: 'center',
+                          gap: '10px',
+                          boxSizing: 'border-box'
                         }}
                       >
                         <div 
@@ -262,7 +270,7 @@ export default function TransformedLives() {
                             border: '4px solid #000648', background: '#f2b733', flexShrink: 0
                           }} 
                         />
-                        <span style={{ fontSize: '0.88rem', fontWeight: 900, color: '#000648' }}>
+                        <span style={{ fontSize: '0.88rem', fontWeight: 900, color: '#000648', textAlign: 'center', lineHeight: 1.2 }}>
                           {item.afterRole}
                         </span>
                       </div>
