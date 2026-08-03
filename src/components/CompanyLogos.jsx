@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion';
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
 const baseLogosRow1 = [
   {
@@ -185,18 +184,6 @@ const baseLogosRow3 = [
   }
 ];
 
-// Quadrupled arrays for continuous infinite smooth CSS ticker
-const makeInfiniteTrack = (items) => [
-  ...items.map((item, i) => ({ ...item, uId: `${item.id}-a-${i}` })),
-  ...items.map((item, i) => ({ ...item, uId: `${item.id}-b-${i}` })),
-  ...items.map((item, i) => ({ ...item, uId: `${item.id}-c-${i}` })),
-  ...items.map((item, i) => ({ ...item, uId: `${item.id}-d-${i}` }))
-];
-
-const track1 = makeInfiniteTrack(baseLogosRow1);
-const track2 = makeInfiniteTrack(baseLogosRow2);
-const track3 = makeInfiniteTrack(baseLogosRow3);
-
 function LogoCard({ logo }) {
   return (
     <m.div
@@ -221,10 +208,49 @@ function LogoCard({ logo }) {
   );
 }
 
-export default function CompanyLogos() {
-  const [speedMultiplier, setSpeedMultiplier] = useState(1);
+function MarqueeRow({ items, direction = 'left', duration = 32 }) {
+  const [isHovered, setIsHovered] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
+  // Multiply items 3 times for smooth 0% -> -50% loop
+  const duplicatedItems = [...items, ...items, ...items];
+
+  return (
+    <div 
+      onMouseEnter={() => setIsHovered(true)} 
+      onMouseLeave={() => setIsHovered(false)}
+      style={{ overflow: 'hidden', width: '100%', padding: '4px 0' }}
+    >
+      <m.div
+        animate={
+          isHovered || shouldReduceMotion 
+            ? {} 
+            : { x: direction === 'left' ? ['0%', '-50%'] : ['-50%', '0%'] }
+        }
+        transition={{
+          x: {
+            repeat: Infinity,
+            repeatType: 'loop',
+            duration: duration,
+            ease: 'linear'
+          }
+        }}
+        style={{
+          display: 'flex',
+          gap: '16px',
+          width: 'max-content',
+          willChange: 'transform'
+        }}
+      >
+        {duplicatedItems.map((logo, index) => (
+          <LogoCard key={`${logo.id}-${index}`} logo={logo} />
+        ))}
+      </m.div>
+    </div>
+  );
+}
+
+export default function CompanyLogos() {
   return (
     <LazyMotion features={domAnimation}>
       <section
@@ -236,41 +262,6 @@ export default function CompanyLogos() {
           position: 'relative',
         }}
       >
-        {/* CSS Keyframes for High Speed Infinite Marquee Scroll */}
-        <style>{`
-          @keyframes ezerMarqueeLeft {
-            0% { transform: translateX(0%); }
-            100% { transform: translateX(-50%); }
-          }
-          @keyframes ezerMarqueeRight {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0%); }
-          }
-          .marquee-track-1 {
-            display: flex;
-            gap: 16px;
-            width: max-content;
-            animation: ezerMarqueeLeft ${12 / speedMultiplier}s linear infinite;
-          }
-          .marquee-track-2 {
-            display: flex;
-            gap: 16px;
-            width: max-content;
-            animation: ezerMarqueeRight ${12 / speedMultiplier}s linear infinite;
-          }
-          .marquee-track-3 {
-            display: flex;
-            gap: 16px;
-            width: max-content;
-            animation: ezerMarqueeLeft ${12 / speedMultiplier}s linear infinite;
-          }
-          .marquee-row-wrapper:hover .marquee-track-1,
-          .marquee-row-wrapper:hover .marquee-track-2,
-          .marquee-row-wrapper:hover .marquee-track-3 {
-            animation-play-state: paused;
-          }
-        `}</style>
-
         <div
           className="container"
           style={{
@@ -298,62 +289,19 @@ export default function CompanyLogos() {
               Our Graduates Are Hired At Top Global Technology Companies
             </h3>
           </div>
-
-          {/* Speed Toggle Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
-            <button
-              type="button"
-              onClick={() => setSpeedMultiplier(prev => (prev === 1 ? 1.8 : 1))}
-              aria-label="Toggle Auto Scroll Speed"
-              style={{
-                padding: '6px 14px',
-                borderRadius: '50px',
-                border: '1.5px solid #000648',
-                background: speedMultiplier > 1 ? '#000648' : '#ffffff',
-                color: speedMultiplier > 1 ? '#f2b733' : '#000648',
-                fontSize: '0.75rem',
-                fontWeight: 800,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)'
-              }}
-            >
-              🚀 {speedMultiplier > 1 ? 'Fast Auto-Scroll ON' : 'Boost Scroll Speed'}
-            </button>
-          </div>
         </div>
 
-        {/* 3-Row Infinite Ticker Container (1st Left->Right, 2nd Right->Left, 3rd Left->Right) */}
+        {/* 3-Row Infinite Ticker Container for PC View & Mobile (Slower & Smooth Scrolling) */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflow: 'hidden' }}>
           
-          {/* Row 1: Left to Right Scroll */}
-          <div className="marquee-row-wrapper" style={{ overflow: 'hidden', padding: '2px 0' }}>
-            <div className="marquee-track-1">
-              {track1.map((logo) => (
-                <LogoCard key={logo.uId} logo={logo} />
-              ))}
-            </div>
-          </div>
+          {/* Row 1: Leftward Smooth Scroll */}
+          <MarqueeRow items={baseLogosRow1} direction="left" duration={35} />
 
-          {/* Row 2: Right to Left Scroll */}
-          <div className="marquee-row-wrapper" style={{ overflow: 'hidden', padding: '2px 0' }}>
-            <div className="marquee-track-2">
-              {track2.map((logo) => (
-                <LogoCard key={logo.uId} logo={logo} />
-              ))}
-            </div>
-          </div>
+          {/* Row 2: Rightward Smooth Scroll */}
+          <MarqueeRow items={baseLogosRow2} direction="right" duration={38} />
 
-          {/* Row 3: Left to Right Scroll */}
-          <div className="marquee-row-wrapper" style={{ overflow: 'hidden', padding: '2px 0' }}>
-            <div className="marquee-track-3">
-              {track3.map((logo) => (
-                <LogoCard key={logo.uId} logo={logo} />
-              ))}
-            </div>
-          </div>
+          {/* Row 3: Leftward Smooth Scroll */}
+          <MarqueeRow items={baseLogosRow3} direction="left" duration={35} />
 
         </div>
       </section>
