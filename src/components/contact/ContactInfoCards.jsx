@@ -1,55 +1,56 @@
 import React from 'react';
 import { HiLocationMarker, HiPhone, HiMail, HiClock } from 'react-icons/hi';
-
-const cards = [
-  {
-    title: 'Headquarters Location',
-    icon: <HiLocationMarker />,
-    content: (
-      <>
-        EZER Learning Solutions<br />
-        IT Highway Road, Taramani / Velachery Tech Hub,<br />
-        Chennai – 600113, Tamil Nadu, India
-      </>
-    ),
-  },
-  {
-    title: 'Advisory Support Line',
-    icon: <HiPhone />,
-    content: (
-      <>
-        Speak directly with a course counselor:<br />
-        <a href="tel:+919876543210" style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginTop: '4px', display: 'inline-block' }}>
-          +91 98765 43210
-        </a>
-      </>
-    ),
-  },
-  {
-    title: 'Official Inquiry Email',
-    icon: <HiMail />,
-    content: (
-      <>
-        For corporate partnerships & admissions:<br />
-        <a href="mailto:info@ezerlearning.com" style={{ fontSize: '0.95rem', fontWeight: 800, color: '#000648', marginTop: '4px', display: 'inline-block' }}>
-          info@ezerlearning.com
-        </a>
-      </>
-    ),
-  },
-  {
-    title: 'Advisory Desk Hours',
-    icon: <HiClock />,
-    content: (
-      <>
-        Monday – Saturday: 9:00 AM – 7:30 PM IST<br />
-        Sunday: 10:00 AM – 2:00 PM IST (Online Support)
-      </>
-    ),
-  },
-];
+import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 export default function ContactInfoCards() {
+  const { contactInfo } = useSiteData();
+
+  const cards = [
+    {
+      title: 'Headquarters Location',
+      icon: <HiLocationMarker />,
+      content: (
+        <>
+          EZER Learning Solutions<br />
+          {contactInfo.address}
+        </>
+      ),
+    },
+    {
+      title: 'Advisory Support Line',
+      icon: <HiPhone />,
+      content: (
+        <>
+          Speak directly with a course counselor:<br />
+          <a href={`tel:${contactInfo.phone}`} style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginTop: '4px', display: 'inline-block' }}>
+            {contactInfo.phone}
+          </a>
+        </>
+      ),
+    },
+    {
+      title: 'Official Inquiry Email',
+      icon: <HiMail />,
+      content: (
+        <>
+          For corporate partnerships & admissions:<br />
+          <a href={`mailto:${contactInfo.email}`} style={{ fontSize: '0.95rem', fontWeight: 800, color: '#000648', marginTop: '4px', display: 'inline-block' }}>
+            {contactInfo.email}
+          </a>
+        </>
+      ),
+    },
+    {
+      title: 'Advisory Desk Hours',
+      icon: <HiClock />,
+      content: (
+        <>
+          {contactInfo.hours}
+        </>
+      ),
+    },
+  ];
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {cards.map((card) => (
@@ -108,4 +109,3 @@ export default function ContactInfoCards() {
     </div>
   );
 }
-

@@ -4,9 +4,17 @@ import { isAuthenticated, logoutAdmin } from '../utils/authService';
 import { useSiteData } from '../context/SiteContext';
 import HeroManager from '../components/HeroManager';
 import CourseManager from '../components/CourseManager';
+import PlatformManager from '../components/PlatformManager';
+import GraduateOutcomesManager from '../components/GraduateOutcomesManager';
+import VideoReviewsManager from '../components/VideoReviewsManager';
+import ContactInfoManager from '../components/ContactInfoManager';
 import {
   HiOutlinePhotograph,
   HiOutlineAcademicCap,
+  HiOutlineSparkles,
+  HiOutlineUserGroup,
+  HiOutlineVideoCamera,
+  HiOutlinePhone,
   HiOutlineExternalLink,
   HiOutlineLogout,
   HiOutlineRefresh,
@@ -16,7 +24,7 @@ import {
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('hero');
   const navigate = useNavigate();
-  const { heroSlides, courses, resetToDefault } = useSiteData();
+  const { heroSlides, courses, transformedLives, videoTestimonials, resetToDefault } = useSiteData();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -30,10 +38,19 @@ export default function AdminDashboard() {
   };
 
   const handleReset = () => {
-    if (window.confirm('Reset all hero slides and courses back to initial default data?')) {
+    if (window.confirm('Reset all website content, slides, courses, and outcomes back to initial default data?')) {
       resetToDefault();
     }
   };
+
+  const tabs = [
+    { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: heroSlides.length },
+    { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: courses.length },
+    { id: 'platform', label: 'Why EZER Showcase', icon: HiOutlineSparkles },
+    { id: 'outcomes', label: 'Graduate Outcomes', icon: HiOutlineUserGroup, count: transformedLives.length },
+    { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: videoTestimonials.length },
+    { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone }
+  ];
 
   return (
     <div style={{ minHeight: '100vh', background: '#f4f6f9', display: 'flex', flexDirection: 'column' }}>
@@ -54,7 +71,7 @@ export default function AdminDashboard() {
               Admin Control Panel
             </h1>
             <div style={{ fontSize: '0.725rem', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <HiOutlineShieldCheck color="#22c55e" size={14} /> Session Active • Protected Management Console
+              <HiOutlineShieldCheck color="#22c55e" size={14} /> Session Active • Full Site Management
             </div>
           </div>
         </div>
@@ -106,70 +123,54 @@ export default function AdminDashboard() {
       </header>
 
       <div style={{ flex: 1, display: 'flex', maxWidth: '1400px', width: '100%', margin: '0 auto', padding: '24px 20px', gap: '24px' }}>
-        <aside style={{ width: '260px', flexShrink: 0 }}>
+        <aside style={{ width: '270px', flexShrink: 0 }}>
           <div style={{ background: '#ffffff', borderRadius: '14px', padding: '16px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)', border: '1px solid #e2e8f0' }}>
             <div style={{ fontSize: '0.725rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px', paddingLeft: '8px' }}>
               Management Sections
             </div>
 
-            <button
-              type="button"
-              onClick={() => setActiveTab('hero')}
-              aria-label="Switch to Hero Slider Manager"
-              style={{
-                width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-                padding: '12px 14px', borderRadius: '10px', border: 'none',
-                background: activeTab === 'hero' ? '#000648' : 'transparent',
-                color: activeTab === 'hero' ? '#f2b733' : '#475569',
-                fontWeight: activeTab === 'hero' ? 800 : 600,
-                fontSize: '0.875rem', cursor: 'pointer', marginBottom: '6px',
-                textAlign: 'left', transition: 'background-color 0.2s ease, color 0.2s ease'
-              }}
-            >
-              <HiOutlinePhotograph size={20} />
-              <div style={{ flex: 1 }}>Hero Slider</div>
-              <span style={{
-                background: activeTab === 'hero' ? '#f2b733' : '#f1f5f9',
-                color: activeTab === 'hero' ? '#000648' : '#475569',
-                fontSize: '0.7rem', fontWeight: 800, padding: '2px 8px', borderRadius: '50px'
-              }}>
-                {heroSlides.length}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab('courses')}
-              aria-label="Switch to Course Catalog Manager"
-              style={{
-                width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-                padding: '12px 14px', borderRadius: '10px', border: 'none',
-                background: activeTab === 'courses' ? '#000648' : 'transparent',
-                color: activeTab === 'courses' ? '#f2b733' : '#475569',
-                fontWeight: activeTab === 'courses' ? 800 : 600,
-                fontSize: '0.875rem', cursor: 'pointer', marginBottom: '6px',
-                textAlign: 'left', transition: 'background-color 0.2s ease, color 0.2s ease'
-              }}
-            >
-              <HiOutlineAcademicCap size={20} />
-              <div style={{ flex: 1 }}>Course Catalog</div>
-              <span style={{
-                background: activeTab === 'courses' ? '#f2b733' : '#f1f5f9',
-                color: activeTab === 'courses' ? '#000648' : '#475569',
-                fontSize: '0.7rem', fontWeight: 800, padding: '2px 8px', borderRadius: '50px'
-              }}>
-                {courses.length}
-              </span>
-            </button>
+            {tabs.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  onClick={() => setActiveTab(tab.id)}
+                  aria-label={`Switch to ${tab.label}`}
+                  style={{
+                    width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
+                    padding: '12px 14px', borderRadius: '10px', border: 'none',
+                    background: isActive ? '#000648' : 'transparent',
+                    color: isActive ? '#f2b733' : '#475569',
+                    fontWeight: isActive ? 800 : 600,
+                    fontSize: '0.875rem', cursor: 'pointer', marginBottom: '6px',
+                    textAlign: 'left', transition: 'background-color 0.2s ease, color 0.2s ease'
+                  }}
+                >
+                  <Icon size={20} />
+                  <div style={{ flex: 1 }}>{tab.label}</div>
+                  {tab.count !== undefined && (
+                    <span style={{
+                      background: isActive ? '#f2b733' : '#f1f5f9',
+                      color: isActive ? '#000648' : '#475569',
+                      fontSize: '0.7rem', fontWeight: 800, padding: '2px 8px', borderRadius: '50px'
+                    }}>
+                      {tab.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
 
             <div style={{ borderTop: '1px solid #e2e8f0', margin: '16px 0' }} />
 
             <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
               <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-                ⚡ Instant Site Sync
+                ⚡ Real-Time Live Sync
               </div>
               <div style={{ fontSize: '0.725rem', color: '#64748b', lineHeight: 1.4 }}>
-                All edits made here instantly propagate to live site components without rebuilding.
+                All section edits immediately sync across Home, Courses, Testimonials, and Contact pages!
               </div>
             </div>
           </div>
@@ -178,6 +179,10 @@ export default function AdminDashboard() {
         <main style={{ flex: 1, background: '#ffffff', borderRadius: '14px', padding: '28px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)', border: '1px solid #e2e8f0' }}>
           {activeTab === 'hero' && <HeroManager />}
           {activeTab === 'courses' && <CourseManager />}
+          {activeTab === 'platform' && <PlatformManager />}
+          {activeTab === 'outcomes' && <GraduateOutcomesManager />}
+          {activeTab === 'videos' && <VideoReviewsManager />}
+          {activeTab === 'contact' && <ContactInfoManager />}
         </main>
       </div>
     </div>

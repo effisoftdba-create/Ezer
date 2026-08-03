@@ -1,51 +1,10 @@
 import React, { useRef } from 'react';
-import { HiChevronLeft, HiChevronRight, HiArrowDown, HiSparkles } from 'react-icons/hi';
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
-
-const learnerJourneys = [
-  {
-    id: 1,
-    name: "B Swathy",
-    company: "SmartHealth",
-    beforeRole: "Associate",
-    afterRole: "UI/UX Designer",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300&h=300",
-  },
-  {
-    id: 2,
-    name: "Balasubramani",
-    company: "ClarityTTS",
-    beforeRole: "Support Associate",
-    afterRole: "VLSI Physical Design Engineer",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=300&h=300",
-  },
-  {
-    id: 3,
-    name: "Padmini Kadhirvel",
-    company: "TachoMind",
-    beforeRole: "Non-IT Graduate",
-    afterRole: "Automation Testing Engineer",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300",
-  },
-  {
-    id: 4,
-    name: "Hasna Raza",
-    company: "Fipsar Tech",
-    beforeRole: "Fresher, B.Sc (Physics)",
-    afterRole: "ASIC Verification Engineer",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300&h=300",
-  },
-  {
-    id: 5,
-    name: "Subathra N",
-    company: "Standard Chartered",
-    beforeRole: "Quality Analyst",
-    afterRole: "Senior Automation Engineer",
-    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300&h=300",
-  },
-];
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 export default function TransformedLives() {
+  const { transformedLives } = useSiteData();
   const sliderRef = useRef(null);
 
   const handleScroll = (direction) => {
@@ -62,7 +21,7 @@ export default function TransformedLives() {
     <LazyMotion features={domAnimation}>
       <section className="section-alt" style={{ padding: '72px 0', background: '#f8fafc' }}>
         <div className="container">
-          {/* Section Header matching Reference Image 4 */}
+          {/* Section Header */}
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>
             <span 
               style={{
@@ -129,7 +88,7 @@ export default function TransformedLives() {
               </m.button>
             </div>
 
-            {/* Horizontal Slider Track matching Reference Images 3 & 4 Cards */}
+            {/* Horizontal Slider Track */}
             <div
               ref={sliderRef}
               className="no-scrollbar"
@@ -138,7 +97,7 @@ export default function TransformedLives() {
                 scrollBehavior: 'smooth', padding: '12px 4px 24px', width: '100%',
               }}
             >
-              {learnerJourneys.map((item) => (
+              {transformedLives.map((item) => (
                 <m.div
                   key={item.id}
                   whileHover={{ y: -6 }}
@@ -154,7 +113,7 @@ export default function TransformedLives() {
                     flexDirection: 'column',
                   }}
                 >
-                  {/* Dark Navy Top Header Section matching Reference Image 1 */}
+                  {/* Dark Navy Top Header Section */}
                   <div 
                     style={{
                       padding: '24px 20px 20px',
@@ -166,7 +125,7 @@ export default function TransformedLives() {
                       alignItems: 'center'
                     }}
                   >
-                    {/* Circle Avatar with Gold Border matching Image 1 */}
+                    {/* Circle Avatar with Gold Border */}
                     <div style={{ position: 'relative', display: 'inline-block', marginBottom: '12px' }}>
                       <img
                         src={item.image}
@@ -179,26 +138,26 @@ export default function TransformedLives() {
                       />
                     </div>
 
-                    {/* Student Name in White Bold Text matching Image 1 */}
+                    {/* Student Name */}
                     <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
                       {item.name}
                     </h3>
 
-                    {/* Placed @ Company Subtitle matching Image 1 */}
+                    {/* Placed @ Company */}
                     <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#60a5fa' }}>
                       Placed @ {item.company}
                     </div>
                   </div>
 
-                  {/* White Bottom Body Section matching Reference Image 1 */}
+                  {/* White Bottom Body Section */}
                   <div style={{ padding: '20px 18px 22px', background: '#ffffff', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: '14px' }}>
                     
-                    {/* Before Role Line matching Image 1 */}
+                    {/* Before Role Line */}
                     <div style={{ fontSize: '0.88rem', color: '#64748b' }}>
                       Before: <strong style={{ color: '#000648', fontWeight: 800 }}>{item.beforeRole}</strong>
                     </div>
 
-                    {/* After Role Badge Box matching Image 1 */}
+                    {/* After Role Badge Box */}
                     <div 
                       style={{
                         width: '100%',

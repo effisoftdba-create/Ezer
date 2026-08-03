@@ -1,12 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { HiPlay, HiChevronLeft, HiChevronRight, HiStar } from 'react-icons/hi';
-import { videoStories } from '../data/testimonials';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 export default function VideoTestimonials() {
+  const { videoTestimonials } = useSiteData();
   const [activeIdx, setActiveIdx] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const trackRef = useRef(null);
-  const currentVideo = videoStories[activeIdx] || videoStories[0];
+
+  const currentVideo = videoTestimonials[activeIdx] || videoTestimonials[0] || {};
 
   const handleSelectVideo = (idx) => {
     setActiveIdx(idx);
@@ -14,7 +16,8 @@ export default function VideoTestimonials() {
   };
 
   const handleNext = () => {
-    const nextIdx = (activeIdx + 1) % videoStories.length;
+    if (!videoTestimonials.length) return;
+    const nextIdx = (activeIdx + 1) % videoTestimonials.length;
     setActiveIdx(nextIdx);
     setIsPlaying(false);
     if (trackRef.current) {
@@ -23,13 +26,16 @@ export default function VideoTestimonials() {
   };
 
   const handlePrev = () => {
-    const prevIdx = (activeIdx - 1 + videoStories.length) % videoStories.length;
+    if (!videoTestimonials.length) return;
+    const prevIdx = (activeIdx - 1 + videoTestimonials.length) % videoTestimonials.length;
     setActiveIdx(prevIdx);
     setIsPlaying(false);
     if (trackRef.current) {
       trackRef.current.scrollTo({ left: prevIdx * 200, behavior: 'smooth' });
     }
   };
+
+  if (!videoTestimonials || videoTestimonials.length === 0) return null;
 
   return (
     <section className="section-alt" style={{ padding: '64px 0', background: '#f8fafc' }}>
@@ -140,7 +146,7 @@ export default function VideoTestimonials() {
                     </button>
 
                     <a
-                      href={currentVideo.embedUrl.replace('/embed/', '/watch?v=')}
+                      href={currentVideo.embedUrl ? currentVideo.embedUrl.replace('/embed/', '/watch?v=') : '#'}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{
@@ -184,7 +190,7 @@ export default function VideoTestimonials() {
             scrollBehavior: 'smooth', padding: '6px 0', maxWidth: '850px', margin: '0 auto',
           }}
         >
-          {videoStories.map((story, idx) => (
+          {videoTestimonials.map((story, idx) => (
             <button
               key={story.id}
               type="button"

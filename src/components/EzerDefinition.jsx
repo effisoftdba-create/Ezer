@@ -1,7 +1,10 @@
 import React from 'react';
 import { HiSparkles, HiCheckCircle } from 'react-icons/hi';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 export default function EzerDefinition() {
+  const { ezerDefinition } = useSiteData();
+
   return (
     <section 
       id="ezer-definition"
@@ -23,7 +26,7 @@ export default function EzerDefinition() {
           }}
         >
           
-          {/* Left Side: Graphic with Polygon Backdrop & Floating Badges (Reference Image 2 - Gold/Navy) */}
+          {/* Left Side: Graphic with Polygon Backdrop & Floating Badges */}
           <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
             
             {/* Gold Geometric Polygon Shapes matching EZER Brand Palette */}
@@ -69,13 +72,13 @@ export default function EzerDefinition() {
               }}
             >
               <img 
-                src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=800" 
+                src={ezerDefinition.image} 
                 alt="EZER Learner" 
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
               />
             </div>
 
-            {/* Floating Language/Tech Circles in EZER #000648 & #f2b733 Palette (Reference Image 2) */}
+            {/* Floating Language Circles */}
             <div 
               style={{
                 position: 'absolute', top: '8%', left: '-2%', zIndex: 3,
@@ -126,7 +129,7 @@ export default function EzerDefinition() {
 
           </div>
 
-          {/* Right Side: Headline, Copy, and EZER Definition Tagline (Reference Image 2) */}
+          {/* Right Side: Headline, Copy, and EZER Definition Tagline */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
               <span 
@@ -145,7 +148,7 @@ export default function EzerDefinition() {
                 }}
               >
                 <HiSparkles size={14} style={{ color: '#f2b733' }} />
-                Empowering Career Switchers
+                {ezerDefinition.tag}
               </span>
             </div>
 
@@ -158,7 +161,7 @@ export default function EzerDefinition() {
                 marginBottom: '18px'
               }}
             >
-              Leading EdTech Platform for Learning in Native Languages & Real IT Skills.
+              {ezerDefinition.headline}
             </h2>
 
             <p 
@@ -169,7 +172,7 @@ export default function EzerDefinition() {
                 marginBottom: '26px'
               }}
             >
-              EZER Learning Solution is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses. Taught by corporate-experienced IT professionals, EZER offers personalized live online training, hands-on labs, 1-year placement support, and up to 3 years of community access.
+              {ezerDefinition.description}
             </p>
 
             {/* Key Trust Highlights */}
@@ -181,25 +184,15 @@ export default function EzerDefinition() {
                 marginBottom: '32px'
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <HiCheckCircle size={20} style={{ color: '#000648', flexShrink: 0 }} />
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>Live Online Instructor-Led</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <HiCheckCircle size={20} style={{ color: '#000648', flexShrink: 0 }} />
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>1-Year LMS & Placement Support</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <HiCheckCircle size={20} style={{ color: '#000648', flexShrink: 0 }} />
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>3-Year Community Access</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <HiCheckCircle size={20} style={{ color: '#000648', flexShrink: 0 }} />
-                <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>Hands-on Real World Labs</span>
-              </div>
+              {ezerDefinition.highlights?.map((feat, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <HiCheckCircle size={20} style={{ color: '#000648', flexShrink: 0 }} />
+                  <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>{feat}</span>
+                </div>
+              ))}
             </div>
 
-            {/* EZER Definition Box matching Reference Image 2 ("HCL GUVI - Grab Ur Vernacular Imprint") */}
+            {/* EZER Definition Box */}
             <div 
               style={{
                 background: '#000648',
@@ -217,7 +210,7 @@ export default function EzerDefinition() {
               }}
             >
               <span>
-                <strong style={{ color: '#f2b733', fontSize: '1.05rem', marginRight: '6px' }}>EZER —</strong> <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>E</strong>mpowering <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>Z</strong>ero-to-Hero <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>E</strong>ducation & <strong style={{ color: '#f2b733', textDecoration: 'underline' }}>R</strong>eal Career Transformations
+                {ezerDefinition.acronymText}
               </span>
             </div>
 
