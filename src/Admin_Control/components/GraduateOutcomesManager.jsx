@@ -1,24 +1,46 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
-import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck } from 'react-icons/hi';
+import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck, HiSparkles } from 'react-icons/hi';
+
+const DEFAULT_GRADUATE_STATE = {
+  name: '',
+  company: '',
+  beforeRole: '',
+  afterRole: '',
+  image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300'
+};
 
 export default function GraduateOutcomesManager() {
-  const { transformedLives, addTransformedLife, updateTransformedLife, deleteTransformedLife } = useSiteData();
+  const {
+    transformedLives,
+    outcomesHeader,
+    updateOutcomesHeader,
+    addTransformedLife,
+    updateTransformedLife,
+    deleteTransformedLife
+  } = useSiteData();
+
+  const [headerFormData, setHeaderFormData] = useState(outcomesHeader || {
+    tag: 'CAREER PLACEMENT OUTCOMES',
+    headline: 'Our Graduates Get Hired by Leading Tech Firms',
+    sub: 'Join a community of engineers building impactful, high-growth software careers.'
+  });
+
+  const [saveHeaderSuccess, setSaveHeaderSuccess] = useState(false);
 
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
 
-  const defaultState = {
-    name: '',
-    company: '',
-    beforeRole: '',
-    afterRole: '',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300'
-  };
+  const [formData, setFormData] = useState(DEFAULT_GRADUATE_STATE);
 
-  const [formData, setFormData] = useState(defaultState);
+  const handleHeaderSave = (e) => {
+    e.preventDefault();
+    updateOutcomesHeader(headerFormData);
+    setSaveHeaderSuccess(true);
+    setTimeout(() => setSaveHeaderSuccess(false), 3000);
+  };
 
   const handleOpenAdd = () => {
     setEditingId(null);
@@ -77,18 +99,98 @@ export default function GraduateOutcomesManager() {
             "Our Graduates Get Hired" Placement Outcomes
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Add, update, or remove graduate placement outcome cards (photos, names, companies, before/after roles).
+            Edit the section headers ("Our Graduates Get Hired by Leading Tech Firms") and manage graduate placement outcome cards.
           </p>
         </div>
+      </div>
 
+      {saveHeaderSuccess && (
+        <div style={{
+          padding: '12px 16px', background: '#f0fdf4', border: '1px solid #86efac',
+          color: '#166534', borderRadius: '8px', marginBottom: '20px', fontWeight: 700,
+          display: 'flex', alignItems: 'center', gap: '8px'
+        }}>
+          <HiCheck size={18} /> Placement Outcomes section header updated successfully!
+        </div>
+      )}
+
+      {/* Section Header Editor */}
+      <form onSubmit={handleHeaderSave} style={{
+        background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
+        padding: '20px', marginBottom: '28px'
+      }}>
+        <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <HiSparkles color="#f2b733" /> Edit Section Title & Tagline
+        </h3>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '16px', marginBottom: '16px' }}>
+          <div>
+            <label htmlFor="outcomes_tag_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
+              Section Tag / Category Badge
+            </label>
+            <input
+              id="outcomes_tag_input"
+              type="text"
+              value={headerFormData.tag}
+              onChange={(e) => setHeaderFormData({ ...headerFormData, tag: e.target.value })}
+              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="outcomes_headline_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
+              Main Section Title / Headline
+            </label>
+            <input
+              id="outcomes_headline_input"
+              type="text"
+              value={headerFormData.headline}
+              onChange={(e) => setHeaderFormData({ ...headerFormData, headline: e.target.value })}
+              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+              required
+            />
+          </div>
+        </div>
+
+        <div style={{ marginBottom: '16px' }}>
+          <label htmlFor="outcomes_sub_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
+            Section Subtitle Description
+          </label>
+          <input
+            id="outcomes_sub_input"
+            type="text"
+            value={headerFormData.sub}
+            onChange={(e) => setHeaderFormData({ ...headerFormData, sub: e.target.value })}
+            style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+            required
+          />
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            type="submit"
+            aria-label="Save outcomes header"
+            style={{ padding: '9px 20px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <HiCheck size={18} /> Update Section Header Text
+          </button>
+        </div>
+      </form>
+
+      {/* Cards List Bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+        <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: '#000648' }}>
+          Graduate Success Story Cards ({transformedLives.length})
+        </h3>
         <button
           type="button"
           onClick={handleOpenAdd}
           aria-label="Add new graduate outcome"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
-            padding: '10px 20px', background: '#000648', color: '#f2b733',
-            border: 'none', borderRadius: '10px', fontWeight: 800, fontSize: '0.875rem',
+            padding: '9px 18px', background: '#000648', color: '#f2b733',
+            border: 'none', borderRadius: '10px', fontWeight: 800, fontSize: '0.85rem',
             cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,6,72,0.15)'
           }}
         >
@@ -99,8 +201,8 @@ export default function GraduateOutcomesManager() {
       {/* Editor Modal / Form inline */}
       {isEditing && (
         <form onSubmit={handleSave} style={{
-          background: '#f8fafc', border: '2px solid #cbd5e1', borderRadius: '14px',
-          padding: '24px', marginBottom: '28px', boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
+          background: '#ffffff', border: '2px solid #000648', borderRadius: '14px',
+          padding: '24px', marginBottom: '28px', boxShadow: '0 10px 25px rgba(0,0,0,0.08)'
         }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '1.1rem', fontWeight: 800, color: '#000648' }}>
             {editingId ? 'Edit Graduate Success Story' : 'Add New Graduate Success Story'}
@@ -108,9 +210,9 @@ export default function GraduateOutcomesManager() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '20px', alignItems: 'center', marginBottom: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
+              <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
                 Photo Preview
-              </label>
+              </span>
               <div style={{ width: '80px', height: '80px', borderRadius: '50%', overflow: 'hidden', border: '3px solid #f2b733', background: '#000648' }}>
                 <img src={formData.image} alt={formData.name || 'Graduate Photo'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
@@ -220,7 +322,7 @@ export default function GraduateOutcomesManager() {
               aria-label="Save graduate story"
               style={{ padding: '9px 20px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
             >
-              <HiCheck size={18} /> Save Outcome
+              <HiCheck size={18} /> Save Outcome Card
             </button>
           </div>
         </form>

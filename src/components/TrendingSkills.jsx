@@ -95,7 +95,7 @@ export default function TrendingSkills({ onOpenDemoModal }) {
                 border: '1px solid #cbd5e1', background: '#ffffff',
                 color: '#000648', display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-                transition: 'all 0.2s ease',
+                transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease',
               }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#000648'; e.currentTarget.style.background = '#000648'; e.currentTarget.style.color = '#f2b733'; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#000648'; }}
@@ -111,7 +111,7 @@ export default function TrendingSkills({ onOpenDemoModal }) {
                 border: '1px solid #cbd5e1', background: '#ffffff',
                 color: '#000648', display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-                transition: 'all 0.2s ease',
+                transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease',
               }}
               onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#000648'; e.currentTarget.style.background = '#000648'; e.currentTarget.style.color = '#f2b733'; }}
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#000648'; }}

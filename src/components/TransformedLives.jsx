@@ -5,7 +5,7 @@ import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc } from '../utils/imageUtils';
 
 export default function TransformedLives() {
-  const { transformedLives } = useSiteData();
+  const { transformedLives, outcomesHeader } = useSiteData();
   const sliderRef = useRef(null);
 
   const handleScroll = (direction) => {
@@ -16,6 +16,12 @@ export default function TransformedLives() {
         behavior: 'smooth'
       });
     }
+  };
+
+  const headerData = outcomesHeader || {
+    tag: 'CAREER PLACEMENT OUTCOMES',
+    headline: 'Our Graduates Get Hired by Leading Tech Firms',
+    sub: 'Join a community of engineers building impactful, high-growth software careers.'
   };
 
   return (
@@ -38,15 +44,15 @@ export default function TransformedLives() {
                 marginBottom: '12px'
               }}
             >
-              CAREER PLACEMENT OUTCOMES
+              {headerData.tag}
             </span>
 
             <h2 style={{ color: '#000648', fontSize: 'clamp(1.6rem, 2.8vw, 2.3rem)', fontWeight: 900, marginBottom: '8px' }}>
-              Our Graduates Get Hired by Leading Tech Firms
+              {headerData.headline}
             </h2>
 
             <p style={{ color: '#475569', fontSize: '0.94rem', maxWidth: '640px', margin: '0 auto' }}>
-              Join a community of engineers building impactful, high-growth software careers.
+              {headerData.sub}
             </p>
           </div>
 

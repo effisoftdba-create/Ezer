@@ -49,9 +49,9 @@ export default function PlatformManager() {
         {/* Main Section Photo with Live Preview */}
         <div style={{ marginBottom: '24px', display: 'grid', gridTemplateColumns: '180px 1fr', gap: '20px', alignItems: 'center' }}>
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
+            <span style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
               Current Section Photo
-            </label>
+            </span>
             <div style={{
               height: '210px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #000648',
               boxShadow: '0 4px 12px rgba(0,6,72,0.15)', background: '#000648'

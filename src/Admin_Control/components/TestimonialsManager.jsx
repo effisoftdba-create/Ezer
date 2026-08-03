@@ -3,6 +3,16 @@ import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck, HiSparkles } from 'react-icons/hi';
 
+const DEFAULT_CARD_STATE = {
+  name: 'Anand Kumar',
+  role: 'DevOps Specialist',
+  company: 'Freshworks',
+  background: 'Fresher, B.E. CSE',
+  course: 'Cloud DevOps with AI',
+  quote: 'EZER Learning Solution gave me practical, real-world project skills.',
+  image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400'
+};
+
 export default function TestimonialsManager() {
   const {
     testimonialsHero,
@@ -19,19 +29,8 @@ export default function TestimonialsManager() {
   const [isEditingCard, setIsEditingCard] = useState(false);
   const [editingCardId, setEditingCardId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
-  const [imageFieldTarget, setImageFieldTarget] = useState('hero');
 
-  const defaultCardState = {
-    name: 'Anand Kumar',
-    role: 'DevOps Specialist',
-    company: 'Freshworks',
-    background: 'Fresher, B.E. CSE',
-    course: 'Cloud DevOps with AI',
-    quote: 'EZER Learning Solution gave me practical, real-world project skills.',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400'
-  };
-
-  const [cardData, setCardData] = useState(defaultCardState);
+  const [cardData, setCardData] = useState(DEFAULT_CARD_STATE);
 
   const handleHeroSubmit = (e) => {
     e.preventDefault();

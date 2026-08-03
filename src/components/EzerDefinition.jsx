@@ -184,8 +184,8 @@ export default function EzerDefinition() {
                 marginBottom: '32px'
               }}
             >
-              {ezerDefinition.highlights?.map((feat, idx) => (
-                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {ezerDefinition.highlights?.map((feat) => (
+                <div key={feat} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                   <HiCheckCircle size={20} style={{ color: '#000648', flexShrink: 0 }} />
                   <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>{feat}</span>
                 </div>

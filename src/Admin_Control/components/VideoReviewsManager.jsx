@@ -22,6 +22,14 @@ function formatYouTubeEmbedUrl(urlStr) {
   return urlStr;
 }
 
+const DEFAULT_VIDEO_STATE = {
+  title: 'How I Landed an IT Role — Student Career Switch Story',
+  name: 'Kavitha R',
+  company: 'Cloud DevOps Graduate',
+  embedUrl: 'https://www.youtube.com/embed/hQcFE0RD0cQ',
+  thumbnail: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400'
+};
+
 export default function VideoReviewsManager() {
   const { videoTestimonials, addVideoTestimonial, updateVideoTestimonial, deleteVideoTestimonial } = useSiteData();
 
@@ -29,19 +37,11 @@ export default function VideoReviewsManager() {
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
 
-  const defaultState = {
-    title: 'How I Landed an IT Role — Student Career Switch Story',
-    name: 'Kavitha R',
-    company: 'Cloud DevOps Graduate',
-    embedUrl: 'https://www.youtube.com/embed/hQcFE0RD0cQ',
-    thumbnail: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400'
-  };
-
-  const [formData, setFormData] = useState(defaultState);
+  const [formData, setFormData] = useState(DEFAULT_VIDEO_STATE);
 
   const handleOpenAdd = () => {
     setEditingId(null);
-    setFormData(defaultState);
+    setFormData(DEFAULT_VIDEO_STATE);
     setIsEditing(true);
   };
 

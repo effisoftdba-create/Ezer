@@ -12,18 +12,8 @@ import {
   HiOutlineCheckCircle
 } from 'react-icons/hi';
 
-export const STATE_TYPES = {
-  EMPTY: 'empty',
-  LOADING: 'loading',
-  ERROR: 'error',
-  NO_INTERNET: 'no_internet',
-  SLOW_NETWORK: 'slow_network',
-  NO_SEARCH_RESULTS: 'no_search_results',
-  PERMISSION_DENIED: 'permission_denied',
-  SESSION_EXPIRED: 'session_expired',
-  FORM_VALIDATION: 'form_validation',
-  SUCCESS: 'success',
-};
+import { STATE_TYPES } from '../constants/uiStateTypes';
+export { STATE_TYPES };
 
 const STATE_CONFIGS = {
   empty: {

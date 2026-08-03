@@ -10,6 +10,7 @@ const STORAGE_COURSES_KEY = 'ezer_courses:v1';
 const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v1';
 const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v1';
 const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v1';
+const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v1';
 const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v1';
 const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v1';
 const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v1';
@@ -147,6 +148,12 @@ const defaultTransformedLives = [
   },
 ];
 
+const defaultOutcomesHeader = {
+  tag: 'CAREER PLACEMENT OUTCOMES',
+  headline: 'Our Graduates Get Hired by Leading Tech Firms',
+  sub: 'Join a community of engineers building impactful, high-growth software careers.'
+};
+
 const defaultTestimonialsHero = {
   tag: 'ALUMNI SUCCESS & REVIEWS',
   headline: 'Proven Outcomes & Real Alumni Stories',
@@ -204,6 +211,14 @@ export function SiteProvider({ children }) {
     return defaultTransformedLives;
   });
 
+  const [outcomesHeader, setOutcomesHeader] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_OUTCOMES_HEADER_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    return defaultOutcomesHeader;
+  });
+
   const [videoTestimonials, setVideoTestimonials] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_VIDEOS_KEY);
@@ -250,6 +265,7 @@ export function SiteProvider({ children }) {
   useEffect(() => { localStorage.setItem(STORAGE_PLATFORM_KEY, JSON.stringify(ezerDefinition)); }, [ezerDefinition]);
   useEffect(() => { localStorage.setItem(STORAGE_SUPPORT_CARDS_KEY, JSON.stringify(supportCards)); }, [supportCards]);
   useEffect(() => { localStorage.setItem(STORAGE_TRANSFORMED_KEY, JSON.stringify(transformedLives)); }, [transformedLives]);
+  useEffect(() => { localStorage.setItem(STORAGE_OUTCOMES_HEADER_KEY, JSON.stringify(outcomesHeader)); }, [outcomesHeader]);
   useEffect(() => { localStorage.setItem(STORAGE_VIDEOS_KEY, JSON.stringify(videoTestimonials)); }, [videoTestimonials]);
   useEffect(() => { localStorage.setItem(STORAGE_TESTIMONIALS_HERO_KEY, JSON.stringify(testimonialsHero)); }, [testimonialsHero]);
   useEffect(() => { localStorage.setItem(STORAGE_WRITTEN_TESTIMONIALS_KEY, JSON.stringify(writtenTestimonials)); }, [writtenTestimonials]);
@@ -275,6 +291,7 @@ export function SiteProvider({ children }) {
   const deleteSupportCard = (id) => setSupportCards((prev) => prev.filter((c) => c.id !== id && c.title !== id));
 
   // Transformed Lives CRUD
+  const updateOutcomesHeader = (data) => setOutcomesHeader((prev) => ({ ...prev, ...data }));
   const addTransformedLife = (item) => setTransformedLives((prev) => [{ id: Date.now(), ...item }, ...prev]);
   const updateTransformedLife = (id, updated) => setTransformedLives((prev) => prev.map((t) => (t.id === id ? { ...t, ...updated } : t)));
   const deleteTransformedLife = (id) => setTransformedLives((prev) => prev.filter((t) => t.id !== id));
@@ -302,6 +319,7 @@ export function SiteProvider({ children }) {
     setEzerDefinition(defaultPlatformDef);
     setSupportCards(defaultSupportCards);
     setTransformedLives(defaultTransformedLives);
+    setOutcomesHeader(defaultOutcomesHeader);
     setVideoTestimonials(videoStories);
     setTestimonialsHero(defaultTestimonialsHero);
     setWrittenTestimonials(initialTestimonials);
@@ -313,6 +331,7 @@ export function SiteProvider({ children }) {
     localStorage.removeItem(STORAGE_PLATFORM_KEY);
     localStorage.removeItem(STORAGE_SUPPORT_CARDS_KEY);
     localStorage.removeItem(STORAGE_TRANSFORMED_KEY);
+    localStorage.removeItem(STORAGE_OUTCOMES_HEADER_KEY);
     localStorage.removeItem(STORAGE_VIDEOS_KEY);
     localStorage.removeItem(STORAGE_TESTIMONIALS_HERO_KEY);
     localStorage.removeItem(STORAGE_WRITTEN_TESTIMONIALS_KEY);
@@ -327,6 +346,7 @@ export function SiteProvider({ children }) {
       ezerDefinition,
       supportCards,
       transformedLives,
+      outcomesHeader,
       videoTestimonials,
       testimonialsHero,
       writtenTestimonials,
@@ -342,6 +362,7 @@ export function SiteProvider({ children }) {
       addSupportCard,
       updateSupportCard,
       deleteSupportCard,
+      updateOutcomesHeader,
       addTransformedLife,
       updateTransformedLife,
       deleteTransformedLife,
@@ -356,7 +377,7 @@ export function SiteProvider({ children }) {
       updateContactInfo,
       resetToDefault,
     }),
-    [heroSlides, courses, ezerDefinition, supportCards, transformedLives, videoTestimonials, testimonialsHero, writtenTestimonials, faqList, contactInfo]
+    [heroSlides, courses, ezerDefinition, supportCards, transformedLives, outcomesHeader, videoTestimonials, testimonialsHero, writtenTestimonials, faqList, contactInfo]
   );
 
   return <SiteContext.Provider value={contextValue}>{children}</SiteContext.Provider>;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HiX, HiCheck, HiPhotograph, HiUpload, HiArrowRight, HiTrash } from 'react-icons/hi';
+import { HiX, HiCheck, HiPhotograph, HiUpload, HiArrowRight, HiTrash, HiZoomIn, HiZoomOut } from 'react-icons/hi';
 import { resolveImageSrc } from '../../utils/imageUtils';
 
 const STORAGE_UPLOADED_IMAGES_KEY = 'ezer_uploaded_images:v1';
@@ -26,6 +26,7 @@ export default function ImagePickerModal({
   const [selectedUrl, setSelectedUrl] = useState(currentImage || DEFAULT_PRESET_IMAGES[0].url);
   const [customUrl, setCustomUrl] = useState('');
   const [position, setPosition] = useState(currentPosition || 'center center');
+  const [zoomScale, setZoomScale] = useState(1);
 
   const [uploadedImages, setUploadedImages] = useState(() => {
     try {
@@ -94,12 +95,12 @@ export default function ImagePickerModal({
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
     }}>
       <div style={{
-        background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '720px',
+        background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '750px',
         maxHeight: '94vh', overflowY: 'auto', padding: '24px', boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiPhotograph color="#115DFC" size={22} /> Select, Upload & Position Image
+            <HiPhotograph color="#115DFC" size={22} /> Select, Upload, Zoom & Position Image
           </h3>
           <button
             type="button"
@@ -111,7 +112,7 @@ export default function ImagePickerModal({
           </button>
         </div>
 
-        {/* Dual Image Preview (Current vs. Newly Selected with Position Control) */}
+        {/* Dual Image Preview (Current vs. Newly Selected with Position & Zoom Control) */}
         <div style={{
           background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
           padding: '16px', marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr auto 1fr',
@@ -119,9 +120,9 @@ export default function ImagePickerModal({
         }}>
           <div>
             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
-              Current Image
+              Current Active Image
             </div>
-            <div style={{ height: '115px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0' }}>
+            <div style={{ height: '125px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0' }}>
               {currentImage ? (
                 <img src={resolveImageSrc(currentImage)} alt="Current active" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
@@ -140,38 +141,101 @@ export default function ImagePickerModal({
             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', textTransform: 'uppercase', marginBottom: '6px' }}>
               Newly Chosen Image Preview
             </div>
-            <div style={{ height: '115px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #115DFC', background: '#000648', boxShadow: '0 4px 12px rgba(17,93,252,0.2)' }}>
+            <div style={{ height: '125px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #115DFC', background: '#000648', boxShadow: '0 4px 12px rgba(17,93,252,0.2)', position: 'relative' }}>
               <img
                 src={resolveImageSrc(activeSelectedUrl)}
                 alt="Newly chosen preview"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: position }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: position,
+                  transform: `scale(${zoomScale})`,
+                  transition: 'transform 0.2s ease, object-position 0.2s ease'
+                }}
               />
             </div>
           </div>
         </div>
 
-        {/* Interactive Image Position & Focus Adjustment */}
-        <div style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px' }}>
-          <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-            Adjust Visible Crop & Focus Position
+        {/* Interactive Image Zoom In / Zoom Out & Focus Position Adjustment */}
+        <div style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '14px 16px', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+            <span style={{ fontSize: '0.825rem', fontWeight: 800, color: '#000648' }}>
+              Crop Focus Position & Interactive Zoom (Zoom In / Zoom Out)
+            </span>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', background: '#e0e7ff', padding: '2px 8px', borderRadius: '4px' }}>
+              Zoom: {Math.round(zoomScale * 100)}%
+            </span>
           </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-            {POSITION_PRESETS.map((p) => (
-              <button
-                key={p.value}
-                type="button"
-                onClick={() => setPosition(p.value)}
-                aria-label={`Position preset ${p.label}`}
-                style={{
-                  padding: '5px 12px', borderRadius: '6px', border: '1px solid #cbd5e1',
-                  background: position === p.value ? '#000648' : '#ffffff',
-                  color: position === p.value ? '#f2b733' : '#334155',
-                  fontWeight: position === p.value ? 800 : 600, fontSize: '0.75rem', cursor: 'pointer'
-                }}
-              >
-                {p.label}
-              </button>
-            ))}
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', alignItems: 'center' }}>
+            {/* Focus Position Presets */}
+            <div>
+              <div style={{ fontSize: '0.725rem', fontWeight: 700, color: '#475569', marginBottom: '6px' }}>
+                Position Focus Alignment
+              </div>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                {POSITION_PRESETS.map((p) => (
+                  <button
+                    key={p.value}
+                    type="button"
+                    onClick={() => setPosition(p.value)}
+                    aria-label={`Position preset ${p.label}`}
+                    style={{
+                      padding: '4px 10px', borderRadius: '6px', border: '1px solid #cbd5e1',
+                      background: position === p.value ? '#000648' : '#ffffff',
+                      color: position === p.value ? '#f2b733' : '#334155',
+                      fontWeight: position === p.value ? 800 : 600, fontSize: '0.725rem', cursor: 'pointer'
+                    }}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Interactive Zoom Controls */}
+            <div>
+              <div style={{ fontSize: '0.725rem', fontWeight: 700, color: '#475569', marginBottom: '6px' }}>
+                Zoom In / Zoom Out Controls
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <button
+                  type="button"
+                  onClick={() => setZoomScale((z) => Math.max(1, +(z - 0.15).toFixed(2)))}
+                  aria-label="Zoom out"
+                  style={{
+                    padding: '6px 10px', background: '#ffffff', border: '1px solid #cbd5e1',
+                    borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px',
+                    fontSize: '0.75rem', fontWeight: 700, color: '#000648'
+                  }}
+                >
+                  <HiZoomOut size={15} /> Out
+                </button>
+                <input
+                  type="range"
+                  min="1"
+                  max="2.5"
+                  step="0.05"
+                  value={zoomScale}
+                  onChange={(e) => setZoomScale(parseFloat(e.target.value))}
+                  style={{ flex: 1, accentColor: '#115DFC', cursor: 'pointer' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setZoomScale((z) => Math.min(2.5, +(z + 0.15).toFixed(2)))}
+                  aria-label="Zoom in"
+                  style={{
+                    padding: '6px 10px', background: '#ffffff', border: '1px solid #cbd5e1',
+                    borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px',
+                    fontSize: '0.75rem', fontWeight: 700, color: '#000648'
+                  }}
+                >
+                  <HiZoomIn size={15} /> In
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

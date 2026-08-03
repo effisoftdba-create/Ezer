@@ -3,6 +3,14 @@ import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck } from 'react-icons/hi';
 
+const DEFAULT_CARD_STATE = {
+  title: 'Pre-Employment Support',
+  subtitle: 'Career Readiness Phase',
+  desc: 'Comprehensive guidance before you start applying — build a high-impact profile that catches recruiter attention.',
+  bullets: 'Resume & LinkedIn profile optimization\n1-on-1 technical mock interviews\nGitHub portfolio & capstone review',
+  image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=400'
+};
+
 export default function SupportCardsManager() {
   const { supportCards, addSupportCard, updateSupportCard, deleteSupportCard } = useSiteData();
 
@@ -10,19 +18,11 @@ export default function SupportCardsManager() {
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
 
-  const defaultState = {
-    title: 'Pre-Employment Support',
-    subtitle: 'Career Readiness Phase',
-    desc: 'Comprehensive guidance before you start applying — build a high-impact profile that catches recruiter attention.',
-    bullets: 'Resume & LinkedIn profile optimization\n1-on-1 technical mock interviews\nGitHub portfolio & capstone review',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=400'
-  };
-
-  const [formData, setFormData] = useState(defaultState);
+  const [formData, setFormData] = useState(DEFAULT_CARD_STATE);
 
   const handleOpenAdd = () => {
     setEditingId(null);
-    setFormData(defaultState);
+    setFormData(DEFAULT_CARD_STATE);
     setIsEditing(true);
   };
 
@@ -115,9 +115,9 @@ export default function SupportCardsManager() {
           {/* Dual Image Preview */}
           <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '20px', alignItems: 'center', marginBottom: '16px' }}>
             <div>
-              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
+              <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
                 Photo Preview
-              </label>
+              </span>
               <div style={{ height: '80px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #000648', background: '#000648' }}>
                 <img src={formData.image} alt={formData.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>

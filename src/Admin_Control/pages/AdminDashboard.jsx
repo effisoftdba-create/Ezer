@@ -81,8 +81,8 @@ export default function AdminDashboard() {
   const tabs = [
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: heroSlides.length },
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: courses.length },
-    { id: 'platform', label: 'Why EZER Showcase', icon: HiOutlineSparkles },
-    { id: 'support', label: 'Support Feature Cards', icon: HiOutlineBadgeCheck, count: supportCards.length },
+    { id: 'platform', label: 'Why EZER Definition', icon: HiOutlineSparkles },
+    { id: 'support', label: 'Why EZER Support Cards', icon: HiOutlineBadgeCheck, count: supportCards.length },
     { id: 'outcomes', label: 'Graduate Outcomes', icon: HiOutlineUserGroup, count: transformedLives.length },
     { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: videoTestimonials.length },
     { id: 'testimonials', label: 'Testimonials Page', icon: HiOutlineChatAlt, count: writtenTestimonials.length },
