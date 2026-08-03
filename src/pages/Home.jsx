@@ -4,6 +4,7 @@ import TrustBar from '../components/TrustBar';
 import TrendingSkills from '../components/TrendingSkills';
 import CompanyLogos from '../components/CompanyLogos';
 import WhyEzer from '../components/WhyEzer';
+import AnimMasterShowcase from '../components/AnimMasterShowcase';
 import EzerDefinition from '../components/EzerDefinition';
 import TransformedLives from '../components/TransformedLives';
 import VideoTestimonials from '../components/VideoTestimonials';
@@ -17,6 +18,7 @@ export default function Home({ onOpenDemoModal }) {
       <CompanyLogos />
       <TrendingSkills onOpenDemoModal={onOpenDemoModal} />
       <WhyEzer />
+      <AnimMasterShowcase onOpenDemoModal={onOpenDemoModal} />
       <EzerDefinition />
       <TransformedLives />
       <VideoTestimonials />
