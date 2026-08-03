@@ -239,11 +239,11 @@ export default function WhyEzer() {
                   </p>
                 </div>
 
-                {/* Static Inner Rectangle Box matching Reference Image */}
+                {/* Inner Rectangle Box with Flexible Height for Mobile View Safety */}
                 <div style={{ 
                   width: '100%',
-                  height: '120px',
                   minHeight: '120px',
+                  height: 'auto',
                   boxSizing: 'border-box',
                   background: '#f8fafc',
                   padding: '14px 16px',
@@ -256,9 +256,9 @@ export default function WhyEzer() {
                   boxShadow: '0 2px 8px rgba(0, 6, 72, 0.03)'
                 }}>
                   {r.bullets.map((bullet) => (
-                    <div key={bullet} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.78rem', fontWeight: 800, color: '#000648' }}>
-                      <HiCheckCircle size={17} style={{ color: '#f2b733', flexShrink: 0 }} />
-                      <span>{bullet}</span>
+                    <div key={bullet} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.78rem', fontWeight: 800, color: '#000648', lineHeight: 1.35 }}>
+                      <HiCheckCircle size={17} style={{ color: '#f2b733', flexShrink: 0, marginTop: '1px' }} />
+                      <span style={{ wordBreak: 'break-word' }}>{bullet}</span>
                     </div>
                   ))}
                 </div>
