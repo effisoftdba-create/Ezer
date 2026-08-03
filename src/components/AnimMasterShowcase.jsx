@@ -51,7 +51,7 @@ export default function AnimMasterShowcase({
   onOpenDemoModal,
   title = "Next-Gen Interactive Learning Platform",
   subtitle = "Experience high-performance, hands-on tech education powered by real-time corporate lab simulations.",
-  logoSrc = `${import.meta.env.BASE_URL || '/'}images/ezer_shield_logo.png`
+  logoSrc = `${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`
 }) {
   const shouldReduceMotion = useReducedMotion();
 

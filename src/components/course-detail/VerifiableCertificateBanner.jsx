@@ -30,7 +30,9 @@ export default function VerifiableCertificateBanner({ courseTitle, onOpenDemoMod
             {/* Clean Corporate Certification Card */}
             <div style={{ background: '#ffffff', borderRadius: '12px', padding: '24px', color: '#0f172a', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-                <img src={`${import.meta.env.BASE_URL || '/'}images/logo.png`} alt="EZER Logo" style={{ height: '40px', width: 'auto', objectFit: 'contain' }} />
+                <div style={{ background: '#ffffff', padding: '4px 8px', borderRadius: '10px', border: '1.5px solid #000648', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <img src={`${import.meta.env.BASE_URL || '/'}images/logo_navy.png`} alt="EZER Logo" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
+                </div>
                 <div>
                   <div style={{ fontSize: '1rem', fontWeight: 800, color: '#000648' }}>EZER Learning Solutions</div>
                   <div style={{ fontSize: '0.785rem', color: '#64748b' }}>Executive Certification Program</div>
