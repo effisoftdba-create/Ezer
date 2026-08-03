@@ -1,25 +1,27 @@
 import React, { useState, useRef } from 'react';
-import { phase1Courses } from '../data/courses';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 import CourseCard from './CourseCard';
 import { HiChevronLeft, HiChevronRight, HiAcademicCap } from 'react-icons/hi';
 
 const tabs = ['All Courses', 'Cloud & DevOps', 'Testing & QA', 'AI & Data', 'IT Infrastructure'];
 
 export default function TrendingSkills({ onOpenDemoModal }) {
+  const { courses } = useSiteData();
   const [activeTab, setActiveTab] = useState(0);
   const sliderRef = useRef(null);
 
   const getFilteredCourses = () => {
-    if (activeTab === 0) return phase1Courses;
-    if (activeTab === 1) return phase1Courses.filter(c => c.slug?.includes('devops') || c.slug?.includes('cloud'));
-    if (activeTab === 2) return phase1Courses.filter(c => c.slug?.includes('testing') || c.slug?.includes('playwright'));
-    if (activeTab === 3) return phase1Courses.filter(c => c.slug?.includes('ai') || c.slug?.includes('ml') || c.slug?.includes('data'));
-    if (activeTab === 4) return phase1Courses.filter(c => c.slug?.includes('infrastructure') || c.slug?.includes('sysadmin'));
-    return phase1Courses;
+    const list = courses || [];
+    if (activeTab === 0) return list;
+    if (activeTab === 1) return list.filter(c => c.slug?.includes('devops') || c.slug?.includes('cloud'));
+    if (activeTab === 2) return list.filter(c => c.slug?.includes('testing') || c.slug?.includes('playwright'));
+    if (activeTab === 3) return list.filter(c => c.slug?.includes('ai') || c.slug?.includes('ml') || c.slug?.includes('data'));
+    if (activeTab === 4) return list.filter(c => c.slug?.includes('infrastructure') || c.slug?.includes('sysadmin'));
+    return list;
   };
 
   const filtered = getFilteredCourses();
-  const display = filtered.length > 0 ? filtered : phase1Courses;
+  const display = filtered.length > 0 ? filtered : courses;
 
   const handleScroll = (direction) => {
     if (sliderRef.current) {
@@ -58,31 +60,23 @@ export default function TrendingSkills({ onOpenDemoModal }) {
           <div className="no-scrollbar" style={{
             display: 'flex', gap: '8px', overflowX: 'auto', padding: '4px 0'
           }}>
-            {tabs.map((tab, i) => (
-              <button 
-                key={tab} 
-                type="button" 
-                onClick={() => setActiveTab(i)}
+            {tabs.map((tab, idx) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(idx)}
                 style={{
-                  padding: '7px 16px', borderRadius: '50px',
-                  border: activeTab === i ? '1.5px solid #000648' : '1.5px solid #cbd5e1',
-                  background: activeTab === i ? '#000648' : '#ffffff',
-                  color: activeTab === i ? '#f2b733' : '#334155',
-                  fontWeight: 800, fontSize: '0.76rem', whiteSpace: 'nowrap',
-                  cursor: 'pointer', transition: 'border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease',
-                  boxShadow: activeTab === i ? '0 4px 12px rgba(0,6,72,0.15)' : 'none'
-                }}
-                onMouseEnter={(e) => {
-                  if (activeTab !== i) {
-                    e.currentTarget.style.borderColor = '#000648';
-                    e.currentTarget.style.color = '#000648';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (activeTab !== i) {
-                    e.currentTarget.style.borderColor = '#cbd5e1';
-                    e.currentTarget.style.color = '#334155';
-                  }
+                  padding: '7px 16px',
+                  borderRadius: '50px',
+                  fontSize: '0.78rem',
+                  fontWeight: activeTab === idx ? 800 : 600,
+                  whiteSpace: 'nowrap',
+                  cursor: 'pointer',
+                  border: activeTab === idx ? '1.5px solid #000648' : '1px solid #cbd5e1',
+                  background: activeTab === idx ? '#000648' : '#ffffff',
+                  color: activeTab === idx ? '#ffffff' : '#475569',
+                  boxShadow: activeTab === idx ? '0 4px 12px rgba(0, 6, 72, 0.15)' : 'none',
+                  transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease',
                 }}
               >
                 {tab}
@@ -90,57 +84,44 @@ export default function TrendingSkills({ onOpenDemoModal }) {
             ))}
           </div>
 
-          {/* Left & Right Scroll Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
+          {/* Navigation Arrows */}
+          <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
             <button
               type="button"
               onClick={() => handleScroll('left')}
               aria-label="Scroll left"
               style={{
-                width: '38px', height: '38px', borderRadius: '50%',
-                border: '1.5px solid #000648', background: '#ffffff',
-                color: '#000648', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer', transition: 'background-color 0.2s ease, color 0.2s ease',
-                boxShadow: '0 2px 8px rgba(0,6,72,0.08)'
+                width: '36px', height: '36px', borderRadius: '50%',
+                border: '1px solid #cbd5e1', background: '#ffffff',
+                color: '#000648', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+                transition: 'all 0.2s ease',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#000648';
-                e.currentTarget.style.color = '#f2b733';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#ffffff';
-                e.currentTarget.style.color = '#000648';
-              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#000648'; e.currentTarget.style.background = '#000648'; e.currentTarget.style.color = '#f2b733'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#000648'; }}
             >
               <HiChevronLeft size={20} />
             </button>
-
             <button
               type="button"
               onClick={() => handleScroll('right')}
               aria-label="Scroll right"
               style={{
-                width: '38px', height: '38px', borderRadius: '50%',
-                border: '1.5px solid #000648', background: '#000648',
-                color: '#f2b733', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer', transition: 'background-color 0.2s ease, color 0.2s ease',
-                boxShadow: '0 2px 8px rgba(0,6,72,0.15)'
+                width: '36px', height: '36px', borderRadius: '50%',
+                border: '1px solid #cbd5e1', background: '#ffffff',
+                color: '#000648', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
+                transition: 'all 0.2s ease',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#f2b733';
-                e.currentTarget.style.color = '#000648';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#000648';
-                e.currentTarget.style.color = '#f2b733';
-              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#000648'; e.currentTarget.style.background = '#000648'; e.currentTarget.style.color = '#f2b733'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#000648'; }}
             >
               <HiChevronRight size={20} />
             </button>
           </div>
         </div>
 
-        {/* Single Line Scrollable Track (Strictly NO multi-line grid wrapping as requested) */}
+        {/* Horizontal Slider Layout */}
         <div
           ref={sliderRef}
           className="no-scrollbar"
@@ -149,19 +130,16 @@ export default function TrendingSkills({ onOpenDemoModal }) {
             gap: '20px',
             overflowX: 'auto',
             scrollSnapType: 'x mandatory',
-            padding: '12px 8px 24px 8px', // Space for hover border & shadow
-            width: '100%',
-            boxSizing: 'border-box',
+            paddingBottom: '16px',
             scrollBehavior: 'smooth',
           }}
         >
           {display.map((course) => (
             <div
-              key={course.id}
+              key={course.id || course.slug}
               style={{
-                flex: '0 0 clamp(280px, 30vw, 320px)',
+                flex: '0 0 320px',
                 scrollSnapAlign: 'start',
-                minWidth: '280px',
               }}
             >
               <CourseCard course={course} onOpenDemoModal={onOpenDemoModal} />
@@ -173,4 +151,3 @@ export default function TrendingSkills({ onOpenDemoModal }) {
     </section>
   );
 }
-

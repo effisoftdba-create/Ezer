@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { HiChevronLeft, HiChevronRight, HiCheckCircle } from 'react-icons/hi';
 import { getCourseBySlug } from '../data/courses';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 import CampusImmersionBanner from '../components/CampusImmersionBanner';
 import FacultyShowcase from '../components/FacultyShowcase';
@@ -50,7 +51,8 @@ const learnerTransitions = [
 
 export default function CourseDetail({ onOpenDemoModal }) {
   const { slug } = useParams();
-  const course = getCourseBySlug(slug);
+  const { courses } = useSiteData();
+  const course = (courses || []).find((c) => c.slug === slug || c.id === slug) || getCourseBySlug(slug);
 
   if (!course) {
     return (

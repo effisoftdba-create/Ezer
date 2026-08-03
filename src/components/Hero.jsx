@@ -2,35 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { HiArrowRight, HiOutlineShieldCheck, HiOutlineUserGroup, HiOutlineClock, HiOutlineAcademicCap, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
-
-const baseUrl = import.meta.env.BASE_URL || '/';
-
-const slides = [
-  {
-    url: `${baseUrl}images/hero/hero_section_1.jpg`,
-    headline: 'Learn Live. Build Real Skills. Get Placed.',
-    sub: 'Live online classes led by working corporate professionals, hands-on labs on industry tools, and placement support that continues after graduation.',
-    badge: 'Outcome-Driven IT Training',
-  },
-  {
-    url: `${baseUrl}images/hero/cloud_deveops.png`,
-    headline: 'Deploy, Automate, and Scale Like a Real DevOps Engineer',
-    sub: 'Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with hands-on production labs.',
-    badge: 'Cloud & DevOps Masterclass',
-  },
-  {
-    url: `${baseUrl}images/hero/software_testing_playwright.jpg`,
-    headline: 'Test Smarter With Modern Automation Frameworks',
-    sub: 'From manual testing fundamentals to full Playwright automation and CI/CD integration.',
-    badge: 'Playwright Automation Program',
-  },
-  {
-    url: `${baseUrl}images/hero/AI_machine_learning.png`,
-    headline: 'From Python Basics to Deploying Real ML Models',
-    sub: 'A hands-on, project-based path into AI & Machine Learning — live, instructor-led, and practical.',
-    badge: 'AI & Data Science Track',
-  },
-];
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 const trustSignals = [
   {
@@ -95,7 +67,9 @@ function HeroTrustSignals() {
   );
 }
 
-function HeroImageSlider({ active, setActive, handleNext, handlePrev }) {
+function HeroImageSlider({ slides, active, setActive, handleNext, handlePrev }) {
+  if (!slides || slides.length === 0) return null;
+
   return (
     <div style={{ 
       position: 'relative', width: '100%', 
@@ -139,9 +113,9 @@ function HeroImageSlider({ active, setActive, handleNext, handlePrev }) {
       }}>
         {slides.map((s, idx) => (
           <img 
-            key={s.badge} 
+            key={s.id || s.headline || s.badge} 
             src={s.url} 
-            alt={s.headline} 
+            alt={s.headline || s.badge || 'Hero Slide'} 
             style={{
               position: 'absolute', inset: 0,
               width: '100%', height: '100%', objectFit: 'cover',
@@ -174,7 +148,7 @@ function HeroImageSlider({ active, setActive, handleNext, handlePrev }) {
           <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
             {slides.map((s, i) => (
               <button 
-                key={s.badge}
+                key={s.id || s.headline || s.badge}
                 type="button"
                 onClick={() => setActive(i)}
                 aria-label={`Go to slide ${i + 1}`}
@@ -241,12 +215,19 @@ function HeroImageSlider({ active, setActive, handleNext, handlePrev }) {
 }
 
 export default function Hero({ onOpenDemoModal }) {
+  const { heroSlides } = useSiteData();
   const [active, setActive] = useState(0);
 
+  const slides = heroSlides || [];
+
   useEffect(() => {
+    if (slides.length === 0) return;
     const t = setInterval(() => setActive((p) => (p + 1) % slides.length), 6000);
     return () => clearInterval(t);
-  }, []);
+  }, [slides.length]);
+
+  const safeActive = active < slides.length ? active : 0;
+  const currentSlide = slides[safeActive] || { badge: 'EZER IT', headline: 'Welcome to EZER', sub: 'Transforming Careers' };
 
   const handleNext = () => setActive((prev) => (prev + 1) % slides.length);
   const handlePrev = () => setActive((prev) => (prev - 1 + slides.length) % slides.length);
@@ -272,7 +253,7 @@ export default function Hero({ onOpenDemoModal }) {
             <div style={{ display: 'flex', flexDirection: 'column', zIndex: 10 }}>
               <AnimatePresence mode="wait">
                 <m.div
-                  key={slides[active].badge}
+                  key={currentSlide.id || currentSlide.badge || safeActive}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
@@ -287,7 +268,7 @@ export default function Hero({ onOpenDemoModal }) {
                     boxShadow: '0 2px 8px rgba(0,6,72,0.12)',
                   }}>
                     <HiOutlineShieldCheck size={15} style={{ color: '#f2b733' }} />
-                    {slides[active].badge}
+                    {currentSlide.badge}
                   </div>
 
                   <h1 style={{
@@ -295,7 +276,7 @@ export default function Hero({ onOpenDemoModal }) {
                     color: '#000648', lineHeight: 1.2, marginBottom: '14px',
                     letterSpacing: '-0.02em', fontFamily: "'DM Sans', sans-serif"
                   }}>
-                    {slides[active].headline}
+                    {currentSlide.headline}
                   </h1>
 
                   <p style={{
@@ -303,7 +284,7 @@ export default function Hero({ onOpenDemoModal }) {
                     lineHeight: 1.6, marginBottom: '24px', maxWidth: '540px',
                     fontWeight: 500
                   }}>
-                    {slides[active].sub}
+                    {currentSlide.sub}
                   </p>
                 </m.div>
               </AnimatePresence>
@@ -383,7 +364,8 @@ export default function Hero({ onOpenDemoModal }) {
             </div>
 
             <HeroImageSlider 
-              active={active} 
+              slides={slides}
+              active={safeActive} 
               setActive={setActive} 
               handleNext={handleNext} 
               handlePrev={handlePrev} 
