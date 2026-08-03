@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
-const baseLogos = [
+const baseLogosRow1 = [
   {
     id: 'tcs',
     name: 'TCS',
     icon: (
-      <svg viewBox="0 0 190 50" style={{ height: '32px' }}>
+      <svg viewBox="0 0 190 50" style={{ height: '28px' }}>
         <path d="M10 12 L45 12 M27.5 12 L27.5 40" stroke="#000648" strokeWidth="6" strokeLinecap="square" />
         <text x="50" y="38" fontFamily="DM Sans, sans-serif" fontSize="30" fontWeight="900" fill="#000648" letterSpacing="-0.5px">TCS</text>
         <rect x="115" y="16" width="3" height="24" fill="#f2b733" />
@@ -19,7 +19,7 @@ const baseLogos = [
     id: 'infosys',
     name: 'Infosys',
     icon: (
-      <svg viewBox="0 0 150 50" style={{ height: '32px' }}>
+      <svg viewBox="0 0 150 50" style={{ height: '28px' }}>
         <text x="5" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#006699" letterSpacing="-1px">Infosys</text>
       </svg>
     )
@@ -28,7 +28,7 @@ const baseLogos = [
     id: 'wipro',
     name: 'Wipro',
     icon: (
-      <svg viewBox="0 0 150 50" style={{ height: '32px' }}>
+      <svg viewBox="0 0 150 50" style={{ height: '28px' }}>
         <circle cx="16" cy="18" r="5" fill="#e42528" />
         <circle cx="28" cy="18" r="5" fill="#f2b733" />
         <circle cx="16" cy="30" r="5" fill="#006699" />
@@ -41,7 +41,7 @@ const baseLogos = [
     id: 'hcltech',
     name: 'HCLTech',
     icon: (
-      <svg viewBox="0 0 170 50" style={{ height: '32px' }}>
+      <svg viewBox="0 0 170 50" style={{ height: '28px' }}>
         <text x="5" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#00529b">HCL</text>
         <text x="80" y="36" fontFamily="Inter, sans-serif" fontSize="24" fontWeight="800" fill="#f2b733">Tech</text>
       </svg>
@@ -51,7 +51,7 @@ const baseLogos = [
     id: 'zoho',
     name: 'Zoho',
     icon: (
-      <svg viewBox="0 0 160 50" style={{ height: '32px' }}>
+      <svg viewBox="0 0 160 50" style={{ height: '28px' }}>
         <rect x="4" y="10" width="28" height="28" rx="6" fill="#e42528" />
         <text x="11" y="32" fontFamily="sans-serif" fontSize="20" fontWeight="900" fill="#fff">Z</text>
         <rect x="36" y="10" width="28" height="28" rx="6" fill="#006699" />
@@ -62,12 +62,15 @@ const baseLogos = [
         <text x="106" y="32" fontFamily="sans-serif" fontSize="20" fontWeight="900" fill="#000648">O</text>
       </svg>
     )
-  },
+  }
+];
+
+const baseLogosRow2 = [
   {
     id: 'capgemini',
     name: 'Capgemini',
     icon: (
-      <svg viewBox="0 0 190 50" style={{ height: '30px' }}>
+      <svg viewBox="0 0 190 50" style={{ height: '28px' }}>
         <path d="M12 25 C12 15, 25 10, 25 25 C25 40, 38 35, 38 25" stroke="#0070ad" strokeWidth="5" fill="none" strokeLinecap="round" />
         <text x="48" y="34" fontFamily="DM Sans, sans-serif" fontSize="26" fontWeight="900" fill="#0070ad">Capgemini</text>
       </svg>
@@ -77,7 +80,7 @@ const baseLogos = [
     id: 'accenture',
     name: 'Accenture',
     icon: (
-      <svg viewBox="0 0 180 50" style={{ height: '30px' }}>
+      <svg viewBox="0 0 180 50" style={{ height: '28px' }}>
         <text x="5" y="36" fontFamily="DM Sans, sans-serif" fontSize="28" fontWeight="900" fill="#000648">accenture</text>
         <path d="M136 12 L150 22 L136 32" stroke="#a100ff" strokeWidth="5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
@@ -87,7 +90,7 @@ const baseLogos = [
     id: 'cognizant',
     name: 'Cognizant',
     icon: (
-      <svg viewBox="0 0 170 50" style={{ height: '30px' }}>
+      <svg viewBox="0 0 170 50" style={{ height: '28px' }}>
         <text x="5" y="35" fontFamily="DM Sans, sans-serif" fontSize="27" fontWeight="900" fill="#0033a0">Cognizant</text>
       </svg>
     )
@@ -96,7 +99,7 @@ const baseLogos = [
     id: 'amazon',
     name: 'Amazon',
     icon: (
-      <svg viewBox="0 0 150 50" style={{ height: '32px' }}>
+      <svg viewBox="0 0 150 50" style={{ height: '28px' }}>
         <text x="5" y="32" fontFamily="DM Sans, sans-serif" fontSize="28" fontWeight="900" fill="#131921">amazon</text>
         <path d="M10 38 Q 55 46, 95 35" fill="none" stroke="#ff9900" strokeWidth="3.5" strokeLinecap="round" />
         <path d="M90 32 L98 35 L93 40" fill="none" stroke="#ff9900" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -107,7 +110,7 @@ const baseLogos = [
     id: 'google',
     name: 'Google',
     icon: (
-      <svg viewBox="0 0 150 50" style={{ height: '32px' }}>
+      <svg viewBox="0 0 150 50" style={{ height: '28px' }}>
         <text x="5" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#4285F4">G</text>
         <text x="34" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#EA4335">o</text>
         <text x="56" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#FBBC05">o</text>
@@ -116,12 +119,15 @@ const baseLogos = [
         <text x="110" y="36" fontFamily="DM Sans, sans-serif" fontSize="32" fontWeight="900" fill="#EA4335">e</text>
       </svg>
     )
-  },
+  }
+];
+
+const baseLogosRow3 = [
   {
     id: 'microsoft',
     name: 'Microsoft',
     icon: (
-      <svg viewBox="0 0 170 50" style={{ height: '30px' }}>
+      <svg viewBox="0 0 170 50" style={{ height: '28px' }}>
         <rect x="5" y="10" width="13" height="13" fill="#f25022" />
         <rect x="21" y="10" width="13" height="13" fill="#7fba00" />
         <rect x="5" y="26" width="13" height="13" fill="#00a4ef" />
@@ -134,7 +140,7 @@ const baseLogos = [
     id: 'ibm',
     name: 'IBM',
     icon: (
-      <svg viewBox="0 0 130 50" style={{ height: '32px' }}>
+      <svg viewBox="0 0 130 50" style={{ height: '28px' }}>
         <text x="5" y="36" fontFamily="monospace" fontSize="36" fontWeight="900" fill="#052FAD" letterSpacing="2px">IBM</text>
       </svg>
     )
@@ -143,97 +149,71 @@ const baseLogos = [
     id: 'freshworks',
     name: 'Freshworks',
     icon: (
-      <svg viewBox="0 0 180 50" style={{ height: '30px' }}>
+      <svg viewBox="0 0 180 50" style={{ height: '28px' }}>
         <circle cx="18" cy="25" r="12" fill="#ff5a5f" />
         <text x="36" y="34" fontFamily="DM Sans, sans-serif" fontSize="24" fontWeight="900" fill="#000648">freshworks</text>
+      </svg>
+    )
+  },
+  {
+    id: 'tcs-3',
+    name: 'TCS',
+    icon: (
+      <svg viewBox="0 0 190 50" style={{ height: '28px' }}>
+        <path d="M10 12 L45 12 M27.5 12 L27.5 40" stroke="#000648" strokeWidth="6" strokeLinecap="square" />
+        <text x="50" y="38" fontFamily="DM Sans, sans-serif" fontSize="30" fontWeight="900" fill="#000648" letterSpacing="-0.5px">TCS</text>
+        <rect x="115" y="16" width="3" height="24" fill="#f2b733" />
+        <text x="126" y="36" fontFamily="Inter, sans-serif" fontSize="16" fontWeight="900" fill="#000648" letterSpacing="1px">TATA</text>
+      </svg>
+    )
+  },
+  {
+    id: 'zoho-3',
+    name: 'Zoho',
+    icon: (
+      <svg viewBox="0 0 160 50" style={{ height: '28px' }}>
+        <rect x="4" y="10" width="28" height="28" rx="6" fill="#e42528" />
+        <text x="11" y="32" fontFamily="sans-serif" fontSize="20" fontWeight="900" fill="#fff">Z</text>
+        <rect x="36" y="10" width="28" height="28" rx="6" fill="#006699" />
+        <text x="42" y="32" fontFamily="sans-serif" fontSize="20" fontWeight="900" fill="#fff">O</text>
+        <rect x="68" y="10" width="28" height="28" rx="6" fill="#0dba4b" />
+        <text x="74" y="32" fontFamily="sans-serif" fontSize="20" fontWeight="900" fill="#fff">H</text>
+        <rect x="100" y="10" width="28" height="28" rx="6" fill="#f2b733" />
+        <text x="106" y="32" fontFamily="sans-serif" fontSize="20" fontWeight="900" fill="#000648">O</text>
       </svg>
     )
   }
 ];
 
-// Tripled logo array for continuous infinite scroll
-const marqueeLogos = [
-  ...baseLogos.map((l) => ({ ...l, uniqueKey: l.id + '-1' })),
-  ...baseLogos.map((l) => ({ ...l, uniqueKey: l.id + '-2' })),
-  ...baseLogos.map((l) => ({ ...l, uniqueKey: l.id + '-3' }))
+// Quadrupled arrays for continuous infinite smooth CSS ticker
+const makeInfiniteTrack = (items) => [
+  ...items.map((item, i) => ({ ...item, uId: `${item.id}-a-${i}` })),
+  ...items.map((item, i) => ({ ...item, uId: `${item.id}-b-${i}` })),
+  ...items.map((item, i) => ({ ...item, uId: `${item.id}-c-${i}` })),
+  ...items.map((item, i) => ({ ...item, uId: `${item.id}-d-${i}` }))
 ];
 
-const WIPE_DURATION = 0.92;
-const WIPE_TIMES = [0, 0.4, 1];
+const track1 = makeInfiniteTrack(baseLogosRow1);
+const track2 = makeInfiniteTrack(baseLogosRow2);
+const track3 = makeInfiniteTrack(baseLogosRow3);
 
-function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone, shouldReduceMotion }) {
+function LogoCard({ logo }) {
   return (
     <m.div
-      aria-label={logo.name}
-      animate={
-        isWaving && !shouldReduceMotion
-          ? {
-              clipPath: [
-                "inset(0 0% 0 0)",
-                "inset(0 100% 0 0)",
-                "inset(0 0% 0 0)",
-              ],
-              filter: ["blur(0px)", "blur(6px)", "blur(0px)"],
-              opacity: [1, 0.3, 1],
-            }
-          : {
-              clipPath: "inset(0 0% 0 0)",
-              filter: "blur(0px)",
-              opacity: 1,
-            }
-      }
-      transition={
-        isWaving && !shouldReduceMotion
-          ? {
-              clipPath: {
-                duration: WIPE_DURATION,
-                times: WIPE_TIMES,
-                ease: ["easeIn", [0.16, 1, 0.3, 1]],
-                delay: (index % baseLogos.length) * stagger,
-              },
-              filter: {
-                duration: WIPE_DURATION * 0.9,
-                times: WIPE_TIMES,
-                ease: "easeInOut",
-                delay: (index % baseLogos.length) * stagger,
-              },
-              opacity: {
-                duration: WIPE_DURATION * 0.85,
-                times: WIPE_TIMES,
-                ease: "easeInOut",
-                delay: (index % baseLogos.length) * stagger,
-              },
-            }
-          : {
-              duration: 0.3,
-              ease: "easeOut",
-            }
-      }
-      onAnimationComplete={() => {
-        if (isWaving && index === totalCount - 1) onDone();
-      }}
-      whileHover={
-        shouldReduceMotion
-          ? undefined
-          : {
-              scale: 1.07,
-              opacity: 1,
-              filter: "blur(0px)",
-              transition: { type: "spring", stiffness: 340, damping: 24 },
-            }
-      }
+      whileHover={{ scale: 1.06, borderColor: '#000648', boxShadow: '0 6px 18px rgba(0,6,72,0.12)' }}
       style={{
-        height: '56px',
-        padding: '8px 20px',
+        height: '48px',
+        padding: '6px 18px',
         background: '#ffffff',
-        borderRadius: '14px',
+        borderRadius: '12px',
         border: '1.5px solid #e2e8f0',
-        boxShadow: '0 4px 14px rgba(0, 6, 72, 0.06)',
+        boxShadow: '0 2px 8px rgba(0, 6, 72, 0.05)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
-        cursor: 'pointer'
+        cursor: 'pointer',
+        transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
       }}
     >
       {logo.icon}
@@ -242,56 +222,55 @@ function LogoItem({ logo, index, isWaving, stagger, totalCount, onDone, shouldRe
 }
 
 export default function CompanyLogos() {
-  const [waving, setWaving] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const scrollRef = useRef(null);
+  const [speedMultiplier, setSpeedMultiplier] = useState(1);
   const shouldReduceMotion = useReducedMotion();
-
-  // Waving animation trigger
-  useEffect(() => {
-    if (shouldReduceMotion) return;
-    const id = setInterval(() => setWaving(true), 4000);
-    return () => clearInterval(id);
-  }, [shouldReduceMotion]);
-
-  // Continuous Auto-Scroll Engine (Left-to-Right / Right-to-Left loop)
-  useEffect(() => {
-    if (shouldReduceMotion) return;
-
-    let animationFrameId;
-    const autoScroll = () => {
-      if (scrollRef.current && !isPaused) {
-        scrollRef.current.scrollLeft += 1.2;
-        // Infinite seamless reset when reaching half scroll width
-        if (scrollRef.current.scrollLeft >= scrollRef.current.scrollWidth / 2) {
-          scrollRef.current.scrollLeft = 0;
-        }
-      }
-      animationFrameId = requestAnimationFrame(autoScroll);
-    };
-
-    animationFrameId = requestAnimationFrame(autoScroll);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [isPaused, shouldReduceMotion]);
-
-  const handleManualScroll = (direction) => {
-    if (scrollRef.current) {
-      const scrollAmount = direction === 'left' ? -300 : 300;
-      scrollRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
 
   return (
     <LazyMotion features={domAnimation}>
       <section
         style={{
-          padding: '28px 0 32px',
+          padding: '32px 0 36px',
           background: '#ffffff',
           borderBottom: '1px solid #e2e8f0',
           overflow: 'hidden',
           position: 'relative',
         }}
       >
+        {/* CSS Keyframes for High Speed Infinite Marquee Scroll */}
+        <style>{`
+          @keyframes ezerMarqueeLeft {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+          }
+          @keyframes ezerMarqueeRight {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+          }
+          .marquee-track-1 {
+            display: flex;
+            gap: 16px;
+            width: max-content;
+            animation: ezerMarqueeLeft ${12 / speedMultiplier}s linear infinite;
+          }
+          .marquee-track-2 {
+            display: flex;
+            gap: 16px;
+            width: max-content;
+            animation: ezerMarqueeRight ${12 / speedMultiplier}s linear infinite;
+          }
+          .marquee-track-3 {
+            display: flex;
+            gap: 16px;
+            width: max-content;
+            animation: ezerMarqueeLeft ${12 / speedMultiplier}s linear infinite;
+          }
+          .marquee-row-wrapper:hover .marquee-track-1,
+          .marquee-row-wrapper:hover .marquee-track-2,
+          .marquee-row-wrapper:hover .marquee-track-3 {
+            animation-play-state: paused;
+          }
+        `}</style>
+
         <div
           className="container"
           style={{
@@ -320,81 +299,62 @@ export default function CompanyLogos() {
             </h3>
           </div>
 
-          {/* Interactive Left & Right Manual Scroll Buttons */}
+          {/* Speed Toggle Controls */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
             <button
               type="button"
-              onClick={() => handleManualScroll('left')}
-              aria-label="Scroll Left"
+              onClick={() => setSpeedMultiplier(prev => (prev === 1 ? 1.8 : 1))}
+              aria-label="Toggle Auto Scroll Speed"
               style={{
-                width: '34px',
-                height: '34px',
-                borderRadius: '50%',
+                padding: '6px 14px',
+                borderRadius: '50px',
                 border: '1.5px solid #000648',
-                background: '#ffffff',
-                color: '#000648',
+                background: speedMultiplier > 1 ? '#000648' : '#ffffff',
+                color: speedMultiplier > 1 ? '#f2b733' : '#000648',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)',
+                gap: '6px',
+                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)'
               }}
             >
-              <HiChevronLeft size={18} />
-            </button>
-            <button
-              type="button"
-              onClick={() => handleManualScroll('right')}
-              aria-label="Scroll Right"
-              style={{
-                width: '34px',
-                height: '34px',
-                borderRadius: '50%',
-                border: '1.5px solid #000648',
-                background: '#000648',
-                color: '#f2b733',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.15)',
-              }}
-            >
-              <HiChevronRight size={18} />
+              🚀 {speedMultiplier > 1 ? 'Fast Auto-Scroll ON' : 'Boost Scroll Speed'}
             </button>
           </div>
         </div>
 
-        {/* Continuous Auto-Scrolling & Hover-Pausable Logo Track */}
-        <div
-          ref={scrollRef}
-          className="no-scrollbar"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          style={{
-            display: 'flex',
-            gap: '16px',
-            overflowX: 'auto',
-            scrollBehavior: 'smooth',
-            padding: '6px 20px 16px',
-            width: '100%',
-            boxSizing: 'border-box',
-            maskImage: 'linear-gradient(to right, transparent, black 3%, black 97%, transparent)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent, black 3%, black 97%, transparent)',
-          }}
-        >
-          {marqueeLogos.map((logo, i) => (
-            <LogoItem
-              key={logo.uniqueKey}
-              logo={logo}
-              index={i}
-              isWaving={waving}
-              stagger={0.08}
-              totalCount={marqueeLogos.length}
-              onDone={() => setWaving(false)}
-              shouldReduceMotion={shouldReduceMotion}
-            />
-          ))}
+        {/* 3-Row Infinite Ticker Container (1st Left->Right, 2nd Right->Left, 3rd Left->Right) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflow: 'hidden' }}>
+          
+          {/* Row 1: Left to Right Scroll */}
+          <div className="marquee-row-wrapper" style={{ overflow: 'hidden', padding: '2px 0' }}>
+            <div className="marquee-track-1">
+              {track1.map((logo) => (
+                <LogoCard key={logo.uId} logo={logo} />
+              ))}
+            </div>
+          </div>
+
+          {/* Row 2: Right to Left Scroll */}
+          <div className="marquee-row-wrapper" style={{ overflow: 'hidden', padding: '2px 0' }}>
+            <div className="marquee-track-2">
+              {track2.map((logo) => (
+                <LogoCard key={logo.uId} logo={logo} />
+              ))}
+            </div>
+          </div>
+
+          {/* Row 3: Left to Right Scroll */}
+          <div className="marquee-row-wrapper" style={{ overflow: 'hidden', padding: '2px 0' }}>
+            <div className="marquee-track-3">
+              {track3.map((logo) => (
+                <LogoCard key={logo.uId} logo={logo} />
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
     </LazyMotion>

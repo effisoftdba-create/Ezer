@@ -81,16 +81,18 @@ export default function AnimMasterShowcase({
         />
 
         <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          {/* Header Block with New Logo Shield */}
+          {/* Header Block with New Logo Shield & White Background Badge for Clear Visibility */}
           <div style={{ textAlign: 'center', marginBottom: '44px' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'rgba(242, 183, 51, 0.12)', border: '1.5px solid rgba(242, 183, 51, 0.4)', padding: '6px 18px', borderRadius: '50px', marginBottom: '16px' }}>
-              <img 
-                src={logoSrc} 
-                alt="EZER Official Shield Logo" 
-                style={{ width: '22px', height: '22px', objectFit: 'contain' }} 
-              />
+              <div style={{ background: '#ffffff', padding: '3px 6px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 6px rgba(0, 6, 72, 0.2)' }}>
+                <img 
+                  src={logoSrc} 
+                  alt="EZER Official Shield Logo" 
+                  style={{ width: '22px', height: '22px', objectFit: 'contain' }} 
+                />
+              </div>
               <span style={{ color: '#f2b733', fontSize: '0.78rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                ANIMMASTER ENGINE • EZER TECH
+                EZER TECH LEARNING ENGINE
               </span>
             </div>
 

@@ -21,12 +21,14 @@ export default function Footer() {
         }}>
           {/* Brand */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-              <img 
-                src={`${import.meta.env.BASE_URL || '/'}images/logo.png`} 
-                alt="EZER Learning Solutions Crest Logo" 
-                style={{ height: '48px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(242, 183, 51, 0.3))' }} 
-              />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+              <div style={{ background: '#ffffff', padding: '4px 8px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 8px rgba(0, 6, 72, 0.2)' }}>
+                <img 
+                  src={`${import.meta.env.BASE_URL || '/'}images/logo.png`} 
+                  alt="EZER Learning Solutions Crest Logo" 
+                  style={{ height: '40px', width: 'auto', objectFit: 'contain' }} 
+                />
+              </div>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1 }}>
                   EZER

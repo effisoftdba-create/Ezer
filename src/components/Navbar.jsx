@@ -53,7 +53,11 @@ export default function Navbar({ onOpenDemoModal }) {
                 whileHover={{ scale: 1.06, rotate: [0, -2, 2, 0] }}
                 transition={{ duration: 0.3 }}
                 style={{
-                  position: 'relative',
+                  background: '#ffffff',
+                  padding: '4px 8px',
+                  borderRadius: '10px',
+                  border: '1.5px solid #000648',
+                  boxShadow: '0 4px 12px rgba(0, 6, 72, 0.12)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
@@ -63,10 +67,9 @@ export default function Navbar({ onOpenDemoModal }) {
                   src={`${import.meta.env.BASE_URL || '/'}images/logo.png`} 
                   alt="EZER Learning Solutions Crest Logo" 
                   style={{
-                    height: '48px',
+                    height: '42px',
                     width: 'auto',
                     objectFit: 'contain',
-                    filter: 'drop-shadow(0 4px 10px rgba(0, 6, 72, 0.2))',
                   }} 
                 />
               </m.div>
