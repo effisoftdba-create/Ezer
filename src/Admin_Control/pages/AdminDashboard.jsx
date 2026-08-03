@@ -11,7 +11,7 @@ import VideoReviewsManager from '../components/VideoReviewsManager';
 import TestimonialsManager from '../components/TestimonialsManager';
 import FaqManager from '../components/FaqManager';
 import ContactInfoManager from '../components/ContactInfoManager';
-import UIStatePreviewManager from '../components/UIStatePreviewManager';
+import UIStateDisplay, { STATE_TYPES } from '../../components/UIStateDisplay';
 import {
   HiOutlinePhotograph,
   HiOutlineAcademicCap,
@@ -22,7 +22,6 @@ import {
   HiOutlineChatAlt,
   HiOutlineQuestionMarkCircle,
   HiOutlinePhone,
-  HiOutlineTemplate,
   HiOutlineExternalLink,
   HiOutlineLogout,
   HiOutlineRefresh,
@@ -43,11 +42,28 @@ export default function AdminDashboard() {
     resetToDefault
   } = useSiteData();
 
+  const isAuth = isAuthenticated();
+
   useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/admin/login');
+    if (!isAuth) {
+      const timer = setTimeout(() => navigate('/admin/login'), 2500);
+      return () => clearTimeout(timer);
     }
-  }, [navigate]);
+  }, [isAuth, navigate]);
+
+  if (!isAuth) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000648' }}>
+        <UIStateDisplay
+          type={STATE_TYPES.PERMISSION_DENIED}
+          title="Access Permission Denied"
+          message="You must log in to access the Admin Control Panel. Redirecting to login..."
+          onRetry={() => navigate('/admin/login')}
+          actionLabel="Go to Login Now"
+        />
+      </div>
+    );
+  }
 
   const handleLogout = () => {
     logoutAdmin();
@@ -71,8 +87,7 @@ export default function AdminDashboard() {
     { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: videoTestimonials.length },
     { id: 'testimonials', label: 'Testimonials Page', icon: HiOutlineChatAlt, count: writtenTestimonials.length },
     { id: 'faq', label: 'FAQ Manager', icon: HiOutlineQuestionMarkCircle, count: totalFaqs },
-    { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone },
-    { id: 'uistates', label: 'UI Feedback States', icon: HiOutlineTemplate }
+    { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone }
   ];
 
   return (
@@ -209,7 +224,6 @@ export default function AdminDashboard() {
           {activeTab === 'testimonials' && <TestimonialsManager />}
           {activeTab === 'faq' && <FaqManager />}
           {activeTab === 'contact' && <ContactInfoManager />}
-          {activeTab === 'uistates' && <UIStatePreviewManager />}
         </main>
       </div>
     </div>

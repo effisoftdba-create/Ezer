@@ -4,6 +4,7 @@ import { SiteProvider } from './Admin_Control/context/SiteContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PopupForm from './components/PopupForm';
+import UIStateDisplay, { STATE_TYPES } from './components/UIStateDisplay';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -21,7 +22,20 @@ import AdminDashboard from './Admin_Control/pages/AdminDashboard';
 export default function App() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedCourseForModal, setSelectedCourseForModal] = useState('');
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const location = useLocation();
+
+  // Network Online / Offline Detection for UI Feedback State
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   // Robust Admin Route Detection across HashRouter, Query params (?/admin/login), and Pathnames
   const fullSearch = typeof window !== 'undefined' ? window.location.search : '';
@@ -45,7 +59,7 @@ export default function App() {
     if (isAdminRoute) return;
     const timer = setTimeout(() => {
       setIsPopupOpen(true);
-    }, 60000); // 60 Seconds delay auto-popup
+    }, 60000);
 
     return () => clearTimeout(timer);
   }, [isAdminRoute]);
@@ -62,6 +76,17 @@ export default function App() {
   return (
     <SiteProvider>
       <div className="app-layout" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+        {/* Global Offline Network Status Banner */}
+        {isOffline && (
+          <div style={{ position: 'sticky', top: 0, zIndex: 10000 }}>
+            <UIStateDisplay
+              type={STATE_TYPES.NO_INTERNET}
+              onRetry={() => setIsOffline(!navigator.onLine)}
+              actionLabel="Check Network Again"
+            />
+          </div>
+        )}
+
         {!isAdminRoute && <Navbar onOpenDemoModal={() => handleOpenDemoModal()} />}
 
         <main style={{ flexGrow: 1 }}>

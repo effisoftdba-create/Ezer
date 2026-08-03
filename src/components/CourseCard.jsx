@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { HiClock, HiArrowRight, HiGlobeAlt, HiStar } from 'react-icons/hi';
+import { resolveImageSrc } from '../utils/imageUtils';
 
 export default function CourseCard({ course, onOpenDemoModal }) {
   const displayTools = course.tools ? course.tools.slice(0, 3) : ['AWS', 'Docker', 'Kubernetes'];
@@ -36,9 +37,15 @@ export default function CourseCard({ course, onOpenDemoModal }) {
       {/* Clear Image Banner Header */}
       <div style={{ position: 'relative', height: '175px', overflow: 'hidden', background: '#ffffff' }}>
         <img 
-          src={course.image?.startsWith('http') ? course.image : `${import.meta.env.BASE_URL || '/'}${course.image?.replace(/^\//, '')}`} 
+          src={resolveImageSrc(course.image)} 
           alt={course.title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 1 }}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: course.imagePosition || 'center center',
+            opacity: 1
+          }}
         />
 
         {/* Category / Bestseller Badge */}

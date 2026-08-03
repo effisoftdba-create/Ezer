@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
-import { HiX, HiCheck, HiPhotograph, HiUpload, HiArrowRight } from 'react-icons/hi';
+import React, { useState, useEffect } from 'react';
+import { HiX, HiCheck, HiPhotograph, HiUpload, HiArrowRight, HiTrash } from 'react-icons/hi';
+import { resolveImageSrc } from '../../utils/imageUtils';
 
-const PRESET_IMAGES = [
+const STORAGE_UPLOADED_IMAGES_KEY = 'ezer_uploaded_images:v1';
+
+const DEFAULT_PRESET_IMAGES = [
   { label: 'Hero Default', url: 'images/hero/hero_section_1.jpg' },
   { label: 'Cloud & DevOps', url: 'images/hero/cloud_deveops.png' },
   { label: 'Software Testing / Playwright', url: 'images/hero/software_testing_playwright.jpg' },
@@ -12,9 +15,31 @@ const PRESET_IMAGES = [
   { label: 'Data Analytics & PowerBI', url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800' }
 ];
 
-export default function ImagePickerModal({ isOpen, onClose, onSelectImage, currentImage = '' }) {
-  const [selectedUrl, setSelectedUrl] = useState(currentImage || PRESET_IMAGES[0].url);
+export default function ImagePickerModal({
+  isOpen,
+  onClose,
+  onSelectImage,
+  currentImage = '',
+  currentPosition = 'center center',
+  onSelectPosition
+}) {
+  const [selectedUrl, setSelectedUrl] = useState(currentImage || DEFAULT_PRESET_IMAGES[0].url);
   const [customUrl, setCustomUrl] = useState('');
+  const [position, setPosition] = useState(currentPosition || 'center center');
+
+  const [uploadedImages, setUploadedImages] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_UPLOADED_IMAGES_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    return [];
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_UPLOADED_IMAGES_KEY, JSON.stringify(uploadedImages));
+    } catch (e) {}
+  }, [uploadedImages]);
 
   if (!isOpen) return null;
 
@@ -22,7 +47,8 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
 
   const handleConfirm = () => {
     if (activeSelectedUrl) {
-      onSelectImage(activeSelectedUrl);
+      onSelectImage(activeSelectedUrl, position);
+      if (onSelectPosition) onSelectPosition(position);
       onClose();
     }
   };
@@ -30,31 +56,50 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        alert('Image size exceeds 2MB limit for client upload.');
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size exceeds 5MB limit.');
         return;
       }
       const reader = new FileReader();
       reader.onloadend = () => {
-        setCustomUrl(reader.result);
+        const dataUri = reader.result;
+        setCustomUrl(dataUri);
+        // Persist uploaded picture into uploadedImages list
+        setUploadedImages((prev) => {
+          if (prev.some((img) => img.url === dataUri)) return prev;
+          return [{ label: `Upload ${prev.length + 1}`, url: dataUri, date: new Date().toLocaleTimeString() }, ...prev];
+        });
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const handleDeleteUploadedImage = (url, e) => {
+    e.stopPropagation();
+    setUploadedImages((prev) => prev.filter((img) => img.url !== url));
+  };
+
+  const POSITION_PRESETS = [
+    { label: 'Center', value: 'center center' },
+    { label: 'Top Focus', value: 'center top' },
+    { label: 'Bottom Focus', value: 'center bottom' },
+    { label: 'Left Focus', value: 'left center' },
+    { label: 'Right Focus', value: 'right center' }
+  ];
+
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
-      background: 'rgba(0, 6, 72, 0.65)', backdropFilter: 'blur(4px)',
+      background: 'rgba(0, 6, 72, 0.7)', backdropFilter: 'blur(5px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
     }}>
       <div style={{
-        background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '680px',
-        maxHeight: '92vh', overflowY: 'auto', padding: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.25)'
+        background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '720px',
+        maxHeight: '94vh', overflowY: 'auto', padding: '24px', boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiPhotograph color="#115DFC" size={22} /> Select or Upload Image
+            <HiPhotograph color="#115DFC" size={22} /> Select, Upload & Position Image
           </h3>
           <button
             type="button"
@@ -66,19 +111,19 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
           </button>
         </div>
 
-        {/* Dual Image Preview (Current vs. Newly Selected) */}
+        {/* Dual Image Preview (Current vs. Newly Selected with Position Control) */}
         <div style={{
           background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
           padding: '16px', marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr auto 1fr',
           gap: '16px', alignItems: 'center'
         }}>
           <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', uppercase: true, marginBottom: '6px' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
               Current Image
             </div>
-            <div style={{ height: '110px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0' }}>
+            <div style={{ height: '115px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0' }}>
               {currentImage ? (
-                <img src={currentImage} alt="Current active" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={resolveImageSrc(currentImage)} alt="Current active" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
                 <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: '#94a3b8' }}>
                   No Image Set
@@ -92,15 +137,45 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
           </div>
 
           <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', uppercase: true, marginBottom: '6px' }}>
+            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', textTransform: 'uppercase', marginBottom: '6px' }}>
               Newly Chosen Image Preview
             </div>
-            <div style={{ height: '110px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #115DFC', background: '#000648', boxShadow: '0 4px 12px rgba(17,93,252,0.2)' }}>
-              <img src={activeSelectedUrl} alt="Newly chosen preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div style={{ height: '115px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #115DFC', background: '#000648', boxShadow: '0 4px 12px rgba(17,93,252,0.2)' }}>
+              <img
+                src={resolveImageSrc(activeSelectedUrl)}
+                alt="Newly chosen preview"
+                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: position }}
+              />
             </div>
           </div>
         </div>
 
+        {/* Interactive Image Position & Focus Adjustment */}
+        <div style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '12px 16px', marginBottom: '20px' }}>
+          <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
+            Adjust Visible Crop & Focus Position
+          </div>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+            {POSITION_PRESETS.map((p) => (
+              <button
+                key={p.value}
+                type="button"
+                onClick={() => setPosition(p.value)}
+                aria-label={`Position preset ${p.label}`}
+                style={{
+                  padding: '5px 12px', borderRadius: '6px', border: '1px solid #cbd5e1',
+                  background: position === p.value ? '#000648' : '#ffffff',
+                  color: position === p.value ? '#f2b733' : '#334155',
+                  fontWeight: position === p.value ? 800 : 600, fontSize: '0.75rem', cursor: 'pointer'
+                }}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Option 1: Custom URL or File Upload */}
         <div style={{ marginBottom: '20px' }}>
           <label htmlFor="custom_image_url_picker" style={{ fontSize: '0.825rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '6px' }}>
             Option 1: Enter Custom Image URL or Upload File
@@ -118,24 +193,75 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
               }}
             />
             <label htmlFor="image_file_upload_input" style={{
-              background: '#f1f5f9', border: '1.5px solid #cbd5e1', padding: '10px 14px',
+              background: '#000648', color: '#f2b733', border: 'none', padding: '10px 16px',
               borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
-              fontSize: '0.825rem', fontWeight: 700, color: '#334155'
+              fontSize: '0.825rem', fontWeight: 800
             }}>
-              <HiUpload size={16} /> Upload
+              <HiUpload size={16} /> Upload Image
               <input id="image_file_upload_input" type="file" accept="image/*" onChange={handleFileUpload} style={{ display: 'none' }} />
             </label>
           </div>
         </div>
 
+        {/* User Uploaded Pictures Gallery */}
+        {uploadedImages.length > 0 && (
+          <div style={{ marginBottom: '20px' }}>
+            <span style={{ fontSize: '0.825rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '10px' }}>
+              Your Uploaded Pictures ({uploadedImages.length})
+            </span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '12px' }}>
+              {uploadedImages.map((img, idx) => {
+                const isSelected = activeSelectedUrl === img.url;
+                return (
+                  <button
+                    type="button"
+                    key={idx}
+                    onClick={() => {
+                      setSelectedUrl(img.url);
+                      setCustomUrl('');
+                    }}
+                    aria-label={`Select uploaded image ${img.label}`}
+                    style={{
+                      position: 'relative', borderRadius: '10px', overflow: 'hidden', cursor: 'pointer',
+                      border: isSelected ? '3px solid #115DFC' : '1.5px solid #cbd5e1',
+                      height: '90px', background: '#000648', padding: 0, textAlign: 'left'
+                    }}
+                  >
+                    <img src={resolveImageSrc(img.url)} alt={img.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <button
+                      type="button"
+                      onClick={(e) => handleDeleteUploadedImage(img.url, e)}
+                      aria-label="Delete uploaded image"
+                      style={{
+                        position: 'absolute', top: '4px', right: '4px', background: 'rgba(220, 38, 38, 0.85)',
+                        color: '#fff', border: 'none', borderRadius: '50%', width: '22px', height: '22px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
+                      }}
+                    >
+                      <HiTrash size={12} />
+                    </button>
+                    <div style={{
+                      position: 'absolute', bottom: 0, inset: 'auto 0 0 0', background: 'rgba(0,0,0,0.75)',
+                      color: '#fff', fontSize: '0.65rem', padding: '3px 4px', textAlign: 'center'
+                    }}>
+                      Uploaded
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
         <div style={{ borderTop: '1px solid #e2e8f0', margin: '20px 0' }} />
 
+        {/* Curated Presets */}
         <div>
           <span style={{ fontSize: '0.825rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '10px' }}>
             Option 2: Select from Curated Gallery Presets
           </span>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '12px' }}>
-            {PRESET_IMAGES.map((img) => {
+            {DEFAULT_PRESET_IMAGES.map((img) => {
               const isSelected = (customUrl === '' && selectedUrl === img.url) || customUrl === img.url;
               return (
                 <button
@@ -153,7 +279,7 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
                     height: '90px', background: '#f8fafc', padding: 0, textAlign: 'left'
                   }}
                 >
-                  <img src={img.url} alt={img.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <img src={resolveImageSrc(img.url)} alt={img.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   <div style={{
                     position: 'absolute', bottom: 0, inset: 'auto 0 0 0', background: 'rgba(0,0,0,0.7)',
                     color: '#fff', fontSize: '0.65rem', padding: '3px 4px', textAlign: 'center', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap'
@@ -176,7 +302,7 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
 
         <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-            Selected: <strong style={{ color: '#000648' }}>{activeSelectedUrl.substring(0, 32)}...</strong>
+            Selected: <strong style={{ color: '#000648' }}>{activeSelectedUrl.substring(0, 30)}...</strong>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button
@@ -195,8 +321,8 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
               onClick={handleConfirm}
               aria-label="Confirm image selection"
               style={{
-                padding: '10px 20px', borderRadius: '8px', border: 'none',
-                background: '#115DFC', color: '#ffffff', fontWeight: 700, cursor: 'pointer',
+                padding: '10px 22px', borderRadius: '8px', border: 'none',
+                background: '#115DFC', color: '#ffffff', fontWeight: 800, cursor: 'pointer',
                 boxShadow: '0 4px 12px rgba(17, 93, 252, 0.3)'
               }}
             >

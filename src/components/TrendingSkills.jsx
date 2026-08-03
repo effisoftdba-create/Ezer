@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import CourseCard from './CourseCard';
+import UIStateDisplay, { STATE_TYPES } from './UIStateDisplay';
 import { HiChevronLeft, HiChevronRight, HiAcademicCap } from 'react-icons/hi';
 
 const tabs = ['All Courses', 'Cloud & DevOps', 'Testing & QA', 'AI & Data', 'IT Infrastructure'];
@@ -21,7 +22,6 @@ export default function TrendingSkills({ onOpenDemoModal }) {
   };
 
   const filtered = getFilteredCourses();
-  const display = filtered.length > 0 ? filtered : courses;
 
   const handleScroll = (direction) => {
     if (sliderRef.current) {
@@ -121,31 +121,41 @@ export default function TrendingSkills({ onOpenDemoModal }) {
           </div>
         </div>
 
-        {/* Horizontal Slider Layout */}
-        <div
-          ref={sliderRef}
-          className="no-scrollbar"
-          style={{
-            display: 'flex',
-            gap: '20px',
-            overflowX: 'auto',
-            scrollSnapType: 'x mandatory',
-            paddingBottom: '16px',
-            scrollBehavior: 'smooth',
-          }}
-        >
-          {display.map((course) => (
-            <div
-              key={course.id || course.slug}
-              style={{
-                flex: '0 0 320px',
-                scrollSnapAlign: 'start',
-              }}
-            >
-              <CourseCard course={course} onOpenDemoModal={onOpenDemoModal} />
-            </div>
-          ))}
-        </div>
+        {/* Horizontal Slider Layout or Empty Search UI State */}
+        {filtered.length > 0 ? (
+          <div
+            ref={sliderRef}
+            className="no-scrollbar"
+            style={{
+              display: 'flex',
+              gap: '20px',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              paddingBottom: '16px',
+              scrollBehavior: 'smooth',
+            }}
+          >
+            {filtered.map((course) => (
+              <div
+                key={course.id || course.slug}
+                style={{
+                  flex: '0 0 320px',
+                  scrollSnapAlign: 'start',
+                }}
+              >
+                <CourseCard course={course} onOpenDemoModal={onOpenDemoModal} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <UIStateDisplay
+            type={STATE_TYPES.NO_SEARCH_RESULTS}
+            title="No Courses Found in Selected Category"
+            message={`No active programs match the category "${tabs[activeTab]}". Click reset to view all available courses.`}
+            onRetry={() => setActiveTab(0)}
+            actionLabel="View All Courses"
+          />
+        )}
 
       </div>
     </section>
