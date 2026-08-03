@@ -23,7 +23,17 @@ export default function App() {
   const [selectedCourseForModal, setSelectedCourseForModal] = useState('');
   const location = useLocation();
 
-  const isAdminRoute = location.pathname.startsWith('/admin');
+  // Robust Admin Route Detection across HashRouter, Query params (?/admin/login), and Pathnames
+  const fullSearch = typeof window !== 'undefined' ? window.location.search : '';
+  const fullHash = typeof window !== 'undefined' ? window.location.hash : '';
+  const fullPath = location.pathname;
+
+  const isSearchAdmin = fullSearch.includes('admin');
+  const isHashAdmin = fullHash.includes('admin');
+  const isPathAdmin = fullPath.startsWith('/admin') || fullPath.includes('admin');
+
+  const isAdminRoute = isPathAdmin || isHashAdmin || isSearchAdmin;
+  const isDashboardRoute = fullSearch.includes('dashboard') || fullHash.includes('dashboard') || fullPath.includes('dashboard');
 
   // Scroll to top on route change
   useEffect(() => {
@@ -55,22 +65,30 @@ export default function App() {
         {!isAdminRoute && <Navbar onOpenDemoModal={() => handleOpenDemoModal()} />}
 
         <main style={{ flexGrow: 1 }}>
-          <Routes>
-            <Route path="/" element={<Home onOpenDemoModal={handleOpenDemoModal} />} />
-            <Route path="/about" element={<About onOpenDemoModal={handleOpenDemoModal} />} />
-            <Route path="/courses" element={<Courses onOpenDemoModal={handleOpenDemoModal} />} />
-            <Route path="/courses/:slug" element={<CourseDetail onOpenDemoModal={handleOpenDemoModal} />} />
-            <Route path="/testimonials" element={<TestimonialsPage onOpenDemoModal={handleOpenDemoModal} />} />
-            <Route path="/faq" element={<FAQPage onOpenDemoModal={handleOpenDemoModal} />} />
-            <Route path="/contact" element={<Contact onOpenDemoModal={handleOpenDemoModal} />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy onOpenDemoModal={handleOpenDemoModal} />} />
-            <Route path="/student-admission-policy" element={<StudentAdmissionPolicy onOpenDemoModal={handleOpenDemoModal} />} />
+          {isAdminRoute ? (
+            isDashboardRoute ? (
+              <AdminDashboard />
+            ) : (
+              <AdminLogin />
+            )
+          ) : (
+            <Routes>
+              <Route path="/" element={<Home onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/about" element={<About onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/courses" element={<Courses onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/courses/:slug" element={<CourseDetail onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/testimonials" element={<TestimonialsPage onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/faq" element={<FAQPage onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/contact" element={<Contact onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/student-admission-policy" element={<StudentAdmissionPolicy onOpenDemoModal={handleOpenDemoModal} />} />
 
-            {/* Isolated Admin Routes */}
-            <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/dashboard/*" element={<AdminDashboard />} />
-            <Route path="/admin" element={<AdminLogin />} />
-          </Routes>
+              {/* Isolated Admin Routes fallback */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/dashboard/*" element={<AdminDashboard />} />
+              <Route path="/admin" element={<AdminLogin />} />
+            </Routes>
+          )}
         </main>
 
         {!isAdminRoute && <Footer />}

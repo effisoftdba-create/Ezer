@@ -15,7 +15,11 @@ export default function AdminLogin() {
 
   useEffect(() => {
     if (isAuthenticated()) {
-      navigate('/admin/dashboard');
+      if (window.location.search.includes('admin')) {
+        window.location.href = window.location.origin + window.location.pathname + '?/admin/dashboard';
+      } else {
+        navigate('/admin/dashboard');
+      }
     }
     const state = getLockoutState();
     setLockoutState(state);
@@ -29,7 +33,11 @@ export default function AdminLogin() {
     try {
       const result = await authenticateAdmin(email, password);
       if (result.success) {
-        navigate('/admin/dashboard');
+        if (window.location.search.includes('admin')) {
+          window.location.href = window.location.origin + window.location.pathname + '?/admin/dashboard';
+        } else {
+          navigate('/admin/dashboard');
+        }
       } else {
         setError(result.error);
         if (result.isLocked) {
