@@ -2,6 +2,51 @@ import React from 'react';
 import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion';
 import { HiShieldCheck, HiAcademicCap, HiLightningBolt, HiArrowRight, HiCheckCircle } from 'react-icons/hi';
 
+const animFeatures = [
+  {
+    id: 'labs',
+    icon: <HiLightningBolt size={24} />,
+    title: "Real-Time Cloud Labs",
+    desc: "Instant access to AWS, Docker, & Kubernetes sandbox environments with automated grading.",
+    tag: "Live Interactive"
+  },
+  {
+    id: 'mentorship',
+    icon: <HiAcademicCap size={24} />,
+    title: "1-on-1 Senior Mentorship",
+    desc: "Direct code reviews & architecture guidance from principal engineers working at FAANG.",
+    tag: "Corporate Expert"
+  },
+  {
+    id: 'shield',
+    icon: <HiShieldCheck size={24} />,
+    title: "1-Year Career Safety Net",
+    desc: "Post-hiring workplace onboarding support, resume optimization, and unlimited referral loops.",
+    tag: "Guaranteed Guidance"
+  }
+];
+
+const containerVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }
+  }
+};
+
 export default function AnimMasterShowcase({ 
   onOpenDemoModal,
   title = "Next-Gen Interactive Learning Platform",
@@ -9,51 +54,6 @@ export default function AnimMasterShowcase({
   logoSrc = `${import.meta.env.BASE_URL || '/'}images/ezer_shield_logo.png`
 }) {
   const shouldReduceMotion = useReducedMotion();
-
-  const animFeatures = [
-    {
-      id: 'labs',
-      icon: <HiLightningBolt size={24} />,
-      title: "Real-Time Cloud Labs",
-      desc: "Instant access to AWS, Docker, & Kubernetes sandbox environments with automated grading.",
-      tag: "Live Interactive"
-    },
-    {
-      id: 'mentorship',
-      icon: <HiAcademicCap size={24} />,
-      title: "1-on-1 Senior Mentorship",
-      desc: "Direct code reviews & architecture guidance from principal engineers working at FAANG.",
-      tag: "Corporate Expert"
-    },
-    {
-      id: 'shield',
-      icon: <HiShieldCheck size={24} />,
-      title: "1-Year Career Safety Net",
-      desc: "Post-hiring workplace onboarding support, resume optimization, and unlimited referral loops.",
-      tag: "Guaranteed Guidance"
-    }
-  ];
-
-  const containerVariants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 24 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }
-    }
-  };
 
   return (
     <LazyMotion features={domAnimation}>
