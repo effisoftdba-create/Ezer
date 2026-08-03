@@ -212,8 +212,12 @@ function MarqueeRow({ items, direction = 'left', duration = 32 }) {
   const [isHovered, setIsHovered] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
-  // Multiply items 3 times for smooth 0% -> -50% loop
-  const duplicatedItems = [...items, ...items, ...items];
+  // Multiply items 3 times with stable unique ids for seamless 0% -> -50% loop
+  const duplicatedItems = [
+    ...items.map((item) => ({ ...item, uId: `${item.id}-dup-1` })),
+    ...items.map((item) => ({ ...item, uId: `${item.id}-dup-2` })),
+    ...items.map((item) => ({ ...item, uId: `${item.id}-dup-3` }))
+  ];
 
   return (
     <div 
@@ -238,12 +242,11 @@ function MarqueeRow({ items, direction = 'left', duration = 32 }) {
         style={{
           display: 'flex',
           gap: '16px',
-          width: 'max-content',
-          willChange: 'transform'
+          width: 'max-content'
         }}
       >
-        {duplicatedItems.map((logo, index) => (
-          <LogoCard key={`${logo.id}-${index}`} logo={logo} />
+        {duplicatedItems.map((logo) => (
+          <LogoCard key={logo.uId} logo={logo} />
         ))}
       </m.div>
     </div>
