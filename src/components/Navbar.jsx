@@ -49,30 +49,15 @@ export default function Navbar({ onOpenDemoModal }) {
           {/* Animated Brand Crest Logo */}
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
-              <m.div
-                whileHover={{ scale: 1.06, rotate: [0, -2, 2, 0] }}
-                transition={{ duration: 0.3 }}
+              <img 
+                src={`${import.meta.env.BASE_URL || '/'}images/logo_navy.png`} 
+                alt="EZER Learning Solutions Crest Logo" 
                 style={{
-                  background: '#ffffff',
-                  padding: '4px 8px',
-                  borderRadius: '10px',
-                  border: '1.5px solid #000648',
-                  boxShadow: '0 4px 12px rgba(0, 6, 72, 0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}
-              >
-                <img 
-                  src={`${import.meta.env.BASE_URL || '/'}images/logo_navy.png`} 
-                  alt="EZER Learning Solutions Crest Logo" 
-                  style={{
-                    height: '42px',
-                    width: 'auto',
-                    objectFit: 'contain',
-                  }} 
-                />
-              </m.div>
+                  height: '46px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                }} 
+              />
 
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                 <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', letterSpacing: '-0.02em', lineHeight: 1 }}>

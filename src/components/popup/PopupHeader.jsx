@@ -16,17 +16,16 @@ export default function PopupHeader({ onClose }) {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '8px' }}>
-        <div style={{ background: '#ffffff', padding: '4px 8px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.25)' }}>
-          <img
-            src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`}
-            alt="EZER Learning Solutions Crest Logo"
-            style={{
-              height: '38px',
-              width: 'auto',
-              objectFit: 'contain',
-            }}
-          />
-        </div>
+        <img
+          src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`}
+          alt="EZER Learning Solutions Crest Logo"
+          style={{
+            height: '44px',
+            width: 'auto',
+            objectFit: 'contain',
+            mixBlendMode: 'screen'
+          }}
+        />
         <div style={{ textAlign: 'left' }}>
           <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1 }}>
             EZER
