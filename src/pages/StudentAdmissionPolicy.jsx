@@ -108,7 +108,8 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
   return (
     <div style={{
       background: '#ffffff', border: '2px solid #000648', borderRadius: '16px',
-      padding: '36px', boxShadow: '0 12px 32px rgba(0,6,72,0.08)'
+      padding: 'clamp(14px, 3.5vw, 36px)', boxShadow: '0 12px 32px rgba(0,6,72,0.08)',
+      boxSizing: 'border-box', width: '100%', maxWidth: '100%', overflow: 'hidden'
     }}>
       <div style={{ textAlign: 'center', borderBottom: '2px solid #000648', paddingBottom: '20px', marginBottom: '24px' }}>
         <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', letterSpacing: '0.04em', margin: 0 }}>
@@ -123,13 +124,21 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
       </div>
 
       {/* Interactive Student Details Form Block */}
-      <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '20px', marginBottom: '24px' }}>
+      <div style={{
+        background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px',
+        padding: 'clamp(12px, 2.5vw, 20px)', marginBottom: '24px', boxSizing: 'border-box',
+        width: '100%', overflow: 'hidden'
+      }}>
         <h3 style={{ fontSize: '0.92rem', fontWeight: 800, color: '#000648', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
           Student Details (Fillable Form)
         </h3>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-          <div>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))',
+          gap: '14px', width: '100%', boxSizing: 'border-box'
+        }}>
+          <div style={{ width: '100%', boxSizing: 'border-box' }}>
             <label htmlFor="studentName" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
               Student Name *
             </label>
@@ -141,14 +150,14 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
               onChange={handleInputChange}
               placeholder="Enter your full legal name"
               style={{
-                width: '100%', padding: '9px 12px', borderRadius: '8px',
+                width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: '8px',
                 border: '1.5px solid #000648', fontSize: '0.88rem', fontWeight: 700,
-                color: '#000648', outline: 'none', background: '#ffffff'
+                color: '#000648', outline: 'none', background: '#ffffff', maxWidth: '100%'
               }}
             />
           </div>
 
-          <div>
+          <div style={{ width: '100%', boxSizing: 'border-box' }}>
             <label htmlFor="admissionNo" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
               Admission No.
             </label>
@@ -159,14 +168,14 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
               value={formData.admissionNo}
               onChange={handleInputChange}
               style={{
-                width: '100%', padding: '9px 12px', borderRadius: '8px',
+                width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: '8px',
                 border: '1.5px solid #cbd5e1', fontSize: '0.88rem', fontWeight: 700,
-                color: '#000648', outline: 'none', background: '#f1f5f9'
+                color: '#000648', outline: 'none', background: '#f1f5f9', maxWidth: '100%'
               }}
             />
           </div>
 
-          <div>
+          <div style={{ width: '100%', boxSizing: 'border-box' }}>
             <label htmlFor="courseName" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
               Course Name *
             </label>
@@ -176,9 +185,9 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
               value={formData.courseName}
               onChange={handleInputChange}
               style={{
-                width: '100%', padding: '9px 12px', borderRadius: '8px',
+                width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: '8px',
                 border: '1.5px solid #000648', fontSize: '0.88rem', fontWeight: 700,
-                color: '#000648', outline: 'none', background: '#ffffff'
+                color: '#000648', outline: 'none', background: '#ffffff', maxWidth: '100%'
               }}
             >
               <option value="Cloud DevOps with AI">Cloud DevOps with AI</option>
@@ -189,7 +198,7 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
             </select>
           </div>
 
-          <div>
+          <div style={{ width: '100%', boxSizing: 'border-box' }}>
             <label htmlFor="batchCode" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
               Batch Code
             </label>
@@ -200,21 +209,22 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
               value={formData.batchCode}
               onChange={handleInputChange}
               style={{
-                width: '100%', padding: '9px 12px', borderRadius: '8px',
+                width: '100%', boxSizing: 'border-box', padding: '9px 12px', borderRadius: '8px',
                 border: '1.5px solid #cbd5e1', fontSize: '0.88rem', fontWeight: 700,
-                color: '#000648', outline: 'none', background: '#f1f5f9'
+                color: '#000648', outline: 'none', background: '#f1f5f9', maxWidth: '100%'
               }}
             />
           </div>
 
-          <div style={{ gridColumn: 'span 1' }}>
+          <div style={{ gridColumn: 'span 1', width: '100%', boxSizing: 'border-box' }}>
             <span style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
               Admission Date (Auto Real-time)
             </span>
             <div style={{
+              width: '100%', boxSizing: 'border-box',
               padding: '9px 12px', borderRadius: '8px',
               background: 'rgba(242, 183, 51, 0.15)', border: '1.5px solid #f2b733',
-              fontSize: '0.88rem', fontWeight: 900, color: '#000648'
+              fontSize: '0.88rem', fontWeight: 900, color: '#000648', maxWidth: '100%'
             }}>
               📅 {formData.admissionDate}
             </div>
@@ -267,8 +277,13 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
           I have read and understood the Institute’s policies and agree to abide by all rules and regulations set forth in this agreement.
         </p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', paddingTop: '16px', borderTop: '1px dashed #cbd5e1', fontSize: '0.84rem', color: '#334155' }}>
-          <div>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(180px, 100%), 1fr))',
+          gap: '16px', paddingTop: '16px', borderTop: '1px dashed #cbd5e1', fontSize: '0.84rem', color: '#334155',
+          boxSizing: 'border-box', width: '100%'
+        }}>
+          <div style={{ width: '100%', boxSizing: 'border-box' }}>
             <label htmlFor="studentSignature" style={{ display: 'block', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
               Student Digital Signature *
             </label>
@@ -280,9 +295,9 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
               onChange={handleInputChange}
               placeholder="Type your name to sign"
               style={{
-                width: '100%', padding: '8px 12px', borderRadius: '6px',
+                width: '100%', boxSizing: 'border-box', padding: '8px 12px', borderRadius: '6px',
                 border: '1.5px solid #000648',
-                fontSize: '1rem', fontWeight: 700, color: '#000648', outline: 'none'
+                fontSize: '1rem', fontWeight: 700, color: '#000648', outline: 'none', maxWidth: '100%'
               }}
             />
             <div style={{ borderBottom: '1.5px solid #000648', marginTop: '6px', width: '100%' }}></div>
@@ -291,21 +306,21 @@ function AdmissionAgreementTab({ formData, handleInputChange }) {
             </div>
           </div>
 
-          <div>
+          <div style={{ width: '100%', boxSizing: 'border-box' }}>
             <span style={{ display: 'block', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
               Authorized Signatory
             </span>
-            <div style={{ padding: '8px 12px', background: '#f1f5f9', borderRadius: '6px', fontWeight: 800, color: '#000648', fontSize: '0.88rem' }}>
+            <div style={{ width: '100%', boxSizing: 'border-box', padding: '8px 12px', background: '#f1f5f9', borderRadius: '6px', fontWeight: 800, color: '#000648', fontSize: '0.88rem' }}>
               {formData.authorizedSignatory}
             </div>
             <div style={{ borderBottom: '1.5px solid #000648', marginTop: '6px', width: '100%' }}></div>
           </div>
 
-          <div>
+          <div style={{ width: '100%', boxSizing: 'border-box' }}>
             <span style={{ display: 'block', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
               Agreement Execution Date (Auto)
             </span>
-            <div style={{ padding: '8px 12px', background: 'rgba(242,183,51,0.15)', border: '1px solid #f2b733', borderRadius: '6px', fontWeight: 900, color: '#000648', fontSize: '0.88rem' }}>
+            <div style={{ width: '100%', boxSizing: 'border-box', padding: '8px 12px', background: 'rgba(242,183,51,0.15)', border: '1px solid #f2b733', borderRadius: '6px', fontWeight: 900, color: '#000648', fontSize: '0.88rem' }}>
               📅 {formData.admissionDate}
             </div>
             <div style={{ borderBottom: '1.5px solid #000648', marginTop: '6px', width: '100%' }}></div>
