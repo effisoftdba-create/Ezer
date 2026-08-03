@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authenticateAdmin, isAuthenticated, getLockoutState } from '../utils/authService';
-import { HiOutlineMail, HiOutlineLockClosed, HiOutlineShieldCheck } from 'react-icons/hi';
+import { HiOutlineMail, HiOutlineLockClosed, HiOutlineShieldCheck, HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import './AdminLogin.css';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [lockoutState, setLockoutState] = useState({ isLocked: false, remainingMinutes: 0 });
@@ -15,7 +16,7 @@ export default function AdminLogin() {
 
   useEffect(() => {
     if (isAuthenticated()) {
-      if (window.location.search.includes('admin')) {
+      if (typeof window !== 'undefined' && window.location.search.includes('admin')) {
         window.location.href = window.location.origin + window.location.pathname + '?/admin/dashboard';
       } else {
         navigate('/admin/dashboard');
@@ -33,7 +34,7 @@ export default function AdminLogin() {
     try {
       const result = await authenticateAdmin(email, password);
       if (result.success) {
-        if (window.location.search.includes('admin')) {
+        if (typeof window !== 'undefined' && window.location.search.includes('admin')) {
           window.location.href = window.location.origin + window.location.pathname + '?/admin/dashboard';
         } else {
           navigate('/admin/dashboard');
@@ -91,8 +92,8 @@ export default function AdminLogin() {
           </div>
           <input
             placeholder="admin@ezer.com"
-            title="Input title"
-            name="input-name"
+            title="Email Address"
+            name="email"
             type="email"
             className="input_field"
             id="email_field"
@@ -110,16 +111,36 @@ export default function AdminLogin() {
           </div>
           <input
             placeholder="••••••••••••"
-            title="Input title"
-            name="input-name"
-            type="password"
+            title="Password"
+            name="password"
+            type={showPassword ? 'text' : 'password'}
             className="input_field"
             id="password_field"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={isLoading || lockoutState.isLocked}
+            style={{ paddingRight: '40px' }}
             required
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            style={{
+              position: 'absolute',
+              right: '12px',
+              bottom: '9px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              color: '#8B8E98',
+              display: 'flex',
+              alignItems: 'center',
+              zIndex: 99
+            }}
+          >
+            {showPassword ? <HiOutlineEyeOff size={18} /> : <HiOutlineEye size={18} />}
+          </button>
         </div>
 
         <button
