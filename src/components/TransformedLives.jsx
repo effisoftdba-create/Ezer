@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
+import { resolveImageSrc } from '../utils/imageUtils';
 
 export default function TransformedLives() {
   const { transformedLives } = useSiteData();
@@ -128,11 +129,13 @@ export default function TransformedLives() {
                     {/* Circle Avatar with Gold Border */}
                     <div style={{ position: 'relative', display: 'inline-block', marginBottom: '12px' }}>
                       <img
-                        src={item.image}
+                        src={resolveImageSrc(item.image)}
                         alt={item.name}
                         style={{
                           width: '80px', height: '80px', borderRadius: '50%',
-                          objectFit: 'cover', border: '3px solid #f2b733',
+                          objectFit: 'cover',
+                          objectPosition: item.imagePosition || 'center center',
+                          border: '3px solid #f2b733',
                           boxShadow: '0 4px 14px rgba(242, 183, 51, 0.4)'
                         }}
                       />
