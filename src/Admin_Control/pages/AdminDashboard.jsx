@@ -7,6 +7,7 @@ import CourseManager from '../components/CourseManager';
 import PlatformManager from '../components/PlatformManager';
 import SupportCardsManager from '../components/SupportCardsManager';
 import GraduateOutcomesManager from '../components/GraduateOutcomesManager';
+import SeniorMentorsManager from '../components/SeniorMentorsManager';
 import VideoReviewsManager from '../components/VideoReviewsManager';
 import TestimonialsManager from '../components/TestimonialsManager';
 import FaqManager from '../components/FaqManager';
@@ -18,6 +19,7 @@ import {
   HiOutlineSparkles,
   HiOutlineBadgeCheck,
   HiOutlineUserGroup,
+  HiOutlineUser,
   HiOutlineVideoCamera,
   HiOutlineChatAlt,
   HiOutlineQuestionMarkCircle,
@@ -36,6 +38,7 @@ export default function AdminDashboard() {
     courses,
     supportCards,
     transformedLives,
+    seniorMentors,
     videoTestimonials,
     writtenTestimonials,
     faqList,
@@ -81,9 +84,10 @@ export default function AdminDashboard() {
   const tabs = [
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: heroSlides.length },
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: courses.length },
-    { id: 'platform', label: 'Why EZER Definition', icon: HiOutlineSparkles },
+    { id: 'platform', label: 'Empowering Career Switchers', icon: HiOutlineSparkles },
     { id: 'support', label: 'Why EZER Support Cards', icon: HiOutlineBadgeCheck, count: supportCards.length },
     { id: 'outcomes', label: 'Graduate Outcomes', icon: HiOutlineUserGroup, count: transformedLives.length },
+    { id: 'mentors', label: 'Senior Mentors', icon: HiOutlineUser, count: (seniorMentors || []).length },
     { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: videoTestimonials.length },
     { id: 'testimonials', label: 'Testimonials Page', icon: HiOutlineChatAlt, count: writtenTestimonials.length },
     { id: 'faq', label: 'FAQ Manager', icon: HiOutlineQuestionMarkCircle, count: totalFaqs },
@@ -220,6 +224,7 @@ export default function AdminDashboard() {
           {activeTab === 'platform' && <PlatformManager />}
           {activeTab === 'support' && <SupportCardsManager />}
           {activeTab === 'outcomes' && <GraduateOutcomesManager />}
+          {activeTab === 'mentors' && <SeniorMentorsManager />}
           {activeTab === 'videos' && <VideoReviewsManager />}
           {activeTab === 'testimonials' && <TestimonialsManager />}
           {activeTab === 'faq' && <FaqManager />}

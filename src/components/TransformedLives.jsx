@@ -32,8 +32,8 @@ export default function TransformedLives() {
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>
             <span 
               style={{
-                background: 'rgba(0, 6, 72, 0.06)',
-                color: '#000648',
+                background: 'rgba(0, 6, 56, 0.06)',
+                color: '#000638',
                 fontSize: '0.72rem',
                 fontWeight: 800,
                 padding: '5px 16px',
@@ -41,13 +41,14 @@ export default function TransformedLives() {
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
                 display: 'inline-block',
-                marginBottom: '12px'
+                marginBottom: '12px',
+                border: '1px solid rgba(0, 6, 56, 0.12)'
               }}
             >
               {headerData.tag}
             </span>
 
-            <h2 style={{ color: '#000648', fontSize: 'clamp(1.6rem, 2.8vw, 2.3rem)', fontWeight: 900, marginBottom: '8px' }}>
+            <h2 style={{ color: '#000638', fontSize: 'clamp(1.6rem, 2.8vw, 2.3rem)', fontWeight: 900, marginBottom: '8px' }}>
               {headerData.headline}
             </h2>
 
@@ -68,10 +69,10 @@ export default function TransformedLives() {
                 aria-label="Previous story"
                 style={{
                   width: '38px', height: '38px', borderRadius: '50%',
-                  border: '1.5px solid #cbd5e1', background: '#ffffff',
-                  color: '#000648', display: 'flex', alignItems: 'center',
+                  border: '1.5px solid #000638', background: '#ffffff',
+                  color: '#000638', display: 'flex', alignItems: 'center',
                   justifyContent: 'center', cursor: 'pointer',
-                  boxShadow: '0 2px 6px rgba(0, 6, 72, 0.06)',
+                  boxShadow: '0 2px 6px rgba(0, 6, 56, 0.06)',
                 }}
               >
                 <HiChevronLeft size={20} />
@@ -85,10 +86,10 @@ export default function TransformedLives() {
                 aria-label="Next story"
                 style={{
                   width: '38px', height: '38px', borderRadius: '50%',
-                  border: '1.5px solid #000648', background: '#000648',
+                  border: '1.5px solid #000638', background: '#000638',
                   color: '#f2b733', display: 'flex', alignItems: 'center',
                   justifyContent: 'center', cursor: 'pointer',
-                  boxShadow: '0 4px 10px rgba(0, 6, 72, 0.18)',
+                  boxShadow: '0 4px 10px rgba(0, 6, 56, 0.18)',
                 }}
               >
                 <HiChevronRight size={20} />
@@ -112,20 +113,20 @@ export default function TransformedLives() {
                   style={{
                     flex: '0 0 280px',
                     background: '#ffffff',
-                    borderRadius: '16px',
-                    border: '1.5px solid #000648',
-                    boxShadow: '0 8px 24px rgba(0, 6, 72, 0.12)',
+                    borderRadius: '20px',
+                    border: '2px solid #000638',
+                    boxShadow: '0 12px 30px rgba(0, 6, 56, 0.12)',
                     overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
                   }}
                 >
-                  {/* Dark Navy Top Header Section */}
+                  {/* Dark Navy Top Header Section matching User Reference Image 2 */}
                   <div 
                     style={{
                       padding: '24px 20px 20px',
                       textAlign: 'center',
-                      backgroundColor: '#000648',
+                      backgroundColor: '#000638',
                       color: '#ffffff',
                       display: 'flex',
                       flexDirection: 'column',
@@ -138,32 +139,48 @@ export default function TransformedLives() {
                         src={resolveImageSrc(item.image)}
                         alt={item.name}
                         style={{
-                          width: '80px', height: '80px', borderRadius: '50%',
+                          width: '82px', height: '82px', borderRadius: '50%',
                           objectFit: 'cover',
                           objectPosition: item.imagePosition || 'center center',
-                          border: '3px solid #f2b733',
-                          boxShadow: '0 4px 14px rgba(242, 183, 51, 0.4)'
+                          border: '3.5px solid #f2b733',
+                          boxShadow: '0 6px 18px rgba(242, 183, 51, 0.45)'
                         }}
                       />
                     </div>
 
                     {/* Student Name */}
-                    <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
                       {item.name}
                     </h3>
 
                     {/* Placed @ Company */}
-                    <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#60a5fa' }}>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f2b733', background: 'rgba(242, 183, 51, 0.12)', padding: '4px 14px', borderRadius: '50px', border: '1px solid rgba(242, 183, 51, 0.3)' }}>
                       Placed @ {item.company}
                     </div>
                   </div>
 
-                  {/* White Bottom Body Section */}
-                  <div style={{ padding: '20px 18px 22px', background: '#ffffff', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: '14px' }}>
+                  {/* White Bottom Body Section with Step Connector matching User Reference Image 3 */}
+                  <div style={{ padding: '20px 18px 22px', background: '#ffffff', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: '10px' }}>
                     
-                    {/* Before Role Line */}
-                    <div style={{ fontSize: '0.88rem', color: '#64748b' }}>
-                      Before: <strong style={{ color: '#000648', fontWeight: 800 }}>{item.beforeRole}</strong>
+                    {/* Before Role Pill */}
+                    <div style={{
+                      width: '100%',
+                      padding: '10px 14px',
+                      borderRadius: '12px',
+                      border: '1.5px solid #e2e8f0',
+                      background: '#f8fafc',
+                      fontSize: '0.85rem',
+                      color: '#475569',
+                      textAlign: 'center',
+                      boxSizing: 'border-box'
+                    }}>
+                      Before: <strong style={{ color: '#000638', fontWeight: 800 }}>{item.beforeRole}</strong>
+                    </div>
+
+                    {/* Vertical Connector Line */}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '-4px 0' }}>
+                      <div style={{ width: '2px', height: '14px', borderLeft: '2px dashed #000638' }} />
+                      <div style={{ width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '6px solid #000638' }} />
                     </div>
 
                     {/* After Role Badge Box */}
@@ -172,16 +189,17 @@ export default function TransformedLives() {
                         width: '100%',
                         padding: '12px 14px',
                         borderRadius: '12px',
-                        border: '1.5px solid #000648',
-                        background: 'rgba(0, 6, 72, 0.04)',
+                        border: '2px solid #000638',
+                        background: '#000638',
+                        color: '#ffffff',
                         fontSize: '0.9rem',
                         fontWeight: 900,
-                        color: '#000648',
                         textAlign: 'center',
-                        boxSizing: 'border-box'
+                        boxSizing: 'border-box',
+                        boxShadow: '0 4px 12px rgba(0, 6, 56, 0.15)'
                       }}
                     >
-                      After: {item.afterRole}
+                      After: <span style={{ color: '#f2b733' }}>{item.afterRole}</span>
                     </div>
 
                   </div>

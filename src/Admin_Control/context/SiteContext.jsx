@@ -11,6 +11,8 @@ const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v1';
 const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v1';
 const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v1';
 const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v1';
+const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v1';
+const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v1';
 const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v1';
 const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v1';
 const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v1';
@@ -154,6 +156,31 @@ const defaultOutcomesHeader = {
   sub: 'Join a community of engineers building impactful, high-growth software careers.'
 };
 
+const defaultSeniorMentors = [
+  {
+    id: 'mentor-1',
+    name: 'Arun Kumar S',
+    designation: 'Principal Cloud Architect @ TechCorp',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300&h=300',
+    bio: '11+ years designing multi-cloud architectures across AWS and Azure. Mentored 2,500+ engineers into DevOps career roles.',
+    tags: ['AWS Certified', 'Kubernetes Lead', 'DevOps Veteran']
+  },
+  {
+    id: 'mentor-2',
+    name: 'Kavitha Ranganathan',
+    designation: 'Senior SRE Lead @ Global Cloud Systems',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300',
+    bio: 'Specialist in Kubernetes zero-downtime deployments and IaC automation with Terraform.',
+    tags: ['Terraform Expert', 'SRE Architecture', 'GitOps Specialist']
+  }
+];
+
+const defaultMentorsHeader = {
+  tag: 'SENIOR MENTORS',
+  headline: 'Learn Directly From Senior Engineers & Academic Mentors',
+  sub: 'Gain real-world insights from instructors with years of industry tenure across top technology firms.'
+};
+
 const defaultTestimonialsHero = {
   tag: 'ALUMNI SUCCESS & REVIEWS',
   headline: 'Proven Outcomes & Real Alumni Stories',
@@ -219,6 +246,22 @@ export function SiteProvider({ children }) {
     return defaultOutcomesHeader;
   });
 
+  const [seniorMentors, setSeniorMentors] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_MENTORS_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    return defaultSeniorMentors;
+  });
+
+  const [mentorsHeader, setMentorsHeader] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_MENTORS_HEADER_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    return defaultMentorsHeader;
+  });
+
   const [videoTestimonials, setVideoTestimonials] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_VIDEOS_KEY);
@@ -266,6 +309,8 @@ export function SiteProvider({ children }) {
   useEffect(() => { localStorage.setItem(STORAGE_SUPPORT_CARDS_KEY, JSON.stringify(supportCards)); }, [supportCards]);
   useEffect(() => { localStorage.setItem(STORAGE_TRANSFORMED_KEY, JSON.stringify(transformedLives)); }, [transformedLives]);
   useEffect(() => { localStorage.setItem(STORAGE_OUTCOMES_HEADER_KEY, JSON.stringify(outcomesHeader)); }, [outcomesHeader]);
+  useEffect(() => { localStorage.setItem(STORAGE_MENTORS_KEY, JSON.stringify(seniorMentors)); }, [seniorMentors]);
+  useEffect(() => { localStorage.setItem(STORAGE_MENTORS_HEADER_KEY, JSON.stringify(mentorsHeader)); }, [mentorsHeader]);
   useEffect(() => { localStorage.setItem(STORAGE_VIDEOS_KEY, JSON.stringify(videoTestimonials)); }, [videoTestimonials]);
   useEffect(() => { localStorage.setItem(STORAGE_TESTIMONIALS_HERO_KEY, JSON.stringify(testimonialsHero)); }, [testimonialsHero]);
   useEffect(() => { localStorage.setItem(STORAGE_WRITTEN_TESTIMONIALS_KEY, JSON.stringify(writtenTestimonials)); }, [writtenTestimonials]);
@@ -296,6 +341,12 @@ export function SiteProvider({ children }) {
   const updateTransformedLife = (id, updated) => setTransformedLives((prev) => prev.map((t) => (t.id === id ? { ...t, ...updated } : t)));
   const deleteTransformedLife = (id) => setTransformedLives((prev) => prev.filter((t) => t.id !== id));
 
+  // Senior Mentors CRUD
+  const updateMentorsHeader = (data) => setMentorsHeader((prev) => ({ ...prev, ...data }));
+  const addSeniorMentor = (mentor) => setSeniorMentors((prev) => [{ id: `mentor-${Date.now()}`, ...mentor }, ...prev]);
+  const updateSeniorMentor = (id, updated) => setSeniorMentors((prev) => prev.map((m) => (m.id === id ? { ...m, ...updated } : m)));
+  const deleteSeniorMentor = (id) => setSeniorMentors((prev) => prev.filter((m) => m.id !== id));
+
   // Video Testimonial CRUD
   const addVideoTestimonial = (video) => setVideoTestimonials((prev) => [{ id: Date.now(), ...video }, ...prev]);
   const updateVideoTestimonial = (id, updated) => setVideoTestimonials((prev) => prev.map((v) => (v.id === id ? { ...v, ...updated } : v)));
@@ -320,6 +371,8 @@ export function SiteProvider({ children }) {
     setSupportCards(defaultSupportCards);
     setTransformedLives(defaultTransformedLives);
     setOutcomesHeader(defaultOutcomesHeader);
+    setSeniorMentors(defaultSeniorMentors);
+    setMentorsHeader(defaultMentorsHeader);
     setVideoTestimonials(videoStories);
     setTestimonialsHero(defaultTestimonialsHero);
     setWrittenTestimonials(initialTestimonials);
@@ -332,6 +385,8 @@ export function SiteProvider({ children }) {
     localStorage.removeItem(STORAGE_SUPPORT_CARDS_KEY);
     localStorage.removeItem(STORAGE_TRANSFORMED_KEY);
     localStorage.removeItem(STORAGE_OUTCOMES_HEADER_KEY);
+    localStorage.removeItem(STORAGE_MENTORS_KEY);
+    localStorage.removeItem(STORAGE_MENTORS_HEADER_KEY);
     localStorage.removeItem(STORAGE_VIDEOS_KEY);
     localStorage.removeItem(STORAGE_TESTIMONIALS_HERO_KEY);
     localStorage.removeItem(STORAGE_WRITTEN_TESTIMONIALS_KEY);
@@ -347,6 +402,8 @@ export function SiteProvider({ children }) {
       supportCards,
       transformedLives,
       outcomesHeader,
+      seniorMentors,
+      mentorsHeader,
       videoTestimonials,
       testimonialsHero,
       writtenTestimonials,
@@ -366,6 +423,10 @@ export function SiteProvider({ children }) {
       addTransformedLife,
       updateTransformedLife,
       deleteTransformedLife,
+      updateMentorsHeader,
+      addSeniorMentor,
+      updateSeniorMentor,
+      deleteSeniorMentor,
       addVideoTestimonial,
       updateVideoTestimonial,
       deleteVideoTestimonial,
@@ -377,7 +438,7 @@ export function SiteProvider({ children }) {
       updateContactInfo,
       resetToDefault,
     }),
-    [heroSlides, courses, ezerDefinition, supportCards, transformedLives, outcomesHeader, videoTestimonials, testimonialsHero, writtenTestimonials, faqList, contactInfo]
+    [heroSlides, courses, ezerDefinition, supportCards, transformedLives, outcomesHeader, seniorMentors, mentorsHeader, videoTestimonials, testimonialsHero, writtenTestimonials, faqList, contactInfo]
   );
 
   return <SiteContext.Provider value={contextValue}>{children}</SiteContext.Provider>;

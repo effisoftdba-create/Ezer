@@ -1,77 +1,132 @@
 import React from 'react';
+import { useSiteData } from '../../Admin_Control/context/SiteContext';
+import { resolveImageSrc } from '../../utils/imageUtils';
 
-export default function HiredCompaniesGrid({ transitions }) {
+export default function HiredCompaniesGrid({ transitions: propTransitions }) {
+  const { transformedLives, outcomesHeader } = useSiteData();
+
+  const displayList = (transformedLives && transformedLives.length > 0) ? transformedLives : (propTransitions || []);
+  const headerData = outcomesHeader || {
+    tag: 'CAREER PLACEMENT OUTCOMES',
+    headline: 'Our Graduates Get Hired by Leading Tech Firms',
+    sub: 'Join a community of engineers building impactful, high-growth software careers.'
+  };
+
+  if (!displayList || displayList.length === 0) return null;
+
   return (
-    <section className="section" style={{ background: '#ffffff', padding: '72px 0' }}>
+    <section className="section" style={{ background: '#ffffff', padding: '72px 0', borderBottom: '1px solid #e2e8f0' }}>
       <div className="container">
-        <div className="section-title">
-          <span className="section-tag">Career Placement Outcomes</span>
-          <h2>Our Graduates Get Hired by Leading Tech Firms</h2>
-          <p>Join a community of engineers building impactful, high-growth software careers.</p>
+        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+          <span
+            style={{
+              background: 'rgba(0, 6, 56, 0.06)',
+              color: '#000638',
+              fontSize: '0.72rem',
+              fontWeight: 800,
+              padding: '5px 16px',
+              borderRadius: '50px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+              display: 'inline-block',
+              marginBottom: '12px',
+              border: '1px solid rgba(0, 6, 56, 0.12)'
+            }}
+          >
+            {headerData.tag}
+          </span>
+          <h2 style={{ color: '#000638', fontSize: 'clamp(1.6rem, 2.8vw, 2.3rem)', fontWeight: 900, marginBottom: '8px' }}>
+            {headerData.headline}
+          </h2>
+          <p style={{ color: '#475569', fontSize: '0.94rem', maxWidth: '640px', margin: '0 auto' }}>
+            {headerData.sub}
+          </p>
         </div>
 
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
             gap: '24px',
           }}
         >
-          {transitions.map((item) => (
+          {displayList.map((item) => (
             <div
-              key={item.name}
+              key={item.id || item.name}
               style={{
                 background: '#ffffff',
-                border: '1.5px solid #000648',
-                borderRadius: '16px',
+                border: '2px solid #000638',
+                borderRadius: '20px',
                 overflow: 'hidden',
-                boxShadow: '0 8px 24px rgba(0, 6, 72, 0.12)',
+                boxShadow: '0 12px 30px rgba(0, 6, 56, 0.12)',
                 textAlign: 'center',
                 display: 'flex',
                 flexDirection: 'column',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease'
               }}
             >
-              {/* Dark Navy Top Header matching Reference Image 1 */}
-              <div style={{ background: '#000648', padding: '24px 20px 20px', color: '#ffffff', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  style={{
-                    width: '80px',
-                    height: '80px',
-                    borderRadius: '50%',
-                    objectFit: 'cover',
-                    margin: '0 auto 12px',
-                    border: '3px solid #f2b733',
-                    boxShadow: '0 4px 14px rgba(242, 183, 51, 0.4)',
-                  }}
-                />
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
+              {/* Dark Navy Top Header matching User Reference Image 2 & 3 */}
+              <div style={{ background: '#000638', padding: '24px 20px 20px', color: '#ffffff', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ position: 'relative', marginBottom: '12px' }}>
+                  <img
+                    src={resolveImageSrc(item.image)}
+                    alt={item.name}
+                    style={{
+                      width: '82px',
+                      height: '82px',
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                      border: '3.5px solid #f2b733',
+                      boxShadow: '0 6px 18px rgba(242, 183, 51, 0.45)',
+                    }}
+                  />
+                </div>
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#ffffff', marginBottom: '4px' }}>
                   {item.name}
                 </h3>
-                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#60a5fa' }}>
+                <div style={{ fontSize: '0.88rem', fontWeight: 800, color: '#f2b733', background: 'rgba(242, 183, 51, 0.12)', padding: '4px 14px', borderRadius: '50px', border: '1px solid rgba(242, 183, 51, 0.3)' }}>
                   Placed @ {item.company}
                 </div>
               </div>
 
-              {/* White Bottom Body Section matching Reference Image 1 */}
-              <div style={{ padding: '20px 18px 22px', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '14px', background: '#ffffff' }}>
-                <div style={{ fontSize: '0.88rem', color: '#64748b' }}>
-                  Before: <strong style={{ color: '#000648', fontWeight: 800 }}>{item.beforeRole}</strong>
+              {/* White Bottom Body Section with Step Connector matching User Reference Image 3 */}
+              <div style={{ padding: '20px 18px 22px', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px', background: '#ffffff' }}>
+                {/* Before Role Pill */}
+                <div style={{
+                  width: '100%',
+                  padding: '10px 14px',
+                  borderRadius: '12px',
+                  border: '1.5px solid #e2e8f0',
+                  background: '#f8fafc',
+                  fontSize: '0.85rem',
+                  color: '#475569',
+                  textAlign: 'center',
+                  boxSizing: 'border-box'
+                }}>
+                  Before: <strong style={{ color: '#000638', fontWeight: 800 }}>{item.beforeRole}</strong>
                 </div>
+
+                {/* Vertical Connector Line */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '-4px 0' }}>
+                  <div style={{ width: '2px', height: '14px', borderLeft: '2px dashed #000638' }} />
+                  <div style={{ width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '6px solid #000638' }} />
+                </div>
+
+                {/* After Role Pill */}
                 <div style={{
                   width: '100%',
                   padding: '12px 14px',
                   borderRadius: '12px',
-                  border: '1.5px solid #000648',
-                  background: 'rgba(0, 6, 72, 0.04)',
+                  border: '2px solid #000638',
+                  background: '#000638',
+                  color: '#ffffff',
                   fontSize: '0.9rem',
                   fontWeight: 900,
-                  color: '#000648',
                   textAlign: 'center',
-                  boxSizing: 'border-box'
+                  boxSizing: 'border-box',
+                  boxShadow: '0 4px 12px rgba(0, 6, 56, 0.15)'
                 }}>
-                  After: {item.afterRole}
+                  After: <span style={{ color: '#f2b733' }}>{item.afterRole}</span>
                 </div>
               </div>
             </div>
