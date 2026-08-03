@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react';
-import { testimonials } from '../../data/testimonials';
+import React, { useRef } from 'react';
 import { HiChevronLeft, HiChevronRight, HiStar, HiSparkles } from 'react-icons/hi';
 import { FaLinkedin, FaQuoteLeft } from 'react-icons/fa';
+import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 export default function TestimonialsSliderTrack() {
+  const { writtenTestimonials } = useSiteData();
   const sliderRef = useRef(null);
 
   const handleScroll = (direction) => {
@@ -96,13 +97,13 @@ export default function TestimonialsSliderTrack() {
             gap: '24px',
             overflowX: 'auto',
             scrollSnapType: 'x mandatory',
-            padding: '12px 8px 24px 8px', // Space for hover border & shadow
+            padding: '12px 8px 24px 8px',
             width: '100%',
             boxSizing: 'border-box',
             scrollBehavior: 'smooth',
           }}
         >
-          {testimonials.map((item) => (
+          {writtenTestimonials.map((item) => (
             <div
               key={item.id}
               style={{
@@ -154,24 +155,26 @@ export default function TestimonialsSliderTrack() {
                         padding: '3px 8px', borderRadius: '50px', fontWeight: 700, 
                         marginTop: '4px', display: 'inline-block', lineHeight: 1.2
                       }}>
-                        {item.role} @ {item.company}
+                        {item.role || item.company}
                       </div>
                     </div>
                   </div>
 
-                  <a
-                    href={item.linkedIn}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ 
-                      color: '#000648', fontSize: '1.25rem', padding: '6px', 
-                      background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 
-                    }}
-                    aria-label={`${item.name}'s LinkedIn Profile`}
-                  >
-                    <FaLinkedin />
-                  </a>
+                  {item.linkedIn && (
+                    <a
+                      href={item.linkedIn}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{ 
+                        color: '#000648', fontSize: '1.25rem', padding: '6px', 
+                        background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 
+                      }}
+                      aria-label={`${item.name}'s LinkedIn Profile`}
+                    >
+                      <FaLinkedin />
+                    </a>
+                  )}
                 </div>
 
                 {/* Rating Stars & Quote Icon */}
@@ -189,23 +192,25 @@ export default function TestimonialsSliderTrack() {
               </div>
 
               {/* Course Track Footer Badge */}
-              <div
-                style={{
-                  background: '#f8fafc',
-                  padding: '8px 12px',
-                  borderRadius: '8px',
-                  border: '1px solid #e2e8f0',
-                  fontSize: '0.76rem',
-                  fontWeight: 800,
-                  color: '#000648',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px'
-                }}
-              >
-                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#f2b733' }}></span>
-                Track: {item.course}
-              </div>
+              {item.course && (
+                <div
+                  style={{
+                    background: '#f8fafc',
+                    padding: '8px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid #e2e8f0',
+                    fontSize: '0.76rem',
+                    fontWeight: 800,
+                    color: '#000648',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#f2b733' }}></span>
+                  Track: {item.course}
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -214,4 +219,3 @@ export default function TestimonialsSliderTrack() {
     </section>
   );
 }
-

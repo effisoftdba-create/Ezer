@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HiX, HiCheck, HiPhotograph, HiUpload } from 'react-icons/hi';
+import { HiX, HiCheck, HiPhotograph, HiUpload, HiArrowRight } from 'react-icons/hi';
 
 const PRESET_IMAGES = [
   { label: 'Hero Default', url: 'images/hero/hero_section_1.jpg' },
@@ -13,15 +13,16 @@ const PRESET_IMAGES = [
 ];
 
 export default function ImagePickerModal({ isOpen, onClose, onSelectImage, currentImage = '' }) {
-  const [selectedUrl, setSelectedUrl] = useState(currentImage);
+  const [selectedUrl, setSelectedUrl] = useState(currentImage || PRESET_IMAGES[0].url);
   const [customUrl, setCustomUrl] = useState('');
 
   if (!isOpen) return null;
 
+  const activeSelectedUrl = customUrl.trim() || selectedUrl;
+
   const handleConfirm = () => {
-    const finalUrl = customUrl.trim() || selectedUrl;
-    if (finalUrl) {
-      onSelectImage(finalUrl);
+    if (activeSelectedUrl) {
+      onSelectImage(activeSelectedUrl);
       onClose();
     }
   };
@@ -44,16 +45,16 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
-      background: 'rgba(0, 6, 72, 0.6)', backdropFilter: 'blur(4px)',
+      background: 'rgba(0, 6, 72, 0.65)', backdropFilter: 'blur(4px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
     }}>
       <div style={{
-        background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '640px',
-        maxHeight: '90vh', overflowY: 'auto', padding: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
+        background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '680px',
+        maxHeight: '92vh', overflowY: 'auto', padding: '24px', boxShadow: '0 20px 40px rgba(0,0,0,0.25)'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiPhotograph color="#115DFC" /> Select or Upload Image
+            <HiPhotograph color="#115DFC" size={22} /> Select or Upload Image
           </h3>
           <button
             type="button"
@@ -63,6 +64,41 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
           >
             <HiX size={24} />
           </button>
+        </div>
+
+        {/* Dual Image Preview (Current vs. Newly Selected) */}
+        <div style={{
+          background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
+          padding: '16px', marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr auto 1fr',
+          gap: '16px', alignItems: 'center'
+        }}>
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', uppercase: true, marginBottom: '6px' }}>
+              Current Image
+            </div>
+            <div style={{ height: '110px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0' }}>
+              {currentImage ? (
+                <img src={currentImage} alt="Current active" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: '#94a3b8' }}>
+                  No Image Set
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div style={{ color: '#000648', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <HiArrowRight size={22} />
+          </div>
+
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', uppercase: true, marginBottom: '6px' }}>
+              Newly Chosen Image Preview
+            </div>
+            <div style={{ height: '110px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #115DFC', background: '#000648', boxShadow: '0 4px 12px rgba(17,93,252,0.2)' }}>
+              <img src={activeSelectedUrl} alt="Newly chosen preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+          </div>
         </div>
 
         <div style={{ marginBottom: '20px' }}>
@@ -140,7 +176,7 @@ export default function ImagePickerModal({ isOpen, onClose, onSelectImage, curre
 
         <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-            Selected: <strong style={{ color: '#000648' }}>{(customUrl || selectedUrl).substring(0, 35)}...</strong>
+            Selected: <strong style={{ color: '#000648' }}>{activeSelectedUrl.substring(0, 32)}...</strong>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
             <button

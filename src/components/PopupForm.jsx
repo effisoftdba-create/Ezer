@@ -76,7 +76,7 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
         right: 0,
         bottom: 0,
         zIndex: 9999,
-        background: 'rgba(0, 6, 72, 0.78)',
+        background: 'rgba(0, 6, 72, 0.82)',
         backdropFilter: 'blur(6px)',
         display: 'flex',
         alignItems: 'center',
@@ -87,7 +87,9 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
     >
       <div
         style={{
-          background: '#ffffff',
+          background: 'linear-gradient(rgba(255, 255, 255, 0.93), rgba(255, 255, 255, 0.93)), url("images/hero/hero_section_1.jpg")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
           borderRadius: '16px',
           width: '100%',
           maxWidth: 'min(440px, 94vw)',

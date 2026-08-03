@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { phase1Courses } from '../../data/courses';
-import { videoStories } from '../../data/testimonials';
+import { testimonials as initialTestimonials, videoStories } from '../../data/testimonials';
 import { generalFaqs } from '../../data/faq';
 
 const SiteContext = createContext();
@@ -8,8 +8,11 @@ const SiteContext = createContext();
 const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v1';
 const STORAGE_COURSES_KEY = 'ezer_courses:v1';
 const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v1';
+const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v1';
 const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v1';
 const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v1';
+const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v1';
+const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v1';
 const STORAGE_FAQS_KEY = 'ezer_faqs:v1';
 const STORAGE_CONTACT_KEY = 'ezer_contact:v1';
 
@@ -58,6 +61,57 @@ const defaultPlatformDef = {
   acronymText: 'EZER — Empowering Zero-to-Hero Education & Real Career Transformations'
 };
 
+const defaultSupportCards = [
+  {
+    id: 'support-1',
+    title: 'Pre-Employment Support',
+    subtitle: 'Career Readiness Phase',
+    desc: 'Comprehensive guidance before you start applying — build a high-impact profile that catches recruiter attention.',
+    bullets: [
+      'Resume & LinkedIn profile optimization',
+      '1-on-1 technical mock interviews',
+      'GitHub portfolio & capstone review'
+    ],
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=400',
+  },
+  {
+    id: 'support-2',
+    title: 'Post-Employment Assistance',
+    subtitle: '1-Year Placement Safety Net',
+    desc: 'Our commitment doesn’t end on graduation day. Receive continuous job referrals and interview prep for 1 full year.',
+    bullets: [
+      'Up to 1 year continuous job referrals',
+      'Post-hiring workplace onboarding support',
+      'Salary negotiation & offer review'
+    ],
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600&h=400',
+  },
+  {
+    id: 'support-3',
+    title: '3-Year Community Access',
+    subtitle: 'Long-Term Peer Network',
+    desc: 'Stay connected with senior mentors, corporate practitioners, and fellow alumni for continuous growth.',
+    bullets: [
+      '3-year active Slack & Discord access',
+      'Monthly expert masterclasses',
+      'Peer code reviews & hackathons'
+    ],
+    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600&h=400',
+  },
+  {
+    id: 'support-4',
+    title: 'Practical-First Live Labs',
+    subtitle: 'Hands-on Production Depth',
+    desc: 'Master industry-standard production tools through hands-on labs and real corporate scenario simulations.',
+    bullets: [
+      'Real cloud & automation environment labs',
+      'Industry-standard toolchain exposure',
+      'Live scenario troubleshooting'
+    ],
+    image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=600&h=400',
+  },
+];
+
 const defaultTransformedLives = [
   {
     id: 1,
@@ -91,15 +145,16 @@ const defaultTransformedLives = [
     afterRole: 'ASIC Verification Engineer',
     image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300&h=300',
   },
-  {
-    id: 5,
-    name: 'Subathra N',
-    company: 'Standard Chartered',
-    beforeRole: 'Quality Analyst',
-    afterRole: 'Senior Automation Engineer',
-    image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300&h=300',
-  },
 ];
+
+const defaultTestimonialsHero = {
+  tag: 'ALUMNI SUCCESS & REVIEWS',
+  headline: 'Proven Outcomes & Real Alumni Stories',
+  sub: 'Explore career switch journeys from our graduates who secured engineering roles across leading IT companies after completing EZER live online cohorts.',
+  ratingBadge: '4.9 / 5 Rating (1,200+ Reviews)',
+  assistanceBadge: 'Up to 1-Year Placement Assistance',
+  image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800'
+};
 
 const defaultContactInfo = {
   phone: '+91 98765 43210',
@@ -133,6 +188,14 @@ export function SiteProvider({ children }) {
     return defaultPlatformDef;
   });
 
+  const [supportCards, setSupportCards] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_SUPPORT_CARDS_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    return defaultSupportCards;
+  });
+
   const [transformedLives, setTransformedLives] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_TRANSFORMED_KEY);
@@ -147,6 +210,22 @@ export function SiteProvider({ children }) {
       if (stored) return JSON.parse(stored);
     } catch (e) {}
     return videoStories;
+  });
+
+  const [testimonialsHero, setTestimonialsHero] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_TESTIMONIALS_HERO_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    return defaultTestimonialsHero;
+  });
+
+  const [writtenTestimonials, setWrittenTestimonials] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_WRITTEN_TESTIMONIALS_KEY);
+      if (stored) return JSON.parse(stored);
+    } catch (e) {}
+    return initialTestimonials;
   });
 
   const [faqList, setFaqList] = useState(() => {
@@ -169,8 +248,11 @@ export function SiteProvider({ children }) {
   useEffect(() => { localStorage.setItem(STORAGE_SLIDES_KEY, JSON.stringify(heroSlides)); }, [heroSlides]);
   useEffect(() => { localStorage.setItem(STORAGE_COURSES_KEY, JSON.stringify(courses)); }, [courses]);
   useEffect(() => { localStorage.setItem(STORAGE_PLATFORM_KEY, JSON.stringify(ezerDefinition)); }, [ezerDefinition]);
+  useEffect(() => { localStorage.setItem(STORAGE_SUPPORT_CARDS_KEY, JSON.stringify(supportCards)); }, [supportCards]);
   useEffect(() => { localStorage.setItem(STORAGE_TRANSFORMED_KEY, JSON.stringify(transformedLives)); }, [transformedLives]);
   useEffect(() => { localStorage.setItem(STORAGE_VIDEOS_KEY, JSON.stringify(videoTestimonials)); }, [videoTestimonials]);
+  useEffect(() => { localStorage.setItem(STORAGE_TESTIMONIALS_HERO_KEY, JSON.stringify(testimonialsHero)); }, [testimonialsHero]);
+  useEffect(() => { localStorage.setItem(STORAGE_WRITTEN_TESTIMONIALS_KEY, JSON.stringify(writtenTestimonials)); }, [writtenTestimonials]);
   useEffect(() => { localStorage.setItem(STORAGE_FAQS_KEY, JSON.stringify(faqList)); }, [faqList]);
   useEffect(() => { localStorage.setItem(STORAGE_CONTACT_KEY, JSON.stringify(contactInfo)); }, [contactInfo]);
 
@@ -187,6 +269,11 @@ export function SiteProvider({ children }) {
   // Platform Definition Updates
   const updateEzerDefinition = (data) => setEzerDefinition((prev) => ({ ...prev, ...data }));
 
+  // Support Cards CRUD
+  const addSupportCard = (card) => setSupportCards((prev) => [{ id: `support-${Date.now()}`, ...card }, ...prev]);
+  const updateSupportCard = (id, updated) => setSupportCards((prev) => prev.map((c) => (c.id === id || c.title === id ? { ...c, ...updated } : c)));
+  const deleteSupportCard = (id) => setSupportCards((prev) => prev.filter((c) => c.id !== id && c.title !== id));
+
   // Transformed Lives CRUD
   const addTransformedLife = (item) => setTransformedLives((prev) => [{ id: Date.now(), ...item }, ...prev]);
   const updateTransformedLife = (id, updated) => setTransformedLives((prev) => prev.map((t) => (t.id === id ? { ...t, ...updated } : t)));
@@ -197,6 +284,15 @@ export function SiteProvider({ children }) {
   const updateVideoTestimonial = (id, updated) => setVideoTestimonials((prev) => prev.map((v) => (v.id === id ? { ...v, ...updated } : v)));
   const deleteVideoTestimonial = (id) => setVideoTestimonials((prev) => prev.filter((v) => v.id !== id));
 
+  // Testimonials Page CRUD
+  const updateTestimonialsHero = (data) => setTestimonialsHero((prev) => ({ ...prev, ...data }));
+  const addWrittenTestimonial = (item) => setWrittenTestimonials((prev) => [{ id: Date.now(), ...item }, ...prev]);
+  const updateWrittenTestimonial = (id, updated) => setWrittenTestimonials((prev) => prev.map((t) => (t.id === id ? { ...t, ...updated } : t)));
+  const deleteWrittenTestimonial = (id) => setWrittenTestimonials((prev) => prev.filter((t) => t.id !== id));
+
+  // FAQ CRUD
+  const updateFaqList = (newList) => setFaqList(newList);
+
   // Contact Info Updates
   const updateContactInfo = (data) => setContactInfo((prev) => ({ ...prev, ...data }));
 
@@ -204,16 +300,22 @@ export function SiteProvider({ children }) {
     setHeroSlides(defaultSlides);
     setCourses(phase1Courses);
     setEzerDefinition(defaultPlatformDef);
+    setSupportCards(defaultSupportCards);
     setTransformedLives(defaultTransformedLives);
     setVideoTestimonials(videoStories);
+    setTestimonialsHero(defaultTestimonialsHero);
+    setWrittenTestimonials(initialTestimonials);
     setFaqList(generalFaqs);
     setContactInfo(defaultContactInfo);
 
     localStorage.removeItem(STORAGE_SLIDES_KEY);
     localStorage.removeItem(STORAGE_COURSES_KEY);
     localStorage.removeItem(STORAGE_PLATFORM_KEY);
+    localStorage.removeItem(STORAGE_SUPPORT_CARDS_KEY);
     localStorage.removeItem(STORAGE_TRANSFORMED_KEY);
     localStorage.removeItem(STORAGE_VIDEOS_KEY);
+    localStorage.removeItem(STORAGE_TESTIMONIALS_HERO_KEY);
+    localStorage.removeItem(STORAGE_WRITTEN_TESTIMONIALS_KEY);
     localStorage.removeItem(STORAGE_FAQS_KEY);
     localStorage.removeItem(STORAGE_CONTACT_KEY);
   };
@@ -223,8 +325,11 @@ export function SiteProvider({ children }) {
       heroSlides,
       courses,
       ezerDefinition,
+      supportCards,
       transformedLives,
       videoTestimonials,
+      testimonialsHero,
+      writtenTestimonials,
       faqList,
       contactInfo,
       addHeroSlide,
@@ -234,16 +339,24 @@ export function SiteProvider({ children }) {
       updateCourse,
       deleteCourse,
       updateEzerDefinition,
+      addSupportCard,
+      updateSupportCard,
+      deleteSupportCard,
       addTransformedLife,
       updateTransformedLife,
       deleteTransformedLife,
       addVideoTestimonial,
       updateVideoTestimonial,
       deleteVideoTestimonial,
+      updateTestimonialsHero,
+      addWrittenTestimonial,
+      updateWrittenTestimonial,
+      deleteWrittenTestimonial,
+      updateFaqList,
       updateContactInfo,
       resetToDefault,
     }),
-    [heroSlides, courses, ezerDefinition, transformedLives, videoTestimonials, faqList, contactInfo]
+    [heroSlides, courses, ezerDefinition, supportCards, transformedLives, videoTestimonials, testimonialsHero, writtenTestimonials, faqList, contactInfo]
   );
 
   return <SiteContext.Provider value={contextValue}>{children}</SiteContext.Provider>;

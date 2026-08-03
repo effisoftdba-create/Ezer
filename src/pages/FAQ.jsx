@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import FAQAccordion from '../components/FAQAccordion';
 import CTABanner from '../components/CTABanner';
-import { generalFaqs } from '../data/faq';
-import { HiShieldCheck, HiUserGroup } from 'react-icons/hi';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 export default function FAQ({ onOpenDemoModal }) {
+  const { faqList } = useSiteData();
+
   return (
     <div>
       {/* Header Banner */}
@@ -46,8 +47,15 @@ export default function FAQ({ onOpenDemoModal }) {
 
       {/* Main FAQ Accordion Container */}
       <section className="section" style={{ padding: '72px 0', background: '#ffffff' }}>
-        <div className="container" style={{ maxWidth: '860px' }}>
-          <FAQAccordion items={generalFaqs} title="General Program & Admissions FAQ" />
+        <div className="container" style={{ maxWidth: '860px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
+          {Array.isArray(faqList) && faqList.map((categoryGroup, idx) => (
+            <div key={categoryGroup.category || idx}>
+              <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', marginBottom: '16px', paddingBottom: '8px', borderBottom: '2px solid #f2b733', display: 'inline-block' }}>
+                {categoryGroup.category} Questions
+              </h2>
+              <FAQAccordion items={categoryGroup.items} />
+            </div>
+          ))}
         </div>
       </section>
 

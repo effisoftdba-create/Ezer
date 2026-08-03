@@ -5,16 +5,24 @@ import { useSiteData } from '../context/SiteContext';
 import HeroManager from '../components/HeroManager';
 import CourseManager from '../components/CourseManager';
 import PlatformManager from '../components/PlatformManager';
+import SupportCardsManager from '../components/SupportCardsManager';
 import GraduateOutcomesManager from '../components/GraduateOutcomesManager';
 import VideoReviewsManager from '../components/VideoReviewsManager';
+import TestimonialsManager from '../components/TestimonialsManager';
+import FaqManager from '../components/FaqManager';
 import ContactInfoManager from '../components/ContactInfoManager';
+import UIStatePreviewManager from '../components/UIStatePreviewManager';
 import {
   HiOutlinePhotograph,
   HiOutlineAcademicCap,
   HiOutlineSparkles,
+  HiOutlineBadgeCheck,
   HiOutlineUserGroup,
   HiOutlineVideoCamera,
+  HiOutlineChatAlt,
+  HiOutlineQuestionMarkCircle,
   HiOutlinePhone,
+  HiOutlineTemplate,
   HiOutlineExternalLink,
   HiOutlineLogout,
   HiOutlineRefresh,
@@ -24,7 +32,16 @@ import {
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('hero');
   const navigate = useNavigate();
-  const { heroSlides, courses, transformedLives, videoTestimonials, resetToDefault } = useSiteData();
+  const {
+    heroSlides,
+    courses,
+    supportCards,
+    transformedLives,
+    videoTestimonials,
+    writtenTestimonials,
+    faqList,
+    resetToDefault
+  } = useSiteData();
 
   useEffect(() => {
     if (!isAuthenticated()) {
@@ -43,13 +60,19 @@ export default function AdminDashboard() {
     }
   };
 
+  const totalFaqs = faqList.reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
+
   const tabs = [
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: heroSlides.length },
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: courses.length },
     { id: 'platform', label: 'Why EZER Showcase', icon: HiOutlineSparkles },
+    { id: 'support', label: 'Support Feature Cards', icon: HiOutlineBadgeCheck, count: supportCards.length },
     { id: 'outcomes', label: 'Graduate Outcomes', icon: HiOutlineUserGroup, count: transformedLives.length },
     { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: videoTestimonials.length },
-    { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone }
+    { id: 'testimonials', label: 'Testimonials Page', icon: HiOutlineChatAlt, count: writtenTestimonials.length },
+    { id: 'faq', label: 'FAQ Manager', icon: HiOutlineQuestionMarkCircle, count: totalFaqs },
+    { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone },
+    { id: 'uistates', label: 'UI Feedback States', icon: HiOutlineTemplate }
   ];
 
   return (
@@ -71,7 +94,7 @@ export default function AdminDashboard() {
               Admin Control Panel
             </h1>
             <div style={{ fontSize: '0.725rem', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <HiOutlineShieldCheck color="#22c55e" size={14} /> Session Active • Full Site Management
+              <HiOutlineShieldCheck color="#22c55e" size={14} /> Session Active • Protected Management Console
             </div>
           </div>
         </div>
@@ -140,21 +163,21 @@ export default function AdminDashboard() {
                   aria-label={`Switch to ${tab.label}`}
                   style={{
                     width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-                    padding: '12px 14px', borderRadius: '10px', border: 'none',
+                    padding: '10px 12px', borderRadius: '10px', border: 'none',
                     background: isActive ? '#000648' : 'transparent',
                     color: isActive ? '#f2b733' : '#475569',
                     fontWeight: isActive ? 800 : 600,
-                    fontSize: '0.875rem', cursor: 'pointer', marginBottom: '6px',
+                    fontSize: '0.85rem', cursor: 'pointer', marginBottom: '4px',
                     textAlign: 'left', transition: 'background-color 0.2s ease, color 0.2s ease'
                   }}
                 >
-                  <Icon size={20} />
-                  <div style={{ flex: 1 }}>{tab.label}</div>
+                  <Icon size={18} />
+                  <div style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tab.label}</div>
                   {tab.count !== undefined && (
                     <span style={{
                       background: isActive ? '#f2b733' : '#f1f5f9',
                       color: isActive ? '#000648' : '#475569',
-                      fontSize: '0.7rem', fontWeight: 800, padding: '2px 8px', borderRadius: '50px'
+                      fontSize: '0.7rem', fontWeight: 800, padding: '2px 7px', borderRadius: '50px'
                     }}>
                       {tab.count}
                     </span>
@@ -163,14 +186,14 @@ export default function AdminDashboard() {
               );
             })}
 
-            <div style={{ borderTop: '1px solid #e2e8f0', margin: '16px 0' }} />
+            <div style={{ borderTop: '1px solid #e2e8f0', margin: '14px 0' }} />
 
             <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
               <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-                ⚡ Real-Time Live Sync
+                Real-Time Site Sync Active
               </div>
               <div style={{ fontSize: '0.725rem', color: '#64748b', lineHeight: 1.4 }}>
-                All section edits immediately sync across Home, Courses, Testimonials, and Contact pages!
+                All section edits immediately sync across Home, Courses, Testimonials, FAQ, and Contact pages!
               </div>
             </div>
           </div>
@@ -180,9 +203,13 @@ export default function AdminDashboard() {
           {activeTab === 'hero' && <HeroManager />}
           {activeTab === 'courses' && <CourseManager />}
           {activeTab === 'platform' && <PlatformManager />}
+          {activeTab === 'support' && <SupportCardsManager />}
           {activeTab === 'outcomes' && <GraduateOutcomesManager />}
           {activeTab === 'videos' && <VideoReviewsManager />}
+          {activeTab === 'testimonials' && <TestimonialsManager />}
+          {activeTab === 'faq' && <FaqManager />}
           {activeTab === 'contact' && <ContactInfoManager />}
+          {activeTab === 'uistates' && <UIStatePreviewManager />}
         </main>
       </div>
     </div>
