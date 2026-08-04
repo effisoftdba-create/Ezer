@@ -6,20 +6,20 @@ import productionData from '../../data/productionData.json';
 
 const SiteContext = createContext();
 
-const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v3_prod';
-const STORAGE_COURSES_KEY = 'ezer_courses:v3_prod';
-const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v3_prod';
-const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v3_prod';
-const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v3_prod';
-const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v3_prod';
-const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v3_prod';
-const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v3_prod';
-const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v3_prod';
-const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v3_prod';
-const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v3_prod';
-const STORAGE_FAQS_KEY = 'ezer_faqs:v3_prod';
-const STORAGE_CONTACT_KEY = 'ezer_contact:v3_prod';
-const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v3_prod';
+const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v4_prod';
+const STORAGE_COURSES_KEY = 'ezer_courses:v4_prod';
+const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v4_prod';
+const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v4_prod';
+const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v4_prod';
+const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v4_prod';
+const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v4_prod';
+const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v4_prod';
+const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v4_prod';
+const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v4_prod';
+const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v4_prod';
+const STORAGE_FAQS_KEY = 'ezer_faqs:v4_prod';
+const STORAGE_CONTACT_KEY = 'ezer_contact:v4_prod';
+const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v4_prod';
 
 const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -264,13 +264,13 @@ function safeSetStorage(key, value) {
   }
 }
 
-// Clean up stale v1/v2 localStorage keys so mobile devices don't carry old data
+// Clean up stale localStorage keys so mobile devices don't carry old data
 function cleanupOldStorageKeys() {
   try {
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith('ezer_') && (key.includes(':v1') || key.includes(':v2'))) {
+      if (key && key.startsWith('ezer_') && !key.endsWith(':v4_prod')) {
         keysToRemove.push(key);
       }
     }
@@ -293,9 +293,13 @@ function getStored(key, fallback) {
 }
 
 function getInitialState() {
+  const prodConfig = productionData.popupConfig || defaultPopupConfig;
+  const prodSlides = productionData.heroSlides || defaultSlides;
+  const prodCourses = productionData.courses || phase1Courses;
+
   return {
-    heroSlides: getStored(STORAGE_SLIDES_KEY, defaultSlides),
-    courses: getStored(STORAGE_COURSES_KEY, phase1Courses),
+    heroSlides: getStored(STORAGE_SLIDES_KEY, prodSlides),
+    courses: getStored(STORAGE_COURSES_KEY, prodCourses),
     ezerDefinition: getStored(STORAGE_PLATFORM_KEY, defaultPlatformDef),
     supportCards: getStored(STORAGE_SUPPORT_CARDS_KEY, defaultSupportCards),
     transformedLives: getStored(STORAGE_TRANSFORMED_KEY, defaultTransformedLives),
@@ -307,7 +311,7 @@ function getInitialState() {
     writtenTestimonials: getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials),
     faqList: getStored(STORAGE_FAQS_KEY, generalFaqs),
     contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo),
-    popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, defaultPopupConfig),
+    popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, prodConfig),
   };
 }
 

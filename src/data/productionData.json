@@ -70,5 +70,75 @@
       "fit": "cover",
       "position": "center center"
     }
+  ],
+  "courses": [
+    {
+      "id": "cloud-devops-ai",
+      "title": "Cloud DevOps with AI",
+      "slug": "cloud-devops-ai",
+      "badge": "Best Seller",
+      "tagline": "Deploy, Automate, and Scale — Like a Real DevOps Engineer.",
+      "description": "Live, hands-on training across AWS, Azure, GCP and the industry's core DevOps toolchain integrated with modern AI tools. Build production automated pipelines from day one.",
+      "tools": ["AWS", "Azure", "GCP", "Docker", "Kubernetes", "Jenkins", "Terraform", "Python AI", "Prometheus & Grafana"],
+      "image": "images/hero/cloud_deveops.png",
+      "imagePosition": "center center",
+      "imageFit": "cover",
+      "duration": "3 Months",
+      "schedule": "Weekday & Weekend batches available",
+      "startDate": "New Cohort Starting Next Week",
+      "languages": "Tamil, English, Hindi",
+      "fee": "₹45,000 + 18% GST"
+    },
+    {
+      "id": "software-testing-playwright",
+      "title": "Software Testing – Playwright",
+      "slug": "software-testing-playwright",
+      "badge": "Trending",
+      "tagline": "Test Smarter With the Automation Framework Top QA Teams Are Adopting.",
+      "description": "Master end-to-end web testing, API automation, CI/CD pipeline integration, and modern JavaScript/TypeScript testing with Microsoft Playwright.",
+      "tools": ["Playwright", "TypeScript", "JavaScript", "Jenkins", "Git", "Postman API", "Docker", "Cucumber BDD"],
+      "image": "images/hero/software_testing_playwright.jpg",
+      "imagePosition": "center center",
+      "imageFit": "cover",
+      "duration": "3 Months",
+      "schedule": "Weekday & Weekend batches available",
+      "startDate": "New Cohort Starting Next Week",
+      "languages": "Tamil, English, Hindi",
+      "fee": "₹40,000 + 18% GST"
+    },
+    {
+      "id": "ai-machine-learning",
+      "title": "AI & Machine Learning",
+      "slug": "ai-machine-learning",
+      "badge": "High Demand",
+      "tagline": "From Data Foundations to Training and Deploying Production ML Models.",
+      "description": "Comprehensive practical program covering Python, Data Analytics, Supervised & Unsupervised Learning, Neural Networks, Deep Learning, and Generative AI fundamentals.",
+      "tools": ["Python", "TensorFlow", "PyTorch", "Scikit-Learn", "Pandas", "NumPy", "OpenCV", "Streamlit", "Docker"],
+      "image": "images/hero/AI_machine_learning.png",
+      "imagePosition": "center center",
+      "imageFit": "cover",
+      "duration": "4 Months",
+      "schedule": "Weekend & Weekday cohorts",
+      "startDate": "Next Batch Commencing Soon",
+      "languages": "Tamil, English, Hindi",
+      "fee": "₹50,000 + 18% GST"
+    },
+    {
+      "id": "it-infrastructure-system-admin",
+      "title": "IT Infrastructure & System Administration",
+      "slug": "it-infrastructure-system-admin",
+      "badge": "Beginner Friendly",
+      "tagline": "Master Windows Server, Active Directory, Linux Administration & Enterprise Networking.",
+      "description": "Zero-to-hero practical training for aspiring System Administrators, Network Engineers, and IT Support Professionals. Hands-on labs on real server environments.",
+      "tools": ["Windows Server 2022", "Active Directory", "Linux RHEL/Ubuntu", "DNS / DHCP", "VMware ESXi", "Cisco Packet Tracer", "Bash Scripting"],
+      "image": "images/hero/it_admin.jpg",
+      "imagePosition": "center center",
+      "imageFit": "cover",
+      "duration": "3 Months",
+      "schedule": "Flexible Weekend & Evening batches",
+      "startDate": "Enrolling for New Batch",
+      "languages": "Tamil, English, Hindi",
+      "fee": "₹35,000 + 18% GST"
+    }
   ]
 }
