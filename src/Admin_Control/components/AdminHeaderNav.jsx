@@ -51,8 +51,8 @@ export default function AdminHeaderNav({ handleReset, handleLogout }) {
         </div>
       </div>
 
-      {/* Header Actions Toolbar */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      {/* Header Actions Toolbar - Positioned strictly to Far Right */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginLeft: 'auto' }}>
         <Link
           to="/"
           target="_blank"
