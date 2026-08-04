@@ -238,8 +238,8 @@ img { max-width: 100%; display: block; }
 }
 
 .uipro-btn-accent {
-  background: linear-gradient(135deg, #115DFC 0%, #0046d5 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, #f2b733 0%, #d9a02a 100%);
+  color: #000648;
   border: none;
   border-radius: var(--radius-md);
   font-weight: 800;
@@ -249,7 +249,7 @@ img { max-width: 100%; display: block; }
 
 .uipro-btn-accent:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(17, 93, 252, 0.35);
+  box-shadow: 0 6px 18px rgba(242, 183, 51, 0.4);
 }
 
 

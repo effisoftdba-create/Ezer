@@ -1,370 +1,27 @@
 import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
-import { phase1Courses } from '../../data/courses';
-import { testimonials as initialTestimonials, videoStories } from '../../data/testimonials';
-import { generalFaqs } from '../../data/faq';
-import productionData from '../../data/productionData.json';
 import { triggerStateToast } from '../../utils/toastService';
+import {
+  STORAGE_SLIDES_KEY,
+  STORAGE_COURSES_KEY,
+  STORAGE_PLATFORM_KEY,
+  STORAGE_SUPPORT_CARDS_KEY,
+  STORAGE_TRANSFORMED_KEY,
+  STORAGE_OUTCOMES_HEADER_KEY,
+  STORAGE_MENTORS_KEY,
+  STORAGE_MENTORS_HEADER_KEY,
+  STORAGE_VIDEOS_KEY,
+  STORAGE_TESTIMONIALS_HERO_KEY,
+  STORAGE_WRITTEN_TESTIMONIALS_KEY,
+  STORAGE_FAQS_KEY,
+  STORAGE_CONTACT_KEY,
+  STORAGE_POPUP_CONFIG_KEY,
+  STORAGE_LEADS_KEY,
+  getInitialState,
+  siteReducer,
+  safeSetStorage
+} from './siteDefaults';
 
 const SiteContext = createContext();
-
-const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v6_cache_busted';
-const STORAGE_COURSES_KEY = 'ezer_courses:v6_cache_busted';
-const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v6_cache_busted';
-const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v6_cache_busted';
-const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v6_cache_busted';
-const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v6_cache_busted';
-const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v6_cache_busted';
-const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v6_cache_busted';
-const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v6_cache_busted';
-const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v6_cache_busted';
-const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v6_cache_busted';
-const STORAGE_FAQS_KEY = 'ezer_faqs:v6_cache_busted';
-const STORAGE_CONTACT_KEY = 'ezer_contact:v6_cache_busted';
-const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v6_cache_busted';
-const STORAGE_LEADS_KEY = 'ezer_leads:v6_cache_busted';
-
-const defaultPopupConfig = {
-  title: 'Register For Free Demo',
-  subtitle: 'Book your free live demo class & 1-on-1 career counselling session',
-  badge: 'LIMITED SEATS AVAILABLE',
-  submitBtnText: 'Register Now',
-  image: 'images/hero/hero_section_1.jpg',
-  imagePosition: 'center center',
-  imageFit: 'cover',
-  photoVisibility: 85,
-  photoHeight: 120,
-  showPhoto: false,
-  bodyBgImage: 'images/hero/hero_section_1.jpg',
-  bodyBgOpacity: 15,
-  showStateCity: true,
-  nameLabel: 'Full Name*',
-  emailLabel: 'Email Address*',
-  phoneLabel: 'Mobile Number*',
-  countryLabel: 'Country',
-  courseLabel: 'Target Course*',
-  termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.',
-  coursesList: [
-    'Cloud DevOps with AI',
-    'Software Testing – Playwright',
-    'AI & Machine Learning',
-    'IT Infrastructure & System Administration'
-  ],
-  countriesList: [
-    'India',
-    'United States',
-    'UAE',
-    'Singapore',
-    'Other'
-  ]
-};
-
-const defaultSlides = [
-  {
-    id: 'slide-1',
-    url: 'images/hero/hero_section_1.jpg',
-    headline: 'Learn Live. Build Real Skills. Get Placed.',
-    sub: 'Live online classes led by working corporate professionals, hands-on labs on industry tools, and placement support that continues after graduation.',
-    badge: 'Outcome-Driven IT Training',
-  },
-  {
-    id: 'slide-2',
-    url: 'images/hero/cloud_deveops.png',
-    headline: 'Deploy, Automate, and Scale Like a Real DevOps Engineer',
-    sub: 'Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with hands-on production labs.',
-    badge: 'Cloud & DevOps Masterclass',
-  },
-  {
-    id: 'slide-3',
-    url: 'images/hero/software_testing_playwright.jpg',
-    headline: 'Test Smarter With Modern Automation Frameworks',
-    sub: 'From manual testing fundamentals to full Playwright automation and CI/CD integration.',
-    badge: 'Playwright Automation Program',
-  },
-  {
-    id: 'slide-4',
-    url: 'images/hero/AI_machine_learning.png',
-    headline: 'From Python Basics to Deploying Real ML Models',
-    sub: 'A hands-on, project-based path into AI & Machine Learning — live, instructor-led, and practical.',
-    badge: 'AI & Data Science Track',
-  },
-];
-
-const defaultPlatformDef = {
-  tag: 'Empowering Career Switchers',
-  headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
-  description: "EZER Learning Solution is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses. Taught by corporate-experienced IT professionals, EZER offers personalized live online training, hands-on labs, 1-year placement support, and up to 3 years of community access.",
-  image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=800',
-  highlights: [
-    'Live Online Instructor-Led',
-    '1-Year LMS & Placement Support',
-    '3-Year Community Access',
-    'Hands-on Real World Labs'
-  ],
-  acronymText: 'EZER — Empowering Zero-to-Hero Education & Real Career Transformations'
-};
-
-const defaultSupportCards = [
-  {
-    id: 'support-1',
-    title: 'Pre-Employment Support',
-    subtitle: 'Career Readiness Phase',
-    desc: 'Comprehensive guidance before you start applying — build a high-impact profile that catches recruiter attention.',
-    bullets: [
-      'Resume & LinkedIn profile optimization',
-      '1-on-1 technical mock interviews',
-      'GitHub portfolio & capstone review'
-    ],
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=400',
-  },
-  {
-    id: 'support-2',
-    title: 'Post-Employment Assistance',
-    subtitle: '1-Year Placement Safety Net',
-    desc: 'Our commitment doesn’t end on graduation day. Receive continuous job referrals and interview prep for 1 full year.',
-    bullets: [
-      'Up to 1 year continuous job referrals',
-      'Post-hiring workplace onboarding support',
-      'Salary negotiation & offer review'
-    ],
-    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600&h=400',
-  },
-  {
-    id: 'support-3',
-    title: '3-Year Community Access',
-    subtitle: 'Long-Term Peer Network',
-    desc: 'Stay connected with senior mentors, corporate practitioners, and fellow alumni for continuous growth.',
-    bullets: [
-      '3-year active Slack & Discord access',
-      'Monthly expert masterclasses',
-      'Peer code reviews & hackathons'
-    ],
-    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=600&h=400',
-  },
-  {
-    id: 'support-4',
-    title: 'Practical-First Live Labs',
-    subtitle: 'Hands-on Production Depth',
-    desc: 'Master industry-standard production tools through hands-on labs and real corporate scenario simulations.',
-    bullets: [
-      'Real cloud & automation environment labs',
-      'Industry-standard toolchain exposure',
-      'Live scenario troubleshooting'
-    ],
-    image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=600&h=400',
-  },
-];
-
-const defaultTransformedLives = [
-  {
-    id: 1,
-    name: 'B Swathy',
-    company: 'SmartHealth',
-    beforeRole: 'Associate',
-    afterRole: 'UI/UX Designer',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300&h=300',
-  },
-  {
-    id: 2,
-    name: 'Balasubramani',
-    company: 'ClarityTTS',
-    beforeRole: 'Support Associate',
-    afterRole: 'VLSI Physical Design Engineer',
-    image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=300&h=300',
-  },
-  {
-    id: 3,
-    name: 'Padmini Kadhirvel',
-    company: 'TachoMind',
-    beforeRole: 'Non-IT Graduate',
-    afterRole: 'Automation Testing Engineer',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300',
-  },
-  {
-    id: 4,
-    name: 'Hasna Raza',
-    company: 'Fipsar Tech',
-    beforeRole: 'Fresher, B.Sc (Physics)',
-    afterRole: 'ASIC Verification Engineer',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300&h=300',
-  },
-];
-
-const defaultOutcomesHeader = {
-  tag: 'CAREER PLACEMENT OUTCOMES',
-  headline: 'Our Graduates Get Hired by Leading Tech Firms',
-  sub: 'Join a community of engineers building impactful, high-growth software careers.'
-};
-
-const defaultSeniorMentors = [
-  {
-    id: 'mentor-1',
-    name: 'Arun Kumar S',
-    designation: 'Principal Cloud Architect @ TechCorp',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300&h=300',
-    bio: '11+ years designing multi-cloud architectures across AWS and Azure. Mentored 2,500+ engineers into DevOps career roles.',
-    tags: ['AWS Certified', 'Kubernetes Lead', 'DevOps Veteran']
-  },
-  {
-    id: 'mentor-2',
-    name: 'Kavitha Ranganathan',
-    designation: 'Senior SRE Lead @ Global Cloud Systems',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300',
-    bio: 'Specialist in Kubernetes zero-downtime deployments and IaC automation with Terraform.',
-    tags: ['Terraform Expert', 'SRE Architecture', 'GitOps Specialist']
-  }
-];
-
-const defaultMentorsHeader = {
-  tag: 'SENIOR MENTORS',
-  headline: 'Learn Directly From Senior Engineers & Academic Mentors',
-  sub: 'Gain real-world insights from instructors with years of industry tenure across top technology firms.'
-};
-
-const defaultTestimonialsHero = {
-  tag: 'ALUMNI SUCCESS & REVIEWS',
-  headline: 'Proven Outcomes & Real Alumni Stories',
-  sub: 'Explore career switch journeys from our graduates who secured engineering roles across leading IT companies after completing EZER live online cohorts.',
-  ratingBadge: '4.9 / 5 Rating (1,200+ Reviews)',
-  assistanceBadge: 'Up to 1-Year Placement Assistance',
-  image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800'
-};
-
-const defaultContactInfo = {
-  phone: '+91 98765 43210',
-  email: 'admissions@ezerlearn.com',
-  address: 'No. 42, Tech Park Avenue, Guindy, Chennai, Tamil Nadu - 600032',
-  hours: 'Mon - Sat: 9:00 AM - 8:00 PM IST'
-};
-
-const defaultLeads = [
-  {
-    id: 'lead-101',
-    name: 'Swathy B',
-    email: 'swathy.b@example.com',
-    phone: '9876543210',
-    country: 'India',
-    state: 'Tamil Nadu',
-    city: 'Chennai',
-    course: 'Cloud DevOps with AI',
-    otherCourseText: '',
-    agreeTerms: true,
-    status: 'Pending',
-    timestamp: new Date().toISOString(),
-    comments: [
-      { id: 'c-1', text: 'Form submitted on landing page.', author: 'System', time: '10:30 AM' }
-    ]
-  },
-  {
-    id: 'lead-102',
-    name: 'Karthik Raja',
-    email: 'karthik.r@example.com',
-    phone: '9123456789',
-    country: 'India',
-    state: 'Karnataka',
-    city: 'Bengaluru',
-    course: 'Others',
-    otherCourseText: 'Flutter & Cross-Platform Mobile App Development',
-    agreeTerms: true,
-    status: 'Contacted',
-    timestamp: new Date().toISOString(),
-    comments: [
-      { id: 'c-2', text: 'Called student regarding custom mobile app course request. Sent syllabus overview.', author: 'Admin Counselor', time: '11:45 AM' }
-    ]
-  }
-];
-
-function safeSetStorage(key, value) {
-  try {
-    const serialized = JSON.stringify(value);
-    localStorage.setItem(key, serialized);
-    return true;
-  } catch (err) {
-    console.warn(`[SiteContext] Could not persist ${key} to localStorage:`, err);
-
-    // If QuotaExceeded, try to free space by removing uploaded images cache first
-    if (err.name === 'QuotaExceededError' || err.code === 22 || err.code === 1014) {
-      try {
-        // Remove uploaded images cache (largest item) to free space
-        localStorage.removeItem('ezer_uploaded_images:v3');
-        // Retry save after freeing space
-        localStorage.setItem(key, serialized);
-        console.log(`[SiteContext] Saved ${key} after clearing image cache.`);
-        return true;
-      } catch (retryErr) {
-        // Still failed — alert user
-        alert(
-          '⚠️ Storage Full! Your changes could not be saved because the browser storage is full.\n\n' +
-          'This usually happens when large images are uploaded as base64.\n\n' +
-          'Solution: Use image URLs (paste a link) instead of uploading files, or clear your browser data and try again.'
-        );
-      }
-    }
-    return false;
-  }
-}
-
-// Clean up stale localStorage keys so mobile devices don't carry old data
-function cleanupOldStorageKeys() {
-  try {
-    const keysToRemove = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('ezer_') && !key.endsWith(':v6_cache_busted')) {
-        keysToRemove.push(key);
-      }
-    }
-    keysToRemove.forEach((key) => localStorage.removeItem(key));
-    if (keysToRemove.length > 0) {
-      console.log(`[SiteContext] Cleaned up ${keysToRemove.length} stale storage keys.`);
-    }
-  } catch (e) {}
-}
-
-// Run cleanup on module load (runs once on first import)
-cleanupOldStorageKeys();
-
-function getStored(key, fallback) {
-  try {
-    const stored = localStorage.getItem(key);
-    if (stored) return JSON.parse(stored);
-  } catch (e) {}
-  return fallback;
-}
-
-function getInitialState() {
-  const prodConfig = productionData.popupConfig || defaultPopupConfig;
-  const prodSlides = productionData.heroSlides || defaultSlides;
-  const prodCourses = productionData.courses || phase1Courses;
-
-  return {
-    heroSlides: getStored(STORAGE_SLIDES_KEY, prodSlides),
-    courses: getStored(STORAGE_COURSES_KEY, prodCourses),
-    ezerDefinition: getStored(STORAGE_PLATFORM_KEY, defaultPlatformDef),
-    supportCards: getStored(STORAGE_SUPPORT_CARDS_KEY, defaultSupportCards),
-    transformedLives: getStored(STORAGE_TRANSFORMED_KEY, defaultTransformedLives),
-    outcomesHeader: getStored(STORAGE_OUTCOMES_HEADER_KEY, defaultOutcomesHeader),
-    seniorMentors: getStored(STORAGE_MENTORS_KEY, defaultSeniorMentors),
-    mentorsHeader: getStored(STORAGE_MENTORS_HEADER_KEY, defaultMentorsHeader),
-    videoTestimonials: getStored(STORAGE_VIDEOS_KEY, videoStories),
-    testimonialsHero: getStored(STORAGE_TESTIMONIALS_HERO_KEY, defaultTestimonialsHero),
-    writtenTestimonials: getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials),
-    faqList: getStored(STORAGE_FAQS_KEY, generalFaqs),
-    contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo),
-    popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, prodConfig),
-    leads: getStored(STORAGE_LEADS_KEY, defaultLeads),
-  };
-}
-
-function siteReducer(state, action) {
-  switch (action.type) {
-    case 'SET_KEY':
-      return { ...state, [action.key]: action.value };
-    case 'RESET_ALL':
-      return getInitialState();
-    default:
-      return state;
-  }
-}
 
 export function SiteProvider({ children }) {
   const [state, dispatch] = useReducer(siteReducer, null, getInitialState);
@@ -387,7 +44,7 @@ export function SiteProvider({ children }) {
     leads
   } = state;
 
-  // Check for mobile sync token in URL (#/?syncData=... or #/sync?data=...)
+  // Check for mobile sync token in URL
   useEffect(() => {
     try {
       const fullUrl = window.location.href || '';
@@ -416,7 +73,7 @@ export function SiteProvider({ children }) {
     }
   }, []);
 
-  // LocalStorage Persist Effects (Safely guarded against QuotaExceededError crashes)
+  // LocalStorage Sync Effects
   useEffect(() => { safeSetStorage(STORAGE_SLIDES_KEY, heroSlides); }, [heroSlides]);
   useEffect(() => { safeSetStorage(STORAGE_COURSES_KEY, courses); }, [courses]);
   useEffect(() => { safeSetStorage(STORAGE_PLATFORM_KEY, ezerDefinition); }, [ezerDefinition]);
@@ -433,362 +90,131 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_POPUP_CONFIG_KEY, popupConfig); }, [popupConfig]);
   useEffect(() => { safeSetStorage(STORAGE_LEADS_KEY, leads); }, [leads]);
 
-  // Helper dispatch setters with useCallback & Success Toast Notifications
-  const addHeroSlide = useCallback((slide) => {
-    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: [...state.heroSlides, { id: `slide-${Date.now()}`, ...slide }] });
-    triggerStateToast('success', 'Hero Slide Added!', 'New slide added to hero section slider.');
-  }, [state.heroSlides]);
-
-  const updateHeroSlide = useCallback((id, updated) => {
-    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: state.heroSlides.map((s) => (s.id === id || s.badge === id ? { ...s, ...updated } : s)) });
-    triggerStateToast('success', 'Hero Slide Updated!', 'Slide details and image configuration saved.');
-  }, [state.heroSlides]);
-
-  const deleteHeroSlide = useCallback((id) => {
-    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: state.heroSlides.filter((s) => s.id !== id && s.badge !== id) });
-    triggerStateToast('success', 'Hero Slide Deleted!', 'Slide removed from hero slider.');
-  }, [state.heroSlides]);
-
-  const addCourse = useCallback((c) => {
-    dispatch({ type: 'SET_KEY', key: 'courses', value: [{ id: c.slug || `course-${Date.now()}`, badge: 'New Course', ...c }, ...state.courses] });
-    triggerStateToast('success', 'New Course Created!', 'Course catalog updated with new program.');
-  }, [state.courses]);
-
-  const updateCourse = useCallback((id, updated) => {
-    dispatch({ type: 'SET_KEY', key: 'courses', value: state.courses.map((c) => (c.id === id || c.slug === id ? { ...c, ...updated } : c)) });
-    triggerStateToast('success', 'Course Details Updated!', 'Course info and pricing changes saved.');
-  }, [state.courses]);
-
-  const deleteCourse = useCallback((id) => {
-    dispatch({ type: 'SET_KEY', key: 'courses', value: state.courses.filter((c) => c.id !== id && c.slug !== id) });
-    triggerStateToast('success', 'Course Deleted!', 'Course removed from catalog.');
-  }, [state.courses]);
-
-  const updateEzerDefinition = useCallback((data) => {
-    dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: { ...state.ezerDefinition, ...data } });
-    triggerStateToast('success', 'Empowering Switchers Saved!', 'Platform definition section updated.');
-  }, [state.ezerDefinition]);
-
-  const addSupportCard = useCallback((card) => {
-    dispatch({ type: 'SET_KEY', key: 'supportCards', value: [{ id: `support-${Date.now()}`, ...card }, ...state.supportCards] });
-    triggerStateToast('success', 'Support Card Added!', 'Why EZER card added.');
-  }, [state.supportCards]);
-
-  const updateSupportCard = useCallback((id, updated) => {
-    dispatch({ type: 'SET_KEY', key: 'supportCards', value: state.supportCards.map((c) => (c.id === id || c.title === id ? { ...c, ...updated } : c)) });
-    triggerStateToast('success', 'Support Card Updated!', 'Card content saved successfully.');
-  }, [state.supportCards]);
-
-  const deleteSupportCard = useCallback((id) => {
-    dispatch({ type: 'SET_KEY', key: 'supportCards', value: state.supportCards.filter((c) => c.id !== id && c.title !== id) });
-    triggerStateToast('success', 'Support Card Removed!', 'Card deleted from section.');
-  }, [state.supportCards]);
-
-  const updateOutcomesHeader = useCallback((data) => {
-    dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: { ...state.outcomesHeader, ...data } });
-    triggerStateToast('success', 'Outcomes Header Saved!', 'Graduate outcomes header updated.');
-  }, [state.outcomesHeader]);
-
-  const addTransformedLife = useCallback((item) => {
-    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: [{ id: Date.now(), ...item }, ...state.transformedLives] });
-    triggerStateToast('success', 'Graduate Outcome Added!', 'New graduate story added.');
-  }, [state.transformedLives]);
-
-  const updateTransformedLife = useCallback((id, updated) => {
-    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: state.transformedLives.map((t) => (t.id === id ? { ...t, ...updated } : t)) });
-    triggerStateToast('success', 'Graduate Outcome Updated!', 'Student outcome details saved.');
-  }, [state.transformedLives]);
-
-  const deleteTransformedLife = useCallback((id) => {
-    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: state.transformedLives.filter((t) => t.id !== id) });
-    triggerStateToast('success', 'Graduate Story Deleted!', 'Item removed from outcomes.');
-  }, [state.transformedLives]);
-
-  const updateMentorsHeader = useCallback((data) => {
-    dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: { ...state.mentorsHeader, ...data } });
-    triggerStateToast('success', 'Mentors Header Saved!', 'Mentors section header updated.');
-  }, [state.mentorsHeader]);
-
-  const addSeniorMentor = useCallback((mentor) => {
-    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: [{ id: `mentor-${Date.now()}`, ...mentor }, ...state.seniorMentors] });
-    triggerStateToast('success', 'Senior Mentor Added!', 'New mentor profile added.');
-  }, [state.seniorMentors]);
-
-  const updateSeniorMentor = useCallback((id, updated) => {
-    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: state.seniorMentors.map((m) => (m.id === id ? { ...m, ...updated } : m)) });
-    triggerStateToast('success', 'Mentor Profile Saved!', 'Senior mentor details updated.');
-  }, [state.seniorMentors]);
-
-  const deleteSeniorMentor = useCallback((id) => {
-    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: state.seniorMentors.filter((m) => m.id !== id) });
-    triggerStateToast('success', 'Mentor Profile Removed!', 'Mentor deleted from roster.');
-  }, [state.seniorMentors]);
-
-  const addVideoTestimonial = useCallback((v) => {
-    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: [{ id: `video-${Date.now()}`, ...v }, ...state.videoTestimonials] });
-    triggerStateToast('success', 'Video Story Added!', 'New video review added.');
-  }, [state.videoTestimonials]);
-
-  const updateVideoTestimonial = useCallback((id, updated) => {
-    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: state.videoTestimonials.map((v) => (v.id === id ? { ...v, ...updated } : v)) });
-    triggerStateToast('success', 'Video Review Saved!', 'Video review updated.');
-  }, [state.videoTestimonials]);
-
-  const deleteVideoTestimonial = useCallback((id) => {
-    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: state.videoTestimonials.filter((v) => v.id !== id) });
-    triggerStateToast('success', 'Video Review Removed!', 'Video deleted.');
-  }, [state.videoTestimonials]);
-
-  const updateTestimonialsHero = useCallback((data) => {
-    dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: { ...state.testimonialsHero, ...data } });
-    triggerStateToast('success', 'Testimonials Header Saved!', 'Header settings updated.');
-  }, [state.testimonialsHero]);
-
-  const addWrittenTestimonial = useCallback((t) => {
-    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: [{ id: Date.now(), ...t }, ...state.writtenTestimonials] });
-    triggerStateToast('success', 'Testimonial Added!', 'New written review added.');
-  }, [state.writtenTestimonials]);
-
-  const updateWrittenTestimonial = useCallback((id, updated) => {
-    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: state.writtenTestimonials.map((t) => (t.id === id ? { ...t, ...updated } : t)) });
-    triggerStateToast('success', 'Testimonial Saved!', 'Testimonial updated.');
-  }, [state.writtenTestimonials]);
-
-  const deleteWrittenTestimonial = useCallback((id) => {
-    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: state.writtenTestimonials.filter((t) => t.id !== id) });
-    triggerStateToast('success', 'Testimonial Removed!', 'Testimonial deleted.');
-  }, [state.writtenTestimonials]);
-
-  const addFaqItem = useCallback((categoryName, item) => {
-    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: [...cat.items, { id: `faq-${Date.now()}`, ...item }] } : cat) });
-    triggerStateToast('success', 'FAQ Question Added!', 'Question added to category.');
-  }, [state.faqList]);
-
-  const updateFaqItem = useCallback((categoryName, id, updated) => {
-    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: cat.items.map((i) => i.id === id || i.q === id ? { ...i, ...updated } : i) } : cat) });
-    triggerStateToast('success', 'FAQ Answer Saved!', 'FAQ details updated.');
-  }, [state.faqList]);
-
-  const deleteFaqItem = useCallback((categoryName, id) => {
-    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: cat.items.filter((i) => i.id !== id && i.q !== id) } : cat) });
-    triggerStateToast('success', 'FAQ Item Deleted!', 'Question deleted.');
-  }, [state.faqList]);
-
-  const updateContactInfo = useCallback((data) => {
-    dispatch({ type: 'SET_KEY', key: 'contactInfo', value: { ...state.contactInfo, ...data } });
-    triggerStateToast('success', 'Contact Info Updated!', 'Phone, email & address saved.');
-  }, [state.contactInfo]);
-
-  const updatePopupConfig = useCallback((data) => {
-    dispatch({ type: 'SET_KEY', key: 'popupConfig', value: { ...state.popupConfig, ...data } });
-    triggerStateToast('success', 'Popup Config Saved!', 'Lead modal settings updated.');
-  }, [state.popupConfig]);
-
-  const addLead = useCallback((leadData) => {
-    const newLead = {
-      id: `lead-${Date.now()}`,
-      status: 'Pending',
-      timestamp: new Date().toISOString(),
-      comments: [
-        { id: `c-${Date.now()}`, text: 'Form registration submitted.', author: 'System', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
-      ],
-      ...leadData
-    };
-    dispatch({ type: 'SET_KEY', key: 'leads', value: [newLead, ...(state.leads || [])] });
-  }, [state.leads]);
-
-  const updateLeadStatus = useCallback((id, status) => {
-    dispatch({
-      type: 'SET_KEY',
-      key: 'leads',
-      value: (state.leads || []).map((l) => l.id === id ? { ...l, status } : l)
-    });
-    triggerStateToast('success', 'Lead Status Updated!', `Lead status changed to "${status}".`);
-  }, [state.leads]);
-
-  const addLeadComment = useCallback((id, text, author = 'Admin Counselor') => {
-    dispatch({
-      type: 'SET_KEY',
-      key: 'leads',
-      value: (state.leads || []).map((l) => {
-        if (l.id === id) {
-          const comments = l.comments || [];
-          return {
-            ...l,
-            comments: [
-              ...comments,
-              { id: `c-${Date.now()}`, text, author, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
-            ]
-          };
-        }
-        return l;
-      })
-    });
-    triggerStateToast('success', 'Counselor Note Saved!', 'Comment added to lead file.');
-  }, [state.leads]);
-
-  const deleteLead = useCallback((id) => {
-    dispatch({
-      type: 'SET_KEY',
-      key: 'leads',
-      value: (state.leads || []).filter((l) => l.id !== id)
-    });
-    triggerStateToast('success', 'Lead Record Deleted!', 'Lead removed from admin panel.');
-  }, [state.leads]);
-
-  const resetToDefault = useCallback(() => {
-    localStorage.removeItem(STORAGE_SLIDES_KEY);
-    localStorage.removeItem(STORAGE_COURSES_KEY);
-    localStorage.removeItem(STORAGE_PLATFORM_KEY);
-    localStorage.removeItem(STORAGE_SUPPORT_CARDS_KEY);
-    localStorage.removeItem(STORAGE_TRANSFORMED_KEY);
-    localStorage.removeItem(STORAGE_OUTCOMES_HEADER_KEY);
-    localStorage.removeItem(STORAGE_MENTORS_KEY);
-    localStorage.removeItem(STORAGE_MENTORS_HEADER_KEY);
-    localStorage.removeItem(STORAGE_VIDEOS_KEY);
-    localStorage.removeItem(STORAGE_TESTIMONIALS_HERO_KEY);
-    localStorage.removeItem(STORAGE_WRITTEN_TESTIMONIALS_KEY);
-    localStorage.removeItem(STORAGE_FAQS_KEY);
-    localStorage.removeItem(STORAGE_CONTACT_KEY);
-    localStorage.removeItem(STORAGE_POPUP_CONFIG_KEY);
-    localStorage.removeItem(STORAGE_LEADS_KEY);
-    dispatch({ type: 'RESET_ALL' });
+  // Action Dispatchers
+  const updateHeroSlides = useCallback((slides) => {
+    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: slides });
+    triggerStateToast('SAVED');
   }, []);
 
-  const contextValue = useMemo(() => ({
-    notifyState: triggerStateToast,
-    heroSlides,
-    addHeroSlide,
-    updateHeroSlide,
-    deleteHeroSlide,
+  const updateCourses = useCallback((newCourses) => {
+    dispatch({ type: 'SET_KEY', key: 'courses', value: newCourses });
+    triggerStateToast('SAVED');
+  }, []);
 
-    courses,
-    addCourse,
-    updateCourse,
-    deleteCourse,
+  const updateEzerDefinition = useCallback((def) => {
+    dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: def });
+    triggerStateToast('SAVED');
+  }, []);
 
-    ezerDefinition,
-    updateEzerDefinition,
+  const updateSupportCards = useCallback((cards) => {
+    dispatch({ type: 'SET_KEY', key: 'supportCards', value: cards });
+    triggerStateToast('SAVED');
+  }, []);
 
-    supportCards,
-    addSupportCard,
-    updateSupportCard,
-    deleteSupportCard,
+  const updateTransformedLives = useCallback((lives) => {
+    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: lives });
+    triggerStateToast('SAVED');
+  }, []);
 
-    transformedLives,
-    outcomesHeader,
-    updateOutcomesHeader,
-    addTransformedLife,
-    updateTransformedLife,
-    deleteTransformedLife,
+  const updateOutcomesHeader = useCallback((header) => {
+    dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: header });
+    triggerStateToast('SAVED');
+  }, []);
 
-    seniorMentors,
-    mentorsHeader,
-    updateMentorsHeader,
-    addSeniorMentor,
-    updateSeniorMentor,
-    deleteSeniorMentor,
+  const updateSeniorMentors = useCallback((mentors) => {
+    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: mentors });
+    triggerStateToast('SAVED');
+  }, []);
 
-    videoTestimonials,
-    addVideoTestimonial,
-    updateVideoTestimonial,
-    deleteVideoTestimonial,
+  const updateMentorsHeader = useCallback((header) => {
+    dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: header });
+    triggerStateToast('SAVED');
+  }, []);
 
-    testimonialsHero,
-    updateTestimonialsHero,
-    writtenTestimonials,
-    addWrittenTestimonial,
-    updateWrittenTestimonial,
-    deleteWrittenTestimonial,
+  const updateVideoTestimonials = useCallback((videos) => {
+    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: videos });
+    triggerStateToast('SAVED');
+  }, []);
 
-    faqList,
-    addFaqItem,
-    updateFaqItem,
-    deleteFaqItem,
+  const updateTestimonialsHero = useCallback((hero) => {
+    dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: hero });
+    triggerStateToast('SAVED');
+  }, []);
 
-    contactInfo,
-    updateContactInfo,
+  const updateWrittenTestimonials = useCallback((testimonials) => {
+    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: testimonials });
+    triggerStateToast('SAVED');
+  }, []);
 
-    popupConfig,
-    updatePopupConfig,
+  const updateFaqs = useCallback((faqs) => {
+    dispatch({ type: 'SET_KEY', key: 'faqList', value: faqs });
+    triggerStateToast('SAVED');
+  }, []);
 
-    leads,
-    addLead,
-    updateLeadStatus,
-    addLeadComment,
-    deleteLead,
+  const updateContactInfo = useCallback((info) => {
+    dispatch({ type: 'SET_KEY', key: 'contactInfo', value: info });
+    triggerStateToast('SAVED');
+  }, []);
 
-    resetToDefault
+  const updatePopupConfig = useCallback((config) => {
+    dispatch({ type: 'SET_KEY', key: 'popupConfig', value: config });
+    triggerStateToast('SAVED');
+  }, []);
+
+  const addLead = useCallback((leadData) => {
+    const newLead = { id: Date.now(), ...leadData, date: new Date().toLocaleString() };
+    dispatch({ type: 'SET_KEY', key: 'leads', value: [newLead, ...leads] });
+    triggerStateToast('SAVED');
+  }, [leads]);
+
+  const deleteLead = useCallback((leadId) => {
+    dispatch({ type: 'SET_KEY', key: 'leads', value: leads.filter(l => l.id !== leadId) });
+    triggerStateToast('SAVED');
+  }, [leads]);
+
+  const resetAllToDefaults = useCallback(() => {
+    localStorage.clear();
+    dispatch({ type: 'RESET_ALL' });
+    triggerStateToast('SAVED');
+  }, []);
+
+  const value = useMemo(() => ({
+    heroSlides, updateHeroSlides,
+    courses, updateCourses,
+    ezerDefinition, updateEzerDefinition,
+    supportCards, updateSupportCards,
+    transformedLives, updateTransformedLives,
+    outcomesHeader, updateOutcomesHeader,
+    seniorMentors, updateSeniorMentors,
+    mentorsHeader, updateMentorsHeader,
+    videoTestimonials, updateVideoTestimonials,
+    testimonialsHero, updateTestimonialsHero,
+    writtenTestimonials, updateWrittenTestimonials,
+    faqList, updateFaqs,
+    contactInfo, updateContactInfo,
+    popupConfig, updatePopupConfig,
+    leads, addLead, deleteLead,
+    resetAllToDefaults
   }), [
-    heroSlides,
-    addHeroSlide,
-    updateHeroSlide,
-    deleteHeroSlide,
-
-    courses,
-    addCourse,
-    updateCourse,
-    deleteCourse,
-
-    ezerDefinition,
-    updateEzerDefinition,
-
-    supportCards,
-    addSupportCard,
-    updateSupportCard,
-    deleteSupportCard,
-
-    transformedLives,
-    outcomesHeader,
-    updateOutcomesHeader,
-    addTransformedLife,
-    updateTransformedLife,
-    deleteTransformedLife,
-
-    seniorMentors,
-    mentorsHeader,
-    updateMentorsHeader,
-    addSeniorMentor,
-    updateSeniorMentor,
-    deleteSeniorMentor,
-
-    videoTestimonials,
-    addVideoTestimonial,
-    updateVideoTestimonial,
-    deleteVideoTestimonial,
-
-    testimonialsHero,
-    updateTestimonialsHero,
-    writtenTestimonials,
-    addWrittenTestimonial,
-    updateWrittenTestimonial,
-    deleteWrittenTestimonial,
-
-    faqList,
-    addFaqItem,
-    updateFaqItem,
-    deleteFaqItem,
-
-    contactInfo,
-    updateContactInfo,
-
-    popupConfig,
-    updatePopupConfig,
-
-    leads,
-    addLead,
-    updateLeadStatus,
-    addLeadComment,
-    deleteLead,
-
-    resetToDefault
+    heroSlides, updateHeroSlides,
+    courses, updateCourses,
+    ezerDefinition, updateEzerDefinition,
+    supportCards, updateSupportCards,
+    transformedLives, updateTransformedLives,
+    outcomesHeader, updateOutcomesHeader,
+    seniorMentors, updateSeniorMentors,
+    mentorsHeader, updateMentorsHeader,
+    videoTestimonials, updateVideoTestimonials,
+    testimonialsHero, updateTestimonialsHero,
+    writtenTestimonials, updateWrittenTestimonials,
+    faqList, updateFaqs,
+    contactInfo, updateContactInfo,
+    popupConfig, updatePopupConfig,
+    leads, addLead, deleteLead,
+    resetAllToDefaults
   ]);
 
-  return (
-    <SiteContext.Provider value={contextValue}>
-      {children}
-    </SiteContext.Provider>
-  );
+  return <SiteContext.Provider value={value}>{children}</SiteContext.Provider>;
 }
 
 export function useSiteData() {
