@@ -1,0 +1,157 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import {
+  HiOutlineShieldCheck,
+  HiDeviceMobile,
+  HiOutlineExternalLink,
+  HiOutlineRefresh,
+  HiOutlineLogout
+} from 'react-icons/hi';
+
+export default function AdminHeaderNav({
+  setShowSyncModal,
+  handleReset,
+  handleLogout
+}) {
+  return (
+    <header
+      style={{
+        background: 'linear-gradient(135deg, #000648 0%, #000c66 50%, #001280 100%)',
+        color: '#ffffff',
+        padding: '16px 28px',
+        display: 'flex',
+        justify: 'space-between',
+        alignItems: 'center',
+        boxShadow: '0 8px 32px rgba(0, 6, 72, 0.35)',
+        borderBottom: '2px solid #f2b733',
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000
+      }}
+    >
+      {/* Brand & Status Mark */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+        <div
+          style={{
+            background: 'linear-gradient(135deg, #f2b733 0%, #ffd700 100%)',
+            color: '#000648',
+            fontWeight: 900,
+            padding: '6px 14px',
+            borderRadius: '10px',
+            fontSize: '1.15rem',
+            letterSpacing: '0.05em',
+            boxShadow: '0 4px 14px rgba(242, 183, 51, 0.45)'
+          }}
+        >
+          EZ
+        </div>
+        <div>
+          <h1 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.01em' }}>
+            Admin Control Panel
+          </h1>
+          <div style={{ fontSize: '0.725rem', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+            <HiOutlineShieldCheck color="#22c55e" size={15} />
+            <span>Session Active • Protected Management Console</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Header Actions */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <button
+          type="button"
+          aria-label="Open mobile sync and export hub modal"
+          onClick={() => setShowSyncModal(true)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '9px 16px',
+            background: 'linear-gradient(135deg, #115DFC 0%, #0046d5 100%)',
+            color: '#ffffff',
+            borderRadius: '10px',
+            border: 'none',
+            fontSize: '0.825rem',
+            fontWeight: 800,
+            cursor: 'pointer',
+            boxShadow: '0 4px 14px rgba(17, 93, 252, 0.4)',
+            transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+          }}
+        >
+          <HiDeviceMobile size={17} />
+          <span>Sync Mobile & Export</span>
+        </button>
+
+        <Link
+          to="/"
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '9px 16px',
+            background: 'rgba(255, 255, 255, 0.1)',
+            color: '#ffffff',
+            borderRadius: '10px',
+            textDecoration: 'none',
+            fontSize: '0.825rem',
+            fontWeight: 700,
+            border: '1px solid rgba(255, 255, 255, 0.25)',
+            backdropFilter: 'blur(4px)',
+            transition: 'background-color 0.2s ease'
+          }}
+        >
+          <span>View Live Site</span>
+          <HiOutlineExternalLink size={15} />
+        </Link>
+
+        <button
+          type="button"
+          onClick={handleReset}
+          title="Reset site content to default data"
+          aria-label="Reset site content to default data"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '9px 14px',
+            background: 'rgba(255, 255, 255, 0.06)',
+            color: '#cbd5e1',
+            borderRadius: '10px',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            fontSize: '0.825rem',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          <HiOutlineRefresh size={15} />
+          <span>Reset</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={handleLogout}
+          aria-label="Logout from admin panel"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '9px 18px',
+            background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
+            color: '#ffffff',
+            borderRadius: '10px',
+            border: 'none',
+            fontSize: '0.825rem',
+            fontWeight: 800,
+            cursor: 'pointer',
+            boxShadow: '0 4px 14px rgba(220, 38, 38, 0.35)'
+          }}
+        >
+          <HiOutlineLogout size={15} />
+          <span>Logout</span>
+        </button>
+      </div>
+    </header>
+  );
+}
