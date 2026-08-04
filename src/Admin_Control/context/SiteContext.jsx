@@ -6,20 +6,20 @@ import productionData from '../../data/productionData.json';
 
 const SiteContext = createContext();
 
-const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v5_mobile_sync_fixed';
-const STORAGE_COURSES_KEY = 'ezer_courses:v5_mobile_sync_fixed';
-const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v5_mobile_sync_fixed';
-const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v5_mobile_sync_fixed';
-const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v5_mobile_sync_fixed';
-const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v5_mobile_sync_fixed';
-const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v5_mobile_sync_fixed';
-const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v5_mobile_sync_fixed';
-const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v5_mobile_sync_fixed';
-const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v5_mobile_sync_fixed';
-const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v5_mobile_sync_fixed';
-const STORAGE_FAQS_KEY = 'ezer_faqs:v5_mobile_sync_fixed';
-const STORAGE_CONTACT_KEY = 'ezer_contact:v5_mobile_sync_fixed';
-const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v5_mobile_sync_fixed';
+const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v6_cache_busted';
+const STORAGE_COURSES_KEY = 'ezer_courses:v6_cache_busted';
+const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v6_cache_busted';
+const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v6_cache_busted';
+const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v6_cache_busted';
+const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v6_cache_busted';
+const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v6_cache_busted';
+const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v6_cache_busted';
+const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v6_cache_busted';
+const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v6_cache_busted';
+const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v6_cache_busted';
+const STORAGE_FAQS_KEY = 'ezer_faqs:v6_cache_busted';
+const STORAGE_CONTACT_KEY = 'ezer_contact:v6_cache_busted';
+const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v6_cache_busted';
 
 const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -270,7 +270,7 @@ function cleanupOldStorageKeys() {
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith('ezer_') && !key.endsWith(':v5_mobile_sync_fixed')) {
+      if (key && key.startsWith('ezer_') && !key.endsWith(':v6_cache_busted')) {
         keysToRemove.push(key);
       }
     }
