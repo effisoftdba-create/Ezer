@@ -433,52 +433,156 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_POPUP_CONFIG_KEY, popupConfig); }, [popupConfig]);
   useEffect(() => { safeSetStorage(STORAGE_LEADS_KEY, leads); }, [leads]);
 
-  // Helper dispatch setters with useCallback
-  const addHeroSlide = useCallback((slide) => dispatch({ type: 'SET_KEY', key: 'heroSlides', value: [...state.heroSlides, { id: `slide-${Date.now()}`, ...slide }] }), [state.heroSlides]);
-  const updateHeroSlide = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'heroSlides', value: state.heroSlides.map((s) => (s.id === id || s.badge === id ? { ...s, ...updated } : s)) }), [state.heroSlides]);
-  const deleteHeroSlide = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'heroSlides', value: state.heroSlides.filter((s) => s.id !== id && s.badge !== id) }), [state.heroSlides]);
+  // Helper dispatch setters with useCallback & Success Toast Notifications
+  const addHeroSlide = useCallback((slide) => {
+    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: [...state.heroSlides, { id: `slide-${Date.now()}`, ...slide }] });
+    triggerStateToast('success', 'Hero Slide Added!', 'New slide added to hero section slider.');
+  }, [state.heroSlides]);
 
-  const addCourse = useCallback((c) => dispatch({ type: 'SET_KEY', key: 'courses', value: [{ id: c.slug || `course-${Date.now()}`, badge: 'New Course', ...c }, ...state.courses] }), [state.courses]);
-  const updateCourse = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'courses', value: state.courses.map((c) => (c.id === id || c.slug === id ? { ...c, ...updated } : c)) }), [state.courses]);
-  const deleteCourse = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'courses', value: state.courses.filter((c) => c.id !== id && c.slug !== id) }), [state.courses]);
+  const updateHeroSlide = useCallback((id, updated) => {
+    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: state.heroSlides.map((s) => (s.id === id || s.badge === id ? { ...s, ...updated } : s)) });
+    triggerStateToast('success', 'Hero Slide Updated!', 'Slide details and image configuration saved.');
+  }, [state.heroSlides]);
 
-  const updateEzerDefinition = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: { ...state.ezerDefinition, ...data } }), [state.ezerDefinition]);
+  const deleteHeroSlide = useCallback((id) => {
+    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: state.heroSlides.filter((s) => s.id !== id && s.badge !== id) });
+    triggerStateToast('success', 'Hero Slide Deleted!', 'Slide removed from hero slider.');
+  }, [state.heroSlides]);
 
-  const addSupportCard = useCallback((card) => dispatch({ type: 'SET_KEY', key: 'supportCards', value: [{ id: `support-${Date.now()}`, ...card }, ...state.supportCards] }), [state.supportCards]);
-  const updateSupportCard = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'supportCards', value: state.supportCards.map((c) => (c.id === id || c.title === id ? { ...c, ...updated } : c)) }), [state.supportCards]);
-  const deleteSupportCard = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'supportCards', value: state.supportCards.filter((c) => c.id !== id && c.title !== id) }), [state.supportCards]);
+  const addCourse = useCallback((c) => {
+    dispatch({ type: 'SET_KEY', key: 'courses', value: [{ id: c.slug || `course-${Date.now()}`, badge: 'New Course', ...c }, ...state.courses] });
+    triggerStateToast('success', 'New Course Created!', 'Course catalog updated with new program.');
+  }, [state.courses]);
 
-  const updateOutcomesHeader = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: { ...state.outcomesHeader, ...data } }), [state.outcomesHeader]);
-  const addTransformedLife = useCallback((item) => dispatch({ type: 'SET_KEY', key: 'transformedLives', value: [{ id: Date.now(), ...item }, ...state.transformedLives] }), [state.transformedLives]);
-  const updateTransformedLife = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'transformedLives', value: state.transformedLives.map((t) => (t.id === id ? { ...t, ...updated } : t)) }), [state.transformedLives]);
-  const deleteTransformedLife = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'transformedLives', value: state.transformedLives.filter((t) => t.id !== id) }), [state.transformedLives]);
+  const updateCourse = useCallback((id, updated) => {
+    dispatch({ type: 'SET_KEY', key: 'courses', value: state.courses.map((c) => (c.id === id || c.slug === id ? { ...c, ...updated } : c)) });
+    triggerStateToast('success', 'Course Details Updated!', 'Course info and pricing changes saved.');
+  }, [state.courses]);
 
-  const updateMentorsHeader = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: { ...state.mentorsHeader, ...data } }), [state.mentorsHeader]);
-  const addSeniorMentor = useCallback((mentor) => dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: [{ id: `mentor-${Date.now()}`, ...mentor }, ...state.seniorMentors] }), [state.seniorMentors]);
-  const updateSeniorMentor = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: state.seniorMentors.map((m) => (m.id === id ? { ...m, ...updated } : m)) }), [state.seniorMentors]);
-  const deleteSeniorMentor = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: state.seniorMentors.filter((m) => m.id !== id) }), [state.seniorMentors]);
+  const deleteCourse = useCallback((id) => {
+    dispatch({ type: 'SET_KEY', key: 'courses', value: state.courses.filter((c) => c.id !== id && c.slug !== id) });
+    triggerStateToast('success', 'Course Deleted!', 'Course removed from catalog.');
+  }, [state.courses]);
 
-  const addVideoTestimonial = useCallback((v) => dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: [{ id: `video-${Date.now()}`, ...v }, ...state.videoTestimonials] }), [state.videoTestimonials]);
-  const updateVideoTestimonial = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: state.videoTestimonials.map((v) => (v.id === id ? { ...v, ...updated } : v)) }), [state.videoTestimonials]);
-  const deleteVideoTestimonial = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: state.videoTestimonials.filter((v) => v.id !== id) }), [state.videoTestimonials]);
+  const updateEzerDefinition = useCallback((data) => {
+    dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: { ...state.ezerDefinition, ...data } });
+    triggerStateToast('success', 'Empowering Switchers Saved!', 'Platform definition section updated.');
+  }, [state.ezerDefinition]);
 
-  const updateTestimonialsHero = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: { ...state.testimonialsHero, ...data } }), [state.testimonialsHero]);
-  const addWrittenTestimonial = useCallback((t) => dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: [{ id: Date.now(), ...t }, ...state.writtenTestimonials] }), [state.writtenTestimonials]);
-  const updateWrittenTestimonial = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: state.writtenTestimonials.map((t) => (t.id === id ? { ...t, ...updated } : t)) }), [state.writtenTestimonials]);
-  const deleteWrittenTestimonial = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: state.writtenTestimonials.filter((t) => t.id !== id) }), [state.writtenTestimonials]);
+  const addSupportCard = useCallback((card) => {
+    dispatch({ type: 'SET_KEY', key: 'supportCards', value: [{ id: `support-${Date.now()}`, ...card }, ...state.supportCards] });
+    triggerStateToast('success', 'Support Card Added!', 'Why EZER card added.');
+  }, [state.supportCards]);
+
+  const updateSupportCard = useCallback((id, updated) => {
+    dispatch({ type: 'SET_KEY', key: 'supportCards', value: state.supportCards.map((c) => (c.id === id || c.title === id ? { ...c, ...updated } : c)) });
+    triggerStateToast('success', 'Support Card Updated!', 'Card content saved successfully.');
+  }, [state.supportCards]);
+
+  const deleteSupportCard = useCallback((id) => {
+    dispatch({ type: 'SET_KEY', key: 'supportCards', value: state.supportCards.filter((c) => c.id !== id && c.title !== id) });
+    triggerStateToast('success', 'Support Card Removed!', 'Card deleted from section.');
+  }, [state.supportCards]);
+
+  const updateOutcomesHeader = useCallback((data) => {
+    dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: { ...state.outcomesHeader, ...data } });
+    triggerStateToast('success', 'Outcomes Header Saved!', 'Graduate outcomes header updated.');
+  }, [state.outcomesHeader]);
+
+  const addTransformedLife = useCallback((item) => {
+    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: [{ id: Date.now(), ...item }, ...state.transformedLives] });
+    triggerStateToast('success', 'Graduate Outcome Added!', 'New graduate story added.');
+  }, [state.transformedLives]);
+
+  const updateTransformedLife = useCallback((id, updated) => {
+    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: state.transformedLives.map((t) => (t.id === id ? { ...t, ...updated } : t)) });
+    triggerStateToast('success', 'Graduate Outcome Updated!', 'Student outcome details saved.');
+  }, [state.transformedLives]);
+
+  const deleteTransformedLife = useCallback((id) => {
+    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: state.transformedLives.filter((t) => t.id !== id) });
+    triggerStateToast('success', 'Graduate Story Deleted!', 'Item removed from outcomes.');
+  }, [state.transformedLives]);
+
+  const updateMentorsHeader = useCallback((data) => {
+    dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: { ...state.mentorsHeader, ...data } });
+    triggerStateToast('success', 'Mentors Header Saved!', 'Mentors section header updated.');
+  }, [state.mentorsHeader]);
+
+  const addSeniorMentor = useCallback((mentor) => {
+    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: [{ id: `mentor-${Date.now()}`, ...mentor }, ...state.seniorMentors] });
+    triggerStateToast('success', 'Senior Mentor Added!', 'New mentor profile added.');
+  }, [state.seniorMentors]);
+
+  const updateSeniorMentor = useCallback((id, updated) => {
+    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: state.seniorMentors.map((m) => (m.id === id ? { ...m, ...updated } : m)) });
+    triggerStateToast('success', 'Mentor Profile Saved!', 'Senior mentor details updated.');
+  }, [state.seniorMentors]);
+
+  const deleteSeniorMentor = useCallback((id) => {
+    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: state.seniorMentors.filter((m) => m.id !== id) });
+    triggerStateToast('success', 'Mentor Profile Removed!', 'Mentor deleted from roster.');
+  }, [state.seniorMentors]);
+
+  const addVideoTestimonial = useCallback((v) => {
+    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: [{ id: `video-${Date.now()}`, ...v }, ...state.videoTestimonials] });
+    triggerStateToast('success', 'Video Story Added!', 'New video review added.');
+  }, [state.videoTestimonials]);
+
+  const updateVideoTestimonial = useCallback((id, updated) => {
+    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: state.videoTestimonials.map((v) => (v.id === id ? { ...v, ...updated } : v)) });
+    triggerStateToast('success', 'Video Review Saved!', 'Video review updated.');
+  }, [state.videoTestimonials]);
+
+  const deleteVideoTestimonial = useCallback((id) => {
+    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: state.videoTestimonials.filter((v) => v.id !== id) });
+    triggerStateToast('success', 'Video Review Removed!', 'Video deleted.');
+  }, [state.videoTestimonials]);
+
+  const updateTestimonialsHero = useCallback((data) => {
+    dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: { ...state.testimonialsHero, ...data } });
+    triggerStateToast('success', 'Testimonials Header Saved!', 'Header settings updated.');
+  }, [state.testimonialsHero]);
+
+  const addWrittenTestimonial = useCallback((t) => {
+    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: [{ id: Date.now(), ...t }, ...state.writtenTestimonials] });
+    triggerStateToast('success', 'Testimonial Added!', 'New written review added.');
+  }, [state.writtenTestimonials]);
+
+  const updateWrittenTestimonial = useCallback((id, updated) => {
+    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: state.writtenTestimonials.map((t) => (t.id === id ? { ...t, ...updated } : t)) });
+    triggerStateToast('success', 'Testimonial Saved!', 'Testimonial updated.');
+  }, [state.writtenTestimonials]);
+
+  const deleteWrittenTestimonial = useCallback((id) => {
+    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: state.writtenTestimonials.filter((t) => t.id !== id) });
+    triggerStateToast('success', 'Testimonial Removed!', 'Testimonial deleted.');
+  }, [state.writtenTestimonials]);
 
   const addFaqItem = useCallback((categoryName, item) => {
     dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: [...cat.items, { id: `faq-${Date.now()}`, ...item }] } : cat) });
-  }, [state.faqList]);
-  const updateFaqItem = useCallback((categoryName, id, updated) => {
-    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: cat.items.map((i) => i.id === id || i.q === id ? { ...i, ...updated } : i) } : cat) });
-  }, [state.faqList]);
-  const deleteFaqItem = useCallback((categoryName, id) => {
-    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: cat.items.filter((i) => i.id !== id && i.q !== id) } : cat) });
+    triggerStateToast('success', 'FAQ Question Added!', 'Question added to category.');
   }, [state.faqList]);
 
-  const updateContactInfo = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'contactInfo', value: { ...state.contactInfo, ...data } }), [state.contactInfo]);
-  const updatePopupConfig = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'popupConfig', value: { ...state.popupConfig, ...data } }), [state.popupConfig]);
+  const updateFaqItem = useCallback((categoryName, id, updated) => {
+    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: cat.items.map((i) => i.id === id || i.q === id ? { ...i, ...updated } : i) } : cat) });
+    triggerStateToast('success', 'FAQ Answer Saved!', 'FAQ details updated.');
+  }, [state.faqList]);
+
+  const deleteFaqItem = useCallback((categoryName, id) => {
+    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: cat.items.filter((i) => i.id !== id && i.q !== id) } : cat) });
+    triggerStateToast('success', 'FAQ Item Deleted!', 'Question deleted.');
+  }, [state.faqList]);
+
+  const updateContactInfo = useCallback((data) => {
+    dispatch({ type: 'SET_KEY', key: 'contactInfo', value: { ...state.contactInfo, ...data } });
+    triggerStateToast('success', 'Contact Info Updated!', 'Phone, email & address saved.');
+  }, [state.contactInfo]);
+
+  const updatePopupConfig = useCallback((data) => {
+    dispatch({ type: 'SET_KEY', key: 'popupConfig', value: { ...state.popupConfig, ...data } });
+    triggerStateToast('success', 'Popup Config Saved!', 'Lead modal settings updated.');
+  }, [state.popupConfig]);
 
   const addLead = useCallback((leadData) => {
     const newLead = {
@@ -499,6 +603,7 @@ export function SiteProvider({ children }) {
       key: 'leads',
       value: (state.leads || []).map((l) => l.id === id ? { ...l, status } : l)
     });
+    triggerStateToast('success', 'Lead Status Updated!', `Lead status changed to "${status}".`);
   }, [state.leads]);
 
   const addLeadComment = useCallback((id, text, author = 'Admin Counselor') => {
@@ -519,6 +624,7 @@ export function SiteProvider({ children }) {
         return l;
       })
     });
+    triggerStateToast('success', 'Counselor Note Saved!', 'Comment added to lead file.');
   }, [state.leads]);
 
   const deleteLead = useCallback((id) => {
@@ -527,6 +633,7 @@ export function SiteProvider({ children }) {
       key: 'leads',
       value: (state.leads || []).filter((l) => l.id !== id)
     });
+    triggerStateToast('success', 'Lead Record Deleted!', 'Lead removed from admin panel.');
   }, [state.leads]);
 
   const resetToDefault = useCallback(() => {
