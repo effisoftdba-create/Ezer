@@ -100,7 +100,7 @@ export default function AdminDashboard() {
       const pathname = window.location.pathname || '/';
       const cleanPath = pathname.endsWith('/') ? pathname : `${pathname}/`;
       const serialized = encodeURIComponent(JSON.stringify(currentExportData));
-      return `${origin}${cleanPath}#/sync?data=${serialized}`;
+      return `${origin}${cleanPath}#/?syncData=${serialized}`;
     } catch (e) {
       return '';
     }
