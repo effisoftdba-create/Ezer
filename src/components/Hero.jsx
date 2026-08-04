@@ -285,7 +285,17 @@ export default function Hero({ onOpenDemoModal }) {
             }
             .hero-right-photo-column {
               order: 2 !important;
-              min-height: 320px !important;
+              min-height: 360px !important;
+              height: 360px !important;
+            }
+            .hero-badge-pill {
+              top: 10px !important;
+              right: 10px !important;
+              padding: 3px 10px !important;
+              font-size: 0.62rem !important;
+              background: rgba(0, 6, 56, 0.85) !important;
+              backdrop-filter: blur(4px) !important;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
             }
           }
         `}</style>

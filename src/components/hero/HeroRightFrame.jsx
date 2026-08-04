@@ -52,6 +52,7 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
       </AnimatePresence>
 
       <div
+        className="hero-badge-pill"
         style={{
           position: 'absolute',
           top: '24px',

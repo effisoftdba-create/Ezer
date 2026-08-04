@@ -1,5 +1,13 @@
-import React from 'react';
-import { HiArrowRight, HiSelector } from 'react-icons/hi';
+import React, { useState } from 'react';
+import {
+  HiDesktopComputer,
+  HiDeviceMobile,
+  HiViewGrid,
+  HiSelector,
+  HiCheck,
+  HiSparkles,
+  HiRefresh
+} from 'react-icons/hi';
 import { resolveImageSrc } from '../../utils/imageUtils';
 
 export default function ImagePickerPreviewBox({
@@ -16,79 +24,265 @@ export default function ImagePickerPreviewBox({
   handleMouseMove,
   handleMouseUp
 }) {
+  const [devicePreviewMode, setDevicePreviewMode] = useState('dual'); // 'desktop' | 'mobile' | 'dual'
+  const [showGridLines, setShowGridLines] = useState(true);
+
+  const activeSrc = resolveImageSrc(activeSelectedUrl);
+  const currentSrc = currentImage ? resolveImageSrc(currentImage) : null;
+  const computedPosStr = `${50 + dragOffset.x}% ${50 + dragOffset.y}%`;
+
   return (
-    <div style={{
-      background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
-      padding: '16px', marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr auto 1fr',
-      gap: '16px', alignItems: 'center'
-    }}>
-      <div>
-        <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
-          Current Active Image
-        </div>
-        <div style={{
-          aspectRatio: previewDims.ratio,
-          maxHeight: '220px',
-          borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0'
-        }}>
-          {currentImage ? (
-            <img src={resolveImageSrc(currentImage)} alt="Current active" style={{ width: '100%', height: '100%', objectFit: currentFit || 'cover', objectPosition: currentPosition }} />
-          ) : (
-            <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: '#94a3b8' }}>
-              No Image Set
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div style={{ color: '#000648', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <HiArrowRight size={22} />
-      </div>
-
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', textTransform: 'uppercase' }}>
-            Newly Chosen Image Preview
-          </span>
-          <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#166534', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-            <HiSelector size={12} /> Drag image to position
+    <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '16px', padding: '18px', marginBottom: '20px' }}>
+      {/* Device View & Grid Overlay Header Bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#000648', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <HiSparkles color="#115DFC" size={16} /> Device Screen Adjustment & Live Preview
           </span>
         </div>
-        
-        <div
-          role="region"
-          aria-label="Drag image to reposition focal point"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
-          style={{
-            aspectRatio: previewDims.ratio,
-            maxHeight: '220px',
-            borderRadius: '10px', overflow: 'hidden',
-            border: '2.5px solid #115DFC', background: '#000648',
-            boxShadow: '0 4px 14px rgba(17,93,252,0.25)', position: 'relative',
-            cursor: isDragging ? 'grabbing' : 'grab', userSelect: 'none'
-          }}
-        >
-          <img
-            src={resolveImageSrc(activeSelectedUrl)}
-            alt="Newly chosen preview"
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          {/* Rule of Thirds Grid Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowGridLines((prev) => !prev)}
+            aria-label="Toggle rule of thirds grid lines overlay"
             style={{
-              width: '100%', height: '100%',
-              objectFit: fitMode,
-              objectPosition: `${50 + dragOffset.x}% ${50 + dragOffset.y}%`,
-              transform: `scale(${zoomScale})`, pointerEvents: 'none',
-              transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
+              padding: '4px 10px', borderRadius: '6px',
+              border: showGridLines ? '1.5px solid #115DFC' : '1px solid #cbd5e1',
+              background: showGridLines ? '#eff6ff' : '#ffffff',
+              color: showGridLines ? '#115DFC' : '#475569',
+              fontWeight: 700, fontSize: '0.73rem', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: '4px'
             }}
-          />
-          <div style={{
-            position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,0,0,0.75)',
-            color: '#fff', fontSize: '0.65rem', padding: '2px 7px', borderRadius: '4px', pointerEvents: 'none'
-          }}>
-            Pos: {50 + dragOffset.x}% {50 + dragOffset.y}% | Fit: {fitMode}
+          >
+            <HiViewGrid size={14} /> Grid Overlay {showGridLines ? 'ON' : 'OFF'}
+          </button>
+
+          {/* Device Preview Mode Switcher */}
+          <div style={{ display: 'flex', background: '#e2e8f0', borderRadius: '8px', padding: '3px', gap: '3px' }}>
+            <button
+              type="button"
+              onClick={() => setDevicePreviewMode('desktop')}
+              style={{
+                padding: '4px 10px', borderRadius: '6px', border: 'none',
+                background: devicePreviewMode === 'desktop' ? '#000648' : 'transparent',
+                color: devicePreviewMode === 'desktop' ? '#f2b733' : '#475569',
+                fontWeight: devicePreviewMode === 'desktop' ? 800 : 600,
+                fontSize: '0.73rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
+              }}
+            >
+              <HiDesktopComputer size={14} /> Desktop
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setDevicePreviewMode('mobile')}
+              style={{
+                padding: '4px 10px', borderRadius: '6px', border: 'none',
+                background: devicePreviewMode === 'mobile' ? '#000648' : 'transparent',
+                color: devicePreviewMode === 'mobile' ? '#f2b733' : '#475569',
+                fontWeight: devicePreviewMode === 'mobile' ? 800 : 600,
+                fontSize: '0.73rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
+              }}
+            >
+              <HiDeviceMobile size={14} /> Mobile Phone
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setDevicePreviewMode('dual')}
+              style={{
+                padding: '4px 10px', borderRadius: '6px', border: 'none',
+                background: devicePreviewMode === 'dual' ? '#000648' : 'transparent',
+                color: devicePreviewMode === 'dual' ? '#f2b733' : '#475569',
+                fontWeight: devicePreviewMode === 'dual' ? 800 : 600,
+                fontSize: '0.73rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
+              }}
+            >
+              <HiRefresh size={14} /> Dual Both
+            </button>
           </div>
         </div>
+      </div>
+
+      {/* Main Interactive Drag & Preview Area */}
+      <div style={{ display: 'grid', gridTemplateColumns: devicePreviewMode === 'dual' ? '1fr 1fr' : '1fr', gap: '16px', alignItems: 'start' }}>
+        
+        {/* DESKTOP VIEW CONTAINER */}
+        {(devicePreviewMode === 'desktop' || devicePreviewMode === 'dual') && (
+          <div style={{ background: '#ffffff', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '14px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <HiDesktopComputer color="#115DFC" size={16} /> Desktop View ({previewDims.ratio})
+              </span>
+              <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#166534', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                <HiSelector size={12} /> Drag image to adjust
+              </span>
+            </div>
+
+            <div
+              role="region"
+              aria-label="Desktop screen preview - drag image to adjust position"
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              style={{
+                aspectRatio: previewDims.ratio,
+                maxHeight: '220px',
+                borderRadius: '10px',
+                overflow: 'hidden',
+                border: '2px solid #115DFC',
+                background: '#000648',
+                boxShadow: '0 4px 14px rgba(17,93,252,0.2)',
+                position: 'relative',
+                cursor: isDragging ? 'grabbing' : 'grab',
+                userSelect: 'none'
+              }}
+            >
+              <img
+                src={activeSrc}
+                alt="Desktop preview"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: fitMode,
+                  objectPosition: computedPosStr,
+                  transform: `scale(${zoomScale})`,
+                  pointerEvents: 'none',
+                  transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
+                }}
+              />
+
+              {/* Rule of Thirds Grid Overlay */}
+              {showGridLines && (
+                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', border: '1px dashed rgba(255,255,255,0.25)', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: '1fr 1fr 1fr' }}>
+                  {[...Array(9)].map((_, i) => (
+                    <div key={i} style={{ border: '0.5px dashed rgba(255,255,255,0.2)' }} />
+                  ))}
+                </div>
+              )}
+
+              <div style={{
+                position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,6,72,0.85)',
+                color: '#f2b733', fontSize: '0.65rem', padding: '3px 8px', borderRadius: '4px',
+                pointerEvents: 'none', fontWeight: 700, border: '1px solid rgba(242,183,51,0.4)'
+              }}>
+                Pos: {computedPosStr} | {fitMode}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* MOBILE PHONE FRAME SCREEN MOCKUP */}
+        {(devicePreviewMode === 'mobile' || devicePreviewMode === 'dual') && (
+          <div style={{ background: '#ffffff', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '14px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <HiDeviceMobile color="#115DFC" size={16} /> Mobile Phone Screen (iPhone/Android 9:16)
+              </span>
+              <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#115DFC', background: '#e0e7ff', padding: '1px 6px', borderRadius: '4px' }}>
+                Live Phone Alignment
+              </span>
+            </div>
+
+            {/* REALISTIC SMARTPHONE MOCKUP BODY */}
+            <div
+              style={{
+                width: '190px',
+                height: '280px',
+                background: '#0f172a',
+                borderRadius: '24px',
+                padding: '10px 8px 12px',
+                boxShadow: '0 12px 28px rgba(0,6,72,0.3)',
+                border: '3.5px solid #334155',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+              }}
+            >
+              {/* Phone Speaker Notch */}
+              <div style={{ width: '50px', height: '10px', background: '#1e293b', borderRadius: '0 0 8px 8px', marginBottom: '6px', position: 'relative', zIndex: 10 }}>
+                <div style={{ width: '12px', height: '2.5px', background: '#475569', borderRadius: '2px', margin: '3px auto 0' }} />
+              </div>
+
+              {/* Screen Area with Drag Event Handlers */}
+              <div
+                role="region"
+                aria-label="Mobile screen preview - drag image to adjust position"
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseUp}
+                style={{
+                  width: '100%',
+                  flex: 1,
+                  background: '#000638',
+                  borderRadius: '14px',
+                  overflow: 'hidden',
+                  position: 'relative',
+                  border: '1.5px solid #115DFC',
+                  cursor: isDragging ? 'grabbing' : 'grab',
+                  userSelect: 'none'
+                }}
+              >
+                <img
+                  src={activeSrc}
+                  alt="Mobile screen preview"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: fitMode,
+                    objectPosition: computedPosStr,
+                    transform: `scale(${zoomScale})`,
+                    pointerEvents: 'none',
+                    transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
+                  }}
+                />
+
+                {/* Simulated Overlay Badge Pill as seen on Live Site */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '8px',
+                    right: '8px',
+                    background: 'rgba(0,6,56,0.85)',
+                    color: '#ffffff',
+                    padding: '2px 6px',
+                    borderRadius: '50px',
+                    border: '1px solid #f2b733',
+                    fontSize: '0.55rem',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '3px',
+                    pointerEvents: 'none',
+                    zIndex: 5
+                  }}
+                >
+                  <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#f2b733' }} />
+                  <span>EZER</span>
+                </div>
+
+                {/* Grid Overlay on Mobile Frame */}
+                {showGridLines && (
+                  <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: '1fr 1fr 1fr' }}>
+                    {[...Array(9)].map((_, i) => (
+                      <div key={i} style={{ border: '0.5px dashed rgba(255,255,255,0.2)' }} />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div style={{ fontSize: '0.62rem', color: '#94a3b8', marginTop: '6px', fontWeight: 700 }}>
+                Mobile Alignment OK
+              </div>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
