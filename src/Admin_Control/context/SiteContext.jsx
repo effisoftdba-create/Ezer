@@ -6,20 +6,20 @@ import productionData from '../../data/productionData.json';
 
 const SiteContext = createContext();
 
-const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v4_prod';
-const STORAGE_COURSES_KEY = 'ezer_courses:v4_prod';
-const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v4_prod';
-const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v4_prod';
-const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v4_prod';
-const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v4_prod';
-const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v4_prod';
-const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v4_prod';
-const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v4_prod';
-const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v4_prod';
-const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v4_prod';
-const STORAGE_FAQS_KEY = 'ezer_faqs:v4_prod';
-const STORAGE_CONTACT_KEY = 'ezer_contact:v4_prod';
-const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v4_prod';
+const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v5_mobile_sync_fixed';
+const STORAGE_COURSES_KEY = 'ezer_courses:v5_mobile_sync_fixed';
+const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v5_mobile_sync_fixed';
+const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v5_mobile_sync_fixed';
+const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v5_mobile_sync_fixed';
+const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v5_mobile_sync_fixed';
+const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v5_mobile_sync_fixed';
+const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v5_mobile_sync_fixed';
+const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v5_mobile_sync_fixed';
+const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v5_mobile_sync_fixed';
+const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v5_mobile_sync_fixed';
+const STORAGE_FAQS_KEY = 'ezer_faqs:v5_mobile_sync_fixed';
+const STORAGE_CONTACT_KEY = 'ezer_contact:v5_mobile_sync_fixed';
+const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v5_mobile_sync_fixed';
 
 const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -270,13 +270,13 @@ function cleanupOldStorageKeys() {
     const keysToRemove = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith('ezer_') && !key.endsWith(':v4_prod')) {
+      if (key && key.startsWith('ezer_') && !key.endsWith(':v5_mobile_sync_fixed')) {
         keysToRemove.push(key);
       }
     }
     keysToRemove.forEach((key) => localStorage.removeItem(key));
     if (keysToRemove.length > 0) {
-      console.log(`[SiteContext] Cleaned up ${keysToRemove.length} stale storage keys from old versions.`);
+      console.log(`[SiteContext] Cleaned up ${keysToRemove.length} stale storage keys.`);
     }
   } catch (e) {}
 }
