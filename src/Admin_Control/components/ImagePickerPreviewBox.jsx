@@ -24,7 +24,7 @@ export default function ImagePickerPreviewBox({
   handleMouseMove,
   handleMouseUp
 }) {
-  const [devicePreviewMode, setDevicePreviewMode] = useState('dual'); // 'desktop' | 'mobile' | 'dual'
+  const [devicePreviewMode, setDevicePreviewMode] = useState('desktop'); // 'desktop' | 'mobile' | 'dual'
   const [showGridLines, setShowGridLines] = useState(true);
 
   const activeSrc = resolveImageSrc(activeSelectedUrl);
