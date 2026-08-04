@@ -15,7 +15,6 @@ import FaqManager from '../components/FaqManager';
 import ContactInfoManager from '../components/ContactInfoManager';
 import PopupManager from '../components/PopupManager';
 import LeadsManager from '../components/LeadsManager';
-import AdminSyncModal from '../components/AdminSyncModal';
 import AdminHeaderNav from '../components/AdminHeaderNav';
 import AdminSidebarNav from '../components/AdminSidebarNav';
 
@@ -37,9 +36,6 @@ import {
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('leads');
-  const [showSyncModal, setShowSyncModal] = useState(false);
-  const [copiedSyncLink, setCopiedSyncLink] = useState(false);
-  const [copiedJson, setCopiedJson] = useState(false);
 
   const navigate = useNavigate();
   const {
@@ -90,40 +86,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const currentExportData = {
-    popupConfig,
-    heroSlides,
-    courses
-  };
-
-  const buildSyncUrl = () => {
-    try {
-      const origin = window.location.origin || '';
-      const pathname = window.location.pathname || '/';
-      const cleanPath = pathname.endsWith('/') ? pathname : `${pathname}/`;
-      const serialized = encodeURIComponent(JSON.stringify(currentExportData));
-      return `${origin}${cleanPath}#/?syncData=${serialized}`;
-    } catch (e) {
-      return '';
-    }
-  };
-
-  const handleCopySyncLink = () => {
-    const url = buildSyncUrl();
-    if (url) {
-      navigator.clipboard.writeText(url);
-      setCopiedSyncLink(true);
-      setTimeout(() => setCopiedSyncLink(false), 3000);
-    }
-  };
-
-  const handleCopyJson = () => {
-    const jsonStr = JSON.stringify(currentExportData, null, 2);
-    navigator.clipboard.writeText(jsonStr);
-    setCopiedJson(true);
-    setTimeout(() => setCopiedJson(false), 3000);
-  };
-
   const totalFaqs = faqList.reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
 
   const tabs = [
@@ -144,7 +106,6 @@ export default function AdminDashboard() {
   return (
     <div style={{ minHeight: '100vh', background: '#f4f6f9', display: 'flex', flexDirection: 'column' }}>
       <AdminHeaderNav
-        setShowSyncModal={setShowSyncModal}
         handleReset={handleReset}
         handleLogout={handleLogout}
       />
@@ -171,17 +132,6 @@ export default function AdminDashboard() {
           {activeTab === 'contact' && <ContactInfoManager />}
         </main>
       </div>
-
-      <AdminSyncModal
-        showSyncModal={showSyncModal}
-        setShowSyncModal={setShowSyncModal}
-        buildSyncUrl={buildSyncUrl}
-        handleCopySyncLink={handleCopySyncLink}
-        copiedSyncLink={copiedSyncLink}
-        currentExportData={currentExportData}
-        handleCopyJson={handleCopyJson}
-        copiedJson={copiedJson}
-      />
     </div>
   );
 }

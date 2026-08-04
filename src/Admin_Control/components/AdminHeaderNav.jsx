@@ -58,29 +58,6 @@ export default function AdminHeaderNav({
 
       {/* Header Actions */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <button
-          type="button"
-          aria-label="Open mobile sync and export hub modal"
-          onClick={() => setShowSyncModal(true)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '9px 16px',
-            background: 'linear-gradient(135deg, #115DFC 0%, #0046d5 100%)',
-            color: '#ffffff',
-            borderRadius: '10px',
-            border: 'none',
-            fontSize: '0.825rem',
-            fontWeight: 800,
-            cursor: 'pointer',
-            boxShadow: '0 4px 14px rgba(17, 93, 252, 0.4)',
-            transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-          }}
-        >
-          <HiDeviceMobile size={17} />
-          <span>Sync Mobile & Export</span>
-        </button>
 
         <Link
           to="/"

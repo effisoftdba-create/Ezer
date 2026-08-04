@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import PopupForm from './components/PopupForm';
 import UIStateDisplay, { STATE_TYPES } from './components/UIStateDisplay';
+import UIToastNotifier from './components/UIToastNotifier';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -75,6 +76,7 @@ export default function App() {
 
   return (
     <SiteProvider>
+      <UIToastNotifier />
       <div className="app-layout" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         {/* Global Offline Network Status Banner */}
         {isOffline && (

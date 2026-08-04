@@ -3,6 +3,7 @@ import { phase1Courses } from '../../data/courses';
 import { testimonials as initialTestimonials, videoStories } from '../../data/testimonials';
 import { generalFaqs } from '../../data/faq';
 import productionData from '../../data/productionData.json';
+import { triggerStateToast } from '../../utils/toastService';
 
 const SiteContext = createContext();
 
@@ -548,6 +549,7 @@ export function SiteProvider({ children }) {
   }, []);
 
   const contextValue = useMemo(() => ({
+    notifyState: triggerStateToast,
     heroSlides,
     addHeroSlide,
     updateHeroSlide,

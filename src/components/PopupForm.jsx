@@ -36,10 +36,16 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
     e.preventDefault();
     if (!formData.agreeTerms) {
       setStatus({ submitting: false, success: false, error: 'Please accept terms and conditions.' });
+      if (siteData?.notifyState) {
+        siteData.notifyState('form_validation', 'Form Validation Error', 'Please accept the terms and conditions to proceed.');
+      }
       return;
     }
 
     setStatus({ submitting: true, success: false, error: '' });
+    if (siteData?.notifyState) {
+      siteData.notifyState('loading', 'Submitting Enquiry...', 'Syncing your details with our admissions desk.');
+    }
 
     try {
       if (siteData?.addLead) {
@@ -66,10 +72,16 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
       }).catch((err) => console.log('Google Sheets Sync (Fallback logged locally):', err));
 
       setStatus({ submitting: false, success: true, error: '' });
+      if (siteData?.notifyState) {
+        siteData.notifyState('success', 'Form Registration Submitted!', 'Your enquiry has been received. Our counselor will reach out shortly.');
+      }
       sessionStorage.setItem('ezer_popup_submitted', 'true');
     } catch (err) {
       console.error(err);
       setStatus({ submitting: false, success: false, error: 'Failed to submit. Please try again.' });
+      if (siteData?.notifyState) {
+        siteData.notifyState('error', 'Form Submission Error', 'Failed to submit enquiry. Please check your network and try again.');
+      }
     }
   };
 
