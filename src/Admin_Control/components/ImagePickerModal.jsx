@@ -168,7 +168,7 @@ export default function ImagePickerModal({
     const reader = new FileReader();
     reader.onloadend = async () => {
       const rawDataUri = reader.result;
-      const compressedWebUri = await compressImageForWeb(rawDataUri, 900, 0.75);
+      const compressedWebUri = await compressImageForWeb(rawDataUri, 600, 0.6);
 
       setCustomUrl(compressedWebUri);
       setSelectedUrl(compressedWebUri);

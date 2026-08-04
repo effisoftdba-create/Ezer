@@ -238,8 +238,29 @@ function safeSetStorage(key, value) {
   try {
     const serialized = JSON.stringify(value);
     localStorage.setItem(key, serialized);
+    return true;
   } catch (err) {
     console.warn(`[SiteContext] Could not persist ${key} to localStorage:`, err);
+
+    // If QuotaExceeded, try to free space by removing uploaded images cache first
+    if (err.name === 'QuotaExceededError' || err.code === 22 || err.code === 1014) {
+      try {
+        // Remove uploaded images cache (largest item) to free space
+        localStorage.removeItem('ezer_uploaded_images:v3');
+        // Retry save after freeing space
+        localStorage.setItem(key, serialized);
+        console.log(`[SiteContext] Saved ${key} after clearing image cache.`);
+        return true;
+      } catch (retryErr) {
+        // Still failed — alert user
+        alert(
+          '⚠️ Storage Full! Your changes could not be saved because the browser storage is full.\n\n' +
+          'This usually happens when large images are uploaded as base64.\n\n' +
+          'Solution: Use image URLs (paste a link) instead of uploading files, or clear your browser data and try again.'
+        );
+      }
+    }
+    return false;
   }
 }
 

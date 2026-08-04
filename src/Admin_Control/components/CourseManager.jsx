@@ -200,7 +200,7 @@ export default function CourseManager() {
         {filteredCourses.map((c) => (
           <div key={c.id || c.slug} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <div style={{ height: '140px', position: 'relative', overflow: 'hidden', background: '#000648' }}>
+              <div style={{ height: '175px', position: 'relative', overflow: 'hidden', background: '#ffffff' }}>
                 <img
                   src={resolveImageSrc(c.image)}
                   alt={c.title}
@@ -259,9 +259,9 @@ export default function CourseManager() {
             imageFit: fit || 'cover'
           }));
         }}
-        targetArea="Course Program Banner"
-        aspectRatio="Rectangle / Landscape (16:9)"
-        recommendedDimensions="1200 x 675 px"
+        targetArea="Course Card Banner (Website Exact Size)"
+        aspectRatio="Standard (4:3)"
+        recommendedDimensions="800 x 500 px (matches course card)"
       />
     </div>
   );
