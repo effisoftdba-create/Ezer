@@ -197,3 +197,59 @@ img { max-width: 100%; display: block; }
   }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   UI/UX PRO MAX DESIGN SYSTEM UTILITIES & MICRO-ANIMATIONS
+   ═══════════════════════════════════════════════════════════ */
+@keyframes uipro-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes uipro-glow-pulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(242, 183, 51, 0.2); }
+  50% { box-shadow: 0 0 24px rgba(242, 183, 51, 0.45); }
+}
+
+.uipro-fade-in {
+  animation: uipro-fade-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.uipro-glass-panel {
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(226, 232, 240, 0.9);
+  box-shadow: 0 10px 30px rgba(0, 6, 72, 0.04);
+}
+
+.uipro-btn-primary {
+  background: linear-gradient(135deg, #000648 0%, #001280 100%);
+  color: #f2b733;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.uipro-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 6, 72, 0.25);
+}
+
+.uipro-btn-accent {
+  background: linear-gradient(135deg, #115DFC 0%, #0046d5 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.uipro-btn-accent:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(17, 93, 252, 0.35);
+}
+
+

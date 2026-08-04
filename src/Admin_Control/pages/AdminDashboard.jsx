@@ -156,7 +156,7 @@ export default function AdminDashboard() {
           setActiveTab={setActiveTab}
         />
 
-        <main style={{ flex: 1, background: '#ffffff', borderRadius: '16px', padding: '32px', boxShadow: '0 8px 30px rgba(0,0,0,0.03)', border: '1.5px solid #e2e8f0' }}>
+        <main key={activeTab} className="uipro-fade-in" style={{ flex: 1, background: '#ffffff', borderRadius: '16px', padding: '32px', boxShadow: '0 8px 30px rgba(0,0,0,0.03)', border: '1.5px solid #e2e8f0' }}>
           {activeTab === 'leads' && <LeadsManager />}
           {activeTab === 'hero' && <HeroManager />}
           {activeTab === 'courses' && <CourseManager />}
