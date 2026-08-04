@@ -2,23 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   HiOutlineShieldCheck,
-  HiDeviceMobile,
   HiOutlineExternalLink,
   HiOutlineRefresh,
   HiOutlineLogout
 } from 'react-icons/hi';
 
-export default function AdminHeaderNav({
-  setShowSyncModal,
-  handleReset,
-  handleLogout
-}) {
+export default function AdminHeaderNav({ handleReset, handleLogout }) {
   return (
     <header
       style={{
         background: 'linear-gradient(135deg, #000648 0%, #000c66 50%, #001280 100%)',
         color: '#ffffff',
-        padding: '16px 28px',
+        padding: '14px 28px',
         display: 'flex',
         justify: 'space-between',
         alignItems: 'center',
@@ -56,9 +51,8 @@ export default function AdminHeaderNav({
         </div>
       </div>
 
-      {/* Header Actions */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-
+      {/* Header Actions Toolbar */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <Link
           to="/"
           target="_blank"
@@ -67,16 +61,16 @@ export default function AdminHeaderNav({
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
-            padding: '9px 16px',
-            background: 'rgba(255, 255, 255, 0.1)',
+            padding: '8px 16px',
+            background: 'rgba(255, 255, 255, 0.12)',
             color: '#ffffff',
-            borderRadius: '10px',
+            borderRadius: '8px',
             textDecoration: 'none',
             fontSize: '0.825rem',
             fontWeight: 700,
             border: '1px solid rgba(255, 255, 255, 0.25)',
             backdropFilter: 'blur(4px)',
-            transition: 'background-color 0.2s ease'
+            transition: 'background-color 0.2s ease, transform 0.15s ease'
           }}
         >
           <span>View Live Site</span>
@@ -92,13 +86,13 @@ export default function AdminHeaderNav({
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
-            padding: '9px 14px',
-            background: 'rgba(255, 255, 255, 0.06)',
+            padding: '8px 14px',
+            background: 'rgba(255, 255, 255, 0.08)',
             color: '#cbd5e1',
-            borderRadius: '10px',
+            borderRadius: '8px',
             border: '1px solid rgba(255, 255, 255, 0.18)',
             fontSize: '0.825rem',
-            fontWeight: 600,
+            fontWeight: 700,
             cursor: 'pointer'
           }}
         >
@@ -114,10 +108,10 @@ export default function AdminHeaderNav({
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
-            padding: '9px 18px',
+            padding: '8px 18px',
             background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
             color: '#ffffff',
-            borderRadius: '10px',
+            borderRadius: '8px',
             border: 'none',
             fontSize: '0.825rem',
             fontWeight: 800,

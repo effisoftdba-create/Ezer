@@ -93,8 +93,8 @@ export default function LeadsManager() {
         </div>
       </div>
 
-      {/* Metric Cards Row */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+      {/* Metric Cards Row - Strictly Single 1-Line Layout */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '14px', marginBottom: '24px', overflowX: 'auto' }}>
         <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px', padding: '16px', display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div style={{ background: '#e0e7ff', color: '#000648', padding: '12px', borderRadius: '10px', display: 'flex' }}>
             <HiUserGroup size={22} />
