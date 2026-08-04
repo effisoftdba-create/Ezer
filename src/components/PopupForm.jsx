@@ -3,6 +3,7 @@ import PopupHeader from './popup/PopupHeader';
 import PopupSuccessState from './popup/PopupSuccessState';
 import PopupFormFields from './popup/PopupFormFields';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
+import { resolveImageSrc } from '../utils/imageUtils';
 
 const GOOGLE_SHEETS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_EXAMPLE_DEPLOYMENT_ID/exec';
 
@@ -69,6 +70,11 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
     }
   };
 
+  const popupConfig = siteData?.popupConfig || {};
+  const bgOpacity = popupConfig.bodyBgOpacity !== undefined ? popupConfig.bodyBgOpacity : 15;
+  const overlayAlpha = (100 - bgOpacity) / 100;
+  const bgImgUrl = resolveImageSrc(popupConfig.bodyBgImage || popupConfig.image || 'images/hero/hero_section_1.jpg');
+
   return (
     <div
       style={{
@@ -89,7 +95,7 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
     >
       <div
         style={{
-          background: 'linear-gradient(rgba(255, 255, 255, 0.93), rgba(255, 255, 255, 0.93)), url("images/hero/hero_section_1.jpg")',
+          background: `linear-gradient(rgba(255, 255, 255, ${overlayAlpha}), rgba(255, 255, 255, ${overlayAlpha})), url("${bgImgUrl}")`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           borderRadius: '16px',
@@ -105,7 +111,7 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
         }}
       >
         <div style={{ maxHeight: 'calc(90vh - 24px)', overflowY: 'auto' }}>
-          <PopupHeader onClose={onClose} />
+          <PopupHeader onClose={onClose} overrideConfig={popupConfig} />
           <div style={{ padding: 'clamp(16px, 4vw, 22px)' }}>
             {status.success ? (
               <PopupSuccessState onClose={onClose} />
@@ -115,7 +121,7 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
                 status={status}
-                submitBtnText={siteData?.popupConfig?.submitBtnText}
+                overrideConfig={popupConfig}
               />
             )}
           </div>

@@ -24,11 +24,55 @@ const handleBlur = (e) => {
   e.target.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.03)';
 };
 
-export default function PopupFormFields({ formData, handleChange, handleSubmit, status, submitBtnText }) {
+export default function PopupFormFields({
+  formData,
+  handleChange,
+  handleSubmit,
+  status,
+  overrideConfig
+}) {
+  const config = overrideConfig || {
+    submitBtnText: 'Register Now',
+    showStateCity: true,
+    nameLabel: 'Full Name*',
+    emailLabel: 'Email Address*',
+    phoneLabel: 'Mobile Number*',
+    countryLabel: 'Country',
+    courseLabel: 'Target Course*',
+    termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.',
+    coursesList: [
+      'Cloud DevOps with AI',
+      'Software Testing – Playwright',
+      'AI & Machine Learning',
+      'IT Infrastructure & System Administration'
+    ],
+    countriesList: [
+      'India',
+      'United States',
+      'UAE',
+      'Singapore',
+      'Other'
+    ]
+  };
+
+  const coursesArray = (config.coursesList && config.coursesList.length > 0) ? config.coursesList : [
+    'Cloud DevOps with AI',
+    'Software Testing – Playwright',
+    'AI & Machine Learning',
+    'IT Infrastructure & System Administration'
+  ];
+
+  const countriesArray = (config.countriesList && config.countriesList.length > 0) ? config.countriesList : [
+    'India',
+    'United States',
+    'UAE',
+    'Singapore',
+    'Other'
+  ];
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-      {status.error && (
+      {status?.error && (
         <div style={{ background: '#fee2e2', color: '#dc2626', padding: '10px 14px', borderRadius: '8px', fontSize: '0.85rem', fontWeight: 600 }}>
           {status.error}
         </div>
@@ -37,7 +81,7 @@ export default function PopupFormFields({ formData, handleChange, handleSubmit, 
       {/* Name */}
       <div>
         <label htmlFor="popup-name" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-          Full Name*
+          {config.nameLabel || 'Full Name*'}
         </label>
         <input
           id="popup-name"
@@ -57,7 +101,7 @@ export default function PopupFormFields({ formData, handleChange, handleSubmit, 
       {/* Email */}
       <div>
         <label htmlFor="popup-email" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-          Email Address*
+          {config.emailLabel || 'Email Address*'}
         </label>
         <input
           id="popup-email"
@@ -77,7 +121,7 @@ export default function PopupFormFields({ formData, handleChange, handleSubmit, 
       {/* Mobile Phone */}
       <div>
         <label htmlFor="popup-phone" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-          Mobile Number*
+          {config.phoneLabel || 'Mobile Number*'}
         </label>
         <div style={{ display: 'flex', gap: '8px' }}>
           <div
@@ -116,7 +160,7 @@ export default function PopupFormFields({ formData, handleChange, handleSubmit, 
       {/* Country */}
       <div>
         <label htmlFor="popup-country" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-          Country
+          {config.countryLabel || 'Country'}
         </label>
         <select
           id="popup-country"
@@ -128,56 +172,56 @@ export default function PopupFormFields({ formData, handleChange, handleSubmit, 
           onFocus={handleFocus}
           onBlur={handleBlur}
         >
-          <option value="India">India</option>
-          <option value="United States">United States</option>
-          <option value="UAE">United Arab Emirates</option>
-          <option value="Singapore">Singapore</option>
-          <option value="Other">Other</option>
+          {countriesArray.map((c) => (
+            <option key={c} value={c}>{c}</option>
+          ))}
         </select>
       </div>
 
       {/* State & City Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-        <div>
-          <label htmlFor="popup-state" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-            State
-          </label>
-          <input
-            id="popup-state"
-            aria-label="State"
-            type="text"
-            name="state"
-            placeholder="e.g. Tamil Nadu"
-            value={formData.state}
-            onChange={handleChange}
-            style={inputStyle}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-          />
+      {config.showStateCity !== false && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <div>
+            <label htmlFor="popup-state" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+              State
+            </label>
+            <input
+              id="popup-state"
+              aria-label="State"
+              type="text"
+              name="state"
+              placeholder="e.g. Tamil Nadu"
+              value={formData.state}
+              onChange={handleChange}
+              style={inputStyle}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+          </div>
+          <div>
+            <label htmlFor="popup-city" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+              City
+            </label>
+            <input
+              id="popup-city"
+              aria-label="City"
+              type="text"
+              name="city"
+              placeholder="e.g. Chennai"
+              value={formData.city}
+              onChange={handleChange}
+              style={inputStyle}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+          </div>
         </div>
-        <div>
-          <label htmlFor="popup-city" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-            City
-          </label>
-          <input
-            id="popup-city"
-            aria-label="City"
-            type="text"
-            name="city"
-            placeholder="e.g. Chennai"
-            value={formData.city}
-            onChange={handleChange}
-            style={inputStyle}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-          />
-        </div>
-      </div>
+      )}
 
       {/* Target Course */}
       <div>
         <label htmlFor="popup-course" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-          Target Course*
+          {config.courseLabel || 'Target Course*'}
         </label>
         <select
           id="popup-course"
@@ -189,10 +233,9 @@ export default function PopupFormFields({ formData, handleChange, handleSubmit, 
           onFocus={handleFocus}
           onBlur={handleBlur}
         >
-          <option value="Cloud DevOps with AI">Cloud DevOps with AI</option>
-          <option value="Software Testing – Playwright">Software Testing – Playwright</option>
-          <option value="AI & Machine Learning">AI & Machine Learning</option>
-          <option value="IT Infrastructure & System Administration">IT Infrastructure & System Administration</option>
+          {coursesArray.map((crs) => (
+            <option key={crs} value={crs}>{crs}</option>
+          ))}
         </select>
       </div>
 
@@ -207,14 +250,14 @@ export default function PopupFormFields({ formData, handleChange, handleSubmit, 
           style={{ marginTop: '3px', cursor: 'pointer', accentColor: '#000648' }}
         />
         <label htmlFor="agreeTerms" style={{ fontSize: '0.75rem', color: '#475569', lineHeight: 1.4 }}>
-          I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.
+          {config.termsLabel || 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.'}
         </label>
       </div>
 
       {/* Submit Button */}
       <button
         type="submit"
-        disabled={status.submitting}
+        disabled={status?.submitting}
         className="btn btn-secondary"
         style={{
           width: '100%',
@@ -225,9 +268,8 @@ export default function PopupFormFields({ formData, handleChange, handleSubmit, 
           borderRadius: '8px'
         }}
       >
-        {status.submitting ? 'Registering...' : (submitBtnText || 'Register Now')}
+        {status?.submitting ? 'Registering...' : (config.submitBtnText || 'Register Now')}
       </button>
     </form>
   );
 }
-

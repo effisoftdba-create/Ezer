@@ -31,6 +31,28 @@ const defaultPopupConfig = {
   photoVisibility: 85,
   photoHeight: 120,
   showPhoto: true,
+  bodyBgImage: 'images/hero/hero_section_1.jpg',
+  bodyBgOpacity: 15,
+  showStateCity: true,
+  nameLabel: 'Full Name*',
+  emailLabel: 'Email Address*',
+  phoneLabel: 'Mobile Number*',
+  countryLabel: 'Country',
+  courseLabel: 'Target Course*',
+  termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.',
+  coursesList: [
+    'Cloud DevOps with AI',
+    'Software Testing – Playwright',
+    'AI & Machine Learning',
+    'IT Infrastructure & System Administration'
+  ],
+  countriesList: [
+    'India',
+    'United States',
+    'UAE',
+    'Singapore',
+    'Other'
+  ]
 };
 
 const defaultSlides = [

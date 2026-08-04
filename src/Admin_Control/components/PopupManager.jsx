@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
-import PopupHeader from '../../components/popup/PopupHeader';
 import PopupBannerPhotoControls from './PopupBannerPhotoControls';
-import { HiCheck, HiSparkles, HiEye } from 'react-icons/hi';
+import PopupFormFieldsManager from './PopupFormFieldsManager';
+import PopupLivePreviewBox from './PopupLivePreviewBox';
+import { HiCheck, HiSparkles, HiCode } from 'react-icons/hi';
 
 export default function PopupManager() {
   const { popupConfig, updatePopupConfig } = useSiteData();
@@ -18,17 +19,51 @@ export default function PopupManager() {
     imageFit: 'cover',
     photoVisibility: 85,
     photoHeight: 120,
-    showPhoto: true
+    showPhoto: true,
+    bodyBgImage: 'images/hero/hero_section_1.jpg',
+    bodyBgOpacity: 15,
+    showStateCity: true,
+    nameLabel: 'Full Name*',
+    emailLabel: 'Email Address*',
+    phoneLabel: 'Mobile Number*',
+    countryLabel: 'Country',
+    courseLabel: 'Target Course*',
+    termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.',
+    coursesList: [
+      'Cloud DevOps with AI',
+      'Software Testing – Playwright',
+      'AI & Machine Learning',
+      'IT Infrastructure & System Administration'
+    ],
+    countriesList: [
+      'India',
+      'United States',
+      'UAE',
+      'Singapore',
+      'Other'
+    ]
   });
 
-  const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
+  const [pickerTarget, setPickerTarget] = useState(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [showCodeModal, setShowCodeModal] = useState(false);
+
+  const [previewFormData, setPreviewFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    country: 'India',
+    state: '',
+    city: '',
+    course: 'Cloud DevOps with AI',
+    agreeTerms: true
+  });
 
   const handleSave = (e) => {
     e.preventDefault();
     updatePopupConfig(formData);
     setSaveSuccess(true);
-    setTimeout(() => setSaveSuccess(false), 3000);
+    setTimeout(() => setSaveSuccess(false), 3500);
   };
 
   return (
@@ -39,18 +74,33 @@ export default function PopupManager() {
       }}>
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000648', margin: 0 }}>
-            Lead Registration Popup Manager
+            Lead Registration Popup & Form Fields Manager
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Customize headline text, banner photo, photo visibility opacity, height, and button labels for the lead modal.
+            Customize title, subtitle, header photo, body watermark opacity, field labels, state/city toggles, and dropdown options.
           </p>
         </div>
 
-        {saveSuccess && (
-          <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#166534', background: '#dcfce7', padding: '6px 14px', borderRadius: '50px' }}>
-            Popup Configuration Saved Live!
-          </span>
-        )}
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <button
+            type="button"
+            aria-label="Sync and export popup config JSON"
+            onClick={() => setShowCodeModal(true)}
+            style={{
+              padding: '8px 14px', background: '#f1f5f9', border: '1px solid #cbd5e1',
+              color: '#000648', borderRadius: '8px', fontWeight: 800, fontSize: '0.8rem',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px'
+            }}
+          >
+            <HiCode size={16} /> Sync / Export JSON
+          </button>
+
+          {saveSuccess && (
+            <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#166534', background: '#dcfce7', padding: '6px 14px', borderRadius: '50px' }}>
+              Saved & Live!
+            </span>
+          )}
+        </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '24px', alignItems: 'start' }}>
@@ -61,7 +111,7 @@ export default function PopupManager() {
           boxShadow: '0 4px 16px rgba(0,6,72,0.06)'
         }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiSparkles color="#f2b733" size={20} /> Popup Modal Text & Photo Controls
+            <HiSparkles color="#f2b733" size={20} /> Modal Headers & Submit Button Text
           </h3>
 
           <div style={{ marginBottom: '16px' }}>
@@ -123,80 +173,113 @@ export default function PopupManager() {
             </div>
           </div>
 
+          {/* Banner Photo & Watermark Controls */}
           <PopupBannerPhotoControls
             formData={formData}
             setFormData={setFormData}
-            onOpenImagePicker={() => setIsImagePickerOpen(true)}
+            onOpenHeaderPicker={() => setPickerTarget('header')}
+            onOpenBodyPicker={() => setPickerTarget('body')}
           />
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid #e2e8f0' }}>
+          {/* Form Fields & Dropdown Options Manager */}
+          <PopupFormFieldsManager
+            formData={formData}
+            setFormData={setFormData}
+          />
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '16px', borderTop: '1px solid #e2e8f0' }}>
             <button
               type="submit"
+              aria-label="Save all popup configuration changes button"
               style={{
-                padding: '10px 24px', background: '#000648', color: '#f2b733',
-                border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: '6px'
+                padding: '12px 28px', background: '#000648', color: '#f2b733',
+                border: 'none', borderRadius: '10px', fontWeight: 900, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.92rem',
+                boxShadow: '0 4px 14px rgba(0,6,72,0.2)'
               }}
             >
-              <HiCheck size={18} /> Save Popup Configuration
+              <HiCheck size={20} /> Save All Popup Changes
             </button>
           </div>
         </form>
 
-        {/* RIGHT COLUMN: REALTIME LIVE PREVIEW */}
-        <div>
-          <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#000648', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiEye color="#115DFC" size={18} /> Live Popup Preview (Updates in Realtime)
-          </div>
-
-          <div style={{
-            background: 'rgba(0, 6, 72, 0.82)', backdropFilter: 'blur(4px)',
-            borderRadius: '20px', padding: '20px', display: 'flex', justifyContent: 'center'
-          }}>
-            <div style={{
-              background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '360px',
-              border: '3px solid #000648', outline: '2px solid #f2b733', outlineOffset: '-5px',
-              overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
-            }}>
-              <PopupHeader onClose={() => {}} overrideConfig={formData} />
-
-              <div style={{ padding: '16px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', opacity: 0.65, pointerEvents: 'none' }}>
-                  <div style={{ height: '32px', background: '#f1f5f9', borderRadius: '6px', border: '1px solid #cbd5e1' }} />
-                  <div style={{ height: '32px', background: '#f1f5f9', borderRadius: '6px', border: '1px solid #cbd5e1' }} />
-                  <div style={{ height: '32px', background: '#f1f5f9', borderRadius: '6px', border: '1px solid #cbd5e1' }} />
-                  <div style={{
-                    height: '38px', background: '#000648', color: '#f2b733',
-                    borderRadius: '8px', display: 'flex', alignItems: 'center',
-                    justifyContent: 'center', fontWeight: 900, fontSize: '0.85rem'
-                  }}>
-                    {formData.submitBtnText || 'Register Now'}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* RIGHT COLUMN: FULL HIGH DEFINITION REALTIME LIVE PREVIEW */}
+        <PopupLivePreviewBox
+          formData={formData}
+          previewFormData={previewFormData}
+          setPreviewFormData={setPreviewFormData}
+        />
       </div>
 
+      {/* Image Picker Modal */}
       <ImagePickerModal
-        isOpen={isImagePickerOpen}
-        onClose={() => setIsImagePickerOpen(false)}
-        currentImage={formData.image}
+        isOpen={Boolean(pickerTarget)}
+        onClose={() => setPickerTarget(null)}
+        currentImage={pickerTarget === 'header' ? formData.image : (formData.bodyBgImage || formData.image)}
         currentPosition={formData.imagePosition}
         currentFit={formData.imageFit}
         onSelectImage={(url, pos, fit) => {
-          setFormData((prev) => ({
-            ...prev,
-            image: url,
-            imagePosition: pos || 'center center',
-            imageFit: fit || 'cover'
-          }));
+          if (pickerTarget === 'header') {
+            setFormData((prev) => ({
+              ...prev,
+              image: url,
+              imagePosition: pos || 'center center',
+              imageFit: fit || 'cover'
+            }));
+          } else {
+            setFormData((prev) => ({
+              ...prev,
+              bodyBgImage: url
+            }));
+          }
         }}
-        targetArea="Lead Registration Popup Banner Photo"
+        targetArea={pickerTarget === 'header' ? 'Popup Header Banner Photo' : 'Popup Form Body Watermark Photo'}
         aspectRatio="Rectangle (16:9)"
         recommendedDimensions="800 x 450 px"
       />
+
+      {/* Export JSON Sync Modal */}
+      {showCodeModal && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,6,72,0.8)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
+        }}>
+          <div style={{ background: '#fff', borderRadius: '16px', padding: '24px', maxWidth: '600px', width: '100%' }}>
+            <h3 style={{ margin: '0 0 10px 0', fontSize: '1.1rem', color: '#000648' }}>Popup Config Data (JSON Sync)</h3>
+            <p style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '12px' }}>
+              Copy this JSON configuration to save into your project defaults or sync across devices.
+            </p>
+            <textarea
+              readOnly
+              rows={12}
+              aria-label="Export JSON Popup Configuration Data"
+              value={JSON.stringify(formData, null, 2)}
+              style={{ width: '100%', fontFamily: 'monospace', fontSize: '0.78rem', padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1' }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '16px' }}>
+              <button
+                type="button"
+                aria-label="Copy JSON code button"
+                onClick={() => {
+                  navigator.clipboard.writeText(JSON.stringify(formData, null, 2));
+                  alert('Popup Configuration JSON copied to clipboard!');
+                }}
+                style={{ padding: '8px 16px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}
+              >
+                Copy JSON
+              </button>
+              <button
+                type="button"
+                aria-label="Close export modal button"
+                onClick={() => setShowCodeModal(false)}
+                style={{ padding: '8px 16px', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
