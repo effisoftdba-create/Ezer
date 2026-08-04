@@ -2,23 +2,24 @@ import React, { createContext, useContext, useReducer, useEffect, useMemo, useCa
 import { phase1Courses } from '../../data/courses';
 import { testimonials as initialTestimonials, videoStories } from '../../data/testimonials';
 import { generalFaqs } from '../../data/faq';
+import productionData from '../../data/productionData.json';
 
 const SiteContext = createContext();
 
-const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v1';
-const STORAGE_COURSES_KEY = 'ezer_courses:v1';
-const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v1';
-const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v1';
-const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v1';
-const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v1';
-const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v1';
-const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v1';
-const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v1';
-const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v1';
-const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v1';
-const STORAGE_FAQS_KEY = 'ezer_faqs:v1';
-const STORAGE_CONTACT_KEY = 'ezer_contact:v1';
-const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v1';
+const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v3_prod';
+const STORAGE_COURSES_KEY = 'ezer_courses:v3_prod';
+const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v3_prod';
+const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v3_prod';
+const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v3_prod';
+const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v3_prod';
+const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v3_prod';
+const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v3_prod';
+const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v3_prod';
+const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v3_prod';
+const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v3_prod';
+const STORAGE_FAQS_KEY = 'ezer_faqs:v3_prod';
+const STORAGE_CONTACT_KEY = 'ezer_contact:v3_prod';
+const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v3_prod';
 
 const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -30,7 +31,7 @@ const defaultPopupConfig = {
   imageFit: 'cover',
   photoVisibility: 85,
   photoHeight: 120,
-  showPhoto: true,
+  showPhoto: false,
   bodyBgImage: 'images/hero/hero_section_1.jpg',
   bodyBgOpacity: 15,
   showStateCity: true,
@@ -241,6 +242,26 @@ function safeSetStorage(key, value) {
     console.warn(`[SiteContext] Could not persist ${key} to localStorage:`, err);
   }
 }
+
+// Clean up stale v1/v2 localStorage keys so mobile devices don't carry old data
+function cleanupOldStorageKeys() {
+  try {
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('ezer_') && (key.includes(':v1') || key.includes(':v2'))) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
+    if (keysToRemove.length > 0) {
+      console.log(`[SiteContext] Cleaned up ${keysToRemove.length} stale storage keys from old versions.`);
+    }
+  } catch (e) {}
+}
+
+// Run cleanup on module load (runs once on first import)
+cleanupOldStorageKeys();
 
 function getStored(key, fallback) {
   try {

@@ -1,0 +1,74 @@
+{
+  "popupConfig": {
+    "title": "Register For Free Demo",
+    "subtitle": "Book your free live demo class & 1-on-1 career counselling session",
+    "badge": "LIMITED SEATS AVAILABLE",
+    "submitBtnText": "Register Now",
+    "image": "images/hero/hero_section_1.jpg",
+    "imagePosition": "center center",
+    "imageFit": "cover",
+    "photoVisibility": 85,
+    "photoHeight": 120,
+    "showPhoto": false,
+    "bodyBgImage": "images/hero/hero_section_1.jpg",
+    "bodyBgOpacity": 15,
+    "showStateCity": true,
+    "nameLabel": "Full Name*",
+    "emailLabel": "Email Address*",
+    "phoneLabel": "Mobile Number*",
+    "countryLabel": "Country",
+    "courseLabel": "Target Course*",
+    "termsLabel": "I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.",
+    "coursesList": [
+      "Cloud DevOps with AI",
+      "Software Testing – Playwright",
+      "AI & Machine Learning",
+      "IT Infrastructure & System Administration"
+    ],
+    "countriesList": [
+      "India",
+      "United States",
+      "UAE",
+      "Singapore",
+      "Other"
+    ]
+  },
+  "heroSlides": [
+    {
+      "id": "slide-1",
+      "url": "images/hero/hero_section_1.jpg",
+      "headline": "Learn Live. Build Real Skills. Get Placed.",
+      "sub": "Live online classes led by working corporate professionals, hands-on labs on industry tools, and placement support that continues after graduation.",
+      "badge": "Outcome-Driven IT Training",
+      "fit": "cover",
+      "position": "center center"
+    },
+    {
+      "id": "slide-2",
+      "url": "images/hero/cloud_deveops.png",
+      "headline": "Deploy, Automate, and Scale Like a Real DevOps Engineer",
+      "sub": "Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with hands-on production labs.",
+      "badge": "Cloud & DevOps Masterclass",
+      "fit": "cover",
+      "position": "center center"
+    },
+    {
+      "id": "slide-3",
+      "url": "images/hero/software_testing_playwright.jpg",
+      "headline": "Test Smarter With Modern Automation Frameworks",
+      "sub": "From manual testing fundamentals to full Playwright automation and CI/CD integration.",
+      "badge": "Playwright Automation Program",
+      "fit": "cover",
+      "position": "center center"
+    },
+    {
+      "id": "slide-4",
+      "url": "images/hero/AI_machine_learning.png",
+      "headline": "From Python Basics to Deploying Real ML Models",
+      "sub": "A hands-on, project-based path into AI & Machine Learning — live, instructor-led, and practical.",
+      "badge": "AI & Data Science Track",
+      "fit": "cover",
+      "position": "center center"
+    }
+  ]
+}
