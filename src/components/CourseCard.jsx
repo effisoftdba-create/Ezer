@@ -42,8 +42,8 @@ export default function CourseCard({ course, onOpenDemoModal }) {
           style={{
             width: '100%',
             height: '100%',
-            objectFit: 'cover',
-            objectPosition: course.imagePosition || 'center center',
+            objectFit: course.fit || course.imageFit || 'cover',
+            objectPosition: course.position || course.imagePosition || 'center center',
             opacity: 1
           }}
         />

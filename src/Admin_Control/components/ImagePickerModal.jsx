@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { HiUpload, HiArrowRight, HiSelector } from 'react-icons/hi';
 import { resolveImageSrc } from '../../utils/imageUtils';
 import ImagePickerGalleryGrid from './ImagePickerGalleryGrid';
 import ImagePickerControls from './ImagePickerControls';
 import ImagePickerHeaderBanner from './ImagePickerHeaderBanner';
 
-const STORAGE_UPLOADED_IMAGES_KEY = 'ezer_uploaded_images:v1';
+const STORAGE_UPLOADED_IMAGES_KEY = 'ezer_uploaded_images:v2';
 
 const DEFAULT_PRESET_IMAGES = [
   { label: 'Hero Default', url: 'images/hero/hero_section_1.jpg' },
@@ -25,6 +25,43 @@ const POSITION_PRESETS = [
   { label: 'Left Focus', value: 'left center', x: -40, y: 0 },
   { label: 'Right Focus', value: 'right center', x: 40, y: 0 }
 ];
+
+/**
+ * Compute the CSS aspect-ratio from the human-readable aspectRatio prop.
+ * Returns { ratio, height } where ratio is used for CSS aspect-ratio
+ * and height is a fallback value.
+ */
+function getPreviewDimensions(aspectRatio) {
+  if (!aspectRatio) return { ratio: '16/9', height: '160px' };
+  const lower = aspectRatio.toLowerCase();
+  if (lower.includes('1:1') || lower.includes('square')) return { ratio: '1/1', height: '200px' };
+  if (lower.includes('4:3')) return { ratio: '4/3', height: '180px' };
+  if (lower.includes('3:2')) return { ratio: '3/2', height: '170px' };
+  if (lower.includes('portrait') || lower.includes('9:16')) return { ratio: '9/16', height: '240px' };
+  // Default to 16:9 rectangle
+  return { ratio: '16/9', height: '160px' };
+}
+
+/**
+ * Compress an image data URI to a thumbnail for gallery storage.
+ * This prevents localStorage quota overflow.
+ */
+function compressImageForStorage(dataUri, maxWidth = 200) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const scale = Math.min(1, maxWidth / img.width);
+      canvas.width = img.width * scale;
+      canvas.height = img.height * scale;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', 0.6));
+    };
+    img.onerror = () => resolve(dataUri);
+    img.src = dataUri;
+  });
+}
 
 export default function ImagePickerModal({
   isOpen,
@@ -47,6 +84,9 @@ export default function ImagePickerModal({
   const [isDragging, setIsDragging] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0 });
 
+  // Store full-res data URI temporarily (session only) for selection
+  const fullResMapRef = useRef({});
+
   const [uploadedImages, setUploadedImages] = useState(() => {
     try {
       const stored = localStorage.getItem(STORAGE_UPLOADED_IMAGES_KEY);
@@ -60,51 +100,89 @@ export default function ImagePickerModal({
   }, [currentImage]);
 
   useEffect(() => {
+    if (currentPosition) setPosition(currentPosition);
+  }, [currentPosition]);
+
+  useEffect(() => {
+    if (currentFit) setFitMode(currentFit);
+  }, [currentFit]);
+
+  // Persist uploaded thumbnails to localStorage safely
+  useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_UPLOADED_IMAGES_KEY, JSON.stringify(uploadedImages));
-    } catch (e) {}
+      const serialized = JSON.stringify(uploadedImages);
+      // Only store if under 4MB to avoid quota errors
+      if (serialized.length < 4 * 1024 * 1024) {
+        localStorage.setItem(STORAGE_UPLOADED_IMAGES_KEY, serialized);
+      }
+    } catch (e) {
+      console.warn('ImagePicker: localStorage quota exceeded for uploaded images. Gallery thumbnails may not persist.');
+    }
   }, [uploadedImages]);
 
   if (!isOpen) return null;
 
   const activeSelectedUrl = customUrl.trim() || selectedUrl;
+  const previewDims = getPreviewDimensions(aspectRatio);
 
   const combinedGalleryImages = [
-    ...uploadedImages.map((img) => ({ label: img.label || 'Uploaded Image', url: img.url, isUploaded: true })),
+    ...uploadedImages.map((img) => ({ label: img.label || 'Uploaded Image', url: img.url, fullUrl: img.fullUrl || img.url, isUploaded: true })),
     ...DEFAULT_PRESET_IMAGES
   ];
 
   const handleConfirm = () => {
     if (activeSelectedUrl) {
+      // Resolve the full-resolution URL if it's from an upload
+      let resolvedUrl = activeSelectedUrl;
+      if (fullResMapRef.current[activeSelectedUrl]) {
+        resolvedUrl = fullResMapRef.current[activeSelectedUrl];
+      }
+      // Check if the gallery entry has a fullUrl
+      const matchGallery = combinedGalleryImages.find((img) => img.url === activeSelectedUrl);
+      if (matchGallery?.fullUrl) {
+        resolvedUrl = matchGallery.fullUrl;
+      }
+
       const computedPosStr = (dragOffset.x !== 0 || dragOffset.y !== 0)
         ? `${50 + dragOffset.x}% ${50 + dragOffset.y}%`
         : position;
 
-      onSelectImage(activeSelectedUrl, computedPosStr, fitMode);
+      onSelectImage(resolvedUrl, computedPosStr, fitMode);
       if (onSelectPosition) onSelectPosition(computedPosStr, fitMode);
       onClose();
     }
   };
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      if (file.size > 8 * 1024 * 1024) {
-        alert('Image file size exceeds 8MB limit.');
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const dataUri = reader.result;
-        setCustomUrl(dataUri);
-        setSelectedUrl(dataUri);
-        setUploadedImages((prev) => [
-          { label: `Upload ${prev.length + 1}`, url: dataUri, date: new Date().toLocaleTimeString() },
-          ...prev
-        ]);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Image file size exceeds 10MB limit.');
+      return;
     }
+
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      const fullDataUri = reader.result;
+
+      // Set the full-res image as the selected one immediately
+      setCustomUrl(fullDataUri);
+      setSelectedUrl(fullDataUri);
+
+      // Generate compressed thumbnail for gallery persistence
+      const thumbnail = await compressImageForStorage(fullDataUri, 200);
+
+      // Map thumbnail -> full res for later retrieval
+      fullResMapRef.current[thumbnail] = fullDataUri;
+      fullResMapRef.current[fullDataUri] = fullDataUri;
+
+      setUploadedImages((prev) => [
+        { label: `Upload ${prev.length + 1}`, url: thumbnail, fullUrl: fullDataUri, date: new Date().toLocaleTimeString() },
+        ...prev
+      ]);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleDeleteUploadedImage = (url, e) => {
@@ -121,19 +199,31 @@ export default function ImagePickerModal({
     dragStartRef.current = { x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y };
   };
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     if (!isDragging) return;
     const newX = Math.min(80, Math.max(-80, Math.round((e.clientX - dragStartRef.current.x))));
     const newY = Math.min(80, Math.max(-80, Math.round((e.clientY - dragStartRef.current.y))));
     setDragOffset({ x: newX, y: newY });
     setPosition(`${50 + newX}% ${50 + newY}%`);
-  };
+  }, [isDragging]);
 
   const handleMouseUp = () => setIsDragging(false);
 
   const handlePresetPosition = (preset) => {
     setPosition(preset.value);
     setDragOffset({ x: preset.x, y: preset.y });
+  };
+
+  const handleGallerySelect = (url) => {
+    // If the gallery entry has a fullUrl, use that for preview
+    const matchGallery = combinedGalleryImages.find((img) => img.url === url);
+    if (matchGallery?.fullUrl) {
+      setSelectedUrl(matchGallery.fullUrl);
+      fullResMapRef.current[matchGallery.fullUrl] = matchGallery.fullUrl;
+    } else {
+      setSelectedUrl(url);
+    }
+    setCustomUrl('');
   };
 
   return (
@@ -153,7 +243,7 @@ export default function ImagePickerModal({
           onClose={onClose}
         />
 
-        {/* Dual Image Preview */}
+        {/* Dual Image Preview — aspect ratio matches target section */}
         <div style={{
           background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
           padding: '16px', marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr auto 1fr',
@@ -163,7 +253,11 @@ export default function ImagePickerModal({
             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
               Current Active Image
             </div>
-            <div style={{ height: '140px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0' }}>
+            <div style={{
+              aspectRatio: previewDims.ratio,
+              maxHeight: '220px',
+              borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0'
+            }}>
               {currentImage ? (
                 <img src={resolveImageSrc(currentImage)} alt="Current active" style={{ width: '100%', height: '100%', objectFit: currentFit || 'cover', objectPosition: currentPosition }} />
               ) : (
@@ -196,7 +290,9 @@ export default function ImagePickerModal({
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
               style={{
-                height: '140px', borderRadius: '10px', overflow: 'hidden',
+                aspectRatio: previewDims.ratio,
+                maxHeight: '220px',
+                borderRadius: '10px', overflow: 'hidden',
                 border: '2.5px solid #115DFC', background: '#000648',
                 boxShadow: '0 4px 14px rgba(17,93,252,0.25)', position: 'relative',
                 cursor: isDragging ? 'grabbing' : 'grab', userSelect: 'none'
@@ -244,7 +340,7 @@ export default function ImagePickerModal({
               id="custom_image_url_picker"
               type="text"
               placeholder="https://example.com/image.jpg or local path"
-              value={customUrl}
+              value={customUrl.startsWith('data:') ? '(Uploaded image data)' : customUrl}
               onChange={(e) => setCustomUrl(e.target.value)}
               style={{
                 flex: 1, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #cbd5e1',
@@ -267,8 +363,9 @@ export default function ImagePickerModal({
           combinedGalleryImages={combinedGalleryImages}
           activeSelectedUrl={activeSelectedUrl}
           uploadedImages={uploadedImages}
-          onSelectUrl={(url) => { setSelectedUrl(url); setCustomUrl(''); }}
+          onSelectUrl={handleGallerySelect}
           onDeleteUploaded={handleDeleteUploadedImage}
+          aspectRatio={aspectRatio}
         />
 
         {/* Modal Action Buttons */}

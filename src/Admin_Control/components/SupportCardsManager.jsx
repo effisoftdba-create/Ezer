@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck } from 'react-icons/hi';
+import { resolveImageSrc } from '../../utils/imageUtils';
 
 const DEFAULT_CARD_STATE = {
   title: 'Pre-Employment Support',
   subtitle: 'Career Readiness Phase',
   desc: 'Comprehensive guidance before you start applying — build a high-impact profile that catches recruiter attention.',
   bullets: 'Resume & LinkedIn profile optimization\n1-on-1 technical mock interviews\nGitHub portfolio & capstone review',
-  image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=400'
+  image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=400',
+  position: 'center center',
+  fit: 'cover'
 };
 
 export default function SupportCardsManager() {
@@ -33,7 +36,9 @@ export default function SupportCardsManager() {
       subtitle: card.subtitle || '',
       desc: card.desc || '',
       bullets: Array.isArray(card.bullets) ? card.bullets.join('\n') : card.bullets || '',
-      image: card.image || ''
+      image: card.image || '',
+      position: card.position || 'center center',
+      fit: card.fit || 'cover'
     });
     setIsEditing(true);
   };
@@ -55,7 +60,9 @@ export default function SupportCardsManager() {
       subtitle: formData.subtitle,
       desc: formData.desc,
       bullets: bulletList,
-      image: formData.image
+      image: formData.image,
+      position: formData.position || 'center center',
+      fit: formData.fit || 'cover'
     };
 
     if (editingId) {
@@ -119,7 +126,7 @@ export default function SupportCardsManager() {
                 Photo Preview
               </span>
               <div style={{ height: '80px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #000648', background: '#000648' }}>
-                <img src={formData.image} alt={formData.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={resolveImageSrc(formData.image)} alt={formData.title} style={{ width: '100%', height: '100%', objectFit: formData.fit || 'cover', objectPosition: formData.position || 'center center' }} />
               </div>
             </div>
 
@@ -240,7 +247,7 @@ export default function SupportCardsManager() {
             }}
           >
             <div style={{ height: '130px', background: '#000648', position: 'relative' }}>
-              <img src={card.image} alt={card.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={resolveImageSrc(card.image)} alt={card.title} style={{ width: '100%', height: '100%', objectFit: card.fit || 'cover', objectPosition: card.position || 'center center' }} />
               {card.subtitle && (
                 <div style={{ position: 'absolute', top: '8px', right: '8px', background: '#000648', color: '#f2b733', fontSize: '0.65rem', fontWeight: 800, padding: '3px 8px', borderRadius: '50px', border: '1px solid #f2b733' }}>
                   {card.subtitle}
@@ -289,7 +296,12 @@ export default function SupportCardsManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
-        onSelectImage={(url) => setFormData((prev) => ({ ...prev, image: url }))}
+        currentPosition={formData.position}
+        currentFit={formData.fit}
+        onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
+        targetArea="Support Feature Card Banner"
+        aspectRatio="Rectangle (16:9)"
+        recommendedDimensions="600 x 400 px"
       />
     </div>
   );

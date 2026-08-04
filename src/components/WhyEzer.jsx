@@ -7,6 +7,7 @@ import {
   HiCheckCircle
 } from 'react-icons/hi';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
+import { resolveImageSrc } from '../utils/imageUtils';
 
 export default function WhyEzer() {
   const { supportCards } = useSiteData();
@@ -135,9 +136,9 @@ export default function WhyEzer() {
               {/* Image Banner Header */}
               <div style={{ height: '175px', overflow: 'hidden', position: 'relative', background: '#000648' }}>
                 <img 
-                  src={r.image} 
+                  src={resolveImageSrc(r.image)} 
                   alt={r.title} 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 1, objectPosition: 'center top' }} 
+                  style={{ width: '100%', height: '100%', objectFit: r.fit || r.imageFit || 'cover', opacity: 1, objectPosition: r.position || r.imagePosition || 'center center' }} 
                 />
                 
                 {/* Floating Icon Box */}

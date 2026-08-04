@@ -2,13 +2,25 @@ import React from 'react';
 import { HiCheck, HiTrash } from 'react-icons/hi';
 import { resolveImageSrc } from '../../utils/imageUtils';
 
+function getGalleryTileAspect(aspectRatio) {
+  if (!aspectRatio) return '16/9';
+  const lower = aspectRatio.toLowerCase();
+  if (lower.includes('1:1') || lower.includes('square')) return '1/1';
+  if (lower.includes('4:3')) return '4/3';
+  if (lower.includes('3:2')) return '3/2';
+  return '16/9';
+}
+
 export default function ImagePickerGalleryGrid({
   combinedGalleryImages,
   activeSelectedUrl,
   uploadedImages,
   onSelectUrl,
-  onDeleteUploaded
+  onDeleteUploaded,
+  aspectRatio
 }) {
+  const tileAspect = getGalleryTileAspect(aspectRatio);
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
@@ -24,7 +36,7 @@ export default function ImagePickerGalleryGrid({
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(135px, 1fr))', gap: '12px' }}>
         {combinedGalleryImages.map((img) => {
-          const isSelected = activeSelectedUrl === img.url;
+          const isSelected = activeSelectedUrl === img.url || activeSelectedUrl === img.fullUrl;
           return (
             <div
               key={img.url}
@@ -39,12 +51,13 @@ export default function ImagePickerGalleryGrid({
                   position: 'relative', borderRadius: '10px', overflow: 'hidden', cursor: 'pointer',
                   border: isSelected ? '3px solid #115DFC' : '1.5px solid #e2e8f0',
                   boxShadow: isSelected ? '0 4px 12px rgba(17, 93, 252, 0.3)' : 'none',
-                  height: '90px', background: '#f8fafc', padding: 0, textAlign: 'left'
+                  aspectRatio: tileAspect,
+                  background: '#f8fafc', padding: 0, textAlign: 'left'
                 }}
               >
-                <img src={resolveImageSrc(img.url)} alt={img.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={resolveImageSrc(img.fullUrl || img.url)} alt={img.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div style={{
-                  position: 'absolute', bottom: 0, insetX: 0, background: 'rgba(0,6,72,0.85)',
+                  position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(0,6,72,0.85)',
                   color: '#fff', fontSize: '0.68rem', padding: '3px 6px', fontWeight: 700,
                   whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'
                 }}>
