@@ -216,25 +216,26 @@ export default function ImagePickerModal({
       right: 0,
       bottom: 0,
       zIndex: 99999,
-      background: 'rgba(0, 6, 72, 0.8)',
+      background: 'rgba(0, 6, 72, 0.85)',
       backdropFilter: 'blur(8px)',
       display: 'flex',
-      alignItems: 'center',
+      alignItems: 'flex-start',
       justifyContent: 'center',
-      padding: '24px 16px',
+      padding: '16px',
       overflowY: 'auto'
     }}>
       <div style={{
         background: '#ffffff',
         borderRadius: '18px',
         width: '100%',
-        maxWidth: '820px',
-        maxHeight: '88vh',
+        maxWidth: '840px',
+        maxHeight: 'calc(100vh - 32px)',
         overflowY: 'auto',
         padding: '24px',
         boxShadow: '0 25px 60px rgba(0,6,72,0.45)',
         border: '1.5px solid rgba(242, 183, 51, 0.4)',
-        margin: 'auto'
+        marginTop: '8px',
+        marginBottom: '16px'
       }}>
         <ImagePickerHeaderBanner
           targetArea={targetArea}
