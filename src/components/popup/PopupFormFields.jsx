@@ -24,7 +24,7 @@ const handleBlur = (e) => {
   e.target.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.03)';
 };
 
-export default function PopupFormFields({ formData, handleChange, handleSubmit, status }) {
+export default function PopupFormFields({ formData, handleChange, handleSubmit, status, submitBtnText }) {
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -225,7 +225,7 @@ export default function PopupFormFields({ formData, handleChange, handleSubmit, 
           borderRadius: '8px'
         }}
       >
-        {status.submitting ? 'Registering...' : 'Register Now'}
+        {status.submitting ? 'Registering...' : (submitBtnText || 'Register Now')}
       </button>
     </form>
   );

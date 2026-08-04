@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import PopupHeader from './popup/PopupHeader';
 import PopupSuccessState from './popup/PopupSuccessState';
 import PopupFormFields from './popup/PopupFormFields';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 const GOOGLE_SHEETS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_EXAMPLE_DEPLOYMENT_ID/exec';
 
 export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
+  const siteData = useSiteData();
   const [formData, setFormData] = useState(() => ({
     name: '',
     email: '',
@@ -113,6 +115,7 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
                 status={status}
+                submitBtnText={siteData?.popupConfig?.submitBtnText}
               />
             )}
           </div>

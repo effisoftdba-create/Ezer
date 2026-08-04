@@ -18,6 +18,20 @@ const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v1';
 const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v1';
 const STORAGE_FAQS_KEY = 'ezer_faqs:v1';
 const STORAGE_CONTACT_KEY = 'ezer_contact:v1';
+const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v1';
+
+const defaultPopupConfig = {
+  title: 'Register For Free Demo',
+  subtitle: 'Book your free live demo class & 1-on-1 career counselling session',
+  badge: 'LIMITED SEATS AVAILABLE',
+  submitBtnText: 'Register Now',
+  image: 'images/hero/hero_section_1.jpg',
+  imagePosition: 'center center',
+  imageFit: 'cover',
+  photoVisibility: 85,
+  photoHeight: 120,
+  showPhoto: true,
+};
 
 const defaultSlides = [
   {
@@ -229,6 +243,7 @@ function getInitialState() {
     writtenTestimonials: getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials),
     faqList: getStored(STORAGE_FAQS_KEY, generalFaqs),
     contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo),
+    popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, defaultPopupConfig),
   };
 }
 
@@ -259,7 +274,8 @@ export function SiteProvider({ children }) {
     testimonialsHero,
     writtenTestimonials,
     faqList,
-    contactInfo
+    contactInfo,
+    popupConfig
   } = state;
 
   // LocalStorage Persist Effects (Safely guarded against QuotaExceededError crashes)
@@ -276,6 +292,7 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_WRITTEN_TESTIMONIALS_KEY, writtenTestimonials); }, [writtenTestimonials]);
   useEffect(() => { safeSetStorage(STORAGE_FAQS_KEY, faqList); }, [faqList]);
   useEffect(() => { safeSetStorage(STORAGE_CONTACT_KEY, contactInfo); }, [contactInfo]);
+  useEffect(() => { safeSetStorage(STORAGE_POPUP_CONFIG_KEY, popupConfig); }, [popupConfig]);
 
   // Helper dispatch setters with useCallback
   const addHeroSlide = useCallback((slide) => dispatch({ type: 'SET_KEY', key: 'heroSlides', value: [...state.heroSlides, { id: `slide-${Date.now()}`, ...slide }] }), [state.heroSlides]);
@@ -322,6 +339,7 @@ export function SiteProvider({ children }) {
   }, [state.faqList]);
 
   const updateContactInfo = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'contactInfo', value: { ...state.contactInfo, ...data } }), [state.contactInfo]);
+  const updatePopupConfig = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'popupConfig', value: { ...state.popupConfig, ...data } }), [state.popupConfig]);
 
   const resetToDefault = useCallback(() => {
     localStorage.removeItem(STORAGE_SLIDES_KEY);
@@ -337,6 +355,7 @@ export function SiteProvider({ children }) {
     localStorage.removeItem(STORAGE_WRITTEN_TESTIMONIALS_KEY);
     localStorage.removeItem(STORAGE_FAQS_KEY);
     localStorage.removeItem(STORAGE_CONTACT_KEY);
+    localStorage.removeItem(STORAGE_POPUP_CONFIG_KEY);
     dispatch({ type: 'RESET_ALL' });
   }, []);
 
@@ -393,6 +412,9 @@ export function SiteProvider({ children }) {
     contactInfo,
     updateContactInfo,
 
+    popupConfig,
+    updatePopupConfig,
+
     resetToDefault
   }), [
     heroSlides,
@@ -446,6 +468,9 @@ export function SiteProvider({ children }) {
 
     contactInfo,
     updateContactInfo,
+
+    popupConfig,
+    updatePopupConfig,
 
     resetToDefault
   ]);

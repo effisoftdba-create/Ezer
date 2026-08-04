@@ -12,6 +12,7 @@ import VideoReviewsManager from '../components/VideoReviewsManager';
 import TestimonialsManager from '../components/TestimonialsManager';
 import FaqManager from '../components/FaqManager';
 import ContactInfoManager from '../components/ContactInfoManager';
+import PopupManager from '../components/PopupManager';
 import UIStateDisplay, { STATE_TYPES } from '../../components/UIStateDisplay';
 import {
   HiOutlinePhotograph,
@@ -24,6 +25,7 @@ import {
   HiOutlineChatAlt,
   HiOutlineQuestionMarkCircle,
   HiOutlinePhone,
+  HiOutlineTemplate,
   HiOutlineExternalLink,
   HiOutlineLogout,
   HiOutlineRefresh,
@@ -90,6 +92,7 @@ export default function AdminDashboard() {
     { id: 'mentors', label: 'Senior Mentors', icon: HiOutlineUser, count: (seniorMentors || []).length },
     { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: videoTestimonials.length },
     { id: 'testimonials', label: 'Testimonials Page', icon: HiOutlineChatAlt, count: writtenTestimonials.length },
+    { id: 'popup', label: 'Lead Popup Modal', icon: HiOutlineTemplate },
     { id: 'faq', label: 'FAQ Manager', icon: HiOutlineQuestionMarkCircle, count: totalFaqs },
     { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone }
   ];
@@ -159,16 +162,22 @@ export default function AdminDashboard() {
               cursor: 'pointer', boxShadow: '0 2px 8px rgba(220, 38, 38, 0.3)'
             }}
           >
-            <HiOutlineLogout size={16} /> Logout
+            <HiOutlineLogout size={15} /> Logout
           </button>
         </div>
       </header>
 
-      <div style={{ flex: 1, display: 'flex', maxWidth: '1400px', width: '100%', margin: '0 auto', padding: '24px 20px', gap: '24px' }}>
+      <div style={{ display: 'flex', flex: 1, padding: '24px', gap: '24px', maxWidth: '1440px', width: '100%', margin: '0 auto' }}>
         <aside style={{ width: '270px', flexShrink: 0 }}>
-          <div style={{ background: '#ffffff', borderRadius: '14px', padding: '16px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)', border: '1px solid #e2e8f0' }}>
-            <div style={{ fontSize: '0.725rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '12px', paddingLeft: '8px' }}>
-              Management Sections
+          <div style={{
+            background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px',
+            padding: '12px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)'
+          }}>
+            <div style={{
+              fontSize: '0.725rem', fontWeight: 800, color: '#64748b',
+              textTransform: 'uppercase', letterSpacing: '0.05em', padding: '8px 12px 12px'
+            }}>
+              Navigation Modules
             </div>
 
             {tabs.map((tab) => {
@@ -179,24 +188,26 @@ export default function AdminDashboard() {
                   key={tab.id}
                   type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  aria-label={`Switch to ${tab.label}`}
                   style={{
-                    width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-                    padding: '10px 12px', borderRadius: '10px', border: 'none',
+                    width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    padding: '10px 14px', borderRadius: '8px', border: 'none',
                     background: isActive ? '#000648' : 'transparent',
-                    color: isActive ? '#f2b733' : '#475569',
-                    fontWeight: isActive ? 800 : 600,
-                    fontSize: '0.85rem', cursor: 'pointer', marginBottom: '4px',
-                    textAlign: 'left', transition: 'background-color 0.2s ease, color 0.2s ease'
+                    color: isActive ? '#f2b733' : '#334155',
+                    fontWeight: isActive ? 800 : 600, fontSize: '0.84rem',
+                    cursor: 'pointer', marginBottom: '4px',
+                    transition: 'background-color 0.2s ease, color 0.2s ease'
                   }}
                 >
-                  <Icon size={18} />
-                  <div style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{tab.label}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Icon size={18} style={{ color: isActive ? '#f2b733' : '#64748b' }} />
+                    <span>{tab.label}</span>
+                  </div>
                   {tab.count !== undefined && (
                     <span style={{
-                      background: isActive ? '#f2b733' : '#f1f5f9',
-                      color: isActive ? '#000648' : '#475569',
-                      fontSize: '0.7rem', fontWeight: 800, padding: '2px 7px', borderRadius: '50px'
+                      fontSize: '0.7rem', fontWeight: 800,
+                      padding: '2px 7px', borderRadius: '50px',
+                      background: isActive ? 'rgba(242, 183, 51, 0.2)' : '#f1f5f9',
+                      color: isActive ? '#f2b733' : '#64748b'
                     }}>
                       {tab.count}
                     </span>
@@ -204,17 +215,6 @@ export default function AdminDashboard() {
                 </button>
               );
             })}
-
-            <div style={{ borderTop: '1px solid #e2e8f0', margin: '14px 0' }} />
-
-            <div style={{ padding: '12px', background: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-                Real-Time Site Sync Active
-              </div>
-              <div style={{ fontSize: '0.725rem', color: '#64748b', lineHeight: 1.4 }}>
-                All section edits immediately sync across Home, Courses, Testimonials, FAQ, and Contact pages!
-              </div>
-            </div>
           </div>
         </aside>
 
@@ -227,6 +227,7 @@ export default function AdminDashboard() {
           {activeTab === 'mentors' && <SeniorMentorsManager />}
           {activeTab === 'videos' && <VideoReviewsManager />}
           {activeTab === 'testimonials' && <TestimonialsManager />}
+          {activeTab === 'popup' && <PopupManager />}
           {activeTab === 'faq' && <FaqManager />}
           {activeTab === 'contact' && <ContactInfoManager />}
         </main>
