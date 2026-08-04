@@ -42,9 +42,9 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
     setStatus({ submitting: true, success: false, error: '' });
 
     try {
-      const existingLeads = JSON.parse(localStorage.getItem('ezer_leads:v1') || '[]');
-      existingLeads.push({ ...formData, timestamp: new Date().toISOString() });
-      localStorage.setItem('ezer_leads:v1', JSON.stringify(existingLeads));
+      if (siteData?.addLead) {
+        siteData.addLead(formData);
+      }
 
       const formPayload = new FormData();
       formPayload.append('Name', formData.name);
@@ -53,7 +53,10 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
       formPayload.append('Country', formData.country);
       formPayload.append('State', formData.state);
       formPayload.append('City', formData.city);
-      formPayload.append('Course', formData.course);
+      formPayload.append('Course', formData.course === 'Others' || formData.course === 'Other' ? `Others (${formData.otherCourseText || 'Custom Goal'})` : formData.course);
+      if (formData.otherCourseText) {
+        formPayload.append('OtherCourseText', formData.otherCourseText);
+      }
       formPayload.append('Timestamp', new Date().toLocaleString());
 
       fetch(GOOGLE_SHEETS_SCRIPT_URL, {

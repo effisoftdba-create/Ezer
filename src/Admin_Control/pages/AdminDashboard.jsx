@@ -13,6 +13,7 @@ import TestimonialsManager from '../components/TestimonialsManager';
 import FaqManager from '../components/FaqManager';
 import ContactInfoManager from '../components/ContactInfoManager';
 import PopupManager from '../components/PopupManager';
+import LeadsManager from '../components/LeadsManager';
 import AdminSyncModal from '../components/AdminSyncModal';
 import UIStateDisplay, { STATE_TYPES } from '../../components/UIStateDisplay';
 import {
@@ -31,11 +32,12 @@ import {
   HiOutlineLogout,
   HiOutlineRefresh,
   HiOutlineShieldCheck,
-  HiDeviceMobile
+  HiDeviceMobile,
+  HiOutlineMailOpen
 } from 'react-icons/hi';
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('hero');
+  const [activeTab, setActiveTab] = useState('leads');
   const [showSyncModal, setShowSyncModal] = useState(false);
   const [copiedSyncLink, setCopiedSyncLink] = useState(false);
   const [copiedJson, setCopiedJson] = useState(false);
@@ -51,6 +53,7 @@ export default function AdminDashboard() {
     writtenTestimonials,
     faqList,
     popupConfig,
+    leads,
     resetToDefault
   } = useSiteData();
 
@@ -125,6 +128,7 @@ export default function AdminDashboard() {
   const totalFaqs = faqList.reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
 
   const tabs = [
+    { id: 'leads', label: 'Lead Submissions & Form Enquiries', icon: HiOutlineMailOpen, count: (leads || []).length },
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: heroSlides.length },
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: courses.length },
     { id: 'platform', label: 'Empowering Career Switchers', icon: HiOutlineSparkles },
@@ -274,6 +278,7 @@ export default function AdminDashboard() {
         </aside>
 
         <main style={{ flex: 1, background: '#ffffff', borderRadius: '14px', padding: '28px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)', border: '1px solid #e2e8f0' }}>
+          {activeTab === 'leads' && <LeadsManager />}
           {activeTab === 'hero' && <HeroManager />}
           {activeTab === 'courses' && <CourseManager />}
           {activeTab === 'platform' && <PlatformManager />}

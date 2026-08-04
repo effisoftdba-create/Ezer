@@ -236,8 +236,33 @@ export default function PopupFormFields({
           {coursesArray.map((crs) => (
             <option key={crs} value={crs}>{crs}</option>
           ))}
+          {!coursesArray.includes('Others') && !coursesArray.includes('Other') && (
+            <option value="Others">Others</option>
+          )}
         </select>
       </div>
+
+      {/* Custom Target Course Input when 'Others' or 'Other' is Selected */}
+      {(formData.course === 'Others' || formData.course === 'Other') && (
+        <div style={{ animation: 'fadeIn 0.2s ease' }}>
+          <label htmlFor="popup-other-course-text" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#115DFC', marginBottom: '4px' }}>
+            Specify Your Target Course / Learning Goal *
+          </label>
+          <input
+            id="popup-other-course-text"
+            aria-label="Specify Your Target Course or Learning Goal"
+            type="text"
+            name="otherCourseText"
+            required
+            placeholder="e.g. Flutter Development, PowerBI & SQL Analytics..."
+            value={formData.otherCourseText || ''}
+            onChange={handleChange}
+            style={{ ...inputStyle, borderColor: '#115DFC', background: '#f8fafc' }}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+          />
+        </div>
+      )}
 
       {/* Terms Checkbox */}
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '2px' }}>

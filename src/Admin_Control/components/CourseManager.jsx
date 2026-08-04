@@ -259,9 +259,9 @@ export default function CourseManager() {
             imageFit: fit || 'cover'
           }));
         }}
-        targetArea="Course Card Banner (Website Exact Size)"
-        aspectRatio="Standard (4:3)"
-        recommendedDimensions="800 x 500 px (matches course card)"
+        targetArea="Course Card Banner"
+        aspectRatio="Rectangle / Landscape (16:9)"
+        recommendedDimensions="1200 x 675 px"
       />
     </div>
   );

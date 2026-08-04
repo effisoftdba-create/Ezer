@@ -282,9 +282,9 @@ export default function HeroManager() {
         currentPosition={formData.position}
         currentFit={formData.fit}
         onSelectImage={(url, position, fit) => setFormData((prev) => ({ ...prev, url, position: position || 'center center', fit: fit || 'cover' }))}
-        targetArea="Hero Slide Banner"
-        aspectRatio="Rectangle / Widescreen (16:9)"
-        recommendedDimensions="1200 x 675 px"
+        targetArea="Hero Slide Photo"
+        aspectRatio="Square (1:1)"
+        recommendedDimensions="800 x 800 px"
       />
     </div>
   );

@@ -20,6 +20,7 @@ const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v6_cache_bus
 const STORAGE_FAQS_KEY = 'ezer_faqs:v6_cache_busted';
 const STORAGE_CONTACT_KEY = 'ezer_contact:v6_cache_busted';
 const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v6_cache_busted';
+const STORAGE_LEADS_KEY = 'ezer_leads:v6_cache_busted';
 
 const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -234,6 +235,43 @@ const defaultContactInfo = {
   hours: 'Mon - Sat: 9:00 AM - 8:00 PM IST'
 };
 
+const defaultLeads = [
+  {
+    id: 'lead-101',
+    name: 'Swathy B',
+    email: 'swathy.b@example.com',
+    phone: '9876543210',
+    country: 'India',
+    state: 'Tamil Nadu',
+    city: 'Chennai',
+    course: 'Cloud DevOps with AI',
+    otherCourseText: '',
+    agreeTerms: true,
+    status: 'Pending',
+    timestamp: new Date().toISOString(),
+    comments: [
+      { id: 'c-1', text: 'Form submitted on landing page.', author: 'System', time: '10:30 AM' }
+    ]
+  },
+  {
+    id: 'lead-102',
+    name: 'Karthik Raja',
+    email: 'karthik.r@example.com',
+    phone: '9123456789',
+    country: 'India',
+    state: 'Karnataka',
+    city: 'Bengaluru',
+    course: 'Others',
+    otherCourseText: 'Flutter & Cross-Platform Mobile App Development',
+    agreeTerms: true,
+    status: 'Contacted',
+    timestamp: new Date().toISOString(),
+    comments: [
+      { id: 'c-2', text: 'Called student regarding custom mobile app course request. Sent syllabus overview.', author: 'Admin Counselor', time: '11:45 AM' }
+    ]
+  }
+];
+
 function safeSetStorage(key, value) {
   try {
     const serialized = JSON.stringify(value);
@@ -312,6 +350,7 @@ function getInitialState() {
     faqList: getStored(STORAGE_FAQS_KEY, generalFaqs),
     contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo),
     popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, prodConfig),
+    leads: getStored(STORAGE_LEADS_KEY, defaultLeads),
   };
 }
 
@@ -343,7 +382,8 @@ export function SiteProvider({ children }) {
     writtenTestimonials,
     faqList,
     contactInfo,
-    popupConfig
+    popupConfig,
+    leads
   } = state;
 
   // Check for mobile sync token in URL (#/?syncData=... or #/sync?data=...)
@@ -390,6 +430,7 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_FAQS_KEY, faqList); }, [faqList]);
   useEffect(() => { safeSetStorage(STORAGE_CONTACT_KEY, contactInfo); }, [contactInfo]);
   useEffect(() => { safeSetStorage(STORAGE_POPUP_CONFIG_KEY, popupConfig); }, [popupConfig]);
+  useEffect(() => { safeSetStorage(STORAGE_LEADS_KEY, leads); }, [leads]);
 
   // Helper dispatch setters with useCallback
   const addHeroSlide = useCallback((slide) => dispatch({ type: 'SET_KEY', key: 'heroSlides', value: [...state.heroSlides, { id: `slide-${Date.now()}`, ...slide }] }), [state.heroSlides]);
@@ -438,6 +479,55 @@ export function SiteProvider({ children }) {
   const updateContactInfo = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'contactInfo', value: { ...state.contactInfo, ...data } }), [state.contactInfo]);
   const updatePopupConfig = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'popupConfig', value: { ...state.popupConfig, ...data } }), [state.popupConfig]);
 
+  const addLead = useCallback((leadData) => {
+    const newLead = {
+      id: `lead-${Date.now()}`,
+      status: 'Pending',
+      timestamp: new Date().toISOString(),
+      comments: [
+        { id: `c-${Date.now()}`, text: 'Form registration submitted.', author: 'System', time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+      ],
+      ...leadData
+    };
+    dispatch({ type: 'SET_KEY', key: 'leads', value: [newLead, ...(state.leads || [])] });
+  }, [state.leads]);
+
+  const updateLeadStatus = useCallback((id, status) => {
+    dispatch({
+      type: 'SET_KEY',
+      key: 'leads',
+      value: (state.leads || []).map((l) => l.id === id ? { ...l, status } : l)
+    });
+  }, [state.leads]);
+
+  const addLeadComment = useCallback((id, text, author = 'Admin Counselor') => {
+    dispatch({
+      type: 'SET_KEY',
+      key: 'leads',
+      value: (state.leads || []).map((l) => {
+        if (l.id === id) {
+          const comments = l.comments || [];
+          return {
+            ...l,
+            comments: [
+              ...comments,
+              { id: `c-${Date.now()}`, text, author, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+            ]
+          };
+        }
+        return l;
+      })
+    });
+  }, [state.leads]);
+
+  const deleteLead = useCallback((id) => {
+    dispatch({
+      type: 'SET_KEY',
+      key: 'leads',
+      value: (state.leads || []).filter((l) => l.id !== id)
+    });
+  }, [state.leads]);
+
   const resetToDefault = useCallback(() => {
     localStorage.removeItem(STORAGE_SLIDES_KEY);
     localStorage.removeItem(STORAGE_COURSES_KEY);
@@ -453,6 +543,7 @@ export function SiteProvider({ children }) {
     localStorage.removeItem(STORAGE_FAQS_KEY);
     localStorage.removeItem(STORAGE_CONTACT_KEY);
     localStorage.removeItem(STORAGE_POPUP_CONFIG_KEY);
+    localStorage.removeItem(STORAGE_LEADS_KEY);
     dispatch({ type: 'RESET_ALL' });
   }, []);
 
@@ -512,6 +603,12 @@ export function SiteProvider({ children }) {
     popupConfig,
     updatePopupConfig,
 
+    leads,
+    addLead,
+    updateLeadStatus,
+    addLeadComment,
+    deleteLead,
+
     resetToDefault
   }), [
     heroSlides,
@@ -568,6 +665,12 @@ export function SiteProvider({ children }) {
 
     popupConfig,
     updatePopupConfig,
+
+    leads,
+    addLead,
+    updateLeadStatus,
+    addLeadComment,
+    deleteLead,
 
     resetToDefault
   ]);
