@@ -280,6 +280,9 @@ export default function HeroManager() {
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.url}
         onSelectImage={(url) => setFormData((prev) => ({ ...prev, url }))}
+        targetArea="Hero Slide Banner"
+        aspectRatio="Rectangle / Widescreen (16:9)"
+        recommendedDimensions="1200 x 675 px"
       />
     </div>
   );

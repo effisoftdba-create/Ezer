@@ -1,82 +1,82 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
-import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck, HiSparkles } from 'react-icons/hi';
+import TestimonialFormModal from './TestimonialFormModal';
+import { HiPlus, HiTrash, HiPencil, HiCheck, HiStar } from 'react-icons/hi';
+import { resolveImageSrc } from '../../utils/imageUtils';
 
-const DEFAULT_CARD_STATE = {
-  name: 'Anand Kumar',
-  role: 'DevOps Specialist',
-  company: 'Freshworks',
-  background: 'Fresher, B.E. CSE',
-  course: 'Cloud DevOps with AI',
-  quote: 'EZER Learning Solution gave me practical, real-world project skills.',
-  image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400'
+const DEFAULT_TESTIMONIAL_STATE = {
+  author: '',
+  role: '',
+  text: '',
+  rating: 5,
+  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
 };
 
 export default function TestimonialsManager() {
   const {
     testimonialsHero,
-    updateTestimonialsHero,
     writtenTestimonials,
+    updateTestimonialsHero,
     addWrittenTestimonial,
     updateWrittenTestimonial,
     deleteWrittenTestimonial
   } = useSiteData();
 
-  const [heroData, setHeroData] = useState(testimonialsHero);
+  const [heroFormData, setHeroFormData] = useState(testimonialsHero || {
+    tag: 'ALUMNI SUCCESS & REVIEWS',
+    headline: 'Proven Outcomes & Real Alumni Stories',
+    sub: 'Explore career switch journeys from our graduates who secured engineering roles.'
+  });
+
   const [saveHeroSuccess, setSaveHeroSuccess] = useState(false);
-
-  const [isEditingCard, setIsEditingCard] = useState(false);
-  const [editingCardId, setEditingCardId] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
+  const [formData, setFormData] = useState(DEFAULT_TESTIMONIAL_STATE);
 
-  const [cardData, setCardData] = useState(DEFAULT_CARD_STATE);
-
-  const handleHeroSubmit = (e) => {
+  const handleHeroSave = (e) => {
     e.preventDefault();
-    updateTestimonialsHero(heroData);
+    updateTestimonialsHero(heroFormData);
     setSaveHeroSuccess(true);
     setTimeout(() => setSaveHeroSuccess(false), 3000);
   };
 
-  const handleOpenAddCard = () => {
-    setEditingCardId(null);
-    setCardData(defaultCardState);
-    setIsEditingCard(true);
+  const handleOpenAdd = () => {
+    setEditingId(null);
+    setFormData(DEFAULT_TESTIMONIAL_STATE);
+    setIsEditing(true);
   };
 
-  const handleOpenEditCard = (item) => {
-    setEditingCardId(item.id);
-    setCardData({
-      name: item.name || '',
-      role: item.role || '',
-      company: item.company || '',
-      background: item.background || '',
-      course: item.course || '',
-      quote: item.quote || '',
-      image: item.image || ''
+  const handleOpenEdit = (item) => {
+    setEditingId(item.id);
+    setFormData({
+      author: item.author || item.name || '',
+      role: item.role || item.designation || '',
+      text: item.text || item.content || item.review || '',
+      rating: item.rating || 5,
+      avatar: item.avatar || item.image || ''
     });
-    setIsEditingCard(true);
+    setIsEditing(true);
   };
 
-  const handleSaveCard = (e) => {
+  const handleSave = (e) => {
     e.preventDefault();
-    if (!cardData.name || !cardData.quote) {
-      alert('Student Name and Testimonial Quote are required.');
+    if (!formData.author || !formData.text) {
+      alert('Author name and review content are required.');
       return;
     }
 
-    if (editingCardId) {
-      updateWrittenTestimonial(editingCardId, cardData);
+    if (editingId) {
+      updateWrittenTestimonial(editingId, formData);
     } else {
-      addWrittenTestimonial(cardData);
+      addWrittenTestimonial(formData);
     }
-
-    setIsEditingCard(false);
+    setIsEditing(false);
   };
 
-  const handleDeleteCard = (id, name) => {
-    if (window.confirm(`Are you sure you want to remove ${name}'s written review?`)) {
+  const handleDelete = (id, author) => {
+    if (window.confirm(`Are you sure you want to remove ${author}'s review?`)) {
       deleteWrittenTestimonial(id);
     }
   };
@@ -89,253 +89,118 @@ export default function TestimonialsManager() {
       }}>
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000648', margin: 0 }}>
-            Testimonials Page & Reviews Control
+            Testimonials Page Manager
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Edit the Testimonials Page Hero banner text and manage written alumni review cards.
+            Update the `/testimonials` page header hero and manage written student reviews.
           </p>
         </div>
+
+        {!isEditing && (
+          <button
+            type="button"
+            onClick={handleOpenAdd}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              padding: '10px 20px', background: '#000648', color: '#f2b733',
+              borderRadius: '10px', fontWeight: 800, border: 'none', cursor: 'pointer',
+              fontSize: '0.875rem'
+            }}
+          >
+            <HiPlus size={18} /> Add New Review
+          </button>
+        )}
       </div>
 
-      {saveHeroSuccess && (
-        <div style={{
-          padding: '12px 16px', background: '#f0fdf4', border: '1px solid #86efac',
-          color: '#166534', borderRadius: '8px', marginBottom: '20px', fontWeight: 700,
-          display: 'flex', alignItems: 'center', gap: '8px'
-        }}>
-          <HiCheck size={18} /> Testimonials Page Hero updated successfully!
-        </div>
-      )}
-
-      {/* Section 1: Hero Banner Config */}
-      <form onSubmit={handleHeroSubmit} style={{
-        background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
-        padding: '20px', marginBottom: '32px'
-      }}>
-        <h3 style={{ margin: '0 0 16px 0', fontSize: '1.1rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <HiSparkles color="#f2b733" /> Testimonials Page Header Section
+      {/* Hero Header Editor */}
+      <form onSubmit={handleHeroSave} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '20px', marginBottom: '24px' }}>
+        <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', fontWeight: 800, color: '#000648' }}>
+          Edit Testimonials Page Header
         </h3>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '16px', marginBottom: '12px' }}>
           <div>
-            <label htmlFor="test_hero_tag" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Tagline Badge Text
-            </label>
+            <label htmlFor="testi_hero_tag" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Header Tag</label>
             <input
-              id="test_hero_tag"
+              id="testi_hero_tag"
               type="text"
-              value={heroData.tag}
-              onChange={(e) => setHeroData({ ...heroData, tag: e.target.value })}
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              required
+              value={heroFormData.tag}
+              onChange={(e) => setHeroFormData((prev) => ({ ...prev, tag: e.target.value }))}
+              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
             />
           </div>
-
           <div>
-            <label htmlFor="test_hero_headline" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Page Headline
-            </label>
+            <label htmlFor="testi_hero_headline" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Headline</label>
             <input
-              id="test_hero_headline"
+              id="testi_hero_headline"
               type="text"
-              value={heroData.headline}
-              onChange={(e) => setHeroData({ ...heroData, headline: e.target.value })}
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              required
+              value={heroFormData.headline}
+              onChange={(e) => setHeroFormData((prev) => ({ ...prev, headline: e.target.value }))}
+              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
             />
           </div>
         </div>
 
-        <div style={{ marginBottom: '16px' }}>
-          <label htmlFor="test_hero_sub" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-            Subtitle Description
-          </label>
-          <textarea
-            id="test_hero_sub"
-            rows={2}
-            value={heroData.sub}
-            onChange={(e) => setHeroData({ ...heroData, sub: e.target.value })}
-            style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-            required
-          />
-        </div>
-
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}>
+          {saveHeroSuccess && <span style={{ color: '#166534', fontWeight: 700, fontSize: '0.8rem' }}>Header Updated!</span>}
           <button
             type="submit"
-            aria-label="Save testimonials hero header"
-            style={{ padding: '9px 20px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}
+            style={{ padding: '8px 16px', background: '#000648', color: '#ffffff', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
           >
-            Save Header Text
+            <HiCheck size={16} color="#f2b733" /> Save Header Info
           </button>
         </div>
       </form>
 
-      {/* Section 2: Written Reviews List */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#000648' }}>
-          Written Student Reviews ({writtenTestimonials.length})
-        </h3>
-        <button
-          type="button"
-          onClick={handleOpenAddCard}
-          aria-label="Add new written testimonial"
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            padding: '8px 16px', background: '#000648', color: '#f2b733',
-            border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.825rem',
-            cursor: 'pointer'
-          }}
-        >
-          <HiPlus size={16} /> Add Student Review
-        </button>
-      </div>
+      {/* Testimonial Form Modal */}
+      <TestimonialFormModal
+        isEditing={isEditing}
+        editingId={editingId}
+        formData={formData}
+        setFormData={setFormData}
+        onSave={handleSave}
+        onCancel={() => setIsEditing(false)}
+        onOpenImagePicker={() => setIsImagePickerOpen(true)}
+      />
 
-      {isEditingCard && (
-        <form onSubmit={handleSaveCard} style={{
-          background: '#ffffff', border: '2px solid #000648', borderRadius: '14px',
-          padding: '20px', marginBottom: '24px', boxShadow: '0 8px 24px rgba(0,6,72,0.1)'
-        }}>
-          <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', fontWeight: 800, color: '#000648' }}>
-            {editingCardId ? 'Edit Student Review' : 'Add New Written Testimonial'}
-          </h4>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: '16px', alignItems: 'center', marginBottom: '16px' }}>
-            <div style={{ width: '70px', height: '70px', borderRadius: '50%', overflow: 'hidden', border: '2px solid #f2b733', background: '#000648' }}>
-              <img src={cardData.image} alt={cardData.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-            <div>
-              <label htmlFor="written_test_photo" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                Student Photo URL
-              </label>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <input
-                  id="written_test_photo"
-                  type="text"
-                  value={cardData.image}
-                  onChange={(e) => setCardData({ ...cardData, image: e.target.value })}
-                  style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setImageFieldTarget('card');
-                    setIsImagePickerOpen(true);
-                  }}
-                  aria-label="Choose photo"
-                  style={{ padding: '8px 12px', background: '#115DFC', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
-                >
-                  <HiPhotograph size={16} />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-            <div>
-              <label htmlFor="written_test_name" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                Student Full Name *
-              </label>
-              <input
-                id="written_test_name"
-                type="text"
-                value={cardData.name}
-                onChange={(e) => setCardData({ ...cardData, name: e.target.value })}
-                style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="written_test_role" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                Job Role & Company
-              </label>
-              <input
-                id="written_test_role"
-                type="text"
-                value={cardData.role}
-                onChange={(e) => setCardData({ ...cardData, role: e.target.value })}
-                placeholder="e.g. Junior DevOps Developer @ Agnikul"
-                style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-                required
-              />
-            </div>
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label htmlFor="written_test_quote" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Testimonial Review Quote *
-            </label>
-            <textarea
-              id="written_test_quote"
-              rows={3}
-              value={cardData.quote}
-              onChange={(e) => setCardData({ ...cardData, quote: e.target.value })}
-              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              required
-            />
-          </div>
-
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-            <button
-              type="button"
-              onClick={() => setIsEditingCard(false)}
-              aria-label="Cancel editing"
-              style={{ padding: '8px 14px', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              aria-label="Save review"
-              style={{ padding: '8px 18px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}
-            >
-              Save Review
-            </button>
-          </div>
-        </form>
-      )}
-
-      {/* Review Cards Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
+      {/* Written Reviews List */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
         {writtenTestimonials.map((item) => (
-          <div
-            key={item.id}
-            style={{
-              background: '#ffffff', border: '1.5px solid #cbd5e1', borderRadius: '14px',
-              padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'
-            }}
-          >
+          <div key={item.id || item.author} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-                <img src={item.image} alt={item.name} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #f2b733' }} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+                <img src={resolveImageSrc(item.avatar || item.image)} alt={item.author || item.name} style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }} />
                 <div>
-                  <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800, color: '#000648' }}>{item.name}</h4>
-                  <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600 }}>{item.role}</div>
+                  <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>{item.author || item.name}</h4>
+                  <div style={{ fontSize: '0.725rem', color: '#64748b' }}>{item.role || item.designation}</div>
                 </div>
               </div>
-              <p style={{ fontSize: '0.82rem', color: '#334155', lineHeight: 1.45, margin: 0, fontStyle: 'italic' }}>
-                "{item.quote}"
+
+              <div style={{ display: 'flex', gap: '2px', color: '#f2b733', marginBottom: '8px' }}>
+                {[...Array(item.rating || 5)].map((_, i) => (
+                  <HiStar key={i} size={14} />
+                ))}
+              </div>
+
+              <p style={{ fontSize: '0.8rem', color: '#475569', lineHeight: 1.4, margin: 0 }}>
+                "{item.text || item.content || item.review}"
               </p>
             </div>
 
-            <div style={{ marginTop: '14px', paddingTop: '10px', borderTop: '1px solid #f1f5f9', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '14px', paddingTop: '10px', borderTop: '1px solid #f1f5f9' }}>
               <button
                 type="button"
-                onClick={() => handleOpenEditCard(item)}
-                aria-label={`Edit ${item.name}`}
-                style={{ padding: '5px 10px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700 }}
+                onClick={() => handleOpenEdit(item)}
+                style={{ padding: '6px 10px', background: '#f1f5f9', border: '1px solid #cbd5e1', color: '#000648', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}
               >
-                Edit
+                <HiPencil size={14} /> Edit
               </button>
               <button
                 type="button"
-                onClick={() => handleDeleteCard(item.id, item.name)}
-                aria-label={`Delete ${item.name}`}
-                style={{ padding: '5px 10px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700 }}
+                onClick={() => handleDelete(item.id, item.author || item.name)}
+                style={{ padding: '6px 10px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}
               >
-                Delete
+                <HiTrash size={14} /> Delete
               </button>
             </div>
           </div>
@@ -345,8 +210,11 @@ export default function TestimonialsManager() {
       <ImagePickerModal
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
-        currentImage={cardData.image}
-        onSelectImage={(url) => setCardData((prev) => ({ ...prev, image: url }))}
+        currentImage={formData.avatar}
+        onSelectImage={(url) => setFormData((prev) => ({ ...prev, avatar: url }))}
+        targetArea="Alumni Review Avatar"
+        aspectRatio="Square (1:1)"
+        recommendedDimensions="200 x 200 px"
       />
     </div>
   );

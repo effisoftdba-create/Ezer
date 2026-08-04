@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
 import { phase1Courses } from '../../data/courses';
 import { testimonials as initialTestimonials, videoStories } from '../../data/testimonials';
 import { generalFaqs } from '../../data/faq';
@@ -197,112 +197,63 @@ const defaultContactInfo = {
   hours: 'Mon - Sat: 9:00 AM - 8:00 PM IST'
 };
 
+function getStored(key, fallback) {
+  try {
+    const stored = localStorage.getItem(key);
+    if (stored) return JSON.parse(stored);
+  } catch (e) {}
+  return fallback;
+}
+
+function getInitialState() {
+  return {
+    heroSlides: getStored(STORAGE_SLIDES_KEY, defaultSlides),
+    courses: getStored(STORAGE_COURSES_KEY, phase1Courses),
+    ezerDefinition: getStored(STORAGE_PLATFORM_KEY, defaultPlatformDef),
+    supportCards: getStored(STORAGE_SUPPORT_CARDS_KEY, defaultSupportCards),
+    transformedLives: getStored(STORAGE_TRANSFORMED_KEY, defaultTransformedLives),
+    outcomesHeader: getStored(STORAGE_OUTCOMES_HEADER_KEY, defaultOutcomesHeader),
+    seniorMentors: getStored(STORAGE_MENTORS_KEY, defaultSeniorMentors),
+    mentorsHeader: getStored(STORAGE_MENTORS_HEADER_KEY, defaultMentorsHeader),
+    videoTestimonials: getStored(STORAGE_VIDEOS_KEY, videoStories),
+    testimonialsHero: getStored(STORAGE_TESTIMONIALS_HERO_KEY, defaultTestimonialsHero),
+    writtenTestimonials: getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials),
+    faqList: getStored(STORAGE_FAQS_KEY, generalFaqs),
+    contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo),
+  };
+}
+
+function siteReducer(state, action) {
+  switch (action.type) {
+    case 'SET_KEY':
+      return { ...state, [action.key]: action.value };
+    case 'RESET_ALL':
+      return getInitialState();
+    default:
+      return state;
+  }
+}
+
 export function SiteProvider({ children }) {
-  const [heroSlides, setHeroSlides] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_SLIDES_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return defaultSlides;
-  });
+  const [state, dispatch] = useReducer(siteReducer, null, getInitialState);
 
-  const [courses, setCourses] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_COURSES_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return phase1Courses;
-  });
+  const {
+    heroSlides,
+    courses,
+    ezerDefinition,
+    supportCards,
+    transformedLives,
+    outcomesHeader,
+    seniorMentors,
+    mentorsHeader,
+    videoTestimonials,
+    testimonialsHero,
+    writtenTestimonials,
+    faqList,
+    contactInfo
+  } = state;
 
-  const [ezerDefinition, setEzerDefinition] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_PLATFORM_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return defaultPlatformDef;
-  });
-
-  const [supportCards, setSupportCards] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_SUPPORT_CARDS_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return defaultSupportCards;
-  });
-
-  const [transformedLives, setTransformedLives] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_TRANSFORMED_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return defaultTransformedLives;
-  });
-
-  const [outcomesHeader, setOutcomesHeader] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_OUTCOMES_HEADER_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return defaultOutcomesHeader;
-  });
-
-  const [seniorMentors, setSeniorMentors] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_MENTORS_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return defaultSeniorMentors;
-  });
-
-  const [mentorsHeader, setMentorsHeader] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_MENTORS_HEADER_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return defaultMentorsHeader;
-  });
-
-  const [videoTestimonials, setVideoTestimonials] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_VIDEOS_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return videoStories;
-  });
-
-  const [testimonialsHero, setTestimonialsHero] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_TESTIMONIALS_HERO_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return defaultTestimonialsHero;
-  });
-
-  const [writtenTestimonials, setWrittenTestimonials] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_WRITTEN_TESTIMONIALS_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return initialTestimonials;
-  });
-
-  const [faqList, setFaqList] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_FAQS_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return generalFaqs;
-  });
-
-  const [contactInfo, setContactInfo] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_CONTACT_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return defaultContactInfo;
-  });
-
-  // LocalStorage Persist Effect
+  // LocalStorage Persist Effects
   useEffect(() => { localStorage.setItem(STORAGE_SLIDES_KEY, JSON.stringify(heroSlides)); }, [heroSlides]);
   useEffect(() => { localStorage.setItem(STORAGE_COURSES_KEY, JSON.stringify(courses)); }, [courses]);
   useEffect(() => { localStorage.setItem(STORAGE_PLATFORM_KEY, JSON.stringify(ezerDefinition)); }, [ezerDefinition]);
@@ -317,68 +268,53 @@ export function SiteProvider({ children }) {
   useEffect(() => { localStorage.setItem(STORAGE_FAQS_KEY, JSON.stringify(faqList)); }, [faqList]);
   useEffect(() => { localStorage.setItem(STORAGE_CONTACT_KEY, JSON.stringify(contactInfo)); }, [contactInfo]);
 
-  // Hero CRUD
-  const addHeroSlide = (slide) => setHeroSlides((prev) => [...prev, { id: `slide-${Date.now()}`, ...slide }]);
-  const updateHeroSlide = (id, updated) => setHeroSlides((prev) => prev.map((s) => (s.id === id || s.badge === id ? { ...s, ...updated } : s)));
-  const deleteHeroSlide = (id) => setHeroSlides((prev) => prev.filter((s) => s.id !== id && s.badge !== id));
+  // Helper dispatch setters with useCallback
+  const addHeroSlide = useCallback((slide) => dispatch({ type: 'SET_KEY', key: 'heroSlides', value: [...state.heroSlides, { id: `slide-${Date.now()}`, ...slide }] }), [state.heroSlides]);
+  const updateHeroSlide = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'heroSlides', value: state.heroSlides.map((s) => (s.id === id || s.badge === id ? { ...s, ...updated } : s)) }), [state.heroSlides]);
+  const deleteHeroSlide = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'heroSlides', value: state.heroSlides.filter((s) => s.id !== id && s.badge !== id) }), [state.heroSlides]);
 
-  // Course CRUD
-  const addCourse = (c) => setCourses((prev) => [{ id: c.slug || `course-${Date.now()}`, badge: 'New Course', ...c }, ...prev]);
-  const updateCourse = (id, updated) => setCourses((prev) => prev.map((c) => (c.id === id || c.slug === id ? { ...c, ...updated } : c)));
-  const deleteCourse = (id) => setCourses((prev) => prev.filter((c) => c.id !== id && c.slug !== id));
+  const addCourse = useCallback((c) => dispatch({ type: 'SET_KEY', key: 'courses', value: [{ id: c.slug || `course-${Date.now()}`, badge: 'New Course', ...c }, ...state.courses] }), [state.courses]);
+  const updateCourse = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'courses', value: state.courses.map((c) => (c.id === id || c.slug === id ? { ...c, ...updated } : c)) }), [state.courses]);
+  const deleteCourse = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'courses', value: state.courses.filter((c) => c.id !== id && c.slug !== id) }), [state.courses]);
 
-  // Platform Definition Updates
-  const updateEzerDefinition = (data) => setEzerDefinition((prev) => ({ ...prev, ...data }));
+  const updateEzerDefinition = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: { ...state.ezerDefinition, ...data } }), [state.ezerDefinition]);
 
-  // Support Cards CRUD
-  const addSupportCard = (card) => setSupportCards((prev) => [{ id: `support-${Date.now()}`, ...card }, ...prev]);
-  const updateSupportCard = (id, updated) => setSupportCards((prev) => prev.map((c) => (c.id === id || c.title === id ? { ...c, ...updated } : c)));
-  const deleteSupportCard = (id) => setSupportCards((prev) => prev.filter((c) => c.id !== id && c.title !== id));
+  const addSupportCard = useCallback((card) => dispatch({ type: 'SET_KEY', key: 'supportCards', value: [{ id: `support-${Date.now()}`, ...card }, ...state.supportCards] }), [state.supportCards]);
+  const updateSupportCard = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'supportCards', value: state.supportCards.map((c) => (c.id === id || c.title === id ? { ...c, ...updated } : c)) }), [state.supportCards]);
+  const deleteSupportCard = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'supportCards', value: state.supportCards.filter((c) => c.id !== id && c.title !== id) }), [state.supportCards]);
 
-  // Transformed Lives CRUD
-  const updateOutcomesHeader = (data) => setOutcomesHeader((prev) => ({ ...prev, ...data }));
-  const addTransformedLife = (item) => setTransformedLives((prev) => [{ id: Date.now(), ...item }, ...prev]);
-  const updateTransformedLife = (id, updated) => setTransformedLives((prev) => prev.map((t) => (t.id === id ? { ...t, ...updated } : t)));
-  const deleteTransformedLife = (id) => setTransformedLives((prev) => prev.filter((t) => t.id !== id));
+  const updateOutcomesHeader = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: { ...state.outcomesHeader, ...data } }), [state.outcomesHeader]);
+  const addTransformedLife = useCallback((item) => dispatch({ type: 'SET_KEY', key: 'transformedLives', value: [{ id: Date.now(), ...item }, ...state.transformedLives] }), [state.transformedLives]);
+  const updateTransformedLife = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'transformedLives', value: state.transformedLives.map((t) => (t.id === id ? { ...t, ...updated } : t)) }), [state.transformedLives]);
+  const deleteTransformedLife = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'transformedLives', value: state.transformedLives.filter((t) => t.id !== id) }), [state.transformedLives]);
 
-  // Senior Mentors CRUD
-  const updateMentorsHeader = (data) => setMentorsHeader((prev) => ({ ...prev, ...data }));
-  const addSeniorMentor = (mentor) => setSeniorMentors((prev) => [{ id: `mentor-${Date.now()}`, ...mentor }, ...prev]);
-  const updateSeniorMentor = (id, updated) => setSeniorMentors((prev) => prev.map((m) => (m.id === id ? { ...m, ...updated } : m)));
-  const deleteSeniorMentor = (id) => setSeniorMentors((prev) => prev.filter((m) => m.id !== id));
+  const updateMentorsHeader = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: { ...state.mentorsHeader, ...data } }), [state.mentorsHeader]);
+  const addSeniorMentor = useCallback((mentor) => dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: [{ id: `mentor-${Date.now()}`, ...mentor }, ...state.seniorMentors] }), [state.seniorMentors]);
+  const updateSeniorMentor = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: state.seniorMentors.map((m) => (m.id === id ? { ...m, ...updated } : m)) }), [state.seniorMentors]);
+  const deleteSeniorMentor = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: state.seniorMentors.filter((m) => m.id !== id) }), [state.seniorMentors]);
 
-  // Video Testimonial CRUD
-  const addVideoTestimonial = (video) => setVideoTestimonials((prev) => [{ id: Date.now(), ...video }, ...prev]);
-  const updateVideoTestimonial = (id, updated) => setVideoTestimonials((prev) => prev.map((v) => (v.id === id ? { ...v, ...updated } : v)));
-  const deleteVideoTestimonial = (id) => setVideoTestimonials((prev) => prev.filter((v) => v.id !== id));
+  const addVideoTestimonial = useCallback((v) => dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: [{ id: `video-${Date.now()}`, ...v }, ...state.videoTestimonials] }), [state.videoTestimonials]);
+  const updateVideoTestimonial = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: state.videoTestimonials.map((v) => (v.id === id ? { ...v, ...updated } : v)) }), [state.videoTestimonials]);
+  const deleteVideoTestimonial = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: state.videoTestimonials.filter((v) => v.id !== id) }), [state.videoTestimonials]);
 
-  // Testimonials Page CRUD
-  const updateTestimonialsHero = (data) => setTestimonialsHero((prev) => ({ ...prev, ...data }));
-  const addWrittenTestimonial = (item) => setWrittenTestimonials((prev) => [{ id: Date.now(), ...item }, ...prev]);
-  const updateWrittenTestimonial = (id, updated) => setWrittenTestimonials((prev) => prev.map((t) => (t.id === id ? { ...t, ...updated } : t)));
-  const deleteWrittenTestimonial = (id) => setWrittenTestimonials((prev) => prev.filter((t) => t.id !== id));
+  const updateTestimonialsHero = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: { ...state.testimonialsHero, ...data } }), [state.testimonialsHero]);
+  const addWrittenTestimonial = useCallback((t) => dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: [{ id: Date.now(), ...t }, ...state.writtenTestimonials] }), [state.writtenTestimonials]);
+  const updateWrittenTestimonial = useCallback((id, updated) => dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: state.writtenTestimonials.map((t) => (t.id === id ? { ...t, ...updated } : t)) }), [state.writtenTestimonials]);
+  const deleteWrittenTestimonial = useCallback((id) => dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: state.writtenTestimonials.filter((t) => t.id !== id) }), [state.writtenTestimonials]);
 
-  // FAQ CRUD
-  const updateFaqList = (newList) => setFaqList(newList);
+  const addFaqItem = useCallback((categoryName, item) => {
+    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: [...cat.items, { id: `faq-${Date.now()}`, ...item }] } : cat) });
+  }, [state.faqList]);
+  const updateFaqItem = useCallback((categoryName, id, updated) => {
+    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: cat.items.map((i) => i.id === id || i.q === id ? { ...i, ...updated } : i) } : cat) });
+  }, [state.faqList]);
+  const deleteFaqItem = useCallback((categoryName, id) => {
+    dispatch({ type: 'SET_KEY', key: 'faqList', value: state.faqList.map((cat) => cat.category === categoryName ? { ...cat, items: cat.items.filter((i) => i.id !== id && i.q !== id) } : cat) });
+  }, [state.faqList]);
 
-  // Contact Info Updates
-  const updateContactInfo = (data) => setContactInfo((prev) => ({ ...prev, ...data }));
+  const updateContactInfo = useCallback((data) => dispatch({ type: 'SET_KEY', key: 'contactInfo', value: { ...state.contactInfo, ...data } }), [state.contactInfo]);
 
-  const resetToDefault = () => {
-    setHeroSlides(defaultSlides);
-    setCourses(phase1Courses);
-    setEzerDefinition(defaultPlatformDef);
-    setSupportCards(defaultSupportCards);
-    setTransformedLives(defaultTransformedLives);
-    setOutcomesHeader(defaultOutcomesHeader);
-    setSeniorMentors(defaultSeniorMentors);
-    setMentorsHeader(defaultMentorsHeader);
-    setVideoTestimonials(videoStories);
-    setTestimonialsHero(defaultTestimonialsHero);
-    setWrittenTestimonials(initialTestimonials);
-    setFaqList(generalFaqs);
-    setContactInfo(defaultContactInfo);
-
+  const resetToDefault = useCallback(() => {
     localStorage.removeItem(STORAGE_SLIDES_KEY);
     localStorage.removeItem(STORAGE_COURSES_KEY);
     localStorage.removeItem(STORAGE_PLATFORM_KEY);
@@ -392,56 +328,124 @@ export function SiteProvider({ children }) {
     localStorage.removeItem(STORAGE_WRITTEN_TESTIMONIALS_KEY);
     localStorage.removeItem(STORAGE_FAQS_KEY);
     localStorage.removeItem(STORAGE_CONTACT_KEY);
-  };
+    dispatch({ type: 'RESET_ALL' });
+  }, []);
 
-  const contextValue = useMemo(
-    () => ({
-      heroSlides,
-      courses,
-      ezerDefinition,
-      supportCards,
-      transformedLives,
-      outcomesHeader,
-      seniorMentors,
-      mentorsHeader,
-      videoTestimonials,
-      testimonialsHero,
-      writtenTestimonials,
-      faqList,
-      contactInfo,
-      addHeroSlide,
-      updateHeroSlide,
-      deleteHeroSlide,
-      addCourse,
-      updateCourse,
-      deleteCourse,
-      updateEzerDefinition,
-      addSupportCard,
-      updateSupportCard,
-      deleteSupportCard,
-      updateOutcomesHeader,
-      addTransformedLife,
-      updateTransformedLife,
-      deleteTransformedLife,
-      updateMentorsHeader,
-      addSeniorMentor,
-      updateSeniorMentor,
-      deleteSeniorMentor,
-      addVideoTestimonial,
-      updateVideoTestimonial,
-      deleteVideoTestimonial,
-      updateTestimonialsHero,
-      addWrittenTestimonial,
-      updateWrittenTestimonial,
-      deleteWrittenTestimonial,
-      updateFaqList,
-      updateContactInfo,
-      resetToDefault,
-    }),
-    [heroSlides, courses, ezerDefinition, supportCards, transformedLives, outcomesHeader, seniorMentors, mentorsHeader, videoTestimonials, testimonialsHero, writtenTestimonials, faqList, contactInfo]
+  const contextValue = useMemo(() => ({
+    heroSlides,
+    addHeroSlide,
+    updateHeroSlide,
+    deleteHeroSlide,
+
+    courses,
+    addCourse,
+    updateCourse,
+    deleteCourse,
+
+    ezerDefinition,
+    updateEzerDefinition,
+
+    supportCards,
+    addSupportCard,
+    updateSupportCard,
+    deleteSupportCard,
+
+    transformedLives,
+    outcomesHeader,
+    updateOutcomesHeader,
+    addTransformedLife,
+    updateTransformedLife,
+    deleteTransformedLife,
+
+    seniorMentors,
+    mentorsHeader,
+    updateMentorsHeader,
+    addSeniorMentor,
+    updateSeniorMentor,
+    deleteSeniorMentor,
+
+    videoTestimonials,
+    addVideoTestimonial,
+    updateVideoTestimonial,
+    deleteVideoTestimonial,
+
+    testimonialsHero,
+    updateTestimonialsHero,
+    writtenTestimonials,
+    addWrittenTestimonial,
+    updateWrittenTestimonial,
+    deleteWrittenTestimonial,
+
+    faqList,
+    addFaqItem,
+    updateFaqItem,
+    deleteFaqItem,
+
+    contactInfo,
+    updateContactInfo,
+
+    resetToDefault
+  }), [
+    heroSlides,
+    addHeroSlide,
+    updateHeroSlide,
+    deleteHeroSlide,
+
+    courses,
+    addCourse,
+    updateCourse,
+    deleteCourse,
+
+    ezerDefinition,
+    updateEzerDefinition,
+
+    supportCards,
+    addSupportCard,
+    updateSupportCard,
+    deleteSupportCard,
+
+    transformedLives,
+    outcomesHeader,
+    updateOutcomesHeader,
+    addTransformedLife,
+    updateTransformedLife,
+    deleteTransformedLife,
+
+    seniorMentors,
+    mentorsHeader,
+    updateMentorsHeader,
+    addSeniorMentor,
+    updateSeniorMentor,
+    deleteSeniorMentor,
+
+    videoTestimonials,
+    addVideoTestimonial,
+    updateVideoTestimonial,
+    deleteVideoTestimonial,
+
+    testimonialsHero,
+    updateTestimonialsHero,
+    writtenTestimonials,
+    addWrittenTestimonial,
+    updateWrittenTestimonial,
+    deleteWrittenTestimonial,
+
+    faqList,
+    addFaqItem,
+    updateFaqItem,
+    deleteFaqItem,
+
+    contactInfo,
+    updateContactInfo,
+
+    resetToDefault
+  ]);
+
+  return (
+    <SiteContext.Provider value={contextValue}>
+      {children}
+    </SiteContext.Provider>
   );
-
-  return <SiteContext.Provider value={contextValue}>{children}</SiteContext.Provider>;
 }
 
 export function useSiteData() {

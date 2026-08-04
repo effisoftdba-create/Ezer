@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
-import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck, HiSearch } from 'react-icons/hi';
+import CourseFormModal from './CourseFormModal';
+import { HiPlus, HiTrash, HiPencil, HiSearch } from 'react-icons/hi';
+import { resolveImageSrc } from '../../utils/imageUtils';
 
 const DEFAULT_COURSE_STATE = {
   title: '',
@@ -26,7 +28,6 @@ export default function CourseManager() {
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
-
   const [formData, setFormData] = useState(DEFAULT_COURSE_STATE);
 
   const handleOpenAdd = () => {
@@ -112,268 +113,93 @@ export default function CourseManager() {
           </p>
         </div>
 
-        <button
-          type="button"
-          onClick={handleOpenAdd}
-          aria-label="Add new course"
-          style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            padding: '10px 20px', background: '#000648', color: '#f2b733',
-            border: 'none', borderRadius: '10px', fontWeight: 800, fontSize: '0.875rem',
-            cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,6,72,0.15)'
-          }}
-        >
-          <HiPlus size={18} /> Add New Course
-        </button>
-      </div>
-
-      <div style={{ marginBottom: '20px', position: 'relative', maxWidth: '400px' }}>
-        <HiSearch size={18} style={{ position: 'absolute', left: '12px', top: '11px', color: '#94a3b8' }} />
-        <label htmlFor="course_search_input" style={{ display: 'none' }}>Search Courses</label>
-        <input
-          id="course_search_input"
-          type="text"
-          placeholder="Search courses by name or slug..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          aria-label="Search courses by name or slug"
-          style={{
-            width: '100%', padding: '9px 12px 9px 38px', borderRadius: '8px',
-            border: '1.5px solid #cbd5e1', fontSize: '0.85rem', outline: 'none'
-          }}
-        />
-      </div>
-
-      {isEditing && (
-        <form onSubmit={handleSave} style={{
-          background: '#f8fafc', border: '2px solid #cbd5e1', borderRadius: '14px',
-          padding: '24px', marginBottom: '28px', boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
-        }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.1rem', fontWeight: 800, color: '#000648' }}>
-            {editingId ? 'Edit Course Details' : 'Add New Course'}
-          </h3>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-            <div>
-              <label htmlFor="course_title_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Course Title *</label>
-              <input
-                id="course_title_field"
-                type="text"
-                value={formData.title}
-                onChange={(e) => {
-                  const titleVal = e.target.value;
-                  const autoSlug = titleVal.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                  setFormData({ ...formData, title: titleVal, slug: editingId ? formData.slug : autoSlug });
-                }}
-                placeholder="e.g. AI-Powered Data Engineering"
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="course_slug_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>URL Slug *</label>
-              <input
-                id="course_slug_field"
-                type="text"
-                value={formData.slug}
-                onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                placeholder="e.g. ai-data-engineering"
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="course_badge_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Badge Label</label>
-              <input
-                id="course_badge_field"
-                type="text"
-                value={formData.badge}
-                onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                placeholder="Best Seller / Popular"
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-            <div>
-              <label htmlFor="course_duration_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Duration</label>
-              <input
-                id="course_duration_field"
-                type="text"
-                value={formData.duration}
-                onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                placeholder="e.g. 3 Months"
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="course_fee_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Total Fee</label>
-              <input
-                id="course_fee_field"
-                type="text"
-                value={formData.fee}
-                onChange={(e) => setFormData({ ...formData, fee: e.target.value })}
-                placeholder="e.g. ₹45,000 + 18% GST"
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="course_image_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Course Image</label>
-              <div style={{ display: 'flex', gap: '6px' }}>
-                <input
-                  id="course_image_field"
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="Image URL or Path"
-                  style={{ flex: 1, padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setIsImagePickerOpen(true)}
-                  aria-label="Choose course image"
-                  style={{ padding: '9px 12px', background: '#115DFC', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer' }}
-                >
-                  <HiPhotograph size={16} />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label htmlFor="course_tagline_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Tagline</label>
-            <input
-              id="course_tagline_field"
-              type="text"
-              value={formData.tagline}
-              onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
-              placeholder="e.g. Deploy, Automate, and Scale — Like a Real Engineer."
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-            />
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label htmlFor="course_desc_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Full Description</label>
-            <textarea
-              id="course_desc_field"
-              rows={2}
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Detailed course overview description..."
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-            />
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
-            <div>
-              <label htmlFor="course_tools_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Tools & Technologies (Comma Separated)</label>
-              <input
-                id="course_tools_field"
-                type="text"
-                value={formData.tools}
-                onChange={(e) => setFormData({ ...formData, tools: e.target.value })}
-                placeholder="AWS, Docker, Kubernetes, Jenkins, Python"
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="course_modules_field" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>Curriculum Modules (Comma Separated)</label>
-              <input
-                id="course_modules_field"
-                type="text"
-                value={formData.modulesStr}
-                onChange={(e) => setFormData({ ...formData, modulesStr: e.target.value })}
-                placeholder="Module 1 Title, Module 2 Title, Module 3 Title"
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-            <button
-              type="button"
-              onClick={() => setIsEditing(false)}
-              aria-label="Cancel editing course"
-              style={{ padding: '9px 16px', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              aria-label="Save course"
-              style={{ padding: '9px 20px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <HiCheck size={18} /> Save Course
-            </button>
-          </div>
-        </form>
-      )}
-
-      <div style={{ display: 'grid', gap: '14px' }}>
-        {filteredCourses.map((course) => (
-          <div
-            key={course.id || course.slug}
+        {!isEditing && (
+          <button
+            type="button"
+            onClick={handleOpenAdd}
             style={{
-              display: 'grid', gridTemplateColumns: '120px 1fr auto', gap: '16px',
-              alignItems: 'center', background: '#ffffff', border: '1.5px solid #e2e8f0',
-              borderRadius: '12px', padding: '14px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
+              display: 'inline-flex', alignItems: 'center', gap: '8px',
+              padding: '10px 20px', background: '#000648', color: '#f2b733',
+              borderRadius: '10px', fontWeight: 800, border: 'none', cursor: 'pointer',
+              fontSize: '0.875rem'
             }}
           >
-            <div style={{ height: '75px', borderRadius: '8px', overflow: 'hidden', background: '#f1f5f9' }}>
-              <img src={course.image} alt={course.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
+            <HiPlus size={18} /> Add New Course
+          </button>
+        )}
+      </div>
 
+      {/* Course Form Modal */}
+      <CourseFormModal
+        isEditing={isEditing}
+        editingId={editingId}
+        formData={formData}
+        setFormData={setFormData}
+        onSave={handleSave}
+        onCancel={() => setIsEditing(false)}
+        onOpenImagePicker={() => setIsImagePickerOpen(true)}
+      />
+
+      {/* Search Input */}
+      <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <label htmlFor="course_search_input" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
+            Filter Course Catalog
+          </label>
+          <div style={{ position: 'relative', width: '100%' }}>
+            <HiSearch size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+            <input
+              id="course_search_input"
+              type="text"
+              aria-label="Search catalog by title or slug"
+              placeholder="Search catalog by title or slug..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                width: '100%', padding: '10px 14px 10px 38px', borderRadius: '8px',
+                border: '1.5px solid #cbd5e1', fontSize: '0.875rem', outline: 'none'
+              }}
+            />
+          </div>
+        <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
+          Showing {filteredCourses.length} of {courses.length} courses
+        </span>
+      </div>
+
+      {/* Courses Cards Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+        {filteredCourses.map((c) => (
+          <div key={c.id || c.slug} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <span style={{
-                  background: '#fef3c7', color: '#92400e', fontSize: '0.68rem', fontWeight: 800,
-                  padding: '2px 8px', borderRadius: '50px'
-                }}>
-                  {course.badge || 'Popular'}
-                </span>
-                <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                  Slug: <code style={{ color: '#0f172a' }}>/courses/{course.slug}</code>
+              <div style={{ height: '140px', position: 'relative', overflow: 'hidden', background: '#000648' }}>
+                <img src={resolveImageSrc(c.image)} alt={c.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <span style={{ position: 'absolute', top: '10px', right: '10px', background: '#000648', color: '#f2b733', padding: '3px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 800 }}>
+                  {c.badge || 'Popular'}
                 </span>
               </div>
-              <h4 style={{ margin: '0 0 2px 0', fontSize: '1rem', fontWeight: 800, color: '#000648' }}>
-                {course.title}
-              </h4>
-              <div style={{ fontSize: '0.78rem', color: '#475569' }}>
-                Duration: <strong>{course.duration}</strong> | Fee: <strong>{course.fee}</strong>
+
+              <div style={{ padding: '16px' }}>
+                <h4 style={{ margin: '0 0 6px 0', fontSize: '1rem', fontWeight: 800, color: '#000648' }}>{c.title}</h4>
+                <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', lineHeight: 1.4 }}>{c.tagline || c.description}</p>
+                <div style={{ marginTop: '8px', fontSize: '0.75rem', fontWeight: 700, color: '#000648' }}>
+                  Duration: {c.duration} | Languages: {c.languages}
+                </div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', gap: '8px' }}>
+            <div style={{ padding: '12px 16px', borderTop: '1px solid #f1f5f9', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
               <button
                 type="button"
-                onClick={() => handleOpenEdit(course)}
-                aria-label={`Edit course ${course.title}`}
-                style={{
-                  padding: '8px 12px', background: '#f1f5f9', color: '#000648',
-                  border: '1.5px solid #cbd5e1', borderRadius: '8px', fontWeight: 700,
-                  fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
-                }}
+                onClick={() => handleOpenEdit(c)}
+                style={{ padding: '6px 12px', background: '#f1f5f9', border: '1px solid #cbd5e1', color: '#000648', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}
               >
-                <HiPencil size={15} /> Edit
+                <HiPencil size={14} /> Edit
               </button>
-
               <button
                 type="button"
-                onClick={() => handleDelete(course.id || course.slug, course.title)}
-                aria-label={`Delete course ${course.title}`}
-                style={{
-                  padding: '8px 12px', background: '#fef2f2', color: '#dc2626',
-                  border: '1.5px solid #fecaca', borderRadius: '8px', fontWeight: 700,
-                  fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
-                }}
+                onClick={() => handleDelete(c.id || c.slug, c.title)}
+                style={{ padding: '6px 12px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}
               >
-                <HiTrash size={15} /> Delete
+                <HiTrash size={14} /> Delete
               </button>
             </div>
           </div>
@@ -385,6 +211,9 @@ export default function CourseManager() {
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
         onSelectImage={(url) => setFormData((prev) => ({ ...prev, image: url }))}
+        targetArea="Course Program Banner"
+        aspectRatio="Rectangle / Landscape (16:9)"
+        recommendedDimensions="1200 x 675 px"
       />
     </div>
   );

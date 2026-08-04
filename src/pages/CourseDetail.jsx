@@ -265,31 +265,20 @@ export default function CourseDetail({ onOpenDemoModal }) {
               </div>
             </div>
 
-            {/* ADMISSION STEPS (HOW IT WORKS TIMELINE) */}
-            {course.admissionSteps && (
-              <CourseAdmissionSteps steps={course.admissionSteps} />
-            )}
+            {/* ADMISSION STEPS (HOW IT WORKS TIMELINE - 6 STEPS) */}
+            <CourseAdmissionSteps steps={course.admissionSteps} />
 
             {/* WHO IS THIS PROGRAMME FOR? */}
             <WhoIsThisProgrammeFor audienceList={course.whoIsItFor} />
 
-            {/* FACULTY SHOWCASE */}
-            {course.faculty && (
-              <FacultyShowcase faculty={course.faculty} />
-            )}
+            {/* SENIOR MENTORS / FACULTY SHOWCASE */}
+            <FacultyShowcase faculty={course.faculty} />
 
             {/* BENCHMARK COMPARISON TABLE */}
             {course.comparisonData && (
               <CourseComparisonTable comparisonData={course.comparisonData} />
             )}
 
-            <FeeInstallmentSchedule
-              schedule={course.feeSchedule}
-              fee={course.price}
-              applicationFee="₹1,000 + GST"
-              referral={{ title: "Learner Referral Scheme", desc: "Refer a friend to receive ₹5,000 instant cashback on your fee." }}
-              onOpenDemoModal={onOpenDemoModal}
-            />
 
             {course.faqs && (
               <div>

@@ -1,8 +1,34 @@
 import React from 'react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
+const DEFAULT_CAPSTONES = [
+  {
+    id: 'cap-1',
+    title: 'Multi-Cloud Automated Infrastructure Sandbox',
+    desc: 'Design and provision multi-region infrastructure on AWS and Azure using Terraform modules, Ansible, and Kubernetes.',
+    category: 'Cloud & DevOps Capstone',
+    tools: ['AWS', 'Terraform', 'Kubernetes', 'Docker']
+  },
+  {
+    id: 'cap-2',
+    title: 'Playwright E2E Test Automation Framework',
+    desc: 'Build cross-browser automated testing suite integrated into CI/CD pipelines with real-time HTML execution reports.',
+    category: 'Testing Automation Capstone',
+    tools: ['Playwright', 'TypeScript', 'GitHub Actions', 'Docker']
+  },
+  {
+    id: 'cap-3',
+    title: 'Enterprise AI Customer RAG Engine',
+    desc: 'Deploy high-performance retrieval-augmented generation engine using Python, LangChain, and vector embeddings database.',
+    category: 'AI & Data Science Capstone',
+    tools: ['Python', 'LangChain', 'OpenAI', 'Pinecone']
+  }
+];
+
 export default function CapstoneProjectsSlider({ projects, courseTools }) {
-  if (!projects || projects.length === 0) return null;
+  const displayProjects = (projects && projects.length > 0) ? projects : DEFAULT_CAPSTONES;
+
+  if (!displayProjects || displayProjects.length === 0) return null;
 
   return (
     <section className="section" style={{ background: '#f8fafc', padding: '48px 0' }}>
@@ -77,7 +103,7 @@ export default function CapstoneProjectsSlider({ projects, courseTools }) {
             paddingBottom: '16px',
           }}
         >
-          {projects.map((proj) => {
+          {displayProjects.map((proj) => {
             const title = typeof proj === 'string' ? proj : (proj.title || 'Production Capstone Lab');
             const desc = typeof proj === 'string'
               ? 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.'

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { HiX, HiCheck, HiPhotograph, HiUpload, HiArrowRight, HiTrash, HiZoomIn, HiZoomOut, HiSelector } from 'react-icons/hi';
+import { HiX, HiPhotograph, HiUpload, HiArrowRight, HiSelector } from 'react-icons/hi';
 import { resolveImageSrc } from '../../utils/imageUtils';
+import ImagePickerGalleryGrid from './ImagePickerGalleryGrid';
+import ImagePickerControls from './ImagePickerControls';
 
 const STORAGE_UPLOADED_IMAGES_KEY = 'ezer_uploaded_images:v1';
 
@@ -29,7 +31,10 @@ export default function ImagePickerModal({
   onSelectImage,
   currentImage = '',
   currentPosition = 'center center',
-  onSelectPosition
+  onSelectPosition,
+  targetArea = 'Website Image',
+  aspectRatio = 'Rectangle (16:9)',
+  recommendedDimensions = '1200 x 675 px'
 }) {
   const [selectedUrl, setSelectedUrl] = useState(currentImage || DEFAULT_PRESET_IMAGES[0].url);
   const [customUrl, setCustomUrl] = useState('');
@@ -57,7 +62,6 @@ export default function ImagePickerModal({
 
   const activeSelectedUrl = customUrl.trim() || selectedUrl;
 
-  // Combine user uploaded pictures AND preset images in Gallery Presets so all uploaded images appear everywhere
   const combinedGalleryImages = [
     ...uploadedImages.map((img) => ({ label: img.label || 'Uploaded Image', url: img.url, isUploaded: true })),
     ...DEFAULT_PRESET_IMAGES
@@ -87,7 +91,6 @@ export default function ImagePickerModal({
         const dataUri = reader.result;
         setCustomUrl(dataUri);
         setSelectedUrl(dataUri);
-        // Persist uploaded picture into uploadedImages list so it immediately appears in all gallery options
         setUploadedImages((prev) => {
           if (prev.some((img) => img.url === dataUri)) return prev;
           return [{ label: `My Upload ${prev.length + 1}`, url: dataUri, date: new Date().toLocaleTimeString() }, ...prev];
@@ -102,7 +105,6 @@ export default function ImagePickerModal({
     setUploadedImages((prev) => prev.filter((img) => img.url !== url));
   };
 
-  // Drag handlers for mouse/touch interactive panning inside preview box
   const handleMouseDown = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -118,23 +120,6 @@ export default function ImagePickerModal({
   };
 
   const handleMouseUp = () => setIsDragging(false);
-
-  const handleTouchStart = (e) => {
-    if (e.touches.length === 1) {
-      setIsDragging(true);
-      const touch = e.touches[0];
-      dragStartRef.current = { x: touch.clientX - dragOffset.x, y: touch.clientY - dragOffset.y };
-    }
-  };
-
-  const handleTouchMove = (e) => {
-    if (!isDragging || e.touches.length !== 1) return;
-    const touch = e.touches[0];
-    const newX = Math.min(50, Math.max(-50, Math.round((touch.clientX - dragStartRef.current.x) / 3)));
-    const newY = Math.min(50, Math.max(-50, Math.round((touch.clientY - dragStartRef.current.y) / 3)));
-    setDragOffset({ x: newX, y: newY });
-    setPosition(`${50 + newX}% ${50 + newY}%`);
-  };
 
   const handlePresetPosition = (preset) => {
     setPosition(preset.value);
@@ -165,7 +150,30 @@ export default function ImagePickerModal({
           </button>
         </div>
 
-        {/* Dual Image Preview (Current vs. Newly Selected with Drag-to-Move & Zoom) */}
+        {/* Aspect Ratio Banner */}
+        <div style={{
+          background: 'linear-gradient(135deg, #000638 0%, #1e293b 100%)',
+          color: '#ffffff', borderRadius: '12px', padding: '10px 16px', marginBottom: '16px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px',
+          borderLeft: '4px solid #f2b733'
+        }}>
+          <div>
+            <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#f2b733', fontWeight: 800 }}>
+              Target Section: {targetArea}
+            </span>
+            <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>
+              Required Format: <span style={{ color: '#60a5fa' }}>{aspectRatio}</span>
+            </div>
+          </div>
+          <div style={{
+            background: 'rgba(242, 183, 51, 0.15)', border: '1px solid #f2b733', color: '#f2b733',
+            fontSize: '0.75rem', fontWeight: 800, padding: '4px 10px', borderRadius: '6px'
+          }}>
+            Rec. Size: {recommendedDimensions}
+          </div>
+        </div>
+
+        {/* Dual Image Preview */}
         <div style={{
           background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
           padding: '16px', marginBottom: '20px', display: 'grid', gridTemplateColumns: '1fr auto 1fr',
@@ -200,37 +208,27 @@ export default function ImagePickerModal({
               </span>
             </div>
             
-            {/* Drag to Move Interactive Container */}
             <div
+              role="region"
+              aria-label="Drag image to reposition focal point"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleMouseUp}
               style={{
-                height: '130px',
-                borderRadius: '10px',
-                overflow: 'hidden',
-                border: '2.5px solid #115DFC',
-                background: '#000648',
-                boxShadow: '0 4px 14px rgba(17,93,252,0.25)',
-                position: 'relative',
-                cursor: isDragging ? 'grabbing' : 'grab',
-                userSelect: 'none'
+                height: '130px', borderRadius: '10px', overflow: 'hidden',
+                border: '2.5px solid #115DFC', background: '#000648',
+                boxShadow: '0 4px 14px rgba(17,93,252,0.25)', position: 'relative',
+                cursor: isDragging ? 'grabbing' : 'grab', userSelect: 'none'
               }}
             >
               <img
                 src={resolveImageSrc(activeSelectedUrl)}
                 alt="Newly chosen preview"
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
+                  width: '100%', height: '100%', objectFit: 'cover',
                   objectPosition: `${50 + dragOffset.x}% ${50 + dragOffset.y}%`,
-                  transform: `scale(${zoomScale})`,
-                  pointerEvents: 'none',
+                  transform: `scale(${zoomScale})`, pointerEvents: 'none',
                   transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                 }}
               />
@@ -238,94 +236,22 @@ export default function ImagePickerModal({
                 position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,0,0,0.65)',
                 color: '#fff', fontSize: '0.65rem', padding: '2px 7px', borderRadius: '4px', pointerEvents: 'none'
               }}>
-                Offset: X:{dragOffset.x}% Y:{dragOffset.y}%
+                Pos: {position} | Offset: X:{dragOffset.x}% Y:{dragOffset.y}%
               </div>
             </div>
           </div>
         </div>
 
-        {/* Interactive Image Drag & Zoom Controls */}
-        <div style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '14px 16px', marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-            <span style={{ fontSize: '0.825rem', fontWeight: 800, color: '#000648' }}>
-              Interactive Image Move & Zoom Controls
-            </span>
-            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', background: '#e0e7ff', padding: '2px 8px', borderRadius: '4px' }}>
-              Zoom Level: {Math.round(zoomScale * 100)}%
-            </span>
-          </div>
+        {/* Move & Zoom Controls */}
+        <ImagePickerControls
+          POSITION_PRESETS={POSITION_PRESETS}
+          dragOffset={dragOffset}
+          zoomScale={zoomScale}
+          setZoomScale={setZoomScale}
+          handlePresetPosition={handlePresetPosition}
+        />
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', alignItems: 'center' }}>
-            {/* Quick Position Alignment Presets */}
-            <div>
-              <div style={{ fontSize: '0.725rem', fontWeight: 700, color: '#475569', marginBottom: '6px' }}>
-                Quick Alignment Presets
-              </div>
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {POSITION_PRESETS.map((p) => (
-                  <button
-                    key={p.value}
-                    type="button"
-                    onClick={() => handlePresetPosition(p)}
-                    aria-label={`Position preset ${p.label}`}
-                    style={{
-                      padding: '4px 10px', borderRadius: '6px', border: '1px solid #cbd5e1',
-                      background: (dragOffset.x === p.x && dragOffset.y === p.y) ? '#000648' : '#ffffff',
-                      color: (dragOffset.x === p.x && dragOffset.y === p.y) ? '#f2b733' : '#334155',
-                      fontWeight: (dragOffset.x === p.x && dragOffset.y === p.y) ? 800 : 600, fontSize: '0.725rem', cursor: 'pointer'
-                    }}
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Interactive Zoom Controls */}
-            <div>
-              <div style={{ fontSize: '0.725rem', fontWeight: 700, color: '#475569', marginBottom: '6px' }}>
-                Zoom In / Zoom Out Controls
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <button
-                  type="button"
-                  onClick={() => setZoomScale((z) => Math.max(1, +(z - 0.15).toFixed(2)))}
-                  aria-label="Zoom out"
-                  style={{
-                    padding: '6px 10px', background: '#ffffff', border: '1px solid #cbd5e1',
-                    borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px',
-                    fontSize: '0.75rem', fontWeight: 700, color: '#000648'
-                  }}
-                >
-                  <HiZoomOut size={15} /> Out
-                </button>
-                <input
-                  type="range"
-                  min="1"
-                  max="2.5"
-                  step="0.05"
-                  value={zoomScale}
-                  onChange={(e) => setZoomScale(parseFloat(e.target.value))}
-                  style={{ flex: 1, accentColor: '#115DFC', cursor: 'pointer' }}
-                />
-                <button
-                  type="button"
-                  onClick={() => setZoomScale((z) => Math.min(2.5, +(z + 0.15).toFixed(2)))}
-                  aria-label="Zoom in"
-                  style={{
-                    padding: '6px 10px', background: '#ffffff', border: '1px solid #cbd5e1',
-                    borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px',
-                    fontSize: '0.75rem', fontWeight: 700, color: '#000648'
-                  }}
-                >
-                  <HiZoomIn size={15} /> In
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Option 1: Custom URL or Upload New Image */}
+        {/* Custom URL or Upload Input */}
         <div style={{ marginBottom: '20px' }}>
           <label htmlFor="custom_image_url_picker" style={{ fontSize: '0.825rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '6px' }}>
             Option 1: Enter Custom Image URL or Upload File
@@ -353,108 +279,37 @@ export default function ImagePickerModal({
           </div>
         </div>
 
-        {/* Option 2: All Uploaded Pictures & Curated Presets combined so user can select any uploaded image everywhere */}
-        <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-            <span style={{ fontSize: '0.825rem', fontWeight: 800, color: '#000648' }}>
-              Option 2: Select from Curated Gallery Presets & Your Uploads ({combinedGalleryImages.length})
-            </span>
-            {uploadedImages.length > 0 && (
-              <span style={{ fontSize: '0.725rem', color: '#166534', fontWeight: 700 }}>
-                Includes {uploadedImages.length} uploaded picture{uploadedImages.length > 1 ? 's' : ''}
-              </span>
-            )}
-          </div>
+        {/* Option 2: Gallery Grid */}
+        <ImagePickerGalleryGrid
+          combinedGalleryImages={combinedGalleryImages}
+          activeSelectedUrl={activeSelectedUrl}
+          uploadedImages={uploadedImages}
+          onSelectUrl={(url) => { setSelectedUrl(url); setCustomUrl(''); }}
+          onDeleteUploaded={handleDeleteUploadedImage}
+        />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(135px, 1fr))', gap: '12px' }}>
-            {combinedGalleryImages.map((img, idx) => {
-              const isSelected = activeSelectedUrl === img.url;
-              return (
-                <div
-                  key={`${img.url}-${idx}`}
-                  style={{ position: 'relative', borderRadius: '10px', overflow: 'hidden' }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedUrl(img.url);
-                      setCustomUrl('');
-                    }}
-                    aria-label={`Select image: ${img.label}`}
-                    style={{
-                      width: '100%',
-                      position: 'relative', borderRadius: '10px', overflow: 'hidden', cursor: 'pointer',
-                      border: isSelected ? '3px solid #115DFC' : '1.5px solid #e2e8f0',
-                      boxShadow: isSelected ? '0 4px 12px rgba(17, 93, 252, 0.3)' : 'none',
-                      height: '90px', background: '#f8fafc', padding: 0, textAlign: 'left'
-                    }}
-                  >
-                    <img src={resolveImageSrc(img.url)} alt={img.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <div style={{
-                      position: 'absolute', bottom: 0, inset: 'auto 0 0 0', background: img.isUploaded ? 'rgba(0,6,72,0.85)' : 'rgba(0,0,0,0.7)',
-                      color: '#fff', fontSize: '0.65rem', padding: '3px 4px', textAlign: 'center', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap'
-                    }}>
-                      {img.isUploaded ? `⭐ ${img.label}` : img.label}
-                    </div>
-                    {isSelected && (
-                      <div style={{
-                        position: 'absolute', top: '4px', right: '4px', background: '#115DFC', color: '#fff',
-                        borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center'
-                      }}>
-                        <HiCheck size={14} />
-                      </div>
-                    )}
-                  </button>
-
-                  {img.isUploaded && (
-                    <button
-                      type="button"
-                      onClick={(e) => handleDeleteUploadedImage(img.url, e)}
-                      aria-label="Delete uploaded image"
-                      style={{
-                        position: 'absolute', top: '4px', left: '4px', background: 'rgba(220, 38, 38, 0.85)',
-                        color: '#fff', border: 'none', borderRadius: '50%', width: '20px', height: '20px',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', zIndex: 10
-                      }}
-                    >
-                      <HiTrash size={11} />
-                    </button>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-            Selected: <strong style={{ color: '#000648' }}>{activeSelectedUrl.substring(0, 35)}...</strong>
-          </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Cancel image selection"
-              style={{
-                padding: '10px 18px', borderRadius: '8px', border: '1.5px solid #cbd5e1',
-                background: '#ffffff', color: '#475569', fontWeight: 700, cursor: 'pointer'
-              }}
-            >
-              Cancel
-            </button>
-            <button
-              type="button"
-              onClick={handleConfirm}
-              aria-label="Confirm image selection"
-              style={{
-                padding: '10px 22px', borderRadius: '8px', border: 'none',
-                background: '#115DFC', color: '#ffffff', fontWeight: 800, cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(17, 93, 252, 0.3)'
-              }}
-            >
-              Confirm Selection
-            </button>
-          </div>
+        {/* Modal Action Buttons */}
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #e2e8f0' }}>
+          <button
+            type="button"
+            onClick={onClose}
+            style={{
+              padding: '10px 20px', borderRadius: '8px', border: '1px solid #cbd5e1',
+              background: '#ffffff', color: '#475569', fontWeight: 700, cursor: 'pointer'
+            }}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            onClick={handleConfirm}
+            style={{
+              padding: '10px 24px', borderRadius: '8px', border: 'none',
+              background: '#000648', color: '#f2b733', fontWeight: 800, cursor: 'pointer'
+            }}
+          >
+            Use Selected Image
+          </button>
         </div>
       </div>
     </div>

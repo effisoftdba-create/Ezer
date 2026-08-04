@@ -2,9 +2,20 @@ import React, { useState, useEffect, useRef } from 'react';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import AdmissionStepCard from './admission/AdmissionStepCard';
 
+const DEFAULT_6_STEPS = [
+  { step: '01', title: 'Application & Profile Assessment', desc: 'Submit your background details for cohort track alignment and eligibility evaluation.' },
+  { step: '02', title: 'Live Technical & Career Counseling', desc: '1-on-1 session with senior tech advisors to map your syllabus path and schedule.' },
+  { step: '03', title: 'Cohort Enrollment & Sandbox Access', desc: 'Confirm registration and get immediate access to preparatory LMS & lab environments.' },
+  { step: '04', title: '100% Live Online Masterclasses', desc: 'Interactive weekend/weekday live classes taught by corporate practitioner engineers.' },
+  { step: '05', title: 'Production Labs & Capstone Projects', desc: 'Build portfolio-ready projects evaluated by senior engineers with 1-on-1 feedback.' },
+  { step: '06', title: '1-Year Placement Support & Mock Interviews', desc: 'Resume optimization, technical mock interviews, and continuous job referrals.' }
+];
+
 export default function CourseAdmissionSteps({ steps, title }) {
   const [visibleRows, setVisibleRows] = useState({});
   const containerRef = useRef(null);
+
+  const displaySteps = (steps && steps.length > 0) ? steps : DEFAULT_6_STEPS;
 
   useEffect(() => {
     const node = containerRef.current;
@@ -31,9 +42,9 @@ export default function CourseAdmissionSteps({ steps, title }) {
       rows.forEach((row) => observer.unobserve(row));
       observer.disconnect();
     };
-  }, [steps]);
+  }, [displaySteps]);
 
-  if (!steps || steps.length === 0) return null;
+  if (!displaySteps || displaySteps.length === 0) return null;
 
   return (
     <LazyMotion features={domAnimation}>
@@ -79,7 +90,7 @@ export default function CourseAdmissionSteps({ steps, title }) {
             />
 
             <div style={{ display: 'flex', flexDirection: 'column', position: 'relative', zIndex: 2 }}>
-              {steps.map((item, idx) => (
+              {displaySteps.map((item, idx) => (
                 <AdmissionStepCard
                   key={item.title}
                   item={item}

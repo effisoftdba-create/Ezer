@@ -48,8 +48,8 @@ export default function FAQ({ onOpenDemoModal }) {
       {/* Main FAQ Accordion Container */}
       <section className="section" style={{ padding: '72px 0', background: '#ffffff' }}>
         <div className="container" style={{ maxWidth: '860px', display: 'flex', flexDirection: 'column', gap: '48px' }}>
-          {Array.isArray(faqList) && faqList.map((categoryGroup, idx) => (
-            <div key={categoryGroup.category || idx}>
+          {Array.isArray(faqList) && faqList.map((categoryGroup) => (
+            <div key={categoryGroup.category || categoryGroup.id}>
               <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', marginBottom: '16px', paddingBottom: '8px', borderBottom: '2px solid #f2b733', display: 'inline-block' }}>
                 {categoryGroup.category} Questions
               </h2>

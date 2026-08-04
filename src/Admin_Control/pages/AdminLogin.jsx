@@ -157,10 +157,6 @@ export default function AdminLogin() {
           <span className="line"></span>
         </div>
 
-        <div style={{ fontSize: '0.75rem', color: '#64748b', textAlign: 'center', lineHeight: 1.4 }}>
-          Default Credentials for Demo: <br />
-          <strong>admin@ezer.com</strong> / <strong>Admin@123456</strong>
-        </div>
 
         <button
           type="button"
