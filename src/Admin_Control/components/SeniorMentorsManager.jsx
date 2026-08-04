@@ -238,7 +238,9 @@ export default function SeniorMentorsManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
-        onSelectImage={(url) => setFormData((prev) => ({ ...prev, image: url }))}
+        currentPosition={formData.position}
+        currentFit={formData.fit}
+        onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
         targetArea="Senior Mentor Profile"
         aspectRatio="Square (1:1)"
         recommendedDimensions="400 x 400 px"

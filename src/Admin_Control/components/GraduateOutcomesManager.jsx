@@ -224,7 +224,9 @@ export default function GraduateOutcomesManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
-        onSelectImage={(url) => setFormData((prev) => ({ ...prev, image: url }))}
+        currentPosition={formData.position}
+        currentFit={formData.fit}
+        onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
         targetArea="Graduate Placement Card Photo"
         aspectRatio="Square (1:1)"
         recommendedDimensions="300 x 300 px"

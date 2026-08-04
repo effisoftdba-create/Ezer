@@ -12,12 +12,32 @@ const DEFAULT_COURSE_STATE = {
   tagline: '',
   description: '',
   image: 'images/hero/cloud_deveops.png',
+  imagePosition: 'center center',
+  imageFit: 'cover',
   duration: '3 Months',
   schedule: 'Weekday & Weekend batches available',
   startDate: 'New Cohort Starting Next Week',
   languages: 'Tamil, English, Hindi',
   fee: '₹45,000 + 18% GST',
   tools: 'AWS, Docker, Kubernetes, Jenkins, Python',
+  projectsList: [
+    'Multi-Region AWS VPC Infrastructure Automation with Terraform',
+    'High-Availability Kubernetes Microservices Deployment with Helm & Ingress',
+    'Automated End-to-End CI/CD Pipeline using Jenkins & GitHub Actions'
+  ],
+  whoIsItForList: [
+    'Freshers looking to enter Cloud & DevOps engineering roles',
+    'Software Developers & QA Engineers transitioning to Infrastructure & Automation',
+    'System Administrators moving toward cloud-native automation'
+  ],
+  admissionStepsList: [
+    { step: '01', title: 'Select Batch & Register', desc: 'Fill contact details and choose weekday or weekend batch.' },
+    { step: '02', title: 'Free Counseling & Profile Evaluation', desc: 'Speak with senior tech advisors.' },
+    { step: '03', title: 'Demo Class Attendance', desc: 'Experience interactive live training sessions.' },
+    { step: '04', title: 'Enrollment & Seat Lock', desc: 'Confirm your seat with flexible EMI options.' },
+    { step: '05', title: 'LMS Access & Lab Setup', desc: 'Get full access to live cloud sandboxes & repos.' },
+    { step: '06', title: 'Live Cohort & Placement Support', desc: 'Start live classes and unlock placement support.' }
+  ],
   modulesStr: '01: Cloud Architecture, 02: Containerization with Docker, 03: Kubernetes & CI/CD Pipelines'
 };
 
@@ -45,12 +65,17 @@ export default function CourseManager() {
       tagline: course.tagline || '',
       description: course.description || '',
       image: course.image || 'images/hero/cloud_deveops.png',
+      imagePosition: course.position || course.imagePosition || 'center center',
+      imageFit: course.fit || course.imageFit || 'cover',
       duration: course.duration || '3 Months',
       schedule: course.schedule || 'Weekday & Weekend batches',
       startDate: course.startDate || 'Next Week',
       languages: course.languages || 'Tamil, English, Hindi',
       fee: course.fee || '₹45,000 + 18% GST',
       tools: Array.isArray(course.tools) ? course.tools.join(', ') : (course.tools || ''),
+      projectsList: Array.isArray(course.projects) ? course.projects : (DEFAULT_COURSE_STATE.projectsList),
+      whoIsItForList: Array.isArray(course.whoIsItFor) ? course.whoIsItFor : (DEFAULT_COURSE_STATE.whoIsItForList),
+      admissionStepsList: Array.isArray(course.admissionSteps) ? course.admissionSteps : (DEFAULT_COURSE_STATE.admissionStepsList),
       modulesStr: Array.isArray(course.curriculumModules)
         ? course.curriculumModules.map((m) => `${m.num || ''} ${m.title || ''}`).join(', ')
         : ''
@@ -74,7 +99,12 @@ export default function CourseManager() {
 
     const payload = {
       ...formData,
+      position: formData.imagePosition,
+      fit: formData.imageFit,
       tools: toolsArray.length > 0 ? toolsArray : ['AWS', 'Docker'],
+      projects: formData.projectsList,
+      whoIsItFor: formData.whoIsItForList,
+      admissionSteps: formData.admissionStepsList,
       curriculumModules: modulesArray.length > 0 ? modulesArray : [{ num: '01', title: 'Fundamentals', topics: ['Core Concepts'] }]
     };
 
@@ -106,10 +136,10 @@ export default function CourseManager() {
       }}>
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000648', margin: 0 }}>
-            Course Catalog Manager
+            Course Catalog & Complete Page Manager
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Add, update, or remove courses. Added courses instantly show on `/courses` and detail pages.
+            Edit catalog cards, capstones, 6 admission steps, and audience profiles for all course pages.
           </p>
         </div>
 
@@ -142,24 +172,24 @@ export default function CourseManager() {
 
       {/* Search Input */}
       <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <label htmlFor="course_search_input" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
-            Filter Course Catalog
-          </label>
-          <div style={{ position: 'relative', width: '100%' }}>
-            <HiSearch size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-            <input
-              id="course_search_input"
-              type="text"
-              aria-label="Search catalog by title or slug"
-              placeholder="Search catalog by title or slug..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                width: '100%', padding: '10px 14px 10px 38px', borderRadius: '8px',
-                border: '1.5px solid #cbd5e1', fontSize: '0.875rem', outline: 'none'
-              }}
-            />
-          </div>
+        <label htmlFor="course_search_input" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', display: 'none' }}>
+          Filter Course Catalog
+        </label>
+        <div style={{ position: 'relative', flex: 1, maxWidth: '400px' }}>
+          <HiSearch size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+          <input
+            id="course_search_input"
+            type="text"
+            aria-label="Search catalog by title or slug"
+            placeholder="Search catalog by title or slug..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              width: '100%', padding: '10px 14px 10px 38px', borderRadius: '8px',
+              border: '1.5px solid #cbd5e1', fontSize: '0.875rem', outline: 'none'
+            }}
+          />
+        </div>
         <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
           Showing {filteredCourses.length} of {courses.length} courses
         </span>
@@ -171,7 +201,16 @@ export default function CourseManager() {
           <div key={c.id || c.slug} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
               <div style={{ height: '140px', position: 'relative', overflow: 'hidden', background: '#000648' }}>
-                <img src={resolveImageSrc(c.image)} alt={c.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img
+                  src={resolveImageSrc(c.image)}
+                  alt={c.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: c.fit || c.imageFit || 'cover',
+                    objectPosition: c.position || c.imagePosition || 'center center'
+                  }}
+                />
                 <span style={{ position: 'absolute', top: '10px', right: '10px', background: '#000648', color: '#f2b733', padding: '3px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 800 }}>
                   {c.badge || 'Popular'}
                 </span>
@@ -192,7 +231,7 @@ export default function CourseManager() {
                 onClick={() => handleOpenEdit(c)}
                 style={{ padding: '6px 12px', background: '#f1f5f9', border: '1px solid #cbd5e1', color: '#000648', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}
               >
-                <HiPencil size={14} /> Edit
+                <HiPencil size={14} /> Edit Course Sections
               </button>
               <button
                 type="button"
@@ -210,7 +249,16 @@ export default function CourseManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
-        onSelectImage={(url) => setFormData((prev) => ({ ...prev, image: url }))}
+        currentPosition={formData.imagePosition}
+        currentFit={formData.imageFit}
+        onSelectImage={(url, pos, fit) => {
+          setFormData((prev) => ({
+            ...prev,
+            image: url,
+            imagePosition: pos || 'center center',
+            imageFit: fit || 'cover'
+          }));
+        }}
         targetArea="Course Program Banner"
         aspectRatio="Rectangle / Landscape (16:9)"
         recommendedDimensions="1200 x 675 px"

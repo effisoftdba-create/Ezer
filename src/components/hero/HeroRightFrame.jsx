@@ -2,7 +2,10 @@ import React from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { resolveImageSrc } from '../../utils/imageUtils';
 
-export default function HeroLeftFrame({ currentSlide, safeActive }) {
+export default function HeroRightFrame({ currentSlide, safeActive }) {
+  const imagePos = currentSlide.position || currentSlide.imagePosition || 'center center';
+  const imageFit = currentSlide.fit || currentSlide.imageFit || 'cover';
+
   return (
     <div
       style={{
@@ -12,7 +15,9 @@ export default function HeroLeftFrame({ currentSlide, safeActive }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '420px'
+        minHeight: '420px',
+        width: '100%',
+        height: '100%',
       }}
     >
       <AnimatePresence mode="wait">
@@ -25,20 +30,22 @@ export default function HeroLeftFrame({ currentSlide, safeActive }) {
           style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}
         >
           <img
-            src={resolveImageSrc(currentSlide.url)}
-            alt={currentSlide.headline || 'Hero image slide'}
+            src={resolveImageSrc(currentSlide.url || currentSlide.image)}
+            alt={currentSlide.headline || 'Hero slide photo'}
             style={{
               width: '100%',
               height: '100%',
-              objectFit: 'cover',
-              objectPosition: currentSlide.position || 'center center',
+              objectFit: imageFit,
+              objectPosition: imagePos,
+              transition: 'object-position 0.2s ease, object-fit 0.2s ease',
             }}
           />
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to right, rgba(0, 6, 56, 0.25) 0%, rgba(0, 6, 56, 0) 100%)',
+              background: 'linear-gradient(to left, rgba(0, 6, 56, 0.2) 0%, rgba(0, 6, 56, 0) 100%)',
+              pointerEvents: 'none',
             }}
           />
         </m.div>
@@ -48,7 +55,7 @@ export default function HeroLeftFrame({ currentSlide, safeActive }) {
         style={{
           position: 'absolute',
           top: '24px',
-          left: '24px',
+          right: '24px',
           background: '#000638',
           color: '#ffffff',
           padding: '6px 14px',

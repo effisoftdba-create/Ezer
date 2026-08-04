@@ -120,7 +120,8 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
                   width: '64px',
                   height: '64px',
                   borderRadius: '50%',
-                  objectFit: 'cover',
+                  objectFit: prof.fit || prof.imageFit || 'cover',
+                  objectPosition: prof.position || prof.imagePosition || 'center center',
                   border: '3px solid #f2b733',
                   boxShadow: '0 4px 10px rgba(242, 183, 51, 0.3)'
                 }}

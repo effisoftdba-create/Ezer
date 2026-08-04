@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { HiArrowRight, HiOutlineShieldCheck, HiOutlineUserGroup, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
-import HeroLeftFrame from './hero/HeroLeftFrame';
+import HeroRightFrame from './hero/HeroRightFrame';
 
 const trustSignals = [
   {
@@ -63,11 +63,9 @@ export default function Hero({ onOpenDemoModal }) {
               alignItems: 'stretch',
             }}
           >
-            {/* LEFT SIDE FRAME */}
-            <HeroLeftFrame currentSlide={currentSlide} safeActive={safeActive} />
-
-            {/* RIGHT SIDE CONTENT */}
+            {/* LEFT SIDE: TEXT DETAILS */}
             <div
+              className="hero-left-text-column"
               style={{
                 padding: 'clamp(32px, 5vw, 64px) clamp(24px, 4vw, 56px)',
                 display: 'flex',
@@ -80,9 +78,9 @@ export default function Hero({ onOpenDemoModal }) {
               <AnimatePresence mode="wait">
                 <m.div
                   key={currentSlide.id || safeActive}
-                  initial={{ opacity: 0, x: 20 }}
+                  initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.4 }}
                 >
                   <div
@@ -99,7 +97,7 @@ export default function Hero({ onOpenDemoModal }) {
                     }}
                   >
                     <span style={{ width: '24px', height: '2px', background: '#000638', display: 'inline-block' }} />
-                    <span>{currentSlide.badge || 'FESTIVAL FAVOURITES'}</span>
+                    <span>{currentSlide.badge || 'OUTCOME-DRIVEN IT TRAINING'}</span>
                   </div>
 
                   <h1
@@ -267,6 +265,11 @@ export default function Hero({ onOpenDemoModal }) {
                 ))}
               </div>
             </div>
+
+            {/* RIGHT SIDE: PHOTO FRAME */}
+            <div className="hero-right-photo-column">
+              <HeroRightFrame currentSlide={currentSlide} safeActive={safeActive} />
+            </div>
           </div>
         </div>
 
@@ -274,6 +277,15 @@ export default function Hero({ onOpenDemoModal }) {
           @media (max-width: 900px) {
             .hero-split-container {
               grid-template-columns: 1fr !important;
+              display: flex !important;
+              flex-direction: column !important;
+            }
+            .hero-left-text-column {
+              order: 1 !important;
+            }
+            .hero-right-photo-column {
+              order: 2 !important;
+              min-height: 320px !important;
             }
           }
         `}</style>

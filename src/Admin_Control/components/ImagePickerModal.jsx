@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { HiX, HiPhotograph, HiUpload, HiArrowRight, HiSelector } from 'react-icons/hi';
+import { HiUpload, HiArrowRight, HiSelector } from 'react-icons/hi';
 import { resolveImageSrc } from '../../utils/imageUtils';
 import ImagePickerGalleryGrid from './ImagePickerGalleryGrid';
 import ImagePickerControls from './ImagePickerControls';
+import ImagePickerHeaderBanner from './ImagePickerHeaderBanner';
 
 const STORAGE_UPLOADED_IMAGES_KEY = 'ezer_uploaded_images:v1';
 
@@ -19,10 +20,10 @@ const DEFAULT_PRESET_IMAGES = [
 
 const POSITION_PRESETS = [
   { label: 'Center', value: 'center center', x: 0, y: 0 },
-  { label: 'Top Focus', value: 'center top', x: 0, y: -25 },
-  { label: 'Bottom Focus', value: 'center bottom', x: 0, y: 25 },
-  { label: 'Left Focus', value: 'left center', x: -25, y: 0 },
-  { label: 'Right Focus', value: 'right center', x: 25, y: 0 }
+  { label: 'Top Focus', value: 'center top', x: 0, y: -40 },
+  { label: 'Bottom Focus', value: 'center bottom', x: 0, y: 40 },
+  { label: 'Left Focus', value: 'left center', x: -40, y: 0 },
+  { label: 'Right Focus', value: 'right center', x: 40, y: 0 }
 ];
 
 export default function ImagePickerModal({
@@ -31,6 +32,7 @@ export default function ImagePickerModal({
   onSelectImage,
   currentImage = '',
   currentPosition = 'center center',
+  currentFit = 'cover',
   onSelectPosition,
   targetArea = 'Website Image',
   aspectRatio = 'Rectangle (16:9)',
@@ -39,6 +41,7 @@ export default function ImagePickerModal({
   const [selectedUrl, setSelectedUrl] = useState(currentImage || DEFAULT_PRESET_IMAGES[0].url);
   const [customUrl, setCustomUrl] = useState('');
   const [position, setPosition] = useState(currentPosition || 'center center');
+  const [fitMode, setFitMode] = useState(currentFit || 'cover');
   const [zoomScale, setZoomScale] = useState(1);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -51,6 +54,10 @@ export default function ImagePickerModal({
     } catch (e) {}
     return [];
   });
+
+  useEffect(() => {
+    if (currentImage) setSelectedUrl(currentImage);
+  }, [currentImage]);
 
   useEffect(() => {
     try {
@@ -73,8 +80,8 @@ export default function ImagePickerModal({
         ? `${50 + dragOffset.x}% ${50 + dragOffset.y}%`
         : position;
 
-      onSelectImage(activeSelectedUrl, computedPosStr);
-      if (onSelectPosition) onSelectPosition(computedPosStr);
+      onSelectImage(activeSelectedUrl, computedPosStr, fitMode);
+      if (onSelectPosition) onSelectPosition(computedPosStr, fitMode);
       onClose();
     }
   };
@@ -82,8 +89,8 @@ export default function ImagePickerModal({
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Image size exceeds 5MB limit.');
+      if (file.size > 8 * 1024 * 1024) {
+        alert('Image file size exceeds 8MB limit.');
         return;
       }
       const reader = new FileReader();
@@ -91,10 +98,10 @@ export default function ImagePickerModal({
         const dataUri = reader.result;
         setCustomUrl(dataUri);
         setSelectedUrl(dataUri);
-        setUploadedImages((prev) => {
-          if (prev.some((img) => img.url === dataUri)) return prev;
-          return [{ label: `My Upload ${prev.length + 1}`, url: dataUri, date: new Date().toLocaleTimeString() }, ...prev];
-        });
+        setUploadedImages((prev) => [
+          { label: `Upload ${prev.length + 1}`, url: dataUri, date: new Date().toLocaleTimeString() },
+          ...prev
+        ]);
       };
       reader.readAsDataURL(file);
     }
@@ -103,6 +110,9 @@ export default function ImagePickerModal({
   const handleDeleteUploadedImage = (url, e) => {
     e.stopPropagation();
     setUploadedImages((prev) => prev.filter((img) => img.url !== url));
+    if (selectedUrl === url) {
+      setSelectedUrl(DEFAULT_PRESET_IMAGES[0].url);
+    }
   };
 
   const handleMouseDown = (e) => {
@@ -113,8 +123,8 @@ export default function ImagePickerModal({
 
   const handleMouseMove = (e) => {
     if (!isDragging) return;
-    const newX = Math.min(50, Math.max(-50, Math.round((e.clientX - dragStartRef.current.x) / 3)));
-    const newY = Math.min(50, Math.max(-50, Math.round((e.clientY - dragStartRef.current.y) / 3)));
+    const newX = Math.min(80, Math.max(-80, Math.round((e.clientX - dragStartRef.current.x))));
+    const newY = Math.min(80, Math.max(-80, Math.round((e.clientY - dragStartRef.current.y))));
     setDragOffset({ x: newX, y: newY });
     setPosition(`${50 + newX}% ${50 + newY}%`);
   };
@@ -129,49 +139,19 @@ export default function ImagePickerModal({
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 1000,
-      background: 'rgba(0, 6, 72, 0.7)', backdropFilter: 'blur(5px)',
+      background: 'rgba(0, 6, 72, 0.75)', backdropFilter: 'blur(6px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px'
     }}>
       <div style={{
-        background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '780px',
-        maxHeight: '94vh', overflowY: 'auto', padding: '24px', boxShadow: '0 25px 50px rgba(0,0,0,0.3)'
+        background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '820px',
+        maxHeight: '94vh', overflowY: 'auto', padding: '24px', boxShadow: '0 25px 50px rgba(0,0,0,0.35)'
       }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiPhotograph color="#115DFC" size={22} /> Upload, Drag to Move & Zoom Image
-          </h3>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close image picker modal"
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}
-          >
-            <HiX size={24} />
-          </button>
-        </div>
-
-        {/* Aspect Ratio Banner */}
-        <div style={{
-          background: 'linear-gradient(135deg, #000638 0%, #1e293b 100%)',
-          color: '#ffffff', borderRadius: '12px', padding: '10px 16px', marginBottom: '16px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px',
-          borderLeft: '4px solid #f2b733'
-        }}>
-          <div>
-            <span style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#f2b733', fontWeight: 800 }}>
-              Target Section: {targetArea}
-            </span>
-            <div style={{ fontSize: '0.85rem', fontWeight: 700 }}>
-              Required Format: <span style={{ color: '#60a5fa' }}>{aspectRatio}</span>
-            </div>
-          </div>
-          <div style={{
-            background: 'rgba(242, 183, 51, 0.15)', border: '1px solid #f2b733', color: '#f2b733',
-            fontSize: '0.75rem', fontWeight: 800, padding: '4px 10px', borderRadius: '6px'
-          }}>
-            Rec. Size: {recommendedDimensions}
-          </div>
-        </div>
+        <ImagePickerHeaderBanner
+          targetArea={targetArea}
+          aspectRatio={aspectRatio}
+          recommendedDimensions={recommendedDimensions}
+          onClose={onClose}
+        />
 
         {/* Dual Image Preview */}
         <div style={{
@@ -183,9 +163,9 @@ export default function ImagePickerModal({
             <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '6px' }}>
               Current Active Image
             </div>
-            <div style={{ height: '130px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0' }}>
+            <div style={{ height: '140px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #cbd5e1', background: '#e2e8f0' }}>
               {currentImage ? (
-                <img src={resolveImageSrc(currentImage)} alt="Current active" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={resolveImageSrc(currentImage)} alt="Current active" style={{ width: '100%', height: '100%', objectFit: currentFit || 'cover', objectPosition: currentPosition }} />
               ) : (
                 <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: '#94a3b8' }}>
                   No Image Set
@@ -204,7 +184,7 @@ export default function ImagePickerModal({
                 Newly Chosen Image Preview
               </span>
               <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#166534', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                <HiSelector size={12} /> Drag image to move
+                <HiSelector size={12} /> Drag image to position
               </span>
             </div>
             
@@ -216,7 +196,7 @@ export default function ImagePickerModal({
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseUp}
               style={{
-                height: '130px', borderRadius: '10px', overflow: 'hidden',
+                height: '140px', borderRadius: '10px', overflow: 'hidden',
                 border: '2.5px solid #115DFC', background: '#000648',
                 boxShadow: '0 4px 14px rgba(17,93,252,0.25)', position: 'relative',
                 cursor: isDragging ? 'grabbing' : 'grab', userSelect: 'none'
@@ -226,17 +206,18 @@ export default function ImagePickerModal({
                 src={resolveImageSrc(activeSelectedUrl)}
                 alt="Newly chosen preview"
                 style={{
-                  width: '100%', height: '100%', objectFit: 'cover',
+                  width: '100%', height: '100%',
+                  objectFit: fitMode,
                   objectPosition: `${50 + dragOffset.x}% ${50 + dragOffset.y}%`,
                   transform: `scale(${zoomScale})`, pointerEvents: 'none',
                   transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                 }}
               />
               <div style={{
-                position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,0,0,0.65)',
+                position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,0,0,0.75)',
                 color: '#fff', fontSize: '0.65rem', padding: '2px 7px', borderRadius: '4px', pointerEvents: 'none'
               }}>
-                Pos: {position} | Offset: X:{dragOffset.x}% Y:{dragOffset.y}%
+                Pos: {position} | Fit: {fitMode}
               </div>
             </div>
           </div>
@@ -248,6 +229,8 @@ export default function ImagePickerModal({
           dragOffset={dragOffset}
           zoomScale={zoomScale}
           setZoomScale={setZoomScale}
+          fitMode={fitMode}
+          setFitMode={setFitMode}
           handlePresetPosition={handlePresetPosition}
         />
 
@@ -273,7 +256,7 @@ export default function ImagePickerModal({
               borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
               fontSize: '0.825rem', fontWeight: 800
             }}>
-              <HiUpload size={16} /> Upload Image
+              <HiUpload size={16} /> Upload New Image
               <input id="image_file_upload_input" type="file" accept="image/*" onChange={handleFileUpload} style={{ display: 'none' }} />
             </label>
           </div>

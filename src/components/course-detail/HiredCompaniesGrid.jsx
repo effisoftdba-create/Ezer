@@ -130,8 +130,8 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
                         width: '82px',
                         height: '82px',
                         borderRadius: '50%',
-                        objectFit: 'cover',
-                        objectPosition: item.imagePosition || 'center center',
+                        objectFit: item.fit || item.imageFit || 'cover',
+                        objectPosition: item.position || item.imagePosition || 'center center',
                         border: '3.5px solid #f2b733',
                         boxShadow: '0 6px 18px rgba(242, 183, 51, 0.45)',
                       }}
