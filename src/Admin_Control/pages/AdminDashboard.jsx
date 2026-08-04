@@ -13,6 +13,7 @@ import TestimonialsManager from '../components/TestimonialsManager';
 import FaqManager from '../components/FaqManager';
 import ContactInfoManager from '../components/ContactInfoManager';
 import PopupManager from '../components/PopupManager';
+import AdminSyncModal from '../components/AdminSyncModal';
 import UIStateDisplay, { STATE_TYPES } from '../../components/UIStateDisplay';
 import {
   HiOutlinePhotograph,
@@ -29,11 +30,16 @@ import {
   HiOutlineExternalLink,
   HiOutlineLogout,
   HiOutlineRefresh,
-  HiOutlineShieldCheck
+  HiOutlineShieldCheck,
+  HiDeviceMobile
 } from 'react-icons/hi';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('hero');
+  const [showSyncModal, setShowSyncModal] = useState(false);
+  const [copiedSyncLink, setCopiedSyncLink] = useState(false);
+  const [copiedJson, setCopiedJson] = useState(false);
+
   const navigate = useNavigate();
   const {
     heroSlides,
@@ -44,6 +50,7 @@ export default function AdminDashboard() {
     videoTestimonials,
     writtenTestimonials,
     faqList,
+    popupConfig,
     resetToDefault
   } = useSiteData();
 
@@ -79,6 +86,40 @@ export default function AdminDashboard() {
     if (window.confirm('Reset all website content, slides, courses, and outcomes back to initial default data?')) {
       resetToDefault();
     }
+  };
+
+  const currentExportData = {
+    popupConfig,
+    heroSlides,
+    courses
+  };
+
+  const buildSyncUrl = () => {
+    try {
+      const origin = window.location.origin || '';
+      const pathname = window.location.pathname || '/';
+      const cleanPath = pathname.endsWith('/') ? pathname : `${pathname}/`;
+      const serialized = encodeURIComponent(JSON.stringify(currentExportData));
+      return `${origin}${cleanPath}#/sync?data=${serialized}`;
+    } catch (e) {
+      return '';
+    }
+  };
+
+  const handleCopySyncLink = () => {
+    const url = buildSyncUrl();
+    if (url) {
+      navigator.clipboard.writeText(url);
+      setCopiedSyncLink(true);
+      setTimeout(() => setCopiedSyncLink(false), 3000);
+    }
+  };
+
+  const handleCopyJson = () => {
+    const jsonStr = JSON.stringify(currentExportData, null, 2);
+    navigator.clipboard.writeText(jsonStr);
+    setCopiedJson(true);
+    setTimeout(() => setCopiedJson(false), 3000);
   };
 
   const totalFaqs = faqList.reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
@@ -121,7 +162,21 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <button
+            type="button"
+            aria-label="Open mobile sync and export hub modal"
+            onClick={() => setShowSyncModal(true)}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              padding: '8px 14px', background: '#115DFC', color: '#ffffff',
+              borderRadius: '8px', border: 'none', fontSize: '0.825rem', fontWeight: 800,
+              cursor: 'pointer', boxShadow: '0 2px 8px rgba(17,93,252,0.4)'
+            }}
+          >
+            <HiDeviceMobile size={17} /> Sync Mobile & Export
+          </button>
+
           <Link
             to="/"
             target="_blank"
@@ -148,7 +203,7 @@ export default function AdminDashboard() {
               fontWeight: 600, cursor: 'pointer'
             }}
           >
-            <HiOutlineRefresh size={15} /> Reset Defaults
+            <HiOutlineRefresh size={15} /> Reset
           </button>
 
           <button
@@ -232,6 +287,17 @@ export default function AdminDashboard() {
           {activeTab === 'contact' && <ContactInfoManager />}
         </main>
       </div>
+
+      <AdminSyncModal
+        showSyncModal={showSyncModal}
+        setShowSyncModal={setShowSyncModal}
+        buildSyncUrl={buildSyncUrl}
+        handleCopySyncLink={handleCopySyncLink}
+        copiedSyncLink={copiedSyncLink}
+        currentExportData={currentExportData}
+        handleCopyJson={handleCopyJson}
+        copiedJson={copiedJson}
+      />
     </div>
   );
 }
