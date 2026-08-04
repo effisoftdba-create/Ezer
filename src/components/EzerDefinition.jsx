@@ -78,53 +78,47 @@ export default function EzerDefinition() {
               />
             </div>
 
-            {/* Floating Language Circles */}
+            {/* Floating Language Badges: Tamil (அ), English (A), Hindi (अ) */}
+            {/* Tamil Circle */}
             <div 
+              title="Tamil Medium & Bilingual Support"
               style={{
                 position: 'absolute', top: '8%', left: '-2%', zIndex: 3,
-                width: '46px', height: '46px', borderRadius: '50%',
-                background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.15rem',
+                width: '48px', height: '48px', borderRadius: '50%',
+                background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.2rem',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2px solid #f2b733'
+                boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
               }}
             >
               அ
             </div>
 
+            {/* English Circle */}
             <div 
+              title="English Medium Support"
               style={{
                 position: 'absolute', top: '35%', right: '-4%', zIndex: 3,
-                width: '44px', height: '44px', borderRadius: '50%',
-                background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.05rem',
+                width: '46px', height: '46px', borderRadius: '50%',
+                background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.1rem',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2px solid #f2b733'
+                boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
               }}
             >
               A
             </div>
 
+            {/* Hindi Circle (Devanagari अ) */}
             <div 
+              title="Hindi Medium Support"
               style={{
-                position: 'absolute', bottom: '15%', left: '-4%', zIndex: 3,
+                position: 'absolute', bottom: '12%', left: '-3%', zIndex: 3,
                 width: '48px', height: '48px', borderRadius: '50%',
-                background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.15rem',
+                background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.25rem',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2px solid #f2b733'
+                boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
               }}
             >
-              క
-            </div>
-
-            <div 
-              style={{
-                position: 'absolute', bottom: '8%', right: '8%', zIndex: 3,
-                width: '44px', height: '44px', borderRadius: '50%',
-                background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.05rem',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2px solid #f2b733'
-              }}
-            >
-              ம
+              अ
             </div>
 
           </div>

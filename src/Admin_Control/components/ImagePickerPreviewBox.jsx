@@ -149,7 +149,7 @@ export default function ImagePickerPreviewBox({
                   height: '100%',
                   objectFit: fitMode,
                   objectPosition: computedPosStr,
-                  transform: `scale(${zoomScale})`,
+                  transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) scale(${zoomScale})`,
                   pointerEvents: 'none',
                   transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                 }}
@@ -236,7 +236,7 @@ export default function ImagePickerPreviewBox({
                     height: '100%',
                     objectFit: fitMode,
                     objectPosition: computedPosStr,
-                    transform: `scale(${zoomScale})`,
+                    transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) scale(${zoomScale})`,
                     pointerEvents: 'none',
                     transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                   }}

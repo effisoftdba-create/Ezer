@@ -262,6 +262,7 @@ export default function ImagePickerModal({
         <ImagePickerControls
           POSITION_PRESETS={POSITION_PRESETS}
           dragOffset={dragOffset}
+          setDragOffset={setDragOffset}
           zoomScale={zoomScale}
           setZoomScale={setZoomScale}
           fitMode={fitMode}

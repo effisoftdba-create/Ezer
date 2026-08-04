@@ -104,9 +104,9 @@ export default function ImagePickerControls({
           </div>
 
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '6px' }}>
-            2. Quick Alignment Presets
+            2. Quick Alignment & Manual 4-Way Nudge Controls
           </div>
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
             {POSITION_PRESETS.map((p) => (
               <button
                 key={p.value}
@@ -124,6 +124,57 @@ export default function ImagePickerControls({
               </button>
             ))}
           </div>
+
+          {/* Explicit Directional Nudge Buttons (Left, Right, Up, Down) */}
+          {setDragOffset && (
+            <div style={{ background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+              <span style={{ fontSize: '0.725rem', fontWeight: 800, color: '#000648' }}>
+                Nudge Position:
+              </span>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <button
+                  type="button"
+                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x - 15 }))}
+                  title="Move Image Left"
+                  style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
+                >
+                  ◄ Left
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x + 15 }))}
+                  title="Move Image Right"
+                  style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
+                >
+                  Right ►
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y - 15 }))}
+                  title="Move Image Up"
+                  style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
+                >
+                  ▲ Up
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y + 15 }))}
+                  title="Move Image Down"
+                  style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
+                >
+                  ▼ Down
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDragOffset({ x: 0, y: 0 })}
+                  title="Reset to Center"
+                  style={{ padding: '3px 8px', background: '#e0e7ff', border: '1px solid #c7d2fe', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#115DFC' }}
+                >
+                  ↺ Reset
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Zoom Slider */}
