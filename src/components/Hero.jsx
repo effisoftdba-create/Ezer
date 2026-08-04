@@ -85,18 +85,23 @@ export default function Hero({ onOpenDemoModal }) {
                 >
                   <div
                     style={{
-                      display: 'flex',
+                      display: 'inline-flex',
                       alignItems: 'center',
                       gap: '8px',
-                      marginBottom: '16px',
-                      color: '#000638',
-                      fontSize: '0.78rem',
-                      fontWeight: 800,
-                      letterSpacing: '0.1em',
+                      marginBottom: '18px',
+                      background: '#000648',
+                      color: '#f2b733',
+                      padding: '6px 16px',
+                      borderRadius: '50px',
+                      fontSize: '0.74rem',
+                      fontWeight: 900,
+                      letterSpacing: '0.08em',
                       textTransform: 'uppercase',
+                      border: '1.5px solid #f2b733',
+                      boxShadow: '0 4px 14px rgba(0,6,72,0.15)'
                     }}
                   >
-                    <span style={{ width: '24px', height: '2px', background: '#000638', display: 'inline-block' }} />
+                    <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f2b733', display: 'inline-block' }} />
                     <span>{currentSlide.badge || 'OUTCOME-DRIVEN IT TRAINING'}</span>
                   </div>
 
