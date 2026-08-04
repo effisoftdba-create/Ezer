@@ -173,11 +173,10 @@ export default function PopupManager() {
             </div>
           </div>
 
-          {/* Banner Photo & Watermark Controls */}
+          {/* Watermark Background Photo Controls */}
           <PopupBannerPhotoControls
             formData={formData}
             setFormData={setFormData}
-            onOpenHeaderPicker={() => setPickerTarget('header')}
             onOpenBodyPicker={() => setPickerTarget('body')}
           />
 
@@ -233,9 +232,9 @@ export default function PopupManager() {
             }));
           }
         }}
-        targetArea={pickerTarget === 'header' ? 'Popup Header Banner Photo' : 'Popup Form Body Watermark Photo'}
-        aspectRatio="Rectangle (16:9)"
-        recommendedDimensions="800 x 450 px"
+        targetArea="Popup Form Body Watermark Photo"
+        aspectRatio="Portrait / Vertical (3:4)"
+        recommendedDimensions="600 x 800 px"
       />
 
       {/* Export JSON Sync Modal */}

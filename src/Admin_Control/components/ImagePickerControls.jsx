@@ -1,6 +1,14 @@
 import React from 'react';
 import { HiZoomIn, HiZoomOut, HiAdjustments, HiCheck } from 'react-icons/hi';
 
+const ASPECT_RATIO_PRESETS = [
+  { label: 'Rectangle (16:9)', value: 'Rectangle (16:9)' },
+  { label: 'Standard (4:3)', value: 'Standard (4:3)' },
+  { label: 'Square (1:1)', value: 'Square (1:1)' },
+  { label: 'Portrait (3:4) 📱', value: 'Portrait / Vertical (3:4)' },
+  { label: 'Tall Mobile (9:16)', value: 'Mobile Vertical (9:16)' }
+];
+
 export default function ImagePickerControls({
   POSITION_PRESETS,
   dragOffset,
@@ -8,13 +16,15 @@ export default function ImagePickerControls({
   setZoomScale,
   fitMode,
   setFitMode,
-  handlePresetPosition
+  handlePresetPosition,
+  aspectRatio,
+  onSelectAspectRatio
 }) {
   return (
     <div style={{ background: '#f1f5f9', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '16px', marginBottom: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
         <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <HiAdjustments color="#115DFC" size={18} /> Interactive Fit & Position Controls
+          <HiAdjustments color="#115DFC" size={18} /> Interactive Fit, Aspect Ratio & Position Controls
         </span>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', background: '#e0e7ff', padding: '3px 10px', borderRadius: '6px' }}>
@@ -25,6 +35,36 @@ export default function ImagePickerControls({
           </span>
         </div>
       </div>
+
+      {/* ASPECT RATIO SELECTOR PRESETS BAR */}
+      {onSelectAspectRatio && (
+        <div style={{ marginBottom: '14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '10px', padding: '10px' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
+            Target Container Aspect Ratio (Choose height high vs width wide preview):
+          </div>
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+            {ASPECT_RATIO_PRESETS.map((ar) => {
+              const isSel = (aspectRatio || '').toLowerCase().includes(ar.value.toLowerCase().split(' ')[0]);
+              return (
+                <button
+                  key={ar.value}
+                  type="button"
+                  onClick={() => onSelectAspectRatio(ar.value)}
+                  style={{
+                    padding: '5px 12px', borderRadius: '6px',
+                    border: isSel ? '2px solid #115DFC' : '1px solid #cbd5e1',
+                    background: isSel ? '#000648' : '#f8fafc',
+                    color: isSel ? '#f2b733' : '#334155',
+                    fontWeight: isSel ? 800 : 600, fontSize: '0.75rem', cursor: 'pointer'
+                  }}
+                >
+                  {ar.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '16px', alignItems: 'start' }}>
         {/* Fit Mode Toggle & Presets */}

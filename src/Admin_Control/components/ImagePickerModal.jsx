@@ -32,7 +32,8 @@ function getPreviewDimensions(aspectRatio) {
   if (lower.includes('1:1') || lower.includes('square')) return { ratio: '1/1', height: '200px' };
   if (lower.includes('4:3')) return { ratio: '4/3', height: '180px' };
   if (lower.includes('3:2')) return { ratio: '3/2', height: '170px' };
-  if (lower.includes('portrait') || lower.includes('9:16')) return { ratio: '9/16', height: '240px' };
+  if (lower.includes('3:4') || lower.includes('vertical')) return { ratio: '3/4', height: '240px' };
+  if (lower.includes('portrait') || lower.includes('9:16')) return { ratio: '9/16', height: '260px' };
   return { ratio: '16/9', height: '160px' };
 }
 
@@ -94,6 +95,7 @@ export default function ImagePickerModal({
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedAspectRatio, setSelectedAspectRatio] = useState(aspectRatio);
   const dragStartRef = useRef({ x: 0, y: 0 });
   const presetPosRef = useRef(currentPosition || 'center center');
 
@@ -108,6 +110,10 @@ export default function ImagePickerModal({
   useEffect(() => {
     if (currentImage) setSelectedUrl(currentImage);
   }, [currentImage]);
+
+  useEffect(() => {
+    if (aspectRatio) setSelectedAspectRatio(aspectRatio);
+  }, [aspectRatio]);
 
   useEffect(() => {
     try {
@@ -128,7 +134,9 @@ export default function ImagePickerModal({
   if (!isOpen) return null;
 
   const activeSelectedUrl = customUrl.trim() || selectedUrl;
-  const previewDims = getPreviewDimensions(aspectRatio);
+  const activeRatio = selectedAspectRatio || aspectRatio;
+  const previewDims = getPreviewDimensions(activeRatio);
+
 
   const combinedGalleryImages = [
     ...uploadedImages.map((img) => ({ label: img.label || 'Uploaded Image', url: img.url, isUploaded: true })),
@@ -240,6 +248,8 @@ export default function ImagePickerModal({
           fitMode={fitMode}
           setFitMode={setFitMode}
           handlePresetPosition={handlePresetPosition}
+          aspectRatio={activeRatio}
+          onSelectAspectRatio={(val) => setSelectedAspectRatio(val)}
         />
 
         <div style={{ marginBottom: '20px' }}>
