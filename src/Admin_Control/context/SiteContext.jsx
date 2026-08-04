@@ -197,6 +197,15 @@ const defaultContactInfo = {
   hours: 'Mon - Sat: 9:00 AM - 8:00 PM IST'
 };
 
+function safeSetStorage(key, value) {
+  try {
+    const serialized = JSON.stringify(value);
+    localStorage.setItem(key, serialized);
+  } catch (err) {
+    console.warn(`[SiteContext] Could not persist ${key} to localStorage:`, err);
+  }
+}
+
 function getStored(key, fallback) {
   try {
     const stored = localStorage.getItem(key);
@@ -253,20 +262,20 @@ export function SiteProvider({ children }) {
     contactInfo
   } = state;
 
-  // LocalStorage Persist Effects
-  useEffect(() => { localStorage.setItem(STORAGE_SLIDES_KEY, JSON.stringify(heroSlides)); }, [heroSlides]);
-  useEffect(() => { localStorage.setItem(STORAGE_COURSES_KEY, JSON.stringify(courses)); }, [courses]);
-  useEffect(() => { localStorage.setItem(STORAGE_PLATFORM_KEY, JSON.stringify(ezerDefinition)); }, [ezerDefinition]);
-  useEffect(() => { localStorage.setItem(STORAGE_SUPPORT_CARDS_KEY, JSON.stringify(supportCards)); }, [supportCards]);
-  useEffect(() => { localStorage.setItem(STORAGE_TRANSFORMED_KEY, JSON.stringify(transformedLives)); }, [transformedLives]);
-  useEffect(() => { localStorage.setItem(STORAGE_OUTCOMES_HEADER_KEY, JSON.stringify(outcomesHeader)); }, [outcomesHeader]);
-  useEffect(() => { localStorage.setItem(STORAGE_MENTORS_KEY, JSON.stringify(seniorMentors)); }, [seniorMentors]);
-  useEffect(() => { localStorage.setItem(STORAGE_MENTORS_HEADER_KEY, JSON.stringify(mentorsHeader)); }, [mentorsHeader]);
-  useEffect(() => { localStorage.setItem(STORAGE_VIDEOS_KEY, JSON.stringify(videoTestimonials)); }, [videoTestimonials]);
-  useEffect(() => { localStorage.setItem(STORAGE_TESTIMONIALS_HERO_KEY, JSON.stringify(testimonialsHero)); }, [testimonialsHero]);
-  useEffect(() => { localStorage.setItem(STORAGE_WRITTEN_TESTIMONIALS_KEY, JSON.stringify(writtenTestimonials)); }, [writtenTestimonials]);
-  useEffect(() => { localStorage.setItem(STORAGE_FAQS_KEY, JSON.stringify(faqList)); }, [faqList]);
-  useEffect(() => { localStorage.setItem(STORAGE_CONTACT_KEY, JSON.stringify(contactInfo)); }, [contactInfo]);
+  // LocalStorage Persist Effects (Safely guarded against QuotaExceededError crashes)
+  useEffect(() => { safeSetStorage(STORAGE_SLIDES_KEY, heroSlides); }, [heroSlides]);
+  useEffect(() => { safeSetStorage(STORAGE_COURSES_KEY, courses); }, [courses]);
+  useEffect(() => { safeSetStorage(STORAGE_PLATFORM_KEY, ezerDefinition); }, [ezerDefinition]);
+  useEffect(() => { safeSetStorage(STORAGE_SUPPORT_CARDS_KEY, supportCards); }, [supportCards]);
+  useEffect(() => { safeSetStorage(STORAGE_TRANSFORMED_KEY, transformedLives); }, [transformedLives]);
+  useEffect(() => { safeSetStorage(STORAGE_OUTCOMES_HEADER_KEY, outcomesHeader); }, [outcomesHeader]);
+  useEffect(() => { safeSetStorage(STORAGE_MENTORS_KEY, seniorMentors); }, [seniorMentors]);
+  useEffect(() => { safeSetStorage(STORAGE_MENTORS_HEADER_KEY, mentorsHeader); }, [mentorsHeader]);
+  useEffect(() => { safeSetStorage(STORAGE_VIDEOS_KEY, videoTestimonials); }, [videoTestimonials]);
+  useEffect(() => { safeSetStorage(STORAGE_TESTIMONIALS_HERO_KEY, testimonialsHero); }, [testimonialsHero]);
+  useEffect(() => { safeSetStorage(STORAGE_WRITTEN_TESTIMONIALS_KEY, writtenTestimonials); }, [writtenTestimonials]);
+  useEffect(() => { safeSetStorage(STORAGE_FAQS_KEY, faqList); }, [faqList]);
+  useEffect(() => { safeSetStorage(STORAGE_CONTACT_KEY, contactInfo); }, [contactInfo]);
 
   // Helper dispatch setters with useCallback
   const addHeroSlide = useCallback((slide) => dispatch({ type: 'SET_KEY', key: 'heroSlides', value: [...state.heroSlides, { id: `slide-${Date.now()}`, ...slide }] }), [state.heroSlides]);
