@@ -2,32 +2,31 @@ import React from 'react';
 
 export default function PopupSuccessState({ onClose }) {
   return (
-    <div style={{ textAlign: 'center', padding: '20px 0' }}>
-      <div
-        style={{
-          width: '60px',
-          height: '60px',
-          borderRadius: '50%',
-          background: 'rgba(13, 186, 75, 0.15)',
-          color: 'var(--brand-green)',
-          fontSize: '2rem',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          margin: '0 auto 16px',
-        }}
-      >
-        ✓
-      </div>
-      <h4 style={{ color: 'var(--primary)', fontSize: '1.3rem', marginBottom: '8px' }}>
-        Registration Successful!
-      </h4>
-      <p style={{ color: 'var(--text-body)', fontSize: '0.95rem', marginBottom: '24px' }}>
-        Thank you for reaching out to EZER Learning Solution. Our career counsellor will contact you shortly with demo class details.
-      </p>
-      <button type="button" onClick={onClose} className="btn btn-primary" style={{ width: '100%' }}>
-        Close Window
+    <div className="modern-success-message">
+      <button type="button" className="close-btn" onClick={onClose} aria-label="Close message">
+        ×
       </button>
+
+      <div className="icon-wrapper">
+        <svg
+          className="success-icon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      </div>
+
+      <div className="text-wrapper">
+        <div className="title">Registration Successful!</div>
+        <div className="message">
+          Thank you for reaching out to EZER Learning Solutions. Our career counsellor will contact you shortly with live demo details.
+        </div>
+      </div>
     </div>
   );
 }

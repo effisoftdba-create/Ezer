@@ -76,7 +76,7 @@ export default function About({ onOpenDemoModal }) {
 
       {/* Meaning of EZER Banner */}
       <section style={{ padding: '56px 0', background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
-        <div className="container" style={{ maxWidth: '860px', margin: '0 auto' }}>
+        <div className="container">
           <div style={{
             background: '#ffffff',
             borderRadius: '20px',

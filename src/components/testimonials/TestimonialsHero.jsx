@@ -1,6 +1,7 @@
 import React from 'react';
 import { HiStar, HiUserGroup } from 'react-icons/hi';
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
+import { resolveImageSrc } from '../../utils/imageUtils';
 
 export default function TestimonialsHero({ onOpenDemoModal }) {
   const { testimonialsHero } = useSiteData();
@@ -80,7 +81,7 @@ export default function TestimonialsHero({ onOpenDemoModal }) {
               }}
             >
               <img
-                src={testimonialsHero.image}
+                src={resolveImageSrc(testimonialsHero.image || 'images/hero/hero_section_1.jpg')}
                 alt="EZER Placed Alumni Team"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%' }}
               />

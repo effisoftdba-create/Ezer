@@ -95,6 +95,7 @@ export default function ImagePickerModal({
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
   const [selectedAspectRatio, setSelectedAspectRatio] = useState(aspectRatio);
   const dragStartRef = useRef({ x: 0, y: 0 });
   const presetPosRef = useRef(currentPosition || 'center center');
@@ -272,15 +273,42 @@ export default function ImagePickerModal({
           onSelectAspectRatio={(val) => setSelectedAspectRatio(val)}
         />
 
-        <div style={{ marginBottom: '20px' }}>
-          <label htmlFor="custom_image_url_picker" style={{ fontSize: '0.825rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '6px' }}>
-            Option 1: Enter Custom Image URL or Upload File
+        {/* DRAG & DROP FILE UPLOAD ZONE */}
+        <div 
+          onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+          onDragLeave={(e) => { e.preventDefault(); setIsDragOver(false); }}
+          onDrop={(e) => {
+            e.preventDefault();
+            setIsDragOver(false);
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+              const file = e.dataTransfer.files[0];
+              if (file.type.startsWith('image/')) {
+                const fakeEvent = { target: { files: [file] } };
+                handleFileUpload(fakeEvent);
+              } else {
+                alert('Please drop an image file (PNG, JPG, WebP, AVIF).');
+              }
+            }
+          }}
+          style={{
+            marginBottom: '20px',
+            border: isDragOver ? '2.5px dashed #f2b733' : '2px dashed #cbd5e1',
+            background: isDragOver ? 'rgba(242, 183, 51, 0.12)' : '#f8fafc',
+            borderRadius: '12px',
+            padding: '16px',
+            textAlign: 'center',
+            transition: 'border-color 0.2s ease, background-color 0.2s ease',
+            cursor: 'pointer'
+          }}
+        >
+          <label htmlFor="custom_image_url_picker" style={{ fontSize: '0.825rem', fontWeight: 700, color: '#000648', display: 'block', marginBottom: '8px' }}>
+            Option 1: Enter Custom Image URL or Drag & Drop Image File Here
           </label>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             <input
               id="custom_image_url_picker"
               type="text"
-              placeholder="https://example.com/image.jpg or local path"
+              placeholder="https://example.com/image.jpg or drop image file"
               value={customUrl.startsWith('data:') ? '(Uploaded image compressed & ready)' : customUrl}
               onChange={(e) => setCustomUrl(e.target.value)}
               style={{
@@ -293,10 +321,13 @@ export default function ImagePickerModal({
               borderRadius: '8px', cursor: isUploading ? 'wait' : 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
               fontSize: '0.825rem', fontWeight: 800
             }}>
-              <HiUpload size={16} /> {isUploading ? 'Optimizing...' : 'Upload New Image'}
+              <HiUpload size={16} /> {isUploading ? 'Optimizing...' : 'Upload / Drop File'}
               <input id="image_file_upload_input" type="file" accept="image/*" disabled={isUploading} onChange={handleFileUpload} style={{ display: 'none' }} />
             </label>
           </div>
+          <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, display: 'inline-block', marginTop: '6px' }}>
+            💡 Drag & drop any image file directly onto this box to upload with live ratio preview ({activeRatio})
+          </span>
         </div>
 
         <ImagePickerGalleryGrid

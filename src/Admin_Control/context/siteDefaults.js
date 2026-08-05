@@ -3,21 +3,21 @@ import { testimonials as initialTestimonials, videoStories } from '../../data/te
 import { generalFaqs } from '../../data/faq';
 import productionData from '../../data/productionData.json';
 
-export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v8_cache_busted';
-export const STORAGE_COURSES_KEY = 'ezer_courses:v8_cache_busted';
-export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v8_cache_busted';
-export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v8_cache_busted';
-export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v8_cache_busted';
-export const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v8_cache_busted';
-export const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v8_cache_busted';
-export const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v8_cache_busted';
-export const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v8_cache_busted';
-export const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v8_cache_busted';
-export const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v8_cache_busted';
-export const STORAGE_FAQS_KEY = 'ezer_faqs:v8_cache_busted';
-export const STORAGE_CONTACT_KEY = 'ezer_contact:v8_cache_busted';
-export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v8_cache_busted';
-export const STORAGE_LEADS_KEY = 'ezer_leads:v8_cache_busted';
+export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v9_cache_busted';
+export const STORAGE_COURSES_KEY = 'ezer_courses:v9_cache_busted';
+export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v9_cache_busted';
+export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v9_cache_busted';
+export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v9_cache_busted';
+export const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v9_cache_busted';
+export const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v9_cache_busted';
+export const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v9_cache_busted';
+export const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v9_cache_busted';
+export const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v9_cache_busted';
+export const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v9_cache_busted';
+export const STORAGE_FAQS_KEY = 'ezer_faqs:v9_cache_busted';
+export const STORAGE_CONTACT_KEY = 'ezer_contact:v9_cache_busted';
+export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v9_cache_busted';
+export const STORAGE_LEADS_KEY = 'ezer_leads:v9_cache_busted';
 
 export const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -267,7 +267,8 @@ export const defaultVideoTestimonials = videoStories || [];
 export const defaultTestimonialsHero = {
   badge: 'STUDENT SUCCESS STORIES',
   headline: 'Real Learners. Real IT Career Outcomes.',
-  sub: 'Discover how EZER Learning Solutions helps freshers and career switchers land high-growth tech jobs.'
+  sub: 'Discover how EZER Learning Solutions helps freshers and career switchers land high-growth tech jobs.',
+  image: 'images/hero/hero_section_1.jpg'
 };
 
 export const defaultContactInfo = {

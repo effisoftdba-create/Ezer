@@ -105,7 +105,17 @@ export default function ContactFormCard({ formData, setFormData, submitted, hand
               aria-label="Your Query"
               rows={4}
               placeholder="Tell us about your background and learning objectives..."
-              style={{ width: '100%', padding: '11px 14px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem', outline: 'none', resize: 'vertical' }}
+              style={{
+                width: '100%',
+                padding: '11px 14px',
+                borderRadius: '8px',
+                border: '1.5px solid #cbd5e1',
+                fontSize: '0.9rem',
+                fontFamily: "Inter, 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif",
+                color: '#000648',
+                outline: 'none',
+                resize: 'vertical'
+              }}
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             />

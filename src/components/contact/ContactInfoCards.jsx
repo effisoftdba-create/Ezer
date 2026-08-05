@@ -11,8 +11,10 @@ export default function ContactInfoCards() {
       icon: <HiLocationMarker />,
       content: (
         <>
-          EZER Learning Solutions<br />
-          {contactInfo.address}
+          <strong style={{ color: '#000648', display: 'block', marginBottom: '2px' }}>EZER Learning Solutions</strong>
+          <span style={{ color: '#475569', fontSize: '0.88rem', lineHeight: 1.5 }}>
+            {(contactInfo.address || '').replace(/^EZER Learning Solutions\s*/i, '').replace(/^Ezer Learning Solutions\s*/i, '')}
+          </span>
         </>
       ),
     },
