@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { HiArrowRight, HiOutlineShieldCheck, HiOutlineUserGroup, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import { HiArrowRight, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import HeroRightFrame from './hero/HeroRightFrame';
-
-const trustSignals = [
-  {
-    title: 'Up to 1-Year Placement Support',
-    sub: 'Continuous resume & interview prep',
-    icon: <HiOutlineShieldCheck size={18} />
-  },
-  {
-    title: 'Corporate Practitioner Trainers',
-    sub: 'Active senior tech leads from top firms',
-    icon: <HiOutlineUserGroup size={18} />
-  }
-];
+import HeroTrustGrid from './hero/HeroTrustGrid';
 
 export default function Hero({ onOpenDemoModal }) {
   const { heroSlides } = useSiteData();
@@ -109,34 +97,54 @@ export default function Hero({ onOpenDemoModal }) {
                     style={{
                       fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
                       fontWeight: 900,
-                      color: '#000638',
-                      lineHeight: 1.15,
+                      color: '#000648',
+                      lineHeight: 1.12,
                       marginBottom: '18px',
-                      fontFamily: "'Playfair Display', Georgia, serif, 'DM Sans'",
+                      fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
                       letterSpacing: '-0.02em',
                     }}
                   >
-                    {currentSlide.headline}
+                    {currentSlide.headline ? (
+                      <>
+                        <span style={{ color: '#000648' }}>
+                          {currentSlide.headline.split('. ')[0] || currentSlide.headline}
+                        </span>
+                        {currentSlide.headline.includes('. ') && (
+                          <span
+                            style={{
+                              display: 'block',
+                              background: 'linear-gradient(135deg, #f2b733 0%, #d9a02a 100%)',
+                              WebkitBackgroundClip: 'text',
+                              WebkitTextFillColor: 'transparent',
+                              fontWeight: 900
+                            }}
+                          >
+                            {currentSlide.headline.split('. ').slice(1).join('. ')}
+                          </span>
+                        )}
+                      </>
+                    ) : (
+                      'Learn Live. Build Real Skills.'
+                    )}
                   </h1>
 
                   <div
                     style={{
-                      width: '64px',
-                      height: '3.5px',
-                      background: '#f2b733',
+                      width: '72px',
+                      height: '4px',
+                      background: 'linear-gradient(90deg, #000648 0%, #f2b733 100%)',
                       marginBottom: '20px',
-                      borderRadius: '2px',
+                      borderRadius: '4px',
                     }}
                   />
 
                   <p
                     style={{
                       fontSize: 'clamp(0.95rem, 1.2vw, 1.05rem)',
-                      color: '#000638',
+                      color: '#334155',
                       lineHeight: 1.65,
                       marginBottom: '32px',
                       maxWidth: '560px',
-                      opacity: 0.9,
                       fontWeight: 500,
                     }}
                   >
@@ -248,27 +256,7 @@ export default function Hero({ onOpenDemoModal }) {
               </div>
 
               {/* Trust Signals Footer Grid */}
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                  gap: '12px',
-                  marginTop: '24px',
-                  paddingTop: '20px',
-                  borderTop: '1px solid rgba(0, 6, 56, 0.1)',
-                }}
-              >
-                {trustSignals.map((item) => (
-                  <div key={item.title} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#000638' }}>
-                    <div style={{ color: '#000638', background: '#f2b733', padding: '4px', borderRadius: '4px', display: 'flex', alignItems: 'center' }}>
-                      {item.icon}
-                    </div>
-                    <div style={{ fontSize: '0.75rem', fontWeight: 800, lineHeight: 1.2 }}>
-                      {item.title}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <HeroTrustGrid />
             </div>
 
             {/* RIGHT SIDE: PHOTO FRAME */}
