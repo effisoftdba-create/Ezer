@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { SiteProvider } from './Admin_Control/context/SiteContext';
 import Navbar from './components/Navbar';
@@ -7,18 +7,52 @@ import PopupForm from './components/PopupForm';
 import UIStateDisplay, { STATE_TYPES } from './components/UIStateDisplay';
 import UIToastNotifier from './components/UIToastNotifier';
 
-import Home from './pages/Home';
-import About from './pages/About';
-import Courses from './pages/Courses';
-import CourseDetail from './pages/CourseDetail';
-import TestimonialsPage from './pages/Testimonials';
-import FAQPage from './pages/FAQ';
-import Contact from './pages/Contact';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import StudentAdmissionPolicy from './pages/StudentAdmissionPolicy';
+// Dynamic Code Splitting with React.lazy
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const Courses = lazy(() => import('./pages/Courses'));
+const CourseDetail = lazy(() => import('./pages/CourseDetail'));
+const TestimonialsPage = lazy(() => import('./pages/Testimonials'));
+const FAQPage = lazy(() => import('./pages/FAQ'));
+const Contact = lazy(() => import('./pages/Contact'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const StudentAdmissionPolicy = lazy(() => import('./pages/StudentAdmissionPolicy'));
 
-import AdminLogin from './Admin_Control/pages/AdminLogin';
-import AdminDashboard from './Admin_Control/pages/AdminDashboard';
+const AdminLogin = lazy(() => import('./Admin_Control/pages/AdminLogin'));
+const AdminDashboard = lazy(() => import('./Admin_Control/pages/AdminDashboard'));
+
+// Page Loading Fallback Spinner
+function PageLoader() {
+  return (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '60vh',
+      width: '100%',
+      gap: '16px',
+    }}>
+      <div style={{
+        width: '44px',
+        height: '44px',
+        border: '4px solid #e2e8f0',
+        borderTop: '4px solid #000648',
+        borderRadius: '50%',
+        animation: 'spin 0.8s linear infinite',
+      }} />
+      <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#000648', letterSpacing: '0.04em' }}>
+        Loading EZER Learning Solutions...
+      </span>
+      <style>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}</style>
+    </div>
+  );
+}
 
 export default function App() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -92,30 +126,32 @@ export default function App() {
         {!isAdminRoute && <Navbar onOpenDemoModal={() => handleOpenDemoModal()} />}
 
         <main style={{ flexGrow: 1 }}>
-          {isAdminRoute ? (
-            isDashboardRoute ? (
-              <AdminDashboard />
+          <Suspense fallback={<PageLoader />}>
+            {isAdminRoute ? (
+              isDashboardRoute ? (
+                <AdminDashboard />
+              ) : (
+                <AdminLogin />
+              )
             ) : (
-              <AdminLogin />
-            )
-          ) : (
-            <Routes>
-              <Route path="/" element={<Home onOpenDemoModal={handleOpenDemoModal} />} />
-              <Route path="/about" element={<About onOpenDemoModal={handleOpenDemoModal} />} />
-              <Route path="/courses" element={<Courses onOpenDemoModal={handleOpenDemoModal} />} />
-              <Route path="/courses/:slug" element={<CourseDetail onOpenDemoModal={handleOpenDemoModal} />} />
-              <Route path="/testimonials" element={<TestimonialsPage onOpenDemoModal={handleOpenDemoModal} />} />
-              <Route path="/faq" element={<FAQPage onOpenDemoModal={handleOpenDemoModal} />} />
-              <Route path="/contact" element={<Contact onOpenDemoModal={handleOpenDemoModal} />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy onOpenDemoModal={handleOpenDemoModal} />} />
-              <Route path="/student-admission-policy" element={<StudentAdmissionPolicy onOpenDemoModal={handleOpenDemoModal} />} />
+              <Routes>
+                <Route path="/" element={<Home onOpenDemoModal={handleOpenDemoModal} />} />
+                <Route path="/about" element={<About onOpenDemoModal={handleOpenDemoModal} />} />
+                <Route path="/courses" element={<Courses onOpenDemoModal={handleOpenDemoModal} />} />
+                <Route path="/courses/:slug" element={<CourseDetail onOpenDemoModal={handleOpenDemoModal} />} />
+                <Route path="/testimonials" element={<TestimonialsPage onOpenDemoModal={handleOpenDemoModal} />} />
+                <Route path="/faq" element={<FAQPage onOpenDemoModal={handleOpenDemoModal} />} />
+                <Route path="/contact" element={<Contact onOpenDemoModal={handleOpenDemoModal} />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy onOpenDemoModal={handleOpenDemoModal} />} />
+                <Route path="/student-admission-policy" element={<StudentAdmissionPolicy onOpenDemoModal={handleOpenDemoModal} />} />
 
-              {/* Isolated Admin Routes fallback */}
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route path="/admin/dashboard/*" element={<AdminDashboard />} />
-              <Route path="/admin" element={<AdminLogin />} />
-            </Routes>
-          )}
+                {/* Isolated Admin Routes fallback */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin/dashboard/*" element={<AdminDashboard />} />
+                <Route path="/admin" element={<AdminLogin />} />
+              </Routes>
+            )}
+          </Suspense>
         </main>
 
         {!isAdminRoute && <Footer />}

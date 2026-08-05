@@ -2,10 +2,10 @@ import React from 'react';
 import { HiOutlineShieldCheck, HiOutlineUserGroup, HiOutlineClock, HiOutlineAcademicCap } from 'react-icons/hi';
 
 const items = [
-  { icon: <HiOutlineShieldCheck size={20} />, label: 'Up to 1-Year Placement Support' },
-  { icon: <HiOutlineUserGroup size={20} />, label: 'Corporate Practitioner Trainers' },
-  { icon: <HiOutlineClock size={20} />, label: '3-Year Community Access' },
-  { icon: <HiOutlineAcademicCap size={20} />, label: '1-Year LMS Recorded Access' },
+  { icon: <HiOutlineShieldCheck size={20} />, label: '12-Month Career Placement Support' },
+  { icon: <HiOutlineUserGroup size={20} />, label: 'Mentorship by Industry Practitioners' },
+  { icon: <HiOutlineClock size={20} />, label: 'Alumni & Peer Community*' },
+  { icon: <HiOutlineAcademicCap size={20} />, label: 'Learning Management Access' },
 ];
 
 export default function TrustBar() {

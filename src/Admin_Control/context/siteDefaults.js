@@ -3,21 +3,21 @@ import { testimonials as initialTestimonials, videoStories } from '../../data/te
 import { generalFaqs } from '../../data/faq';
 import productionData from '../../data/productionData.json';
 
-export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v6_cache_busted';
-export const STORAGE_COURSES_KEY = 'ezer_courses:v6_cache_busted';
-export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v6_cache_busted';
-export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v6_cache_busted';
-export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v6_cache_busted';
-export const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v6_cache_busted';
-export const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v6_cache_busted';
-export const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v6_cache_busted';
-export const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v6_cache_busted';
-export const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v6_cache_busted';
-export const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v6_cache_busted';
-export const STORAGE_FAQS_KEY = 'ezer_faqs:v6_cache_busted';
-export const STORAGE_CONTACT_KEY = 'ezer_contact:v6_cache_busted';
-export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v6_cache_busted';
-export const STORAGE_LEADS_KEY = 'ezer_leads:v6_cache_busted';
+export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v7_cache_busted';
+export const STORAGE_COURSES_KEY = 'ezer_courses:v7_cache_busted';
+export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v7_cache_busted';
+export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v7_cache_busted';
+export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v7_cache_busted';
+export const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v7_cache_busted';
+export const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v7_cache_busted';
+export const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v7_cache_busted';
+export const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v7_cache_busted';
+export const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v7_cache_busted';
+export const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v7_cache_busted';
+export const STORAGE_FAQS_KEY = 'ezer_faqs:v7_cache_busted';
+export const STORAGE_CONTACT_KEY = 'ezer_contact:v7_cache_busted';
+export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v7_cache_busted';
+export const STORAGE_LEADS_KEY = 'ezer_leads:v7_cache_busted';
 
 export const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -40,10 +40,12 @@ export const defaultPopupConfig = {
   courseLabel: 'Target Course*',
   termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.',
   coursesList: [
+    'AI/ML',
+    'Full stack development with AI',
+    'Data Analyst',
     'Cloud DevOps with AI',
-    'Software Testing – Playwright',
-    'AI & Machine Learning',
-    'IT Infrastructure & System Administration'
+    'Cyber Security',
+    'Spoken English (International standard)'
   ],
   countriesList: [
     'India',
@@ -72,9 +74,9 @@ export const defaultSlides = [
   {
     id: 'slide-3',
     url: 'images/hero/software_testing_playwright.jpg',
-    headline: 'Test Smarter With Modern Automation Frameworks',
-    sub: 'From manual testing fundamentals to full Playwright automation and CI/CD integration.',
-    badge: 'Playwright Automation Program',
+    headline: 'Build Modern AI-Powered Web Applications',
+    sub: 'Master React, Node.js, Next.js & PostgreSQL supercharged with AI coding assistants.',
+    badge: 'Full Stack with AI',
   },
   {
     id: 'slide-4',
@@ -88,13 +90,13 @@ export const defaultSlides = [
 export const defaultPlatformDef = {
   tag: 'Empowering Career Switchers',
   headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
-  description: "EZER Learning Solution is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses. Taught by corporate-experienced IT professionals, EZER offers personalized live online training, hands-on labs, 1-year placement support, and up to 3 years of community access.",
+  description: "EZER Learning Solutions is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses. Taught by corporate-experienced IT professionals, EZER offers personalized live online training, hands-on labs, 12-month placement support, and up to 3 years of community access.",
   image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=800',
   highlights: [
     'Live Online Instructor-Led',
-    '1-Year LMS & Placement Support',
-    '3-Year Community Access',
-    'Practical Project-First Labs'
+    '12-Month Placement Support',
+    'Mentorship by Industry Practitioners',
+    'Alumni & Peer Community'
   ]
 };
 
@@ -102,9 +104,9 @@ export const defaultSupportCards = [
   {
     id: 'supp-1',
     number: '01',
-    tag: 'PRE-EMPLOYMENT',
-    title: 'Resume Building & Interview Prep',
-    desc: 'Mock technical interviews with senior engineering managers, live coding practice, and LinkedIn profile optimization.',
+    tag: 'PLACEMENT SUPPORT',
+    title: '12-Month Career Placement Support',
+    desc: 'Comprehensive resume optimization, interview preparation, and curated job opportunities',
     bgColor: '#ffffff',
     borderColor: '#e2e8f0',
     tagBg: '#000648',
@@ -116,9 +118,9 @@ export const defaultSupportCards = [
   {
     id: 'supp-2',
     number: '02',
-    tag: 'POST-EMPLOYMENT',
-    title: 'Up to 1-Year Placement Assistance',
-    desc: 'Our placement team continues sending candidate referrals, interview opportunities, and career growth support for up to 12 months after graduation.',
+    tag: 'EXPERT FACULTY',
+    title: 'Mentorship by Industry Practitioners',
+    desc: 'Learn from senior leaders and tech experts working at top global organizations',
     bgColor: '#ffffff',
     borderColor: '#e2e8f0',
     tagBg: '#000648',
@@ -130,9 +132,23 @@ export const defaultSupportCards = [
   {
     id: 'supp-3',
     number: '03',
-    tag: 'COMMUNITY ACCESS',
-    title: 'Up to 3-Year Peer & Mentor Network',
-    desc: 'Access alumni tech channels, weekly live Q&A webinars, new tool updates, and lifetime network access.',
+    tag: 'NETWORKING',
+    title: 'Alumni & Peer Community*',
+    desc: 'Continuous mentorship, Slack access, and networking with a thriving alumni ecosystem',
+    bgColor: '#ffffff',
+    borderColor: '#e2e8f0',
+    tagBg: '#000648',
+    tagColor: '#f2b733',
+    numColor: '#000648',
+    titleColor: '#000648',
+    descColor: '#475569'
+  },
+  {
+    id: 'supp-4',
+    number: '04',
+    tag: 'ON-DEMAND REVISION',
+    title: 'Learning Management Access',
+    desc: 'On-demand access to all session recordings for flexible revision and learning',
     bgColor: '#ffffff',
     borderColor: '#e2e8f0',
     tagBg: '#000648',
@@ -159,11 +175,11 @@ export const defaultTransformedLives = [
     id: 'tl-2',
     name: 'Priya Sundaram',
     beforeRole: 'Manual Tester',
-    afterRole: 'Playwright Automation Lead',
+    afterRole: 'AI Full Stack Developer',
     salaryHike: '140% Salary Hike',
-    story: 'Playwright automation mastery gave me total confidence in technical interviews.',
+    story: 'Full stack development with AI mastery gave me total confidence in corporate technical interviews.',
     company: 'GlobalQA Labs',
-    courseSlug: 'software-testing-playwright',
+    courseSlug: 'full-stack-dev-ai',
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300'
   }
 ];
@@ -186,12 +202,12 @@ export const defaultSeniorMentors = [
   },
   {
     id: 'm-2',
-    name: 'Kavitha Ranganathan',
-    role: 'Senior QA Automation Lead',
-    company: 'Ex-Zoho / CTS',
+    name: 'Pradeep Rajan',
+    role: 'Senior Staff Full-Stack Engineer',
+    company: 'Ex-Zoho / Global Tech Lead',
     exp: '10+ Yrs Exp',
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300',
-    bio: 'Specialist in Playwright framework automation and CI/CD testing pipelines.'
+    bio: 'Specialist in React, Node.js, Next.js and AI Copilot workflow automation.'
   }
 ];
 
@@ -205,13 +221,13 @@ export const defaultVideoTestimonials = videoStories || [];
 export const defaultTestimonialsHero = {
   badge: 'STUDENT SUCCESS STORIES',
   headline: 'Real Learners. Real IT Career Outcomes.',
-  sub: 'Discover how EZER Learning Solution helps freshers and career switchers land high-growth tech jobs.'
+  sub: 'Discover how EZER Learning Solutions helps freshers and career switchers land high-growth tech jobs.'
 };
 
 export const defaultContactInfo = {
   email: 'support@ezerlearning.com',
   phone: '+91 98765 43210',
-  address: 'Chennai, Tamil Nadu, India',
+  address: 'Ezer Learning Solutions\nPlot No: 90, 3rd Cross Street, Phase-2, Thirumalai Nagar Annexe, Perungudi, Chennai - 600096, Tamil Nadu, India',
   whatsapp: '+91 98765 43210',
   workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM'
 };
@@ -238,7 +254,7 @@ export function safeSetStorage(key, val) {
 }
 
 export function getInitialState() {
-  const prodConfig = productionData?.popupConfig || defaultPopupConfig;
+  const prodConfig = defaultPopupConfig;
   return {
     heroSlides: getStored(STORAGE_SLIDES_KEY, defaultSlides),
     courses: getStored(STORAGE_COURSES_KEY, phase1Courses),

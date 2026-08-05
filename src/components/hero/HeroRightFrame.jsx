@@ -1,10 +1,11 @@
 import React from 'react';
 import { m, AnimatePresence } from 'framer-motion';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc, resolveWebPSrc } from '../../utils/imageUtils';
 
 export default function HeroRightFrame({ currentSlide, safeActive }) {
   const imagePos = currentSlide.position || currentSlide.imagePosition || 'center center';
   const imageFit = currentSlide.fit || currentSlide.imageFit || 'cover';
+  const imageSrcs = resolveWebPSrc(currentSlide.url || currentSlide.image);
 
   return (
     <div

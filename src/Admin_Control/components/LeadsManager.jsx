@@ -11,6 +11,8 @@ import {
   HiSearch
 } from 'react-icons/hi';
 
+import PaginationControls from '../../components/PaginationControls';
+
 export default function LeadsManager() {
   const { leads, updateLeadStatus, addLeadComment, deleteLead } = useSiteData();
   const leadsList = useMemo(() => leads || [], [leads]);
@@ -20,6 +22,10 @@ export default function LeadsManager() {
   const [selectedLeadId, setSelectedLeadId] = useState(null);
   const [newCommentText, setNewCommentText] = useState('');
   const [adminAuthorName, setAdminAuthorName] = useState('Admin Counselor');
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
 
   const selectedLead = useMemo(
     () => leadsList.find((l) => l.id === selectedLeadId),
@@ -40,6 +46,12 @@ export default function LeadsManager() {
       return matchesStatus && haystack.includes(term);
     });
   }, [leadsList, filterStatus, searchTerm]);
+
+  // Paginated Leads Slice
+  const paginatedLeads = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredLeads.slice(start, start + pageSize);
+  }, [filteredLeads, currentPage, pageSize]);
 
   // Metrics
   const totalCount = leadsList.length;
@@ -145,7 +157,10 @@ export default function LeadsManager() {
             <button
               key={st}
               type="button"
-              onClick={() => setFilterStatus(st)}
+              onClick={() => {
+                setFilterStatus(st);
+                setCurrentPage(1);
+              }}
               style={{
                 padding: '6px 14px', borderRadius: '50px', border: '1px solid #cbd5e1',
                 background: filterStatus === st ? '#000648' : '#ffffff',
@@ -168,17 +183,31 @@ export default function LeadsManager() {
             type="text"
             placeholder="Search leads by name, email, course..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
             style={{ width: '100%', padding: '8px 12px 8px 36px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.82rem', outline: 'none' }}
           />
         </div>
       </div>
 
       <LeadsTable
-        filteredLeads={filteredLeads}
+        filteredLeads={paginatedLeads}
         handleStatusChange={handleStatusChange}
         setSelectedLeadId={setSelectedLeadId}
         handleDeleteLeadClick={handleDeleteLeadClick}
+      />
+
+      <PaginationControls
+        currentPage={currentPage}
+        pageSize={pageSize}
+        totalItems={filteredLeads.length}
+        onPageChange={(p) => setCurrentPage(p)}
+        onPageSizeChange={(sz) => {
+          setPageSize(sz);
+          setCurrentPage(1);
+        }}
       />
 
       <LeadDetailsModal

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
 import { triggerStateToast } from '../../utils/toastService';
+import { batchFetchRelatedData } from '../../utils/dbQueries';
 import {
   STORAGE_SLIDES_KEY,
   STORAGE_COURSES_KEY,

@@ -71,6 +71,30 @@ export default function Footer() {
             </h4>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.8rem' }}>
               <li>
+                <Link to="/courses/ai-machine-learning" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
+                >
+                  AI/ML
+                </Link>
+              </li>
+              <li>
+                <Link to="/courses/full-stack-dev-ai" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
+                >
+                  Full Stack Development with AI
+                </Link>
+              </li>
+              <li>
+                <Link to="/courses/data-analyst" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
+                >
+                  Data Analyst
+                </Link>
+              </li>
+              <li>
                 <Link to="/courses/cloud-devops-ai" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
@@ -79,27 +103,19 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/courses/software-testing-playwright" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/courses/cyber-security" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
-                  Software Testing (Playwright)
+                  Cyber Security
                 </Link>
               </li>
               <li>
-                <Link to="/courses/ai-machine-learning" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/courses/spoken-english" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
-                  AI & Machine Learning
-                </Link>
-              </li>
-              <li>
-                <Link to="/courses/it-infrastructure-sysadmin" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
-                  onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
-                  onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
-                >
-                  IT Infrastructure & SysAdmin
+                  Spoken English (International Standard)
                 </Link>
               </li>
             </ul>
@@ -160,9 +176,9 @@ export default function Footer() {
               Contact
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.8rem', color: '#cbd5e1' }}>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <HiLocationMarker style={{ color: '#f2b733', flexShrink: 0 }} size={16} />
-                <span>Chennai, Tamil Nadu, India</span>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
+                <HiLocationMarker style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} size={16} />
+                <span>Plot No: 90, 3rd Cross Street, Phase-2, Thirumalai Nagar Annexe, Perungudi, Chennai - 600096, Tamil Nadu, India</span>
               </div>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <HiPhone style={{ color: '#f2b733', flexShrink: 0 }} size={16} />

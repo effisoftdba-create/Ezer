@@ -23,3 +23,19 @@ export function resolveImageSrc(urlStr) {
 
   return finalUrl;
 }
+
+/**
+ * Generates WebP image source url with JPEG/PNG fallback
+ */
+export function resolveWebPSrc(urlStr) {
+  const original = resolveImageSrc(urlStr);
+  if (!original) return { webp: '', fallback: '' };
+
+  // If local static image, derive webp path
+  if (original.endsWith('.jpg') || original.endsWith('.jpeg') || original.endsWith('.png')) {
+    const webpUrl = original.replace(/\.(jpg|jpeg|png)(\?.*)?$/, '.webp$2');
+    return { webp: webpUrl, fallback: original };
+  }
+
+  return { webp: original, fallback: original };
+}

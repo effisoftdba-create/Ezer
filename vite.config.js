@@ -7,5 +7,19 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true
+  },
+  build: {
+    target: 'esnext',
+    cssCodeSplit: true,
+    chunkSizeWarningLimit: 500,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-motion': ['framer-motion'],
+          'vendor-icons': ['react-icons']
+        }
+      }
+    }
   }
 })

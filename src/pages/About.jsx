@@ -1,5 +1,5 @@
 import React from 'react';
-import { HiCheckCircle, HiLightBulb, HiShieldCheck, HiUserGroup, HiAcademicCap, HiSparkles } from 'react-icons/hi';
+import { HiCheckCircle, HiLightBulb, HiShieldCheck, HiHeart, HiAcademicCap, HiSparkles, HiTrendingUp, HiUserGroup, HiBriefcase, HiGlobeAlt } from 'react-icons/hi';
 import CTABanner from '../components/CTABanner';
 
 const gallery = [
@@ -8,27 +8,43 @@ const gallery = [
   'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800&h=500',
 ];
 
-const diffPoints = [
+const coreObjectives = [
   {
-    title: 'Support On Both Sides of Employment',
-    desc: 'Pre-employment resume reviews and mock interviews before your first job, plus up to 1 year of continuous placement assistance after graduation.'
+    num: '1',
+    title: 'Skill Development',
+    desc: 'Offer industry-focused training programs in emerging technologies with practical, project-based learning.',
+    icon: <HiAcademicCap size={24} />
   },
   {
-    title: 'Structured Pathway for Career Switchers',
-    desc: 'Designed specifically to help non-IT graduates, diploma holders, and professionals with career gaps transition into software roles with confidence.'
+    num: '2',
+    title: 'Career Enablement',
+    desc: 'Provide complete placement support including resume building, interview preparation, and corporate connections for every learner.',
+    icon: <HiBriefcase size={24} />
   },
   {
-    title: '3-Year Community & Mentorship Model',
-    desc: 'Learning does not end when class finishes. Access senior mentors, code reviews, and alumni peer networks for 3 full years.'
+    num: '3',
+    title: 'Corporate Alignment',
+    desc: 'Collaborate with companies and corporate experts to ensure our curriculum meets current market requirements.',
+    icon: <HiTrendingUp size={24} />
   },
   {
-    title: 'Corporate Practitioner Faculty',
-    desc: 'Taught exclusively by working tech leads, DevOps architects, and QA leads who manage live corporate production environments.'
+    num: '4',
+    title: 'Accessible Learning',
+    desc: 'Make quality technical education available and affordable to students, graduates, and working professionals.',
+    icon: <HiGlobeAlt size={24} />
   },
   {
-    title: 'Industry-Current Hands-On Labs',
-    desc: 'Practical-first curriculum centered around real-world projects, CI/CD toolchains, Playwright automation, and deployed ML pipelines.'
+    num: '5',
+    title: 'Overall Development',
+    desc: 'Build both technical and soft skills such as communication, problem-solving, and professional conduct.',
+    icon: <HiLightBulb size={24} />
   },
+  {
+    num: '6',
+    title: 'Learning Community',
+    desc: 'Develop a strong network of learners, mentors, and alumni to support continuous growth and knowledge sharing.',
+    icon: <HiUserGroup size={24} />
+  }
 ];
 
 export default function About({ onOpenDemoModal }) {
@@ -38,7 +54,7 @@ export default function About({ onOpenDemoModal }) {
       {/* Hero Banner */}
       <section style={{
         background: '#000648', padding: '72px 0 56px', color: '#fff', textAlign: 'center',
-        backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(242,183,51,0.12) 0%, transparent 60%)',
+        backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(242,183,51,0.14) 0%, transparent 65%)',
         borderBottom: '3px solid #f2b733'
       }}>
         <div className="container">
@@ -52,14 +68,207 @@ export default function About({ onOpenDemoModal }) {
           <h1 style={{ color: '#ffffff', fontSize: 'clamp(2.2rem, 3.8vw, 3.2rem)', fontWeight: 900, marginBottom: '14px' }}>
             Transforming Ambition Into Tech Careers
           </h1>
-          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '1rem', maxWidth: '660px', margin: '0 auto', lineHeight: 1.6 }}>
-            EZER Learning Solutions is a Chennai-based premier IT training institute delivering live online, practical, outcome-driven programs backed by pre- and post-employment support.
+          <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '1.05rem', maxWidth: '700px', margin: '0 auto', lineHeight: 1.65 }}>
+            EZER Learning Solutions is a premier IT training institute delivering live online, practical, outcome-driven programs backed by 12-month career placement support.
           </p>
         </div>
       </section>
 
+      {/* Meaning of EZER Banner */}
+      <section style={{ padding: '56px 0', background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
+        <div className="container" style={{ maxWidth: '860px', margin: '0 auto' }}>
+          <div style={{
+            background: '#ffffff',
+            borderRadius: '20px',
+            padding: '36px clamp(20px, 4vw, 44px)',
+            border: '2px solid #000648',
+            boxShadow: '0 12px 36px rgba(0, 6, 72, 0.08)',
+            position: 'relative',
+            overflow: 'hidden'
+          }}>
+            <div style={{
+              position: 'absolute', top: '-15px', right: '-15px', width: '100px', height: '100px',
+              background: 'rgba(242, 183, 51, 0.18)', borderRadius: '50%', zIndex: 0
+            }} />
+            
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '12px', background: '#000648', color: '#f2b733', padding: '4px 14px', borderRadius: '50px', fontSize: '0.72rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <HiHeart size={14} />
+                OUR PURPOSE
+              </div>
+              <h2 style={{ color: '#000648', fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', fontWeight: 900, marginBottom: '14px' }}>
+                Meaning of <span style={{ color: '#000648', borderBottom: '3px solid #f2b733' }}>EZER</span>
+              </h2>
+              <p style={{ fontSize: '1.12rem', fontWeight: 800, color: '#000648', lineHeight: 1.5, marginBottom: '12px' }}>
+                Ezer means "Helper, Strength, and Support".
+              </p>
+              <p style={{ color: '#475569', fontSize: '0.96rem', lineHeight: 1.75, margin: 0 }}>
+                At Ezer Learning Solutions, this defines our purpose — to act as a dependable support system that helps students, aspirants, and professionals become job-ready and corporate-relevant.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Vision & Mission Cards */}
+      <section style={{ padding: '64px 0', background: '#000648', color: '#ffffff', borderTop: '3px solid #f2b733' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <span style={{
+              background: 'rgba(242,183,51,0.15)', color: '#f2b733', border: '1px solid rgba(242,183,51,0.4)',
+              fontSize: '0.75rem', fontWeight: 800, padding: '4px 14px', borderRadius: '50px', textTransform: 'uppercase', letterSpacing: '0.06em'
+            }}>
+              FOUNDATIONAL PILLARS
+            </span>
+            <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 2.8vw, 2.2rem)', marginTop: '8px', fontWeight: 900 }}>
+              Vision & Mission Statements
+            </h2>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px' }}>
+            
+            {/* Vision Card */}
+            <div 
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '2px solid #f2b733',
+                borderRadius: '16px',
+                padding: '36px 28px',
+                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
+                display: 'flex', flexDirection: 'column',
+                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-6px)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(242,183,51,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.4)';
+              }}
+            >
+              <div style={{
+                width: '52px', height: '52px', borderRadius: '14px',
+                background: '#f2b733', color: '#000648',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: '20px', boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
+              }}>
+                <HiShieldCheck size={28} />
+              </div>
+              <h3 style={{ color: '#f2b733', fontSize: '1.4rem', fontWeight: 900, marginBottom: '12px' }}>
+                Vision
+              </h3>
+              <p style={{ color: 'rgba(255,255,255,0.92)', fontSize: '1rem', lineHeight: 1.75, margin: 0, flexGrow: 1 }}>
+                To be recognized as one of India’s leading learning platforms that develops skilled professionals and enables them to build successful careers in technology and related fields.
+              </p>
+            </div>
+
+            {/* Mission Card */}
+            <div 
+              style={{
+                background: 'rgba(255,255,255,0.04)',
+                border: '2px solid #f2b733',
+                borderRadius: '16px',
+                padding: '36px 28px',
+                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
+                display: 'flex', flexDirection: 'column',
+                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-6px)';
+                e.currentTarget.style.boxShadow = '0 20px 40px rgba(242,183,51,0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.4)';
+              }}
+            >
+              <div style={{
+                width: '52px', height: '52px', borderRadius: '14px',
+                background: '#f2b733', color: '#000648',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: '20px', boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
+              }}>
+                <HiLightBulb size={28} />
+              </div>
+              <h3 style={{ color: '#f2b733', fontSize: '1.4rem', fontWeight: 900, marginBottom: '12px' }}>
+                Mission
+              </h3>
+              <p style={{ color: 'rgba(255,255,255,0.92)', fontSize: '0.98rem', lineHeight: 1.75, marginBottom: '16px' }}>
+                To provide practical, affordable, and results-driven training supported by expert mentorship, real-time projects, and dedicated placement assistance.
+              </p>
+              <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem', lineHeight: 1.65, margin: 0, fontStyle: 'italic' }}>
+                Our goal is to bridge the gap between education and employment by equipping learners with the right skills, guidance, and opportunities.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Core Objectives Section */}
+      <section className="section-alt" style={{ padding: '64px 0', borderBottom: '1px solid #e2e8f0' }}>
+        <div className="container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <span className="section-tag">
+              <HiSparkles size={14} style={{ color: '#f2b733' }} />
+              Strategic Goals
+            </span>
+            <h2 style={{ color: '#000648', fontSize: 'clamp(1.7rem, 2.8vw, 2.2rem)', fontWeight: 900, marginTop: '6px' }}>
+              Core Objectives
+            </h2>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+            {coreObjectives.map((obj) => (
+              <div 
+                key={obj.num} 
+                style={{
+                  display: 'flex', flexDirection: 'column',
+                  background: '#ffffff', padding: '24px 22px', borderRadius: '14px',
+                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,6,72,0.05)',
+                  transition: 'border-color 0.25s ease, transform 0.25s ease',
+                  position: 'relative'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = '#000648';
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = '#e2e8f0';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                  <div style={{
+                    background: '#000648', color: '#f2b733',
+                    width: '42px', height: '42px', borderRadius: '10px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  }}>
+                    {obj.icon}
+                  </div>
+                  <span style={{
+                    fontSize: '1.2rem', fontWeight: 900, color: '#f2b733', background: '#000648',
+                    padding: '2px 10px', borderRadius: '50px'
+                  }}>
+                    0{obj.num}
+                  </span>
+                </div>
+                
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
+                  {obj.num}. {obj.title}
+                </h3>
+                <p style={{ fontSize: '0.88rem', color: '#475569', margin: 0, lineHeight: 1.65 }}>
+                  {obj.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Image Gallery Showcase */}
-      <section style={{ padding: '48px 0', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
+      <section style={{ padding: '48px 0 64px', background: '#f8fafc' }}>
         <div className="container">
           <div style={{
             display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
@@ -74,237 +283,10 @@ export default function About({ onOpenDemoModal }) {
                   src={src} 
                   alt="EZER Learning Environment" 
                   style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} 
+                  loading="lazy"
                 />
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Founding Story */}
-      <section className="section">
-        <div className="container" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
-          <span className="section-tag">
-            <HiSparkles size={14} style={{ color: '#f2b733' }} />
-            Why EZER Was Built
-          </span>
-          <h2 style={{ color: '#000648', fontSize: 'clamp(1.7rem, 2.8vw, 2.2rem)', marginBottom: '16px', marginTop: '6px' }}>
-            Our Founding Story
-          </h2>
-          <p style={{ color: '#475569', fontSize: '0.98rem', lineHeight: 1.75, marginBottom: '20px' }}>
-            We identified a fundamental flaw in traditional IT training: too much passive theory and virtually zero follow-through once the course ends. Learners were left stranded after completing classes without real project portfolios or corporate interview practice.
-          </p>
-          <p style={{ color: '#475569', fontSize: '0.98rem', lineHeight: 1.75 }}>
-            EZER Learning Solutions was founded to redefine IT education. We built a mentorship model where learning takes place in live production-style labs led by senior corporate engineers, and placement support extends for 1 full year after graduation alongside 3-year community access.
-          </p>
-        </div>
-      </section>
-
-      {/* Mission & Vision Cards */}
-      <section style={{ padding: '64px 0', background: '#000648', color: '#ffffff', borderTop: '3px solid #f2b733' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <span style={{
-              background: 'rgba(242,183,51,0.15)', color: '#f2b733', border: '1px solid rgba(242,183,51,0.4)',
-              fontSize: '0.75rem', fontWeight: 800, padding: '4px 14px', borderRadius: '50px', textTransform: 'uppercase', letterSpacing: '0.06em'
-            }}>
-              Our Core Purpose
-            </span>
-            <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 2.8vw, 2.2rem)', marginTop: '8px' }}>
-              Guiding Principles That Drive Student Success
-            </h2>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px' }}>
-            
-            {/* Our Mission Card */}
-            <div 
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '2px solid #f2b733',
-                borderRadius: '16px',
-                padding: '36px 28px',
-                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
-                display: 'flex', flexDirection: 'column',
-                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px) scale(1.01)';
-                e.currentTarget.style.boxShadow = '0 20px 40px rgba(242,183,51,0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.4)';
-              }}
-            >
-              <div style={{
-                width: '52px', height: '52px', borderRadius: '14px',
-                background: '#f2b733', color: '#000648',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: '20px', boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
-                transition: 'transform 0.3s ease'
-              }}>
-                <HiLightBulb size={28} />
-              </div>
-              <h3 style={{ color: '#f2b733', fontSize: '1.4rem', fontWeight: 900, marginBottom: '12px', letterSpacing: '-0.01em' }}>
-                Our Mission
-              </h3>
-              <p style={{ color: 'rgba(255,255,255,0.92)', fontSize: '0.96rem', lineHeight: 1.7, marginBottom: '22px', flexGrow: 1 }}>
-                "To make high-growth IT careers accessible to every aspiring learner through live, practical, mentor-led training — backed by outcome support that extends well beyond the classroom."
-              </p>
-              
-              <div style={{ borderTop: '1px solid rgba(242,183,51,0.25)', paddingTop: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#f2b733', fontWeight: 800 }}>
-                  <HiCheckCircle size={18} /> 100% Live Instructor-Led Classes
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#f2b733', fontWeight: 800 }}>
-                  <HiCheckCircle size={18} /> Practical Corporate Toolchain Labs
-                </div>
-              </div>
-            </div>
-
-            {/* Our Vision Card */}
-            <div 
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '2px solid #f2b733',
-                borderRadius: '16px',
-                padding: '36px 28px',
-                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
-                display: 'flex', flexDirection: 'column',
-                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
-                cursor: 'pointer'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px) scale(1.01)';
-                e.currentTarget.style.boxShadow = '0 20px 40px rgba(242,183,51,0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.4)';
-              }}
-            >
-              <div style={{
-                width: '52px', height: '52px', borderRadius: '14px',
-                background: '#f2b733', color: '#000648',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: '20px', boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
-                transition: 'transform 0.3s ease'
-              }}>
-                <HiShieldCheck size={28} />
-              </div>
-              <h3 style={{ color: '#f2b733', fontSize: '1.4rem', fontWeight: 900, marginBottom: '12px', letterSpacing: '-0.01em' }}>
-                Our Vision
-              </h3>
-              <p style={{ color: 'rgba(255,255,255,0.92)', fontSize: '0.96rem', lineHeight: 1.7, marginBottom: '22px', flexGrow: 1 }}>
-                "To become India's most trusted outcome-driven IT training institute, recognized as much for the long-term career support we provide after placement as for our curriculum excellence."
-              </p>
-              
-              <div style={{ borderTop: '1px solid rgba(242,183,51,0.25)', paddingTop: '18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#f2b733', fontWeight: 800 }}>
-                  <HiCheckCircle size={18} /> 1-Year Post-Employment Assistance
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.84rem', color: '#f2b733', fontWeight: 800 }}>
-                  <HiCheckCircle size={18} /> 3-Year Active Alumni Network
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* What Makes EZER Different */}
-      <section className="section-alt" style={{ padding: '64px 0', borderBottom: '1px solid #e2e8f0' }}>
-        <div className="container" style={{ maxWidth: '840px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '36px' }}>
-            <span className="section-tag">Competitive Distinction</span>
-            <h2 style={{ color: '#000648' }}>What Makes EZER Different</h2>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {diffPoints.map((item) => (
-              <div key={item.title} style={{
-                display: 'flex', alignItems: 'flex-start', gap: '16px',
-                background: '#ffffff', padding: '20px 24px', borderRadius: '12px',
-                border: '1.5px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,6,72,0.04)',
-                transition: 'border-color 0.2s ease, transform 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#000648';
-                e.currentTarget.style.transform = 'translateX(4px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = '#e2e8f0';
-                e.currentTarget.style.transform = 'translateX(0)';
-              }}
-              >
-                <div style={{
-                  background: '#000648', color: '#f2b733',
-                  padding: '6px', borderRadius: '8px', flexShrink: 0, marginTop: '2px'
-                }}>
-                  <HiCheckCircle size={18} />
-                </div>
-                <div>
-                  <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-                    {item.title}
-                  </h3>
-                  <p style={{ fontSize: '0.88rem', color: '#475569', margin: 0, lineHeight: 1.6 }}>
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Verified Trust Stats */}
-      <section className="section" style={{ padding: '56px 0' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', textAlign: 'center' }}>
-            {[
-              { num: '5+', label: 'Years Active in IT Education' },
-              { num: '15+', label: 'Combined Years of Practitioner Trainer Experience' },
-              { num: 'ISO', label: 'ISO Certified Training Quality Management' },
-              { num: '1 Year', label: 'Post-Graduation Job Placement Support' },
-            ].map((s) => (
-              <div key={s.label} style={{ 
-                padding: '28px 20px', background: '#ffffff', borderRadius: '14px', 
-                border: '1.5px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,6,72,0.05)'
-              }}>
-                <div style={{ fontSize: '2.2rem', fontWeight: 900, color: '#000648', marginBottom: '4px' }}>
-                  <span style={{ color: '#f2b733' }}>{s.num}</span>
-                </div>
-                <div style={{ color: '#475569', fontSize: '0.82rem', fontWeight: 700 }}>{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Fixed High-Quality Image Grid at Bottom (Fixing image cropping issue from user feedback) */}
-      <section style={{ padding: '0 0 64px 0' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
-            {/* Image 1 — Properly framed team meeting with center top position */}
-            <div style={{ borderRadius: '16px', overflow: 'hidden', height: '280px', border: '1.5px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,6,72,0.08)' }}>
-              <img 
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000&h=600" 
-                alt="EZER Learning Team Collaboration" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 20%' }} 
-              />
-            </div>
-            
-            {/* Image 2 — Properly framed classroom high-five with center position */}
-            <div style={{ borderRadius: '16px', overflow: 'hidden', height: '280px', border: '1.5px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,6,72,0.08)' }}>
-              <img 
-                src="https://images.unsplash.com/photo-1531498860502-7c67cf02f657?auto=format&fit=crop&q=80&w=1000&h=600" 
-                alt="EZER Mentorship Success" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%' }} 
-              />
-            </div>
           </div>
         </div>
       </section>
@@ -313,4 +295,3 @@ export default function About({ onOpenDemoModal }) {
     </div>
   );
 }
-
