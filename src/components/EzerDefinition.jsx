@@ -191,21 +191,24 @@ export default function EzerDefinition() {
               style={{
                 background: '#000648',
                 color: '#ffffff',
-                padding: '16px 20px',
+                padding: '18px 22px',
                 borderRadius: '12px',
                 borderLeft: '4px solid #f2b733',
-                fontSize: '1rem',
-                fontWeight: 800,
+                fontSize: '0.94rem',
+                fontWeight: 600,
                 display: 'flex',
                 alignItems: 'center',
-                gap: '10px',
-                flexWrap: 'wrap',
+                gap: '14px',
                 boxShadow: '0 4px 16px rgba(0, 6, 72, 0.15)'
               }}
             >
-              <span>
-                {ezerDefinition.acronymText}
-              </span>
+              <HiSparkles size={24} style={{ color: '#f2b733', flexShrink: 0 }} />
+              <div>
+                <span style={{ color: '#f2b733', fontWeight: 900, fontSize: '0.98rem' }}>Meaning of EZER: </span>
+                <span style={{ lineHeight: 1.5 }}>
+                  Ezer means "Helper, Strength, and Support" — acting as a dependable support system that helps students, aspirants, and professionals become job-ready and corporate-relevant.
+                </span>
+              </div>
             </div>
 
           </div>

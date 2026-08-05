@@ -208,7 +208,7 @@ export default function About({ onOpenDemoModal }) {
 
       {/* Core Objectives Section */}
       <section className="section-alt" style={{ padding: '64px 0', borderBottom: '1px solid #e2e8f0' }}>
-        <div className="container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <span className="section-tag">
               <HiSparkles size={14} style={{ color: '#f2b733' }} />
@@ -219,7 +219,7 @@ export default function About({ onOpenDemoModal }) {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', width: '100%' }}>
             {coreObjectives.map((obj) => (
               <div 
                 key={obj.num} 

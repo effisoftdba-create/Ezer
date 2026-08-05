@@ -3,21 +3,21 @@ import { testimonials as initialTestimonials, videoStories } from '../../data/te
 import { generalFaqs } from '../../data/faq';
 import productionData from '../../data/productionData.json';
 
-export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v7_cache_busted';
-export const STORAGE_COURSES_KEY = 'ezer_courses:v7_cache_busted';
-export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v7_cache_busted';
-export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v7_cache_busted';
-export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v7_cache_busted';
-export const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v7_cache_busted';
-export const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v7_cache_busted';
-export const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v7_cache_busted';
-export const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v7_cache_busted';
-export const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v7_cache_busted';
-export const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v7_cache_busted';
-export const STORAGE_FAQS_KEY = 'ezer_faqs:v7_cache_busted';
-export const STORAGE_CONTACT_KEY = 'ezer_contact:v7_cache_busted';
-export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v7_cache_busted';
-export const STORAGE_LEADS_KEY = 'ezer_leads:v7_cache_busted';
+export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v8_cache_busted';
+export const STORAGE_COURSES_KEY = 'ezer_courses:v8_cache_busted';
+export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v8_cache_busted';
+export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v8_cache_busted';
+export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v8_cache_busted';
+export const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v8_cache_busted';
+export const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v8_cache_busted';
+export const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v8_cache_busted';
+export const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v8_cache_busted';
+export const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v8_cache_busted';
+export const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v8_cache_busted';
+export const STORAGE_FAQS_KEY = 'ezer_faqs:v8_cache_busted';
+export const STORAGE_CONTACT_KEY = 'ezer_contact:v8_cache_busted';
+export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v8_cache_busted';
+export const STORAGE_LEADS_KEY = 'ezer_leads:v8_cache_busted';
 
 export const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -66,14 +66,14 @@ export const defaultSlides = [
   },
   {
     id: 'slide-2',
-    url: 'images/hero/cloud_deveops.png',
+    url: 'images/hero/devops.avif',
     headline: 'Deploy, Automate, and Scale Like a Real DevOps Engineer',
     sub: 'Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with hands-on production labs.',
     badge: 'Cloud & DevOps Masterclass',
   },
   {
     id: 'slide-3',
-    url: 'images/hero/software_testing_playwright.jpg',
+    url: 'images/hero/full-stack-development.jpg',
     headline: 'Build Modern AI-Powered Web Applications',
     sub: 'Master React, Node.js, Next.js & PostgreSQL supercharged with AI coding assistants.',
     badge: 'Full Stack with AI',
@@ -92,6 +92,7 @@ export const defaultPlatformDef = {
   headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
   description: "EZER Learning Solutions is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses. Taught by corporate-experienced IT professionals, EZER offers personalized live online training, hands-on labs, 12-month placement support, and up to 3 years of community access.",
   image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=800',
+  acronymText: '"Helper, Strength, and Support" — acting as a dependable support system that helps students, aspirants, and professionals become job-ready and corporate-relevant.',
   highlights: [
     'Live Online Instructor-Led',
     '12-Month Placement Support',
@@ -107,6 +108,9 @@ export const defaultSupportCards = [
     tag: 'PLACEMENT SUPPORT',
     title: '12-Month Career Placement Support',
     desc: 'Comprehensive resume optimization, interview preparation, and curated job opportunities',
+    image: 'images/hero/hero_section_1.jpg',
+    fit: 'cover',
+    position: 'center center',
     bgColor: '#ffffff',
     borderColor: '#e2e8f0',
     tagBg: '#000648',
@@ -121,6 +125,9 @@ export const defaultSupportCards = [
     tag: 'EXPERT FACULTY',
     title: 'Mentorship by Industry Practitioners',
     desc: 'Learn from senior leaders and tech experts working at top global organizations',
+    image: 'images/hero/here_section_2.webp',
+    fit: 'cover',
+    position: 'center center',
     bgColor: '#ffffff',
     borderColor: '#e2e8f0',
     tagBg: '#000648',
@@ -135,6 +142,9 @@ export const defaultSupportCards = [
     tag: 'NETWORKING',
     title: 'Alumni & Peer Community*',
     desc: 'Continuous mentorship, Slack access, and networking with a thriving alumni ecosystem',
+    image: 'images/hero/full-stack-development.jpg',
+    fit: 'cover',
+    position: 'center center',
     bgColor: '#ffffff',
     borderColor: '#e2e8f0',
     tagBg: '#000648',
@@ -149,6 +159,9 @@ export const defaultSupportCards = [
     tag: 'ON-DEMAND REVISION',
     title: 'Learning Management Access',
     desc: 'On-demand access to all session recordings for flexible revision and learning',
+    image: 'images/hero/AI_machine_learning.png',
+    fit: 'cover',
+    position: 'center center',
     bgColor: '#ffffff',
     borderColor: '#e2e8f0',
     tagBg: '#000648',
@@ -181,6 +194,39 @@ export const defaultTransformedLives = [
     company: 'GlobalQA Labs',
     courseSlug: 'full-stack-dev-ai',
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300'
+  },
+  {
+    id: 'tl-3',
+    name: 'Ananth Vignesh',
+    beforeRole: 'B.Sc Physics Graduate (Non-IT)',
+    afterRole: 'Data Analyst',
+    salaryHike: '160% Salary Hike',
+    story: 'Learning SQL, Power BI, and Python at EZER unlocked my first IT job as a Data Analyst in just 3 months.',
+    company: 'Analytics Cloud',
+    courseSlug: 'data-analyst',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=300&h=300'
+  },
+  {
+    id: 'tl-4',
+    name: 'Karthik Raja',
+    beforeRole: 'Helpdesk Support Tech',
+    afterRole: 'Cyber Security Analyst',
+    salaryHike: '150% Salary Hike',
+    story: 'Ethical hacking and SOC lab training at EZER allowed me to pivot straight into enterprise cyber defense.',
+    company: 'SecureTech Solutions',
+    courseSlug: 'cyber-security',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300&h=300'
+  },
+  {
+    id: 'tl-5',
+    name: 'Divya Murali',
+    beforeRole: 'Arts Graduate',
+    afterRole: 'AI/ML Associate Engineer',
+    salaryHike: '175% Salary Hike',
+    story: 'The practical Python and machine learning labs along with 1-on-1 mentorship made my career switch seamless.',
+    company: 'InnovateAI Labs',
+    courseSlug: 'ai-machine-learning',
+    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=300&h=300'
   }
 ];
 
