@@ -88,15 +88,15 @@ export default function ImagePickerModal({
   aspectRatio = 'Rectangle (16:9)',
   recommendedDimensions = '1200 x 675 px'
 }) {
-  const [selectedUrl, setSelectedUrl] = useState(currentImage || DEFAULT_PRESET_IMAGES[0].url);
+  const [selectedUrlOverride, setSelectedUrlOverride] = useState(null);
   const [customUrl, setCustomUrl] = useState('');
-  const [fitMode, setFitMode] = useState(currentFit || 'cover');
+  const [fitModeOverride, setFitModeOverride] = useState(null);
   const [zoomScale, setZoomScale] = useState(1);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [selectedAspectRatio, setSelectedAspectRatio] = useState(aspectRatio);
+  const [aspectRatioOverride, setAspectRatioOverride] = useState(null);
   const dragStartRef = useRef({ x: 0, y: 0 });
   const presetPosRef = useRef(currentPosition || 'center center');
 
@@ -107,17 +107,6 @@ export default function ImagePickerModal({
     } catch (e) {}
     return [];
   });
-
-  useEffect(() => {
-    if (isOpen) {
-      setSelectedUrl(currentImage || DEFAULT_PRESET_IMAGES[0].url);
-      setCustomUrl('');
-      setFitMode(currentFit || 'cover');
-      setSelectedAspectRatio(aspectRatio || 'Rectangle (16:9)');
-      setDragOffset({ x: 0, y: 0 });
-      presetPosRef.current = currentPosition || 'center center';
-    }
-  }, [isOpen, currentImage, currentFit, currentPosition, aspectRatio]);
 
   useEffect(() => {
     try {
@@ -137,10 +126,11 @@ export default function ImagePickerModal({
 
   if (!isOpen) return null;
 
+  const selectedUrl = selectedUrlOverride !== null ? selectedUrlOverride : (currentImage || DEFAULT_PRESET_IMAGES[0].url);
+  const fitMode = fitModeOverride !== null ? fitModeOverride : (currentFit || 'cover');
+  const activeRatio = aspectRatioOverride !== null ? aspectRatioOverride : (aspectRatio || 'Rectangle (16:9)');
   const activeSelectedUrl = customUrl.trim() || selectedUrl;
-  const activeRatio = selectedAspectRatio || aspectRatio;
   const previewDims = getPreviewDimensions(activeRatio);
-
 
   const combinedGalleryImages = [
     ...uploadedImages.map((img) => ({ label: img.label || 'Uploaded Image', url: img.url, isUploaded: true })),
@@ -153,14 +143,14 @@ export default function ImagePickerModal({
 
   const handleConfirm = () => {
     if (activeSelectedUrl) {
-      onSelectImage(activeSelectedUrl, computedPosStr, fitMode);
-      if (onSelectPosition) onSelectPosition(computedPosStr, fitMode);
-      onClose();
+      if (typeof onSelectImage === 'function') onSelectImage(activeSelectedUrl, computedPosStr, fitMode);
+      if (typeof onSelectPosition === 'function') onSelectPosition(computedPosStr, fitMode);
+      if (typeof onClose === 'function') onClose();
     }
   };
 
   const handleFileUpload = (e) => {
-    const file = e.target.files[0];
+    const file = e?.target?.files?.[0];
     if (!file) return;
 
     if (file.size > 15 * 1024 * 1024) {
@@ -175,7 +165,7 @@ export default function ImagePickerModal({
       const compressedWebUri = await compressImageForWeb(rawDataUri, 600, 0.6);
 
       setCustomUrl(compressedWebUri);
-      setSelectedUrl(compressedWebUri);
+      setSelectedUrlOverride(compressedWebUri);
 
       setUploadedImages((prev) => [
         { label: `Upload ${prev.length + 1}`, url: compressedWebUri, date: new Date().toLocaleTimeString() },
@@ -190,7 +180,7 @@ export default function ImagePickerModal({
     e.stopPropagation();
     setUploadedImages((prev) => prev.filter((img) => img.url !== url));
     if (selectedUrl === url) {
-      setSelectedUrl(DEFAULT_PRESET_IMAGES[0].url);
+      setSelectedUrlOverride(DEFAULT_PRESET_IMAGES[0].url);
     }
   };
 
@@ -208,7 +198,7 @@ export default function ImagePickerModal({
   };
 
   const handleGallerySelect = (url) => {
-    setSelectedUrl(url);
+    setSelectedUrlOverride(url);
     setCustomUrl('');
   };
 
@@ -270,10 +260,10 @@ export default function ImagePickerModal({
           zoomScale={zoomScale}
           setZoomScale={setZoomScale}
           fitMode={fitMode}
-          setFitMode={setFitMode}
+          setFitMode={setFitModeOverride}
           handlePresetPosition={handlePresetPosition}
           aspectRatio={activeRatio}
-          onSelectAspectRatio={(val) => setSelectedAspectRatio(val)}
+          onSelectAspectRatio={(val) => setAspectRatioOverride(val)}
         />
 
         {/* DRAG & DROP FILE UPLOAD ZONE */}
