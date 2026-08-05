@@ -102,6 +102,23 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, []);
 
+  const addCourse = useCallback((newCourse) => {
+    dispatch({ type: 'SET_KEY', key: 'courses', value: [newCourse, ...(courses || [])] });
+    triggerStateToast('SAVED');
+  }, [courses]);
+
+  const updateCourse = useCallback((id, updatedCourse) => {
+    const updated = (courses || []).map((c) => (c.id === id || c.slug === id ? { ...c, ...updatedCourse } : c));
+    dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
+    triggerStateToast('SAVED');
+  }, [courses]);
+
+  const deleteCourse = useCallback((id) => {
+    const updated = (courses || []).filter((c) => c.id !== id && c.slug !== id);
+    dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
+    triggerStateToast('SAVED');
+  }, [courses]);
+
   const updateEzerDefinition = useCallback((def) => {
     dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: def });
     triggerStateToast('SAVED');
@@ -181,7 +198,7 @@ export function SiteProvider({ children }) {
 
   const value = useMemo(() => ({
     heroSlides, updateHeroSlides,
-    courses, updateCourses,
+    courses, updateCourses, addCourse, updateCourse, deleteCourse,
     ezerDefinition, updateEzerDefinition,
     supportCards, updateSupportCards,
     transformedLives, updateTransformedLives,
@@ -198,7 +215,7 @@ export function SiteProvider({ children }) {
     resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides,
-    courses, updateCourses,
+    courses, updateCourses, addCourse, updateCourse, deleteCourse,
     ezerDefinition, updateEzerDefinition,
     supportCards, updateSupportCards,
     transformedLives, updateTransformedLives,

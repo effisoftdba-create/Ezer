@@ -10,17 +10,12 @@ export default function CourseCard({ course, onOpenDemoModal }) {
 
   return (
     <div 
+      className="ezer-uiverse-card"
       style={{
-        background: '#ffffff', 
-        borderRadius: '16px', 
-        border: '1.5px solid #e2e8f0',
-        overflow: 'hidden', 
         display: 'flex', 
         flexDirection: 'column',
         height: '100%',
         minHeight: '440px',
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
-        boxShadow: '0 4px 18px rgba(0, 6, 72, 0.06)',
         position: 'relative',
       }}
       onMouseEnter={(e) => {

@@ -112,14 +112,12 @@ export default function WhyEzer() {
         >
           {supportCards.map((r) => (
             <div 
-              key={r.id || r.title} 
+              key={r.id || r.title}
+              className="ezer-uiverse-card"
               style={{
                 flex: '0 0 clamp(290px, 30vw, 340px)',
                 scrollSnapAlign: 'start',
                 minWidth: '290px',
-                background: '#ffffff', borderRadius: '16px', overflow: 'hidden',
-                border: '1.5px solid #e2e8f0', transition: 'transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
-                boxShadow: '0 4px 16px rgba(0,6,72,0.06)',
                 display: 'flex', flexDirection: 'column',
               }}
               onMouseEnter={(e) => {

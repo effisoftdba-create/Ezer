@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import PopupForm from './components/PopupForm';
 import UIStateDisplay, { STATE_TYPES } from './components/UIStateDisplay';
 import UIToastNotifier from './components/UIToastNotifier';
+import EzerBrandPreloader from './components/EzerBrandPreloader';
 
 // Dynamic Code Splitting with React.lazy
 const Home = lazy(() => import('./pages/Home'));
@@ -110,6 +111,7 @@ export default function App() {
 
   return (
     <SiteProvider>
+      <EzerBrandPreloader />
       <UIToastNotifier />
       <div className="app-layout" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         {/* Global Offline Network Status Banner */}
