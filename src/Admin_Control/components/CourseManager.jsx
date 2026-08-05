@@ -11,7 +11,7 @@ const DEFAULT_COURSE_STATE = {
   badge: 'Popular',
   tagline: '',
   description: '',
-  image: 'images/hero/cloud_deveops.png',
+  image: 'images/hero/devops.avif',
   imagePosition: 'center center',
   imageFit: 'cover',
   duration: '3 Months',

@@ -12,6 +12,7 @@ const ASPECT_RATIO_PRESETS = [
 export default function ImagePickerControls({
   POSITION_PRESETS,
   dragOffset,
+  setDragOffset,
   zoomScale,
   setZoomScale,
   fitMode,

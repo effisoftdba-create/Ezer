@@ -45,7 +45,7 @@
     },
     {
       "id": "slide-2",
-      "url": "images/hero/cloud_deveops.png",
+      "url": "images/hero/devops.avif",
       "headline": "Deploy, Automate, and Scale Like a Real DevOps Engineer",
       "sub": "Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with hands-on production labs.",
       "badge": "Cloud & DevOps Masterclass",

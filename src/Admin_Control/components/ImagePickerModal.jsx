@@ -9,7 +9,7 @@ const STORAGE_UPLOADED_IMAGES_KEY = 'ezer_uploaded_images:v3';
 
 const DEFAULT_PRESET_IMAGES = [
   { label: 'Hero Default', url: 'images/hero/hero_section_1.jpg' },
-  { label: 'Cloud & DevOps', url: 'images/hero/cloud_deveops.png' },
+  { label: 'Cloud & DevOps', url: 'images/hero/devops.avif' },
   { label: 'Software Testing / Playwright', url: 'images/hero/software_testing_playwright.jpg' },
   { label: 'AI & Data Science', url: 'images/hero/AI_machine_learning.png' },
   { label: 'Fullstack Engineering', url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800' },
