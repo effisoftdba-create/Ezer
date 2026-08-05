@@ -362,3 +362,63 @@ img { max-width: 100%; display: block; }
               0 0 0 2.5px #f2b733,
               0.4em 0.4em 1.2em rgba(0, 6, 72, 0.22);
 }
+
+/* Dribbble Ellara-Inspired Modern Design Utilities */
+.dribbble-pill-badge {
+  background: rgba(0, 6, 72, 0.05);
+  border: 1.5px solid rgba(0, 6, 72, 0.12);
+  color: #000648;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 6px 18px;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.dribbble-pill-badge-gold {
+  background: rgba(242, 183, 51, 0.12);
+  border: 1.5px solid rgba(242, 183, 51, 0.4);
+  color: #f2b733;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 6px 18px;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dribbble-card {
+  background: #ffffff;
+  border-radius: 20px;
+  border: 1.5px solid #e2e8f0;
+  box-shadow: 0 10px 30px rgba(0, 6, 72, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.dribbble-card:hover {
+  transform: translateY(-4px);
+  border-color: #000648;
+  box-shadow: 0 20px 40px rgba(0, 6, 72, 0.12);
+}
+
+.dribbble-btn-pill {
+  border-radius: 50px !important;
+  padding: 12px 28px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.02em !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.dribbble-btn-pill:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0, 6, 72, 0.25) !important;
+}
