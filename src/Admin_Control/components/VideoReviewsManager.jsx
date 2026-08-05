@@ -288,6 +288,9 @@ export default function VideoReviewsManager() {
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.thumbnail}
         onSelectImage={(url) => setFormData((prev) => ({ ...prev, thumbnail: url }))}
+        targetArea="Video Review Story Thumbnail"
+        aspectRatio="Rectangle / Video (16:9)"
+        recommendedDimensions="1200 x 675 px"
       />
     </div>
   );

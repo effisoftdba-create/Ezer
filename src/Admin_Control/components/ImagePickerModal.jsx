@@ -109,12 +109,15 @@ export default function ImagePickerModal({
   });
 
   useEffect(() => {
-    if (currentImage) setSelectedUrl(currentImage);
-  }, [currentImage]);
-
-  useEffect(() => {
-    if (aspectRatio) setSelectedAspectRatio(aspectRatio);
-  }, [aspectRatio]);
+    if (isOpen) {
+      setSelectedUrl(currentImage || DEFAULT_PRESET_IMAGES[0].url);
+      setCustomUrl('');
+      setFitMode(currentFit || 'cover');
+      setSelectedAspectRatio(aspectRatio || 'Rectangle (16:9)');
+      setDragOffset({ x: 0, y: 0 });
+      presetPosRef.current = currentPosition || 'center center';
+    }
+  }, [isOpen, currentImage, currentFit, currentPosition, aspectRatio]);
 
   useEffect(() => {
     try {
