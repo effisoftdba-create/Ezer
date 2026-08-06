@@ -53,39 +53,23 @@ export default function PlatformManager() {
               Live Executive Showcase Preview (3 Glass Cards: CEO, CFO, CTHM)
             </span>
             
-            {/* Live Glass Stack Preview matching EzerDefinition.jsx */}
+            {/* Live Showcase Single Photo Preview matching EzerDefinition.jsx */}
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 12px', background: '#050b1c', borderRadius: '16px', border: '1.5px solid #cbd5e1' }}>
               <div 
                 style={{
-                  position: 'absolute', top: '4px', left: '5%', width: '90%', height: '95%',
-                  background: 'linear-gradient(135deg, rgba(242, 183, 51, 0.22) 0%, rgba(0, 6, 72, 0.08) 100%)',
-                  clipPath: 'polygon(15% 0%, 100% 10%, 85% 100%, 0% 85%)', borderRadius: '14px', zIndex: 1
-                }} 
-              />
-              <div 
-                style={{
-                  position: 'absolute', top: '10px', right: '2%', width: '80%', height: '90%',
-                  border: '2px solid #f2b733', clipPath: 'polygon(20% 0%, 100% 20%, 80% 100%, 0% 80%)',
-                  borderRadius: '14px', zIndex: 1
-                }} 
-              />
-
-              <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px 0' }}>
-                <div style={{ display: 'flex', margin: '0 -24px' }}>
-                  <div style={{ width: '80px', height: '96px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #f2b733', boxShadow: '0 8px 16px rgba(0,0,0,0.4)', transform: 'rotate(-10deg)', background: '#000648' }}>
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=300" alt="CEO" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                  <div style={{ width: '80px', height: '96px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #f2b733', boxShadow: '0 8px 16px rgba(0,0,0,0.4)', transform: 'rotate(2deg)', margin: '0 -20px', zIndex: 3, background: '#000648' }}>
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300" alt="CFO" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                  <div style={{ width: '80px', height: '96px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #f2b733', boxShadow: '0 8px 16px rgba(0,0,0,0.4)', transform: 'rotate(12deg)', background: '#000648' }}>
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300" alt="CTHM" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  </div>
-                </div>
+                  position: 'relative', zIndex: 2, width: '100%', maxWidth: '280px',
+                  borderRadius: '12px', overflow: 'hidden', border: '2px solid #f2b733',
+                  boxShadow: '0 8px 20px rgba(0,0,0,0.4)', background: '#000'
+                }}
+              >
+                <img 
+                  src={resolveImageSrc(formData.image)} 
+                  alt={formData.headline} 
+                  style={{ width: '100%', height: '140px', objectFit: formData.imageFit || 'cover', display: 'block' }} 
+                />
               </div>
-
-              <span style={{ position: 'relative', zIndex: 3, fontSize: '0.72rem', color: '#f2b733', fontWeight: 800, textAlign: 'center', marginTop: '6px' }}>
-                Executive Board: CEO • CFO • CTHM
+              <span style={{ position: 'relative', zIndex: 3, fontSize: '0.72rem', color: '#f2b733', fontWeight: 800, textAlign: 'center', marginTop: '8px' }}>
+                ★ Live Section Showcase Photo Preview
               </span>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { HiSparkles, HiCheckCircle } from 'react-icons/hi';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
+import { resolveImageSrc } from '../utils/imageUtils';
 import ExecutiveLeadership from './ExecutiveLeadership';
 
 function ExecutiveGlassStack({ leaders }) {
@@ -114,7 +115,89 @@ export default function EzerDefinition() {
               alignItems: 'center'
             }}
           >
-            <ExecutiveGlassStack leaders={leaders} />
+            {/* Left Side: Single Showcase Photo with Polygon Frame & Floating Language Badges */}
+            <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+              <div 
+                style={{
+                  position: 'absolute',
+                  top: '-20px',
+                  left: '5%',
+                  width: '90%',
+                  height: '105%',
+                  background: 'linear-gradient(135deg, rgba(242, 183, 51, 0.25) 0%, rgba(0, 6, 72, 0.1) 100%)',
+                  clipPath: 'polygon(15% 0%, 100% 10%, 85% 100%, 0% 85%)',
+                  borderRadius: '24px',
+                  zIndex: 1
+                }} 
+              />
+
+              <div 
+                style={{
+                  position: 'relative',
+                  zIndex: 2,
+                  width: '100%',
+                  maxWidth: '460px',
+                  borderRadius: '20px',
+                  overflow: 'hidden',
+                  boxShadow: '0 20px 40px rgba(0, 6, 72, 0.18)',
+                  border: '2px solid #000648',
+                  background: '#ffffff'
+                }}
+              >
+                <img 
+                  src={resolveImageSrc(ezerDefinition.image)} 
+                  alt={ezerDefinition.headline}
+                  style={{
+                    width: '100%',
+                    height: 'auto',
+                    minHeight: '340px',
+                    objectFit: ezerDefinition.imageFit || 'cover',
+                    objectPosition: ezerDefinition.imagePosition || 'center center',
+                    display: 'block'
+                  }}
+                />
+              </div>
+
+              {/* Floating Language Badges */}
+              <div 
+                title="Tamil Medium & Bilingual Support"
+                style={{
+                  position: 'absolute', top: '4%', left: '0%', zIndex: 3,
+                  width: '46px', height: '46px', borderRadius: '50%',
+                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.2rem',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
+                }}
+              >
+                அ
+              </div>
+
+              <div 
+                title="English Medium Support"
+                style={{
+                  position: 'absolute', top: '42%', right: '-2%', zIndex: 3,
+                  width: '46px', height: '46px', borderRadius: '50%',
+                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.2rem',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
+                }}
+              >
+                A
+              </div>
+
+              <div 
+                title="Hindi Medium Support"
+                style={{
+                  position: 'absolute', bottom: '6%', left: '0%', zIndex: 3,
+                  width: '46px', height: '46px', borderRadius: '50%',
+                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.25rem',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
+                }}
+              >
+                அ
+              </div>
+            </div>
 
             {/* Right Side: Headline, Copy, and EZER Definition Tagline */}
             <div>
