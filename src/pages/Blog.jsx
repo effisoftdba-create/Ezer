@@ -15,7 +15,6 @@ export default function Blog({ onOpenDemoModal }) {
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200'
   };
 
-  const rawBlogList = (blogs || []).slice(1);
   const defaultArticles = [
     {
       id: 'blog-default-1',
@@ -40,32 +39,45 @@ export default function Blog({ onOpenDemoModal }) {
     }
   ];
 
-  const articlesToDisplay = (rawBlogList && rawBlogList.length > 0) ? rawBlogList : defaultArticles;
+  // Guarantee 3+ articles are rendered in grid (no empty gaps)
+  const userBlogList = (blogs && blogs.length > 1) ? blogs.slice(1) : [];
+  const articlesToDisplay = userBlogList.length >= 3 
+    ? userBlogList 
+    : [...userBlogList, ...defaultArticles.slice(0, 3 - userBlogList.length)];
 
   return (
-    <div style={{ background: '#030712', color: '#f8fafc', minHeight: '100vh', paddingBottom: '60px' }}>
+    <div style={{ background: '#f8fafc', color: '#0f172a', minHeight: '100vh', paddingBottom: '60px', position: 'relative', overflow: 'hidden' }}>
+      
+      {/* FLOATING BACKGROUND ANIMATION EFFECTS */}
+      <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 0 }}>
+        <div className="bg-anim-blob blob-1" />
+        <div className="bg-anim-blob blob-2" />
+        <div className="bg-anim-blob blob-3" />
+      </div>
+
       {/* Magazine Hero Header */}
       <section style={{
-        background: 'radial-gradient(circle at 50% 0%, #1e1b4b 0%, #000648 65%, #030712 100%)',
+        background: 'radial-gradient(circle at 50% 0%, #000648 0%, #0a192f 70%, #020b26 100%)',
         color: '#ffffff',
-        padding: '64px 20px 48px',
+        padding: '64px 20px 54px',
         textAlign: 'center',
         position: 'relative',
-        borderBottom: '2px solid rgba(242, 183, 51, 0.3)'
+        zIndex: 2,
+        borderBottom: '3px solid #f2b733',
+        boxShadow: '0 10px 30px rgba(0, 6, 72, 0.2)'
       }}>
         <div className="container" style={{ maxWidth: '1080px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
           <span style={{
             display: 'inline-flex', alignItems: 'center', gap: '6px',
             background: 'rgba(242, 183, 51, 0.18)', color: '#f2b733',
-            padding: '6px 22px', borderRadius: '50px', fontWeight: 900,
+            padding: '6px 24px', borderRadius: '50px', fontWeight: 900,
             fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.1em',
-            marginBottom: '16px', border: '1.5px solid rgba(242, 183, 51, 0.4)',
-            boxShadow: '0 0 24px rgba(242, 183, 51, 0.25)'
+            marginBottom: '18px', border: '1.5px solid rgba(242, 183, 51, 0.4)',
+            boxShadow: '0 0 24px rgba(242, 183, 51, 0.3)'
           }}>
             <HiSparkles size={16} /> EZER TECH MAGAZINE • VOL. 2026 EDITION
           </span>
 
-          {/* CRISP HIGH-CONTRAST VISIBLE HERO TITLE */}
           <h1 style={{
             fontSize: 'clamp(2.2rem, 4.2vw, 3.6rem)',
             fontWeight: 900,
@@ -73,7 +85,7 @@ export default function Blog({ onOpenDemoModal }) {
             marginBottom: '16px',
             letterSpacing: '-0.02em',
             color: '#ffffff',
-            textShadow: '0 4px 20px rgba(0, 0, 0, 0.9)'
+            textShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
           }}>
             Tech Insights, Academic Excellence & Verified National Honors
           </h1>
@@ -84,14 +96,14 @@ export default function Blog({ onOpenDemoModal }) {
             maxWidth: '740px',
             margin: '0 auto',
             lineHeight: 1.65,
-            textShadow: '0 2px 10px rgba(0,0,0,0.8)'
+            textShadow: '0 2px 8px rgba(0,0,0,0.8)'
           }}>
             Explore verified national awards, corporate placement roadmaps, and editorial insights from EZER Learning Solutions.
           </p>
         </div>
       </section>
 
-      <div className="container" style={{ maxWidth: '1200px', margin: '48px auto 0', padding: '0 20px' }}>
+      <div className="container" style={{ maxWidth: '1200px', margin: '48px auto 0', padding: '0 20px', position: 'relative', zIndex: 2 }}>
         
         {/* FEATURED MAGAZINE COVER STORY */}
         <div className="featured-cover-card">
@@ -128,12 +140,12 @@ export default function Blog({ onOpenDemoModal }) {
           </div>
         </div>
 
-        {/* SECTION 1: EDITORIAL TECH ARTICLES & GUIDES (GRID FILLED WITH CARDS, NO EMPTY SPACE) */}
+        {/* SECTION 1: EDITORIAL TECH ARTICLES & GUIDES (3+ CARDS FILLED GRID, ZERO EMPTY GAP) */}
         <div style={{ marginBottom: '56px' }}>
           <div className="section-header-bar">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <HiNewspaper size={24} color="#f2b733" />
-              <h3>Editorial Tech Articles & Guides</h3>
+              <HiNewspaper size={26} color="#000648" />
+              <h3 style={{ color: '#000648' }}>Editorial Tech Articles & Guides</h3>
             </div>
           </div>
 
@@ -170,8 +182,8 @@ export default function Blog({ onOpenDemoModal }) {
         <div style={{ marginBottom: '40px' }}>
           <div className="section-header-bar" style={{ justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <HiBadgeCheck size={24} color="#f2b733" />
-              <h3>National Awards & Achievements</h3>
+              <HiBadgeCheck size={26} color="#000648" />
+              <h3 style={{ color: '#000648' }}>National Awards & Achievements</h3>
             </div>
 
             {/* Left & Right Scroll Buttons */}
@@ -231,18 +243,65 @@ export default function Blog({ onOpenDemoModal }) {
 
       </div>
 
-      <div style={{ marginTop: '64px' }}>
+      <div style={{ marginTop: '64px', position: 'relative', zIndex: 2 }}>
         <CTABanner onOpenDemoModal={onOpenDemoModal} />
       </div>
 
-      {/* UI/UX Pro Max Responsive Styles */}
+      {/* UI/UX Pro Max Responsive & Animation Styles */}
       <style>{`
+        /* BACKGROUND FLOATING ANIMATION BLOBS */
+        .bg-anim-blob {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(90px);
+          opacity: 0.45;
+          animation: floatGlow 14s ease-in-out infinite alternate;
+        }
+
+        .blob-1 {
+          top: 5%;
+          left: -5%;
+          width: 450px;
+          height: 450px;
+          background: rgba(242, 183, 51, 0.25);
+        }
+
+        .blob-2 {
+          top: 45%;
+          right: -8%;
+          width: 500px;
+          height: 500px;
+          background: rgba(0, 6, 72, 0.15);
+          animation-delay: -5s;
+        }
+
+        .blob-3 {
+          bottom: 5%;
+          left: 20%;
+          width: 400px;
+          height: 400px;
+          background: rgba(17, 93, 252, 0.15);
+          animation-delay: -9s;
+        }
+
+        @keyframes floatGlow {
+          0% {
+            transform: translate(0, 0) scale(1);
+          }
+          50% {
+            transform: translate(40px, 50px) scale(1.1);
+          }
+          100% {
+            transform: translate(-30px, 30px) scale(0.95);
+          }
+        }
+
         .featured-cover-card {
-          background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(0, 6, 72, 0.95) 100%);
+          background: #ffffff;
           border-radius: 24px;
-          border: 2px solid rgba(242, 183, 51, 0.4);
+          border: 2.5px solid #000648;
           overflow: hidden;
-          box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 20px 45px rgba(0, 6, 72, 0.12);
           display: grid;
           grid-template-columns: 1.2fr 1fr;
           margin-bottom: 56px;
@@ -275,7 +334,7 @@ export default function Blog({ onOpenDemoModal }) {
           display: inline-flex;
           align-items: center;
           gap: 6px;
-          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
         }
 
         .featured-cover-content {
@@ -283,11 +342,12 @@ export default function Blog({ onOpenDemoModal }) {
           display: flex;
           flex-direction: column;
           justify-content: center;
+          background: #ffffff;
         }
 
         .cover-meta {
           font-size: 0.82rem;
-          color: #94a3b8;
+          color: #64748b;
           font-weight: 700;
           margin-bottom: 12px;
         }
@@ -295,14 +355,14 @@ export default function Blog({ onOpenDemoModal }) {
         .cover-title {
           font-size: clamp(1.6rem, 2.6vw, 2.2rem);
           font-weight: 900;
-          color: #ffffff;
+          color: #000648;
           line-height: 1.28;
           margin: 0 0 16px 0;
         }
 
         .cover-summary {
           font-size: 0.95rem;
-          color: #cbd5e1;
+          color: #334155;
           line-height: 1.65;
           margin: 0 0 24px 0;
         }
@@ -311,22 +371,23 @@ export default function Blog({ onOpenDemoModal }) {
           align-self: flex-start;
           padding: 12px 28px;
           border-radius: 50px;
-          background: #f2b733;
-          color: #000648;
+          background: #000648;
+          color: #f2b733;
           font-weight: 900;
-          border: none;
+          border: 2px solid #000648;
           cursor: pointer;
           display: flex;
           align-items: center;
           gap: 8px;
           font-size: 0.88rem;
-          box-shadow: 0 6px 20px rgba(242, 183, 51, 0.3);
-          transition: transform 0.25s ease, background-color 0.25s ease;
+          box-shadow: 0 6px 20px rgba(0, 6, 72, 0.25);
+          transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease;
         }
 
         .cover-btn:hover {
           transform: translateY(-2px);
-          background: #ffffff;
+          background: #f2b733;
+          color: #000648;
         }
 
         .section-header-bar {
@@ -334,7 +395,7 @@ export default function Blog({ onOpenDemoModal }) {
           align-items: center;
           gap: 10px;
           margin-bottom: 24px;
-          border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 2.5px solid #000648;
           padding-bottom: 14px;
         }
 
@@ -342,22 +403,21 @@ export default function Blog({ onOpenDemoModal }) {
           margin: 0;
           font-size: 1.4rem;
           font-weight: 900;
-          color: #ffffff;
           letter-spacing: -0.01em;
         }
 
         .award-scroll-btn {
-          width: 40px;
-          height: 40px;
+          width: 42px;
+          height: 42px;
           border-radius: 50%;
-          background: rgba(0, 6, 72, 0.9);
-          border: 1.5px solid #f2b733;
+          background: #000648;
+          border: 2px solid #f2b733;
           color: #f2b733;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+          box-shadow: 0 4px 12px rgba(0,6,72,0.2);
           transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
         }
 
@@ -381,7 +441,7 @@ export default function Blog({ onOpenDemoModal }) {
           scroll-snap-type: x mandatory;
           padding: 8px 4px 20px;
           scrollbar-width: thin;
-          scrollbar-color: #f2b733 #050b1c;
+          scrollbar-color: #f2b733 #e2e8f0;
         }
 
         .awards-scroll-track::-webkit-scrollbar {
@@ -389,7 +449,7 @@ export default function Blog({ onOpenDemoModal }) {
         }
 
         .awards-scroll-track::-webkit-scrollbar-track {
-          background: #050b1c;
+          background: #e2e8f0;
           border-radius: 10px;
         }
 
@@ -403,13 +463,11 @@ export default function Blog({ onOpenDemoModal }) {
           min-width: 320px;
           flex-shrink: 0;
           scroll-snap-align: start;
-          background: rgba(15, 23, 42, 0.85);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
+          background: #ffffff;
           border-radius: 20px;
-          border: 1.5px solid rgba(242, 183, 51, 0.35);
+          border: 1.5px solid #cbd5e1;
           overflow: hidden;
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+          box-shadow: 0 10px 30px rgba(0, 6, 72, 0.08);
           transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
           display: flex;
           flex-direction: column;
@@ -417,18 +475,16 @@ export default function Blog({ onOpenDemoModal }) {
 
         .award-horizontal-card:hover {
           transform: translateY(-6px);
-          border-color: #f2b733;
-          box-shadow: 0 20px 44px rgba(242, 183, 51, 0.25);
+          border-color: #000648;
+          box-shadow: 0 18px 40px rgba(0, 6, 72, 0.18);
         }
 
         .magazine-card {
-          background: rgba(15, 23, 42, 0.85);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
+          background: #ffffff;
           border-radius: 20px;
-          border: 1.5px solid rgba(242, 183, 51, 0.3);
+          border: 1.5px solid #cbd5e1;
           overflow: hidden;
-          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+          box-shadow: 0 10px 30px rgba(0, 6, 72, 0.08);
           transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
           display: flex;
           flex-direction: column;
@@ -436,8 +492,8 @@ export default function Blog({ onOpenDemoModal }) {
 
         .magazine-card:hover {
           transform: translateY(-6px);
-          border-color: #f2b733;
-          box-shadow: 0 20px 44px rgba(242, 183, 51, 0.2);
+          border-color: #000648;
+          box-shadow: 0 18px 40px rgba(0, 6, 72, 0.18);
         }
 
         .card-image-box {
@@ -464,13 +520,13 @@ export default function Blog({ onOpenDemoModal }) {
           position: absolute;
           top: 12px;
           right: 12px;
-          background: rgba(0, 6, 72, 0.92);
-          color: #38bdf8;
+          background: #000648;
+          color: #f2b733;
           font-size: 0.72rem;
           font-weight: 900;
           padding: 4px 14px;
           border-radius: 50px;
-          border: 1.5px solid #38bdf8;
+          border: 1.5px solid #f2b733;
         }
 
         .award-year-tag {
@@ -497,14 +553,14 @@ export default function Blog({ onOpenDemoModal }) {
         .card-title {
           font-size: 1.15rem;
           font-weight: 800;
-          color: #ffffff;
+          color: #000648;
           margin: 0 0 10px 0;
           line-height: 1.35;
         }
 
         .card-summary {
           font-size: 0.86rem;
-          color: #94a3b8;
+          color: #475569;
           margin: 0;
           line-height: 1.6;
           display: -webkit-box;
@@ -516,14 +572,14 @@ export default function Blog({ onOpenDemoModal }) {
         .award-cat-text {
           font-size: 0.72rem;
           font-weight: 900;
-          color: #f2b733;
+          color: #d97706;
           text-transform: uppercase;
           letter-spacing: 0.06em;
         }
 
         .award-issuer {
           font-size: 0.8rem;
-          color: #38bdf8;
+          color: #0284c7;
           font-weight: 700;
           margin-bottom: 8px;
         }
@@ -531,8 +587,8 @@ export default function Blog({ onOpenDemoModal }) {
         .card-read-btn {
           background: none;
           border: none;
-          color: #f2b733;
-          font-weight: 800;
+          color: #000648;
+          font-weight: 900;
           font-size: 0.84rem;
           cursor: pointer;
           padding: 0;
@@ -544,7 +600,7 @@ export default function Blog({ onOpenDemoModal }) {
         }
 
         .card-read-btn:hover {
-          color: #ffffff;
+          color: #d97706;
         }
 
         @media (max-width: 900px) {
