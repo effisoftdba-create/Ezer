@@ -5,6 +5,7 @@ import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import HeroRightFrame from './hero/HeroRightFrame';
 import HeroTrustGrid from './hero/HeroTrustGrid';
+import HeroSlideNav from './hero/HeroSlideNav';
 
 export default function Hero({ onOpenDemoModal }) {
   const { heroSlides } = useSiteData();
@@ -205,7 +206,7 @@ export default function Hero({ onOpenDemoModal }) {
                     cursor: 'pointer',
                     border: '1.5px solid #f2b733',
                     boxShadow: '0 4px 18px rgba(0, 6, 72, 0.25)',
-                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                    transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.transform = 'translateY(-2px) scale(1.03)';
@@ -228,49 +229,13 @@ export default function Hero({ onOpenDemoModal }) {
               </div>
 
               {/* Slide Pill Dots Nav */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: 'auto' }}>
-                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                  <button
-                    type="button"
-                    onClick={handlePrev}
-                    style={{ background: 'none', border: 'none', color: '#000638', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
-                    aria-label="Previous slide"
-                  >
-                    <HiChevronLeft size={20} />
-                  </button>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(0,6,56,0.06)', padding: '4px 10px', borderRadius: '50px' }}>
-                    {slides.map((s, i) => (
-                      <button
-                        key={s.id || s.badge || s.headline}
-                        type="button"
-                        onClick={() => setActive(i)}
-                        aria-label={`Slide ${i + 1}`}
-                        style={{
-                          padding: 0,
-                          border: 'none',
-                          width: safeActive === i ? '20px' : '7px',
-                          height: '7px',
-                          borderRadius: '4px',
-                          cursor: 'pointer',
-                          background: safeActive === i ? '#000638' : '#cbd5e1',
-                          borderTop: safeActive === i ? '2px solid #f2b733' : 'none',
-                          transition: 'width 0.3s ease, background-color 0.3s ease',
-                        }}
-                      />
-                    ))}
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={handleNext}
-                    style={{ background: 'none', border: 'none', color: '#000638', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
-                    aria-label="Next slide"
-                  >
-                    <HiChevronRight size={20} />
-                  </button>
-                </div>
-              </div>
+              <HeroSlideNav
+                slides={slides}
+                safeActive={safeActive}
+                handlePrev={handlePrev}
+                handleNext={handleNext}
+                setActive={setActive}
+              />
 
               {/* Trust Signals Footer Grid */}
               <HeroTrustGrid />

@@ -34,7 +34,7 @@ export default function Blog({ onOpenDemoModal }) {
                 fontWeight: 800, fontSize: '0.86rem', cursor: 'pointer',
                 background: activeTab === 'blogs' ? '#f2b733' : 'transparent',
                 color: activeTab === 'blogs' ? '#000648' : '#ffffff',
-                transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '6px'
+                transition: 'background-color 0.2s ease, color 0.2s ease', display: 'flex', alignItems: 'center', gap: '6px'
               }}
             >
               <HiNewspaper size={18} /> Tech Articles ({ (blogs || []).length })
@@ -48,7 +48,7 @@ export default function Blog({ onOpenDemoModal }) {
                 fontWeight: 800, fontSize: '0.86rem', cursor: 'pointer',
                 background: activeTab === 'achievements' ? '#f2b733' : 'transparent',
                 color: activeTab === 'achievements' ? '#000648' : '#ffffff',
-                transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '6px'
+                transition: 'background-color 0.2s ease, color 0.2s ease', display: 'flex', alignItems: 'center', gap: '6px'
               }}
             >
               <HiBadgeCheck size={18} /> Achievements & Awards ({ (achievements || []).length })
