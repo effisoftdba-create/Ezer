@@ -157,7 +157,7 @@ export default function TestimonialsSliderTrack() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  transition: 'all 0.25s ease'
+                  transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#f2b733';
@@ -187,7 +187,7 @@ export default function TestimonialsSliderTrack() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  transition: 'all 0.25s ease'
+                  transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#f2b733';

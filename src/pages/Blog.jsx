@@ -97,7 +97,7 @@ export default function Blog({ onOpenDemoModal }) {
 
                 return (
                   <div
-                    key={exec.id || idx}
+                    key={exec.id || exec.roleTag || exec.name}
                     className="glass"
                     data-text={tagLabel}
                     style={{ '--r': rotDeg }}
