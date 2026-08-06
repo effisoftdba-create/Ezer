@@ -55,23 +55,24 @@ export default function TestimonialsSliderTrack() {
       style={{
         position: 'relative',
         overflow: 'hidden',
-        background: '#050b1c',
-        color: '#ffffff',
+        background: '#ffffff',
+        color: '#0f172a',
         padding: '80px 0',
-        borderTop: '1px solid rgba(255,255,255,0.08)'
+        borderTop: '2px solid #e2e8f0',
+        borderBottom: '2px solid #e2e8f0'
       }}
     >
-      {/* Accent Blurs */}
+      {/* Ambient Accent Glows */}
       <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden' }}>
         <div
           style={{
             position: 'absolute',
             top: '-96px',
             left: '-96px',
-            width: '288px',
-            height: '288px',
+            width: '320px',
+            height: '320px',
             borderRadius: '50%',
-            background: 'rgba(242, 183, 51, 0.12)',
+            background: 'rgba(242, 183, 51, 0.2)',
             filter: 'blur(90px)'
           }}
         />
@@ -80,10 +81,10 @@ export default function TestimonialsSliderTrack() {
             position: 'absolute',
             top: '50%',
             right: '-96px',
-            width: '288px',
-            height: '288px',
+            width: '320px',
+            height: '320px',
             borderRadius: '50%',
-            background: 'rgba(17, 93, 252, 0.12)',
+            background: 'rgba(0, 6, 72, 0.1)',
             filter: 'blur(90px)'
           }}
         />
@@ -99,9 +100,9 @@ export default function TestimonialsSliderTrack() {
                 alignItems: 'center',
                 gap: '8px',
                 fontSize: '0.78rem',
-                color: '#e2e8f0',
-                background: 'rgba(255, 255, 255, 0.06)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
+                color: '#000648',
+                background: 'rgba(0, 6, 72, 0.08)',
+                border: '1.5px solid rgba(0, 6, 72, 0.15)',
                 borderRadius: '50px',
                 padding: '6px 16px',
                 fontWeight: 800,
@@ -117,7 +118,7 @@ export default function TestimonialsSliderTrack() {
                 fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
                 lineHeight: 1.08,
                 fontWeight: 900,
-                color: '#ffffff',
+                color: '#000648',
                 letterSpacing: '-0.02em',
                 marginTop: '16px',
                 marginBottom: '12px'
@@ -125,23 +126,21 @@ export default function TestimonialsSliderTrack() {
             >
               What our learners are saying
             </h2>
-            <p style={{ color: '#94a3b8', fontSize: '1.05rem', maxWidth: '640px', margin: 0, lineHeight: 1.6 }}>
+            <p style={{ color: '#475569', fontSize: '1.05rem', maxWidth: '640px', margin: 0, lineHeight: 1.6 }}>
               Stories from freshers, working professionals, and career switchers who trusted our guides, routes, and placement support.
             </p>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            <div style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.8)', fontWeight: 700 }}>
-              <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#ffffff' }}>
+            <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 700 }}>
+              <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648' }}>
                 {String(activeIdx + 1).padStart(2, '0')}
               </span>{' '}
-              <span style={{ color: 'rgba(255,255,255,0.4)' }}>/</span>{' '}
-              <span style={{ color: '#94a3b8', fontWeight: 700 }}>
+              <span style={{ color: '#cbd5e1' }}>/</span>{' '}
+              <span style={{ color: '#64748b', fontWeight: 700 }}>
                 {String(totalCount).padStart(2, '0')}
               </span>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <button
                 type="button"
                 onClick={handlePrev}
@@ -150,28 +149,28 @@ export default function TestimonialsSliderTrack() {
                   width: '42px',
                   height: '42px',
                   borderRadius: '50%',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  background: 'rgba(255,255,255,0.06)',
-                  color: '#ffffff',
+                  border: '2px solid #000648',
+                  background: '#000648',
+                  color: '#f2b733',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease'
+                  transition: 'all 0.25s ease',
+                  boxShadow: '0 4px 12px rgba(0,6,72,0.2)'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#f2b733';
                   e.currentTarget.style.color = '#000648';
-                  e.currentTarget.style.borderColor = '#f2b733';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
+                  e.currentTarget.style.background = '#000648';
+                  e.currentTarget.style.color = '#f2b733';
                 }}
               >
                 <HiArrowLeft size={18} />
               </button>
+
               <button
                 type="button"
                 onClick={handleNext}
@@ -180,29 +179,28 @@ export default function TestimonialsSliderTrack() {
                   width: '42px',
                   height: '42px',
                   borderRadius: '50%',
-                  border: '1px solid rgba(255,255,255,0.15)',
-                  background: 'rgba(255,255,255,0.06)',
-                  color: '#ffffff',
+                  border: '2px solid #000648',
+                  background: '#000648',
+                  color: '#f2b733',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   cursor: 'pointer',
-                  transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease'
+                  transition: 'all 0.25s ease',
+                  boxShadow: '0 4px 12px rgba(0,6,72,0.2)'
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = '#f2b733';
                   e.currentTarget.style.color = '#000648';
-                  e.currentTarget.style.borderColor = '#f2b733';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)';
+                  e.currentTarget.style.background = '#000648';
+                  e.currentTarget.style.color = '#f2b733';
                 }}
               >
                 <HiArrowRight size={18} />
               </button>
-            </div>
+            </div>  </div>
           </div>
         </div>
 
@@ -264,7 +262,7 @@ export default function TestimonialsSliderTrack() {
                 </div>
 
                 <div>
-                  <p style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)', fontWeight: 700, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  <p style={{ fontSize: '0.82rem', color: '#0284c7', fontWeight: 900, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     {current.role || current.afterRole || current.background || 'Learner Outcome'} {current.company ? `@ ${current.company}` : ''}
                   </p>
                   <h3
@@ -272,7 +270,7 @@ export default function TestimonialsSliderTrack() {
                       marginTop: '4px',
                       fontSize: 'clamp(1.8rem, 3vw, 2.4rem)',
                       fontWeight: 900,
-                      color: '#ffffff',
+                      color: '#000648',
                       letterSpacing: '-0.01em',
                       marginBottom: '16px'
                     }}
@@ -282,9 +280,10 @@ export default function TestimonialsSliderTrack() {
                   <p
                     style={{
                       fontSize: '1.1rem',
-                      color: '#cbd5e1',
+                      color: '#1e293b',
                       lineHeight: 1.7,
-                      margin: 0
+                      margin: 0,
+                      fontWeight: 500
                     }}
                   >
                     “{current.quote || current.story}”
@@ -297,15 +296,15 @@ export default function TestimonialsSliderTrack() {
                       alignItems: 'center',
                       gap: '8px',
                       borderRadius: '50px',
-                      background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
+                      background: 'rgba(0, 6, 72, 0.06)',
+                      border: '1.5px solid rgba(0, 6, 72, 0.15)',
                       padding: '8px 18px',
                       fontSize: '0.8rem',
-                      color: 'rgba(255,255,255,0.8)',
-                      fontWeight: 700
+                      color: '#000648',
+                      fontWeight: 800
                     }}
                   >
-                    <span style={{ height: '8px', width: '8px', borderRadius: '50%', background: '#f2b733' }} />
+                    <span style={{ height: '8px', width: '8px', borderRadius: '50%', background: '#d97706' }} />
                     <span>
                       {current.course || current.courseSlug ? `Track: ${current.course || current.courseSlug}` : 'Verified EZER Outcome'}
                       {current.salaryHike ? ` • ${current.salaryHike}` : current.beforeRole ? ` • From: ${current.beforeRole}` : ''}
