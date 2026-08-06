@@ -128,14 +128,14 @@ export default function TransformedLives() {
               {transformedLives.map((item) => (
                 <m.div
                   key={item.id}
-                  whileHover={{ y: -8, scale: 1.03 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   style={{
-                    flex: '0 0 290px',
+                    flex: '0 0 295px',
                     background: '#ffffff',
                     borderRadius: '24px',
                     border: '2px solid #000638',
-                    boxShadow: '0 12px 36px rgba(0, 6, 56, 0.12)',
+                    boxShadow: '0 12px 36px rgba(0, 6, 56, 0.08)',
                     overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
@@ -143,47 +143,30 @@ export default function TransformedLives() {
                     cursor: 'pointer',
                   }}
                 >
-                  {/* Top Header Banner Section */}
+                  {/* Top Header Section with Subtle Geometric Grid & Avatar */}
                   <div 
                     style={{
-                      padding: '28px 20px 22px',
+                      padding: '28px 20px 20px',
                       textAlign: 'center',
-                      background: 'linear-gradient(135deg, #000638 0%, #00127a 100%)',
-                      color: '#ffffff',
+                      background: '#faf9f6',
+                      backgroundImage: 'radial-gradient(#cbd5e1 1.2px, transparent 1.2px)',
+                      backgroundSize: '14px 14px',
+                      color: '#000638',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
                       position: 'relative',
-                      overflow: 'hidden'
+                      borderBottom: '1px solid #e2e8f0'
                     }}
                   >
-                    {/* Subtle Radial Glow */}
-                    <div style={{
-                      position: 'absolute', top: '-40px', right: '-40px',
-                      width: '120px', height: '120px', borderRadius: '50%',
-                      background: 'radial-gradient(circle, rgba(242,183,51,0.2) 0%, transparent 70%)',
-                      pointerEvents: 'none'
-                    }} />
-
-                    {/* Verified Badge */}
-                    <span style={{
-                      position: 'absolute', top: '12px', right: '12px',
-                      background: 'rgba(242, 183, 51, 0.16)', color: '#f2b733',
-                      fontSize: '0.62rem', fontWeight: 900, padding: '3px 10px',
-                      borderRadius: '50px', border: '1px solid rgba(242, 183, 51, 0.4)',
-                      letterSpacing: '0.06em', textTransform: 'uppercase'
-                    }}>
-                      ✓ Verified
-                    </span>
-
-                    {/* Circle Avatar with Glowing Animated Ring */}
-                    <div style={{ position: 'relative', display: 'inline-block', marginBottom: '14px' }}>
+                    {/* Circle Avatar with Soft Glowing Gold Ring */}
+                    <div style={{ position: 'relative', display: 'inline-block', marginBottom: '12px' }}>
                       <div 
                         style={{
                           padding: '3px',
                           borderRadius: '50%',
                           background: 'linear-gradient(135deg, #f2b733 0%, #ffd066 50%, #f2b733 100%)',
-                          boxShadow: '0 8px 22px rgba(242, 183, 51, 0.45)',
+                          boxShadow: '0 8px 22px rgba(242, 183, 51, 0.35)',
                           display: 'inline-block'
                         }}
                       >
@@ -191,73 +174,94 @@ export default function TransformedLives() {
                           src={resolveImageSrc(item.image)}
                           alt={item.name}
                           style={{
-                            width: '82px', height: '82px', borderRadius: '50%',
+                            width: '84px', height: '84px', borderRadius: '50%',
                             objectFit: 'cover',
                             objectPosition: item.imagePosition || 'center center',
                             display: 'block',
-                            border: '2px solid #000638'
+                            border: '2.5px solid #ffffff'
                           }}
                         />
                       </div>
                     </div>
 
                     {/* Student Name */}
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', marginBottom: '6px', letterSpacing: '-0.01em' }}>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000638', marginBottom: '6px', letterSpacing: '-0.01em' }}>
                       {item.name}
                     </h3>
 
-                    {/* Placed @ Company Pill */}
-                    <div style={{
-                      fontSize: '0.86rem', fontWeight: 900, color: '#f2b733',
-                      background: 'rgba(242, 183, 51, 0.14)', padding: '5px 16px',
-                      borderRadius: '50px', border: '1.5px solid rgba(242, 183, 51, 0.4)',
-                      boxShadow: '0 4px 12px rgba(0,6,56,0.2)'
-                    }}>
-                      Placed @ {item.company}
+                    {/* EZER Brand Crest Emblem in Center */}
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', opacity: 0.85, marginTop: '2px' }}>
+                      <span style={{ fontSize: '0.74rem', fontWeight: 900, color: '#000638', letterSpacing: '0.14em', textTransform: 'uppercase' }}>
+                        EZER ALUMNI
+                      </span>
                     </div>
                   </div>
 
-                  {/* Bottom Outcome Progression Section */}
-                  <div style={{ padding: '22px 20px 24px', background: '#ffffff', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', gap: '10px' }}>
+                  {/* Bottom Timeline Progression Flow Section */}
+                  <div style={{ padding: '20px 18px 22px', background: '#ffffff', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
                     
-                    {/* Before Role Pill */}
+                    {/* Step 1: Before Role Card Box */}
                     <div style={{
                       width: '100%',
-                      padding: '11px 14px',
-                      borderRadius: '14px',
-                      border: '1.5px solid #e2e8f0',
+                      padding: '12px 14px',
+                      borderRadius: '16px',
+                      border: '1.5px solid #cbd5e1',
                       background: '#f8fafc',
-                      fontSize: '0.86rem',
+                      fontSize: '0.84rem',
                       color: '#475569',
-                      textAlign: 'center',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '10px',
                       boxSizing: 'border-box'
                     }}>
-                      Before: <strong style={{ color: '#000638', fontWeight: 800 }}>{item.beforeRole}</strong>
+                      <div style={{ width: '14px', height: '14px', borderRadius: '50%', border: '2px solid #94a3b8', flexShrink: 0 }} />
+                      <div style={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                        <span style={{ fontSize: '0.76rem', color: '#64748b', display: 'block', fontWeight: 700 }}>Before EZER:</span>
+                        <strong style={{ color: '#000638', fontWeight: 800 }}>{item.beforeRole}</strong>
+                      </div>
                     </div>
 
-                    {/* Animated Step Connector */}
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '-2px 0' }}>
-                      <div style={{ width: '2px', height: '12px', background: 'linear-gradient(to bottom, #000638, #f2b733)' }} />
-                      <div style={{ width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '7px solid #f2b733' }} />
+                    {/* Vertical Dashed Line & Milestone Emblem Node */}
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: '-4px 0' }}>
+                      <div style={{ width: '2px', height: '12px', borderLeft: '2px dashed #000638' }} />
+                      <div style={{
+                        background: '#000638', color: '#f2b733',
+                        fontSize: '0.66rem', fontWeight: 900, padding: '3px 12px',
+                        borderRadius: '50px', border: '1px solid #f2b733',
+                        boxShadow: '0 2px 8px rgba(0,6,56,0.2)',
+                        textTransform: 'uppercase', letterSpacing: '0.04em'
+                      }}>
+                        After EZER Training
+                      </div>
+                      <div style={{ width: '2px', height: '10px', borderLeft: '2px dashed #000638' }} />
+                      <div style={{ width: 0, height: 0, borderLeft: '5px solid transparent', borderRight: '5px solid transparent', borderTop: '6px solid #000638' }} />
                     </div>
 
-                    {/* After Role Badge Box */}
+                    {/* Step 2: After Role & Placed Company Box */}
                     <div 
                       style={{
                         width: '100%',
                         padding: '13px 14px',
-                        borderRadius: '14px',
+                        borderRadius: '16px',
                         border: '2px solid #000638',
-                        background: 'linear-gradient(135deg, #000638 0%, #00127a 100%)',
-                        color: '#ffffff',
-                        fontSize: '0.92rem',
-                        fontWeight: 900,
-                        textAlign: 'center',
+                        background: 'linear-gradient(135deg, rgba(242, 183, 51, 0.18) 0%, rgba(0, 6, 72, 0.05) 100%)',
+                        color: '#000638',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
                         boxSizing: 'border-box',
-                        boxShadow: '0 6px 16px rgba(0, 6, 56, 0.18)'
+                        boxShadow: '0 4px 14px rgba(0, 6, 56, 0.08)'
                       }}
                     >
-                      After: <span style={{ color: '#f2b733', fontWeight: 900 }}>{item.afterRole}</span>
+                      <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#000638', border: '3px solid #f2b733', flexShrink: 0, boxShadow: '0 0 8px rgba(242,183,51,0.6)' }} />
+                      <div>
+                        <span style={{ fontSize: '0.74rem', color: '#000638', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block' }}>
+                          Placed @ {item.company}
+                        </span>
+                        <strong style={{ color: '#000638', fontSize: '0.94rem', fontWeight: 900 }}>
+                          {item.afterRole}
+                        </strong>
+                      </div>
                     </div>
 
                   </div>
