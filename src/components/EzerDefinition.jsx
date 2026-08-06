@@ -4,7 +4,36 @@ import { useSiteData } from '../Admin_Control/context/SiteContext';
 import ExecutiveLeadership from './ExecutiveLeadership';
 
 export default function EzerDefinition() {
-  const { ezerDefinition } = useSiteData();
+  const { ezerDefinition, executiveLeaders } = useSiteData();
+
+  const leaders = (executiveLeaders && executiveLeaders.length >= 3)
+    ? executiveLeaders.slice(0, 3)
+    : [
+        {
+          id: 'exec-1',
+          roleTag: 'CEO',
+          roleName: 'Chief Executive Officer',
+          name: 'Dr. Subramanian R',
+          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=600&h=700',
+          rotationDeg: -12,
+        },
+        {
+          id: 'exec-2',
+          roleTag: 'CFO',
+          roleName: 'Chief Financial Officer',
+          name: 'Meenakshi Sundaram',
+          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=700',
+          rotationDeg: 4,
+        },
+        {
+          id: 'exec-3',
+          roleTag: 'CTHM',
+          roleName: 'Chief Tech & Academic Officer',
+          name: 'Anand Kumar K',
+          image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600&h=700',
+          rotationDeg: 16,
+        }
+      ];
 
   return (
     <>
@@ -27,8 +56,8 @@ export default function EzerDefinition() {
               alignItems: 'center'
             }}
           >
-            {/* Left Side: Graphic with Polygon Backdrop & Floating Badges */}
-            <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+            {/* Left Side: 3 Executive Glass Cards Stack (CEO, CFO, CTHM) */}
+            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
               <div 
                 style={{
                   position: 'absolute',
@@ -57,32 +86,37 @@ export default function EzerDefinition() {
                 }} 
               />
 
-              <div 
-                style={{
-                  position: 'relative',
-                  zIndex: 2,
-                  maxWidth: '400px',
-                  width: '100%',
-                  borderRadius: '24px',
-                  overflow: 'hidden',
-                  boxShadow: '0 20px 40px rgba(0, 6, 72, 0.14)',
-                  border: '3px solid #000648'
-                }}
-              >
-                <img 
-                  src={ezerDefinition.image} 
-                  alt="EZER Learner" 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
+              {/* 3 Executive Overlapping Glass Cards */}
+              <div className="glass-stack-container" style={{ position: 'relative', zIndex: 2, padding: '24px 0' }}>
+                {leaders.map((exec, idx) => {
+                  const rotDeg = exec.rotationDeg !== undefined ? exec.rotationDeg : (-12 + idx * 14);
+                  const tagText = `${exec.roleTag || 'EXEC'} • ${exec.name || ''}`;
+
+                  return (
+                    <div
+                      key={exec.id || idx}
+                      className="glass"
+                      data-text={tagText}
+                      style={{ '--r': rotDeg }}
+                      title={`${exec.roleName || exec.roleTag} — ${exec.name}`}
+                    >
+                      <img src={exec.image} alt={exec.name || exec.roleTag} />
+                    </div>
+                  );
+                })}
               </div>
 
-              {/* Floating Language Badges: Tamil (அ), English (A), Hindi (அ) */}
+              <span style={{ position: 'relative', zIndex: 2, fontSize: '0.78rem', color: '#000648', fontWeight: 800, marginTop: '8px', textAlign: 'center' }}>
+                ★ Hover cards to expand Executive Leaders (CEO, CFO, CTHM)
+              </span>
+
+              {/* Floating Language Badges */}
               <div 
                 title="Tamil Medium & Bilingual Support"
                 style={{
-                  position: 'absolute', top: '8%', left: '-2%', zIndex: 3,
-                  width: '48px', height: '48px', borderRadius: '50%',
-                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.2rem',
+                  position: 'absolute', top: '2%', left: '-2%', zIndex: 3,
+                  width: '44px', height: '44px', borderRadius: '50%',
+                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.1rem',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
                 }}
@@ -93,8 +127,8 @@ export default function EzerDefinition() {
               <div 
                 title="English Medium Support"
                 style={{
-                  position: 'absolute', top: '35%', right: '-4%', zIndex: 3,
-                  width: '46px', height: '46px', borderRadius: '50%',
+                  position: 'absolute', top: '40%', right: '-4%', zIndex: 3,
+                  width: '44px', height: '44px', borderRadius: '50%',
                   background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.1rem',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
@@ -106,9 +140,9 @@ export default function EzerDefinition() {
               <div 
                 title="Hindi Medium Support"
                 style={{
-                  position: 'absolute', bottom: '12%', left: '-3%', zIndex: 3,
-                  width: '48px', height: '48px', borderRadius: '50%',
-                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.25rem',
+                  position: 'absolute', bottom: '8%', left: '-3%', zIndex: 3,
+                  width: '44px', height: '44px', borderRadius: '50%',
+                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.15rem',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
                 }}
@@ -136,7 +170,7 @@ export default function EzerDefinition() {
                   }}
                 >
                   <HiSparkles size={14} style={{ color: '#f2b733' }} />
-                  {ezerDefinition.tag}
+                  {ezerDefinition?.tag || 'EMPOWERING CAREER SWITCHERS'}
                 </span>
               </div>
 
@@ -149,7 +183,7 @@ export default function EzerDefinition() {
                   marginBottom: '18px'
                 }}
               >
-                {ezerDefinition.headline}
+                {ezerDefinition?.headline || 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.'}
               </h2>
 
               <p 
@@ -160,7 +194,7 @@ export default function EzerDefinition() {
                   marginBottom: '26px'
                 }}
               >
-                {ezerDefinition.description}
+                {ezerDefinition?.description || "EZER Learning Solutions is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses."}
               </p>
 
               {/* Key Trust Highlights */}
@@ -172,7 +206,12 @@ export default function EzerDefinition() {
                   marginBottom: '32px'
                 }}
               >
-                {ezerDefinition.highlights?.map((feat) => (
+                {(ezerDefinition?.highlights || [
+                  'Live Online Instructor-Led',
+                  '12-Month Placement Support',
+                  'Mentorship by Industry Practitioners',
+                  'Alumni & Peer Community'
+                ]).map((feat) => (
                   <div key={feat} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <HiCheckCircle size={20} style={{ color: '#000648', flexShrink: 0 }} />
                     <span style={{ fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>{feat}</span>
@@ -200,7 +239,7 @@ export default function EzerDefinition() {
                 <div>
                   <span style={{ color: '#f2b733', fontWeight: 900, fontSize: '0.98rem' }}>Meaning of EZER: </span>
                   <span style={{ lineHeight: 1.5 }}>
-                    Ezer means "Helper, Strength, and Support" — acting as a dependable support system that helps students, aspirants, and professionals become job-ready and corporate-relevant.
+                    {ezerDefinition?.acronymText || 'Ezer means "Helper, Strength, and Support" — acting as a dependable support system that helps students, aspirants, and professionals become job-ready and corporate-relevant.'}
                   </span>
                 </div>
               </div>
@@ -209,10 +248,80 @@ export default function EzerDefinition() {
 
           </div>
         </div>
+
+        {/* User Specified Glassmorphism Stack CSS */}
+        <style>{`
+          .glass-stack-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .glass-stack-container .glass {
+            position: relative;
+            width: 180px;
+            height: 210px;
+            background: linear-gradient(135deg, rgba(0, 6, 72, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+            border: 1px solid rgba(242, 183, 51, 0.4);
+            box-shadow: 0 25px 25px rgba(0, 0, 0, 0.35);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: 0.5s ease;
+            border-radius: 12px;
+            margin: 0 -45px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transform: rotate(calc(var(--r) * 1deg));
+            overflow: hidden;
+            cursor: pointer;
+          }
+
+          .glass-stack-container:hover .glass {
+            transform: rotate(0deg);
+            margin: 0 10px;
+          }
+
+          .glass-stack-container .glass img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+          }
+
+          .glass-stack-container .glass::before {
+            content: attr(data-text);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            background: rgba(0, 6, 72, 0.92);
+            border-top: 1.5px solid #f2b733;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.72rem;
+            text-align: center;
+            padding: 2px 6px;
+            z-index: 5;
+          }
+
+          @media (max-width: 768px) {
+            .glass-stack-container .glass {
+              width: 135px;
+              height: 165px;
+              margin: 0 -25px;
+            }
+          }
+        `}</style>
       </section>
 
-      {/* EXECUTIVE LEADERSHIP BOARD DIRECTLY BELOW MEANING OF EZER */}
+      {/* EXECUTIVE LEADERSHIP BOARD EMBEDDED INSIDE EZER DEFINITION */}
       <ExecutiveLeadership />
     </>
   );
 }
+

@@ -46,68 +46,47 @@ export default function PlatformManager() {
         background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
         padding: '24px', boxShadow: '0 4px 14px rgba(0,0,0,0.02)'
       }}>
-        {/* Main Section Photo with Live Preview Matching Live Website Graphic */}
-        <div style={{ marginBottom: '24px', display: 'grid', gridTemplateColumns: '320px 1fr', gap: '24px', alignItems: 'center' }}>
+        {/* Main Section Showcase Preview Matching Live Website Graphic */}
+        <div style={{ marginBottom: '24px', display: 'grid', gridTemplateColumns: '340px 1fr', gap: '24px', alignItems: 'center' }}>
           <div>
             <span style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-              Current Live Section Photo (4:3 Landscape Ratio)
+              Live Executive Showcase Preview (3 Glass Cards: CEO, CFO, CTHM)
             </span>
             
-            {/* Live Card Graphic Preview matching EzerDefinition.jsx */}
-            <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', padding: '12px 16px' }}>
-              {/* Gold Geometric Polygon Shapes */}
+            {/* Live Glass Stack Preview matching EzerDefinition.jsx */}
+            <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 12px', background: '#050b1c', borderRadius: '16px', border: '1.5px solid #cbd5e1' }}>
               <div 
                 style={{
-                  position: 'absolute', top: '0', left: '5%', width: '90%', height: '100%',
+                  position: 'absolute', top: '4px', left: '5%', width: '90%', height: '95%',
                   background: 'linear-gradient(135deg, rgba(242, 183, 51, 0.22) 0%, rgba(0, 6, 72, 0.08) 100%)',
-                  clipPath: 'polygon(15% 0%, 100% 10%, 85% 100%, 0% 85%)', borderRadius: '16px', zIndex: 1
+                  clipPath: 'polygon(15% 0%, 100% 10%, 85% 100%, 0% 85%)', borderRadius: '14px', zIndex: 1
                 }} 
               />
               <div 
                 style={{
-                  position: 'absolute', top: '8px', right: '2%', width: '80%', height: '90%',
+                  position: 'absolute', top: '10px', right: '2%', width: '80%', height: '90%',
                   border: '2px solid #f2b733', clipPath: 'polygon(20% 0%, 100% 20%, 80% 100%, 0% 80%)',
-                  borderRadius: '16px', zIndex: 1
+                  borderRadius: '14px', zIndex: 1
                 }} 
               />
 
-              {/* Main Image Box */}
-              <div style={{
-                position: 'relative', zIndex: 2, width: '100%', aspectRatio: '4/3', borderRadius: '16px',
-                overflow: 'hidden', border: '3px solid #000648', boxShadow: '0 8px 24px rgba(0,6,72,0.18)', background: '#000648'
-              }}>
-                <img
-                  src={formData.image}
-                  alt="EZER Learner Showcase"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+              <div style={{ position: 'relative', zIndex: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px 0' }}>
+                <div style={{ display: 'flex', margin: '0 -24px' }}>
+                  <div style={{ width: '80px', height: '96px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #f2b733', boxShadow: '0 8px 16px rgba(0,0,0,0.4)', transform: 'rotate(-10deg)', background: '#000648' }}>
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=300" alt="CEO" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <div style={{ width: '80px', height: '96px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #f2b733', boxShadow: '0 8px 16px rgba(0,0,0,0.4)', transform: 'rotate(2deg)', margin: '0 -20px', zIndex: 3, background: '#000648' }}>
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300" alt="CFO" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                  <div style={{ width: '80px', height: '96px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #f2b733', boxShadow: '0 8px 16px rgba(0,0,0,0.4)', transform: 'rotate(12deg)', background: '#000648' }}>
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300" alt="CTHM" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </div>
+                </div>
               </div>
 
-              {/* Floating Language Badges */}
-              <div style={{
-                position: 'absolute', top: '6%', left: '0%', zIndex: 3,
-                width: '32px', height: '32px', borderRadius: '50%', background: '#000648', color: '#f2b733',
-                fontWeight: 900, fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 4px 10px rgba(0,6,72,0.25)', border: '1.5px solid #f2b733'
-              }}>
-                அ
-              </div>
-              <div style={{
-                position: 'absolute', top: '40%', right: '-2%', zIndex: 3,
-                width: '32px', height: '32px', borderRadius: '50%', background: '#000648', color: '#f2b733',
-                fontWeight: 900, fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 4px 10px rgba(0,6,72,0.25)', border: '1.5px solid #f2b733'
-              }}>
-                A
-              </div>
-              <div style={{
-                position: 'absolute', bottom: '6%', left: '0%', zIndex: 3,
-                width: '32px', height: '32px', borderRadius: '50%', background: '#000648', color: '#f2b733',
-                fontWeight: 900, fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 4px 10px rgba(0,6,72,0.25)', border: '1.5px solid #f2b733'
-              }}>
-                अ
-              </div>
+              <span style={{ position: 'relative', zIndex: 3, fontSize: '0.72rem', color: '#f2b733', fontWeight: 800, textAlign: 'center', marginTop: '6px' }}>
+                Executive Board: CEO • CFO • CTHM
+              </span>
             </div>
           </div>
 

@@ -170,7 +170,7 @@ export default function Blog({ onOpenDemoModal }) {
         </div>
 
         {/* MAGAZINE GRID: LEFT ARTICLES, RIGHT AWARDS & HONORS */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '36px', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(360px, 100%), 1fr))', gap: '32px', alignItems: 'start' }}>
           
           {/* COLUMN 1: EDITORIAL ARTICLES */}
           <div>
@@ -187,25 +187,25 @@ export default function Blog({ onOpenDemoModal }) {
                   key={blog.id}
                   style={{
                     background: '#111827', borderRadius: '18px', border: '1.5px solid #1e293b',
-                    padding: '20px', display: 'grid', gridTemplateColumns: '140px 1fr', gap: '18px',
+                    overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
                     transition: 'border-color 0.3s ease, transform 0.3s ease'
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#f2b733'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#1e293b'; e.currentTarget.style.transform = 'translateY(0)'; }}
                 >
-                  <div style={{ height: '110px', borderRadius: '12px', overflow: 'hidden', background: '#000' }}>
+                  <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000', overflow: 'hidden' }}>
                     <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <span style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0, 6, 72, 0.9)', color: '#38bdf8', fontSize: '0.7rem', fontWeight: 900, padding: '3px 12px', borderRadius: '50px', border: '1px solid #38bdf8' }}>
+                      {blog.category || 'Tech Article'}
+                    </span>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <div>
-                      <span style={{ fontSize: '0.68rem', fontWeight: 900, color: '#38bdf8', textTransform: 'uppercase' }}>
-                        {blog.category || 'Tech Article'}
-                      </span>
-                      <h4 style={{ fontSize: '1.02rem', fontWeight: 800, color: '#ffffff', margin: '4px 0 6px 0', lineHeight: 1.3 }}>
+                      <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#ffffff', margin: '0 0 8px 0', lineHeight: 1.35 }}>
                         {blog.title}
                       </h4>
-                      <p style={{ fontSize: '0.78rem', color: '#94a3b8', margin: 0, lineHeight: 1.5, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      <p style={{ fontSize: '0.82rem', color: '#94a3b8', margin: 0, lineHeight: 1.55, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                         {blog.summary}
                       </p>
                     </div>
@@ -213,9 +213,9 @@ export default function Blog({ onOpenDemoModal }) {
                     <button
                       type="button"
                       onClick={() => onOpenDemoModal(blog.title)}
-                      style={{ background: 'none', border: 'none', color: '#f2b733', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', padding: 0, marginTop: '8px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                      style={{ background: 'none', border: 'none', color: '#f2b733', fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer', padding: 0, marginTop: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
                     >
-                      Read Article <HiArrowRight size={14} />
+                      Read Full Article <HiArrowRight size={14} />
                     </button>
                   </div>
                 </article>
@@ -232,33 +232,36 @@ export default function Blog({ onOpenDemoModal }) {
               </h3>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               {(achievements || []).map((ach) => (
                 <div
                   key={ach.id}
                   style={{
                     background: '#111827', borderRadius: '18px', border: '1.5px solid #1e293b',
-                    overflow: 'hidden', boxShadow: '0 8px 20px rgba(0,0,0,0.3)'
+                    overflow: 'hidden', boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                    transition: 'border-color 0.3s ease, transform 0.3s ease'
                   }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#f2b733'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#1e293b'; e.currentTarget.style.transform = 'translateY(0)'; }}
                 >
-                  <div style={{ position: 'relative', height: '140px', background: '#000' }}>
+                  <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000', overflow: 'hidden' }}>
                     <img src={ach.image} alt={ach.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <span style={{ position: 'absolute', top: '10px', right: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px', border: '1px solid #f2b733' }}>
+                    <span style={{ position: 'absolute', top: '12px', right: '12px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 12px', borderRadius: '50px', border: '1px solid #f2b733' }}>
                       {ach.year}
                     </span>
                   </div>
 
-                  <div style={{ padding: '16px' }}>
-                    <span style={{ fontSize: '0.68rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase' }}>
-                      {ach.category || 'Award'}
+                  <div style={{ padding: '20px' }}>
+                    <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                      {ach.category || 'Excellence Award'}
                     </span>
-                    <h4 style={{ fontSize: '0.98rem', fontWeight: 800, color: '#ffffff', margin: '4px 0', lineHeight: 1.3 }}>
+                    <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#ffffff', margin: '4px 0 6px 0', lineHeight: 1.35 }}>
                       {ach.title}
                     </h4>
-                    <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 700 }}>
+                    <div style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 700, marginBottom: '6px' }}>
                       Issued by: {ach.issuer}
                     </div>
-                    <p style={{ fontSize: '0.78rem', color: '#cbd5e1', marginTop: '8px', lineHeight: 1.5, margin: '8px 0 0 0' }}>
+                    <p style={{ fontSize: '0.82rem', color: '#cbd5e1', lineHeight: 1.55, margin: 0 }}>
                       {ach.description}
                     </p>
                   </div>

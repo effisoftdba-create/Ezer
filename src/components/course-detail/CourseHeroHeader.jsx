@@ -1,11 +1,11 @@
 import React from 'react';
 import { HiClock, HiUserGroup, HiGlobeAlt, HiCalendar, HiDocumentText } from 'react-icons/hi';
 
-export default function CourseHeroHeader({ course, onOpenDemoModal }) {
+export default function CourseHeroHeader({ course, onOpenDemoModal, onOpenPurchaseModal }) {
   return (
     <div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-        <span className="section-tag" style={{ background: 'rgba(37, 99, 235, 0.15)', borderColor: 'rgba(37, 99, 235, 0.3)', color: '#93c5fd' }}>
+        <span className="section-tag" style={{ background: 'rgba(242, 183, 51, 0.15)', borderColor: 'rgba(242, 183, 51, 0.3)', color: '#f2b733' }}>
           {course.badge || 'Live Executive Cohort'}
         </span>
         <span
@@ -56,19 +56,19 @@ export default function CourseHeroHeader({ course, onOpenDemoModal }) {
         <div>
           <div style={{ fontSize: '0.725rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>Duration</div>
           <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-            <HiClock style={{ color: '#2563eb' }} /> {course.duration}
+            <HiClock style={{ color: '#f2b733' }} /> {course.duration}
           </div>
         </div>
         <div>
           <div style={{ fontSize: '0.725rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>Format</div>
           <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-            <HiUserGroup style={{ color: '#2563eb' }} /> Live Online Labs
+            <HiUserGroup style={{ color: '#f2b733' }} /> Live Online Labs
           </div>
         </div>
         <div>
           <div style={{ fontSize: '0.725rem', color: '#64748b', textTransform: 'uppercase', fontWeight: 600 }}>Languages</div>
           <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-            <HiGlobeAlt style={{ color: '#2563eb' }} /> {course.languages || 'Tamil & English'}
+            <HiGlobeAlt style={{ color: '#f2b733' }} /> {course.languages || 'Tamil & English'}
           </div>
         </div>
       </div>
@@ -77,19 +77,22 @@ export default function CourseHeroHeader({ course, onOpenDemoModal }) {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
         <button
           type="button"
-          onClick={() => onOpenDemoModal(course.title)}
-          className="btn btn-primary btn-lg"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, borderRadius: '8px' }}
+          onClick={() => {
+            if (onOpenPurchaseModal) onOpenPurchaseModal();
+          }}
+          className="btn btn-gold btn-lg"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 900, borderRadius: '50px', background: '#f2b733', color: '#000648', padding: '12px 24px' }}
         >
-          <HiCalendar size={18} /> Schedule Demo Class
+          Enroll & Buy Course Now
         </button>
+
         <button
           type="button"
-          onClick={() => onOpenDemoModal(`${course.title} Syllabus PDF`)}
-          className="btn btn-ghost btn-lg"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, borderRadius: '8px' }}
+          onClick={() => onOpenDemoModal(course.title)}
+          className="btn btn-primary btn-lg"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, borderRadius: '50px' }}
         >
-          Download Syllabus <HiDocumentText size={16} />
+          <HiCalendar size={18} /> Schedule Demo Class
         </button>
       </div>
     </div>

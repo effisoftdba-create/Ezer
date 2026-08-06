@@ -142,7 +142,7 @@ function AchievementSection({ achievements, addAchievement, deleteAchievement, o
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '18px' }}>
         {(achievements || []).map((ach) => (
           <div key={ach.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-            <div style={{ position: 'relative', height: '150px', background: '#000' }}>
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
               <img src={ach.image} alt={ach.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <span style={{ position: 'absolute', top: '10px', right: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px' }}>
                 {ach.year}
@@ -315,7 +315,7 @@ function BlogSection({ blogs, addBlog, deleteBlog, onOpenPicker, externalImage }
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '18px' }}>
         {(blogs || []).map((blog) => (
           <div key={blog.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-            <div style={{ position: 'relative', height: '160px', background: '#000' }}>
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
               <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px' }}>
                 {blog.category}
@@ -391,8 +391,9 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
 
             <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', gap: '12px' }}>
               <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Role Tag*</label>
+                <label htmlFor="exec_role_tag" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Role Tag*</label>
                 <input
+                  id="exec_role_tag"
                   type="text"
                   value={formData.roleTag}
                   onChange={(e) => setFormData((prev) => ({ ...prev, roleTag: e.target.value }))}
@@ -402,8 +403,9 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Full Role Name*</label>
+                <label htmlFor="exec_role_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Full Role Name*</label>
                 <input
+                  id="exec_role_name"
                   type="text"
                   value={formData.roleName}
                   onChange={(e) => setFormData((prev) => ({ ...prev, roleName: e.target.value }))}
@@ -413,8 +415,9 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Executive Officer Name*</label>
+                <label htmlFor="exec_officer_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Executive Officer Name*</label>
                 <input
+                  id="exec_officer_name"
                   type="text"
                   value={formData.name}
                   onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
@@ -425,9 +428,10 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
             </div>
 
             <div>
-              <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Photo Source / URL</label>
+              <label htmlFor="exec_photo_url" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Photo Source / URL</label>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <input
+                  id="exec_photo_url"
                   type="text"
                   value={formData.image}
                   onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))}
@@ -436,6 +440,7 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                 />
                 <button
                   type="button"
+                  aria-label="Choose executive photo from gallery"
                   onClick={() => setPickerOpen(true)}
                   style={{ padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer' }}
                 >

@@ -17,6 +17,7 @@ import HiredCompaniesGrid from '../components/course-detail/HiredCompaniesGrid';
 import CapstoneProjectsSlider from '../components/course-detail/CapstoneProjectsSlider';
 import VerifiableCertificateBanner from '../components/course-detail/VerifiableCertificateBanner';
 import WhoIsThisProgrammeFor from '../components/course-detail/WhoIsThisProgrammeFor';
+import CoursePurchaseModal from '../components/course-detail/CoursePurchaseModal';
 
 const learnerTransitions = [
   {
@@ -53,17 +54,22 @@ export default function CourseDetail({ onOpenDemoModal }) {
   const { slug } = useParams();
   const { courses } = useSiteData();
   const course = (courses || []).find((c) => c.slug === slug || c.id === slug) || getCourseBySlug(slug);
+  const [isPurchaseModalOpen, setIsPurchaseModalOpen] = React.useState(false);
 
   React.useEffect(() => {
+    let timerId;
     if (window.location.hash) {
       const targetId = window.location.hash.replace('#', '');
       const element = document.getElementById(targetId);
       if (element) {
-        setTimeout(() => {
+        timerId = setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }, 300);
       }
     }
+    return () => {
+      if (timerId) clearTimeout(timerId);
+    };
   }, []);
 
   if (!course) {
@@ -99,8 +105,8 @@ export default function CourseDetail({ onOpenDemoModal }) {
               alignItems: 'center',
             }}
           >
-            <CourseHeroHeader course={course} onOpenDemoModal={onOpenDemoModal} />
-            <CourseApplicationCard course={course} />
+            <CourseHeroHeader course={course} onOpenDemoModal={onOpenDemoModal} onOpenPurchaseModal={() => setIsPurchaseModalOpen(true)} />
+            <CourseApplicationCard course={course} onOpenPurchaseModal={() => setIsPurchaseModalOpen(true)} />
           </div>
         </div>
       </section>
@@ -306,6 +312,12 @@ export default function CourseDetail({ onOpenDemoModal }) {
           </div>
         </div>
       </section>
+
+      <CoursePurchaseModal
+        isOpen={isPurchaseModalOpen}
+        onClose={() => setIsPurchaseModalOpen(false)}
+        course={course}
+      />
     </div>
   );
 }
