@@ -118,50 +118,51 @@ export default function AnimMasterShowcase({
               <m.div
                 key={feat.id}
                 variants={itemVariants}
-                whileHover={shouldReduceMotion ? {} : { y: -6, borderColor: '#f2b733', boxShadow: '0 12px 30px rgba(0, 6, 72, 0.5)' }}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  backdropFilter: 'blur(8px)',
-                  border: '1.5px solid rgba(242, 183, 51, 0.25)',
-                  borderRadius: '16px',
-                  padding: '28px 24px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                  transition: 'border-color 0.25s ease, box-shadow 0.25s ease',
-                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)'
-                }}
+                className="ezer-solution-card"
               >
-                <div>
+                {/* Hover Expanding Color Bubble Background */}
+                <div className="hover_color_bubble" />
+
+                <div style={{ position: 'relative', zIndex: 2 }}>
                   {/* Top Badge & Icon */}
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
-                    <div style={{
-                      width: '48px', height: '48px', borderRadius: '12px',
-                      background: '#000648', border: '2px solid #f2b733',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: '#f2b733', boxShadow: '0 4px 12px rgba(242, 183, 51, 0.25)'
-                    }}>
+                    <div 
+                      className="so_top_icon"
+                      style={{
+                        width: '48px', height: '48px', borderRadius: '12px',
+                        background: '#000648', border: '2px solid #f2b733',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: '#f2b733', boxShadow: '0 4px 12px rgba(0, 6, 72, 0.25)',
+                        transition: 'background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease'
+                      }}
+                    >
                       {feat.icon}
                     </div>
 
                     <span style={{
                       fontSize: '0.68rem', fontWeight: 800, color: '#f2b733',
-                      background: 'rgba(242, 183, 51, 0.15)', border: '1px solid rgba(242, 183, 51, 0.4)',
-                      padding: '3px 10px', borderRadius: '50px', textTransform: 'uppercase'
+                      background: 'rgba(0, 6, 72, 0.85)', border: '1px solid #f2b733',
+                      padding: '3px 10px', borderRadius: '50px', textTransform: 'uppercase',
+                      letterSpacing: '0.05em'
                     }}>
                       {feat.tag}
                     </span>
                   </div>
 
-                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, color: '#ffffff', marginBottom: '8px' }}>
-                    {feat.title}
-                  </h3>
-                  <p style={{ fontSize: '0.86rem', color: 'rgba(255, 255, 255, 0.8)', lineHeight: 1.6, margin: 0 }}>
-                    {feat.desc}
-                  </p>
+                  <div className="solu_title">
+                    <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#000648', marginBottom: '10px', transition: 'color 0.4s ease' }}>
+                      {feat.title}
+                    </h3>
+                  </div>
+
+                  <div className="solu_description">
+                    <p style={{ fontSize: '0.88rem', color: '#475569', lineHeight: 1.65, margin: 0, transition: 'color 0.4s ease' }}>
+                      {feat.desc}
+                    </p>
+                  </div>
                 </div>
 
-                <div style={{ marginTop: '20px', paddingTop: '16px', borderTop: '1px solid rgba(255, 255, 255, 0.1)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', fontWeight: 700, color: '#f2b733' }}>
+                <div style={{ position: 'relative', zIndex: 2, marginTop: '20px', paddingTop: '16px', borderTop: '1px solid rgba(0, 6, 72, 0.12)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', fontWeight: 800, color: '#f2b733' }}>
                   <HiCheckCircle size={16} /> Accelerated Learning Track
                 </div>
               </m.div>
