@@ -128,40 +128,40 @@ export default function About({ onOpenDemoModal }) {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
             
             {/* Vision Card */}
-            <div className="vision-mission-card">
-              <div className="vision-mission-content">
+            <div className="vm-3d-card">
+              <div className="card-content">
                 <div style={{
-                  width: '52px', height: '52px', borderRadius: '14px',
-                  background: '#000648', color: '#f2b733',
+                  width: '56px', height: '56px', borderRadius: '16px',
+                  background: '#f2b733', color: '#000648',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 6px 20px rgba(0,6,72,0.25)',
+                  boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
                 }}>
-                  <HiShieldCheck size={28} />
+                  <HiShieldCheck size={30} />
                 </div>
-                <h3 className="heading">
+                <h3 className="card-title">
                   Vision
                 </h3>
-                <p className="para">
+                <p className="card-para">
                   To be recognized as one of India’s leading learning platforms that develops skilled professionals and enables them to build successful careers in technology and related fields.
                 </p>
               </div>
             </div>
 
             {/* Mission Card */}
-            <div className="vision-mission-card">
-              <div className="vision-mission-content">
+            <div className="vm-3d-card">
+              <div className="card-content">
                 <div style={{
-                  width: '52px', height: '52px', borderRadius: '14px',
-                  background: '#000648', color: '#f2b733',
+                  width: '56px', height: '56px', borderRadius: '16px',
+                  background: '#f2b733', color: '#000648',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 6px 20px rgba(0,6,72,0.25)',
+                  boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
                 }}>
-                  <HiLightBulb size={28} />
+                  <HiLightBulb size={30} />
                 </div>
-                <h3 className="heading">
+                <h3 className="card-title">
                   Mission
                 </h3>
-                <p className="para">
+                <p className="card-para">
                   To provide practical, affordable, and results-driven training supported by expert mentorship, real-time projects, and dedicated placement assistance to bridge the gap between education and employment.
                 </p>
               </div>

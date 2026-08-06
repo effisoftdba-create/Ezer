@@ -637,5 +637,93 @@ img { max-width: 100%; display: block; }
   border-color: #000648 !important;
 }
 
+/* 3D Tilt Vision & Mission Cards */
+.vm-3d-card {
+  width: 100%;
+  min-height: 280px;
+  background-color: #000648;
+  background-image: linear-gradient(135deg, #000648 0%, #00127a 50%, #f2b733 100%);
+  border-radius: 20px;
+  color: white;
+  overflow: hidden;
+  position: relative;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s ease, border-color 0.5s ease;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(0, 6, 72, 0.4);
+  border: 1.5px solid rgba(242, 183, 51, 0.3);
+}
+
+.vm-3d-card .card-content {
+  padding: 36px 28px;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+
+.vm-3d-card .card-content .card-title {
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #f2b733;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.vm-3d-card .card-content .card-para {
+  color: rgba(255, 255, 255, 0.92);
+  opacity: 0.95;
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+.vm-3d-card:hover {
+  transform: rotateY(10deg) rotateX(10deg) scale(1.04);
+  box-shadow: 0 20px 40px rgba(242, 183, 51, 0.25);
+  border-color: #f2b733;
+}
+
+.vm-3d-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.15));
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.vm-3d-card:hover::before {
+  transform: translateX(-100%);
+}
+
+.vm-3d-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.15));
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.vm-3d-card:hover::after {
+  transform: translateX(100%);
+}
+
+
 
 
