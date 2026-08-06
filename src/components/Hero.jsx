@@ -194,8 +194,8 @@ export default function Hero({ onOpenDemoModal }) {
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '8px',
-                    padding: '12px 24px',
+                    justifyContent: 'center',
+                    padding: '12px 26px',
                     borderRadius: '50px',
                     background: 'linear-gradient(135deg, #000648 0%, #00127a 100%)',
                     color: '#f2b733',
@@ -223,8 +223,7 @@ export default function Hero({ onOpenDemoModal }) {
                     e.currentTarget.style.borderColor = '#f2b733';
                   }}
                 >
-                  <HiSparkles size={16} />
-                  <span>Book Free Demo</span>
+                  Book Free Demo
                 </button>
               </div>
 
