@@ -184,48 +184,84 @@ export default function About({ onOpenDemoModal }) {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', width: '100%' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px', width: '100%' }}>
             {coreObjectives.map((obj) => (
               <div 
                 key={obj.num} 
                 style={{
-                  display: 'flex', flexDirection: 'column',
-                  background: '#ffffff', padding: '24px 22px', borderRadius: '14px',
-                  border: '1.5px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,6,72,0.05)',
-                  transition: 'border-color 0.25s ease, transform 0.25s ease',
-                  position: 'relative'
+                  position: 'relative',
+                  overflow: 'hidden',
+                  background: '#ffffff',
+                  padding: '36px 28px',
+                  borderRadius: '24px',
+                  boxShadow: '0px 0px 20px rgba(0, 6, 72, 0.08)',
+                  border: '1.5px solid #e2e8f0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  transition: 'transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease',
                 }}
                 onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-6px)';
+                  e.currentTarget.style.boxShadow = '0px 12px 32px rgba(0, 6, 72, 0.15)';
                   e.currentTarget.style.borderColor = '#000648';
-                  e.currentTarget.style.transform = 'translateY(-4px)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#e2e8f0';
                   e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0px 0px 20px rgba(0, 6, 72, 0.08)';
+                  e.currentTarget.style.borderColor = '#e2e8f0';
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
-                  <div style={{
-                    background: '#000648', color: '#f2b733',
-                    width: '42px', height: '42px', borderRadius: '10px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center'
-                  }}>
-                    {obj.icon}
-                  </div>
-                  <span style={{
-                    fontSize: '1.2rem', fontWeight: 900, color: '#f2b733', background: '#000648',
-                    padding: '2px 10px', borderRadius: '50px'
-                  }}>
+                {/* Top-Right Circle Number Badge */}
+                <div
+                  style={{
+                    width: '96px',
+                    height: '96px',
+                    background: '#000648',
+                    borderRadius: '50%',
+                    position: 'absolute',
+                    right: '-20px',
+                    top: '-28px',
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    justifyContent: 'flex-start',
+                    paddingBottom: '20px',
+                    paddingLeft: '24px',
+                    boxShadow: '0 4px 14px rgba(0, 6, 72, 0.3)',
+                  }}
+                >
+                  <span style={{ color: '#f2b733', fontSize: '1.4rem', fontWeight: 900, lineHeight: 1 }}>
                     0{obj.num}
                   </span>
                 </div>
-                
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-                  {obj.num}. {obj.title}
-                </h3>
-                <p style={{ fontSize: '0.88rem', color: '#475569', margin: 0, lineHeight: 1.65 }}>
-                  {obj.desc}
-                </p>
+
+                {/* Icon Box */}
+                <div
+                  style={{
+                    width: '52px',
+                    height: '52px',
+                    borderRadius: '14px',
+                    background: 'rgba(0, 6, 72, 0.07)',
+                    color: '#000648',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginBottom: '20px',
+                    border: '1.5px solid rgba(0, 6, 72, 0.12)',
+                  }}
+                >
+                  {obj.icon}
+                </div>
+
+                {/* Title & Description */}
+                <div>
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: 900, color: '#000648', marginBottom: '10px', lineHeight: 1.3 }}>
+                    {obj.num}. {obj.title}
+                  </h3>
+                  <p style={{ fontSize: '0.92rem', color: '#475569', margin: 0, lineHeight: 1.65 }}>
+                    {obj.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
