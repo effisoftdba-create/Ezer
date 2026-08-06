@@ -26,15 +26,13 @@ export default function ExecutiveLeadership() {
         },
         {
           id: 'exec-3',
-          roleTag: 'CTHM',
-          roleName: 'Chief Tech & Academic Officer',
+          roleTag: 'CMTO',
+          roleName: 'Chief Marketing & Technology Officer',
           name: 'Anand Kumar K',
           image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600&h=700',
           bio: 'Pioneer of AI-integrated lab curriculums, hands-on production capstones, and corporate readiness standards.'
         }
       ];
-
-  const top3Leaders = leaders.slice(0, 3);
 
   return (
     <section
@@ -57,7 +55,7 @@ export default function ExecutiveLeadership() {
       <div className="container" style={{ maxWidth: '1180px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
         
         {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <span
             style={{
               display: 'inline-flex',
@@ -105,208 +103,159 @@ export default function ExecutiveLeadership() {
           </p>
         </div>
 
-        {/* 3D ROTATING CAROUSEL CONTAINER */}
-        <div className="card-3d-stage">
-          <div className="card-3d">
-            {top3Leaders.map((exec, idx) => (
-              <div
-                key={exec.id || exec.roleTag || idx}
-                className="exec-3d-card-item"
-              >
-                {/* Image Frame */}
-                <div className="exec-3d-img-box">
-                  <img src={exec.image} alt={exec.name || exec.roleTag} />
-                  <span className="exec-3d-tag">
-                    <HiBadgeCheck size={14} /> {exec.roleTag || 'EXEC'}
-                  </span>
-                </div>
+        {/* NORMAL GRID CARDS (3 columns desktop, 1 column mobile) */}
+        <div className="executive-board-grid">
+          {leaders.slice(0, 3).map((exec) => (
+            <div
+              key={exec.id || exec.roleTag || exec.name}
+              className="executive-stylish-card"
+            >
+              {/* Image with gradient overlay */}
+              <div className="exec-image-wrapper">
+                <img src={exec.image} alt={exec.name || exec.roleTag} />
+                <div className="exec-image-overlay" />
+                <span className="exec-role-pill">
+                  <HiBadgeCheck size={16} /> {exec.roleTag || 'EXEC'}
+                </span>
+              </div>
 
-                {/* Card Content */}
-                <div className="exec-3d-body">
-                  <h3 className="exec-3d-name">{exec.name}</h3>
-                  <div className="exec-3d-role">{exec.roleName || exec.roleTag}</div>
-                  <p className="exec-3d-bio">{exec.bio}</p>
+              {/* Executive Details */}
+              <div className="exec-card-body">
+                <h3 className="exec-name">{exec.name}</h3>
+                <div className="exec-title">{exec.roleName || exec.roleTag}</div>
+                <p className="exec-bio">{exec.bio}</p>
+                <div className="exec-footer-badge">
+                  <HiSparkles color="#f2b733" size={14} /> EZER Corporate Directorate
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-
       </div>
 
-      {/* 3D Carousel & Responsive Animation Styles */}
+      {/* Scoped Stylish & Responsive CSS */}
       <style>{`
-        @keyframes autoRun3d {
-          from {
-            transform: perspective(800px) rotateY(-360deg);
-          }
-          to {
-            transform: perspective(800px) rotateY(0deg);
-          }
+        .executive-board-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 32px;
+          align-items: stretch;
         }
 
-        @keyframes animateBrightness {
-          0%, 100% {
-            filter: brightness(1);
-          }
-          50% {
-            filter: brightness(0.85);
-          }
-        }
-
-        .card-3d-stage {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          min-height: 480px;
-          perspective: 1000px;
-          padding: 20px 0;
-        }
-
-        .card-3d {
-          position: relative;
-          width: 320px;
-          height: 420px;
-          transform-style: preserve-3d;
-          transform: perspective(800px);
-          animation: autoRun3d 20s linear infinite;
-          will-change: transform;
-        }
-
-        .card-3d div.exec-3d-card-item {
-          position: absolute;
-          width: 300px;
-          height: 410px;
-          background: rgba(15, 23, 42, 0.95);
+        .executive-stylish-card {
+          background: rgba(15, 23, 42, 0.85);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
-          border: solid 2.5px #f2b733;
+          border: 1.5px solid rgba(242, 183, 51, 0.35);
           border-radius: 24px;
-          top: 50%;
-          left: 50%;
-          transform-origin: center center;
-          animation: animateBrightness 20s linear infinite;
-          transition: transform 0.3s ease, border-color 0.3s ease;
-          will-change: transform, filter;
           overflow: hidden;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+          transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
           display: flex;
           flex-direction: column;
         }
 
-        .card-3d:hover,
-        .card-3d:hover div.exec-3d-card-item {
-          animation-play-state: paused !important;
+        .executive-stylish-card:hover {
+          transform: translateY(-8px);
+          border-color: #f2b733;
+          box-shadow: 0 24px 50px rgba(242, 183, 51, 0.25);
         }
 
-        .card-3d div.exec-3d-card-item:nth-child(1) {
-          transform: translate(-50%, -50%) rotateY(0deg) translateZ(300px);
-          animation-delay: -0s;
-        }
-
-        .card-3d div.exec-3d-card-item:nth-child(2) {
-          transform: translate(-50%, -50%) rotateY(120deg) translateZ(300px);
-          animation-delay: -6.66s;
-        }
-
-        .card-3d div.exec-3d-card-item:nth-child(3) {
-          transform: translate(-50%, -50%) rotateY(240deg) translateZ(300px);
-          animation-delay: -13.33s;
-        }
-
-        .exec-3d-img-box {
+        .exec-image-wrapper {
           position: relative;
           width: 100%;
-          height: 230px;
-          background: #000;
+          height: 320px;
           overflow: hidden;
+          background: #000;
         }
 
-        .exec-3d-img-box img {
+        .exec-image-wrapper img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           object-position: center top;
+          transition: transform 0.5s ease;
         }
 
-        .exec-3d-tag {
+        .executive-stylish-card:hover .exec-image-wrapper img {
+          transform: scale(1.05);
+        }
+
+        .exec-image-overlay {
           position: absolute;
-          top: 14px;
-          right: 14px;
+          inset: 0;
+          background: linear-gradient(to top, rgba(15, 23, 42, 1) 0%, rgba(15, 23, 42, 0.2) 60%, transparent 100%);
+        }
+
+        .exec-role-pill {
+          position: absolute;
+          top: 16px;
+          right: 16px;
           background: #000648;
           color: #f2b733;
-          font-size: 0.75rem;
+          font-size: 0.78rem;
           font-weight: 900;
-          padding: 5px 14px;
+          padding: 6px 14px;
           border-radius: 50px;
           border: 1.5px solid #f2b733;
           display: inline-flex;
           align-items: center;
-          gap: 5px;
+          gap: 6px;
           box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+          z-index: 5;
         }
 
-        .exec-3d-body {
-          padding: 18px 20px;
+        .exec-card-body {
+          padding: 24px;
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
           flex-grow: 1;
-          background: rgba(15, 23, 42, 0.98);
+          justify-content: space-between;
         }
 
-        .exec-3d-name {
-          font-size: 1.2rem;
+        .exec-name {
+          font-size: 1.35rem;
           font-weight: 900;
           color: #ffffff;
-          margin: 0 0 2px 0;
+          margin: 0 0 4px 0;
+          line-height: 1.25;
         }
 
-        .exec-3d-role {
-          font-size: 0.8rem;
+        .exec-title {
+          font-size: 0.85rem;
           font-weight: 800;
           color: #f2b733;
           text-transform: uppercase;
           letter-spacing: 0.05em;
-          margin-bottom: 8px;
+          margin-bottom: 14px;
         }
 
-        .exec-3d-bio {
-          font-size: 0.82rem;
+        .exec-bio {
+          font-size: 0.88rem;
           color: #cbd5e1;
-          line-height: 1.5;
-          margin: 0;
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+          line-height: 1.6;
+          margin: 0 0 20px 0;
         }
 
-        /* MOBILE RESPONSIVE DISPLAY (Stack 1 by 1) */
+        .exec-footer-badge {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 0.75rem;
+          font-weight: 800;
+          color: #94a3b8;
+          padding-top: 14px;
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
         @media (max-width: 768px) {
-          .card-3d-stage {
-            min-height: auto;
-            perspective: none;
+          .executive-board-grid {
+            grid-template-columns: 1fr;
+            gap: 28px;
           }
 
-          .card-3d {
-            animation: none !important;
-            transform: none !important;
-            width: 100%;
-            height: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-          }
-
-          .card-3d div.exec-3d-card-item {
-            position: relative !important;
-            top: auto !important;
-            left: auto !important;
-            transform: none !important;
-            animation: none !important;
-            width: 100% !important;
-            height: auto !important;
+          .exec-image-wrapper {
+            height: 280px;
           }
         }
       `}</style>

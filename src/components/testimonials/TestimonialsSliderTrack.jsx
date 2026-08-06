@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { FaQuoteLeft } from 'react-icons/fa';
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
@@ -49,6 +49,14 @@ export default function TestimonialsSliderTrack() {
   const handlePrev = () => {
     setActiveIdx((prev) => (prev - 1 + totalCount) % totalCount);
   };
+
+  // Auto-scroll every 5 seconds
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIdx((prev) => (prev + 1) % totalCount);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [totalCount]);
 
   return (
     <section
