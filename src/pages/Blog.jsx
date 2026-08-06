@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
-import { HiBadgeCheck, HiNewspaper, HiArrowRight, HiSparkles } from 'react-icons/hi';
+import { HiBadgeCheck, HiNewspaper, HiArrowRight, HiSparkles, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import CTABanner from '../components/CTABanner';
 
 export default function Blog({ onOpenDemoModal }) {
@@ -15,13 +15,38 @@ export default function Blog({ onOpenDemoModal }) {
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200'
   };
 
-  const blogList = (blogs || []).slice(1);
+  const rawBlogList = (blogs || []).slice(1);
+  const defaultArticles = [
+    {
+      id: 'blog-default-1',
+      title: 'Native Language Learning: Breaking Barriers for Non-IT Career Aspirants',
+      category: 'Education Impact',
+      summary: 'How learning complex software concepts in Tamil, Hindi, and English accelerates comprehension and boosts interview confidence.',
+      image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800'
+    },
+    {
+      id: 'blog-default-2',
+      title: 'The Rise of AI-Assisted Full Stack Developers in Top Tech Corporates',
+      category: 'Industry Trends',
+      summary: 'Why modern engineering teams look for developers who leverage AI tools to build scalable production apps in record time.',
+      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800'
+    },
+    {
+      id: 'blog-default-3',
+      title: '12-Month Placement Assistance: How EZER Prepares Students for Tech Interviews',
+      category: 'Career Success',
+      summary: 'Inside EZER’s mentorship framework: mock technical interviews, resume building, and direct corporate referral pathways.',
+      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800'
+    }
+  ];
+
+  const articlesToDisplay = (rawBlogList && rawBlogList.length > 0) ? rawBlogList : defaultArticles;
 
   return (
     <div style={{ background: '#030712', color: '#f8fafc', minHeight: '100vh', paddingBottom: '60px' }}>
       {/* Magazine Hero Header */}
       <section style={{
-        background: 'radial-gradient(circle at 50% 0%, #1e1b4b 0%, #000648 60%, #030712 100%)',
+        background: 'radial-gradient(circle at 50% 0%, #1e1b4b 0%, #000648 65%, #030712 100%)',
         color: '#ffffff',
         padding: '64px 20px 48px',
         textAlign: 'center',
@@ -40,22 +65,26 @@ export default function Blog({ onOpenDemoModal }) {
             <HiSparkles size={16} /> EZER TECH MAGAZINE • VOL. 2026 EDITION
           </span>
 
+          {/* CRISP HIGH-CONTRAST VISIBLE HERO TITLE */}
           <h1 style={{
             fontSize: 'clamp(2.2rem, 4.2vw, 3.6rem)',
             fontWeight: 900,
-            lineHeight: 1.15,
+            lineHeight: 1.18,
             marginBottom: '16px',
-            letterSpacing: '-0.02em'
+            letterSpacing: '-0.02em',
+            color: '#ffffff',
+            textShadow: '0 4px 20px rgba(0, 0, 0, 0.9)'
           }}>
             Tech Insights, Academic Excellence & Verified National Honors
           </h1>
 
           <p style={{
             fontSize: '1.08rem',
-            color: 'rgba(255, 255, 255, 0.85)',
-            maxWidth: '720px',
+            color: 'rgba(255, 255, 255, 0.9)',
+            maxWidth: '740px',
             margin: '0 auto',
-            lineHeight: 1.65
+            lineHeight: 1.65,
+            textShadow: '0 2px 10px rgba(0,0,0,0.8)'
           }}>
             Explore verified national awards, corporate placement roadmaps, and editorial insights from EZER Learning Solutions.
           </p>
@@ -99,15 +128,17 @@ export default function Blog({ onOpenDemoModal }) {
           </div>
         </div>
 
-        {/* SECTION 1: EDITORIAL TECH ARTICLES & GUIDES (NO EMPTY SPACES) */}
+        {/* SECTION 1: EDITORIAL TECH ARTICLES & GUIDES (GRID FILLED WITH CARDS, NO EMPTY SPACE) */}
         <div style={{ marginBottom: '56px' }}>
           <div className="section-header-bar">
-            <HiNewspaper size={24} color="#f2b733" />
-            <h3>Editorial Tech Articles & Guides</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <HiNewspaper size={24} color="#f2b733" />
+              <h3>Editorial Tech Articles & Guides</h3>
+            </div>
           </div>
 
           <div className="articles-grid">
-            {(blogList || []).map((blog) => (
+            {(articlesToDisplay || []).map((blog) => (
               <article key={blog.id} className="magazine-card">
                 <div className="card-image-box">
                   <img src={blog.image} alt={blog.title} />
@@ -135,16 +166,45 @@ export default function Blog({ onOpenDemoModal }) {
           </div>
         </div>
 
-        {/* SECTION 2: NATIONAL AWARDS & CORPORATE ACHIEVEMENTS (NO EMPTY SPACES) */}
+        {/* SECTION 2: NATIONAL AWARDS & ACHIEVEMENTS (HORIZONTAL LEFT-RIGHT SCROLL CAROUSEL) */}
         <div style={{ marginBottom: '40px' }}>
-          <div className="section-header-bar">
-            <HiBadgeCheck size={24} color="#f2b733" />
-            <h3>National Awards & Achievements</h3>
+          <div className="section-header-bar" style={{ justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <HiBadgeCheck size={24} color="#f2b733" />
+              <h3>National Awards & Achievements</h3>
+            </div>
+
+            {/* Left & Right Scroll Buttons */}
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  const track = document.getElementById('awards-scroll-track');
+                  if (track) track.scrollBy({ left: -340, behavior: 'smooth' });
+                }}
+                aria-label="Scroll left"
+                className="award-scroll-btn"
+              >
+                <HiChevronLeft size={22} />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const track = document.getElementById('awards-scroll-track');
+                  if (track) track.scrollBy({ left: 340, behavior: 'smooth' });
+                }}
+                aria-label="Scroll right"
+                className="award-scroll-btn"
+              >
+                <HiChevronRight size={22} />
+              </button>
+            </div>
           </div>
 
-          <div className="awards-grid">
+          {/* Horizontal Scroll Track */}
+          <div id="awards-scroll-track" className="awards-scroll-track">
             {(achievements || []).map((ach) => (
-              <div key={ach.id} className="magazine-card">
+              <div key={ach.id} className="award-horizontal-card">
                 <div className="card-image-box">
                   <img src={ach.image} alt={ach.title} />
                   <span className="award-year-tag">
@@ -286,11 +346,79 @@ export default function Blog({ onOpenDemoModal }) {
           letter-spacing: -0.01em;
         }
 
-        /* GRID LAYOUTS FOR BALANCED DISPLAY */
-        .articles-grid, .awards-grid {
+        .award-scroll-btn {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: rgba(0, 6, 72, 0.9);
+          border: 1.5px solid #f2b733;
+          color: #f2b733;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+          transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+        }
+
+        .award-scroll-btn:hover {
+          background: #f2b733;
+          color: #000648;
+          transform: scale(1.08);
+        }
+
+        .articles-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
           gap: 28px;
+        }
+
+        /* HORIZONTAL SCROLL CAROUSEL TRACK */
+        .awards-scroll-track {
+          display: flex;
+          gap: 24px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          padding: 8px 4px 20px;
+          scrollbar-width: thin;
+          scrollbar-color: #f2b733 #050b1c;
+        }
+
+        .awards-scroll-track::-webkit-scrollbar {
+          height: 6px;
+        }
+
+        .awards-scroll-track::-webkit-scrollbar-track {
+          background: #050b1c;
+          border-radius: 10px;
+        }
+
+        .awards-scroll-track::-webkit-scrollbar-thumb {
+          background: #f2b733;
+          border-radius: 10px;
+        }
+
+        .award-horizontal-card {
+          width: 350px;
+          min-width: 320px;
+          flex-shrink: 0;
+          scroll-snap-align: start;
+          background: rgba(15, 23, 42, 0.85);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-radius: 20px;
+          border: 1.5px solid rgba(242, 183, 51, 0.35);
+          overflow: hidden;
+          box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+          transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .award-horizontal-card:hover {
+          transform: translateY(-6px);
+          border-color: #f2b733;
+          box-shadow: 0 20px 44px rgba(242, 183, 51, 0.25);
         }
 
         .magazine-card {
@@ -327,7 +455,8 @@ export default function Blog({ onOpenDemoModal }) {
           transition: transform 0.4s ease;
         }
 
-        .magazine-card:hover .card-image-box img {
+        .magazine-card:hover .card-image-box img,
+        .award-horizontal-card:hover .card-image-box img {
           transform: scale(1.04);
         }
 
@@ -423,8 +552,13 @@ export default function Blog({ onOpenDemoModal }) {
             grid-template-columns: 1fr;
           }
 
-          .articles-grid, .awards-grid {
+          .articles-grid {
             grid-template-columns: 1fr;
+          }
+
+          .award-horizontal-card {
+            width: 290px;
+            min-width: 270px;
           }
         }
       `}</style>
