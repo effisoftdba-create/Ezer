@@ -125,81 +125,46 @@ export default function About({ onOpenDemoModal }) {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '28px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
             
             {/* Vision Card */}
-            <div 
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '2px solid #f2b733',
-                borderRadius: '16px',
-                padding: '36px 28px',
-                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
-                display: 'flex', flexDirection: 'column',
-                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px)';
-                e.currentTarget.style.boxShadow = '0 20px 40px rgba(242,183,51,0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.4)';
-              }}
-            >
-              <div style={{
-                width: '52px', height: '52px', borderRadius: '14px',
-                background: '#f2b733', color: '#000648',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: '20px', boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
-              }}>
-                <HiShieldCheck size={28} />
+            <div className="vision-mission-card">
+              <div className="vision-mission-content">
+                <div style={{
+                  width: '52px', height: '52px', borderRadius: '14px',
+                  background: '#000648', color: '#f2b733',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 6px 20px rgba(0,6,72,0.25)',
+                }}>
+                  <HiShieldCheck size={28} />
+                </div>
+                <h3 className="heading">
+                  Vision
+                </h3>
+                <p className="para">
+                  To be recognized as one of India’s leading learning platforms that develops skilled professionals and enables them to build successful careers in technology and related fields.
+                </p>
               </div>
-              <h3 style={{ color: '#f2b733', fontSize: '1.4rem', fontWeight: 900, marginBottom: '12px' }}>
-                Vision
-              </h3>
-              <p style={{ color: 'rgba(255,255,255,0.92)', fontSize: '1rem', lineHeight: 1.75, margin: 0, flexGrow: 1 }}>
-                To be recognized as one of India’s leading learning platforms that develops skilled professionals and enables them to build successful careers in technology and related fields.
-              </p>
             </div>
 
             {/* Mission Card */}
-            <div 
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '2px solid #f2b733',
-                borderRadius: '16px',
-                padding: '36px 28px',
-                boxShadow: '0 12px 32px rgba(0, 0, 0, 0.4)',
-                display: 'flex', flexDirection: 'column',
-                transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-6px)';
-                e.currentTarget.style.boxShadow = '0 20px 40px rgba(242,183,51,0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.4)';
-              }}
-            >
-              <div style={{
-                width: '52px', height: '52px', borderRadius: '14px',
-                background: '#f2b733', color: '#000648',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                marginBottom: '20px', boxShadow: '0 6px 20px rgba(242,183,51,0.4)',
-              }}>
-                <HiLightBulb size={28} />
+            <div className="vision-mission-card">
+              <div className="vision-mission-content">
+                <div style={{
+                  width: '52px', height: '52px', borderRadius: '14px',
+                  background: '#000648', color: '#f2b733',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 6px 20px rgba(0,6,72,0.25)',
+                }}>
+                  <HiLightBulb size={28} />
+                </div>
+                <h3 className="heading">
+                  Mission
+                </h3>
+                <p className="para">
+                  To provide practical, affordable, and results-driven training supported by expert mentorship, real-time projects, and dedicated placement assistance to bridge the gap between education and employment.
+                </p>
               </div>
-              <h3 style={{ color: '#f2b733', fontSize: '1.4rem', fontWeight: 900, marginBottom: '12px' }}>
-                Mission
-              </h3>
-              <p style={{ color: 'rgba(255,255,255,0.92)', fontSize: '0.98rem', lineHeight: 1.75, marginBottom: '16px' }}>
-                To provide practical, affordable, and results-driven training supported by expert mentorship, real-time projects, and dedicated placement assistance.
-              </p>
-              <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem', lineHeight: 1.65, margin: 0, fontStyle: 'italic' }}>
-                Our goal is to bridge the gap between education and employment by equipping learners with the right skills, guidance, and opportunities.
-              </p>
             </div>
 
           </div>

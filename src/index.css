@@ -485,3 +485,86 @@ img { max-width: 100%; display: block; }
   background-image: linear-gradient(45deg, #000648 0%, #115DFC 51%, #f2b733 100%);
 }
 
+/* Vision & Mission Animated Card Palette (#000648 & #f2b733) */
+.vision-mission-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 2px;
+  border-radius: 24px;
+  overflow: hidden;
+  line-height: 1.6;
+  transition: transform 0.48s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.48s ease;
+}
+
+.vision-mission-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 34px;
+  border-radius: 22px;
+  color: #000648;
+  overflow: hidden;
+  background: #ffffff;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: background-color 0.48s cubic-bezier(0.23, 1, 0.32, 1), color 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.vision-mission-content .heading {
+  font-weight: 900;
+  font-size: 28px;
+  line-height: 1.3;
+  z-index: 2;
+  color: #000648;
+  transition: color 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.vision-mission-content .para {
+  z-index: 2;
+  font-size: 16px;
+  color: #334155;
+  line-height: 1.65;
+  transition: color 0.48s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.vision-mission-card::before {
+  content: "";
+  position: absolute;
+  height: 160%;
+  width: 160%;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #000648 0%, #f2b733 100%);
+  transform-origin: center;
+  animation: moving 4.8s linear infinite paused;
+  transition: width 0.88s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.vision-mission-card:hover::before {
+  animation-play-state: running;
+  z-index: 0;
+  width: 20%;
+}
+
+.vision-mission-card:hover .vision-mission-content .heading,
+.vision-mission-card:hover .vision-mission-content .para {
+  color: #000648;
+}
+
+.vision-mission-card:hover {
+  box-shadow: 0rem 6px 13px rgba(0, 6, 72, 0.12),
+    0rem 24px 24px rgba(0, 6, 72, 0.09),
+    0rem 55px 33px rgba(0, 6, 72, 0.05);
+  transform: scale(1.03);
+}
+
+@keyframes moving {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+

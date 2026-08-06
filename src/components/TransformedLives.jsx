@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
@@ -7,6 +7,24 @@ import { resolveImageSrc } from '../utils/imageUtils';
 export default function TransformedLives() {
   const { transformedLives, outcomesHeader } = useSiteData();
   const sliderRef = useRef(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto Scroll Loop with Pause on Mouse Hover
+  useEffect(() => {
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      if (sliderRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 10) {
+          sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+        }
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [isHovered]);
 
   const handleScroll = (direction) => {
     if (sliderRef.current) {
@@ -100,6 +118,8 @@ export default function TransformedLives() {
             <div
               ref={sliderRef}
               className="no-scrollbar"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
               style={{
                 display: 'flex', gap: '20px', overflowX: 'auto',
                 scrollBehavior: 'smooth', padding: '12px 4px 24px', width: '100%',
