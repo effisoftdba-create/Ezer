@@ -443,10 +443,10 @@ img { max-width: 100%; display: block; }
 .card_box span.card-ribbon-tag {
   position: absolute;
   overflow: hidden;
-  width: 150px;
-  height: 150px;
-  top: -10px;
-  left: -10px;
+  width: 95px;
+  height: 95px;
+  top: 0px;
+  left: 0px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -457,30 +457,31 @@ img { max-width: 100%; display: block; }
 .card_box span.card-ribbon-tag::before {
   content: attr(data-badge);
   position: absolute;
-  width: 150%;
-  height: 34px;
+  width: 140%;
+  height: 22px;
   background-image: linear-gradient(45deg, #000648 0%, #115DFC 51%, #f2b733 100%);
-  transform: rotate(-45deg) translateY(-18px);
+  transform: rotate(-45deg) translateY(-10px);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-weight: 800;
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
+  font-size: 0.55rem;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.23);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  white-space: nowrap;
 }
 
 .card_box span.card-ribbon-tag::after {
   content: '';
   position: absolute;
-  width: 10px;
+  width: 6px;
   bottom: 0;
   left: 0;
-  height: 10px;
+  height: 6px;
   z-index: -1;
-  box-shadow: 140px -140px #000648;
+  box-shadow: 85px -85px #000648;
   background-image: linear-gradient(45deg, #000648 0%, #115DFC 51%, #f2b733 100%);
 }
 
