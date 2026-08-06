@@ -1,30 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { HiClock, HiArrowRight, HiGlobeAlt, HiStar } from 'react-icons/hi';
+import { HiClock, HiGlobeAlt, HiCheckCircle } from 'react-icons/hi';
 import { resolveImageSrc } from '../utils/imageUtils';
 
 export default function CourseCard({ course, onOpenDemoModal }) {
   const displayTools = course.tools ? course.tools.slice(0, 3) : ['AWS', 'Docker', 'Kubernetes'];
   const languagesDisplay = course.languages || 'Tamil, English & Hindi';
-  const shortDesc = course.subtitle || course.description || 'Learn from active corporate engineers with real hands-on production labs & job referrals.';
   const badgeText = course.badgeTag || course.badge || 'Live Cohort';
+  const coursePrice = course.price || '₹29,999';
+  const originalPrice = course.originalPrice || '₹42,000';
+  const deliverables = (course.whoIsItFor && course.whoIsItFor.length > 0)
+    ? course.whoIsItFor.slice(0, 3)
+    : [
+        'Live 1:1 Corporate Mentor Sessions',
+        'Hands-on Lab Projects & Code Reviews',
+        '100% Guaranteed 1-Year Placement Support'
+      ];
+
+  const hashAnchor = course.hashLink || `#${(course.title || 'course').replace(/[^a-zA-Z0-9]/g, '')}_course`;
 
   return (
     <div 
-      className="ezer-uiverse-card card_box"
+      className="dark-course-card"
       style={{
+        maxWidth: '320px',
+        width: '100%',
         display: 'flex', 
         flexDirection: 'column',
-        height: '100%',
-        minHeight: '440px',
+        borderRadius: '1.5rem',
+        backgroundColor: '#050b1c',
+        padding: '1.5rem',
+        boxShadow: '0px 0px 25px rgba(0, 0, 0, 0.4)',
+        border: '1.5px solid rgba(242, 183, 51, 0.3)',
         position: 'relative',
+        height: '100%',
+        justifyCumulative: 'space-between'
       }}
     >
-      {/* Dynamic Ribbon Tag from Admin Panel */}
-      <span className="card-ribbon-tag" data-badge={badgeText} />
-
-      {/* Clear Image Banner Header */}
-      <div style={{ position: 'relative', height: '175px', overflow: 'hidden', background: '#ffffff' }}>
+      {/* Banner Photo Header */}
+      <div style={{ position: 'relative', height: '145px', borderRadius: '1rem', overflow: 'hidden', marginBottom: '1.25rem', border: '1px solid rgba(255,255,255,0.1)' }}>
         <img 
           src={resolveImageSrc(course.image)} 
           alt={course.title}
@@ -32,124 +46,105 @@ export default function CourseCard({ course, onOpenDemoModal }) {
             width: '100%',
             height: '100%',
             objectFit: course.fit || course.imageFit || 'cover',
-            objectPosition: course.position || course.imagePosition || 'center center',
-            opacity: 1
+            objectPosition: course.position || course.imagePosition || 'center center'
           }}
         />
+        <span style={{
+          position: 'absolute', top: '10px', right: '10px',
+          background: '#000648', color: '#f2b733', fontSize: '0.68rem',
+          fontWeight: 900, padding: '3px 10px', borderRadius: '50px',
+          border: '1px solid #f2b733', textTransform: 'uppercase'
+        }}>
+          {badgeText}
+        </span>
       </div>
 
-      {/* White Card Body with Rich Details */}
-      <div style={{ padding: '20px 18px 18px', display: 'flex', flexDirection: 'column', flexGrow: 1, justifyContent: 'space-between', background: '#ffffff' }}>
-        <div>
-          {/* Course Title */}
-          <h3 style={{
-            fontSize: '1.08rem', fontWeight: 800, color: '#000648',
-            lineHeight: 1.35, marginBottom: '8px',
-            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-            overflow: 'hidden', minHeight: '2.8em'
-          }}>
-            {course.title}
-          </h3>
+      <div>
+        <h3 style={{
+          fontSize: '1.15rem', fontWeight: 800, color: '#ffffff',
+          lineHeight: 1.3, marginBottom: '6px', minHeight: '2.6em',
+          display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'
+        }}>
+          {course.title}
+        </h3>
 
-          {/* Subtitle / Language Indicator Line */}
-          <div style={{ 
-            display: 'flex', alignItems: 'center', gap: '6px', 
-            fontSize: '0.84rem', color: '#000648', marginBottom: '10px', fontWeight: 700
-          }}>
-            <HiGlobeAlt size={16} style={{ color: '#000648', flexShrink: 0 }} />
-            <span>{languagesDisplay}</span>
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: '#f2b733', fontWeight: 700, marginBottom: '12px' }}>
+          <HiGlobeAlt size={15} />
+          <span>{languagesDisplay}</span>
+        </div>
 
-          {/* Short Description */}
-          <p style={{
-            fontSize: '0.82rem', color: '#475569', lineHeight: 1.5, marginBottom: '14px',
-            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-            overflow: 'hidden', minHeight: '2.5em'
-          }}>
-            {shortDesc}
-          </p>
-
-          {/* Duration & Tool Tags Pill Row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
-            <span style={{
-              display: 'inline-flex', alignItems: 'center', gap: '4px',
-              fontSize: '0.72rem', fontWeight: 800,
-              background: 'rgba(0, 6, 72, 0.06)', color: '#000648',
-              padding: '3px 10px', borderRadius: '50px'
-            }}>
-              <HiClock size={13} style={{ color: '#f2b733' }} />
-              {course.duration || '3 Months'}
+        {/* Pricing Display */}
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
+          <span className="price" style={{ fontSize: '2.4rem', fontWeight: 700, color: '#ffffff', lineHeight: 1 }}>
+            {coursePrice}
+          </span>
+          {originalPrice && (
+            <span style={{ fontSize: '0.9rem', color: '#64748b', textDecoration: 'line-through', fontWeight: 600 }}>
+              {originalPrice}
             </span>
-
-            {displayTools.map((tool) => (
-              <span 
-                key={tool}
-                style={{
-                  fontSize: '0.68rem', fontWeight: 700,
-                  background: '#f1f5f9', color: '#334155',
-                  padding: '3px 8px', borderRadius: '6px',
-                  border: '1px solid #e2e8f0'
-                }}
-              >
-                {tool}
-              </span>
-            ))}
-          </div>
+          )}
         </div>
 
-        {/* 2 Action Buttons (Syllabus & Know More) in Navy & Gold Palette */}
-        <div style={{ display: 'flex', gap: '10px', marginTop: 'auto', paddingTop: '10px' }}>
-          <button 
-            type="button"
-            onClick={() => onOpenDemoModal(course.title)}
-            style={{
-              flex: 1, padding: '10px 0', borderRadius: '8px',
-              fontSize: '0.86rem', fontWeight: 800, textAlign: 'center',
-              background: '#ffffff', border: '1.5px solid #000648',
-              color: '#000648', cursor: 'pointer',
-              transition: 'background-color 0.2s ease, border-color 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#f1f5f9';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#ffffff';
-            }}
-          >
-            Syllabus
-          </button>
-          
-          <Link 
-            to={`/courses/${course.slug}`} 
-            style={{
-              flex: 1.1, padding: '10px 0', borderRadius: '8px',
-              fontSize: '0.86rem', fontWeight: 900, textAlign: 'center',
-              background: '#000648', color: '#f2b733',
-              border: '1.5px solid #000648', textDecoration: 'none',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px',
-              boxShadow: '0 4px 12px rgba(0, 6, 72, 0.2)',
-              transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#f2b733';
-              e.currentTarget.style.color = '#000648';
-              e.currentTarget.style.borderColor = '#f2b733';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#000648';
-              e.currentTarget.style.color = '#f2b733';
-              e.currentTarget.style.borderColor = '#000648';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            Know More
-          </Link>
+        <div style={{ fontSize: '0.75rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '16px' }}>
+          <HiClock size={14} color="#f2b733" />
+          <span>{course.duration || '3 Months'} • Live Online Cohort</span>
         </div>
+
+        {/* Deliverables List */}
+        <div className="lists" style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', rowGap: '0.75rem', fontSize: '0.825rem', color: '#ffffff' }}>
+          {deliverables.map((item, idx) => (
+            <div key={idx} className="list" style={{ display: 'flex', alignItems: 'flex-start' }}>
+              <HiCheckCircle style={{ height: '1.1rem', width: '1.1rem', color: '#f2b733', flexShrink: 0, marginTop: '2px' }} />
+              <span style={{ marginLeft: '0.75rem', lineHeight: 1.35, color: '#e2e8f0' }}>{item}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Action Purchase / Know More Buttons */}
+      <div style={{ marginTop: '1.75rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <Link 
+          to={`/courses/${course.slug}${hashAnchor}`}
+          className="action"
+          style={{
+            width: '100%',
+            border: '2px solid #f2b733',
+            borderRadius: '9999px',
+            backgroundColor: '#f2b733',
+            padding: '0.625rem 1.5rem',
+            fontWeight: 800,
+            textAlign: 'center',
+            fontSize: '0.875rem',
+            color: '#000648',
+            outline: 'none',
+            textDecoration: 'none',
+            transition: 'all .2s ease',
+            display: 'block'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = '#f2b733';
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = '#000648';
+            e.currentTarget.style.backgroundColor = '#f2b733';
+          }}
+        >
+          Enroll & Buy Course Now
+        </Link>
+
+        <button 
+          type="button"
+          onClick={() => onOpenDemoModal(course.title)}
+          style={{
+            background: 'none', border: 'none', color: '#94a3b8', fontSize: '0.78rem',
+            fontWeight: 700, cursor: 'pointer', textAlign: 'center', textDecoration: 'underline',
+            marginTop: '4px'
+          }}
+        >
+          Request Free Demo Class & Syllabus
+        </button>
       </div>
     </div>
   );
 }
-
-
-

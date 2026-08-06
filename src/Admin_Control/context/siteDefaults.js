@@ -368,6 +368,38 @@ export function safeSetStorage(key, val) {
   }
 }
 
+export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v1';
+
+export const defaultExecutiveLeaders = [
+  {
+    id: 'exec-1',
+    roleTag: 'CEO',
+    roleName: 'Chief Executive Officer',
+    name: 'Dr. Subramanian R',
+    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=600&h=700',
+    rotationDeg: -12,
+    bio: 'Visionary Leader driving native language tech education and corporate placement partnerships.'
+  },
+  {
+    id: 'exec-2',
+    roleTag: 'CFO',
+    roleName: 'Chief Financial Officer',
+    name: 'Meenakshi Sundaram',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=700',
+    rotationDeg: 4,
+    bio: 'Strategic Financial Lead overseeing scholarship funds, affordable learning models, and growth.'
+  },
+  {
+    id: 'exec-3',
+    roleTag: 'CTHM',
+    roleName: 'Chief Tech & Academic Officer',
+    name: 'Anand Kumar K',
+    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600&h=700',
+    rotationDeg: 16,
+    bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.'
+  }
+];
+
 export function getInitialState() {
   const prodConfig = defaultPopupConfig;
   return {
@@ -388,6 +420,7 @@ export function getInitialState() {
     leads: getStored(STORAGE_LEADS_KEY, defaultLeads),
     blogs: getStored(STORAGE_BLOGS_KEY, defaultBlogs),
     achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements),
+    executiveLeaders: getStored(STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders),
   };
 }
 

@@ -170,6 +170,50 @@ export default function CourseFormModal({
             </div>
           </div>
 
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <label htmlFor="course_price_field" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#000648', display: 'block', marginBottom: '4px' }}>
+                Discounted Fee Amount (e.g. ₹29,999)
+              </label>
+              <input
+                id="course_price_field"
+                type="text"
+                value={formData.price || ''}
+                onChange={(e) => setFormData((prev) => ({ ...prev, price: e.target.value }))}
+                placeholder="₹29,999"
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.875rem', fontWeight: 700 }}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="course_orig_price_field" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>
+                Original Fee (Crossed Out, e.g. ₹42,000)
+              </label>
+              <input
+                id="course_orig_price_field"
+                type="text"
+                value={formData.originalPrice || ''}
+                onChange={(e) => setFormData((prev) => ({ ...prev, originalPrice: e.target.value }))}
+                placeholder="₹42,000"
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.875rem' }}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="course_hashlink_field" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#115DFC', display: 'block', marginBottom: '4px' }}>
+                Deep Link Anchor (e.g. #AIML_course)
+              </label>
+              <input
+                id="course_hashlink_field"
+                type="text"
+                value={formData.hashLink || ''}
+                onChange={(e) => setFormData((prev) => ({ ...prev, hashLink: e.target.value }))}
+                placeholder="#AIML_course"
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.875rem' }}
+              />
+            </div>
+          </div>
+
           <div style={{ marginBottom: '16px' }}>
             <label htmlFor="course_tagline_field" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
               Tagline / Summary

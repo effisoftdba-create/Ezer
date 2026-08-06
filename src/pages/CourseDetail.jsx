@@ -54,6 +54,18 @@ export default function CourseDetail({ onOpenDemoModal }) {
   const { courses } = useSiteData();
   const course = (courses || []).find((c) => c.slug === slug || c.id === slug) || getCourseBySlug(slug);
 
+  React.useEffect(() => {
+    if (window.location.hash) {
+      const targetId = window.location.hash.replace('#', '');
+      const element = document.getElementById(targetId);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      }
+    }
+  }, []);
+
   if (!course) {
     return (
       <div className="container" style={{ padding: '100px 24px', textAlign: 'center' }}>

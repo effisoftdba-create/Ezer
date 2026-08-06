@@ -19,6 +19,7 @@ import {
   STORAGE_LEADS_KEY,
   STORAGE_BLOGS_KEY,
   STORAGE_ACHIEVEMENTS_KEY,
+  STORAGE_EXECUTIVE_LEADERS_KEY,
   getInitialState,
   siteReducer,
   safeSetStorage
@@ -46,7 +47,8 @@ export function SiteProvider({ children }) {
     popupConfig,
     leads,
     blogs,
-    achievements
+    achievements,
+    executiveLeaders
   } = state;
 
   // Check for mobile sync token in URL
@@ -96,8 +98,19 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_LEADS_KEY, leads); }, [leads]);
   useEffect(() => { safeSetStorage(STORAGE_BLOGS_KEY, blogs); }, [blogs]);
   useEffect(() => { safeSetStorage(STORAGE_ACHIEVEMENTS_KEY, achievements); }, [achievements]);
+  useEffect(() => { safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, executiveLeaders); }, [executiveLeaders]);
 
   // Action Dispatchers
+  const updateExecutiveLeaders = useCallback((newExecs) => {
+    dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: newExecs });
+    triggerStateToast('SAVED');
+  }, []);
+
+  const updateExecutiveLeader = useCallback((id, updatedLeader) => {
+    const updated = (executiveLeaders || []).map((l) => (l.id === id || l.roleTag === id ? { ...l, ...updatedLeader } : l));
+    dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: updated });
+    triggerStateToast('SAVED');
+  }, [executiveLeaders]);
   const updateBlogs = useCallback((newBlogs) => {
     dispatch({ type: 'SET_KEY', key: 'blogs', value: newBlogs });
     triggerStateToast('SAVED');
@@ -135,6 +148,26 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, []);
 
+  const addHeroSlide = useCallback((newSlide) => {
+    const slide = { id: `hero-${Date.now()}`, ...newSlide };
+    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: [...(heroSlides || []), slide] });
+    triggerStateToast('SAVED');
+  }, [heroSlides]);
+
+  const updateHeroSlide = useCallback((id, updatedSlide) => {
+    const updated = (heroSlides || []).map((slide) =>
+      slide.id === id || slide.badge === id ? { ...slide, ...updatedSlide } : slide
+    );
+    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
+    triggerStateToast('SAVED');
+  }, [heroSlides]);
+
+  const deleteHeroSlide = useCallback((id) => {
+    const updated = (heroSlides || []).filter((slide) => slide.id !== id && slide.badge !== id);
+    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
+    triggerStateToast('SAVED');
+  }, [heroSlides]);
+
   const updateCourses = useCallback((newCourses) => {
     dispatch({ type: 'SET_KEY', key: 'courses', value: newCourses });
     triggerStateToast('SAVED');
@@ -167,10 +200,50 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, []);
 
+  const addSupportCard = useCallback((newCard) => {
+    const card = { id: `support-${Date.now()}`, ...newCard };
+    dispatch({ type: 'SET_KEY', key: 'supportCards', value: [...(supportCards || []), card] });
+    triggerStateToast('SAVED');
+  }, [supportCards]);
+
+  const updateSupportCard = useCallback((id, updatedCard) => {
+    const updated = (supportCards || []).map((card) =>
+      card.id === id || card.title === id ? { ...card, ...updatedCard } : card
+    );
+    dispatch({ type: 'SET_KEY', key: 'supportCards', value: updated });
+    triggerStateToast('SAVED');
+  }, [supportCards]);
+
+  const deleteSupportCard = useCallback((id) => {
+    const updated = (supportCards || []).filter((card) => card.id !== id && card.title !== id);
+    dispatch({ type: 'SET_KEY', key: 'supportCards', value: updated });
+    triggerStateToast('SAVED');
+  }, [supportCards]);
+
   const updateTransformedLives = useCallback((lives) => {
     dispatch({ type: 'SET_KEY', key: 'transformedLives', value: lives });
     triggerStateToast('SAVED');
   }, []);
+
+  const addTransformedLife = useCallback((newLife) => {
+    const life = { id: `life-${Date.now()}`, ...newLife };
+    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: [...(transformedLives || []), life] });
+    triggerStateToast('SAVED');
+  }, [transformedLives]);
+
+  const updateTransformedLife = useCallback((id, updatedLife) => {
+    const updated = (transformedLives || []).map((life) =>
+      life.id === id ? { ...life, ...updatedLife } : life
+    );
+    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: updated });
+    triggerStateToast('SAVED');
+  }, [transformedLives]);
+
+  const deleteTransformedLife = useCallback((id) => {
+    const updated = (transformedLives || []).filter((life) => life.id !== id);
+    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: updated });
+    triggerStateToast('SAVED');
+  }, [transformedLives]);
 
   const updateOutcomesHeader = useCallback((header) => {
     dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: header });
@@ -182,6 +255,26 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, []);
 
+  const addSeniorMentor = useCallback((newMentor) => {
+    const mentor = { id: `mentor-${Date.now()}`, ...newMentor };
+    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: [...(seniorMentors || []), mentor] });
+    triggerStateToast('SAVED');
+  }, [seniorMentors]);
+
+  const updateSeniorMentor = useCallback((id, updatedMentor) => {
+    const updated = (seniorMentors || []).map((mentor) =>
+      mentor.id === id ? { ...mentor, ...updatedMentor } : mentor
+    );
+    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: updated });
+    triggerStateToast('SAVED');
+  }, [seniorMentors]);
+
+  const deleteSeniorMentor = useCallback((id) => {
+    const updated = (seniorMentors || []).filter((mentor) => mentor.id !== id);
+    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: updated });
+    triggerStateToast('SAVED');
+  }, [seniorMentors]);
+
   const updateMentorsHeader = useCallback((header) => {
     dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: header });
     triggerStateToast('SAVED');
@@ -192,6 +285,26 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, []);
 
+  const addVideoTestimonial = useCallback((newVideo) => {
+    const video = { id: `video-${Date.now()}`, ...newVideo };
+    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: [...(videoTestimonials || []), video] });
+    triggerStateToast('SAVED');
+  }, [videoTestimonials]);
+
+  const updateVideoTestimonial = useCallback((id, updatedVideo) => {
+    const updated = (videoTestimonials || []).map((video) =>
+      video.id === id ? { ...video, ...updatedVideo } : video
+    );
+    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: updated });
+    triggerStateToast('SAVED');
+  }, [videoTestimonials]);
+
+  const deleteVideoTestimonial = useCallback((id) => {
+    const updated = (videoTestimonials || []).filter((video) => video.id !== id);
+    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: updated });
+    triggerStateToast('SAVED');
+  }, [videoTestimonials]);
+
   const updateTestimonialsHero = useCallback((hero) => {
     dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: hero });
     triggerStateToast('SAVED');
@@ -201,6 +314,26 @@ export function SiteProvider({ children }) {
     dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: testimonials });
     triggerStateToast('SAVED');
   }, []);
+
+  const addWrittenTestimonial = useCallback((newTestimonial) => {
+    const testimonial = { id: `testi-${Date.now()}`, ...newTestimonial };
+    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: [...(writtenTestimonials || []), testimonial] });
+    triggerStateToast('SAVED');
+  }, [writtenTestimonials]);
+
+  const updateWrittenTestimonial = useCallback((id, updatedTestimonial) => {
+    const updated = (writtenTestimonials || []).map((t) =>
+      t.id === id || t.author === id ? { ...t, ...updatedTestimonial } : t
+    );
+    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
+    triggerStateToast('SAVED');
+  }, [writtenTestimonials]);
+
+  const deleteWrittenTestimonial = useCallback((id) => {
+    const updated = (writtenTestimonials || []).filter((t) => t.id !== id && t.author !== id);
+    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
+    triggerStateToast('SAVED');
+  }, [writtenTestimonials]);
 
   const updateFaqs = useCallback((faqs) => {
     dispatch({ type: 'SET_KEY', key: 'faqList', value: faqs });
@@ -219,12 +352,30 @@ export function SiteProvider({ children }) {
 
   const addLead = useCallback((leadData) => {
     const newLead = { id: Date.now(), ...leadData, date: new Date().toLocaleString() };
-    dispatch({ type: 'SET_KEY', key: 'leads', value: [newLead, ...leads] });
+    dispatch({ type: 'SET_KEY', key: 'leads', value: [newLead, ...(leads || [])] });
+    triggerStateToast('SAVED');
+  }, [leads]);
+
+  const updateLeadStatus = useCallback((id, status) => {
+    const updated = (leads || []).map((lead) => (lead.id === id ? { ...lead, status } : lead));
+    dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
+    triggerStateToast('SAVED');
+  }, [leads]);
+
+  const addLeadComment = useCallback((id, text, author) => {
+    const newComment = { id: `comment-${Date.now()}`, text, author: author || 'Admin Counselor', date: new Date().toLocaleString() };
+    const updated = (leads || []).map((lead) => {
+      if (lead.id === id) {
+        return { ...lead, comments: [...(lead.comments || []), newComment] };
+      }
+      return lead;
+    });
+    dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
     triggerStateToast('SAVED');
   }, [leads]);
 
   const deleteLead = useCallback((leadId) => {
-    dispatch({ type: 'SET_KEY', key: 'leads', value: leads.filter(l => l.id !== leadId) });
+    dispatch({ type: 'SET_KEY', key: 'leads', value: (leads || []).filter(l => l.id !== leadId) });
     triggerStateToast('SAVED');
   }, [leads]);
 
@@ -235,42 +386,44 @@ export function SiteProvider({ children }) {
   }, []);
 
   const value = useMemo(() => ({
-    heroSlides, updateHeroSlides,
+    heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
     courses, updateCourses, addCourse, updateCourse, deleteCourse,
     ezerDefinition, updateEzerDefinition,
-    supportCards, updateSupportCards,
-    transformedLives, updateTransformedLives,
+    supportCards, updateSupportCards, addSupportCard, updateSupportCard, deleteSupportCard,
+    transformedLives, updateTransformedLives, addTransformedLife, updateTransformedLife, deleteTransformedLife,
     outcomesHeader, updateOutcomesHeader,
-    seniorMentors, updateSeniorMentors,
+    seniorMentors, updateSeniorMentors, addSeniorMentor, updateSeniorMentor, deleteSeniorMentor,
     mentorsHeader, updateMentorsHeader,
-    videoTestimonials, updateVideoTestimonials,
+    videoTestimonials, updateVideoTestimonials, addVideoTestimonial, updateVideoTestimonial, deleteVideoTestimonial,
     testimonialsHero, updateTestimonialsHero,
-    writtenTestimonials, updateWrittenTestimonials,
-    faqList, updateFaqs,
+    writtenTestimonials, updateWrittenTestimonials, addWrittenTestimonial, updateWrittenTestimonial, deleteWrittenTestimonial,
+    faqList, updateFaqs, updateFaqList: updateFaqs,
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
-    leads, addLead, deleteLead,
+    leads, addLead, updateLeadStatus, addLeadComment, deleteLead,
     blogs, updateBlogs, addBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, deleteAchievement,
-    resetAllToDefaults
+    executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
+    resetAllToDefaults, resetToDefault: resetAllToDefaults
   }), [
-    heroSlides, updateHeroSlides,
+    heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
     courses, updateCourses, addCourse, updateCourse, deleteCourse,
     ezerDefinition, updateEzerDefinition,
-    supportCards, updateSupportCards,
-    transformedLives, updateTransformedLives,
+    supportCards, updateSupportCards, addSupportCard, updateSupportCard, deleteSupportCard,
+    transformedLives, updateTransformedLives, addTransformedLife, updateTransformedLife, deleteTransformedLife,
     outcomesHeader, updateOutcomesHeader,
-    seniorMentors, updateSeniorMentors,
+    seniorMentors, updateSeniorMentors, addSeniorMentor, updateSeniorMentor, deleteSeniorMentor,
     mentorsHeader, updateMentorsHeader,
-    videoTestimonials, updateVideoTestimonials,
+    videoTestimonials, updateVideoTestimonials, addVideoTestimonial, updateVideoTestimonial, deleteVideoTestimonial,
     testimonialsHero, updateTestimonialsHero,
-    writtenTestimonials, updateWrittenTestimonials,
+    writtenTestimonials, updateWrittenTestimonials, addWrittenTestimonial, updateWrittenTestimonial, deleteWrittenTestimonial,
     faqList, updateFaqs,
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
-    leads, addLead, deleteLead,
+    leads, addLead, updateLeadStatus, addLeadComment, deleteLead,
     blogs, updateBlogs, addBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, deleteAchievement,
+    executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     resetAllToDefaults
   ]);
 

@@ -46,21 +46,68 @@ export default function PlatformManager() {
         background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
         padding: '24px', boxShadow: '0 4px 14px rgba(0,0,0,0.02)'
       }}>
-        {/* Main Section Photo with Live Preview */}
-        <div style={{ marginBottom: '24px', display: 'grid', gridTemplateColumns: '180px 1fr', gap: '20px', alignItems: 'center' }}>
+        {/* Main Section Photo with Live Preview Matching Live Website Graphic */}
+        <div style={{ marginBottom: '24px', display: 'grid', gridTemplateColumns: '320px 1fr', gap: '24px', alignItems: 'center' }}>
           <div>
-            <span style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-              Current Section Photo
+            <span style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
+              Current Live Section Photo (4:3 Landscape Ratio)
             </span>
-            <div style={{
-              height: '210px', borderRadius: '12px', overflow: 'hidden', border: '2px solid #000648',
-              boxShadow: '0 4px 12px rgba(0,6,72,0.15)', background: '#000648'
-            }}>
-              <img
-                src={formData.image}
-                alt="Why EZER Featured Showcase"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            
+            {/* Live Card Graphic Preview matching EzerDefinition.jsx */}
+            <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', padding: '12px 16px' }}>
+              {/* Gold Geometric Polygon Shapes */}
+              <div 
+                style={{
+                  position: 'absolute', top: '0', left: '5%', width: '90%', height: '100%',
+                  background: 'linear-gradient(135deg, rgba(242, 183, 51, 0.22) 0%, rgba(0, 6, 72, 0.08) 100%)',
+                  clipPath: 'polygon(15% 0%, 100% 10%, 85% 100%, 0% 85%)', borderRadius: '16px', zIndex: 1
+                }} 
               />
+              <div 
+                style={{
+                  position: 'absolute', top: '8px', right: '2%', width: '80%', height: '90%',
+                  border: '2px solid #f2b733', clipPath: 'polygon(20% 0%, 100% 20%, 80% 100%, 0% 80%)',
+                  borderRadius: '16px', zIndex: 1
+                }} 
+              />
+
+              {/* Main Image Box */}
+              <div style={{
+                position: 'relative', zIndex: 2, width: '100%', aspectRatio: '4/3', borderRadius: '16px',
+                overflow: 'hidden', border: '3px solid #000648', boxShadow: '0 8px 24px rgba(0,6,72,0.18)', background: '#000648'
+              }}>
+                <img
+                  src={formData.image}
+                  alt="EZER Learner Showcase"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+
+              {/* Floating Language Badges */}
+              <div style={{
+                position: 'absolute', top: '6%', left: '0%', zIndex: 3,
+                width: '32px', height: '32px', borderRadius: '50%', background: '#000648', color: '#f2b733',
+                fontWeight: 900, fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 4px 10px rgba(0,6,72,0.25)', border: '1.5px solid #f2b733'
+              }}>
+                அ
+              </div>
+              <div style={{
+                position: 'absolute', top: '40%', right: '-2%', zIndex: 3,
+                width: '32px', height: '32px', borderRadius: '50%', background: '#000648', color: '#f2b733',
+                fontWeight: 900, fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 4px 10px rgba(0,6,72,0.25)', border: '1.5px solid #f2b733'
+              }}>
+                A
+              </div>
+              <div style={{
+                position: 'absolute', bottom: '6%', left: '0%', zIndex: 3,
+                width: '32px', height: '32px', borderRadius: '50%', background: '#000648', color: '#f2b733',
+                fontWeight: 900, fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                boxShadow: '0 4px 10px rgba(0,6,72,0.25)', border: '1.5px solid #f2b733'
+              }}>
+                अ
+              </div>
             </div>
           </div>
 
@@ -91,7 +138,7 @@ export default function PlatformManager() {
               </button>
             </div>
             <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0, lineHeight: 1.4 }}>
-              Click <strong>Choose Photo</strong> to pick from curated portraits or upload a new image from your device.
+              Click <strong>Choose Photo</strong> to select or crop your picture with live 4:3 landscape ratio matching the live website display.
             </p>
           </div>
         </div>
@@ -181,8 +228,8 @@ export default function PlatformManager() {
         currentFit={formData.fit}
         onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
         targetArea="Platform Showcase Main Photo"
-        aspectRatio="Portrait / Vertical (3:4)"
-        recommendedDimensions="600 x 800 px"
+        aspectRatio="Landscape / Rounded (4:3)"
+        recommendedDimensions="800 x 600 px"
       />
     </div>
   );
