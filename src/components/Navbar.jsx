@@ -9,6 +9,7 @@ const navLinks = [
   { name: 'Courses', path: '/courses', isDropdown: true },
   { name: 'About Us', path: '/about' },
   { name: 'Testimonials', path: '/testimonials' },
+  { name: 'Blog & Awards', path: '/blog' },
   { name: 'FAQ', path: '/faq' },
   { name: 'Contact', path: '/contact' },
 ];

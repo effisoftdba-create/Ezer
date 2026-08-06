@@ -18,6 +18,8 @@ export const STORAGE_FAQS_KEY = 'ezer_faqs:v9_cache_busted';
 export const STORAGE_CONTACT_KEY = 'ezer_contact:v9_cache_busted';
 export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v9_cache_busted';
 export const STORAGE_LEADS_KEY = 'ezer_leads:v9_cache_busted';
+export const STORAGE_BLOGS_KEY = 'ezer_blogs:v9_cache_busted';
+export const STORAGE_ACHIEVEMENTS_KEY = 'ezer_achievements:v9_cache_busted';
 
 export const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -281,6 +283,72 @@ export const defaultContactInfo = {
 
 export const defaultLeads = [];
 
+export const defaultAchievements = [
+  {
+    id: 'ach-1',
+    title: 'EdTech Excellence & Innovation Award 2025',
+    issuer: 'National Skill Development Forum',
+    year: '2025',
+    category: 'Excellence Award',
+    image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
+    description: 'Recognized as India\'s leading EdTech platform for delivering live online, native-language tech education with verified job outcomes.'
+  },
+  {
+    id: 'ach-2',
+    title: 'Top Career Transition Pioneer Award',
+    issuer: 'Tech Learning & HR Excellence Guild',
+    year: '2024',
+    category: 'Placement Award',
+    image: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=800',
+    description: 'Awarded for enabling over 10,000+ non-IT professionals and career switchers to transition into high-paying software engineering roles.'
+  },
+  {
+    id: 'ach-3',
+    title: 'Best AI-Integrated Curriculum Design',
+    issuer: 'Global EdTech Leadership Summit',
+    year: '2024',
+    category: 'Innovation Award',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800',
+    description: 'Honored for pioneering hands-on AI copilot labs in Full Stack Development, Cloud DevOps, and Data Analytics programs.'
+  },
+  {
+    id: 'ach-4',
+    title: '10,000+ Students Upskilled Milestone',
+    issuer: 'EZER Learning Solutions Foundation',
+    year: '2025',
+    category: 'Milestone Honor',
+    image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800',
+    description: 'Celebrating 10,000+ active learners across Tamil Nadu, Pan-India, and global NRI communities achieving 100% career confidence.'
+  }
+];
+
+export const defaultBlogs = [
+  {
+    id: 'blog-1',
+    title: 'How Non-IT Professionals Are Transitioning Into AI & Software Development in 2025',
+    slug: 'how-non-it-professionals-transition-into-ai',
+    category: 'Career Guide',
+    author: 'EZER Academic Board',
+    date: 'August 2, 2025',
+    summary: 'Discover the exact step-by-step roadmap used by non-tech switchers to master Full Stack AI engineering and land high-growth tech roles.',
+    image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800',
+    content: 'Transitioning into technology does not require a Computer Science degree. With live online instructor-led training in native languages, practical production projects, and 12-month placement assistance, non-IT candidates are closing skill gaps faster than ever.',
+    featured: true
+  },
+  {
+    id: 'blog-2',
+    title: 'EZER Learning Solutions Honored at EdTech Excellence Awards 2025',
+    slug: 'ezer-honored-at-edtech-excellence-awards-2025',
+    category: 'Company News',
+    author: 'EZER Editorial Team',
+    date: 'July 28, 2025',
+    summary: 'EZER wins national recognition for native language IT education, outcome-driven mentorship, and outstanding placement metrics.',
+    image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
+    content: 'We are thrilled to announce that EZER Learning Solutions has been awarded the EdTech Excellence & Innovation Award for 2025. This achievement reflects our commitment to democratizing tech education.',
+    featured: true
+  }
+];
+
 export function getStored(key, fallback) {
   try {
     const item = localStorage.getItem(key);
@@ -318,6 +386,8 @@ export function getInitialState() {
     contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo),
     popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, prodConfig),
     leads: getStored(STORAGE_LEADS_KEY, defaultLeads),
+    blogs: getStored(STORAGE_BLOGS_KEY, defaultBlogs),
+    achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements),
   };
 }
 

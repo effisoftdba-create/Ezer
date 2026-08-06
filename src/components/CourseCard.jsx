@@ -7,10 +7,11 @@ export default function CourseCard({ course, onOpenDemoModal }) {
   const displayTools = course.tools ? course.tools.slice(0, 3) : ['AWS', 'Docker', 'Kubernetes'];
   const languagesDisplay = course.languages || 'Tamil, English & Hindi';
   const shortDesc = course.subtitle || course.description || 'Learn from active corporate engineers with real hands-on production labs & job referrals.';
+  const badgeText = course.badgeTag || course.badge || 'Live Cohort';
 
   return (
     <div 
-      className="ezer-uiverse-card"
+      className="ezer-uiverse-card card_box"
       style={{
         display: 'flex', 
         flexDirection: 'column',
@@ -18,17 +19,10 @@ export default function CourseCard({ course, onOpenDemoModal }) {
         minHeight: '440px',
         position: 'relative',
       }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = '0 14px 32px rgba(0, 6, 72, 0.14)';
-        e.currentTarget.style.borderColor = '#000648';
-        e.currentTarget.style.transform = 'translateY(-4px)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = '0 4px 18px rgba(0, 6, 72, 0.06)';
-        e.currentTarget.style.borderColor = '#e2e8f0';
-        e.currentTarget.style.transform = 'translateY(0)';
-      }}
     >
+      {/* Dynamic Ribbon Tag from Admin Panel */}
+      <span className="card-ribbon-tag" data-badge={badgeText} />
+
       {/* Clear Image Banner Header */}
       <div style={{ position: 'relative', height: '175px', overflow: 'hidden', background: '#ffffff' }}>
         <img 
@@ -42,18 +36,6 @@ export default function CourseCard({ course, onOpenDemoModal }) {
             opacity: 1
           }}
         />
-
-        {/* Category / Bestseller Badge */}
-        <span style={{
-          position: 'absolute', top: '12px', left: '12px',
-          background: '#000648', color: '#f2b733',
-          fontSize: '0.68rem', fontWeight: 900, padding: '4px 12px',
-          borderRadius: '50px', textTransform: 'uppercase', letterSpacing: '0.06em',
-          border: '1px solid #f2b733',
-          boxShadow: '0 2px 8px rgba(0, 6, 72, 0.3)'
-        }}>
-          {course.badge || 'Live Cohort'}
-        </span>
       </div>
 
       {/* White Card Body with Rich Details */}

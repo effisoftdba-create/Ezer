@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticated, logoutAdmin } from '../utils/authService';
 import { useSiteData } from '../context/SiteContext';
@@ -15,6 +15,7 @@ import FaqManager from '../components/FaqManager';
 import ContactInfoManager from '../components/ContactInfoManager';
 import PopupManager from '../components/PopupManager';
 import LeadsManager from '../components/LeadsManager';
+import BlogManager from '../components/BlogManager';
 import AdminHeaderNav from '../components/AdminHeaderNav';
 import AdminSidebarNav from '../components/AdminSidebarNav';
 
@@ -31,11 +32,13 @@ import {
   HiOutlineQuestionMarkCircle,
   HiOutlinePhone,
   HiOutlineTemplate,
-  HiOutlineMailOpen
+  HiOutlineMailOpen,
+  HiOutlineNewspaper
 } from 'react-icons/hi';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('leads');
+  const mainRef = useRef(null);
 
   const navigate = useNavigate();
   const {
@@ -49,6 +52,8 @@ export default function AdminDashboard() {
     faqList,
     popupConfig,
     leads,
+    blogs,
+    achievements,
     resetToDefault
   } = useSiteData();
 
@@ -60,6 +65,13 @@ export default function AdminDashboard() {
       return () => clearTimeout(timer);
     }
   }, [isAuth, navigate]);
+
+  // Reset main content scroll position on tab click/change
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [activeTab]);
 
   if (!isAuth) {
     return (
@@ -86,43 +98,47 @@ export default function AdminDashboard() {
     }
   };
 
-  const totalFaqs = faqList.reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
+  const totalFaqs = (faqList || []).reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
 
   const tabs = [
     { id: 'leads', label: 'Lead Submissions', icon: HiOutlineMailOpen, count: (leads || []).length },
-    { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: heroSlides.length },
-    { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: courses.length },
+    { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: (heroSlides || []).length },
+    { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSparkles },
-    { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: supportCards.length },
-    { id: 'outcomes', label: 'Graduate Outcomes', icon: HiOutlineUserGroup, count: transformedLives.length },
+    { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
+    { id: 'blog', label: 'Blog & Achievements', icon: HiOutlineNewspaper, count: ((blogs || []).length + (achievements || []).length) },
+    { id: 'outcomes', label: 'Graduate Outcomes', icon: HiOutlineUserGroup, count: (transformedLives || []).length },
     { id: 'mentors', label: 'Senior Mentors', icon: HiOutlineUser, count: (seniorMentors || []).length },
-    { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: videoTestimonials.length },
-    { id: 'testimonials', label: 'Testimonials Page', icon: HiOutlineChatAlt, count: writtenTestimonials.length },
+    { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: (videoTestimonials || []).length },
+    { id: 'testimonials', label: 'Testimonials Page', icon: HiOutlineChatAlt, count: (writtenTestimonials || []).length },
     { id: 'popup', label: 'Lead Popup Modal', icon: HiOutlineTemplate },
     { id: 'faq', label: 'FAQ Manager', icon: HiOutlineQuestionMarkCircle, count: totalFaqs },
     { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone }
   ];
 
   return (
-    <div style={{ minHeight: '100vh', background: '#f4f6f9', display: 'flex', flexDirection: 'column' }}>
-      <AdminHeaderNav
-        handleReset={handleReset}
-        handleLogout={handleLogout}
-      />
+    <div style={{ height: '100vh', maxHeight: '100vh', background: '#f4f6f9', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div style={{ flexShrink: 0 }}>
+        <AdminHeaderNav
+          handleReset={handleReset}
+          handleLogout={handleLogout}
+        />
+      </div>
 
-      <div style={{ display: 'flex', flex: 1, padding: '28px', gap: '28px', maxWidth: '1480px', width: '100%', margin: '0 auto' }}>
+      <div style={{ display: 'flex', flex: 1, height: 'calc(100vh - 72px)', overflow: 'hidden', padding: '24px', gap: '24px', maxWidth: '1540px', width: '100%', margin: '0 auto' }}>
         <AdminSidebarNav
           tabs={tabs}
           activeTab={activeTab}
           setActiveTab={setActiveTab}
         />
 
-        <main key={activeTab} className="uipro-fade-in" style={{ flex: 1, background: '#ffffff', borderRadius: '16px', padding: '32px', boxShadow: '0 8px 30px rgba(0,0,0,0.03)', border: '1.5px solid #e2e8f0' }}>
+        <main ref={mainRef} key={activeTab} className="uipro-fade-in" style={{ flex: 1, height: '100%', overflowY: 'auto', background: '#ffffff', borderRadius: '16px', padding: '32px', boxShadow: '0 8px 30px rgba(0,0,0,0.03)', border: '1.5px solid #e2e8f0' }}>
           {activeTab === 'leads' && <LeadsManager />}
           {activeTab === 'hero' && <HeroManager />}
           {activeTab === 'courses' && <CourseManager />}
           {activeTab === 'platform' && <PlatformManager />}
           {activeTab === 'support' && <SupportCardsManager />}
+          {activeTab === 'blog' && <BlogManager />}
           {activeTab === 'outcomes' && <GraduateOutcomesManager />}
           {activeTab === 'mentors' && <SeniorMentorsManager />}
           {activeTab === 'videos' && <VideoReviewsManager />}

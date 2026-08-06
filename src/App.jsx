@@ -18,6 +18,7 @@ const FAQPage = lazy(() => import('./pages/FAQ'));
 const Contact = lazy(() => import('./pages/Contact'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const StudentAdmissionPolicy = lazy(() => import('./pages/StudentAdmissionPolicy'));
+const Blog = lazy(() => import('./pages/Blog'));
 
 const AdminLogin = lazy(() => import('./Admin_Control/pages/AdminLogin'));
 const AdminDashboard = lazy(() => import('./Admin_Control/pages/AdminDashboard'));
@@ -143,6 +144,7 @@ export default function App() {
                 <Route path="/courses/:slug" element={<CourseDetail onOpenDemoModal={handleOpenDemoModal} />} />
                 <Route path="/testimonials" element={<TestimonialsPage onOpenDemoModal={handleOpenDemoModal} />} />
                 <Route path="/faq" element={<FAQPage onOpenDemoModal={handleOpenDemoModal} />} />
+                <Route path="/blog" element={<Blog onOpenDemoModal={handleOpenDemoModal} />} />
                 <Route path="/contact" element={<Contact onOpenDemoModal={handleOpenDemoModal} />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy onOpenDemoModal={handleOpenDemoModal} />} />
                 <Route path="/student-admission-policy" element={<StudentAdmissionPolicy onOpenDemoModal={handleOpenDemoModal} />} />

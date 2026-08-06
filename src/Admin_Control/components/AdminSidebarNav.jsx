@@ -7,7 +7,7 @@ const CATEGORIES = [
   },
   {
     title: 'HOMEPAGE & BRANDING',
-    ids: ['hero', 'platform', 'support']
+    ids: ['hero', 'platform', 'support', 'blog']
   },
   {
     title: 'ACADEMY CATALOG',
@@ -25,7 +25,7 @@ const CATEGORIES = [
 
 export default function AdminSidebarNav({ tabs, activeTab, setActiveTab }) {
   return (
-    <aside style={{ width: '280px', flexShrink: 0 }}>
+    <aside style={{ width: '280px', flexShrink: 0, height: '100%', overflowY: 'auto' }}>
       <div
         style={{
           background: '#ffffff',
@@ -33,8 +33,8 @@ export default function AdminSidebarNav({ tabs, activeTab, setActiveTab }) {
           borderRadius: '16px',
           padding: '16px 14px',
           boxShadow: '0 8px 24px rgba(0, 0, 0, 0.03)',
-          position: 'sticky',
-          top: '90px'
+          maxHeight: '100%',
+          overflowY: 'auto'
         }}
       >
         {CATEGORIES.map((cat, catIdx) => {

@@ -422,3 +422,65 @@ img { max-width: 100%; display: block; }
   transform: translateY(-2px) !important;
   box-shadow: 0 8px 24px rgba(0, 6, 72, 0.25) !important;
 }
+
+/* User Card Box & Dynamic Ribbon Badge Styling */
+.card_box {
+  width: 100%;
+  border-radius: 20px;
+  background: linear-gradient(170deg, rgba(255, 255, 255, 1) 0%, rgb(248, 250, 252) 100%);
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: all .3s ease;
+  overflow: hidden;
+}
+
+.card_box:hover {
+  transform: scale(0.98);
+  box-shadow: 0 20px 40px rgba(0, 6, 72, 0.18);
+}
+
+.card_box span.card-ribbon-tag {
+  position: absolute;
+  overflow: hidden;
+  width: 150px;
+  height: 150px;
+  top: -10px;
+  left: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.card_box span.card-ribbon-tag::before {
+  content: attr(data-badge);
+  position: absolute;
+  width: 150%;
+  height: 34px;
+  background-image: linear-gradient(45deg, #000648 0%, #115DFC 51%, #f2b733 100%);
+  transform: rotate(-45deg) translateY(-18px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.23);
+}
+
+.card_box span.card-ribbon-tag::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  bottom: 0;
+  left: 0;
+  height: 10px;
+  z-index: -1;
+  box-shadow: 140px -140px #000648;
+  background-image: linear-gradient(45deg, #000648 0%, #115DFC 51%, #f2b733 100%);
+}
+

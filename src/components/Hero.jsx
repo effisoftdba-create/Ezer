@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { HiArrowRight, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import { HiArrowRight, HiChevronLeft, HiChevronRight, HiSparkles } from 'react-icons/hi';
 import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import HeroRightFrame from './hero/HeroRightFrame';
@@ -191,22 +191,39 @@ export default function Hero({ onOpenDemoModal }) {
                   type="button"
                   onClick={onOpenDemoModal}
                   style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#000638',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    padding: '12px 24px',
+                    borderRadius: '50px',
+                    background: 'linear-gradient(135deg, #000648 0%, #00127a 100%)',
+                    color: '#f2b733',
                     fontWeight: 800,
-                    fontSize: '0.85rem',
-                    letterSpacing: '0.06em',
+                    fontSize: '0.86rem',
+                    letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     cursor: 'pointer',
-                    padding: '8px 12px',
-                    borderBottom: '2px solid #f2b733',
-                    transition: 'opacity 0.2s ease',
+                    border: '1.5px solid #f2b733',
+                    boxShadow: '0 4px 18px rgba(0, 6, 72, 0.25)',
+                    transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.opacity = '0.7'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.opacity = '1'; }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px) scale(1.03)';
+                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(242, 183, 51, 0.4)';
+                    e.currentTarget.style.background = 'linear-gradient(135deg, #f2b733 0%, #ffd066 100%)';
+                    e.currentTarget.style.color = '#000648';
+                    e.currentTarget.style.borderColor = '#000648';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                    e.currentTarget.style.boxShadow = '0 4px 18px rgba(0, 6, 72, 0.25)';
+                    e.currentTarget.style.background = 'linear-gradient(135deg, #000648 0%, #00127a 100%)';
+                    e.currentTarget.style.color = '#f2b733';
+                    e.currentTarget.style.borderColor = '#f2b733';
+                  }}
                 >
-                  Book Free Demo
+                  <HiSparkles size={16} />
+                  <span>Book Free Demo</span>
                 </button>
               </div>
 

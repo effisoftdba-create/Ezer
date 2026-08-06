@@ -11,16 +11,24 @@ const STATUS_COLORS = {
 
 export default function LeadsTable({ filteredLeads, handleStatusChange, setSelectedLeadId, handleDeleteLeadClick }) {
   return (
-    <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden' }}>
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.84rem' }}>
+    <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 4px 14px rgba(0,0,0,0.02)' }}>
+      <div 
+        className="leads-table-scroll"
+        style={{ 
+          maxHeight: '560px', 
+          overflowY: 'auto', 
+          overflowX: 'auto', 
+          position: 'relative' 
+        }}
+      >
+        <table style={{ width: '100%', minWidth: '850px', borderCollapse: 'separate', borderSpacing: 0, textAlign: 'left', fontSize: '0.84rem' }}>
           <thead>
-            <tr style={{ background: '#f8fafc', borderBottom: '1.5px solid #e2e8f0', color: '#475569', fontWeight: 800, fontSize: '0.75rem', textTransform: 'uppercase' }}>
-              <th style={{ padding: '12px 16px' }}>Student Info</th>
-              <th style={{ padding: '12px 16px' }}>Target Course / Custom Goal</th>
-              <th style={{ padding: '12px 16px' }}>Contact & Location</th>
-              <th style={{ padding: '12px 16px' }}>Status</th>
-              <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
+            <tr style={{ background: '#f8fafc', color: '#475569', fontWeight: 800, fontSize: '0.75rem', textTransform: 'uppercase', position: 'sticky', top: 0, zIndex: 15, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
+              <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Student Info</th>
+              <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Target Course / Custom Goal</th>
+              <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Contact & Location</th>
+              <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Status</th>
+              <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0', textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>

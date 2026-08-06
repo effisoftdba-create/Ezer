@@ -17,6 +17,8 @@ import {
   STORAGE_CONTACT_KEY,
   STORAGE_POPUP_CONFIG_KEY,
   STORAGE_LEADS_KEY,
+  STORAGE_BLOGS_KEY,
+  STORAGE_ACHIEVEMENTS_KEY,
   getInitialState,
   siteReducer,
   safeSetStorage
@@ -42,7 +44,9 @@ export function SiteProvider({ children }) {
     faqList,
     contactInfo,
     popupConfig,
-    leads
+    leads,
+    blogs,
+    achievements
   } = state;
 
   // Check for mobile sync token in URL
@@ -90,8 +94,42 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_CONTACT_KEY, contactInfo); }, [contactInfo]);
   useEffect(() => { safeSetStorage(STORAGE_POPUP_CONFIG_KEY, popupConfig); }, [popupConfig]);
   useEffect(() => { safeSetStorage(STORAGE_LEADS_KEY, leads); }, [leads]);
+  useEffect(() => { safeSetStorage(STORAGE_BLOGS_KEY, blogs); }, [blogs]);
+  useEffect(() => { safeSetStorage(STORAGE_ACHIEVEMENTS_KEY, achievements); }, [achievements]);
 
   // Action Dispatchers
+  const updateBlogs = useCallback((newBlogs) => {
+    dispatch({ type: 'SET_KEY', key: 'blogs', value: newBlogs });
+    triggerStateToast('SAVED');
+  }, []);
+
+  const addBlog = useCallback((blogData) => {
+    const newBlog = { id: `blog-${Date.now()}`, ...blogData };
+    dispatch({ type: 'SET_KEY', key: 'blogs', value: [newBlog, ...(blogs || [])] });
+    triggerStateToast('SAVED');
+  }, [blogs]);
+
+  const deleteBlog = useCallback((blogId) => {
+    dispatch({ type: 'SET_KEY', key: 'blogs', value: (blogs || []).filter(b => b.id !== blogId) });
+    triggerStateToast('SAVED');
+  }, [blogs]);
+
+  const updateAchievements = useCallback((newAch) => {
+    dispatch({ type: 'SET_KEY', key: 'achievements', value: newAch });
+    triggerStateToast('SAVED');
+  }, []);
+
+  const addAchievement = useCallback((achData) => {
+    const newAch = { id: `ach-${Date.now()}`, ...achData };
+    dispatch({ type: 'SET_KEY', key: 'achievements', value: [newAch, ...(achievements || [])] });
+    triggerStateToast('SAVED');
+  }, [achievements]);
+
+  const deleteAchievement = useCallback((achId) => {
+    dispatch({ type: 'SET_KEY', key: 'achievements', value: (achievements || []).filter(a => a.id !== achId) });
+    triggerStateToast('SAVED');
+  }, [achievements]);
+
   const updateHeroSlides = useCallback((slides) => {
     dispatch({ type: 'SET_KEY', key: 'heroSlides', value: slides });
     triggerStateToast('SAVED');
@@ -212,6 +250,8 @@ export function SiteProvider({ children }) {
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
     leads, addLead, deleteLead,
+    blogs, updateBlogs, addBlog, deleteBlog,
+    achievements, updateAchievements, addAchievement, deleteAchievement,
     resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides,
@@ -229,6 +269,8 @@ export function SiteProvider({ children }) {
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
     leads, addLead, deleteLead,
+    blogs, updateBlogs, addBlog, deleteBlog,
+    achievements, updateAchievements, addAchievement, deleteAchievement,
     resetAllToDefaults
   ]);
 
