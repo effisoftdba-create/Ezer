@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { HiBadgeCheck } from 'react-icons/hi';
@@ -36,62 +36,34 @@ export default function ExecutiveLeadership() {
         }
       ];
 
-  const [hoveredId, setHoveredId] = useState(null);
-
   return (
     <section
       style={{
         position: 'relative',
         background: 'radial-gradient(circle at 50% 0%, #1e1b4b 0%, #000648 60%, #030712 100%)',
         color: '#ffffff',
-        padding: '80px 20px',
+        padding: '72px 20px',
         borderTop: '2px solid rgba(242, 183, 51, 0.3)',
         borderBottom: '2px solid rgba(242, 183, 51, 0.3)',
         overflow: 'hidden'
       }}
     >
       <style>{`
-        .exec-card-wrapper {
+        .exec-card {
           width: 100%;
           max-width: 360px;
-          height: 480px;
-          border-radius: 28px;
+          height: 440px;
+          background: #ffffff;
+          border-radius: 32px;
+          padding: 3px;
           position: relative;
-          overflow: hidden;
-          box-shadow: 0 16px 40px rgba(0, 6, 72, 0.35);
-          border: 2.5px solid #000648;
-          transition: border-color 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+          box-shadow: rgba(0, 6, 72, 0.4) 0px 30px 40px -20px;
+          transition: all 0.5s ease-in-out;
+          border: 2px solid #000648;
           margin: 0 auto;
-          background: #000648;
         }
 
-        .exec-card-wrapper:hover {
-          border-color: #f2b733;
-          transform: translateY(-8px);
-          box-shadow: 0 24px 50px rgba(242, 183, 51, 0.22);
-        }
-
-        .exec-card-wrapper .portrait-photo-container {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          z-index: 1;
-        }
-
-        .exec-card-wrapper .portrait-photo-container img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center top;
-          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .exec-card-wrapper:hover .portrait-photo-container img {
-          transform: scale(1.06);
-        }
-
-        .exec-card-wrapper .role-badge-top {
+        .exec-card .role-badge-top {
           position: absolute;
           right: 1.2rem;
           top: 1.2rem;
@@ -100,82 +72,155 @@ export default function ExecutiveLeadership() {
           color: #f2b733;
           font-weight: 900;
           font-size: 0.75rem;
-          padding: 6px 16px;
+          padding: 5px 14px;
           border-radius: 50px;
           z-index: 10;
           display: flex;
           align-items: center;
           gap: 6px;
-          box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
 
-        /* Bottom Drawer Card Bar */
-        .exec-card-wrapper .bottom-info-drawer {
+        .exec-card .profile-pic {
           position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          z-index: 5;
-          background: linear-gradient(180deg, rgba(0, 6, 72, 0.2) 0%, rgba(0, 6, 72, 0.92) 30%, #000648 100%);
-          backdrop-filter: blur(8px);
-          border-top: 2.5px solid #f2b733;
-          padding: 24px 22px;
-          transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+          width: calc(100% - 6px);
+          height: calc(100% - 6px);
+          top: 3px;
+          left: 3px;
+          border-radius: 29px;
+          z-index: 1;
+          border: 0px solid #f2b733;
+          overflow: hidden;
+          transition: all 0.5s ease-in-out 0.2s, z-index 0.5s ease-in-out 0.2s;
         }
 
-        .exec-card-wrapper:hover .bottom-info-drawer {
-          background: linear-gradient(180deg, rgba(0, 6, 72, 0.88) 0%, #000648 100%);
+        .exec-card .profile-pic img {
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+          object-position: center top;
+          transition: all 0.5s ease-in-out 0s;
         }
 
-        .exec-card-wrapper .bottom-info-drawer .name-title {
-          font-size: 1.38rem;
-          font-weight: 900;
-          color: #ffffff;
-          line-height: 1.25;
-          margin: 0 0 4px 0;
+        .exec-card .bottom {
+          position: absolute;
+          bottom: 3px;
+          left: 3px;
+          right: 3px;
+          background: #000648;
+          top: 70%;
+          border-radius: 29px;
+          z-index: 2;
+          border-top: 2px solid #f2b733;
+          box-shadow: rgba(0, 6, 72, 0.4) 0px 5px 15px 0px inset;
+          overflow: hidden;
+          transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+          padding: 16px 20px;
+        }
+
+        .exec-card .bottom .content {
+          position: absolute;
+          bottom: 1.2rem;
+          left: 1.5rem;
+          right: 1.5rem;
+          height: auto;
+        }
+
+        .exec-card .bottom .content .name {
           display: block;
-          letter-spacing: -0.01em;
+          font-size: 1.35rem;
+          color: #ffffff;
+          font-weight: 900;
+          line-height: 1.2;
           text-shadow: 0 2px 8px rgba(0,0,0,0.5);
         }
 
-        .exec-card-wrapper .bottom-info-drawer .role-name-tag {
-          font-size: 0.82rem;
-          font-weight: 900;
-          color: #f2b733;
-          text-transform: uppercase;
-          letter-spacing: 0.07em;
+        .exec-card .bottom .content .role-title {
           display: block;
-          margin-bottom: 8px;
+          font-size: 0.8rem;
+          color: #f2b733;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          margin-top: 4px;
         }
 
-        .exec-card-wrapper .bottom-info-drawer .bio-description {
+        .exec-card .bottom .content .about-me {
+          display: block;
           font-size: 0.88rem;
-          color: #e2e8f0;
-          line-height: 1.55;
-          margin: 0;
-          max-height: 0;
+          color: #cbd5e1;
+          margin-top: 0.8rem;
+          line-height: 1.5;
           opacity: 0;
-          overflow: hidden;
-          transition: max-height 0.45s ease, opacity 0.4s ease, margin-top 0.4s ease;
+          transform: translateY(15px);
+          transition: all 0.4s ease 0.1s;
         }
 
-        .exec-card-wrapper:hover .bottom-info-drawer .bio-description,
-        .exec-card-wrapper.is-open .bottom-info-drawer .bio-description {
-          max-height: 120px;
-          opacity: 1;
-          margin-top: 10px;
-        }
-
-        .exec-card-wrapper .bottom-info-drawer .directorate-badge {
-          margin-top: 12px;
-          padding-top: 10px;
-          border-top: 1px solid rgba(242, 183, 51, 0.3);
+        .exec-card .bottom .bottom-bottom {
+          margin-top: 1rem;
           display: flex;
           align-items: center;
-          gap: 6px;
-          font-size: 0.76rem;
-          color: #f2b733;
+          justify-content: space-between;
+          border-top: 1px solid rgba(242, 183, 51, 0.3);
+          padding-top: 10px;
+          opacity: 0;
+          transform: translateY(15px);
+          transition: all 0.4s ease 0.2s;
+        }
+
+        .exec-card .bottom .bottom-bottom .button {
+          background: #f2b733;
+          color: #000648;
+          border: none;
+          border-radius: 20px;
+          font-size: 0.72rem;
           font-weight: 900;
+          padding: 0.4rem 0.8rem;
+          box-shadow: rgba(0, 6, 72, 0.25) 0px 5px 5px 0px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .exec-card .bottom .bottom-bottom .button:hover {
+          background: #ffffff;
+          color: #000648;
+        }
+
+        /* Hover animation effects */
+        .exec-card:hover {
+          border-top-left-radius: 55px;
+          border-color: #f2b733;
+          box-shadow: 0 25px 50px rgba(242, 183, 51, 0.22);
+        }
+
+        .exec-card:hover .bottom {
+          top: 22%;
+          border-radius: 80px 29px 29px 29px;
+          transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.2s;
+        }
+
+        .exec-card:hover .bottom .content .about-me,
+        .exec-card:hover .bottom .bottom-bottom {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .exec-card:hover .profile-pic {
+          width: 90px;
+          height: 90px;
+          aspect-ratio: 1;
+          top: 10px;
+          left: 10px;
+          border-radius: 50%;
+          z-index: 3;
+          border: 4px solid #f2b733;
+          box-shadow: rgba(0, 6, 72, 0.4) 0px 5px 15px 0px;
+          transition: all 0.5s ease-in-out, z-index 0.5s ease-in-out 0.1s;
+        }
+
+        .exec-card:hover .profile-pic:hover {
+          transform: scale(1.15);
         }
       `}</style>
 
@@ -188,7 +233,7 @@ export default function ExecutiveLeadership() {
       <div className="container" style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
         
         {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <span
             style={{
               display: 'inline-flex',
@@ -235,47 +280,43 @@ export default function ExecutiveLeadership() {
           </p>
         </div>
 
-        {/* 3 Executive Leader Cards Grid with Full Cover Photo & Highlighted Name & Role */}
+        {/* 3 Executive Leader Cards Grid with User CSS Snippet Effect & EZER Color Palette */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '32px', width: '100%' }}>
-          {leaders.map((leader, idx) => {
-            const cardId = leader.id || leader.roleTag || `exec-${idx}`;
-            const isHovered = hoveredId === cardId;
+          {leaders.map((leader, idx) => (
+            <motion.div
+              key={leader.id || leader.roleTag || idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.12 }}
+              className="exec-card"
+            >
+              {/* Role Badge Top */}
+              <span className="role-badge-top">
+                <HiBadgeCheck size={15} /> {leader.roleTag || 'DIRECTOR'}
+              </span>
 
-            return (
-              <motion.div
-                key={cardId}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.12 }}
-                className={`exec-card-wrapper ${isHovered ? 'is-open' : ''}`}
-                onMouseEnter={() => setHoveredId(cardId)}
-                onMouseLeave={() => setHoveredId(null)}
-              >
-                {/* Top Role Badge */}
-                <span className="role-badge-top">
-                  <HiBadgeCheck size={15} /> {leader.roleTag || 'DIRECTOR'}
-                </span>
+              {/* Profile Cover Photo */}
+              <div className="profile-pic">
+                <img src={resolveImageSrc(leader.image)} alt={leader.name} />
+              </div>
 
-                {/* Full Portrait Cover Photo */}
-                <div className="portrait-photo-container">
-                  <img src={resolveImageSrc(leader.image)} alt={leader.name} />
-                </div>
+              {/* Bottom Morphing Content Drawer */}
+              <div className="bottom">
+                <div className="content">
+                  <span className="name">{leader.name}</span>
+                  <span className="role-title">{leader.roleName || leader.roleTag}</span>
+                  <p className="about-me">{leader.bio}</p>
 
-                {/* Always-Visible Bottom Info Drawer */}
-                <div className="bottom-info-drawer">
-                  <span className="name-title">{leader.name}</span>
-                  <span className="role-name-tag">{leader.roleName || leader.roleTag}</span>
-
-                  <p className="bio-description">{leader.bio}</p>
-
-                  <div className="directorate-badge">
-                    <HiBadgeCheck size={15} /> EZER Corporate Directorate
+                  <div className="bottom-bottom">
+                    <button type="button" className="button">
+                      <HiBadgeCheck size={14} /> EZER Corporate Directorate
+                    </button>
                   </div>
                 </div>
-              </motion.div>
-            );
-          })}
+              </div>
+            </motion.div>
+          ))}
         </div>
 
       </div>
