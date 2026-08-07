@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { HiBadgeCheck } from 'react-icons/hi';
 import { resolveImageSrc } from '../utils/imageUtils';
@@ -35,17 +36,11 @@ export default function ExecutiveLeadership() {
         }
       ];
 
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
+  const [activeCardId, setActiveCardId] = useState(null);
 
-  // Automatic scrolling / cycling timer (every 3.2 seconds)
-  useEffect(() => {
-    if (isPaused || !leaders.length) return;
-    const interval = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % leaders.length);
-    }, 3200);
-    return () => clearInterval(interval);
-  }, [isPaused, leaders.length]);
+  const toggleCard = (id) => {
+    setActiveCardId((prev) => (prev === id ? null : id));
+  };
 
   return (
     <section
@@ -62,13 +57,13 @@ export default function ExecutiveLeadership() {
       <style>{`
         .exec-interactive-card {
           width: 100%;
-          max-width: 350px;
-          height: 420px;
+          max-width: 360px;
+          height: 430px;
           background: #ffffff;
           border-radius: 32px;
           padding: 3px;
           position: relative;
-          box-shadow: 0 20px 40px rgba(0, 6, 72, 0.3);
+          box-shadow: 0 16px 36px rgba(0, 6, 72, 0.25);
           transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
           border: 2px solid #000648;
           margin: 0 auto;
@@ -103,7 +98,7 @@ export default function ExecutiveLeadership() {
           z-index: 1;
           border: 0px solid #f2b733;
           overflow: hidden;
-          transition: all 0.5s ease-in-out 0.2s, z-index 0.5s ease-in-out 0.2s;
+          transition: all 0.5s ease-in-out 0.15s, z-index 0.5s ease-in-out 0.15s;
         }
 
         .exec-interactive-card .profile-pic img {
@@ -180,31 +175,31 @@ export default function ExecutiveLeadership() {
           transition: all 0.4s ease 0.2s;
         }
 
-        /* Active / Auto-Cycled & Hover open state */
+        /* Hover & Tap Open State */
         .exec-interactive-card:hover,
-        .exec-interactive-card.is-active {
+        .exec-interactive-card.is-open {
           border-top-left-radius: 50px;
           border-color: #f2b733;
-          box-shadow: 0 25px 50px rgba(242, 183, 51, 0.25);
+          box-shadow: 0 25px 50px rgba(242, 183, 51, 0.22);
         }
 
         .exec-interactive-card:hover .bottom-drawer,
-        .exec-interactive-card.is-active .bottom-drawer {
+        .exec-interactive-card.is-open .bottom-drawer {
           top: 24%;
           border-radius: 60px 29px 29px 29px;
           transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.15s;
         }
 
         .exec-interactive-card:hover .bottom-drawer .bio-text,
-        .exec-interactive-card.is-active .bottom-drawer .bio-text,
+        .exec-interactive-card.is-open .bottom-drawer .bio-text,
         .exec-interactive-card:hover .bottom-drawer .action-bar,
-        .exec-interactive-card.is-active .bottom-drawer .action-bar {
+        .exec-interactive-card.is-open .bottom-drawer .action-bar {
           opacity: 1;
           transform: translateY(0);
         }
 
         .exec-interactive-card:hover .profile-pic,
-        .exec-interactive-card.is-active .profile-pic {
+        .exec-interactive-card.is-open .profile-pic {
           width: 90px;
           height: 90px;
           aspect-ratio: 1;
@@ -274,25 +269,21 @@ export default function ExecutiveLeadership() {
           </p>
         </div>
 
-        {/* Automatic Cycling Interactive Cards Grid */}
+        {/* Responsive Cards Grid with Framer Motion Staggered Entry */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '32px', width: '100%' }}>
           {leaders.map((leader, idx) => {
-            const isActive = idx === activeIndex;
+            const cardId = leader.id || leader.roleTag || `exec-${idx}`;
+            const isOpen = activeCardId === cardId;
 
             return (
-              <div
-                key={leader.id || leader.roleTag || idx}
-                className={`exec-interactive-card ${isActive ? 'is-active' : ''}`}
-                onMouseEnter={() => {
-                  setIsPaused(true);
-                  setActiveIndex(idx);
-                }}
-                onMouseLeave={() => {
-                  setIsPaused(false);
-                }}
-                onClick={() => {
-                  setActiveIndex(idx);
-                }}
+              <motion.div
+                key={cardId}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.12 }}
+                className={`exec-interactive-card ${isOpen ? 'is-open' : ''}`}
+                onClick={() => toggleCard(cardId)}
               >
                 <span className="role-badge-top">
                   <HiBadgeCheck size={14} /> {leader.roleTag || 'DIRECTOR'}
@@ -315,30 +306,9 @@ export default function ExecutiveLeadership() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
-
-        {/* Auto Carousel Indicator Dots */}
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '40px' }}>
-          {leaders.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              aria-label={`Go to slide ${idx + 1}`}
-              onClick={() => setActiveIndex(idx)}
-              style={{
-                width: idx === activeIndex ? '32px' : '10px',
-                height: '10px',
-                borderRadius: '10px',
-                background: idx === activeIndex ? '#f2b733' : 'rgba(255,255,255,0.3)',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.35s ease'
-              }}
-            />
-          ))}
         </div>
 
       </div>
