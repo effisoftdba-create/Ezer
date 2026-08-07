@@ -8,21 +8,41 @@ import UIStateDisplay, { STATE_TYPES } from './components/UIStateDisplay';
 import UIToastNotifier from './components/UIToastNotifier';
 import EzerBrandPreloader from './components/EzerBrandPreloader';
 
-// Dynamic Code Splitting with React.lazy
-const Home = lazy(() => import('./pages/Home'));
-const About = lazy(() => import('./pages/About'));
-const Courses = lazy(() => import('./pages/Courses'));
-const CourseDetail = lazy(() => import('./pages/CourseDetail'));
-const TestimonialsPage = lazy(() => import('./pages/Testimonials'));
-const FAQPage = lazy(() => import('./pages/FAQ'));
-const Contact = lazy(() => import('./pages/Contact'));
-const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
-const StudentAdmissionPolicy = lazy(() => import('./pages/StudentAdmissionPolicy'));
-const Blog = lazy(() => import('./pages/Blog'));
-const BlogDetail = lazy(() => import('./pages/BlogDetail'));
+// Helper to handle dynamic import chunk 404 errors after new deployments
+function lazyRetry(componentImport) {
+  return lazy(async () => {
+    const pageHasBeenRefreshed = JSON.parse(
+      window.sessionStorage.getItem('page-has-been-refreshed') || 'false'
+    );
+    try {
+      const component = await componentImport();
+      window.sessionStorage.setItem('page-has-been-refreshed', 'false');
+      return component;
+    } catch (error) {
+      if (!pageHasBeenRefreshed) {
+        window.sessionStorage.setItem('page-has-been-refreshed', 'true');
+        window.location.reload();
+      }
+      throw error;
+    }
+  });
+}
 
-const AdminLogin = lazy(() => import('./Admin_Control/pages/AdminLogin'));
-const AdminDashboard = lazy(() => import('./Admin_Control/pages/AdminDashboard'));
+// Dynamic Code Splitting with Auto-Retry
+const Home = lazyRetry(() => import('./pages/Home'));
+const About = lazyRetry(() => import('./pages/About'));
+const Courses = lazyRetry(() => import('./pages/Courses'));
+const CourseDetail = lazyRetry(() => import('./pages/CourseDetail'));
+const TestimonialsPage = lazyRetry(() => import('./pages/Testimonials'));
+const FAQPage = lazyRetry(() => import('./pages/FAQ'));
+const Contact = lazyRetry(() => import('./pages/Contact'));
+const PrivacyPolicy = lazyRetry(() => import('./pages/PrivacyPolicy'));
+const StudentAdmissionPolicy = lazyRetry(() => import('./pages/StudentAdmissionPolicy'));
+const Blog = lazyRetry(() => import('./pages/Blog'));
+const BlogDetail = lazyRetry(() => import('./pages/BlogDetail'));
+
+const AdminLogin = lazyRetry(() => import('./Admin_Control/pages/AdminLogin'));
+const AdminDashboard = lazyRetry(() => import('./Admin_Control/pages/AdminDashboard'));
 
 // Page Loading Fallback Spinner
 function PageLoader() {
