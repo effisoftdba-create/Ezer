@@ -106,7 +106,8 @@ export default function AdminDashboard() {
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSparkles },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
-    { id: 'blog', label: 'Blog & Articles Editor', icon: HiOutlineNewspaper, count: ((blogs || []).length + (achievements || []).length) },
+    { id: 'blog', label: 'Blog & Magazine Articles', icon: HiOutlineNewspaper, count: (blogs || []).length },
+    { id: 'achievements', label: 'EZER Awards & Honors', icon: HiOutlineBadgeCheck, count: (achievements || []).length },
     { id: 'outcomes', label: 'Graduate Outcomes', icon: HiOutlineUserGroup, count: (transformedLives || []).length },
     { id: 'mentors', label: 'Senior Mentors', icon: HiOutlineUser, count: (seniorMentors || []).length },
     { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: (videoTestimonials || []).length },
@@ -138,7 +139,8 @@ export default function AdminDashboard() {
           {activeTab === 'courses' && <CourseManager />}
           {activeTab === 'platform' && <PlatformManager />}
           {activeTab === 'support' && <SupportCardsManager />}
-          {activeTab === 'blog' && <BlogManager />}
+          {activeTab === 'blog' && <BlogManager initialSubTab="blogs" />}
+          {activeTab === 'achievements' && <BlogManager initialSubTab="achievements" />}
           {activeTab === 'outcomes' && <GraduateOutcomesManager />}
           {activeTab === 'mentors' && <SeniorMentorsManager />}
           {activeTab === 'videos' && <VideoReviewsManager />}

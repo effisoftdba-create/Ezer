@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import { HiPlus, HiTrash, HiPencil, HiNewspaper, HiBadgeCheck, HiPhotograph, HiCalendar } from 'react-icons/hi';
 import ImagePickerModal from './ImagePickerModal';
@@ -418,14 +418,17 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
   );
 }
 
-/* ────────────────────────────────────────────────────────────
-   MAIN BLOG MANAGER COMPONENT
-   ──────────────────────────────────────────────────────────── */
-export default function BlogManager() {
+export default function BlogManager({ initialSubTab = 'blogs' }) {
   const { blogs, addBlog, updateBlog, deleteBlog, achievements, addAchievement, updateAchievement, deleteAchievement, executiveLeaders, updateExecutiveLeader } = useSiteData();
-  const [activeSubTab, setActiveSubTab] = useState('blogs');
+  const [activeSubTab, setActiveSubTab] = useState(initialSubTab);
   const [achPickerOpen, setAchPickerOpen] = useState(false);
   const [achPickedImage, setAchPickedImage] = useState('');
+
+  useEffect(() => {
+    if (initialSubTab) {
+      setActiveSubTab(initialSubTab);
+    }
+  }, [initialSubTab]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
