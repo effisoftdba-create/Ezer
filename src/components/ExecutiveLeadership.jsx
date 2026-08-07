@@ -253,13 +253,13 @@ export default function ExecutiveLeadership() {
         }
 
         .zigzag-headline {
-          font-family: Georgia, 'Times New Roman', serif;
+          font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
           font-size: clamp(1.8rem, 3.2vw, 2.5rem);
-          font-weight: 400;
+          font-weight: 900;
           color: #000648;
-          line-height: 1.22;
+          line-height: 1.15;
           margin: 0 0 20px 0;
-          letter-spacing: -0.02em;
+          letter-spacing: -0.025em;
         }
 
         .zigzag-officer-name {
