@@ -154,15 +154,15 @@ export default function Hero({ onOpenDemoModal }) {
                 </m.div>
               </AnimatePresence>
 
-              {/* Action Buttons */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', marginBottom: '40px' }}>
+              {/* Dual Matching Action Buttons */}
+              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '24px' }}>
                 <Link
                   to="/courses"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: '10px',
+                    gap: '8px',
                     padding: '14px 28px',
                     background: '#000638',
                     color: '#ffffff',
@@ -171,8 +171,8 @@ export default function Hero({ onOpenDemoModal }) {
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     textDecoration: 'none',
-                    borderRadius: '4px',
-                    boxShadow: '0 4px 14px rgba(0,6,56,0.2)',
+                    borderRadius: '6px',
+                    boxShadow: '0 4px 14px rgba(0,6,56,0.25)',
                     transition: 'background-color 0.25s ease, color 0.25s ease, transform 0.25s ease',
                   }}
                   onMouseEnter={(e) => {
@@ -195,35 +195,31 @@ export default function Hero({ onOpenDemoModal }) {
                     display: 'inline-flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '12px 26px',
-                    borderRadius: '50px',
-                    background: 'linear-gradient(135deg, #000648 0%, #00127a 100%)',
-                    color: '#f2b733',
+                    gap: '8px',
+                    padding: '14px 28px',
+                    background: '#000638',
+                    color: '#ffffff',
                     fontWeight: 800,
-                    fontSize: '0.86rem',
+                    fontSize: '0.88rem',
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     cursor: 'pointer',
-                    border: '1.5px solid #f2b733',
-                    boxShadow: '0 4px 18px rgba(0, 6, 72, 0.25)',
-                    transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease',
+                    border: 'none',
+                    borderRadius: '6px',
+                    boxShadow: '0 4px 14px rgba(0,6,56,0.25)',
+                    transition: 'background-color 0.25s ease, color 0.25s ease, transform 0.25s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px) scale(1.03)';
-                    e.currentTarget.style.boxShadow = '0 8px 25px rgba(242, 183, 51, 0.4)';
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #f2b733 0%, #ffd066 100%)';
-                    e.currentTarget.style.color = '#000648';
-                    e.currentTarget.style.borderColor = '#000648';
+                    e.currentTarget.style.background = '#f2b733';
+                    e.currentTarget.style.color = '#000638';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                    e.currentTarget.style.boxShadow = '0 4px 18px rgba(0, 6, 72, 0.25)';
-                    e.currentTarget.style.background = 'linear-gradient(135deg, #000648 0%, #00127a 100%)';
-                    e.currentTarget.style.color = '#f2b733';
-                    e.currentTarget.style.borderColor = '#f2b733';
+                    e.currentTarget.style.background = '#000638';
+                    e.currentTarget.style.color = '#ffffff';
                   }}
                 >
-                  Book Free Demo
+                  <span>Book Free Demo</span>
+                  <HiArrowRight size={16} />
                 </button>
               </div>
 

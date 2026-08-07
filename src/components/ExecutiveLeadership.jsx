@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
-import { HiSparkles, HiBadgeCheck } from 'react-icons/hi';
+import { HiBadgeCheck } from 'react-icons/hi';
+import { resolveImageSrc } from '../utils/imageUtils';
 
 export default function ExecutiveLeadership() {
   const { executiveLeaders } = useSiteData();
@@ -27,7 +28,7 @@ export default function ExecutiveLeadership() {
         {
           id: 'exec-3',
           roleTag: 'CMTO',
-          roleName: 'Chief Marketing & Technology Officer',
+          roleName: 'Chief Tech & Academic Officer',
           name: 'Anand Kumar K',
           image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600&h=700',
           bio: 'Pioneer of AI-integrated lab curriculums, hands-on production capstones, and corporate readiness standards.'
@@ -46,35 +47,185 @@ export default function ExecutiveLeadership() {
         overflow: 'hidden'
       }}
     >
+      <style>{`
+        .exec-interactive-card {
+          width: 100%;
+          max-width: 350px;
+          height: 420px;
+          background: #ffffff;
+          border-radius: 32px;
+          padding: 3px;
+          position: relative;
+          box-shadow: 0 20px 40px rgba(0, 6, 72, 0.3);
+          transition: all 0.5s ease-in-out;
+          border: 2px solid #000648;
+          margin: 0 auto;
+        }
+
+        .exec-interactive-card .role-badge-top {
+          position: absolute;
+          right: 1.2rem;
+          top: 1.2rem;
+          background: #000648;
+          border: 1.5px solid #f2b733;
+          color: #f2b733;
+          font-weight: 900;
+          font-size: 0.72rem;
+          padding: 5px 14px;
+          border-radius: 50px;
+          z-index: 10;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .exec-interactive-card .profile-pic {
+          position: absolute;
+          width: calc(100% - 6px);
+          height: calc(100% - 6px);
+          top: 3px;
+          left: 3px;
+          border-radius: 29px;
+          z-index: 1;
+          border: 0px solid #f2b733;
+          overflow: hidden;
+          transition: all 0.5s ease-in-out 0.2s, z-index 0.5s ease-in-out 0.2s;
+        }
+
+        .exec-interactive-card .profile-pic img {
+          object-fit: cover;
+          width: 100%;
+          height: 100%;
+          object-position: center top;
+          transition: all 0.5s ease-in-out 0s;
+        }
+
+        .exec-interactive-card .bottom-drawer {
+          position: absolute;
+          bottom: 3px;
+          left: 3px;
+          right: 3px;
+          background: linear-gradient(180deg, #000648 0%, #050e38 100%);
+          top: 72%;
+          border-radius: 29px;
+          z-index: 2;
+          border-top: 2px solid #f2b733;
+          box-shadow: rgba(0, 6, 72, 0.4) 0px 5px 15px 0px inset;
+          overflow: hidden;
+          transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
+          padding: 20px 24px;
+          color: #ffffff;
+        }
+
+        .exec-interactive-card .bottom-drawer .content {
+          position: absolute;
+          bottom: 1.5rem;
+          left: 1.5rem;
+          right: 1.5rem;
+          height: auto;
+        }
+
+        .exec-interactive-card .bottom-drawer .name {
+          display: block;
+          font-size: 1.35rem;
+          color: #ffffff;
+          font-weight: 900;
+          line-height: 1.2;
+        }
+
+        .exec-interactive-card .bottom-drawer .role-title {
+          display: block;
+          font-size: 0.8rem;
+          color: #f2b733;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          margin-top: 4px;
+        }
+
+        .exec-interactive-card .bottom-drawer .bio-text {
+          display: block;
+          font-size: 0.88rem;
+          color: #cbd5e1;
+          margin-top: 0.8rem;
+          line-height: 1.55;
+          opacity: 0;
+          transform: translateY(15px);
+          transition: all 0.4s ease 0.1s;
+        }
+
+        .exec-interactive-card .bottom-drawer .action-bar {
+          margin-top: 1.2rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-top: 1px solid rgba(242, 183, 51, 0.3);
+          padding-top: 12px;
+          opacity: 0;
+          transform: translateY(15px);
+          transition: all 0.4s ease 0.2s;
+        }
+
+        .exec-interactive-card:hover {
+          border-top-left-radius: 50px;
+          border-color: #f2b733;
+        }
+
+        .exec-interactive-card:hover .bottom-drawer {
+          top: 24%;
+          border-radius: 60px 29px 29px 29px;
+          transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.15s;
+        }
+
+        .exec-interactive-card:hover .bottom-drawer .bio-text,
+        .exec-interactive-card:hover .bottom-drawer .action-bar {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
+        .exec-interactive-card:hover .profile-pic {
+          width: 90px;
+          height: 90px;
+          aspect-ratio: 1;
+          top: 12px;
+          left: 12px;
+          border-radius: 50%;
+          z-index: 3;
+          border: 4px solid #f2b733;
+          box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+          transition: all 0.5s ease-in-out, z-index 0.5s ease-in-out 0.1s;
+        }
+      `}</style>
+
       {/* Ambient Glows */}
       <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-100px', left: '15%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(242, 183, 51, 0.14)', filter: 'blur(120px)' }} />
         <div style={{ position: 'absolute', bottom: '-100px', right: '15%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(17, 93, 252, 0.18)', filter: 'blur(120px)' }} />
       </div>
 
-      <div className="container" style={{ maxWidth: '1180px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+      <div className="container" style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
         
-        {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+        {/* Header Section (EMOJI REMOVED AS REQUESTED) */}
+        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <span
             style={{
               display: 'inline-flex',
               alignItems: 'center',
-              gap: '8px',
               background: 'rgba(242, 183, 51, 0.15)',
               color: '#f2b733',
-              padding: '6px 22px',
+              padding: '8px 24px',
               borderRadius: '50px',
               fontWeight: 900,
-              fontSize: '0.78rem',
+              fontSize: '0.8rem',
               textTransform: 'uppercase',
-              letterSpacing: '0.1em',
+              letterSpacing: '0.12em',
               marginBottom: '16px',
-              border: '1.5px solid rgba(242, 183, 51, 0.4)',
+              border: '1.5px solid #f2b733',
               boxShadow: '0 0 24px rgba(242, 183, 51, 0.25)'
             }}
           >
-            <HiSparkles size={16} /> EXECUTIVE LEADERSHIP BOARD
+            EXECUTIVE LEADERSHIP BOARD
           </span>
 
           <h2
@@ -103,162 +254,35 @@ export default function ExecutiveLeadership() {
           </p>
         </div>
 
-        {/* NORMAL GRID CARDS (3 columns desktop, 1 column mobile) */}
-        <div className="executive-board-grid">
-          {leaders.slice(0, 3).map((exec) => (
-            <div
-              key={exec.id || exec.roleTag || exec.name}
-              className="executive-stylish-card"
-            >
-              {/* Image with gradient overlay */}
-              <div className="exec-image-wrapper">
-                <img src={exec.image} alt={exec.name || exec.roleTag} />
-                <div className="exec-image-overlay" />
-                <span className="exec-role-pill">
-                  <HiBadgeCheck size={16} /> {exec.roleTag || 'EXEC'}
-                </span>
+        {/* Interactive Cards Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '32px', width: '100%' }}>
+          {leaders.map((leader) => (
+            <div key={leader.id || leader.roleTag} className="exec-interactive-card">
+              <span className="role-badge-top">
+                <HiBadgeCheck size={14} /> {leader.roleTag || 'DIRECTOR'}
+              </span>
+
+              <div className="profile-pic">
+                <img src={resolveImageSrc(leader.image)} alt={leader.name} />
               </div>
 
-              {/* Executive Details */}
-              <div className="exec-card-body">
-                <h3 className="exec-name">{exec.name}</h3>
-                <div className="exec-title">{exec.roleName || exec.roleTag}</div>
-                <p className="exec-bio">{exec.bio}</p>
-                <div className="exec-footer-badge">
-                  <HiSparkles color="#f2b733" size={14} /> EZER Corporate Directorate
+              <div className="bottom-drawer">
+                <div className="content">
+                  <span className="name">{leader.name}</span>
+                  <span className="role-title">{leader.roleName || leader.roleTag}</span>
+                  <p className="bio-text">{leader.bio}</p>
+
+                  <div className="action-bar">
+                    <span style={{ fontSize: '0.75rem', color: '#f2b733', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <HiBadgeCheck size={14} /> EZER Corporate Directorate
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Scoped Stylish & Responsive CSS */}
-      <style>{`
-        .executive-board-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 32px;
-          align-items: stretch;
-        }
-
-        .executive-stylish-card {
-          background: rgba(15, 23, 42, 0.85);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          border: 1.5px solid rgba(242, 183, 51, 0.35);
-          border-radius: 24px;
-          overflow: hidden;
-          box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
-          transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .executive-stylish-card:hover {
-          transform: translateY(-8px);
-          border-color: #f2b733;
-          box-shadow: 0 24px 50px rgba(242, 183, 51, 0.25);
-        }
-
-        .exec-image-wrapper {
-          position: relative;
-          width: 100%;
-          height: 320px;
-          overflow: hidden;
-          background: #000;
-        }
-
-        .exec-image-wrapper img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          object-position: center top;
-          transition: transform 0.5s ease;
-        }
-
-        .executive-stylish-card:hover .exec-image-wrapper img {
-          transform: scale(1.05);
-        }
-
-        .exec-image-overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(15, 23, 42, 1) 0%, rgba(15, 23, 42, 0.2) 60%, transparent 100%);
-        }
-
-        .exec-role-pill {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          background: #000648;
-          color: #f2b733;
-          font-size: 0.78rem;
-          font-weight: 900;
-          padding: 6px 14px;
-          border-radius: 50px;
-          border: 1.5px solid #f2b733;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-          z-index: 5;
-        }
-
-        .exec-card-body {
-          padding: 24px;
-          display: flex;
-          flex-direction: column;
-          flex-grow: 1;
-          justify-content: space-between;
-        }
-
-        .exec-name {
-          font-size: 1.35rem;
-          font-weight: 900;
-          color: #ffffff;
-          margin: 0 0 4px 0;
-          line-height: 1.25;
-        }
-
-        .exec-title {
-          font-size: 0.85rem;
-          font-weight: 800;
-          color: #f2b733;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          margin-bottom: 14px;
-        }
-
-        .exec-bio {
-          font-size: 0.88rem;
-          color: #cbd5e1;
-          line-height: 1.6;
-          margin: 0 0 20px 0;
-        }
-
-        .exec-footer-badge {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 0.75rem;
-          font-weight: 800;
-          color: #94a3b8;
-          padding-top: 14px;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        @media (max-width: 768px) {
-          .executive-board-grid {
-            grid-template-columns: 1fr;
-            gap: 28px;
-          }
-
-          .exec-image-wrapper {
-            height: 280px;
-          }
-        }
-      `}</style>
     </section>
   );
 }
