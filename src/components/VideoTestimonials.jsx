@@ -38,7 +38,7 @@ export default function VideoTestimonials() {
   if (!videoTestimonials || videoTestimonials.length === 0) return null;
 
   return (
-    <section className="section-alt" style={{ padding: '64px 0', background: '#f8fafc' }}>
+    <section className="section-alt" style={{ padding: '32px 0', background: '#f8fafc' }}>
       <div className="container">
         {/* Section Header with Right-Aligned Controls */}
         <div style={{

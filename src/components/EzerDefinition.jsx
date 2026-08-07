@@ -99,7 +99,7 @@ export default function EzerDefinition() {
       <section 
         id="ezer-definition"
         style={{
-          padding: '72px 0',
+          padding: '36px 0',
           background: '#ffffff',
           overflow: 'hidden',
           position: 'relative',

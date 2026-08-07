@@ -7,7 +7,7 @@ const CATEGORIES = [
   },
   {
     title: 'HOMEPAGE & BRANDING',
-    ids: ['hero', 'platform', 'support', 'blog']
+    ids: ['hero', 'platform', 'support']
   },
   {
     title: 'ACADEMY CATALOG',
@@ -16,6 +16,10 @@ const CATEGORIES = [
   {
     title: 'TESTIMONIALS & REVIEWS',
     ids: ['videos', 'testimonials']
+  },
+  {
+    title: 'BLOG & AWARDS PAGE',
+    ids: ['blog', 'achievements']
   },
   {
     title: 'SYSTEM CONFIG',

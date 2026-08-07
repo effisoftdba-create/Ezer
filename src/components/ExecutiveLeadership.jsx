@@ -43,17 +43,28 @@ export default function ExecutiveLeadership() {
 
   return (
     <section
+      className="exec-section-compact"
       style={{
         position: 'relative',
         background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%)',
         color: '#000648',
-        padding: '80px 20px',
+        padding: '36px 20px',
         borderTop: '3px solid #f2b733',
         borderBottom: '3px solid #f2b733',
         overflow: 'hidden'
       }}
     >
       <style>{`
+        @media (max-width: 768px) {
+          .exec-section-compact {
+            padding: 20px 12px !important;
+          }
+          .zigzag-exec-row {
+            margin-bottom: 20px !important;
+            padding: 20px 14px !important;
+          }
+        }
+
         /* Golden Ambient Background Accents */
         .exec-bg-glow-1 {
           position: absolute;
@@ -81,12 +92,12 @@ export default function ExecutiveLeadership() {
         .zigzag-exec-row {
           display: grid;
           grid-template-columns: 340px 1fr;
-          gap: 48px;
+          gap: 36px;
           align-items: center;
           background: #ffffff;
           border-radius: 24px;
-          padding: 40px;
-          margin-bottom: 48px;
+          padding: 32px;
+          margin-bottom: 24px;
           border: 1.5px solid #cbd5e1;
           box-shadow: 0 15px 40px rgba(0, 6, 72, 0.07);
           transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
