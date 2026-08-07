@@ -2,13 +2,15 @@ import React, { useState, useRef } from 'react';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import CourseCard from './CourseCard';
 import UIStateDisplay, { STATE_TYPES } from './UIStateDisplay';
-import { HiChevronLeft, HiChevronRight, HiAcademicCap } from 'react-icons/hi';
+import { HiAcademicCap } from 'react-icons/hi';
+import CarouselDotsNav from './CarouselDotsNav';
 
 const tabs = ['All Courses', 'Cloud & DevOps', 'Testing & QA', 'AI & Data', 'IT Infrastructure'];
 
 export default function TrendingSkills({ onOpenDemoModal }) {
   const { courses } = useSiteData();
   const [activeTab, setActiveTab] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const sliderRef = useRef(null);
 
   const getFilteredCourses = () => {
@@ -23,13 +25,28 @@ export default function TrendingSkills({ onOpenDemoModal }) {
 
   const filtered = getFilteredCourses();
 
-  const handleScroll = (direction) => {
+  const handlePrev = () => {
+    if (!filtered.length) return;
+    const next = (activeIndex - 1 + filtered.length) % filtered.length;
+    setActiveIndex(next);
     if (sliderRef.current) {
-      const scrollAmount = 300;
-      sliderRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
+      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+    }
+  };
+
+  const handleNext = () => {
+    if (!filtered.length) return;
+    const next = (activeIndex + 1) % filtered.length;
+    setActiveIndex(next);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelect = (idx) => {
+    setActiveIndex(idx);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: idx * 340, behavior: 'smooth' });
     }
   };
 
@@ -43,28 +60,32 @@ export default function TrendingSkills({ onOpenDemoModal }) {
             <HiAcademicCap size={15} style={{ color: '#f2b733' }} />
             LIVE Cohort Programs
           </span>
-          <h2 style={{ fontSize: 'clamp(1.35rem, 2.2vw, 1.7rem)', color: '#000648', marginBottom: '6px' }}>
+          <h2 style={{ color: '#000648', fontSize: 'clamp(1.5rem, 2.5vw, 2.1rem)', marginTop: '4px' }}>
             Live Online IT Courses with Placement Support
           </h2>
-          <p style={{ color: '#475569', fontSize: '0.86rem', maxWidth: '560px', margin: '0 auto' }}>
+          <p style={{ color: '#475569', fontSize: '0.88rem', maxWidth: '600px', margin: '6px auto 0', lineHeight: 1.6 }}>
             Every course combines hands-on labs, real-world projects, and industry-standard tools — backed by up to 1 year of placement assistance.
           </p>
         </div>
 
-        {/* Filter Tabs & Scroll Arrow Controls Header */}
+        {/* Filter Tabs & Standardized Centered < . . . > Controls Header */}
         <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          marginBottom: '20px', flexWrap: 'wrap', gap: '16px'
+          display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+          marginBottom: '24px', width: '100%', gap: '16px'
         }}>
           {/* Tabs List */}
           <div className="no-scrollbar" style={{
-            display: 'flex', gap: '8px', overflowX: 'auto', padding: '4px 0'
+            display: 'flex', gap: '8px', overflowX: 'auto', padding: '4px 0', maxWidth: '100%', justifyContent: 'center'
           }}>
             {tabs.map((tab, idx) => (
               <button
                 key={tab}
                 type="button"
-                onClick={() => setActiveTab(idx)}
+                onClick={() => {
+                  setActiveTab(idx);
+                  setActiveIndex(0);
+                  if (sliderRef.current) sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+                }}
                 style={{
                   padding: '7px 16px',
                   borderRadius: '50px',
@@ -84,41 +105,15 @@ export default function TrendingSkills({ onOpenDemoModal }) {
             ))}
           </div>
 
-          {/* Navigation Arrows */}
-          <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
-            <button
-              type="button"
-              onClick={() => handleScroll('left')}
-              aria-label="Scroll left"
-              style={{
-                width: '36px', height: '36px', borderRadius: '50%',
-                border: '1px solid #cbd5e1', background: '#ffffff',
-                color: '#000648', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-                transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#000648'; e.currentTarget.style.background = '#000648'; e.currentTarget.style.color = '#f2b733'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#000648'; }}
-            >
-              <HiChevronLeft size={20} />
-            </button>
-            <button
-              type="button"
-              onClick={() => handleScroll('right')}
-              aria-label="Scroll right"
-              style={{
-                width: '36px', height: '36px', borderRadius: '50%',
-                border: '1px solid #cbd5e1', background: '#ffffff',
-                color: '#000648', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                cursor: 'pointer', boxShadow: '0 2px 6px rgba(0,0,0,0.05)',
-                transition: 'background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease',
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#000648'; e.currentTarget.style.background = '#000648'; e.currentTarget.style.color = '#f2b733'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = '#cbd5e1'; e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#000648'; }}
-            >
-              <HiChevronRight size={20} />
-            </button>
-          </div>
+          {/* Standardized Centered < . . . > Controls */}
+          <CarouselDotsNav
+            totalItems={filtered.length}
+            activeIndex={activeIndex}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onSelectIndex={handleSelect}
+            style={{ margin: '4px auto 0' }}
+          />
         </div>
 
         {/* Horizontal Slider Layout or Empty Search UI State */}

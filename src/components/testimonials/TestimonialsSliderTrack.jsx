@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { FaQuoteLeft } from 'react-icons/fa';
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
+import CarouselDotsNav from '../CarouselDotsNav';
 
 export default function TestimonialsSliderTrack() {
   const { writtenTestimonials } = useSiteData();
@@ -99,8 +100,8 @@ export default function TestimonialsSliderTrack() {
       </div>
 
       <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', position: 'relative' }}>
-        {/* Header Row */}
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '24px' }}>
+        {/* Centered Header Row */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '16px', width: '100%' }}>
           <div>
             <div
               style={{
@@ -134,82 +135,20 @@ export default function TestimonialsSliderTrack() {
             >
               What our learners are saying
             </h2>
-            <p style={{ color: '#475569', fontSize: '1.05rem', maxWidth: '640px', margin: 0, lineHeight: 1.6 }}>
+            <p style={{ color: '#475569', fontSize: '1.05rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6 }}>
               Stories from freshers, working professionals, and career switchers who trusted our guides, routes, and placement support.
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
-            <div style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: 700 }}>
-              <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648' }}>
-                {String(activeIdx + 1).padStart(2, '0')}
-              </span>{' '}
-              <span style={{ color: '#cbd5e1' }}>/</span>{' '}
-              <span style={{ color: '#64748b', fontWeight: 700 }}>
-                {String(totalCount).padStart(2, '0')}
-              </span>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <button
-                type="button"
-                onClick={handlePrev}
-                aria-label="Previous Testimonial"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  border: '2px solid #000648',
-                  background: '#000648',
-                  color: '#f2b733',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                  boxShadow: '0 4px 12px rgba(0,6,72,0.2)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#f2b733';
-                  e.currentTarget.style.color = '#000648';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#000648';
-                  e.currentTarget.style.color = '#f2b733';
-                }}
-              >
-                <HiArrowLeft size={18} />
-              </button>
-
-              <button
-                type="button"
-                onClick={handleNext}
-                aria-label="Next Testimonial"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  border: '2px solid #000648',
-                  background: '#000648',
-                  color: '#f2b733',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                  boxShadow: '0 4px 12px rgba(0,6,72,0.2)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#f2b733';
-                  e.currentTarget.style.color = '#000648';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#000648';
-                  e.currentTarget.style.color = '#f2b733';
-                }}
-              >
-                <HiArrowRight size={18} />
-              </button>
-            </div>  </div>
-          </div>
+          {/* Standardized Centered < . . . > Controls */}
+          <CarouselDotsNav
+            totalItems={totalCount}
+            activeIndex={activeIdx}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onSelectIndex={(idx) => setActiveIdx(idx)}
+            style={{ margin: '12px auto 0' }}
+          />
         </div>
 
         {/* Current Active Testimonial Slide */}

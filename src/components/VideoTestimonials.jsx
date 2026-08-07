@@ -41,10 +41,10 @@ export default function VideoTestimonials() {
   return (
     <section className="section-alt" style={{ padding: '32px 0', background: '#f8fafc' }}>
       <div className="container">
-        {/* Section Header with Right-Aligned Controls */}
+        {/* Centered Section Header & Controls */}
         <div style={{
-          display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
-          marginBottom: '28px', flexWrap: 'wrap', gap: '16px'
+          display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+          marginBottom: '28px', width: '100%'
         }}>
           <div>
             <span className="section-tag">Alumni Video Reviews</span>
@@ -54,37 +54,15 @@ export default function VideoTestimonials() {
             </p>
           </div>
 
-          {/* Right-Aligned Arrow Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
-            <button
-              type="button"
-              onClick={handlePrev}
-              aria-label="Previous video testimonial"
-              style={{
-                width: '38px', height: '38px', borderRadius: '50%',
-                border: '1.5px solid #000648', background: '#ffffff',
-                color: '#000648', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)',
-              }}
-            >
-              <HiChevronLeft size={20} />
-            </button>
-            <button
-              type="button"
-              onClick={handleNext}
-              aria-label="Next video testimonial"
-              style={{
-                width: '38px', height: '38px', borderRadius: '50%',
-                border: '1.5px solid #000648', background: '#000648',
-                color: '#f2b733', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.15)',
-              }}
-            >
-              <HiChevronRight size={20} />
-            </button>
-          </div>
+          {/* Standardized Centered < . . . > Controls */}
+          <CarouselDotsNav
+            totalItems={(videoTestimonials || []).length}
+            activeIndex={activeIdx}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onSelectIndex={(idx) => handleSelectVideo(idx)}
+            style={{ margin: '16px auto 0' }}
+          />
         </div>
 
         {/* Featured Main Video Player Container with YouTube iFrame */}
@@ -182,15 +160,7 @@ export default function VideoTestimonials() {
           </div>
         </div>
 
-        {/* Standardized Centered < . . . > Controls */}
-        <CarouselDotsNav
-          totalItems={(videoTestimonials || []).length}
-          activeIndex={activeIdx}
-          onPrev={() => handleSelectVideo((activeIdx - 1 + (videoTestimonials || []).length) % (videoTestimonials || []).length)}
-          onNext={() => handleSelectVideo((activeIdx + 1) % (videoTestimonials || []).length)}
-          onSelectIndex={(idx) => handleSelectVideo(idx)}
-          style={{ margin: '20px auto 16px' }}
-        />
+
 
         {/* Thumbnail Selector Track */}
         <div

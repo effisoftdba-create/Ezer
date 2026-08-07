@@ -1,30 +1,46 @@
-import React, { useRef } from 'react';
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import React, { useRef, useState } from 'react';
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
 import { resolveImageSrc } from '../../utils/imageUtils';
+import CarouselDotsNav from '../CarouselDotsNav';
 
 export default function HiredCompaniesGrid({ transitions: propTransitions }) {
   const { transformedLives, outcomesHeader } = useSiteData();
   const sliderRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const displayList = (transformedLives && transformedLives.length > 0) ? transformedLives : (propTransitions || []);
+  const displayStories = (transformedLives && transformedLives.length > 0) ? transformedLives : (propTransitions || []);
   const headerData = outcomesHeader || {
     tag: 'CAREER PLACEMENT OUTCOMES',
     headline: 'Our Graduates Get Hired by Leading Tech Firms',
     sub: 'Join a community of engineers building impactful, high-growth software careers.'
   };
 
-  const handleScroll = (direction) => {
+  const handlePrev = () => {
+    if (!displayStories.length) return;
+    const next = (activeIndex - 1 + displayStories.length) % displayStories.length;
+    setActiveIndex(next);
     if (sliderRef.current) {
-      const scrollAmount = 320;
-      sliderRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
+      sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
     }
   };
 
-  if (!displayList || displayList.length === 0) return null;
+  const handleNext = () => {
+    if (!displayStories.length) return;
+    const next = (activeIndex + 1) % displayStories.length;
+    setActiveIndex(next);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelect = (idx) => {
+    setActiveIndex(idx);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: idx * 320, behavior: 'smooth' });
+    }
+  };
+
+  if (!displayStories || displayStories.length === 0) return null;
 
   return (
     <section className="section" style={{ background: '#ffffff', padding: '32px 0', borderBottom: '1px solid #e2e8f0' }}>
@@ -58,38 +74,15 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
 
         {/* Controls & Single-Line Horizontal Slider Track */}
         <div style={{ position: 'relative' }}>
-          {/* Left/Right Navigation Scroll Buttons */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginBottom: '16px' }}>
-            <button
-              type="button"
-              onClick={() => handleScroll('left')}
-              aria-label="Scroll outcomes left"
-              style={{
-                width: '38px', height: '38px', borderRadius: '50%',
-                border: '1.5px solid #000638', background: '#ffffff',
-                color: '#000638', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(0, 6, 56, 0.06)',
-              }}
-            >
-              <HiChevronLeft size={20} />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleScroll('right')}
-              aria-label="Scroll outcomes right"
-              style={{
-                width: '38px', height: '38px', borderRadius: '50%',
-                border: '1.5px solid #000638', background: '#000638',
-                color: '#f2b733', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer',
-                boxShadow: '0 4px 10px rgba(0, 6, 56, 0.18)',
-              }}
-            >
-              <HiChevronRight size={20} />
-            </button>
-          </div>
+          {/* Standardized Centered < . . . > Controls */}
+          <CarouselDotsNav
+            totalItems={displayStories.length}
+            activeIndex={activeIndex}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onSelectIndex={handleSelect}
+            style={{ marginBottom: '16px', marginTop: 0 }}
+          />
 
           {/* Horizontal Slider Track */}
           <div
@@ -104,7 +97,7 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
               width: '100%',
             }}
           >
-            {displayList.map((item) => (
+            {displayStories.map((item) => (
               <div
                 key={item.id || item.name}
                 style={{

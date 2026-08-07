@@ -3,9 +3,12 @@ import { HiAcademicCap, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc } from '../utils/imageUtils';
 
+import CarouselDotsNav from './CarouselDotsNav';
+
 export default function FacultyShowcase({ faculty: propFaculty, title: propTitle }) {
   const { seniorMentors, mentorsHeader } = useSiteData();
   const sliderRef = useRef(null);
+  const [activeIndex, setActiveIndex] = React.useState(0);
 
   const displayFaculty = (seniorMentors && seniorMentors.length > 0) ? seniorMentors : (propFaculty || []);
   const headerData = mentorsHeader || {
@@ -16,16 +19,34 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
 
   if (!displayFaculty || displayFaculty.length === 0) return null;
 
-  const scroll = (direction) => {
+  const handlePrev = () => {
+    if (!displayFaculty.length) return;
+    const next = (activeIndex - 1 + displayFaculty.length) % displayFaculty.length;
+    setActiveIndex(next);
     if (sliderRef.current) {
-      const scrollAmount = direction === 'left' ? -340 : 340;
-      sliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+    }
+  };
+
+  const handleNext = () => {
+    if (!displayFaculty.length) return;
+    const next = (activeIndex + 1) % displayFaculty.length;
+    setActiveIndex(next);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelect = (idx) => {
+    setActiveIndex(idx);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: idx * 340, behavior: 'smooth' });
     }
   };
 
   return (
     <section style={{ margin: '20px 0', width: '100%', maxWidth: '100%' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '28px', width: '100%' }}>
         <div>
           <span className="section-tag" style={{ background: 'rgba(0, 6, 56, 0.06)', color: '#000638', border: '1px solid rgba(0, 6, 56, 0.12)' }}>
             <HiAcademicCap size={14} color="#000638" /> {headerData.tag || 'Senior Mentors'}
@@ -33,54 +54,20 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
           <h3 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.25rem)', fontWeight: 900, color: '#000638', marginTop: '8px', marginBottom: '6px' }}>
             {propTitle || headerData.headline}
           </h3>
-          <p style={{ color: '#475569', fontSize: '0.95rem', maxWidth: '680px', margin: 0 }}>
+          <p style={{ color: '#475569', fontSize: '0.95rem', maxWidth: '680px', margin: '0 auto' }}>
             {headerData.sub}
           </p>
         </div>
 
-        {/* Scroll Navigation Controls */}
-        <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
-          <button
-            type="button"
-            onClick={() => scroll('left')}
-            aria-label="Scroll left"
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              background: '#ffffff',
-              border: '1.5px solid #000638',
-              color: '#000638',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              boxShadow: '0 2px 6px rgba(0,6,56,0.08)'
-            }}
-          >
-            <HiChevronLeft size={18} />
-          </button>
-          <button
-            type="button"
-            onClick={() => scroll('right')}
-            aria-label="Scroll right"
-            style={{
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              background: '#000638',
-              border: '1.5px solid #000638',
-              color: '#f2b733',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              boxShadow: '0 4px 10px rgba(0,6,56,0.18)'
-            }}
-          >
-            <HiChevronRight size={18} />
-          </button>
-        </div>
+        {/* Standardized Centered < . . . > Controls */}
+        <CarouselDotsNav
+          totalItems={displayFaculty.length}
+          activeIndex={activeIndex}
+          onPrev={handlePrev}
+          onNext={handleNext}
+          onSelectIndex={handleSelect}
+          style={{ margin: '16px auto 0' }}
+        />
       </div>
 
       {/* Horizontal Scroll Track */}
