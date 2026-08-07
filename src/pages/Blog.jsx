@@ -26,7 +26,7 @@ export default function Blog({ onOpenDemoModal }) {
       title: 'Native Language Learning: Breaking Barriers for Non-IT Career Aspirants',
       category: 'Education Impact',
       summary: 'How learning complex software concepts in Tamil, Hindi, and English accelerates comprehension and boosts interview confidence.',
-      image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=800'
+      image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800'
     },
     {
       id: 'blog-default-2',
@@ -34,7 +34,7 @@ export default function Blog({ onOpenDemoModal }) {
       title: 'The Rise of AI-Assisted Full Stack Developers in Top Tech Corporates',
       category: 'Industry Trends',
       summary: 'Why modern engineering teams look for developers who leverage AI tools to build scalable production apps in record time.',
-      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=800'
+      image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800'
     },
     {
       id: 'blog-default-3',
@@ -42,7 +42,7 @@ export default function Blog({ onOpenDemoModal }) {
       title: '12-Month Placement Assistance: How EZER Prepares Students for Tech Interviews',
       category: 'Career Success',
       summary: 'Inside EZER’s mentorship framework: mock technical interviews, resume building, and direct corporate referral pathways.',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800'
+      image: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80&w=800'
     }
   ];
 
