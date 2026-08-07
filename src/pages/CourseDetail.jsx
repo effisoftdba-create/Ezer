@@ -1,11 +1,12 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { HiChevronLeft, HiChevronRight, HiCheckCircle } from 'react-icons/hi';
+import { HiChevronLeft, HiChevronRight, HiCheckCircle, HiSparkles } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { getCourseBySlug } from '../data/courses';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 import VideoPlayer from '../components/VideoPlayer';
+import PaymentCard from '../components/PaymentCard';
 import CampusImmersionBanner from '../components/CampusImmersionBanner';
 import FacultyShowcase from '../components/FacultyShowcase';
 import CourseAdmissionSteps from '../components/CourseAdmissionSteps';
@@ -86,6 +87,25 @@ export default function CourseDetail({ onOpenDemoModal }) {
     );
   }
 
+  // Generate modules list for Zig-Zag cards
+  const modulesList = course.curriculumModules || [
+    {
+      num: "01",
+      title: "Foundations & Core Architecture",
+      topics: ["Environment Setup & Tooling", "Core Fundamentals", "Hands-on Practical Exercises", "Real-World Best Practices"]
+    },
+    {
+      num: "02",
+      title: "Advanced Practical Engineering & Implementation",
+      topics: ["Building Production Modules", "Debugging & Error Handling", "Performance Optimization", "Code Reviews & Mentorship"]
+    },
+    {
+      num: "03",
+      title: "Capstone Project & Placement Preparation",
+      topics: ["Live Industry Capstone Build", "CI/CD & Cloud Deployment", "Mock Technical Interviews", "12-Month Placement Support"]
+    }
+  ];
+
   return (
     <div style={{ background: '#ffffff', color: '#1e293b' }}>
       {/* 1. HERO PROGRAM OVERVIEW SECTION */}
@@ -119,196 +139,226 @@ export default function CourseDetail({ onOpenDemoModal }) {
               initial={{ opacity: 0, scale: 0.96, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.15 }}
-              style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
             >
-              {/* VIDEO PLAYER PREVIEW CARD */}
-              <div style={{ background: '#0a1478', padding: '16px', borderRadius: '20px', border: '1px solid rgba(242,183,51,0.3)', boxShadow: '0 12px 32px rgba(0,0,0,0.3)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', color: '#f2b733', letterSpacing: '0.06em' }}>
-                    ▶ Course Video Preview
-                  </span>
-                  <span style={{ fontSize: '0.7rem', color: '#cbd5e1' }}>100% Practical Demonstration</span>
-                </div>
-                <VideoPlayer videoUrl={course.videoUrl} poster={course.image} title={course.title} />
-              </div>
-
               <CourseApplicationCard course={course} onOpenPurchaseModal={() => setIsPurchaseModalOpen(true)} />
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* 2. OUR STUDENTS GET HIRED BY TOP COMPANIES */}
+      {/* 2. FULL-WIDTH FULL-SCREEN VIDEO PLAYER SECTION (NO SIDE EMPTY SPACES) */}
+      <section
+        style={{
+          width: '100%',
+          background: 'radial-gradient(ellipse at 50% 0%, #000a5e 0%, #000428 100%)',
+          color: '#ffffff',
+          padding: '56px 0',
+          position: 'relative',
+          borderBottom: '2px solid rgba(242, 183, 51, 0.4)',
+        }}
+      >
+        <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(16px, 3vw, 48px)' }}>
+          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: 'rgba(242, 183, 51, 0.18)',
+                color: '#f2b733',
+                padding: '6px 20px',
+                borderRadius: '50px',
+                fontSize: '0.78rem',
+                fontWeight: 900,
+                letterSpacing: '0.08em',
+                textTransform: 'uppercase',
+                border: '1.5px solid rgba(242, 183, 51, 0.4)',
+                marginBottom: '12px'
+              }}
+            >
+              <HiSparkles size={16} /> ▶ COURSE LIVE DEMO & PRACTICAL VIDEO PREVIEW
+            </span>
+            <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: 900, margin: '4px 0 0' }}>
+              Experience the Live Class Environment
+            </h2>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            style={{ width: '100%', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(0,0,0,0.5)' }}
+          >
+            <VideoPlayer videoUrl={course.videoUrl} poster={course.image} title={course.title} />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* 3. OUR STUDENTS GET HIRED BY TOP COMPANIES */}
       <HiredCompaniesGrid transitions={learnerTransitions} />
 
-      {/* 3. CAPSTONE PROJECTS SLIDER */}
+      {/* 4. CAPSTONE PROJECTS SLIDER */}
       <CapstoneProjectsSlider projects={course.projects} courseTools={course.tools} />
 
-      {/* 4. OFFICIAL CERTIFICATION TRUST SEAL */}
+      {/* 5. OFFICIAL CERTIFICATION TRUST SEAL */}
       <VerifiableCertificateBanner courseTitle={course.title} onOpenDemoModal={onOpenDemoModal} />
 
-      {/* 5. ADDITIONAL SECTIONS (CURRICULUM, ADMISSION, WHO IS IT FOR, FACULTY, FEES, FAQ) */}
-      <section className="section" style={{ background: '#f8fafc', padding: '72px 0' }}>
+      {/* 6. DETAILED COURSE DESCRIPTION & ZIG-ZAG CARDS SECTION (FRAMER MOTION) */}
+      <section className="section" style={{ background: '#ffffff', padding: '80px 0', position: 'relative' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 60px' }}>
+            <span className="section-tag" style={{ marginBottom: '10px' }}>Detailed Module Breakdown</span>
+            <h2 style={{ color: '#000648', fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 900, marginBottom: '16px' }}>
+              In-Depth Curriculum & Learning Modules
+            </h2>
+            <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.65, margin: 0 }}>
+              {course.description}
+            </p>
+          </div>
+
+          {/* Zig-Zag Alternating Cards */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '64px', width: '100%' }}>
+            {modulesList.map((mod, idx) => {
+              const isEven = idx % 2 === 1;
+              return (
+                <motion.div
+                  key={mod.num || idx}
+                  initial={{ opacity: 0, x: isEven ? 40 : -40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(440px, 100%), 1fr))',
+                    gap: '48px',
+                    alignItems: 'center',
+                    background: isEven ? '#f8fafc' : '#ffffff',
+                    padding: '40px',
+                    borderRadius: '24px',
+                    border: '1.5px solid #e2e8f0',
+                    boxShadow: '0 12px 36px rgba(0, 6, 72, 0.06)',
+                  }}
+                >
+                  {/* TEXT CONTENT COLUMN */}
+                  <div style={{ order: isEven ? 2 : 1 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+                      <span
+                        style={{
+                          width: '42px',
+                          height: '42px',
+                          borderRadius: '50%',
+                          background: '#000648',
+                          color: '#f2b733',
+                          fontSize: '1.1rem',
+                          fontWeight: 900,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 4px 14px rgba(0,6,72,0.2)'
+                        }}
+                      >
+                        {mod.num || `0${idx + 1}`}
+                      </span>
+                      <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                        MODULE {idx + 1} ARCHITECTURE
+                      </span>
+                    </div>
+
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#000648', marginBottom: '16px', lineHeight: 1.3 }}>
+                      {mod.title}
+                    </h3>
+
+                    <ul style={{ padding: 0, margin: '0 0 24px 0', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                      {mod.topics?.map((topic, tIdx) => (
+                        <li key={tIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.95rem', color: '#334155', lineHeight: 1.5 }}>
+                          <HiCheckCircle size={20} style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} />
+                          <span>{topic}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* VISUAL ACCENT COLUMN */}
+                  <div style={{ order: isEven ? 1 : 2, display: 'flex', justifyContent: 'center' }}>
+                    <div
+                      style={{
+                        width: '100%',
+                        maxWidth: '460px',
+                        aspectRatio: '4 / 3',
+                        background: 'linear-gradient(135deg, #000648 0%, #0a1478 100%)',
+                        borderRadius: '20px',
+                        padding: '32px',
+                        color: '#ffffff',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        boxShadow: '0 16px 40px rgba(0, 6, 72, 0.2)',
+                        border: '2px solid rgba(242, 183, 51, 0.4)',
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '140px', height: '140px', background: 'radial-gradient(circle, rgba(242,183,51,0.2) 0%, transparent 70%)' }} />
+                      <div>
+                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.1)', padding: '6px 14px', borderRadius: '50px', fontSize: '0.75rem', fontWeight: 800, color: '#f2b733', marginBottom: '16px' }}>
+                          <HiSparkles size={14} /> Practical Lab Environment
+                        </div>
+                        <h4 style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>
+                          {mod.title}
+                        </h4>
+                        <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: 1.5, margin: 0 }}>
+                          Master production deployment with 1:1 code reviews from senior industry tech leads.
+                        </p>
+                      </div>
+
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '20px' }}>
+                        {Array.isArray(course.tools) ? (
+                          course.tools.slice(0, 4).map((tool, i) => (
+                            <span key={i} style={{ background: 'rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.72rem', fontWeight: 700, padding: '4px 10px', borderRadius: '6px' }}>
+                              {tool}
+                            </span>
+                          ))
+                        ) : (
+                          <span style={{ background: 'rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.72rem', fontWeight: 700, padding: '4px 10px', borderRadius: '6px' }}>
+                            Live Sandboxes
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. GROWTH PRO PAYMENT CARD SECTION (PLACED DOWN AFTER DESCRIPTION) */}
+      <section className="section" style={{ background: '#f8fafc', padding: '80px 0', borderTop: '1px solid #e2e8f0' }}>
+        <div className="container">
+          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 40px' }}>
+            <span className="section-tag" style={{ marginBottom: '10px' }}>Instant Enrollment</span>
+            <h2 style={{ color: '#000648', fontSize: 'clamp(1.8rem, 3.2vw, 2.5rem)', fontWeight: 900, marginBottom: '12px' }}>
+              Enroll Today & Unlock Your IT Career Growth
+            </h2>
+            <p style={{ fontSize: '0.98rem', color: '#64748b', margin: 0, lineHeight: 1.6 }}>
+              Get immediate access to live cohort classes, 12-month placement assistance, labs & 1:1 mentorship.
+            </p>
+          </div>
+
+          <PaymentCard course={course} onEnrollClick={() => setIsPurchaseModalOpen(true)} />
+        </div>
+      </section>
+
+      {/* 8. ADDITIONAL SECTIONS (CAMPUS IMMERSION, ADMISSION STEPS, FACULTY, FAQ) */}
+      <section className="section" style={{ background: '#ffffff', padding: '72px 0' }}>
         <div className="container" style={{ maxWidth: '1140px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '48px', width: '100%' }}>
             
             {course.campusImmersion && (
               <CampusImmersionBanner immersion={course.campusImmersion} />
             )}
-
-            {/* CURRICULUM BREAKDOWN */}
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '24px', flexWrap: 'wrap', gap: '12px' }}>
-                <div>
-                  <span className="section-tag" style={{ marginBottom: '8px' }}>Course Curriculum</span>
-                  <h3 style={{ color: '#000648', margin: 0, fontSize: '1.8rem', fontWeight: 900 }}>
-                    Comprehensive Programme Curriculum
-                  </h3>
-                </div>
-
-                <div style={{ display: 'flex', gap: '10px' }}>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const el = document.getElementById('curriculum-scroll-track');
-                      if (el) el.scrollBy({ left: -320, behavior: 'smooth' });
-                    }}
-                    aria-label="Scroll curriculum left"
-                    style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      background: '#ffffff',
-                      border: '1.5px solid #000648',
-                      color: '#000648',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <HiChevronLeft size={20} />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const el = document.getElementById('curriculum-scroll-track');
-                      if (el) el.scrollBy({ left: 320, behavior: 'smooth' });
-                    }}
-                    aria-label="Scroll curriculum right"
-                    style={{
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '50%',
-                      background: '#000648',
-                      border: '1.5px solid #000648',
-                      color: '#f2b733',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    <HiChevronRight size={20} />
-                  </button>
-                </div>
-              </div>
-
-              <div
-                id="curriculum-scroll-track"
-                className="no-scrollbar"
-                style={{
-                  display: 'flex',
-                  gap: '20px',
-                  overflowX: 'auto',
-                  scrollSnapType: 'x mandatory',
-                  paddingBottom: '16px',
-                  width: '100%',
-                }}
-              >
-                {course.modules && course.modules.length > 0 ? (
-                  course.modules.map((mod) => (
-                    <div
-                      key={mod.title}
-                      style={{
-                        flex: '0 0 min(300px, 85vw)',
-                        scrollSnapAlign: 'start',
-                        background: '#ffffff',
-                        borderRadius: '16px',
-                        padding: '24px',
-                        boxShadow: '0 4px 16px rgba(0, 6, 72, 0.05)',
-                        borderTop: '4px solid #000648',
-                        borderLeft: '1.5px solid #e2e8f0',
-                        borderRight: '1.5px solid #e2e8f0',
-                        borderBottom: '1.5px solid #e2e8f0',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                      }}
-                    >
-                      <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                          <span
-                            style={{
-                              background: '#000648',
-                              color: '#f2b733',
-                              fontWeight: 900,
-                              width: '32px',
-                              height: '32px',
-                              borderRadius: '50%',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '0.85rem',
-                              lineHeight: 1,
-                              flexShrink: 0,
-                            }}
-                          >
-                            {mod.module || 'M'}
-                          </span>
-                          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#64748b' }}>
-                            {mod.duration || '2-3 Weeks'}
-                          </span>
-                        </div>
-
-                        <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginBottom: '12px', lineHeight: 1.35 }}>
-                          {mod.title}
-                        </h4>
-
-                        <ul style={{ paddingLeft: '0', listStyle: 'none', margin: 0, fontSize: '0.85rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                          {mod.topics?.map((tp) => (
-                            <li key={tp} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                              <HiCheckCircle style={{ color: '#f2b733', fontSize: '1rem', flexShrink: 0, marginTop: '3px' }} />
-                              <span>{tp}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  course.curriculum?.map((modTitle) => (
-                    <div
-                      key={modTitle}
-                      style={{
-                        flex: '0 0 min(280px, 80vw)',
-                        scrollSnapAlign: 'start',
-                        background: '#ffffff',
-                        borderRadius: '16px',
-                        padding: '22px 20px',
-                        boxShadow: '0 4px 16px rgba(0,6,72,0.05)',
-                        borderTop: '4px solid #000648',
-                        border: '1.5px solid #e2e8f0',
-                      }}
-                    >
-                      <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-                        {modTitle}
-                      </h4>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
 
             {/* ADMISSION STEPS (HOW IT WORKS TIMELINE - 6 STEPS) */}
             <CourseAdmissionSteps steps={course.admissionSteps} />
@@ -323,7 +373,6 @@ export default function CourseDetail({ onOpenDemoModal }) {
             {course.comparisonData && (
               <CourseComparisonTable comparisonData={course.comparisonData} />
             )}
-
 
             {course.faqs && (
               <div>

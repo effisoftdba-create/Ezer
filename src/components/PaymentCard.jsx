@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HiCheckCircle, HiLockClosed, HiSparkles } from 'react-icons/hi';
+import { HiCheck, HiLockClosed, HiSparkles } from 'react-icons/hi';
 
 export default function PaymentCard({ course, onEnrollClick }) {
   const [loading, setLoading] = useState(false);
@@ -18,186 +18,204 @@ export default function PaymentCard({ course, onEnrollClick }) {
   };
 
   const courseFeatures = [
-    'Live Online Instructor-Led Cohort Classes',
-    '12-Month Dedicated Placement Support & Resume Prep',
-    'Hands-on Practical Labs & Capstone Projects',
-    '1:1 Code Reviews with Senior Tech Mentors',
-    'Verifiable ISO 9001:2015 Course Certificate',
-    'Up to 3 Years Access to Alumni & Peer Community'
+    'Live Online Instructor-Led Cohort Sessions',
+    '12-Month Dedicated Placement Assistance & Resume Reviews',
+    'Hands-on Practical Labs & Production Capstone Projects',
+    '1:1 Code Reviews & Mentorship by Senior Engineers',
+    'Verifiable ISO 9001:2015 Professional IT Certification',
+    'Up to 3 Years Access to Alumni Network & Community'
   ];
 
   return (
-    <div
-      className="ezer-payment-card-wrapper"
-      style={{
-        position: 'relative',
-        maxWidth: '440px',
-        width: '100%',
-        margin: '0 auto',
-        borderRadius: '24px',
-        padding: '2px',
-        background: 'linear-gradient(135deg, #f2b733 0%, #000648 50%, #f2b733 100%)',
-        boxShadow: '0 20px 50px rgba(0, 6, 72, 0.35)',
-      }}
-    >
-      <div
-        style={{
-          background: 'linear-gradient(180deg, #000648 0%, #0a1478 100%)',
-          borderRadius: '22px',
-          padding: '32px 28px',
-          color: '#ffffff',
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Glow backdrop effect */}
+    <div style={{ width: '100%', maxWidth: '30rem', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="growth-pro-card-group" style={{ position: 'relative', width: '100%' }}>
+        {/* Keyframe styles for spinning blur animations and card hover */}
+        <style>{`
+          @keyframes spinSlow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          @keyframes spinSlowRev {
+            from { transform: rotate(360deg); }
+            to { transform: rotate(0deg); }
+          }
+          .growth-pro-blur-1 {
+            animation: spinSlow 8s linear infinite;
+          }
+          .growth-pro-blur-2 {
+            animation: spinSlowRev 16s linear infinite;
+          }
+          .growth-pro-card-box {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          }
+          .growth-pro-card-box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px -10px rgba(34, 211, 238, 0.45);
+          }
+        `}</style>
+
+        {/* Rotating blur background */}
+        <div style={{ position: 'absolute', inset: 0, borderRadius: '1.25rem', overflow: 'hidden', pointerEvents: 'none' }}>
+          <div
+            className="growth-pro-blur-1"
+            style={{
+              position: 'absolute',
+              top: '-2.5rem',
+              left: '-2.5rem',
+              right: '-2.5rem',
+              bottom: '-2.5rem',
+              borderRadius: '9999px',
+              background: 'linear-gradient(to right, transparent, rgba(34, 211, 238, 0.35), transparent)',
+              filter: 'blur(24px)',
+              opacity: 0.65
+            }}
+          />
+          <div
+            className="growth-pro-blur-2"
+            style={{
+              position: 'absolute',
+              top: '-5rem',
+              left: '-5rem',
+              right: '-5rem',
+              bottom: '-5rem',
+              borderRadius: '9999px',
+              background: 'linear-gradient(to right, transparent, rgba(14, 165, 233, 0.25), transparent)',
+              filter: 'blur(36px)',
+              opacity: 0.45
+            }}
+          />
+        </div>
+
+        {/* Border gradient */}
         <div
           style={{
             position: 'absolute',
-            top: '-50px',
-            right: '-50px',
-            width: '180px',
-            height: '180px',
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(242,183,51,0.25) 0%, rgba(0,6,72,0) 70%)',
-            pointerEvents: 'none',
+            inset: 0,
+            borderRadius: '1.25rem',
+            padding: '1px',
+            background: 'linear-gradient(to bottom, rgba(103, 232, 249, 0.6), rgba(71, 85, 105, 0.8), rgba(30, 58, 138, 0.7))',
+            pointerEvents: 'none'
           }}
         />
 
-        {/* Header Tag */}
+        {/* Growth Pro Card Main Container */}
         <div
+          className="growth-pro-card-box"
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            background: 'rgba(242, 183, 51, 0.15)',
-            border: '1px solid rgba(242, 183, 51, 0.4)',
-            color: '#f2b733',
-            fontSize: '0.75rem',
-            fontWeight: 800,
-            padding: '5px 14px',
-            borderRadius: '50px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.06em',
-            marginBottom: '18px',
+            position: 'relative',
+            borderRadius: '1.25rem',
+            overflow: 'hidden',
+            boxShadow: 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.1)',
+            outline: '1px solid rgba(255, 255, 255, 0.2)',
+            backgroundColor: 'hsl(222, 47%, 11%)',
+            backgroundImage: `
+              radial-gradient(at 88% 40%, hsl(222, 47%, 11%) 0px, transparent 85%),
+              radial-gradient(at 49% 30%, hsl(222, 47%, 11%) 0px, transparent 85%),
+              radial-gradient(at 14% 26%, hsl(222, 47%, 11%) 0px, transparent 85%),
+              radial-gradient(at 0% 64%, hsl(188, 95%, 55%) 0px, transparent 85%),
+              radial-gradient(at 41% 94%, hsl(205, 92%, 62%) 0px, transparent 85%),
+              radial-gradient(at 100% 99%, hsl(195, 100%, 55%) 0px, transparent 85%)
+            `
           }}
         >
-          <HiSparkles size={14} />
-          <span>Limited Time Offer</span>
-        </div>
+          <div style={{ position: 'relative', padding: '1.75rem' }}>
+            {/* Header */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '1.25rem', fontWeight: 800, tracking: '-0.025em', color: '#ffffff' }}>
+                  {course?.title || 'EZER IT Certification'}
+                </span>
+                <span
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: '9999px',
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    background: 'linear-gradient(to right, rgba(6, 182, 212, 0.25), rgba(59, 130, 246, 0.25))',
+                    color: '#67e8f9',
+                    outline: '1px solid rgba(34, 211, 238, 0.4)'
+                  }}
+                >
+                  <HiSparkles size={12} /> Popular Cohort
+                </span>
+              </div>
+              <p style={{ fontSize: '0.875rem', lineHeight: 1.6, color: '#94a3b8', margin: 0, paddingRight: '0.5rem' }}>
+                {course?.tagline || 'Perfect for career switchers ready to master real IT skills and get placed.'}
+              </p>
+            </div>
 
-        {/* Course Title */}
-        <h3
-          style={{
-            fontSize: '1.4rem',
-            fontWeight: 800,
-            color: '#ffffff',
-            marginBottom: '12px',
-            lineHeight: 1.3,
-          }}
-        >
-          {course?.title || 'EZER IT Certification Course'}
-        </h3>
+            {/* Pricing - Strictly ₹9 */}
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '1.5rem' }}>
+              <span style={{ fontSize: '2.5rem', fontWeight: 900, letterSpacing: '-0.025em', color: '#ffffff', lineHeight: 1 }}>
+                ₹9
+              </span>
+              <span style={{ fontSize: '0.875rem', color: '#94a3b8', fontWeight: 600 }}>
+                one-time total
+              </span>
+            </div>
 
-        {/* Pricing Block - Strictly ₹9 */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'baseline',
-            gap: '10px',
-            margin: '20px 0 24px',
-            paddingBottom: '20px',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
-          }}
-        >
-          <span style={{ fontSize: '3rem', fontWeight: 900, color: '#f2b733', lineHeight: 1 }}>
-            ₹9
-          </span>
-          <span style={{ fontSize: '0.9rem', color: '#cbd5e1', fontWeight: 600 }}>
-            one-time total
-          </span>
-        </div>
+            {/* Divider */}
+            <hr style={{ marginBottom: '1.5rem', border: 'none', borderTop: '1px solid rgba(255, 255, 255, 0.12)' }} />
 
-        {/* Feature List */}
-        <div style={{ marginBottom: '28px' }}>
-          <h4
-            style={{
-              fontSize: '0.85rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.06em',
-              color: '#94a3b8',
-              marginBottom: '14px',
-              fontWeight: 700,
-            }}
-          >
-            What this course includes:
-          </h4>
+            {/* Features */}
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '2rem', padding: 0, margin: '0 0 2rem 0', listStyle: 'none' }}>
+              {courseFeatures.map((feat, idx) => (
+                <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <span
+                    style={{
+                      display: 'grid',
+                      placeItems: 'center',
+                      width: '1.25rem',
+                      height: '1.25rem',
+                      borderRadius: '9999px',
+                      background: 'rgba(255, 255, 255, 0.15)',
+                      backdropFilter: 'blur(4px)',
+                      outline: '1px solid rgba(255, 255, 255, 0.25)',
+                      flexShrink: 0
+                    }}
+                  >
+                    <HiCheck size={14} style={{ color: '#ffffff' }} />
+                  </span>
+                  <span style={{ fontSize: '0.875rem', color: '#f1f5f9', fontWeight: 500 }}>
+                    {feat}
+                  </span>
+                </li>
+              ))}
+            </ul>
 
-          <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: 0, margin: 0 }}>
-            {courseFeatures.map((feat, idx) => (
-              <li
-                key={idx}
-                style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '10px',
-                  fontSize: '0.9rem',
-                  color: '#e2e8f0',
-                  lineHeight: 1.45,
-                }}
-              >
-                <HiCheckCircle
-                  size={18}
-                  style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }}
-                />
-                <span>{feat}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
+            {/* CTA Button */}
+            <button
+              type="button"
+              onClick={handleCheckout}
+              disabled={loading}
+              style={{
+                width: '100%',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '0.75rem',
+                padding: '0.875rem 1.25rem',
+                fontSize: '0.95rem',
+                fontWeight: 800,
+                color: '#ffffff',
+                background: 'linear-gradient(135deg, #0284c7 0%, #06b6d4 100%)',
+                boxShadow: 'inset 0 -2px 25px -4px rgba(255, 255, 255, 0.35)',
+                outline: '1px solid rgba(255, 255, 255, 0.15)',
+                border: 'none',
+                cursor: loading ? 'not-allowed' : 'pointer',
+                transition: 'all 0.3s ease',
+                gap: '8px'
+              }}
+            >
+              <HiLockClosed size={18} />
+              <span>{loading ? 'Processing Order...' : 'Enroll Now for ₹9'}</span>
+            </button>
 
-        {/* CTA Button */}
-        <button
-          type="button"
-          onClick={handleCheckout}
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '16px 24px',
-            borderRadius: '50px',
-            background: 'linear-gradient(135deg, #f2b733 0%, #d9a02a 100%)',
-            color: '#000648',
-            fontWeight: 900,
-            fontSize: '1.05rem',
-            letterSpacing: '0.02em',
-            boxShadow: '0 6px 20px rgba(242, 183, 51, 0.4)',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            transition: 'transform 0.2s ease, boxShadow 0.2s ease',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-          }}
-        >
-          <HiLockClosed size={18} />
-          <span>{loading ? 'Processing...' : 'Enroll Now'}</span>
-        </button>
-
-        {/* Secure Transaction Notice (No Money-Back Guarantee Pill) */}
-        <div
-          style={{
-            marginTop: '16px',
-            textAlign: 'center',
-            fontSize: '0.78rem',
-            color: '#94a3b8',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '6px',
-          }}
-        >
-          <HiLockClosed size={12} style={{ color: '#10b981' }} />
-          <span>256-Bit SSL Encrypted & Secured Checkout</span>
+            {/* Note: 14-day money back guarantee pill REMOVED completely per user request */}
+          </div>
         </div>
       </div>
     </div>

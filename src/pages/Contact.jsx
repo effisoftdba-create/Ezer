@@ -23,7 +23,7 @@ export default function Contact() {
   };
 
   return (
-    <div style={{ background: '#f8fafc', minHeight: '100vh', paddingBottom: '60px' }}>
+    <div style={{ background: '#f8fafc', minHeight: '100vh', paddingBottom: 0 }}>
       <ContactHeader />
       <section className="section">
         <div className="container">

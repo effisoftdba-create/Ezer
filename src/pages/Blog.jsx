@@ -46,7 +46,7 @@ export default function Blog({ onOpenDemoModal }) {
     : [...userBlogList, ...defaultArticles.slice(0, 3 - userBlogList.length)];
 
   return (
-    <div style={{ background: '#f8fafc', color: '#0f172a', minHeight: '100vh', paddingBottom: '60px', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ background: '#f8fafc', color: '#0f172a', minHeight: '100vh', paddingBottom: 0, position: 'relative', overflow: 'hidden' }}>
       
       {/* FLOATING BACKGROUND ANIMATION EFFECTS */}
       <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden', zIndex: 0 }}>
@@ -243,7 +243,7 @@ export default function Blog({ onOpenDemoModal }) {
 
       </div>
 
-      <div style={{ marginTop: '64px', position: 'relative', zIndex: 2 }}>
+      <div style={{ marginTop: '56px', marginBottom: 0, position: 'relative', zIndex: 2 }}>
         <CTABanner onOpenDemoModal={onOpenDemoModal} />
       </div>
 
