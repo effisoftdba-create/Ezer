@@ -54,10 +54,17 @@ export default function CourseManager() {
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [formData, setFormData] = useState(DEFAULT_COURSE_STATE);
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const mainEl = document.querySelector('main');
+    if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData(DEFAULT_COURSE_STATE);
     setIsEditing(true);
+    scrollToTop();
   };
 
   const handleOpenEdit = (course) => {
@@ -91,6 +98,7 @@ export default function CourseManager() {
       modulesStr: safeModulesStr
     });
     setIsEditing(true);
+    scrollToTop();
   };
 
   const handleSave = (e) => {

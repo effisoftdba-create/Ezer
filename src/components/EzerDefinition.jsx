@@ -160,42 +160,42 @@ export default function EzerDefinition() {
 
               {/* Floating Language Badges */}
               <div 
-                title="Tamil Medium & Bilingual Support"
+                title="Tamil Language Cohort Support"
                 style={{
-                  position: 'absolute', top: '4%', left: '0%', zIndex: 3,
-                  width: '46px', height: '46px', borderRadius: '50%',
-                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.2rem',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
+                  position: 'absolute', top: '4%', left: '-2%', zIndex: 3,
+                  padding: '8px 18px', borderRadius: '50px',
+                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.85rem',
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  boxShadow: '0 6px 18px rgba(0,6,72,0.3)', border: '2px solid #f2b733'
                 }}
               >
-                அ
+                <HiGlobeAlt size={16} /> Tamil (தமிழ்)
               </div>
 
               <div 
-                title="English Medium Support"
+                title="English Language Cohort Support"
                 style={{
-                  position: 'absolute', top: '42%', right: '-2%', zIndex: 3,
-                  width: '46px', height: '46px', borderRadius: '50%',
-                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.2rem',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
+                  position: 'absolute', top: '42%', right: '-4%', zIndex: 3,
+                  padding: '8px 18px', borderRadius: '50px',
+                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.85rem',
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  boxShadow: '0 6px 18px rgba(0,6,72,0.3)', border: '2px solid #f2b733'
                 }}
               >
-                A
+                <HiGlobeAlt size={16} /> English
               </div>
 
               <div 
-                title="Hindi Medium Support"
+                title="Hindi Language Cohort Support"
                 style={{
-                  position: 'absolute', bottom: '6%', left: '0%', zIndex: 3,
-                  width: '46px', height: '46px', borderRadius: '50%',
-                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1.25rem',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  boxShadow: '0 6px 18px rgba(0,6,72,0.25)', border: '2.5px solid #f2b733'
+                  position: 'absolute', bottom: '6%', left: '-2%', zIndex: 3,
+                  padding: '8px 18px', borderRadius: '50px',
+                  background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.85rem',
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  boxShadow: '0 6px 18px rgba(0,6,72,0.3)', border: '2px solid #f2b733'
                 }}
               >
-                அ
+                <HiGlobeAlt size={16} /> Hindi (हिन्दी)
               </div>
             </div>
 
