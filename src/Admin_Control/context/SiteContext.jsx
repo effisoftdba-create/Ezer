@@ -385,6 +385,12 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [blogs]);
 
+  const updateAchievement = useCallback((id, updatedData) => {
+    const updated = (achievements || []).map((a) => (a.id === id ? { ...a, ...updatedData } : a));
+    dispatch({ type: 'SET_KEY', key: 'achievements', value: updated });
+    triggerStateToast('SAVED');
+  }, [achievements]);
+
   const resetAllToDefaults = useCallback(() => {
     localStorage.clear();
     dispatch({ type: 'RESET_ALL' });
@@ -408,7 +414,7 @@ export function SiteProvider({ children }) {
     popupConfig, updatePopupConfig,
     leads, addLead, updateLeadStatus, addLeadComment, deleteLead,
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
-    achievements, updateAchievements, addAchievement, deleteAchievement,
+    achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     resetAllToDefaults, resetToDefault: resetAllToDefaults
   }), [
@@ -428,7 +434,7 @@ export function SiteProvider({ children }) {
     popupConfig, updatePopupConfig,
     leads, addLead, updateLeadStatus, addLeadComment, deleteLead,
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
-    achievements, updateAchievements, addAchievement, deleteAchievement,
+    achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     resetAllToDefaults
   ]);

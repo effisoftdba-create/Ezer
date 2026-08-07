@@ -45,11 +45,11 @@ export default function ExecutiveLeadership() {
     <section
       style={{
         position: 'relative',
-        background: 'radial-gradient(circle at 50% 30%, #05133b 0%, #000648 55%, #020617 100%)',
-        color: '#ffffff',
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%)',
+        color: '#000648',
         padding: '80px 20px',
-        borderTop: '2px solid rgba(242, 183, 51, 0.4)',
-        borderBottom: '2px solid rgba(242, 183, 51, 0.4)',
+        borderTop: '3px solid #f2b733',
+        borderBottom: '3px solid #f2b733',
         overflow: 'hidden'
       }}
     >
@@ -83,13 +83,12 @@ export default function ExecutiveLeadership() {
           grid-template-columns: 340px 1fr;
           gap: 48px;
           align-items: center;
-          background: rgba(255, 255, 255, 0.03);
-          backdrop-filter: blur(12px);
+          background: #ffffff;
           border-radius: 24px;
           padding: 40px;
           margin-bottom: 48px;
-          border: 1.5px solid rgba(242, 183, 51, 0.25);
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+          border: 1.5px solid #cbd5e1;
+          box-shadow: 0 15px 40px rgba(0, 6, 72, 0.07);
           transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
@@ -99,8 +98,8 @@ export default function ExecutiveLeadership() {
 
         .zigzag-exec-row:hover {
           transform: translateY(-4px);
-          border-color: rgba(242, 183, 51, 0.6);
-          box-shadow: 0 30px 60px rgba(242, 183, 51, 0.15);
+          border-color: #f2b733;
+          box-shadow: 0 25px 50px rgba(0, 6, 72, 0.12);
         }
 
         /* Glowing Image Card Container Style */
@@ -140,7 +139,7 @@ export default function ExecutiveLeadership() {
           overflow: hidden;
           border: 2px solid #f2b733;
           background: #000648;
-          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
         }
 
         .exec-card .img-content {
@@ -221,9 +220,9 @@ export default function ExecutiveLeadership() {
         .zigzag-role-badge {
           display: inline-block;
           align-self: flex-start;
-          background: rgba(242, 183, 51, 0.15);
+          background: #000648;
           color: #f2b733;
-          border: 1.5px solid #f2b733;
+          border: 1.5px solid #000648;
           padding: 4px 16px;
           borderRadius: 50px;
           font-weight: 900;
@@ -235,8 +234,8 @@ export default function ExecutiveLeadership() {
 
         .zigzag-tagline {
           font-size: 1.05rem;
-          color: #f2b733;
-          font-weight: 600;
+          color: #d97706;
+          font-weight: 700;
           font-style: italic;
           margin-bottom: 12px;
           letter-spacing: -0.01em;
@@ -246,7 +245,7 @@ export default function ExecutiveLeadership() {
           font-family: Georgia, 'Times New Roman', serif;
           font-size: clamp(1.8rem, 3.2vw, 2.5rem);
           font-weight: 400;
-          color: #ffffff;
+          color: #000648;
           line-height: 1.22;
           margin: 0 0 20px 0;
           letter-spacing: -0.02em;
@@ -255,14 +254,14 @@ export default function ExecutiveLeadership() {
         .zigzag-officer-name {
           font-size: 1.2rem;
           font-weight: 900;
-          color: #f2b733;
+          color: #000648;
           margin-bottom: 4px;
         }
 
         .zigzag-officer-role {
           font-size: 0.84rem;
           font-weight: 800;
-          color: #93c5fd;
+          color: #115DFC;
           text-transform: uppercase;
           letter-spacing: 0.08em;
           margin-bottom: 14px;
@@ -270,7 +269,7 @@ export default function ExecutiveLeadership() {
 
         .zigzag-bio {
           font-size: 0.96rem;
-          color: #cbd5e1;
+          color: #475569;
           line-height: 1.65;
           margin: 0;
           max-width: 660px;
@@ -318,7 +317,7 @@ export default function ExecutiveLeadership() {
             style={{
               fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
               fontWeight: 900,
-              color: '#ffffff',
+              color: '#000648',
               lineHeight: 1.15,
               marginBottom: '12px',
               letterSpacing: '-0.02em'
@@ -330,7 +329,7 @@ export default function ExecutiveLeadership() {
           <p
             style={{
               fontSize: '1.05rem',
-              color: '#94a3b8',
+              color: '#475569',
               maxWidth: '740px',
               margin: '0 auto',
               lineHeight: 1.6

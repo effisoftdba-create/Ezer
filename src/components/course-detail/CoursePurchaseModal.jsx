@@ -117,6 +117,18 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
       background: 'rgba(0, 6, 72, 0.85)', backdropFilter: 'blur(8px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
     }}>
+      <style>{`
+        .modal-form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+        }
+        @media (max-width: 540px) {
+          .modal-form-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
       <div style={{
         background: '#ffffff', color: '#000648', width: '100%', maxWidth: '560px',
         maxHeight: '90vh', overflowY: 'auto',
@@ -182,7 +194,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
               />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+            <div className="modal-form-grid">
               <div>
                 <label htmlFor="student_email" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
                   Email Address *

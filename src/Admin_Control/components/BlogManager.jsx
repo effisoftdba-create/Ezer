@@ -7,7 +7,8 @@ import ArticleFormModal from './ArticleFormModal';
 /* ────────────────────────────────────────────────────────────
    ACHIEVEMENT SECTION (unchanged logic, kept compact)
    ──────────────────────────────────────────────────────────── */
-function AchievementSection({ achievements, addAchievement, deleteAchievement, onOpenPicker, externalImage }) {
+function AchievementSection({ achievements, addAchievement, updateAchievement, deleteAchievement, onOpenPicker, externalImage }) {
+  const [editingAchId, setEditingAchId] = useState(null);
   const [achTitle, setAchTitle] = useState('');
   const [achIssuer, setAchIssuer] = useState('');
   const [achYear, setAchYear] = useState(() => new Date().getFullYear().toString());
@@ -17,17 +18,43 @@ function AchievementSection({ achievements, addAchievement, deleteAchievement, o
 
   const currentImage = externalImage || achImage;
 
-  const handleAddAchievement = (e) => {
+  const handleEditClick = (ach) => {
+    setEditingAchId(ach.id);
+    setAchTitle(ach.title || '');
+    setAchIssuer(ach.issuer || '');
+    setAchYear(ach.year || '2025');
+    setAchCategory(ach.category || 'Excellence Award');
+    setAchImage(ach.image || '');
+    setAchDesc(ach.description || '');
+  };
+
+  const handleCancelEdit = () => {
+    setEditingAchId(null);
+    setAchTitle('');
+    setAchIssuer('');
+    setAchDesc('');
+  };
+
+  const handleSubmitAchievement = (e) => {
     e.preventDefault();
     if (!achTitle.trim()) return alert('Please enter achievement title');
-    addAchievement({
+
+    const payload = {
       title: achTitle.trim(),
       issuer: achIssuer.trim() || 'EZER Learning Solutions',
       year: achYear.trim() || '2025',
       category: achCategory,
       image: currentImage.trim(),
       description: achDesc.trim() || 'Awarded for tech training excellence and verified student outcomes.'
-    });
+    };
+
+    if (editingAchId && updateAchievement) {
+      updateAchievement(editingAchId, payload);
+      setEditingAchId(null);
+    } else {
+      addAchievement(payload);
+    }
+
     setAchTitle('');
     setAchIssuer('');
     setAchDesc('');
@@ -35,9 +62,10 @@ function AchievementSection({ achievements, addAchievement, deleteAchievement, o
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-      <form onSubmit={handleAddAchievement} style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <HiPlus size={18} /> Add New EZER Award / Achievement
+      <form onSubmit={handleSubmitAchievement} style={{ background: '#f8fafc', border: editingAchId ? '2px solid #000648' : '1.5px solid #e2e8f0', borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px', margin: 0 }}>
+          <HiBadgeCheck size={20} color="#f2b733" />
+          {editingAchId ? 'Editing EZER Award / Achievement' : 'Add New EZER Award / Achievement'}
         </h3>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 120px', gap: '14px' }}>
@@ -74,9 +102,16 @@ function AchievementSection({ achievements, addAchievement, deleteAchievement, o
               </button>
             </div>
           </div>
-          <button type="submit" style={{ padding: '10px 20px', background: '#000648', color: '#f2b733', fontWeight: 900, borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiBadgeCheck size={18} /> Add Award
-          </button>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            {editingAchId && (
+              <button type="button" onClick={handleCancelEdit} style={{ padding: '10px 16px', background: '#e2e8f0', color: '#475569', fontWeight: 800, borderRadius: '8px', border: 'none', cursor: 'pointer' }}>
+                Cancel
+              </button>
+            )}
+            <button type="submit" style={{ padding: '10px 20px', background: '#000648', color: '#f2b733', fontWeight: 900, borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <HiBadgeCheck size={18} /> {editingAchId ? 'Save Award' : 'Add Award'}
+            </button>
+          </div>
         </div>
 
         <div>
@@ -101,9 +136,15 @@ function AchievementSection({ achievements, addAchievement, deleteAchievement, o
                 <p style={{ fontSize: '0.76rem', color: '#64748b', marginTop: '2px', fontWeight: 700 }}>Issued by: {ach.issuer}</p>
                 <p style={{ fontSize: '0.78rem', color: '#475569', marginTop: '8px', lineHeight: 1.4 }}>{ach.description}</p>
               </div>
-              <button type="button" onClick={() => deleteAchievement(ach.id)} style={{ marginTop: '14px', padding: '6px 12px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', alignSelf: 'flex-end' }}>
-                <HiTrash size={14} /> Remove Award
-              </button>
+
+              <div style={{ display: 'flex', gap: '8px', marginTop: '14px', justifyContent: 'flex-end' }}>
+                <button type="button" onClick={() => handleEditClick(ach)} style={{ padding: '6px 12px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <HiPencil size={14} /> Edit
+                </button>
+                <button type="button" onClick={() => deleteAchievement(ach.id)} style={{ padding: '6px 12px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <HiTrash size={14} /> Delete
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -381,7 +422,7 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
    MAIN BLOG MANAGER COMPONENT
    ──────────────────────────────────────────────────────────── */
 export default function BlogManager() {
-  const { blogs, addBlog, updateBlog, deleteBlog, achievements, addAchievement, deleteAchievement, executiveLeaders, updateExecutiveLeader } = useSiteData();
+  const { blogs, addBlog, updateBlog, deleteBlog, achievements, addAchievement, updateAchievement, deleteAchievement, executiveLeaders, updateExecutiveLeader } = useSiteData();
   const [activeSubTab, setActiveSubTab] = useState('blogs');
   const [achPickerOpen, setAchPickerOpen] = useState(false);
   const [achPickedImage, setAchPickedImage] = useState('');
@@ -456,6 +497,7 @@ export default function BlogManager() {
         <AchievementSection
           achievements={achievements}
           addAchievement={addAchievement}
+          updateAchievement={updateAchievement}
           deleteAchievement={deleteAchievement}
           onOpenPicker={() => setAchPickerOpen(true)}
           externalImage={achPickedImage}

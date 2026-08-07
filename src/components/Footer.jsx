@@ -4,11 +4,11 @@ import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaTwitter } from 'react
 import { HiMail, HiPhone, HiLocationMarker } from 'react-icons/hi';
 
 const socialLinks = [
-  { name: 'Facebook', Icon: FaFacebook },
-  { name: 'Instagram', Icon: FaInstagram },
-  { name: 'LinkedIn', Icon: FaLinkedin },
-  { name: 'YouTube', Icon: FaYoutube },
-  { name: 'Twitter', Icon: FaTwitter },
+  { name: 'Facebook', Icon: FaFacebook, url: '#' },
+  { name: 'Instagram', Icon: FaInstagram, url: 'https://www.instagram.com/ezerlearning?igsh=eHZ1Y3NyOHF5NGY3' },
+  { name: 'LinkedIn', Icon: FaLinkedin, url: 'https://www.linkedin.com/company/ezer-learning-solutions/' },
+  { name: 'YouTube', Icon: FaYoutube, url: '#' },
+  { name: 'Twitter', Icon: FaTwitter, url: '#' },
 ];
 
 export default function Footer() {
@@ -42,22 +42,28 @@ export default function Footer() {
             </p>
             
             <div style={{ display: 'flex', gap: '12px' }}>
-              {socialLinks.map(({ name, Icon }) => (
-                <a key={name} href="#" style={{
-                  color: '#000648', background: '#f2b733',
-                  width: '30px', height: '30px', borderRadius: '50%',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '0.85rem', transition: 'background-color 0.2s ease, transform 0.2s ease', textDecoration: 'none'
-                }} 
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#ffffff';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#f2b733';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-                aria-label={`${name} page`}>
+              {socialLinks.map(({ name, Icon, url }) => (
+                <a
+                  key={name}
+                  href={url}
+                  target={url !== '#' ? '_blank' : '_self'}
+                  rel={url !== '#' ? 'noopener noreferrer' : ''}
+                  style={{
+                    color: '#000648', background: '#f2b733',
+                    width: '30px', height: '30px', borderRadius: '50%',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '0.85rem', transition: 'background-color 0.2s ease, transform 0.2s ease', textDecoration: 'none'
+                  }} 
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = '#ffffff';
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = '#f2b733';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                  aria-label={`${name} page`}
+                >
                   <Icon />
                 </a>
               ))}
