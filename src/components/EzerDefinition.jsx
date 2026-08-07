@@ -1,5 +1,5 @@
 import React from 'react';
-import { HiSparkles, HiCheckCircle } from 'react-icons/hi';
+import { HiSparkles, HiCheckCircle, HiGlobeAlt } from 'react-icons/hi';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc } from '../utils/imageUtils';
 import ExecutiveLeadership from './ExecutiveLeadership';
