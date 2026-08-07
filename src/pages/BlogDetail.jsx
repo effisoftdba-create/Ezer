@@ -191,51 +191,51 @@ export default function BlogDetail({ onOpenDemoModal }) {
   }
 
   return (
-    <div style={{ background: '#f8fafc', color: '#0f172a', minHeight: '100vh', position: 'relative' }}>
+    <div style={{ background: '#f8fafc', color: '#0f172a', minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
       
-      {/* Article Navigation Bar */}
-      <div style={{ background: '#000648', color: '#ffffff', padding: '16px 0', borderBottom: '2px solid #f2b733' }}>
-        <div className="container" style={{ maxWidth: '1000px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Link to="/blog" style={{ color: '#f2b733', textDecoration: 'none', fontWeight: 800, fontSize: '0.88rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+      {/* Article Top Navigation Bar */}
+      <div style={{ background: '#000648', color: '#ffffff', padding: '16px 20px', borderBottom: '2.5px solid #f2b733' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          <Link to="/blog" style={{ color: '#f2b733', textDecoration: 'none', fontWeight: 900, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <HiArrowLeft size={18} /> Back to EZER Tech Magazine
           </Link>
-          <span style={{ fontSize: '0.78rem', color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 800 }}>
+          <span style={{ fontSize: '0.78rem', color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 900, background: 'rgba(255,255,255,0.1)', padding: '4px 14px', borderRadius: '50px' }}>
             {article.category}
           </span>
         </div>
       </div>
 
-      {/* Hero Magazine Article Header */}
-      <header style={{ background: 'radial-gradient(circle at 50% 0%, #000a5e 0%, #000428 100%)', color: '#ffffff', padding: '64px 20px 48px', position: 'relative' }}>
-        <div className="container" style={{ maxWidth: '920px', margin: '0 auto' }}>
+      {/* Hero Magazine Article Header - Full Width */}
+      <header style={{ background: 'radial-gradient(circle at 50% 0%, #000a5e 0%, #000428 100%)', color: '#ffffff', padding: '64px 24px 56px', position: 'relative', width: '100%' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', width: '100%' }}>
           
-          {/* SEO / GEO / AEO Keyword Tag */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+          {/* SEO / GEO / AEO Keyword Badges */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
             <span style={{
               display: 'inline-flex', alignItems: 'center', gap: '6px',
               background: 'rgba(242, 183, 51, 0.18)', color: '#f2b733',
-              padding: '6px 20px', borderRadius: '50px', fontWeight: 900,
-              fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.08em',
+              padding: '6px 22px', borderRadius: '50px', fontWeight: 900,
+              fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em',
               border: '1.5px solid rgba(242, 183, 51, 0.4)'
             }}>
               <HiSparkles size={16} /> SPECIAL EDITORIAL FEATURE
             </span>
 
-            <span style={{ fontSize: '0.75rem', color: '#cbd5e1', background: 'rgba(255,255,255,0.1)', padding: '4px 12px', borderRadius: '50px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-              <HiLocationMarker size={14} color="#f2b733" /> {article.seoGeoAeoTag || 'Chennai, India & Online'}
+            <span style={{ fontSize: '0.78rem', color: '#ffffff', background: 'rgba(255,255,255,0.12)', padding: '5px 16px', borderRadius: '50px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid rgba(255,255,255,0.2)' }}>
+              <HiLocationMarker size={15} color="#f2b733" /> {article.seoGeoAeoTag}
             </span>
           </div>
 
-          <h1 style={{ fontSize: 'clamp(2.1rem, 4vw, 3.2rem)', fontWeight: 900, lineHeight: 1.2, color: '#ffffff', marginBottom: '20px', letterSpacing: '-0.02em' }}>
+          <h1 style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)', fontWeight: 900, lineHeight: 1.16, color: '#ffffff', marginBottom: '20px', letterSpacing: '-0.02em', textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
             {article.title}
           </h1>
 
-          <p style={{ fontSize: '1.15rem', color: '#cbd5e1', lineHeight: 1.65, marginBottom: '28px', fontWeight: 400 }}>
+          <p style={{ fontSize: '1.2rem', color: '#cbd5e1', lineHeight: 1.65, marginBottom: '28px', maxWidth: '1000px', fontWeight: 400 }}>
             {article.summary}
           </p>
 
           {/* Author Metadata Bar */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.15)', fontSize: '0.88rem', color: '#94a3b8' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.15)', fontSize: '0.9rem', color: '#94a3b8' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ffffff', fontWeight: 800 }}>
               <HiUser size={18} color="#f2b733" /> {article.author}
             </div>
@@ -250,54 +250,54 @@ export default function BlogDetail({ onOpenDemoModal }) {
         </div>
       </header>
 
-      {/* Main Cover Image */}
-      <div style={{ maxWidth: '1000px', margin: '-30px auto 48px', padding: '0 20px', position: 'relative', zIndex: 10 }}>
-        <div style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 25px 50px rgba(0,6,72,0.25)', border: '4px solid #ffffff' }}>
+      {/* Main Hero Cover Photo - Full Width */}
+      <div style={{ maxWidth: '1280px', margin: '-35px auto 48px', padding: '0 24px', position: 'relative', zIndex: 10, width: '100%' }}>
+        <div style={{ borderRadius: '28px', overflow: 'hidden', boxShadow: '0 25px 50px rgba(0,6,72,0.25)', border: '4px solid #ffffff' }}>
           <img
             src={resolveImageSrc(article.image)}
             alt={article.title}
             onError={handleImgError}
-            style={{ width: '100%', maxHeight: '520px', objectFit: 'cover', display: 'block' }}
+            style={{ width: '100%', maxHeight: '560px', objectFit: 'cover', display: 'block' }}
           />
         </div>
       </div>
 
-      {/* Article Content Layout */}
-      <main className="container" style={{ maxWidth: '860px', margin: '0 auto 64px', padding: '0 20px' }}>
+      {/* Main Article Grid Layout - Spanning Full Width (1280px) */}
+      <main style={{ maxWidth: '1280px', margin: '0 auto 64px', padding: '0 24px', width: '100%' }}>
         
-        {/* Magazine Key Takeaways Callout Box */}
-        <div style={{ background: '#eff6ff', borderLeft: '5px solid #000648', borderRadius: '12px', padding: '24px 28px', marginBottom: '44px', boxShadow: '0 4px 16px rgba(0,6,72,0.06)' }}>
-          <h4 style={{ color: '#000648', fontSize: '1.1rem', fontWeight: 900, margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiCheckCircle size={22} color="#000648" /> Executive Summary & Key Takeaways
+        {/* Magazine Key Takeaways Full-Width Callout */}
+        <div style={{ background: '#eff6ff', borderLeft: '6px solid #000648', borderRadius: '16px', padding: '28px 32px', marginBottom: '48px', boxShadow: '0 8px 24px rgba(0,6,72,0.06)' }}>
+          <h4 style={{ color: '#000648', fontSize: '1.2rem', fontWeight: 900, margin: '0 0 14px 0', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <HiCheckCircle size={24} color="#000648" /> Executive Summary & Key Takeaways
           </h4>
-          <ul style={{ margin: 0, paddingLeft: '20px', color: '#334155', fontSize: '0.95rem', lineHeight: 1.7 }}>
+          <ul style={{ margin: 0, paddingLeft: '22px', color: '#1e293b', fontSize: '1.02rem', lineHeight: 1.75, fontWeight: 500 }}>
             {article.takeaways.map((item, i) => (
-              <li key={i}>{item}</li>
+              <li key={i} style={{ marginBottom: '6px' }}>{item}</li>
             ))}
           </ul>
         </div>
 
-        {/* Article Body Sections with Photos & Magazine Styling */}
+        {/* Article Body Sections */}
         {article.sections.map((sec, idx) => (
-          <article key={idx} style={{ marginBottom: '48px' }}>
-            <h2 style={{ fontSize: '1.7rem', fontWeight: 900, color: '#000648', marginBottom: '16px', lineHeight: 1.3 }}>
+          <article key={idx} style={{ marginBottom: '56px' }}>
+            <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#000648', marginBottom: '18px', lineHeight: 1.25 }}>
               {sec.title}
             </h2>
 
-            <p style={{ fontSize: '1.08rem', color: '#334155', lineHeight: 1.8, whiteSpace: 'pre-line', marginBottom: '24px' }}>
+            <p style={{ fontSize: '1.12rem', color: '#334155', lineHeight: 1.85, whiteSpace: 'pre-line', marginBottom: '28px' }}>
               {sec.content}
             </p>
 
             {sec.image && (
-              <figure style={{ margin: '24px 0 36px 0' }}>
+              <figure style={{ margin: '28px 0 40px 0' }}>
                 <img
                   src={sec.image}
                   alt={sec.title}
                   onError={handleImgError}
-                  style={{ width: '100%', borderRadius: '16px', maxHeight: '420px', objectFit: 'cover', display: 'block', boxShadow: '0 12px 30px rgba(0,0,0,0.1)' }}
+                  style={{ width: '100%', borderRadius: '20px', maxHeight: '520px', objectFit: 'cover', display: 'block', boxShadow: '0 15px 35px rgba(0,0,0,0.12)' }}
                 />
                 {sec.caption && (
-                  <figcaption style={{ fontSize: '0.84rem', color: '#64748b', textAlign: 'center', marginTop: '10px', fontStyle: 'italic' }}>
+                  <figcaption style={{ fontSize: '0.88rem', color: '#64748b', textAlign: 'center', marginTop: '12px', fontStyle: 'italic', fontWeight: 600 }}>
                     {sec.caption}
                   </figcaption>
                 )}
@@ -306,18 +306,18 @@ export default function BlogDetail({ onOpenDemoModal }) {
           </article>
         ))}
 
-        {/* Call to Action Card Inside Article */}
-        <div style={{ background: 'linear-gradient(135deg, #000648 0%, #0a1478 100%)', color: '#ffffff', padding: '36px', borderRadius: '24px', textAlign: 'center', border: '2px solid #f2b733', boxShadow: '0 20px 40px rgba(0,6,72,0.3)' }}>
-          <h3 style={{ fontSize: '1.6rem', fontWeight: 900, color: '#ffffff', marginBottom: '10px' }}>
+        {/* Full-Width Call to Action Banner Inside Article */}
+        <div style={{ background: 'linear-gradient(135deg, #000648 0%, #0a1478 100%)', color: '#ffffff', padding: '44px 36px', borderRadius: '28px', textAlign: 'center', border: '2.5px solid #f2b733', boxShadow: '0 20px 40px rgba(0,6,72,0.3)', width: '100%' }}>
+          <h3 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#ffffff', marginBottom: '12px' }}>
             Ready to Launch Your Career in Technology?
           </h3>
-          <p style={{ color: '#cbd5e1', fontSize: '0.95rem', maxWidth: '600px', margin: '0 auto 20px', lineHeight: 1.6 }}>
-            Book a free 1-on-1 counseling call with senior EZER academic counselors in Chennai and explore our accelerated live cohorts.
+          <p style={{ color: '#cbd5e1', fontSize: '1.05rem', maxWidth: '780px', margin: '0 auto 24px', lineHeight: 1.65 }}>
+            Book a free 1-on-1 counseling session with senior EZER academic counselors in Chennai and explore our accelerated live cohorts.
           </p>
           <button
             type="button"
             onClick={() => onOpenDemoModal(article.title)}
-            style={{ padding: '14px 32px', borderRadius: '50px', background: '#f2b733', color: '#000648', fontWeight: 900, fontSize: '0.95rem', border: 'none', cursor: 'pointer', boxShadow: '0 4px 18px rgba(242,183,51,0.4)' }}
+            style={{ padding: '16px 36px', borderRadius: '50px', background: '#f2b733', color: '#000648', fontWeight: 900, fontSize: '1rem', border: 'none', cursor: 'pointer', boxShadow: '0 6px 24px rgba(242,183,51,0.4)' }}
           >
             BOOK FREE COUNSELING CALL →
           </button>

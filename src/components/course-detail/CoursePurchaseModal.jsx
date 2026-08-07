@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { HiX, HiCheckCircle, HiCreditCard, HiQrcode, HiLockClosed } from 'react-icons/hi';
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 export default function CoursePurchaseModal({ isOpen, onClose, course }) {
   const { addLead, contactInfo } = useSiteData();
   const [step, setStep] = useState(1); // 1: Select Plan & Details, 2: Payment Method, 3: Success Receipt
-  const [paymentOption, setPaymentOption] = useState('full'); // 'full' | 'emi'
   const [paymentMethod, setPaymentMethod] = useState('upi'); // 'upi' | 'card'
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [receiptNumber, setReceiptNumber] = useState('');
+
+  const waGroupUrl = (contactInfo && contactInfo.whatsappGroupUrl) || 'https://chat.whatsapp.com/EZERStudentCohortOfficial';
+
+  // Direct Automatic Redirect to WhatsApp upon Step 3 Completion
+  useEffect(() => {
+    if (step === 3) {
+      const redirectTimer = setTimeout(() => {
+        window.location.href = waGroupUrl;
+      }, 1500);
+      return () => clearTimeout(redirectTimer);
+    }
+  }, [step, waGroupUrl]);
 
   if (!isOpen || !course) return null;
 
@@ -99,8 +110,6 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
     setStep(1);
     onClose();
   };
-
-  const waGroupUrl = (contactInfo && contactInfo.whatsappGroupUrl) || 'https://chat.whatsapp.com/EZERStudentCohortOfficial';
 
   return (
     <div style={{
@@ -298,11 +307,11 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
           </div>
         )}
 
-        {/* STEP 3: ENROLLMENT CONFIRMATION RECEIPT & WHATSAPP REDIRECT */}
+        {/* STEP 3: ENROLLMENT CONFIRMATION RECEIPT & DIRECT AUTOMATIC WHATSAPP REDIRECT */}
         {step === 3 && (
-          <div style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <HiCheckCircle size={44} />
+          <div style={{ padding: '36px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            <div style={{ width: '68px', height: '68px', borderRadius: '50%', background: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)' }}>
+              <HiCheckCircle size={48} />
             </div>
 
             <div>
@@ -332,37 +341,10 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
               </div>
             </div>
 
-            {/* Official Student WhatsApp Group Link Redirect Button */}
-            <a
-              href={waGroupUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                width: '100%',
-                padding: '14px 20px',
-                borderRadius: '50px',
-                background: '#25D366',
-                color: '#ffffff',
-                fontWeight: 900,
-                fontSize: '0.98rem',
-                textDecoration: 'none',
-                boxShadow: '0 8px 24px rgba(37, 211, 102, 0.4)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px'
-              }}
-            >
-              JOIN OFFICIAL STUDENT WHATSAPP GROUP →
-            </a>
-
-            <button
-              type="button"
-              onClick={handleResetAndClose}
-              style={{ padding: '10px 28px', borderRadius: '50px', background: '#000648', color: '#f2b733', fontWeight: 900, border: 'none', cursor: 'pointer', fontSize: '0.85rem' }}
-            >
-              Close & Start Learning
-            </button>
+            {/* Direct Automatic Redirect Notice */}
+            <div style={{ background: '#25D366', color: '#ffffff', padding: '14px 20px', borderRadius: '50px', fontWeight: 900, fontSize: '0.95rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 8px 24px rgba(37, 211, 102, 0.4)' }}>
+              <span>Redirecting to Official Student WhatsApp Group...</span>
+            </div>
           </div>
         )}
       </div>
