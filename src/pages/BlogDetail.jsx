@@ -207,7 +207,7 @@ export default function BlogDetail({ onOpenDemoModal }) {
     : baseArticle;
 
   return (
-    <div style={{ background: '#f8fafc', color: '#0f172a', minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
+    <div style={{ background: '#ffffff', color: '#0f172a', minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>
       
       {/* Article Top Navigation Bar */}
       <div style={{ background: '#000648', color: '#ffffff', padding: '16px 20px', borderBottom: '2.5px solid #f2b733' }}>
