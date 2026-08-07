@@ -54,6 +54,7 @@ export default function AdminDashboard() {
     leads,
     blogs,
     achievements,
+    executiveLeaders,
     resetToDefault
   } = useSiteData();
 
