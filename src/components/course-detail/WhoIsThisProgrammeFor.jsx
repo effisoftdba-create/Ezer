@@ -47,7 +47,7 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
   }) : programAudienceData;
 
   return (
-    <section className="section-alt" style={{ padding: '72px 0' }}>
+    <section className="section-alt" style={{ padding: '24px 0' }}>
       <div className="container">
         {/* Header & Scroll Controls */}
         <div

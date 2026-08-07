@@ -27,7 +27,7 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
   if (!displayList || displayList.length === 0) return null;
 
   return (
-    <section className="section" style={{ background: '#ffffff', padding: '72px 0', borderBottom: '1px solid #e2e8f0' }}>
+    <section className="section" style={{ background: '#ffffff', padding: '32px 0', borderBottom: '1px solid #e2e8f0' }}>
       <div className="container">
         {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '36px' }}>

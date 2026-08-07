@@ -155,13 +155,13 @@ export default function CourseDetail({ onOpenDemoModal }) {
           width: '100%',
           background: 'radial-gradient(ellipse at 50% 0%, #000a5e 0%, #000428 100%)',
           color: '#ffffff',
-          padding: '56px 0',
+          padding: '40px 0',
           position: 'relative',
           borderBottom: '2px solid rgba(242, 183, 51, 0.4)',
         }}
       >
         <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(16px, 3vw, 48px)' }}>
-          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
             <span
               style={{
                 display: 'inline-flex',
@@ -176,7 +176,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
                 letterSpacing: '0.08em',
                 textTransform: 'uppercase',
                 border: '1.5px solid rgba(242, 183, 51, 0.4)',
-                marginBottom: '12px'
+                marginBottom: '10px'
               }}
             >
               <HiSparkles size={16} /> COURSE LIVE DEMO & PRACTICAL VIDEO PREVIEW
@@ -199,11 +199,11 @@ export default function CourseDetail({ onOpenDemoModal }) {
       </section>
 
       {/* 3. DETAILED MODULE BREAKDOWN SECTION (MOVED NEXT TO VIDEO PLAYER) */}
-      <section className="section" style={{ background: '#ffffff', padding: '72px 0', position: 'relative' }}>
+      <section className="section" style={{ background: '#ffffff', padding: '44px 0', position: 'relative' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 48px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 36px' }}>
             <span className="section-tag" style={{ marginBottom: '10px' }}>Detailed Module Breakdown</span>
-            <h2 style={{ color: '#000648', fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 900, marginBottom: '16px' }}>
+            <h2 style={{ color: '#000648', fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 900, marginBottom: '14px' }}>
               In-Depth Curriculum & Learning Modules
             </h2>
             <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.65, margin: 0 }}>
@@ -212,7 +212,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
           </div>
 
           {/* Visual Module Cards Grid with Cover Photos & Framer Motion */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '32px', width: '100%' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '28px', width: '100%' }}>
             {modulesList.map((mod, idx) => {
               const coverImg = mod.image || [
                 "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=600",
@@ -297,9 +297,9 @@ export default function CourseDetail({ onOpenDemoModal }) {
                   </div>
 
                   {/* Card Content Body */}
-                  <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                     <div>
-                      <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginBottom: '16px', lineHeight: 1.35 }}>
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginBottom: '14px', lineHeight: 1.35 }}>
                         {mod.title}
                       </h3>
 
@@ -313,7 +313,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
                       </ul>
                     </div>
 
-                    <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ marginTop: '20px', paddingTop: '14px', borderTop: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#166534', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                         <HiCheckCircle size={14} /> Accelerated Learning Track
                       </span>
@@ -327,9 +327,9 @@ export default function CourseDetail({ onOpenDemoModal }) {
       </section>
 
       {/* 4. EZER BRAND PAYMENT SECTION (#000648 Navy & #f2b733 Gold - NO SIDE MARGIN GAPS) */}
-      <section className="section" style={{ background: '#000648', padding: '72px 0', borderTop: '3px solid #f2b733', borderBottom: '3px solid #f2b733' }}>
+      <section className="section" style={{ background: '#000648', padding: '44px 0', borderTop: '3px solid #f2b733', borderBottom: '3px solid #f2b733' }}>
         <div className="container" style={{ width: '100%', maxWidth: '100%', padding: '0 clamp(16px, 4vw, 64px)' }}>
-          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 40px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 28px' }}>
             <span
               style={{
                 display: 'inline-flex',
@@ -343,12 +343,12 @@ export default function CourseDetail({ onOpenDemoModal }) {
                 fontWeight: 900,
                 textTransform: 'uppercase',
                 letterSpacing: '0.08em',
-                marginBottom: '12px'
+                marginBottom: '10px'
               }}
             >
               <HiSparkles size={16} /> OFFICIAL INSTANT ENROLLMENT
             </span>
-            <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 900, marginBottom: '12px' }}>
+            <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 900, marginBottom: '10px' }}>
               Enroll Today & Unlock 12-Month Placement Support
             </h2>
             <p style={{ fontSize: '1rem', color: '#cbd5e1', margin: 0, lineHeight: 1.6 }}>
@@ -366,9 +366,9 @@ export default function CourseDetail({ onOpenDemoModal }) {
       <CapstoneProjectsSlider projects={course.projects} courseTools={course.tools} />
       <VerifiableCertificateBanner courseTitle={course.title} onOpenDemoModal={onOpenDemoModal} />
 
-      <section className="section" style={{ background: '#ffffff', padding: '72px 0' }}>
+      <div style={{ background: '#ffffff', padding: '24px 0' }}>
         <div className="container" style={{ maxWidth: '1140px' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '48px', width: '100%' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
             
             {course.campusImmersion && (
               <CampusImmersionBanner immersion={course.campusImmersion} />
@@ -390,7 +390,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
 
             {course.faqs && (
               <div>
-                <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                   <span className="badge badge-gold" style={{ marginBottom: '8px' }}>Got Questions?</span>
                   <h3 style={{ color: '#000648', fontSize: '1.6rem', fontWeight: 900, margin: 0 }}>
                     Frequently Asked Questions
@@ -401,7 +401,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
             )}
           </div>
         </div>
-      </section>
+      </div>
 
       <CoursePurchaseModal
         isOpen={isPurchaseModalOpen}

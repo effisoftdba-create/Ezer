@@ -51,7 +51,7 @@ export default function CourseAdmissionSteps({ steps, title }) {
       <section
         style={{
           background: '#ffffff',
-          padding: '72px 0',
+          padding: '24px 0',
           width: '100%',
           position: 'relative',
           overflow: 'hidden',

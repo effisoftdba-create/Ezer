@@ -24,7 +24,7 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
   };
 
   return (
-    <section style={{ margin: '64px 0', width: '100%', maxWidth: '100%' }}>
+    <section style={{ margin: '20px 0', width: '100%', maxWidth: '100%' }}>
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '32px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <span className="section-tag" style={{ background: 'rgba(0, 6, 56, 0.06)', color: '#000638', border: '1px solid rgba(0, 6, 56, 0.12)' }}>

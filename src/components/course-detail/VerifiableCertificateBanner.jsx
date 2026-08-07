@@ -3,7 +3,7 @@ import { HiShieldCheck, HiBadgeCheck } from 'react-icons/hi';
 
 export default function VerifiableCertificateBanner({ courseTitle, onOpenDemoModal }) {
   return (
-    <section className="section" style={{ background: '#ffffff', padding: '72px 0' }}>
+    <section className="section" style={{ background: '#ffffff', padding: '32px 0' }}>
       <div className="container">
         <div style={{ background: '#0f172a', borderRadius: '16px', border: '1px solid rgba(255, 255, 255, 0.1)', padding: '36px 32px', color: '#ffffff', boxShadow: '0 12px 28px -4px rgba(15, 23, 42, 0.15)' }}>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '36px', alignItems: 'center' }}>

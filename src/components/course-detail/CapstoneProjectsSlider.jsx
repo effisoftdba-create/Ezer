@@ -31,7 +31,7 @@ export default function CapstoneProjectsSlider({ projects, courseTools }) {
   if (!displayProjects || displayProjects.length === 0) return null;
 
   return (
-    <section className="section" style={{ background: '#f8fafc', padding: '48px 0' }}>
+    <section className="section" style={{ background: '#f8fafc', padding: '32px 0' }}>
       <div className="container">
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
           <div>

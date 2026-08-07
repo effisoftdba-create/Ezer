@@ -24,7 +24,7 @@ export default function WhyEzer() {
   };
 
   return (
-    <section className="section" style={{ background: '#ffffff', borderBottom: '1px solid #e2e8f0', padding: '64px 0' }}>
+    <section className="section" style={{ background: '#ffffff', borderBottom: '1px solid #e2e8f0', padding: '36px 0' }}>
       <div className="container">
         
         {/* Header with Title & Navigation Arrows */}

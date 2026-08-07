@@ -4,7 +4,7 @@ import { HiArrowRight } from 'react-icons/hi';
 export default function CTABanner({ onOpenDemoModal }) {
   return (
     <section style={{
-      background: '#000648', padding: '56px 0',
+      background: '#000648', padding: '36px 0',
       backgroundImage: 'radial-gradient(ellipse at 20% 50%, rgba(242,183,51,0.12) 0%, transparent 60%)',
       borderTop: '2px solid #f2b733',
     }}>

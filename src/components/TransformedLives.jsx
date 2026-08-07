@@ -44,7 +44,7 @@ export default function TransformedLives() {
 
   return (
     <LazyMotion features={domAnimation}>
-      <section className="section-alt" style={{ padding: '72px 0', background: '#f8fafc' }}>
+      <section className="section-alt" style={{ padding: '36px 0', background: '#f8fafc' }}>
         <div className="container">
           {/* Section Header */}
           <div style={{ textAlign: 'center', marginBottom: '36px' }}>
