@@ -1,9 +1,11 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { HiChevronLeft, HiChevronRight, HiCheckCircle } from 'react-icons/hi';
+import { motion } from 'framer-motion';
 import { getCourseBySlug } from '../data/courses';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 
+import VideoPlayer from '../components/VideoPlayer';
 import CampusImmersionBanner from '../components/CampusImmersionBanner';
 import FacultyShowcase from '../components/FacultyShowcase';
 import CourseAdmissionSteps from '../components/CourseAdmissionSteps';
@@ -105,8 +107,33 @@ export default function CourseDetail({ onOpenDemoModal }) {
               alignItems: 'center',
             }}
           >
-            <CourseHeroHeader course={course} onOpenDemoModal={onOpenDemoModal} onOpenPurchaseModal={() => setIsPurchaseModalOpen(true)} />
-            <CourseApplicationCard course={course} onOpenPurchaseModal={() => setIsPurchaseModalOpen(true)} />
+            <motion.div
+              initial={{ opacity: 0, x: -24 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <CourseHeroHeader course={course} onOpenDemoModal={onOpenDemoModal} onOpenPurchaseModal={() => setIsPurchaseModalOpen(true)} />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
+            >
+              {/* VIDEO PLAYER PREVIEW CARD */}
+              <div style={{ background: '#0a1478', padding: '16px', borderRadius: '20px', border: '1px solid rgba(242,183,51,0.3)', boxShadow: '0 12px 32px rgba(0,0,0,0.3)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', color: '#f2b733', letterSpacing: '0.06em' }}>
+                    ▶ Course Video Preview
+                  </span>
+                  <span style={{ fontSize: '0.7rem', color: '#cbd5e1' }}>100% Practical Demonstration</span>
+                </div>
+                <VideoPlayer videoUrl={course.videoUrl} poster={course.image} title={course.title} />
+              </div>
+
+              <CourseApplicationCard course={course} onOpenPurchaseModal={() => setIsPurchaseModalOpen(true)} />
+            </motion.div>
           </div>
         </div>
       </section>

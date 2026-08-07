@@ -157,14 +157,15 @@ export default function CourseFormModal({
             </div>
 
             <div>
-              <label htmlFor="course_languages_field" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#475569', display: 'block', marginBottom: '4px' }}>
-                Languages Offered
+              <label htmlFor="course_video_field" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#000648', display: 'block', marginBottom: '4px' }}>
+                Video Preview URL (YouTube, Drive, or MP4)
               </label>
               <input
-                id="course_languages_field"
+                id="course_video_field"
                 type="text"
-                value={formData.languages}
-                onChange={(e) => setFormData((prev) => ({ ...prev, languages: e.target.value }))}
+                placeholder="https://www.youtube.com/watch?v=..."
+                value={formData.videoUrl || ''}
+                onChange={(e) => setFormData((prev) => ({ ...prev, videoUrl: e.target.value }))}
                 style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.875rem' }}
               />
             </div>

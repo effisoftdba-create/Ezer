@@ -21,9 +21,9 @@ export default function Hero({ onOpenDemoModal }) {
 
   const safeActive = active < slides.length ? active : 0;
   const currentSlide = slides[safeActive] || {
-    badge: 'Outcome-Driven IT Training',
-    headline: 'Learn Live. Build Real Skills. Get Placed.',
-    sub: 'Live online classes led by working corporate professionals, hands-on labs on industry tools, and placement support that continues after graduation.',
+    badge: 'Empowering Career Switchers',
+    headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
+    sub: "EZER Learning Solutions is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses. Taught by corporate-experienced IT professionals, EZER offers personalized live online training, hands-on labs, 12-month placement support, and up to 3 years of community access.",
     url: 'images/hero/hero_section_1.jpg'
   };
 
