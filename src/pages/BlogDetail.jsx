@@ -176,19 +176,35 @@ export default function BlogDetail({ onOpenDemoModal }) {
   const { slug } = useParams();
   const { blogs } = useSiteData();
 
-  // Look up custom article or fallback to matching slug in database
+  // Look up custom article in SiteContext or fallback to matching slug in ARTICLES_DATABASE
   const userBlog = (blogs || []).find((b) => b.slug === slug || b.id === slug);
-  const article = ARTICLES_DATABASE[slug] || ARTICLES_DATABASE['how-non-it-professionals-transition-into-ai'];
+  const baseArticle = ARTICLES_DATABASE[slug] || ARTICLES_DATABASE['how-non-it-professionals-transition-into-ai'];
 
-  // Override title and summary if user created a custom blog entry in Admin
-  if (userBlog) {
-    article.title = userBlog.title || article.title;
-    article.summary = userBlog.summary || article.summary;
-    if (userBlog.image) article.image = userBlog.image;
-    if (userBlog.content) {
-      article.sections[0].content = userBlog.content;
-    }
-  }
+  const article = userBlog
+    ? {
+        title: userBlog.title || baseArticle.title,
+        category: userBlog.category || baseArticle.category,
+        author: userBlog.author || baseArticle.author,
+        date: userBlog.date || baseArticle.date,
+        readTime: userBlog.readTime || baseArticle.readTime,
+        seoGeoAeoTag: userBlog.seoGeoAeoTag || baseArticle.seoGeoAeoTag,
+        summary: userBlog.summary || baseArticle.summary,
+        image: userBlog.image || baseArticle.image,
+        takeaways: Array.isArray(userBlog.takeaways) && userBlog.takeaways.length > 0
+          ? userBlog.takeaways
+          : baseArticle.takeaways,
+        sections: Array.isArray(userBlog.sections) && userBlog.sections.length > 0
+          ? userBlog.sections
+          : [
+              {
+                title: '1. Article Overview & Industry Insights',
+                content: userBlog.content || userBlog.summary || baseArticle.sections[0].content,
+                image: userBlog.image || baseArticle.image,
+                caption: 'Featured EZER Tech Magazine Editorial'
+              }
+            ]
+      }
+    : baseArticle;
 
   return (
     <div style={{ background: '#f8fafc', color: '#0f172a', minHeight: '100vh', position: 'relative', overflowX: 'hidden' }}>

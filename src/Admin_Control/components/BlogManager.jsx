@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
-import { HiPlus, HiTrash, HiNewspaper, HiBadgeCheck, HiPhotograph, HiCalendar } from 'react-icons/hi';
+import { HiPlus, HiTrash, HiPencil, HiNewspaper, HiBadgeCheck, HiPhotograph, HiCalendar } from 'react-icons/hi';
 import ImagePickerModal from './ImagePickerModal';
+import ArticleFormModal from './ArticleFormModal';
 
+/* ────────────────────────────────────────────────────────────
+   ACHIEVEMENT SECTION (unchanged logic, kept compact)
+   ──────────────────────────────────────────────────────────── */
 function AchievementSection({ achievements, addAchievement, deleteAchievement, onOpenPicker, externalImage }) {
   const [achTitle, setAchTitle] = useState('');
   const [achIssuer, setAchIssuer] = useState('');
@@ -39,116 +43,57 @@ function AchievementSection({ achievements, addAchievement, deleteAchievement, o
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 120px', gap: '14px' }}>
           <div>
             <label htmlFor="ach-title-input" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Award / Achievement Title*</label>
-            <input
-              id="ach-title-input"
-              aria-label="Award / Achievement Title"
-              type="text"
-              placeholder="e.g. EdTech Excellence & Innovation Award 2025"
-              value={achTitle}
-              onChange={(e) => setAchTitle(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
-              required
-            />
+            <input id="ach-title-input" type="text" placeholder="e.g. EdTech Excellence & Innovation Award 2025" value={achTitle} onChange={(e) => setAchTitle(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
           </div>
-
           <div>
-            <label htmlFor="ach-issuer-input" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Issuing Authority / Guild</label>
-            <input
-              id="ach-issuer-input"
-              aria-label="Issuing Authority"
-              type="text"
-              placeholder="e.g. National Skill Development Forum"
-              value={achIssuer}
-              onChange={(e) => setAchIssuer(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
-            />
+            <label htmlFor="ach-issuer-input" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Issuing Authority</label>
+            <input id="ach-issuer-input" type="text" placeholder="e.g. National Skill Development Forum" value={achIssuer} onChange={(e) => setAchIssuer(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} />
           </div>
-
           <div>
             <label htmlFor="ach-year-input" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Year</label>
-            <input
-              id="ach-year-input"
-              aria-label="Year"
-              type="text"
-              value={achYear}
-              onChange={(e) => setAchYear(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
-            />
+            <input id="ach-year-input" type="text" value={achYear} onChange={(e) => setAchYear(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} />
           </div>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr auto', gap: '14px', alignItems: 'flex-end' }}>
           <div>
             <label htmlFor="ach-category-select" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Category</label>
-            <select
-              id="ach-category-select"
-              aria-label="Achievement Category"
-              value={achCategory}
-              onChange={(e) => setAchCategory(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem', background: '#fff' }}
-            >
+            <select id="ach-category-select" value={achCategory} onChange={(e) => setAchCategory(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem', background: '#fff' }}>
               <option value="Excellence Award">Excellence Award</option>
               <option value="Placement Award">Placement Award</option>
               <option value="Innovation Award">Innovation Award</option>
               <option value="Milestone Honor">Milestone Honor</option>
             </select>
           </div>
-
           <div>
             <label htmlFor="ach-image-input" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Achievement Image URL</label>
-            <input
-              id="ach-image-input"
-              aria-label="Achievement Image URL"
-              type="text"
-              placeholder="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad"
-              value={currentImage}
-              onChange={(e) => setAchImage(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
-            />
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <input id="ach-image-input" type="text" placeholder="https://images.unsplash.com/..." value={currentImage} onChange={(e) => setAchImage(e.target.value)} style={{ flex: 1, padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} />
+              <button type="button" onClick={onOpenPicker} style={{ padding: '10px 14px', borderRadius: '8px', background: '#e2e8f0', color: '#000648', fontWeight: 800, fontSize: '0.8rem', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <HiPhotograph size={16} /> Choose
+              </button>
+            </div>
           </div>
-
-          <button
-            type="button"
-            aria-label="Choose image for achievement"
-            onClick={onOpenPicker}
-            style={{ padding: '10px 14px', borderRadius: '8px', background: '#e2e8f0', color: '#000648', fontWeight: 800, fontSize: '0.8rem', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-          >
-            <HiPhotograph size={16} /> Choose Image
+          <button type="submit" style={{ padding: '10px 20px', background: '#000648', color: '#f2b733', fontWeight: 900, borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <HiBadgeCheck size={18} /> Add Award
           </button>
         </div>
 
         <div>
-          <label htmlFor="ach-desc-textarea" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Description / Citation</label>
-          <textarea
-            id="ach-desc-textarea"
-            aria-label="Description / Citation"
-            rows={2}
-            placeholder="Brief citation about the award..."
-            value={achDesc}
-            onChange={(e) => setAchDesc(e.target.value)}
-            style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem', resize: 'vertical' }}
-          />
+          <label htmlFor="ach-desc-textarea" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Description</label>
+          <textarea id="ach-desc-textarea" rows={2} placeholder="Brief description of the award or achievement..." value={achDesc} onChange={(e) => setAchDesc(e.target.value)} style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} />
         </div>
-
-        <button
-          type="submit"
-          aria-label="Add Achievement to Gallery"
-          style={{ alignSelf: 'flex-start', padding: '10px 24px', background: '#000648', color: '#f2b733', fontWeight: 900, borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-        >
-          <HiPlus size={18} /> Add Achievement to Gallery
-        </button>
       </form>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '18px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '18px' }}>
         {(achievements || []).map((ach) => (
           <div key={ach.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
             <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
               <img src={ach.image} alt={ach.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <span style={{ position: 'absolute', top: '10px', right: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px' }}>
-                {ach.year}
+              <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.7rem', padding: '3px 10px', borderRadius: '50px' }}>
+                {ach.year} • {ach.category}
               </span>
             </div>
-
             <div style={{ padding: '14px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
                 <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#115DFC', textTransform: 'uppercase' }}>{ach.category}</span>
@@ -156,13 +101,7 @@ function AchievementSection({ achievements, addAchievement, deleteAchievement, o
                 <p style={{ fontSize: '0.76rem', color: '#64748b', marginTop: '2px', fontWeight: 700 }}>Issued by: {ach.issuer}</p>
                 <p style={{ fontSize: '0.78rem', color: '#475569', marginTop: '8px', lineHeight: 1.4 }}>{ach.description}</p>
               </div>
-
-              <button
-                type="button"
-                aria-label={`Remove award ${ach.title}`}
-                onClick={() => deleteAchievement(ach.id)}
-                style={{ marginTop: '14px', padding: '6px 12px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', alignSelf: 'flex-end' }}
-              >
+              <button type="button" onClick={() => deleteAchievement(ach.id)} style={{ marginTop: '14px', padding: '6px 12px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', alignSelf: 'flex-end' }}>
                 <HiTrash size={14} /> Remove Award
               </button>
             </div>
@@ -173,145 +112,59 @@ function AchievementSection({ achievements, addAchievement, deleteAchievement, o
   );
 }
 
-function BlogSection({ blogs, addBlog, deleteBlog, onOpenPicker, externalImage }) {
-  const [blogTitle, setBlogTitle] = useState('');
-  const [blogCategory, setBlogCategory] = useState('Career Guide');
-  const [blogAuthor, setBlogAuthor] = useState('EZER Academic Board');
-  const [blogSummary, setBlogSummary] = useState('');
-  const [blogContent, setBlogContent] = useState('');
-  const [blogImage, setBlogImage] = useState('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800');
+/* ────────────────────────────────────────────────────────────
+   BLOG / ARTICLE SECTION — Full CRUD with ArticleFormModal
+   ──────────────────────────────────────────────────────────── */
+function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
+  const [articleModalOpen, setArticleModalOpen] = useState(false);
+  const [editingArticle, setEditingArticle] = useState(null);
 
-  const currentImage = externalImage || blogImage;
+  const handleOpenAdd = () => {
+    setEditingArticle(null);
+    setArticleModalOpen(true);
+  };
 
-  const handleAddBlog = (e) => {
-    e.preventDefault();
-    if (!blogTitle.trim()) return alert('Please enter blog title');
-    addBlog({
-      title: blogTitle.trim(),
-      slug: blogTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, ''),
-      category: blogCategory,
-      author: blogAuthor.trim() || 'EZER Editorial Team',
-      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-      summary: blogSummary.trim() || 'Read the latest insights from EZER tech mentors.',
-      content: blogContent.trim() || blogSummary.trim(),
-      image: currentImage.trim(),
-      featured: true
-    });
-    setBlogTitle('');
-    setBlogSummary('');
-    setBlogContent('');
+  const handleOpenEdit = (blog) => {
+    setEditingArticle(blog);
+    setArticleModalOpen(true);
+  };
+
+  const handleSaveArticle = (payload) => {
+    if (payload.id) {
+      updateBlog(payload.id, payload);
+    } else {
+      const newPayload = {
+        ...payload,
+        id: `blog-${Date.now()}`,
+        date: payload.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+        featured: true
+      };
+      addBlog(newPayload);
+    }
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-      <form onSubmit={handleAddBlog} style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <HiPlus size={18} /> Publish New Blog Post
-        </h3>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px 180px', gap: '14px' }}>
-          <div>
-            <label htmlFor="blog-title-input" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Article Headline / Title*</label>
-            <input
-              id="blog-title-input"
-              aria-label="Article Headline / Title"
-              type="text"
-              placeholder="e.g. Transitioning Into Software Engineering in 2025"
-              value={blogTitle}
-              onChange={(e) => setBlogTitle(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
-              required
-            />
-          </div>
-
-          <div>
-            <label htmlFor="blog-category-select" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Category</label>
-            <select
-              id="blog-category-select"
-              aria-label="Blog Category"
-              value={blogCategory}
-              onChange={(e) => setBlogCategory(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem', background: '#fff' }}
-            >
-              <option value="Career Guide">Career Guide</option>
-              <option value="Company News">Company News</option>
-              <option value="AI & Tech">AI & Tech</option>
-              <option value="Success Stories">Success Stories</option>
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor="blog-author-input" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Author</label>
-            <input
-              id="blog-author-input"
-              aria-label="Author"
-              type="text"
-              value={blogAuthor}
-              onChange={(e) => setBlogAuthor(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
-            />
-          </div>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '14px', alignItems: 'flex-end' }}>
-          <div>
-            <label htmlFor="blog-image-input" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Banner Image URL</label>
-            <input
-              id="blog-image-input"
-              aria-label="Banner Image URL"
-              type="text"
-              placeholder="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4"
-              value={currentImage}
-              onChange={(e) => setBlogImage(e.target.value)}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
-            />
-          </div>
-
-          <button
-            type="button"
-            aria-label="Choose image for blog article"
-            onClick={onOpenPicker}
-            style={{ padding: '10px 14px', borderRadius: '8px', background: '#e2e8f0', color: '#000648', fontWeight: 800, fontSize: '0.8rem', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-          >
-            <HiPhotograph size={16} /> Choose Image
-          </button>
-        </div>
-
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Header with Add Button */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <label htmlFor="blog-summary-textarea" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Article Excerpt / Summary</label>
-          <textarea
-            id="blog-summary-textarea"
-            aria-label="Article Excerpt / Summary"
-            rows={2}
-            placeholder="Short summary displayed on blog card previews..."
-            value={blogSummary}
-            onChange={(e) => setBlogSummary(e.target.value)}
-            style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
-          />
+          <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 900, color: '#000648' }}>
+            Published Magazine Articles ({(blogs || []).length})
+          </h3>
+          <span style={{ fontSize: '0.78rem', color: '#64748b' }}>
+            Create, edit, or remove full editorial magazine articles with multi-section content and inline photos.
+          </span>
         </div>
-
-        <div>
-          <label htmlFor="blog-content-textarea" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Full Article Body Content</label>
-          <textarea
-            id="blog-content-textarea"
-            aria-label="Full Article Body Content"
-            rows={4}
-            placeholder="Full article body..."
-            value={blogContent}
-            onChange={(e) => setBlogContent(e.target.value)}
-            style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem', resize: 'vertical' }}
-          />
-        </div>
-
         <button
-          type="submit"
-          aria-label="Publish Blog Post"
-          style={{ alignSelf: 'flex-start', padding: '10px 24px', background: '#000648', color: '#f2b733', fontWeight: 900, borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+          type="button"
+          onClick={handleOpenAdd}
+          style={{ padding: '10px 20px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '10px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.86rem' }}
         >
-          <HiNewspaper size={18} /> Publish Blog Post
+          <HiPlus size={18} /> Publish New Article
         </button>
-      </form>
+      </div>
 
+      {/* Blog Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '18px' }}>
         {(blogs || []).map((blog) => (
           <div key={blog.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
@@ -329,27 +182,58 @@ function BlogSection({ blogs, addBlog, deleteBlog, onOpenPicker, externalImage }
                   <HiCalendar size={13} /> {blog.date} • by {blog.author}
                 </div>
                 <p style={{ fontSize: '0.8rem', color: '#475569', marginTop: '10px', lineHeight: 1.5 }}>{blog.summary}</p>
+                {blog.sections && blog.sections.length > 0 && (
+                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#115DFC', marginTop: '6px', display: 'inline-block' }}>
+                    {blog.sections.length} content section{blog.sections.length > 1 ? 's' : ''}
+                  </span>
+                )}
               </div>
 
-              <button
-                type="button"
-                aria-label={`Remove blog post ${blog.title}`}
-                onClick={() => deleteBlog(blog.id)}
-                style={{ marginTop: '14px', padding: '6px 12px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', alignSelf: 'flex-end' }}
-              >
-                <HiTrash size={14} /> Remove Article
-              </button>
+              <div style={{ display: 'flex', gap: '8px', marginTop: '14px', justifyContent: 'flex-end' }}>
+                <button
+                  type="button"
+                  onClick={() => handleOpenEdit(blog)}
+                  style={{ padding: '6px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontSize: '0.78rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                >
+                  <HiPencil size={14} /> Edit Article
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.confirm(`Delete article "${blog.title}"?`)) deleteBlog(blog.id);
+                  }}
+                  style={{ padding: '6px 12px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                >
+                  <HiTrash size={14} /> Delete
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Article Form Modal (Portal-based) */}
+      <ArticleFormModal
+        isOpen={articleModalOpen}
+        onClose={() => { setArticleModalOpen(false); setEditingArticle(null); }}
+        editingArticle={editingArticle}
+        onSave={handleSaveArticle}
+      />
     </div>
   );
 }
 
+/* ────────────────────────────────────────────────────────────
+   EXECUTIVE SECTION — CEO Editorial Card Style with tagline/headline
+   ──────────────────────────────────────────────────────────── */
 function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
   const [editingId, setEditingId] = useState(null);
-  const [formData, setFormData] = useState({ roleTag: 'CEO', roleName: 'Chief Executive Officer', name: '', image: '', bio: '' });
+  const [formData, setFormData] = useState({
+    roleTag: 'CEO', roleName: 'Chief Executive Officer',
+    name: '', image: '', bio: '',
+    tagline: 'From problem to solution.',
+    headline: 'A creative and strategic transformation partner for bold businesses.'
+  });
   const [pickerOpen, setPickerOpen] = useState(false);
 
   const handleEdit = (exec) => {
@@ -359,7 +243,9 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
       roleName: exec.roleName || 'Chief Executive Officer',
       name: exec.name || '',
       image: exec.image || '',
-      bio: exec.bio || ''
+      bio: exec.bio || '',
+      tagline: exec.tagline || 'From problem to solution.',
+      headline: exec.headline || 'A creative and strategic transformation partner for bold businesses.'
     });
   };
 
@@ -377,10 +263,10 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '20px' }}>
         <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', marginBottom: '12px' }}>
-          Edit Executive Leaders (CEO, CFO, CTHM) Photo & Details
+          Edit Executive Leaders (CEO, CFO, CTHM) Photo, Editorial Headline & Details
         </h3>
         <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '0 0 16px 0' }}>
-          Update executive board photos, role names, and leadership titles displayed on the Tech Magazine & Showcase page.
+          Update executive board photos, editorial taglines, serif headlines, role names, and leadership bios displayed in the luxury editorial showcase section.
         </p>
 
         {editingId ? (
@@ -392,75 +278,50 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
             <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', gap: '12px' }}>
               <div>
                 <label htmlFor="exec_role_tag" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Role Tag*</label>
-                <input
-                  id="exec_role_tag"
-                  type="text"
-                  value={formData.roleTag}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, roleTag: e.target.value }))}
-                  style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }}
-                  required
-                />
+                <input id="exec_role_tag" type="text" value={formData.roleTag} onChange={(e) => setFormData((prev) => ({ ...prev, roleTag: e.target.value }))} style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }} required />
               </div>
-
               <div>
                 <label htmlFor="exec_role_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Full Role Name*</label>
-                <input
-                  id="exec_role_name"
-                  type="text"
-                  value={formData.roleName}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, roleName: e.target.value }))}
-                  style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }}
-                  required
-                />
+                <input id="exec_role_name" type="text" value={formData.roleName} onChange={(e) => setFormData((prev) => ({ ...prev, roleName: e.target.value }))} style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }} required />
               </div>
-
               <div>
                 <label htmlFor="exec_officer_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Executive Officer Name*</label>
-                <input
-                  id="exec_officer_name"
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                  style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }}
-                  required
-                />
+                <input id="exec_officer_name" type="text" value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }} required />
+              </div>
+            </div>
+
+            {/* New Editorial Tagline & Headline Fields */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div>
+                <label htmlFor="exec_tagline" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Editorial Tagline (Italic Intro)</label>
+                <input id="exec_tagline" type="text" value={formData.tagline} onChange={(e) => setFormData((prev) => ({ ...prev, tagline: e.target.value }))} placeholder="e.g. From problem to solution." style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }} />
+              </div>
+              <div>
+                <label htmlFor="exec_headline" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Serif Headline (Big Text)</label>
+                <input id="exec_headline" type="text" value={formData.headline} onChange={(e) => setFormData((prev) => ({ ...prev, headline: e.target.value }))} placeholder="e.g. A creative and strategic transformation partner..." style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }} />
               </div>
             </div>
 
             <div>
               <label htmlFor="exec_photo_url" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Photo Source / URL</label>
               <div style={{ display: 'flex', gap: '8px' }}>
-                <input
-                  id="exec_photo_url"
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))}
-                  style={{ flex: 1, padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }}
-                  required
-                />
-                <button
-                  type="button"
-                  aria-label="Choose executive photo from gallery"
-                  onClick={() => setPickerOpen(true)}
-                  style={{ padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer' }}
-                >
+                <input id="exec_photo_url" type="text" value={formData.image} onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))} style={{ flex: 1, padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }} required />
+                <button type="button" onClick={() => setPickerOpen(true)} style={{ padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer' }}>
                   Choose Photo
                 </button>
               </div>
             </div>
 
+            <div>
+              <label htmlFor="exec_bio" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Leadership Bio</label>
+              <textarea id="exec_bio" rows={2} value={formData.bio} onChange={(e) => setFormData((prev) => ({ ...prev, bio: e.target.value }))} placeholder="Brief leadership bio..." style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }} />
+            </div>
+
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '8px' }}>
-              <button
-                type="button"
-                onClick={() => setEditingId(null)}
-                style={{ padding: '6px 14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '6px', color: '#64748b', fontWeight: 700, cursor: 'pointer' }}
-              >
+              <button type="button" onClick={() => setEditingId(null)} style={{ padding: '6px 14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '6px', color: '#64748b', fontWeight: 700, cursor: 'pointer' }}>
                 Cancel
               </button>
-              <button
-                type="submit"
-                style={{ padding: '6px 18px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, cursor: 'pointer' }}
-              >
+              <button type="submit" style={{ padding: '6px 18px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, cursor: 'pointer' }}>
                 Save Executive Details
               </button>
             </div>
@@ -473,13 +334,13 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                 onSelectImage={(url) => { setFormData((prev) => ({ ...prev, image: url })); setPickerOpen(false); }}
                 targetArea={`Executive Photo (${formData.roleTag})`}
                 aspectRatio="Square (1:1)"
-                recommendedDimensions="600 x 600 px"
+                recommendedDimensions="700 x 700 px"
               />
             )}
           </form>
         ) : (
           <div style={{ fontSize: '0.82rem', color: '#64748b' }}>
-            Select an executive card below to edit their photo, title, or name.
+            Select an executive card below to edit their photo, tagline, headline, and role details.
           </div>
         )}
       </div>
@@ -497,7 +358,8 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
             <div style={{ padding: '14px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
               <div>
                 <h4 style={{ margin: '0 0 2px 0', fontSize: '1rem', fontWeight: 900, color: '#000648' }}>{exec.name}</h4>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#115DFC', marginBottom: '8px' }}>{exec.roleName}</div>
+                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#115DFC', marginBottom: '4px' }}>{exec.roleName}</div>
+                {exec.tagline && <div style={{ fontSize: '0.72rem', color: '#64748b', fontStyle: 'italic' }}>{exec.tagline}</div>}
               </div>
 
               <button
@@ -515,13 +377,14 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
   );
 }
 
+/* ────────────────────────────────────────────────────────────
+   MAIN BLOG MANAGER COMPONENT
+   ──────────────────────────────────────────────────────────── */
 export default function BlogManager() {
-  const { blogs, addBlog, deleteBlog, achievements, addAchievement, deleteAchievement, executiveLeaders, updateExecutiveLeader } = useSiteData();
+  const { blogs, addBlog, updateBlog, deleteBlog, achievements, addAchievement, deleteAchievement, executiveLeaders, updateExecutiveLeader } = useSiteData();
   const [activeSubTab, setActiveSubTab] = useState('executive');
   const [achPickerOpen, setAchPickerOpen] = useState(false);
-  const [blogPickerOpen, setBlogPickerOpen] = useState(false);
   const [achPickedImage, setAchPickedImage] = useState('');
-  const [blogPickedImage, setBlogPickedImage] = useState('');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
@@ -537,47 +400,15 @@ export default function BlogManager() {
         </div>
 
         <div style={{ display: 'flex', gap: '8px', background: '#f1f5f9', padding: '4px', borderRadius: '10px' }}>
-          <button
-            type="button"
-            aria-label="View Executive Board Tab"
-            onClick={() => setActiveSubTab('executive')}
-            style={{
-              padding: '8px 16px', borderRadius: '8px', border: 'none',
-              fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer',
-              background: activeSubTab === 'executive' ? '#000648' : 'transparent',
-              color: activeSubTab === 'executive' ? '#f2b733' : '#64748b',
-              display: 'flex', alignItems: 'center', gap: '6px'
-            }}
-          >
+          <button type="button" onClick={() => setActiveSubTab('executive')} style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer', background: activeSubTab === 'executive' ? '#000648' : 'transparent', color: activeSubTab === 'executive' ? '#f2b733' : '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
             Executive Board (CEO, CFO, CTHM)
           </button>
 
-          <button
-            type="button"
-            aria-label="View Achievements Tab"
-            onClick={() => setActiveSubTab('achievements')}
-            style={{
-              padding: '8px 16px', borderRadius: '8px', border: 'none',
-              fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer',
-              background: activeSubTab === 'achievements' ? '#000648' : 'transparent',
-              color: activeSubTab === 'achievements' ? '#f2b733' : '#64748b',
-              display: 'flex', alignItems: 'center', gap: '6px'
-            }}
-          >
+          <button type="button" onClick={() => setActiveSubTab('achievements')} style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer', background: activeSubTab === 'achievements' ? '#000648' : 'transparent', color: activeSubTab === 'achievements' ? '#f2b733' : '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <HiBadgeCheck size={16} /> EZER Achievements ({ (achievements || []).length })
           </button>
-          <button
-            type="button"
-            aria-label="View Blog Posts Tab"
-            onClick={() => setActiveSubTab('blogs')}
-            style={{
-              padding: '8px 16px', borderRadius: '8px', border: 'none',
-              fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer',
-              background: activeSubTab === 'blogs' ? '#000648' : 'transparent',
-              color: activeSubTab === 'blogs' ? '#f2b733' : '#64748b',
-              display: 'flex', alignItems: 'center', gap: '6px'
-            }}
-          >
+
+          <button type="button" onClick={() => setActiveSubTab('blogs')} style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer', background: activeSubTab === 'blogs' ? '#000648' : 'transparent', color: activeSubTab === 'blogs' ? '#f2b733' : '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <HiNewspaper size={16} /> Blog Posts ({ (blogs || []).length })
           </button>
         </div>
@@ -604,9 +435,8 @@ export default function BlogManager() {
         <BlogSection
           blogs={blogs}
           addBlog={addBlog}
+          updateBlog={updateBlog}
           deleteBlog={deleteBlog}
-          onOpenPicker={() => setBlogPickerOpen(true)}
-          externalImage={blogPickedImage}
         />
       )}
 
@@ -615,14 +445,6 @@ export default function BlogManager() {
           isOpen={achPickerOpen}
           onClose={() => setAchPickerOpen(false)}
           onSelectImage={(url) => { setAchPickedImage(url); setAchPickerOpen(false); }}
-        />
-      )}
-
-      {blogPickerOpen && (
-        <ImagePickerModal
-          isOpen={blogPickerOpen}
-          onClose={() => setBlogPickerOpen(false)}
-          onSelectImage={(url) => { setBlogPickedImage(url); setBlogPickerOpen(false); }}
         />
       )}
     </div>

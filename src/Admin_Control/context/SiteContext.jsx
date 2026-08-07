@@ -379,6 +379,12 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [leads]);
 
+  const updateBlog = useCallback((id, updatedData) => {
+    const updated = (blogs || []).map((b) => (b.id === id || b.slug === id ? { ...b, ...updatedData } : b));
+    dispatch({ type: 'SET_KEY', key: 'blogs', value: updated });
+    triggerStateToast('SAVED');
+  }, [blogs]);
+
   const resetAllToDefaults = useCallback(() => {
     localStorage.clear();
     dispatch({ type: 'RESET_ALL' });
@@ -401,7 +407,7 @@ export function SiteProvider({ children }) {
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
     leads, addLead, updateLeadStatus, addLeadComment, deleteLead,
-    blogs, updateBlogs, addBlog, deleteBlog,
+    blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     resetAllToDefaults, resetToDefault: resetAllToDefaults
@@ -421,7 +427,7 @@ export function SiteProvider({ children }) {
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
     leads, addLead, updateLeadStatus, addLeadComment, deleteLead,
-    blogs, updateBlogs, addBlog, deleteBlog,
+    blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     resetAllToDefaults

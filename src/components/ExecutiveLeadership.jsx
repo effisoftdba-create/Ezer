@@ -1,7 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
-import { HiBadgeCheck } from 'react-icons/hi';
 import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 
 export default function ExecutiveLeadership() {
@@ -15,15 +14,19 @@ export default function ExecutiveLeadership() {
           roleTag: 'CEO',
           roleName: 'Chief Executive Officer',
           name: 'Dr. Subramanian R',
-          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=600&h=700',
-          bio: 'Visionary Leader driving native language tech education and corporate placement partnerships.'
+          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=700&h=700',
+          tagline: 'From problem to solution.',
+          headline: 'A creative and strategic transformation partner for bold businesses.',
+          bio: 'Visionary Leader driving native language tech education, corporate placement partnerships, and pan-India EdTech growth.'
         },
         {
           id: 'exec-2',
           roleTag: 'CFO',
           roleName: 'Chief Financial Officer',
           name: 'Meenakshi Sundaram',
-          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=700',
+          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=700',
+          tagline: 'Financial integrity & student affordability.',
+          headline: 'Pioneering accessible scholarship funds for high-growth tech careers.',
           bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.'
         },
         {
@@ -31,7 +34,9 @@ export default function ExecutiveLeadership() {
           roleTag: 'CMTO',
           roleName: 'Chief Tech & Academic Officer',
           name: 'Anand Kumar K',
-          image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600&h=700',
+          image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=700&h=700',
+          tagline: 'Curriculum innovation & hands-on labs.',
+          headline: 'Architecting AI-integrated practical capstones for production readiness.',
           bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.'
         }
       ];
@@ -40,172 +45,155 @@ export default function ExecutiveLeadership() {
     <section
       style={{
         position: 'relative',
-        background: 'radial-gradient(circle at 50% 0%, #1e1b4b 0%, #000648 60%, #030712 100%)',
-        color: '#ffffff',
+        background: '#e5e7eb',
+        color: '#0f172a',
         padding: '64px 20px',
-        borderTop: '2px solid rgba(242, 183, 51, 0.3)',
-        borderBottom: '2px solid rgba(242, 183, 51, 0.3)',
-        overflow: 'visible'
+        borderTop: '2px solid rgba(0, 6, 72, 0.1)',
+        borderBottom: '2px solid rgba(0, 6, 72, 0.1)',
+        overflow: 'hidden'
       }}
     >
       <style>{`
-        .ezer-3d-card {
-          overflow: visible;
+        .editorial-exec-card {
+          display: grid;
+          grid-template-columns: minmax(280px, 420px) 1fr;
+          background: #d1d5db;
+          border-radius: 12px;
+          overflow: hidden;
+          box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+          margin-bottom: 36px;
+          border: 1px solid #cbd5e1;
+          transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .editorial-exec-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 25px 45px rgba(0,0,0,0.12);
+        }
+
+        .editorial-img-box {
           position: relative;
           width: 100%;
-          max-width: 320px;
-          height: 380px;
-          background: #000648;
-          border-radius: 24px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-          margin: 0 auto;
-          border: 2.5px solid #f2b733;
-          transition: transform 0.4s ease, border-color 0.4s ease;
-        }
-
-        .ezer-3d-card:before,
-        .ezer-3d-card:after {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
           height: 100%;
-          border-radius: 24px;
-          background: #000a5e;
-          border: 2px solid rgba(242, 183, 51, 0.4);
-          transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-          z-index: -1;
-        }
-
-        .ezer-3d-card:hover {
-          transform: translateY(-6px);
-        }
-
-        .ezer-3d-card:hover:before {
-          transform: rotate(12deg);
-          background: #000d78;
-        }
-
-        .ezer-3d-card:hover:after {
-          transform: rotate(6deg);
-          box-shadow: 0 2px 25px rgba(242, 183, 51, 0.3);
-        }
-
-        .ezer-3d-card .role-badge-top {
-          position: absolute;
-          right: 1rem;
-          top: 1rem;
-          background: #000648;
-          border: 1.5px solid #f2b733;
-          color: #f2b733;
-          font-weight: 900;
-          font-size: 0.72rem;
-          padding: 4px 12px;
-          border-radius: 50px;
-          z-index: 10;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-        }
-
-        .ezer-3d-card .imgbox {
-          position: absolute;
-          top: 10px;
-          left: 10px;
-          bottom: 10px;
-          right: 10px;
-          background: #000648;
-          border-radius: 18px;
-          transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-          z-index: 1;
+          min-height: 380px;
+          background: #111827;
           overflow: hidden;
-          border: 1.5px solid rgba(242, 183, 51, 0.3);
         }
 
-        .ezer-3d-card .imgbox img {
+        .editorial-img-box img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           object-position: center top;
-          transition: transform 0.5s ease;
+          transition: transform 0.6s ease;
         }
 
-        .ezer-3d-card:hover .imgbox {
-          bottom: 100px;
+        .editorial-exec-card:hover .editorial-img-box img {
+          transform: scale(1.04);
         }
 
-        .ezer-3d-card .details {
-          position: absolute;
-          left: 12px;
-          right: 12px;
-          bottom: 10px;
-          height: 80px;
-          text-align: center;
-          z-index: 2;
+        .editorial-content-box {
+          padding: 48px;
           display: flex;
           flex-direction: column;
-          align-items: center;
           justify-content: center;
+          background: #e5e7eb;
         }
 
-        .ezer-3d-card .details .title {
+        .editorial-tagline {
+          font-size: 1.05rem;
+          color: #4b5563;
+          font-weight: 500;
+          margin-bottom: 16px;
+          letter-spacing: -0.01em;
+        }
+
+        .editorial-headline {
+          font-family: Georgia, 'Times New Roman', serif;
+          font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+          font-weight: 400;
+          color: #111827;
+          line-height: 1.22;
+          margin: 0 0 24px 0;
+          letter-spacing: -0.02em;
+        }
+
+        .editorial-officer-name {
+          font-size: 1.1rem;
           font-weight: 900;
-          font-size: 1.25rem;
-          color: #ffffff;
-          margin: 0;
-          line-height: 1.15;
-          text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+          color: #000648;
+          margin-bottom: 4px;
         }
 
-        .ezer-3d-card .details .caption {
+        .editorial-officer-role {
+          font-size: 0.82rem;
           font-weight: 800;
-          font-size: 0.76rem;
-          color: #f2b733;
-          display: block;
-          margin-top: 3px;
+          color: #2563eb;
           text-transform: uppercase;
-          letter-spacing: 0.06em;
+          letter-spacing: 0.08em;
+          margin-bottom: 16px;
         }
 
-        .ezer-3d-card .details .bio-text {
-          font-size: 0.74rem;
-          color: #cbd5e1;
-          margin-top: 4px;
-          line-height: 1.3;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+        .editorial-bio {
+          font-size: 0.95rem;
+          color: #475569;
+          line-height: 1.6;
+          margin-bottom: 28px;
+          max-width: 640px;
+        }
+
+        .editorial-readmore-btn {
+          align-self: flex-start;
+          font-size: 0.85rem;
+          font-weight: 900;
+          color: #111827;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          text-decoration: none;
+          padding-bottom: 4px;
+          border-bottom: 3px solid #111827;
+          transition: color 0.3s ease, border-color 0.3s ease;
+          cursor: pointer;
+          background: transparent;
+          border-top: none;
+          border-left: none;
+          border-right: none;
+        }
+
+        .editorial-readmore-btn:hover {
+          color: #2563eb;
+          border-color: #2563eb;
+        }
+
+        @media (max-width: 860px) {
+          .editorial-exec-card {
+            grid-template-columns: 1fr;
+          }
+          .editorial-content-box {
+            padding: 28px 24px;
+          }
+          .editorial-img-box {
+            min-height: 320px;
+          }
         }
       `}</style>
 
-      {/* Ambient Background Glows */}
-      <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '-100px', left: '15%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(242, 183, 51, 0.14)', filter: 'blur(120px)' }} />
-        <div style={{ position: 'absolute', bottom: '-100px', right: '15%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(17, 93, 252, 0.18)', filter: 'blur(120px)' }} />
-      </div>
-
-      <div className="container" style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
+      <div className="container" style={{ maxWidth: '1240px', margin: '0 auto' }}>
         
         {/* Header Section */}
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <span
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              background: 'rgba(242, 183, 51, 0.15)',
+              display: 'inline-block',
+              background: '#000648',
               color: '#f2b733',
-              padding: '6px 20px',
+              padding: '6px 22px',
               borderRadius: '50px',
               fontWeight: 900,
               fontSize: '0.78rem',
               textTransform: 'uppercase',
               letterSpacing: '0.12em',
-              marginBottom: '12px',
-              border: '1.5px solid #f2b733',
-              boxShadow: '0 0 24px rgba(242, 183, 51, 0.25)'
+              marginBottom: '12px'
             }}
           >
             EXECUTIVE LEADERSHIP BOARD
@@ -213,9 +201,9 @@ export default function ExecutiveLeadership() {
 
           <h2
             style={{
-              fontSize: 'clamp(1.8rem, 3.6vw, 3rem)',
+              fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
               fontWeight: 900,
-              color: '#ffffff',
+              color: '#000648',
               lineHeight: 1.15,
               marginBottom: '10px',
               letterSpacing: '-0.02em'
@@ -226,8 +214,8 @@ export default function ExecutiveLeadership() {
 
           <p
             style={{
-              fontSize: '1rem',
-              color: 'rgba(255,255,255,0.85)',
+              fontSize: '1.05rem',
+              color: '#475569',
               maxWidth: '740px',
               margin: '0 auto',
               lineHeight: 1.6
@@ -237,32 +225,42 @@ export default function ExecutiveLeadership() {
           </p>
         </div>
 
-        {/* 3 Executive Leader Cards Grid with User 3D Stack Rotating Effect & EZER Colors */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '40px', width: '100%', padding: '20px 0' }}>
+        {/* Editorial Executive Cards Grid */}
+        <div>
           {leaders.map((leader, idx) => (
             <motion.div
-              key={leader.id || leader.roleTag || idx}
+              key={leader.id || idx}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.12 }}
-              className="ezer-3d-card"
+              className="editorial-exec-card"
             >
-              {/* Role Badge Top */}
-              <span className="role-badge-top">
-                <HiBadgeCheck size={14} /> {leader.roleTag || 'DIRECTOR'}
-              </span>
-
-              {/* Photo Box container */}
-              <div className="imgbox">
-                <img src={resolveImageSrc(leader.image)} alt={leader.name} onError={handleImgError} />
+              {/* Left Photo Container */}
+              <div className="editorial-img-box">
+                <img
+                  src={resolveImageSrc(leader.image)}
+                  alt={leader.name}
+                  onError={handleImgError}
+                />
               </div>
 
-              {/* Details Text Box */}
-              <div className="details">
-                <h3 className="title">{leader.name}</h3>
-                <span className="caption">{leader.roleName || leader.roleTag}</span>
-                <p className="bio-text">{leader.bio}</p>
+              {/* Right Luxury Editorial Content Box */}
+              <div className="editorial-content-box">
+                <span className="editorial-tagline">{leader.tagline || 'From problem to solution.'}</span>
+                
+                <h3 className="editorial-headline">
+                  {leader.headline || 'A creative and strategic transformation partner for bold businesses.'}
+                </h3>
+
+                <div className="editorial-officer-name">{leader.name}</div>
+                <div className="editorial-officer-role">{leader.roleName || leader.roleTag}</div>
+
+                <p className="editorial-bio">{leader.bio}</p>
+
+                <button type="button" className="editorial-readmore-btn">
+                  READ MORE
+                </button>
               </div>
             </motion.div>
           ))}
