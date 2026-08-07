@@ -3,26 +3,19 @@ import { HiX, HiCheckCircle, HiCreditCard, HiQrcode, HiLockClosed } from 'react-
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 export default function CoursePurchaseModal({ isOpen, onClose, course }) {
-  const { addLead } = useSiteData();
+  const { addLead, contactInfo } = useSiteData();
   const [step, setStep] = useState(1); // 1: Select Plan & Details, 2: Payment Method, 3: Success Receipt
   const [paymentOption, setPaymentOption] = useState('full'); // 'full' | 'emi'
   const [paymentMethod, setPaymentMethod] = useState('upi'); // 'upi' | 'card'
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [couponCode, setCouponCode] = useState('');
-  const [couponApplied, setCouponApplied] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [receiptNumber, setReceiptNumber] = useState('');
 
   if (!isOpen || !course) return null;
 
   const finalPrice = 9;
-
-  const handleApplyCoupon = (e) => {
-    e.preventDefault();
-    alert('Special discount rate of ₹9 applied automatically for instant enrollment.');
-  };
 
   const handleProceedToPayment = (e) => {
     e.preventDefault();
@@ -69,36 +62,32 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
         })
       });
 
-      const orderData = await res.json();
-      if (!orderData.success) {
-        throw new Error(orderData.error || 'Failed to create order');
-      }
+      if (res && res.ok) {
+        const orderData = await res.json();
+        if (orderData && orderData.success) {
+          const verifyRes = await fetch('/api/checkout/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              razorpay_order_id: orderData.orderId,
+              razorpay_payment_id: 'pay_' + Date.now() + Math.random().toString(36).substring(2, 7),
+              razorpay_signature: 'test_valid_sig',
+              courseId: course.id || course.slug,
+              userId: email
+            })
+          });
 
-      const verifyRes = await fetch('/api/checkout/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          razorpay_order_id: orderData.orderId,
-          razorpay_payment_id: 'pay_' + Date.now() + Math.random().toString(36).substring(2, 7),
-          razorpay_signature: 'test_valid_sig',
-          courseId: course.id || course.slug,
-          userId: email
-        })
-      });
-
-      const verifyData = await verifyRes.json();
-      setIsProcessing(false);
-
-      if (verifyData.success) {
-        generatedReceipt = verifyData.payment ? verifyData.payment.id : generatedReceipt;
-        setReceiptNumber(generatedReceipt);
-        recordStudentEnrollment(generatedReceipt);
-        setStep(3);
-      } else {
-        alert('Payment verification failed: ' + (verifyData.error || 'Unknown error'));
+          if (verifyRes && verifyRes.ok) {
+            const verifyData = await verifyRes.json();
+            if (verifyData && verifyData.success && verifyData.payment) {
+              generatedReceipt = verifyData.payment.id;
+            }
+          }
+        }
       }
     } catch (err) {
-      console.warn('[Checkout] Fallback local verification mode active:', err);
+      console.warn('[Checkout] Instant payment fallback active:', err);
+    } finally {
       setIsProcessing(false);
       setReceiptNumber(generatedReceipt);
       recordStudentEnrollment(generatedReceipt);
@@ -108,10 +97,10 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
 
   const handleResetAndClose = () => {
     setStep(1);
-    setCouponApplied(false);
-    setCouponCode('');
     onClose();
   };
+
+  const waGroupUrl = (contactInfo && contactInfo.whatsappGroupUrl) || 'https://chat.whatsapp.com/EZERStudentCohortOfficial';
 
   return (
     <div style={{
@@ -133,7 +122,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
         }}>
           <div>
             <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-              OFFICIAL ENROLLMENT CHECKOUT
+              OFFICIAL ENROLLMENT PORTAL
             </span>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', margin: '2px 0 0 0' }}>
               {course.title}
@@ -142,130 +131,77 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
 
           <button
             type="button"
-            onClick={handleResetAndClose}
-            aria-label="Close purchase modal"
-            style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', borderRadius: '50%', width: '36px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}
+            aria-label="Close modal window"
+            onClick={onClose}
+            style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <HiX size={20} />
           </button>
         </div>
 
-        {/* STEP 1: ENROLLMENT FORM & PRICING PLAN */}
+        {/* STEP 1: ENROLLMENT FORM */}
         {step === 1 && (
-          <form onSubmit={handleProceedToPayment} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
-            {/* Pricing Card Header */}
-            <div style={{ background: '#050b1c', color: '#ffffff', borderRadius: '16px', padding: '18px', border: '1.5px solid #f2b733', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <form onSubmit={handleProceedToPayment} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            
+            {/* Instant Enrollment Price Badge */}
+            <div style={{ background: '#f0fdf4', border: '1.5px solid #86efac', borderRadius: '12px', padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
-                <span style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 700 }}>Total Course Tuition Fee</span>
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '2px' }}>
-                  <span style={{ fontSize: '2.2rem', fontWeight: 900, color: '#f2b733', lineHeight: 1 }}>
-                    ₹{finalPrice.toLocaleString('en-IN')}
-                  </span>
-                  {course.originalPrice && (
-                    <span style={{ fontSize: '0.9rem', color: '#64748b', textDecoration: 'line-through', fontWeight: 600 }}>
-                      {course.originalPrice}
-                    </span>
-                  )}
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  INSTANT COHORT ENROLLMENT
+                </span>
+                <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#000648', lineHeight: 1.1 }}>
+                  ₹{finalPrice.toLocaleString('en-IN')} <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>(Full Course Access + Mentorship)</span>
                 </div>
               </div>
-
-              <span style={{ background: '#f2b733', color: '#000648', fontSize: '0.72rem', fontWeight: 900, padding: '4px 12px', borderRadius: '50px' }}>
-                {course.duration || '3 Months'} Live Access
+              <span style={{ background: '#000648', color: '#f2b733', fontSize: '0.72rem', fontWeight: 900, padding: '4px 10px', borderRadius: '50px' }}>
+                99% OFF SPECIAL
               </span>
             </div>
 
-            {/* Single Official 1-Time Payment Badge */}
-            <div
-              style={{
-                padding: '14px 18px', borderRadius: '12px',
-                border: '2px solid #000648',
-                background: '#f0f4ff',
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between'
-              }}
-            >
-              <div>
-                <div style={{ fontWeight: 900, fontSize: '0.92rem', color: '#000648' }}>Official 1-Time Instant Access</div>
-                <div style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 800, marginTop: '2px' }}>Instant Course Enrollment for ₹9</div>
-              </div>
-              <span style={{ background: '#000648', color: '#f2b733', padding: '6px 14px', borderRadius: '50px', fontWeight: 900, fontSize: '0.8rem' }}>
-                ₹9 ONLY
-              </span>
+            <div>
+              <label htmlFor="student_full_name" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                Full Name *
+              </label>
+              <input
+                id="student_full_name"
+                type="text"
+                required
+                placeholder="Enter your full name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.875rem' }}
+              />
             </div>
 
-            {/* Candidate Details Inputs */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
-                <label htmlFor="checkout_name" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                  Full Candidate Name*
+                <label htmlFor="student_email" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  Email Address *
                 </label>
                 <input
-                  id="checkout_name"
-                  type="text"
-                  placeholder="e.g. Ramesh Krishnan"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.88rem' }}
+                  id="student_email"
+                  type="email"
                   required
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.875rem' }}
                 />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <div>
-                  <label htmlFor="checkout_email" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                    Email Address*
-                  </label>
-                  <input
-                    id="checkout_email"
-                    type="email"
-                    placeholder="you@domain.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.88rem' }}
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="checkout_phone" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                    Mobile Number*
-                  </label>
-                  <input
-                    id="checkout_phone"
-                    type="tel"
-                    placeholder="+91 98765 43210"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.88rem' }}
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Coupon Code Section */}
-            <div>
-              <label htmlFor="coupon_code_input" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Promo / Coupon Code
-              </label>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div>
+                <label htmlFor="student_phone" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                  Mobile Number *
+                </label>
                 <input
-                  id="coupon_code_input"
-                  type="text"
-                  placeholder="Enter Coupon (e.g. EZER2000)"
-                  aria-label="Promo or coupon discount code"
-                  value={couponCode}
-                  onChange={(e) => setCouponCode(e.target.value)}
-                  disabled={couponApplied}
-                  style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.82rem', textTransform: 'uppercase' }}
+                  id="student_phone"
+                  type="tel"
+                  required
+                  placeholder="+91 98765 43210"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.875rem' }}
                 />
-                <button
-                  type="button"
-                  onClick={handleApplyCoupon}
-                  disabled={couponApplied}
-                  style={{ padding: '8px 16px', background: couponApplied ? '#166534' : '#000648', color: '#ffffff', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer' }}
-                >
-                  {couponApplied ? '★ Applied (-₹2,000)' : 'Apply'}
-                </button>
               </div>
             </div>
 
@@ -398,7 +334,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
 
             {/* Official Student WhatsApp Group Link Redirect Button */}
             <a
-              href={(contactInfo && contactInfo.whatsappGroupUrl) || 'https://chat.whatsapp.com/EZERStudentCohortOfficial'}
+              href={waGroupUrl}
               target="_blank"
               rel="noopener noreferrer"
               style={{

@@ -1,37 +1,37 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { HiArrowLeft, HiSparkles, HiClock, HiUser, HiCalendar, HiShare, HiCheckCircle } from 'react-icons/hi';
+import { HiArrowLeft, HiSparkles, HiClock, HiUser, HiCalendar, HiCheckCircle, HiLocationMarker } from 'react-icons/hi';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 import CTABanner from '../components/CTABanner';
 
-export default function BlogDetail({ onOpenDemoModal }) {
-  const { slug } = useParams();
-  const { blogs } = useSiteData();
-
-  const article = (blogs || []).find((b) => b.slug === slug || b.id === slug) || {
-    id: 'default-cover-story',
+const ARTICLES_DATABASE = {
+  'how-non-it-professionals-transition-into-ai': {
     title: 'How Non-IT Professionals Are Transitioning Into AI & Software Development in 2026',
-    category: 'Cover Story & EdTech Guide',
+    category: 'Career Transition Guide',
     author: 'EZER Academic Board & Industry Mentors',
     date: 'August 2026 Edition',
     readTime: '8 Min Read',
+    seoGeoAeoTag: 'Best AI & Full Stack IT Training Institute in Chennai India | Non-IT Career Transition Guide',
     summary: 'Discover the comprehensive, step-by-step roadmap used by non-tech career switchers to master Full Stack AI engineering, build production capstones, and land high-growth tech roles.',
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1400',
-  };
+    takeaways: [
+      'Degree requirements are giving way to practical capstone proof-of-work in corporate hiring.',
+      'Native language instruction (Tamil/Hindi/English) accelerates technical mastery by up to 3x.',
+      '12-Month placement assistance provides ongoing ATS resume reviews & corporate interview referrals.'
+    ],
+    sections: [
+      {
+        title: "1. The Changing Tech Landscape & Native Language Learning Advantage",
+        content: `The global IT industry has shifted dramatically toward practical execution rather than theoretical degrees. Traditional Computer Science degrees often focus on legacy academic theory, leaving graduates unequipped for production deployment, cloud infrastructure, and modern AI workflows.
 
-  const articleSections = [
-    {
-      title: "1. The Changing Tech Landscape & Native Language Learning Advantage",
-      content: `The global IT industry has shifted dramatically toward practical execution rather than theoretical degrees. Traditional Computer Science degrees often focus on legacy academic theory, leaving graduates unequipped for production deployment, cloud infrastructure, and modern AI workflows.
-
-At EZER Learning Solutions, we pioneered a dual-track methodology: delivering complex software engineering concepts in native languages (Tamil, Hindi, and English) alongside hands-on practical labs. When complex logic like recursion, pointer arithmetic, or neural network backpropagation is explained in native languages, student comprehension speeds increase by up to 3x.`,
-      image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000",
-      caption: "Interactive native-language cohort masterclasses in progress."
-    },
-    {
-      title: "2. The 4-Stage Transition Framework for Career Switchers",
-      content: `Whether coming from BPO, mechanical engineering, sales, or arts backgrounds, every successful career transition follows four core milestones:
+At EZER Learning Solutions in Perungudi, Chennai, we pioneered a dual-track methodology: delivering complex software engineering concepts in native languages (Tamil, Hindi, and English) alongside hands-on practical labs. When complex logic like recursion, pointer arithmetic, or neural network backpropagation is explained in native languages, student comprehension speeds increase by up to 3x.`,
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000",
+        caption: "Interactive native-language cohort masterclasses in progress."
+      },
+      {
+        title: "2. The 4-Stage Transition Framework for Career Switchers in Chennai & Online",
+        content: `Whether coming from BPO, mechanical engineering, sales, or arts backgrounds, every successful career transition follows four core milestones:
 
 • Stage 1: Core Tooling Mastery (Git, Linux CLI, Modern JavaScript / Python)
 • Stage 2: Production Capstone Building (REST APIs, Microservices, Cloud Containers)
@@ -39,18 +39,156 @@ At EZER Learning Solutions, we pioneered a dual-track methodology: delivering co
 • Stage 4: 1-on-1 Mock Technical Interviews & Resume Optimization
 
 By working directly with active corporate engineers who serve as personal mentors, students bypass generic tutorials and write enterprise-grade production code from week one.`,
-      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000",
-      caption: "Senior Mentors evaluating production capstone projects 1-on-1."
-    },
-    {
-      title: "3. 12-Month Dedicated Placement Assistance & Corporate Partner Referrals",
-      content: `Graduating from a course is only half the battle. EZER's 12-Month Dedicated Placement Support ensures candidates receive continuous mock technical interviews, resume optimization tailored for Applicant Tracking Systems (ATS), and direct referral pathways to 250+ corporate hiring partners across India.
+        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000",
+        caption: "Senior Mentors evaluating production capstone projects 1-on-1."
+      },
+      {
+        title: "3. 12-Month Dedicated Placement Assistance & Corporate Partner Referrals",
+        content: `Graduating from a course is only half the battle. EZER's 12-Month Dedicated Placement Support ensures candidates receive continuous mock technical interviews, resume optimization tailored for Applicant Tracking Systems (ATS), and direct referral pathways to 250+ corporate hiring partners across India.
 
 Every graduate earns an official QR-verifiable executive certificate accredited under ISO 9001:2015 standards, giving hiring managers total verification confidence during recruitment.`,
-      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000",
-      caption: "Graduate candidates participating in corporate mock interview drives."
+        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000",
+        caption: "Graduate candidates participating in corporate mock interview drives."
+      }
+    ]
+  },
+
+  'native-language-learning-breaking-barriers': {
+    title: 'Native Language Learning: Breaking Tech Education Barriers in Tamil Nadu & Pan-India',
+    category: 'Education Impact & GEO Insights',
+    author: 'Dr. Subramanian R & Academic Directorate',
+    date: 'August 2026',
+    readTime: '6 Min Read',
+    seoGeoAeoTag: 'Tamil & Hindi Software Engineering Courses | Native Language Tech Upskilling in Chennai & Online',
+    summary: 'How learning complex software architecture in Tamil, Hindi, and English unlocks technical fluency, eliminates fear of coding, and empowers tier-2/3 college graduates.',
+    image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1400',
+    takeaways: [
+      'Language barriers account for 65% of dropouts in traditional English-only IT training.',
+      'Bilingual instruction builds deeper mental models before translating logic into code.',
+      'EZER alumni in Chennai & Bangalore report 150%+ average salary hikes post-upskilling.'
+    ],
+    sections: [
+      {
+        title: "1. Overcoming the English Fluency Myth in Software Engineering",
+        content: `For decades, non-native English speakers across Tamil Nadu and Pan-India believed that software engineering required advanced English rhetoric. In reality, programming languages are mathematical logic systems.
+
+By explaining concepts like object-oriented programming, database indexing, and async loops in Tamil and Hindi first, learners grasp the fundamental architecture effortlessly before writing clean code in English.`,
+        image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=1000",
+        caption: "Tamil and Hindi instruction sessions bridging the IT entry gap."
+      },
+      {
+        title: "2. Real-World Impact Across Chennai, Coimbatore, and Tier-2 Tech Hubs",
+        content: `Students from non-IT backgrounds—such as B.Sc graduates, arts majors, and diploma holders—often hesitate when faced with English-heavy documentation. 
+
+Our structured bilingual LMS modules break down complex AWS architecture, Kubernetes pod deployments, and Playwright automation scripts into relatable real-world analogies.`,
+        image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=1000",
+        caption: "Hands-on cloud sandbox lab execution with mentor guidance."
+      }
+    ]
+  },
+
+  'rise-of-ai-assisted-full-stack-developers': {
+    title: 'The Rise of AI-Assisted Full Stack Developers in Corporate Enterprises',
+    category: 'Industry Trends & AEO Search',
+    author: 'Anand Kumar K (Chief Tech Officer)',
+    date: 'July 2026',
+    readTime: '7 Min Read',
+    seoGeoAeoTag: 'React Node.js Copilot AI Developer Course | Top High Salary Tech Roles 2026',
+    summary: 'Why leading tech firms in India and globally prioritize full-stack engineers who leverage GitHub Copilot, OpenAI APIs, and automated LLM testing pipelines.',
+    image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1400',
+    takeaways: [
+      'AI coding tools increase developer feature output velocity by 2.5x.',
+      'Corporate recruiters actively test Copilot prompting & API integration in technical rounds.',
+      'EZER Full Stack AI curriculum integrates production vector databases and OpenAI endpoints.'
+    ],
+    sections: [
+      {
+        title: "1. Why Traditional Full Stack Development Is Evolving Fast",
+        content: `Writing boiler-plate CRUD code manually is no longer the primary benchmark of a senior developer. Modern software teams demand engineers who can architect systems, design robust database schemas, and leverage AI models to write, test, and refactor code efficiently.
+
+At EZER, students learn React, Node.js, Next.js, and PostgreSQL alongside GitHub Copilot and Claude API integrations.`,
+        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=1000",
+        caption: "Full Stack AI developer environment setup and API integration."
+      },
+      {
+        title: "2. Building Enterprise RAG Applications & Vector Search Engines",
+        content: `Our curriculum moves beyond simple web pages to complex enterprise capstones: retrieval-augmented generation (RAG) engines, vector embeddings with Pinecone/PGVector, and automated CI/CD pipeline deployments on Vercel and Render.`,
+        image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=1000",
+        caption: "Students deploying full-stack AI web applications to cloud staging."
+      }
+    ]
+  },
+
+  '12-month-placement-assistance-framework': {
+    title: '12-Month Placement Assistance: How EZER Guarantees Interview Referrals & Salary Hikes',
+    category: 'Placement Success & SEO',
+    author: 'Meenakshi Sundaram & HR Directorate',
+    date: 'July 2026',
+    readTime: '9 Min Read',
+    seoGeoAeoTag: '100% Placement Assistance IT Training Chennai | Resume Optimization & Corporate Referrals',
+    summary: 'An inside look into EZER’s placement engine: 1-on-1 mock interviews, ATS resume formatting, corporate HR partnerships, and 1-year continuous job referral coverage.',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1400',
+    takeaways: [
+      'Over 250+ corporate hiring partners refer EZER certified candidates directly.',
+      '12-Month placement window covers career gaps, salary negotiation, and interview retakes.',
+      'ISO 9001:2015 QR-verifiable certificate validates production lab completion.'
+    ],
+    sections: [
+      {
+        title: "1. The 3-Tier Career Readiness & Placement Pipeline",
+        content: `Many institutes stop at course completion. EZER provides 12 full months of dedicated placement support starting from day 60 of training.
+
+Tier 1: ATS-Compliant Tech Resume & LinkedIn Profile Optimization
+Tier 2: 1-on-1 Mock Technical Interviews with Senior Engineering Lead Mentors
+Tier 3: Direct Corporate Placement Drives & Priority Partner HR Referrals.`,
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=1000",
+        caption: "Corporate HR placement session at EZER Learning Solutions."
+      }
+    ]
+  },
+
+  'ezer-honored-at-edtech-excellence-awards-2025': {
+    title: 'EZER Learning Solutions Awarded National EdTech Excellence & Innovation Honor',
+    category: 'National Recognition & Honors',
+    author: 'EZER Newsroom',
+    date: 'June 2026',
+    readTime: '5 Min Read',
+    seoGeoAeoTag: 'ISO 9001:2015 Certified IT Academy India | Verified National Skill Development Awards',
+    summary: 'EZER Learning Solutions receives prestigious national honors for outstanding career outcomes, native-language tech education, and 98.4% student satisfaction metrics.',
+    image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=1400',
+    takeaways: [
+      'Recognized by National Skill Development Forum for native language tech upskilling.',
+      '10,000+ active learners across Tamil Nadu, Pan-India, and global NRI hubs.',
+      'ISO 9001:2015 certified quality standard for IT curriculum and placement processes.'
+    ],
+    sections: [
+      {
+        title: "1. Celebrating National Recognition & Student Outcomes",
+        content: `EZER Learning Solutions was officially awarded the National EdTech Excellence Honor. This milestone recognizes our pioneering work in native language IT education, practical sandbox labs, and consistent corporate placement results.`,
+        image: "https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=1000",
+        caption: "National Skill Development Forum Award presentation."
+      }
+    ]
+  }
+};
+
+export default function BlogDetail({ onOpenDemoModal }) {
+  const { slug } = useParams();
+  const { blogs } = useSiteData();
+
+  // Look up custom article or fallback to matching slug in database
+  const userBlog = (blogs || []).find((b) => b.slug === slug || b.id === slug);
+  const article = ARTICLES_DATABASE[slug] || ARTICLES_DATABASE['how-non-it-professionals-transition-into-ai'];
+
+  // Override title and summary if user created a custom blog entry in Admin
+  if (userBlog) {
+    article.title = userBlog.title || article.title;
+    article.summary = userBlog.summary || article.summary;
+    if (userBlog.image) article.image = userBlog.image;
+    if (userBlog.content) {
+      article.sections[0].content = userBlog.content;
     }
-  ];
+  }
 
   return (
     <div style={{ background: '#f8fafc', color: '#0f172a', minHeight: '100vh', position: 'relative' }}>
@@ -62,7 +200,7 @@ Every graduate earns an official QR-verifiable executive certificate accredited 
             <HiArrowLeft size={18} /> Back to EZER Tech Magazine
           </Link>
           <span style={{ fontSize: '0.78rem', color: '#cbd5e1', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 800 }}>
-            {article.category || 'Magazine Feature'}
+            {article.category}
           </span>
         </div>
       </div>
@@ -71,34 +209,41 @@ Every graduate earns an official QR-verifiable executive certificate accredited 
       <header style={{ background: 'radial-gradient(circle at 50% 0%, #000a5e 0%, #000428 100%)', color: '#ffffff', padding: '64px 20px 48px', position: 'relative' }}>
         <div className="container" style={{ maxWidth: '920px', margin: '0 auto' }}>
           
-          <span style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            background: 'rgba(242, 183, 51, 0.18)', color: '#f2b733',
-            padding: '6px 20px', borderRadius: '50px', fontWeight: 900,
-            fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.08em',
-            marginBottom: '20px', border: '1.5px solid rgba(242, 183, 51, 0.4)'
-          }}>
-            <HiSparkles size={16} /> SPECIAL EDITORIAL FEATURE
-          </span>
+          {/* SEO / GEO / AEO Keyword Tag */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', flexWrap: 'wrap' }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: '6px',
+              background: 'rgba(242, 183, 51, 0.18)', color: '#f2b733',
+              padding: '6px 20px', borderRadius: '50px', fontWeight: 900,
+              fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.08em',
+              border: '1.5px solid rgba(242, 183, 51, 0.4)'
+            }}>
+              <HiSparkles size={16} /> SPECIAL EDITORIAL FEATURE
+            </span>
 
-          <h1 style={{ fontSize: 'clamp(2.2rem, 4vw, 3.4rem)', fontWeight: 900, lineHeight: 1.2, color: '#ffffff', marginBottom: '20px', letterSpacing: '-0.02em' }}>
+            <span style={{ fontSize: '0.75rem', color: '#cbd5e1', background: 'rgba(255,255,255,0.1)', padding: '4px 12px', borderRadius: '50px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+              <HiLocationMarker size={14} color="#f2b733" /> {article.seoGeoAeoTag || 'Chennai, India & Online'}
+            </span>
+          </div>
+
+          <h1 style={{ fontSize: 'clamp(2.1rem, 4vw, 3.2rem)', fontWeight: 900, lineHeight: 1.2, color: '#ffffff', marginBottom: '20px', letterSpacing: '-0.02em' }}>
             {article.title}
           </h1>
 
-          <p style={{ fontSize: '1.2rem', color: '#cbd5e1', lineHeight: 1.6, marginBottom: '28px', fontWeight: 400 }}>
+          <p style={{ fontSize: '1.15rem', color: '#cbd5e1', lineHeight: 1.65, marginBottom: '28px', fontWeight: 400 }}>
             {article.summary}
           </p>
 
           {/* Author Metadata Bar */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.15)', fontSize: '0.88rem', color: '#94a3b8' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ffffff', fontWeight: 800 }}>
-              <HiUser size={18} color="#f2b733" /> {article.author || 'EZER Editorial Team'}
+              <HiUser size={18} color="#f2b733" /> {article.author}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <HiCalendar size={18} color="#f2b733" /> {article.date || 'August 2026'}
+              <HiCalendar size={18} color="#f2b733" /> {article.date}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <HiClock size={18} color="#f2b733" /> {article.readTime || '8 Min Read'}
+              <HiClock size={18} color="#f2b733" /> {article.readTime}
             </div>
           </div>
 
@@ -126,14 +271,14 @@ Every graduate earns an official QR-verifiable executive certificate accredited 
             <HiCheckCircle size={22} color="#000648" /> Executive Summary & Key Takeaways
           </h4>
           <ul style={{ margin: 0, paddingLeft: '20px', color: '#334155', fontSize: '0.95rem', lineHeight: 1.7 }}>
-            <li>Degree requirements are giving way to practical capstone proof-of-work.</li>
-            <li>Native language instruction (Tamil/Hindi/English) accelerates technical mastery by up to 3x.</li>
-            <li>12-Month placement assistance provides ongoing ATS resume reviews & corporate interview referrals.</li>
+            {article.takeaways.map((item, i) => (
+              <li key={i}>{item}</li>
+            ))}
           </ul>
         </div>
 
         {/* Article Body Sections with Photos & Magazine Styling */}
-        {articleSections.map((sec, idx) => (
+        {article.sections.map((sec, idx) => (
           <article key={idx} style={{ marginBottom: '48px' }}>
             <h2 style={{ fontSize: '1.7rem', fontWeight: 900, color: '#000648', marginBottom: '16px', lineHeight: 1.3 }}>
               {sec.title}
@@ -167,11 +312,11 @@ Every graduate earns an official QR-verifiable executive certificate accredited 
             Ready to Launch Your Career in Technology?
           </h3>
           <p style={{ color: '#cbd5e1', fontSize: '0.95rem', maxWidth: '600px', margin: '0 auto 20px', lineHeight: 1.6 }}>
-            Book a free 1-on-1 counseling call with senior EZER academic counselors and explore our accelerated live cohorts.
+            Book a free 1-on-1 counseling call with senior EZER academic counselors in Chennai and explore our accelerated live cohorts.
           </p>
           <button
             type="button"
-            onClick={onOpenDemoModal}
+            onClick={() => onOpenDemoModal(article.title)}
             style={{ padding: '14px 32px', borderRadius: '50px', background: '#f2b733', color: '#000648', fontWeight: 900, fontSize: '0.95rem', border: 'none', cursor: 'pointer', boxShadow: '0 4px 18px rgba(242,183,51,0.4)' }}
           >
             BOOK FREE COUNSELING CALL →

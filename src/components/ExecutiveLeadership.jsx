@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { HiBadgeCheck } from 'react-icons/hi';
@@ -6,10 +6,6 @@ import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 
 export default function ExecutiveLeadership() {
   const { executiveLeaders } = useSiteData();
-  const sectionRef = useRef(null);
-  const [activeAutoIdx, setActiveAutoIdx] = useState(-1);
-  const [hasAnimatedSequence, setHasAnimatedSequence] = useState(false);
-  const [userHoveredIdx, setUserHoveredIdx] = useState(-1);
 
   const leaders = (executiveLeaders && executiveLeaders.length > 0)
     ? executiveLeaders
@@ -20,7 +16,7 @@ export default function ExecutiveLeadership() {
           roleName: 'Chief Executive Officer',
           name: 'Dr. Subramanian R',
           image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=600&h=700',
-          bio: 'Visionary Leader driving native language tech education, corporate placement partnerships, and pan-India growth.'
+          bio: 'Visionary Leader driving native language tech education and corporate placement partnerships.'
         },
         {
           id: 'exec-2',
@@ -28,7 +24,7 @@ export default function ExecutiveLeadership() {
           roleName: 'Chief Financial Officer',
           name: 'Meenakshi Sundaram',
           image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=700',
-          bio: 'Strategic Financial Lead overseeing student scholarship funds, affordable fee structures, and enterprise scalability.'
+          bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.'
         },
         {
           id: 'exec-3',
@@ -36,227 +32,152 @@ export default function ExecutiveLeadership() {
           roleName: 'Chief Tech & Academic Officer',
           name: 'Anand Kumar K',
           image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600&h=700',
-          bio: 'Pioneer of AI-integrated lab curriculums, hands-on production capstones, and corporate readiness standards.'
+          bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.'
         }
       ];
 
-  // 1-Time Auto Scroll Sequence Animation when user reaches Executive Board Section
-  useEffect(() => {
-    const node = sectionRef.current;
-    if (!node || hasAnimatedSequence) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !hasAnimatedSequence) {
-          setHasAnimatedSequence(true);
-          
-          // Sequence: Card 0 -> Card 1 -> Card 2 -> Reset cleanly
-          setActiveAutoIdx(0);
-          setTimeout(() => setActiveAutoIdx(1), 2200);
-          setTimeout(() => setActiveAutoIdx(2), 4400);
-          setTimeout(() => setActiveAutoIdx(-1), 6600);
-        }
-      },
-      { threshold: 0.25 }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [hasAnimatedSequence]);
-
   return (
     <section
-      ref={sectionRef}
       style={{
         position: 'relative',
         background: 'radial-gradient(circle at 50% 0%, #1e1b4b 0%, #000648 60%, #030712 100%)',
         color: '#ffffff',
-        padding: '56px 16px',
+        padding: '64px 20px',
         borderTop: '2px solid rgba(242, 183, 51, 0.3)',
         borderBottom: '2px solid rgba(242, 183, 51, 0.3)',
-        overflow: 'hidden'
+        overflow: 'visible'
       }}
     >
       <style>{`
-        .exec-card {
-          width: 100%;
-          max-width: 360px;
-          height: 420px;
-          background: #ffffff;
-          border-radius: 32px;
-          padding: 3px;
+        .ezer-3d-card {
+          overflow: visible;
           position: relative;
-          box-shadow: rgba(0, 6, 72, 0.4) 0px 20px 35px -15px;
-          transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
-          border: 2.5px solid #000648;
+          width: 100%;
+          max-width: 320px;
+          height: 380px;
+          background: #000648;
+          border-radius: 24px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
           margin: 0 auto;
-          overflow: hidden;
+          border: 2.5px solid #f2b733;
+          transition: transform 0.4s ease, border-color 0.4s ease;
         }
 
-        .exec-card .role-badge-top {
+        .ezer-3d-card:before,
+        .ezer-3d-card:after {
+          content: "";
           position: absolute;
-          right: 1.2rem;
-          top: 1.2rem;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-radius: 24px;
+          background: #000a5e;
+          border: 2px solid rgba(242, 183, 51, 0.4);
+          transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+          z-index: -1;
+        }
+
+        .ezer-3d-card:hover {
+          transform: translateY(-6px);
+        }
+
+        .ezer-3d-card:hover:before {
+          transform: rotate(12deg);
+          background: #000d78;
+        }
+
+        .ezer-3d-card:hover:after {
+          transform: rotate(6deg);
+          box-shadow: 0 2px 25px rgba(242, 183, 51, 0.3);
+        }
+
+        .ezer-3d-card .role-badge-top {
+          position: absolute;
+          right: 1rem;
+          top: 1rem;
           background: #000648;
           border: 1.5px solid #f2b733;
           color: #f2b733;
           font-weight: 900;
-          font-size: 0.75rem;
-          padding: 5px 14px;
+          font-size: 0.72rem;
+          padding: 4px 12px;
           border-radius: 50px;
           z-index: 10;
           display: flex;
           align-items: center;
-          gap: 6px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+          gap: 4px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.4);
         }
 
-        .exec-card .profile-pic {
+        .ezer-3d-card .imgbox {
           position: absolute;
-          width: calc(100% - 6px);
-          height: calc(100% - 6px);
-          top: 3px;
-          left: 3px;
-          border-radius: 29px;
+          top: 10px;
+          left: 10px;
+          bottom: 10px;
+          right: 10px;
+          background: #000648;
+          border-radius: 18px;
+          transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
           z-index: 1;
-          border: 0px solid #f2b733;
           overflow: hidden;
-          transition: all 0.5s ease-in-out 0.15s, z-index 0.5s ease-in-out 0.15s;
+          border: 1.5px solid rgba(242, 183, 51, 0.3);
         }
 
-        .exec-card .profile-pic img {
-          object-fit: cover;
+        .ezer-3d-card .imgbox img {
           width: 100%;
           height: 100%;
+          object-fit: cover;
           object-position: center top;
-          transition: all 0.5s ease-in-out 0s;
+          transition: transform 0.5s ease;
         }
 
-        .exec-card .bottom {
+        .ezer-3d-card:hover .imgbox {
+          bottom: 100px;
+        }
+
+        .ezer-3d-card .details {
           position: absolute;
-          bottom: 3px;
-          left: 3px;
-          right: 3px;
-          background: #000648;
-          top: auto;
-          height: 84px;
-          border-radius: 22px;
+          left: 12px;
+          right: 12px;
+          bottom: 10px;
+          height: 80px;
+          text-align: center;
           z-index: 2;
-          border-top: 2.5px solid #f2b733;
-          box-shadow: rgba(0, 6, 72, 0.4) 0px 5px 15px 0px inset;
-          overflow: hidden;
-          transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
-          padding: 12px 18px;
           display: flex;
           flex-direction: column;
+          align-items: center;
           justify-content: center;
         }
 
-        .exec-card .bottom .content {
-          position: relative;
-          width: 100%;
-        }
-
-        .exec-card .bottom .content .name {
-          display: block;
-          font-size: 1.2rem;
-          color: #ffffff;
+        .ezer-3d-card .details .title {
           font-weight: 900;
-          line-height: 1.2;
-          text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+          font-size: 1.25rem;
+          color: #ffffff;
+          margin: 0;
+          line-height: 1.15;
+          text-shadow: 0 2px 8px rgba(0,0,0,0.6);
         }
 
-        .exec-card .bottom .content .role-title {
-          display: block;
+        .ezer-3d-card .details .caption {
+          font-weight: 800;
           font-size: 0.76rem;
           color: #f2b733;
-          font-weight: 900;
+          display: block;
+          margin-top: 3px;
           text-transform: uppercase;
           letter-spacing: 0.06em;
-          margin-top: 2px;
         }
 
-        .exec-card .bottom .content .about-me {
-          display: block;
-          font-size: 0.86rem;
+        .ezer-3d-card .details .bio-text {
+          font-size: 0.74rem;
           color: #cbd5e1;
-          margin-top: 0.7rem;
-          line-height: 1.5;
-          opacity: 0;
-          max-height: 0;
+          margin-top: 4px;
+          line-height: 1.3;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
           overflow: hidden;
-          transition: opacity 0.4s ease 0.1s, max-height 0.4s ease 0.1s;
-        }
-
-        .exec-card .bottom .bottom-bottom {
-          margin-top: 0.8rem;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          border-top: 1px solid rgba(242, 183, 51, 0.3);
-          padding-top: 10px;
-          opacity: 0;
-          max-height: 0;
-          overflow: hidden;
-          transition: opacity 0.4s ease 0.2s, max-height 0.4s ease 0.2s;
-        }
-
-        .exec-card .bottom .bottom-bottom .button {
-          background: #f2b733;
-          color: #000648;
-          border: none;
-          border-radius: 20px;
-          font-size: 0.72rem;
-          font-weight: 900;
-          padding: 0.4rem 0.8rem;
-          box-shadow: rgba(0, 6, 72, 0.25) 0px 5px 5px 0px;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-
-        .exec-card .bottom .bottom-bottom .button:hover {
-          background: #ffffff;
-          color: #000648;
-        }
-
-        /* Hover & Auto-Scroll Animation Effects */
-        .exec-card.is-active-card,
-        .exec-card:hover {
-          border-top-left-radius: 55px;
-          border-color: #f2b733;
-          box-shadow: 0 25px 50px rgba(242, 183, 51, 0.25);
-        }
-
-        .exec-card.is-active-card .bottom,
-        .exec-card:hover .bottom {
-          top: 20%;
-          height: auto;
-          border-radius: 80px 29px 29px 29px;
-          padding: 20px 20px;
-          transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.15s;
-        }
-
-        .exec-card.is-active-card .bottom .content .about-me,
-        .exec-card:hover .bottom .content .about-me,
-        .exec-card.is-active-card .bottom .bottom-bottom,
-        .exec-card:hover .bottom .bottom-bottom {
-          opacity: 1;
-          max-height: 140px;
-        }
-
-        .exec-card.is-active-card .profile-pic,
-        .exec-card:hover .profile-pic {
-          width: 90px;
-          height: 90px;
-          aspect-ratio: 1;
-          top: 10px;
-          left: 10px;
-          border-radius: 50%;
-          z-index: 3;
-          border: 4px solid #f2b733;
-          box-shadow: rgba(0, 6, 72, 0.4) 0px 5px 15px 0px;
-          transition: all 0.5s ease-in-out, z-index 0.5s ease-in-out 0.1s;
         }
       `}</style>
 
@@ -269,7 +190,7 @@ export default function ExecutiveLeadership() {
       <div className="container" style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
         
         {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: '36px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <span
             style={{
               display: 'inline-flex',
@@ -316,49 +237,35 @@ export default function ExecutiveLeadership() {
           </p>
         </div>
 
-        {/* 3 Executive Leader Cards Grid with Auto-Scroll Animation & User Hover Support */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '28px', width: '100%' }}>
-          {leaders.map((leader, idx) => {
-            const isCardActive = (userHoveredIdx === idx) || (userHoveredIdx === -1 && activeAutoIdx === idx);
+        {/* 3 Executive Leader Cards Grid with User 3D Stack Rotating Effect & EZER Colors */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))', gap: '40px', width: '100%', padding: '20px 0' }}>
+          {leaders.map((leader, idx) => (
+            <motion.div
+              key={leader.id || leader.roleTag || idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.12 }}
+              className="ezer-3d-card"
+            >
+              {/* Role Badge Top */}
+              <span className="role-badge-top">
+                <HiBadgeCheck size={14} /> {leader.roleTag || 'DIRECTOR'}
+              </span>
 
-            return (
-              <motion.div
-                key={leader.id || leader.roleTag || idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.12 }}
-                onMouseEnter={() => setUserHoveredIdx(idx)}
-                onMouseLeave={() => setUserHoveredIdx(-1)}
-                className={`exec-card ${isCardActive ? 'is-active-card' : ''}`}
-              >
-                {/* Role Badge Top */}
-                <span className="role-badge-top">
-                  <HiBadgeCheck size={15} /> {leader.roleTag || 'DIRECTOR'}
-                </span>
+              {/* Photo Box container */}
+              <div className="imgbox">
+                <img src={resolveImageSrc(leader.image)} alt={leader.name} onError={handleImgError} />
+              </div>
 
-                {/* Profile Cover Photo */}
-                <div className="profile-pic">
-                  <img src={resolveImageSrc(leader.image)} alt={leader.name} onError={handleImgError} />
-                </div>
-
-                {/* Bottom Content Drawer */}
-                <div className="bottom">
-                  <div className="content">
-                    <span className="name">{leader.name}</span>
-                    <span className="role-title">{leader.roleName || leader.roleTag}</span>
-                    <p className="about-me">{leader.bio}</p>
-
-                    <div className="bottom-bottom">
-                      <button type="button" className="button">
-                        <HiBadgeCheck size={14} /> EZER Corporate Directorate
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
+              {/* Details Text Box */}
+              <div className="details">
+                <h3 className="title">{leader.name}</h3>
+                <span className="caption">{leader.roleName || leader.roleTag}</span>
+                <p className="bio-text">{leader.bio}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
       </div>
