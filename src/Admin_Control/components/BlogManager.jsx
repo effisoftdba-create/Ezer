@@ -267,7 +267,7 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
 /* ────────────────────────────────────────────────────────────
    EXECUTIVE SECTION — CEO Editorial Card Style with tagline/headline
    ──────────────────────────────────────────────────────────── */
-function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
+export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
     roleTag: 'CEO', roleName: 'Chief Executive Officer',
@@ -461,27 +461,14 @@ export default function BlogManager({ initialSubTab = 'blogs' }) {
 
           <button
             type="button"
-            onClick={() => setActiveSubTab('executive')}
-            style={{
-              padding: '10px 18px', borderRadius: '8px', border: 'none',
-              fontWeight: 900, fontSize: '0.86rem', cursor: 'pointer',
-              background: activeSubTab === 'executive' ? '#f2b733' : 'transparent',
-              color: activeSubTab === 'executive' ? '#000648' : '#ffffff',
-              display: 'flex', alignItems: 'center', gap: '6px'
-            }}
-          >
-            Executive Board (CEO / Leaders)
-          </button>
-
-          <button
-            type="button"
             onClick={() => setActiveSubTab('achievements')}
             style={{
               padding: '10px 18px', borderRadius: '8px', border: 'none',
               fontWeight: 900, fontSize: '0.86rem', cursor: 'pointer',
               background: activeSubTab === 'achievements' ? '#f2b733' : 'transparent',
               color: activeSubTab === 'achievements' ? '#000648' : '#ffffff',
-              display: 'flex', alignItems: 'center', gap: '6px'
+              display: 'flex', alignItems: 'center', gap: '6px',
+              boxShadow: activeSubTab === 'achievements' ? '0 4px 12px rgba(242,183,51,0.3)' : 'none'
             }}
           >
             <HiBadgeCheck size={18} /> EZER Achievements ({ (achievements || []).length })

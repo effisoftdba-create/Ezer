@@ -15,7 +15,7 @@ import FaqManager from '../components/FaqManager';
 import ContactInfoManager from '../components/ContactInfoManager';
 import PopupManager from '../components/PopupManager';
 import LeadsManager from '../components/LeadsManager';
-import BlogManager from '../components/BlogManager';
+import BlogManager, { ExecutiveSection } from '../components/BlogManager';
 import AdminHeaderNav from '../components/AdminHeaderNav';
 import AdminSidebarNav from '../components/AdminSidebarNav';
 
@@ -55,6 +55,7 @@ export default function AdminDashboard() {
     blogs,
     achievements,
     executiveLeaders,
+    updateExecutiveLeader,
     resetToDefault
   } = useSiteData();
 
@@ -141,7 +142,7 @@ export default function AdminDashboard() {
           {activeTab === 'courses' && <CourseManager />}
           {activeTab === 'platform' && <PlatformManager />}
           {activeTab === 'support' && <SupportCardsManager />}
-          {activeTab === 'executive' && <BlogManager initialSubTab="executive" />}
+          {activeTab === 'executive' && <ExecutiveSection executiveLeaders={executiveLeaders} updateExecutiveLeader={updateExecutiveLeader} />}
           {activeTab === 'blog' && <BlogManager initialSubTab="blogs" />}
           {activeTab === 'achievements' && <BlogManager initialSubTab="achievements" />}
           {activeTab === 'outcomes' && <GraduateOutcomesManager />}
