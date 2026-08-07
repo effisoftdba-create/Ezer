@@ -27,32 +27,74 @@ export const phase1Courses = [
       {
         num: "01",
         title: "Python Programming & Mathematics for AI",
-        topics: ["Python Fundamentals, Data Structures & OOP", "NumPy for Numerical Computing", "Pandas for Data Manipulation & Cleaning", "Linear Algebra, Probability & Statistics for ML"]
+        image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=600",
+        badge: "Core Foundations",
+        topics: [
+          "Python Fundamentals, Data Structures & OOP",
+          "NumPy for Numerical Computing",
+          "Pandas for Data Manipulation & Cleaning",
+          "Linear Algebra, Probability & Statistics for ML"
+        ]
       },
       {
         num: "02",
         title: "Exploratory Data Analysis (EDA) & Visualization",
-        topics: ["Matplotlib & Seaborn Data Visualizations", "Feature Scaling, Normalization & Encoding", "Handling Missing Data & Outlier Detection", "Exploratory Insights Generation"]
+        image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=600",
+        badge: "Data Insights",
+        topics: [
+          "Matplotlib & Seaborn Data Visualizations",
+          "Feature Scaling, Normalization & Encoding",
+          "Handling Missing Data & Outlier Detection",
+          "Exploratory Insights Generation"
+        ]
       },
       {
         num: "03",
         title: "Supervised Machine Learning Algorithms",
-        topics: ["Linear & Logistic Regression", "Decision Trees & Random Forests", "Support Vector Machines (SVM) & KNN", "Gradient Boosting (XGBoost, LightGBM)"]
+        image: "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=600",
+        badge: "Predictive ML",
+        topics: [
+          "Linear & Logistic Regression",
+          "Decision Trees & Random Forests",
+          "Support Vector Machines (SVM) & KNN",
+          "Gradient Boosting (XGBoost, LightGBM)"
+        ]
       },
       {
         num: "04",
         title: "Unsupervised Machine Learning & Dimensionality",
-        topics: ["K-Means & Hierarchical Clustering", "Principal Component Analysis (PCA)", "Anomaly Detection Techniques", "Recommender Systems Architecture"]
+        image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600",
+        badge: "Clustering & PCA",
+        topics: [
+          "K-Means & Hierarchical Clustering",
+          "Principal Component Analysis (PCA)",
+          "Anomaly Detection Techniques",
+          "Recommender Systems Architecture"
+        ]
       },
       {
         num: "05",
         title: "Deep Learning & Neural Networks",
-        topics: ["Artificial Neural Networks (ANN) & Perceptrons", "TensorFlow & Keras Model Architecture", "Convolutional Neural Networks (CNN) for Vision", "Recurrent Neural Networks (RNN) & LSTMs"]
+        image: "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=600",
+        badge: "Neural Networks",
+        topics: [
+          "Artificial Neural Networks (ANN) & Perceptrons",
+          "TensorFlow & Keras Model Architecture",
+          "Convolutional Neural Networks (CNN) for Vision",
+          "Recurrent Neural Networks (RNN) & LSTMs"
+        ]
       },
       {
         num: "06",
         title: "ML Model Deployment & AI Application Building",
-        topics: ["Model Evaluation Metrics (ROC-AUC, Precision/Recall)", "Saving & Serializing Models (Joblib/Pickle)", "Building Web APIs with FastAPI & Streamlit", "Introduction to Prompt Engineering & LLM Integration"]
+        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600",
+        badge: "Production AI & LLM",
+        topics: [
+          "Model Evaluation Metrics (ROC-AUC, Precision/Recall)",
+          "Saving & Serializing Models (Joblib/Pickle)",
+          "Building Web APIs with FastAPI & Streamlit",
+          "Introduction to Prompt Engineering & LLM Integration"
+        ]
       }
     ],
 

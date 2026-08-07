@@ -211,64 +211,117 @@ export default function CourseDetail({ onOpenDemoModal }) {
             </p>
           </div>
 
-          {/* Module Cards Grid (Admin Editable) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '28px', width: '100%' }}>
-            {modulesList.map((mod, idx) => (
-              <motion.div
-                key={mod.num || idx}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                style={{
-                  background: '#f8fafc',
-                  padding: '32px',
-                  borderRadius: '20px',
-                  border: '2px solid #000648',
-                  boxShadow: '0 12px 32px rgba(0, 6, 72, 0.06)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between'
-                }}
-              >
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+          {/* Visual Module Cards Grid with Cover Photos & Framer Motion */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '32px', width: '100%' }}>
+            {modulesList.map((mod, idx) => {
+              const coverImg = mod.image || [
+                "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=600",
+                "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600"
+              ][idx % 6];
+
+              return (
+                <motion.div
+                  key={mod.num || idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0, 6, 72, 0.16)', borderColor: '#f2b733' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: idx * 0.08 }}
+                  style={{
+                    background: '#ffffff',
+                    borderRadius: '24px',
+                    border: '2px solid #000648',
+                    overflow: 'hidden',
+                    boxShadow: '0 10px 30px rgba(0, 6, 72, 0.06)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    transition: 'border-color 0.3s ease'
+                  }}
+                >
+                  {/* Photo Header Container */}
+                  <div style={{ position: 'relative', height: '180px', overflow: 'hidden', background: '#000648' }}>
+                    <img
+                      src={coverImg}
+                      alt={mod.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease' }}
+                    />
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 40%, rgba(0,6,72,0.85) 100%)' }} />
+
+                    {/* Module Number Circular Badge */}
                     <span
                       style={{
-                        width: '38px',
-                        height: '38px',
+                        position: 'absolute',
+                        top: '14px',
+                        left: '14px',
+                        width: '40px',
+                        height: '40px',
                         borderRadius: '50%',
                         background: '#000648',
                         color: '#f2b733',
-                        fontSize: '1rem',
+                        border: '2px solid #f2b733',
+                        fontSize: '0.95rem',
                         fontWeight: 900,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
                       }}
                     >
                       {mod.num || `0${idx + 1}`}
                     </span>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                      MODULE {idx + 1}
+
+                    {/* Category / Badge Tag */}
+                    <span
+                      style={{
+                        position: 'absolute',
+                        bottom: '12px',
+                        right: '14px',
+                        background: '#f2b733',
+                        color: '#000648',
+                        padding: '4px 14px',
+                        borderRadius: '50px',
+                        fontSize: '0.72rem',
+                        fontWeight: 900,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.3)'
+                      }}
+                    >
+                      {mod.badge || `MODULE ${idx + 1}`}
                     </span>
                   </div>
 
-                  <h3 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#000648', marginBottom: '14px', lineHeight: 1.3 }}>
-                    {mod.title}
-                  </h3>
+                  {/* Card Content Body */}
+                  <div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginBottom: '16px', lineHeight: 1.35 }}>
+                        {mod.title}
+                      </h3>
 
-                  <ul style={{ padding: 0, margin: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                    {mod.topics?.map((topic, tIdx) => (
-                      <li key={tIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.92rem', color: '#334155', lineHeight: 1.5 }}>
-                        <HiCheckCircle size={18} style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} />
-                        <span>{topic}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            ))}
+                      <ul style={{ padding: 0, margin: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        {mod.topics?.map((topic, tIdx) => (
+                          <li key={tIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.9rem', color: '#334155', lineHeight: 1.5 }}>
+                            <HiCheckCircle size={18} style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} />
+                            <span>{topic}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#166534', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <HiCheckCircle size={14} /> Accelerated Learning Track
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
