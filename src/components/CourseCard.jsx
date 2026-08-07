@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { HiClock, HiArrowRight, HiGlobeAlt } from 'react-icons/hi';
-import { resolveImageSrc } from '../utils/imageUtils';
+import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 import CoursePurchaseModal from './course-detail/CoursePurchaseModal';
 
 export default function CourseCard({ course, onOpenDemoModal }) {
@@ -35,6 +35,7 @@ export default function CourseCard({ course, onOpenDemoModal }) {
           <img 
             src={resolveImageSrc(course.image)} 
             alt={course.title}
+            onError={handleImgError}
             style={{
               width: '100%',
               height: '100%',

@@ -278,6 +278,7 @@ export const defaultContactInfo = {
   phone: '+91 98765 43210',
   address: 'Ezer Learning Solutions\nPlot No: 90, 3rd Cross Street, Phase-2, Thirumalai Nagar Annexe, Perungudi, Chennai - 600096, Tamil Nadu, India',
   whatsapp: '+91 98765 43210',
+  whatsappGroupUrl: 'https://chat.whatsapp.com/EZERStudentCohortOfficial',
   workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM'
 };
 

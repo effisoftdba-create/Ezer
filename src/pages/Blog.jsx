@@ -1,16 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { HiBadgeCheck, HiNewspaper, HiArrowRight, HiSparkles, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import { handleImgError } from '../utils/imageUtils';
 import CTABanner from '../components/CTABanner';
 
 export default function Blog({ onOpenDemoModal }) {
   const { blogs, achievements } = useSiteData();
 
   const featuredCoverArticle = (blogs && blogs[0]) || {
-    title: 'How Non-IT Professionals Are Transitioning Into AI & Software Development in 2025',
+    id: 'blog-1',
+    slug: 'how-non-it-professionals-transition-into-ai',
+    title: 'How Non-IT Professionals Are Transitioning Into AI & Software Development in 2026',
     category: 'Cover Story',
     author: 'EZER Academic Board',
-    date: 'August 2025 Edition',
+    date: 'August 2026 Edition',
     summary: 'Discover the step-by-step roadmap used by non-tech switchers to master Full Stack AI engineering and land high-growth tech roles.',
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200'
   };
@@ -18,6 +22,7 @@ export default function Blog({ onOpenDemoModal }) {
   const defaultArticles = [
     {
       id: 'blog-default-1',
+      slug: 'native-language-learning-breaking-barriers',
       title: 'Native Language Learning: Breaking Barriers for Non-IT Career Aspirants',
       category: 'Education Impact',
       summary: 'How learning complex software concepts in Tamil, Hindi, and English accelerates comprehension and boosts interview confidence.',
@@ -25,6 +30,7 @@ export default function Blog({ onOpenDemoModal }) {
     },
     {
       id: 'blog-default-2',
+      slug: 'rise-of-ai-assisted-full-stack-developers',
       title: 'The Rise of AI-Assisted Full Stack Developers in Top Tech Corporates',
       category: 'Industry Trends',
       summary: 'Why modern engineering teams look for developers who leverage AI tools to build scalable production apps in record time.',
@@ -32,6 +38,7 @@ export default function Blog({ onOpenDemoModal }) {
     },
     {
       id: 'blog-default-3',
+      slug: '12-month-placement-assistance-framework',
       title: '12-Month Placement Assistance: How EZER Prepares Students for Tech Interviews',
       category: 'Career Success',
       summary: 'Inside EZER’s mentorship framework: mock technical interviews, resume building, and direct corporate referral pathways.',
@@ -111,6 +118,7 @@ export default function Blog({ onOpenDemoModal }) {
             <img
               src={featuredCoverArticle.image}
               alt={featuredCoverArticle.title}
+              onError={handleImgError}
             />
             <span className="cover-story-tag">
               <HiSparkles size={14} /> COVER STORY
@@ -130,17 +138,17 @@ export default function Blog({ onOpenDemoModal }) {
               {featuredCoverArticle.summary}
             </p>
 
-            <button
-              type="button"
-              onClick={() => onOpenDemoModal(featuredCoverArticle.title)}
+            <Link
+              to={`/blog/${featuredCoverArticle.slug || featuredCoverArticle.id}`}
               className="cover-btn"
+              style={{ textDecoration: 'none' }}
             >
               Read Full Cover Story <HiArrowRight size={16} />
-            </button>
+            </Link>
           </div>
         </div>
 
-        {/* SECTION 1: EDITORIAL TECH ARTICLES & GUIDES (3+ CARDS FILLED GRID, ZERO EMPTY GAP) */}
+        {/* SECTION 1: EDITORIAL TECH ARTICLES & GUIDES */}
         <div style={{ marginBottom: '56px' }}>
           <div className="section-header-bar">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -153,7 +161,7 @@ export default function Blog({ onOpenDemoModal }) {
             {(articlesToDisplay || []).map((blog) => (
               <article key={blog.id} className="magazine-card">
                 <div className="card-image-box">
-                  <img src={blog.image} alt={blog.title} />
+                  <img src={blog.image} alt={blog.title} onError={handleImgError} />
                   <span className="card-cat-tag">
                     {blog.category || 'Tech Article'}
                   </span>
@@ -165,13 +173,13 @@ export default function Blog({ onOpenDemoModal }) {
                     <p className="card-summary">{blog.summary}</p>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => onOpenDemoModal(blog.title)}
+                  <Link
+                    to={`/blog/${blog.slug || blog.id}`}
                     className="card-read-btn"
+                    style={{ textDecoration: 'none' }}
                   >
-                    Read Article <HiArrowRight size={14} />
-                  </button>
+                    Read Full Story <HiArrowRight size={14} />
+                  </Link>
                 </div>
               </article>
             ))}

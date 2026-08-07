@@ -91,19 +91,37 @@ export default function ContactInfoManager() {
           />
         </div>
 
-        <div style={{ marginBottom: '24px' }}>
+        <div style={{ marginBottom: '16px' }}>
           <label htmlFor="contact_hours_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
             <HiClock size={14} style={{ display: 'inline', marginRight: '4px' }} /> Support & Business Hours
           </label>
           <input
             id="contact_hours_input"
             type="text"
-            value={formData.hours}
-            onChange={(e) => setFormData({ ...formData, hours: e.target.value })}
+            value={formData.hours || formData.workingHours}
+            onChange={(e) => setFormData({ ...formData, hours: e.target.value, workingHours: e.target.value })}
             placeholder="e.g. Mon - Sat: 9:00 AM - 8:00 PM IST"
             style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
             required
           />
+        </div>
+
+        <div style={{ marginBottom: '24px' }}>
+          <label htmlFor="whatsapp_group_url_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#166534', marginBottom: '4px' }}>
+            Official Student WhatsApp Group Link (Post-Payment Redirect) *
+          </label>
+          <input
+            id="whatsapp_group_url_input"
+            type="url"
+            value={formData.whatsappGroupUrl || ''}
+            onChange={(e) => setFormData({ ...formData, whatsappGroupUrl: e.target.value })}
+            placeholder="e.g. https://chat.whatsapp.com/EZERStudentCohortOfficial"
+            style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #22c55e', fontSize: '0.875rem', fontWeight: 700 }}
+            required
+          />
+          <span style={{ fontSize: '0.75rem', color: '#64748b', display: 'block', marginTop: '4px' }}>
+            Students will be automatically redirected to this WhatsApp group immediately after completing course payment.
+          </span>
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>

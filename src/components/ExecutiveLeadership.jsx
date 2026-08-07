@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { HiBadgeCheck } from 'react-icons/hi';
-import { resolveImageSrc } from '../utils/imageUtils';
+import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 
 export default function ExecutiveLeadership() {
   const { executiveLeaders } = useSiteData();
@@ -138,29 +138,28 @@ export default function ExecutiveLeadership() {
           left: 3px;
           right: 3px;
           background: #000648;
-          top: 68%;
-          border-radius: 24px;
+          top: auto;
+          height: 84px;
+          border-radius: 22px;
           z-index: 2;
           border-top: 2.5px solid #f2b733;
           box-shadow: rgba(0, 6, 72, 0.4) 0px 5px 15px 0px inset;
           overflow: hidden;
           transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0s;
-          padding: 16px 20px;
+          padding: 12px 18px;
           display: flex;
           flex-direction: column;
-          justify.content: flex-start;
+          justify-content: center;
         }
 
         .exec-card .bottom .content {
-          position: absolute;
-          top: 14px;
-          left: 1.5rem;
-          right: 1.5rem;
+          position: relative;
+          width: 100%;
         }
 
         .exec-card .bottom .content .name {
           display: block;
-          font-size: 1.25rem;
+          font-size: 1.2rem;
           color: #ffffff;
           font-weight: 900;
           line-height: 1.2;
@@ -169,12 +168,12 @@ export default function ExecutiveLeadership() {
 
         .exec-card .bottom .content .role-title {
           display: block;
-          font-size: 0.78rem;
+          font-size: 0.76rem;
           color: #f2b733;
           font-weight: 900;
           text-transform: uppercase;
           letter-spacing: 0.06em;
-          margin-top: 3px;
+          margin-top: 2px;
         }
 
         .exec-card .bottom .content .about-me {
@@ -184,8 +183,9 @@ export default function ExecutiveLeadership() {
           margin-top: 0.7rem;
           line-height: 1.5;
           opacity: 0;
-          transform: translateY(12px);
-          transition: all 0.4s ease 0.1s;
+          max-height: 0;
+          overflow: hidden;
+          transition: opacity 0.4s ease 0.1s, max-height 0.4s ease 0.1s;
         }
 
         .exec-card .bottom .bottom-bottom {
@@ -196,8 +196,9 @@ export default function ExecutiveLeadership() {
           border-top: 1px solid rgba(242, 183, 51, 0.3);
           padding-top: 10px;
           opacity: 0;
-          transform: translateY(12px);
-          transition: all 0.4s ease 0.2s;
+          max-height: 0;
+          overflow: hidden;
+          transition: opacity 0.4s ease 0.2s, max-height 0.4s ease 0.2s;
         }
 
         .exec-card .bottom .bottom-bottom .button {
@@ -229,8 +230,10 @@ export default function ExecutiveLeadership() {
 
         .exec-card.is-active-card .bottom,
         .exec-card:hover .bottom {
-          top: 22%;
+          top: 20%;
+          height: auto;
           border-radius: 80px 29px 29px 29px;
+          padding: 20px 20px;
           transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.15s;
         }
 
@@ -239,7 +242,7 @@ export default function ExecutiveLeadership() {
         .exec-card.is-active-card .bottom .bottom-bottom,
         .exec-card:hover .bottom .bottom-bottom {
           opacity: 1;
-          transform: translateY(0);
+          max-height: 140px;
         }
 
         .exec-card.is-active-card .profile-pic,
@@ -336,7 +339,7 @@ export default function ExecutiveLeadership() {
 
                 {/* Profile Cover Photo */}
                 <div className="profile-pic">
-                  <img src={resolveImageSrc(leader.image)} alt={leader.name} />
+                  <img src={resolveImageSrc(leader.image)} alt={leader.name} onError={handleImgError} />
                 </div>
 
                 {/* Bottom Content Drawer */}
