@@ -57,29 +57,30 @@ export default function PlatformManager() {
         padding: '24px', boxShadow: '0 4px 14px rgba(0,0,0,0.02)'
       }}>
         {/* Main Section Showcase Preview Matching Live Website Graphic */}
-        <div style={{ marginBottom: '24px', display: 'grid', gridTemplateColumns: '340px 1fr', gap: '24px', alignItems: 'center' }}>
+        <div style={{ marginBottom: '24px', display: 'grid', gridTemplateColumns: '260px 1fr', gap: '24px', alignItems: 'center' }}>
           <div>
             <span style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-              Live Executive Showcase Preview (3 Glass Cards: CEO, CFO, CTHM)
+              Live Section Portrait Photo Preview (4:5 Ratio)
             </span>
             
-            {/* Live Showcase Single Photo Preview matching EzerDefinition.jsx */}
+            {/* Live Showcase Single Photo Preview matching EzerDefinition.jsx vertical portrait card */}
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 12px', background: '#050b1c', borderRadius: '16px', border: '1.5px solid #cbd5e1' }}>
               <div 
                 style={{
-                  position: 'relative', zIndex: 2, width: '100%', maxWidth: '280px',
-                  borderRadius: '12px', overflow: 'hidden', border: '2px solid #f2b733',
-                  boxShadow: '0 8px 20px rgba(0,0,0,0.4)', background: '#000'
+                  position: 'relative', zIndex: 2, width: '100%', maxWidth: '200px',
+                  aspectRatio: '4 / 5', height: '250px',
+                  borderRadius: '16px', overflow: 'hidden', border: '2.5px solid #000648',
+                  boxShadow: '0 12px 28px rgba(0,0,0,0.3)', background: '#ffffff'
                 }}
               >
                 <img 
                   src={resolveImageSrc(formData.image)} 
                   alt={formData.headline} 
-                  style={{ width: '100%', height: '140px', objectFit: formData.imageFit || 'cover', display: 'block' }} 
+                  style={{ width: '100%', height: '100%', objectFit: formData.imageFit || 'cover', objectPosition: formData.imagePosition || 'center center', display: 'block' }} 
                 />
               </div>
-              <span style={{ position: 'relative', zIndex: 3, fontSize: '0.72rem', color: '#f2b733', fontWeight: 800, textAlign: 'center', marginTop: '8px' }}>
-                Live Section Showcase Photo Preview
+              <span style={{ position: 'relative', zIndex: 3, fontSize: '0.72rem', color: '#f2b733', fontWeight: 800, textAlign: 'center', marginTop: '10px' }}>
+                Live Section Portrait Photo Preview
               </span>
             </div>
           </div>
@@ -111,7 +112,7 @@ export default function PlatformManager() {
               </button>
             </div>
             <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0, lineHeight: 1.4 }}>
-              Click <strong>Choose Photo</strong> to select or crop your picture with live 4:3 landscape ratio matching the live website display.
+              Click <strong>Choose Photo</strong> to select or crop your picture with vertical portrait (4:5 ratio) matching the live website display.
             </p>
           </div>
         </div>
@@ -201,8 +202,8 @@ export default function PlatformManager() {
         currentFit={formData.fit}
         onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
         targetArea="Platform Showcase Main Photo"
-        aspectRatio="Landscape / Rounded (4:3)"
-        recommendedDimensions="800 x 600 px"
+        aspectRatio="Portrait / Vertical (4:5)"
+        recommendedDimensions="600 x 750 px"
       />
     </div>
   );
