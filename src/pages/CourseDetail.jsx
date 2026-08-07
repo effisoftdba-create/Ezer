@@ -4,6 +4,7 @@ import { HiChevronLeft, HiChevronRight, HiCheckCircle, HiSparkles, HiAcademicCap
 import { motion } from 'framer-motion';
 import { getCourseBySlug } from '../data/courses';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
+import { handleImgError, resolveImageSrc } from '../utils/imageUtils';
 
 import VideoPlayer from '../components/VideoPlayer';
 import PaymentCard from '../components/PaymentCard';
