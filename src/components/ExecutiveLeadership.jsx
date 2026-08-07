@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { HiBadgeCheck } from 'react-icons/hi';
 import { resolveImageSrc } from '../utils/imageUtils';
@@ -35,6 +35,18 @@ export default function ExecutiveLeadership() {
         }
       ];
 
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Automatic scrolling / cycling timer (every 3.2 seconds)
+  useEffect(() => {
+    if (isPaused || !leaders.length) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % leaders.length);
+    }, 3200);
+    return () => clearInterval(interval);
+  }, [isPaused, leaders.length]);
+
   return (
     <section
       style={{
@@ -57,9 +69,10 @@ export default function ExecutiveLeadership() {
           padding: 3px;
           position: relative;
           box-shadow: 0 20px 40px rgba(0, 6, 72, 0.3);
-          transition: all 0.5s ease-in-out;
+          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
           border: 2px solid #000648;
           margin: 0 auto;
+          cursor: pointer;
         }
 
         .exec-interactive-card .role-badge-top {
@@ -167,24 +180,31 @@ export default function ExecutiveLeadership() {
           transition: all 0.4s ease 0.2s;
         }
 
-        .exec-interactive-card:hover {
+        /* Active / Auto-Cycled & Hover open state */
+        .exec-interactive-card:hover,
+        .exec-interactive-card.is-active {
           border-top-left-radius: 50px;
           border-color: #f2b733;
+          box-shadow: 0 25px 50px rgba(242, 183, 51, 0.25);
         }
 
-        .exec-interactive-card:hover .bottom-drawer {
+        .exec-interactive-card:hover .bottom-drawer,
+        .exec-interactive-card.is-active .bottom-drawer {
           top: 24%;
           border-radius: 60px 29px 29px 29px;
           transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1) 0.15s;
         }
 
         .exec-interactive-card:hover .bottom-drawer .bio-text,
-        .exec-interactive-card:hover .bottom-drawer .action-bar {
+        .exec-interactive-card.is-active .bottom-drawer .bio-text,
+        .exec-interactive-card:hover .bottom-drawer .action-bar,
+        .exec-interactive-card.is-active .bottom-drawer .action-bar {
           opacity: 1;
           transform: translateY(0);
         }
 
-        .exec-interactive-card:hover .profile-pic {
+        .exec-interactive-card:hover .profile-pic,
+        .exec-interactive-card.is-active .profile-pic {
           width: 90px;
           height: 90px;
           aspect-ratio: 1;
@@ -198,7 +218,7 @@ export default function ExecutiveLeadership() {
         }
       `}</style>
 
-      {/* Ambient Glows */}
+      {/* Ambient Background Glows */}
       <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '-100px', left: '15%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(242, 183, 51, 0.14)', filter: 'blur(120px)' }} />
         <div style={{ position: 'absolute', bottom: '-100px', right: '15%', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(17, 93, 252, 0.18)', filter: 'blur(120px)' }} />
@@ -206,7 +226,7 @@ export default function ExecutiveLeadership() {
 
       <div className="container" style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 10 }}>
         
-        {/* Header Section (EMOJI REMOVED AS REQUESTED) */}
+        {/* Header Section */}
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <span
             style={{
@@ -254,34 +274,73 @@ export default function ExecutiveLeadership() {
           </p>
         </div>
 
-        {/* Interactive Cards Grid */}
+        {/* Automatic Cycling Interactive Cards Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '32px', width: '100%' }}>
-          {leaders.map((leader) => (
-            <div key={leader.id || leader.roleTag} className="exec-interactive-card">
-              <span className="role-badge-top">
-                <HiBadgeCheck size={14} /> {leader.roleTag || 'DIRECTOR'}
-              </span>
+          {leaders.map((leader, idx) => {
+            const isActive = idx === activeIndex;
 
-              <div className="profile-pic">
-                <img src={resolveImageSrc(leader.image)} alt={leader.name} />
-              </div>
+            return (
+              <div
+                key={leader.id || leader.roleTag || idx}
+                className={`exec-interactive-card ${isActive ? 'is-active' : ''}`}
+                onMouseEnter={() => {
+                  setIsPaused(true);
+                  setActiveIndex(idx);
+                }}
+                onMouseLeave={() => {
+                  setIsPaused(false);
+                }}
+                onClick={() => {
+                  setActiveIndex(idx);
+                }}
+              >
+                <span className="role-badge-top">
+                  <HiBadgeCheck size={14} /> {leader.roleTag || 'DIRECTOR'}
+                </span>
 
-              <div className="bottom-drawer">
-                <div className="content">
-                  <span className="name">{leader.name}</span>
-                  <span className="role-title">{leader.roleName || leader.roleTag}</span>
-                  <p className="bio-text">{leader.bio}</p>
+                <div className="profile-pic">
+                  <img src={resolveImageSrc(leader.image)} alt={leader.name} />
+                </div>
 
-                  <div className="action-bar">
-                    <span style={{ fontSize: '0.75rem', color: '#f2b733', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <HiBadgeCheck size={14} /> EZER Corporate Directorate
-                    </span>
+                <div className="bottom-drawer">
+                  <div className="content">
+                    <span className="name">{leader.name}</span>
+                    <span className="role-title">{leader.roleName || leader.roleTag}</span>
+                    <p className="bio-text">{leader.bio}</p>
+
+                    <div className="action-bar">
+                      <span style={{ fontSize: '0.75rem', color: '#f2b733', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <HiBadgeCheck size={14} /> EZER Corporate Directorate
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            );
+          })}
+        </div>
+
+        {/* Auto Carousel Indicator Dots */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px', marginTop: '40px' }}>
+          {leaders.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              aria-label={`Go to slide ${idx + 1}`}
+              onClick={() => setActiveIndex(idx)}
+              style={{
+                width: idx === activeIndex ? '32px' : '10px',
+                height: '10px',
+                borderRadius: '10px',
+                background: idx === activeIndex ? '#f2b733' : 'rgba(255,255,255,0.3)',
+                border: 'none',
+                cursor: 'pointer',
+                transition: 'all 0.35s ease'
+              }}
+            />
           ))}
         </div>
+
       </div>
     </section>
   );
