@@ -409,6 +409,18 @@ export function getInitialState() {
   const storedDef = getStored(STORAGE_PLATFORM_KEY, defaultPlatformDef);
   const safePlatformDef = (storedDef && typeof storedDef === 'object') ? { ...defaultPlatformDef, ...storedDef } : defaultPlatformDef;
 
+  const rawExec = getStored(STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders) || defaultExecutiveLeaders;
+  const safeExec = (Array.isArray(rawExec) ? rawExec : defaultExecutiveLeaders).map((leader) => {
+    if (leader.id === 'exec-3' || leader.roleTag === 'CTHM' || leader.roleName === 'Chief Tech & Academic Officer') {
+      return {
+        ...leader,
+        roleTag: 'CMTO',
+        roleName: 'Chief Marketing Technology Officer'
+      };
+    }
+    return leader;
+  });
+
   return {
     heroSlides: getStored(STORAGE_SLIDES_KEY, defaultSlides) || defaultSlides,
     courses: getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses,
@@ -427,7 +439,7 @@ export function getInitialState() {
     leads: getStored(STORAGE_LEADS_KEY, defaultLeads) || defaultLeads,
     blogs: getStored(STORAGE_BLOGS_KEY, defaultBlogs) || defaultBlogs,
     achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements) || defaultAchievements,
-    executiveLeaders: getStored(STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders) || defaultExecutiveLeaders,
+    executiveLeaders: safeExec,
   };
 }
 
