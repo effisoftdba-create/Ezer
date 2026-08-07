@@ -9,37 +9,37 @@ export default function ExecutiveLeadership() {
   const leaders = (executiveLeaders && executiveLeaders.length > 0)
     ? executiveLeaders
     : [
-        {
-          id: 'exec-1',
-          roleTag: 'CEO',
-          roleName: 'Chief Executive Officer',
-          name: 'Dr. Subramanian R',
-          image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=700&h=700',
-          tagline: 'From problem to solution.',
-          headline: 'A creative and strategic transformation partner for bold businesses.',
-          bio: 'Visionary Leader driving native language tech education, corporate placement partnerships, and pan-India EdTech growth.'
-        },
-        {
-          id: 'exec-2',
-          roleTag: 'CFO',
-          roleName: 'Chief Financial Officer',
-          name: 'Meenakshi Sundaram',
-          image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=700',
-          tagline: 'Financial integrity & student affordability.',
-          headline: 'Pioneering accessible scholarship funds for high-growth tech careers.',
-          bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.'
-        },
-        {
-          id: 'exec-3',
-          roleTag: 'CMTO',
-          roleName: 'Chief Tech & Academic Officer',
-          name: 'Anand Kumar K',
-          image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=700&h=700',
-          tagline: 'Curriculum innovation & hands-on labs.',
-          headline: 'Architecting AI-integrated practical capstones for production readiness.',
-          bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.'
-        }
-      ];
+      {
+        id: 'exec-1',
+        roleTag: 'CEO',
+        roleName: 'Chief Executive Officer',
+        name: 'Dr. Subramanian R',
+        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=700&h=700',
+        tagline: 'From problem to solution.',
+        headline: 'A creative and strategic transformation partner for bold businesses.',
+        bio: 'Visionary Leader driving native language tech education, corporate placement partnerships, and pan-India EdTech growth.'
+      },
+      {
+        id: 'exec-2',
+        roleTag: 'CFO',
+        roleName: 'Chief Financial Officer',
+        name: 'Meenakshi Sundaram',
+        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=700',
+        tagline: 'Financial integrity & student affordability.',
+        headline: 'Pioneering accessible scholarship funds for high-growth tech careers.',
+        bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.'
+      },
+      {
+        id: 'exec-3',
+        roleTag: 'CMTO',
+        roleName: 'Chief Marketing Technology Officer',
+        name: 'Anand Kumar K',
+        image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=700&h=700',
+        tagline: 'Curriculum innovation & hands-on labs.',
+        headline: 'Architecting AI-integrated practical capstones for production readiness.',
+        bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.'
+      }
+    ];
 
   return (
     <section
@@ -303,7 +303,7 @@ export default function ExecutiveLeadership() {
       <div className="exec-bg-glow-2" />
 
       <div className="container" style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 3 }}>
-        
+
         {/* Header Section */}
         <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <span
@@ -391,7 +391,7 @@ export default function ExecutiveLeadership() {
                     <div className="zigzag-content-box">
                       <span className="zigzag-role-badge">{leader.roleTag} • {leader.roleName}</span>
                       {leader.tagline && <span className="zigzag-tagline">{leader.tagline}</span>}
-                      
+
                       <h3 className="zigzag-headline">
                         {leader.headline || 'A creative and strategic transformation partner for bold businesses.'}
                       </h3>
@@ -408,7 +408,7 @@ export default function ExecutiveLeadership() {
                     <div className="zigzag-content-box">
                       <span className="zigzag-role-badge">{leader.roleTag} • {leader.roleName}</span>
                       {leader.tagline && <span className="zigzag-tagline">{leader.tagline}</span>}
-                      
+
                       <h3 className="zigzag-headline">
                         {leader.headline || 'Pioneering accessible scholarship funds for high-growth tech careers.'}
                       </h3>

@@ -394,8 +394,8 @@ export const defaultExecutiveLeaders = [
   },
   {
     id: 'exec-3',
-    roleTag: 'CTHM',
-    roleName: 'Chief Tech & Academic Officer',
+    roleTag: 'CMTO',
+    roleName: 'Chief Marketing Technology Officer',
     name: 'Anand Kumar K',
     image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=700&h=700',
     tagline: 'Curriculum innovation & hands-on labs.',

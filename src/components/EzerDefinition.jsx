@@ -56,7 +56,7 @@ function ExecutiveGlassStack({ leaders }) {
       </div>
 
       <span style={{ position: 'relative', zIndex: 2, fontSize: '0.78rem', color: '#000648', fontWeight: 800, marginTop: '8px', textAlign: 'center' }}>
-        Hover cards to expand Executive Leaders (CEO, CFO, CTHM)
+        Hover cards to expand Executive Leaders (CEO, CFO, CMTO)
       </span>
     </div>
   );
@@ -86,8 +86,8 @@ export default function EzerDefinition() {
         },
         {
           id: 'exec-3',
-          roleTag: 'CTHM',
-          roleName: 'Chief Tech & Academic Officer',
+          roleTag: 'CMTO',
+          roleName: 'Chief Marketing Technology Officer',
           name: 'Anand Kumar K',
           image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=600&h=700',
           rotationDeg: 16,

@@ -304,7 +304,7 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '20px' }}>
         <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', marginBottom: '12px' }}>
-          Edit Executive Leaders (CEO, CFO, CTHM) Photo, Editorial Headline & Details
+          Edit Executive Leaders (CEO, CFO, CMTO) Photo, Editorial Headline & Details
         </h3>
         <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '0 0 16px 0' }}>
           Update executive board photos, editorial taglines, serif headlines, role names, and leadership bios displayed in the luxury editorial showcase section.
