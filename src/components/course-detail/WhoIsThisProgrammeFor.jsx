@@ -76,45 +76,35 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
             </h2>
           </div>
 
-          {/* Navigation Controls */}
-          <div style={{ display: 'flex', gap: '8px' }}>
+          {/* Centered Navigation Controls */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', maxWidth: 'fit-content' }}>
             <button
               type="button"
               onClick={() => handleScroll('left')}
               aria-label="Scroll left"
               style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                border: '1px solid #cbd5e1',
-                background: '#ffffff',
-                color: '#0f172a',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
+                width: '38px', height: '38px', borderRadius: '50%',
+                border: '1.5px solid #000648', background: '#ffffff',
+                color: '#000648', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)'
               }}
             >
-              <HiChevronLeft size={18} />
+              <HiChevronLeft size={20} />
             </button>
             <button
               type="button"
               onClick={() => handleScroll('right')}
               aria-label="Scroll right"
               style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                border: '1px solid #0f172a',
-                background: '#0f172a',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
+                width: '38px', height: '38px', borderRadius: '50%',
+                border: '1.5px solid #000648', background: '#000648',
+                color: '#ffffff', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', cursor: 'pointer',
+                boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)'
               }}
             >
-              <HiChevronRight size={18} />
+              <HiChevronRight size={20} />
             </button>
           </div>
         </div>

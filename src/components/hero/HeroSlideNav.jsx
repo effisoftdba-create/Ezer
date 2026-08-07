@@ -3,18 +3,24 @@ import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
 
 export default function HeroSlideNav({ slides, safeActive, handlePrev, handleNext, setActive }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: 'auto' }}>
-      <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', marginTop: 'auto', width: '100%' }}>
+      <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center' }}>
         <button
           type="button"
           onClick={handlePrev}
-          style={{ background: 'none', border: 'none', color: '#000638', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+          style={{
+            width: '36px', height: '36px', borderRadius: '50%',
+            border: '1.5px solid #000648', background: '#ffffff',
+            color: '#000648', cursor: 'pointer', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 2px 6px rgba(0,6,72,0.08)'
+          }}
           aria-label="Previous slide"
         >
-          <HiChevronLeft size={20} />
+          <HiChevronLeft size={18} />
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(0,6,56,0.06)', padding: '4px 10px', borderRadius: '50px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: 'rgba(0,6,72,0.06)', padding: '6px 12px', borderRadius: '50px' }}>
           {slides.map((s, i) => (
             <button
               key={s.id || s.badge || s.headline}
@@ -24,12 +30,11 @@ export default function HeroSlideNav({ slides, safeActive, handlePrev, handleNex
               style={{
                 padding: 0,
                 border: 'none',
-                width: safeActive === i ? '20px' : '7px',
-                height: '7px',
-                borderRadius: '4px',
+                width: safeActive === i ? '22px' : '8px',
+                height: '8px',
+                borderRadius: '50px',
                 cursor: 'pointer',
-                background: safeActive === i ? '#000638' : '#cbd5e1',
-                borderTop: safeActive === i ? '2px solid #f2b733' : 'none',
+                background: safeActive === i ? '#000648' : '#cbd5e1',
                 transition: 'width 0.3s ease, background-color 0.3s ease',
               }}
             />
@@ -39,10 +44,16 @@ export default function HeroSlideNav({ slides, safeActive, handlePrev, handleNex
         <button
           type="button"
           onClick={handleNext}
-          style={{ background: 'none', border: 'none', color: '#000638', cursor: 'pointer', padding: '4px', display: 'flex', alignItems: 'center' }}
+          style={{
+            width: '36px', height: '36px', borderRadius: '50%',
+            border: '1.5px solid #000648', background: '#000648',
+            color: '#ffffff', cursor: 'pointer', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 4px 10px rgba(0,6,72,0.2)'
+          }}
           aria-label="Next slide"
         >
-          <HiChevronRight size={20} />
+          <HiChevronRight size={18} />
         </button>
       </div>
     </div>

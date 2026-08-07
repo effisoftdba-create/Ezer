@@ -181,6 +181,39 @@ export default function VideoTestimonials() {
           </div>
         </div>
 
+        {/* Center-Aligned Navigation Controls */}
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', margin: '20px auto 14px', width: '100%' }}>
+          <button
+            type="button"
+            onClick={() => handleSelectVideo((activeIdx - 1 + (videoTestimonials || []).length) % (videoTestimonials || []).length)}
+            aria-label="Previous video testimonial"
+            style={{
+              width: '38px', height: '38px', borderRadius: '50%',
+              border: '1.5px solid #000648', background: '#ffffff',
+              color: '#000648', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', cursor: 'pointer',
+              boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)'
+            }}
+          >
+            <HiChevronLeft size={20} />
+          </button>
+
+          <button
+            type="button"
+            onClick={() => handleSelectVideo((activeIdx + 1) % (videoTestimonials || []).length)}
+            aria-label="Next video testimonial"
+            style={{
+              width: '38px', height: '38px', borderRadius: '50%',
+              border: '1.5px solid #000648', background: '#000648',
+              color: '#ffffff', display: 'flex', alignItems: 'center',
+              justifyContent: 'center', cursor: 'pointer',
+              boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)'
+            }}
+          >
+            <HiChevronRight size={20} />
+          </button>
+        </div>
+
         {/* Thumbnail Selector Track */}
         <div
           ref={trackRef}

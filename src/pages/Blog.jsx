@@ -188,14 +188,14 @@ export default function Blog({ onOpenDemoModal }) {
 
         {/* SECTION 2: NATIONAL AWARDS & ACHIEVEMENTS (HORIZONTAL LEFT-RIGHT SCROLL CAROUSEL) */}
         <div style={{ marginBottom: '40px' }}>
-          <div className="section-header-bar" style={{ justifyContent: 'space-between' }}>
+          <div className="section-header-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <HiBadgeCheck size={26} color="#000648" />
-              <h3 style={{ color: '#000648' }}>National Awards & Achievements</h3>
+              <h3 style={{ color: '#000648', margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>National Awards & Achievements</h3>
             </div>
 
-            {/* Left & Right Scroll Buttons */}
-            <div style={{ display: 'flex', gap: '8px' }}>
+            {/* Left & Right Centered Scroll Controls */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', maxWidth: 'fit-content' }}>
               <button
                 type="button"
                 onClick={() => {
@@ -204,9 +204,17 @@ export default function Blog({ onOpenDemoModal }) {
                 }}
                 aria-label="Scroll left"
                 className="award-scroll-btn"
+                style={{
+                  width: '38px', height: '38px', borderRadius: '50%',
+                  border: '1.5px solid #000648', background: '#ffffff',
+                  color: '#000648', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', cursor: 'pointer',
+                  boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)'
+                }}
               >
-                <HiChevronLeft size={22} />
+                <HiChevronLeft size={20} />
               </button>
+
               <button
                 type="button"
                 onClick={() => {
@@ -215,8 +223,15 @@ export default function Blog({ onOpenDemoModal }) {
                 }}
                 aria-label="Scroll right"
                 className="award-scroll-btn"
+                style={{
+                  width: '38px', height: '38px', borderRadius: '50%',
+                  border: '1.5px solid #000648', background: '#000648',
+                  color: '#ffffff', display: 'flex', alignItems: 'center',
+                  justifyContent: 'center', cursor: 'pointer',
+                  boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)'
+                }}
               >
-                <HiChevronRight size={22} />
+                <HiChevronRight size={20} />
               </button>
             </div>
           </div>

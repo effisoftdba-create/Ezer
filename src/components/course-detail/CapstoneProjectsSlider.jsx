@@ -44,7 +44,7 @@ export default function CapstoneProjectsSlider({ projects, courseTools }) {
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', maxWidth: 'fit-content' }}>
             <button
               type="button"
               onClick={() => {
@@ -53,19 +53,20 @@ export default function CapstoneProjectsSlider({ projects, courseTools }) {
               }}
               aria-label="Scroll projects left"
               style={{
-                width: '42px',
-                height: '42px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '50%',
                 background: '#ffffff',
-                border: '2px solid #000648',
+                border: '1.5px solid #000648',
                 color: '#000648',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
+                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)'
               }}
             >
-              <HiChevronLeft size={22} />
+              <HiChevronLeft size={20} />
             </button>
             <button
               type="button"
@@ -75,19 +76,20 @@ export default function CapstoneProjectsSlider({ projects, courseTools }) {
               }}
               aria-label="Scroll projects right"
               style={{
-                width: '42px',
-                height: '42px',
+                width: '38px',
+                height: '38px',
                 borderRadius: '50%',
                 background: '#000648',
-                border: '2px solid #000648',
-                color: '#f2b733',
+                border: '1.5px solid #000648',
+                color: '#ffffff',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
+                boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)'
               }}
             >
-              <HiChevronRight size={22} />
+              <HiChevronRight size={20} />
             </button>
           </div>
         </div>

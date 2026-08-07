@@ -77,8 +77,8 @@ export default function TransformedLives() {
 
           {/* Controls & Track Wrapper */}
           <div style={{ position: 'relative' }}>
-            {/* Scroll Buttons Header Bar */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginBottom: '16px' }}>
+            {/* Center-Aligned Scroll Controls */}
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', marginBottom: '20px', width: '100%' }}>
               <m.button
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.94 }}

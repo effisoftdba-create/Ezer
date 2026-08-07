@@ -218,19 +218,40 @@ export default function Navbar({ onOpenDemoModal }) {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay Drawer (Float on top without moving page down) */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <m.div
-              initial={{ opacity: 0, scaleY: 0 }}
-              animate={{ opacity: 1, scaleY: 1 }}
-              exit={{ opacity: 0, scaleY: 0 }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              style={{ transformOrigin: 'top', background: '#000648', borderTop: '1px solid #f2b733', padding: '18px 20px', display: 'flex', flexDirection: 'column', gap: '14px', overflow: 'hidden' }}
+              style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                width: '100%',
+                background: '#000648',
+                borderTop: '2px solid #f2b733',
+                borderBottom: '3px solid #f2b733',
+                boxShadow: '0 16px 40px rgba(0, 6, 72, 0.45)',
+                padding: '20px 24px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                zIndex: 999,
+              }}
             >
               {navLinks.map((link) => (
                 <Link key={link.name} to={link.path} onClick={() => setMobileMenuOpen(false)}
-                  style={{ color: location.pathname === link.path ? '#f2b733' : '#ffffff', fontWeight: 700, fontSize: '0.92rem', textDecoration: 'none' }}
+                  style={{
+                    color: location.pathname === link.path ? '#f2b733' : '#ffffff',
+                    fontWeight: 700,
+                    fontSize: '0.96rem',
+                    textDecoration: 'none',
+                    padding: '6px 0',
+                    borderBottom: '1px solid rgba(255,255,255,0.08)'
+                  }}
                 >
                   {link.name}
                 </Link>

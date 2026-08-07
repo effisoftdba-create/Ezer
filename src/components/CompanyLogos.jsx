@@ -209,7 +209,6 @@ function LogoCard({ logo }) {
 }
 
 function MarqueeRow({ items, direction = 'left', duration = 32 }) {
-  const [isHovered, setIsHovered] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   // Multiply items 3 times with stable unique ids for seamless 0% -> -50% loop
@@ -221,13 +220,11 @@ function MarqueeRow({ items, direction = 'left', duration = 32 }) {
 
   return (
     <div 
-      onMouseEnter={() => setIsHovered(true)} 
-      onMouseLeave={() => setIsHovered(false)}
-      style={{ overflow: 'hidden', width: '100%', padding: '4px 0' }}
+      style={{ overflow: 'hidden', width: '100%', padding: '4px 0', pointerEvents: 'none', userSelect: 'none' }}
     >
       <m.div
         animate={
-          isHovered || shouldReduceMotion 
+          shouldReduceMotion 
             ? {} 
             : { x: direction === 'left' ? ['0%', '-50%'] : ['-50%', '0%'] }
         }
