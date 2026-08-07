@@ -161,20 +161,18 @@ export default function CourseManager() {
           </p>
         </div>
 
-        {!isEditing && (
-          <button
-            type="button"
-            onClick={handleOpenAdd}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
-              padding: '10px 20px', background: '#000648', color: '#f2b733',
-              borderRadius: '10px', fontWeight: 800, border: 'none', cursor: 'pointer',
-              fontSize: '0.875rem'
-            }}
-          >
-            <HiPlus size={18} /> Add New Course
-          </button>
-        )}
+        <button
+          type="button"
+          onClick={handleOpenAdd}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            padding: '10px 20px', background: '#000648', color: '#f2b733',
+            borderRadius: '10px', fontWeight: 800, border: 'none', cursor: 'pointer',
+            fontSize: '0.875rem'
+          }}
+        >
+          <HiPlus size={18} /> Add New Course
+        </button>
       </div>
 
       {/* Course Form Modal */}

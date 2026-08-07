@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import { HiUpload } from 'react-icons/hi';
 import ImagePickerGalleryGrid from './ImagePickerGalleryGrid';
 import ImagePickerControls from './ImagePickerControls';
@@ -202,7 +203,7 @@ export default function ImagePickerModal({
     setCustomUrl('');
   };
 
-  return (
+  const modalJSX = (
     <div style={{
       position: 'fixed',
       top: 0,
@@ -356,4 +357,8 @@ export default function ImagePickerModal({
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined'
+    ? ReactDOM.createPortal(modalJSX, document.body)
+    : modalJSX;
 }
