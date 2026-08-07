@@ -418,7 +418,7 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
   );
 }
 
-export default function BlogManager({ initialSubTab = 'blogs' }) {
+export default function BlogManager({ initialSubTab = 'blogs', hideSubTabs = false }) {
   const { blogs, addBlog, updateBlog, deleteBlog, achievements, addAchievement, updateAchievement, deleteAchievement, executiveLeaders, updateExecutiveLeader } = useSiteData();
   const [activeSubTab, setActiveSubTab] = useState(initialSubTab);
   const [achPickerOpen, setAchPickerOpen] = useState(false);
@@ -430,50 +430,68 @@ export default function BlogManager({ initialSubTab = 'blogs' }) {
     }
   }, [initialSubTab]);
 
+  const isBlogs = activeSubTab === 'blogs';
+  const isAchievements = activeSubTab === 'achievements';
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #e2e8f0', paddingBottom: '16px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
-            <HiNewspaper size={26} style={{ color: '#f2b733' }} />
-            Magazine Articles & Content Management
+            {isAchievements ? (
+              <>
+                <HiBadgeCheck size={26} style={{ color: '#f2b733' }} />
+                EZER Awards & Verified Honors Management
+              </>
+            ) : (
+              <>
+                <HiNewspaper size={26} style={{ color: '#f2b733' }} />
+                Magazine Articles & Editorial Content Management
+              </>
+            )}
           </h2>
           <p style={{ fontSize: '0.84rem', color: '#64748b', marginTop: '4px', margin: 0 }}>
-            Click <strong>"Blog & Magazine Articles"</strong> below to create, edit, or delete full articles with custom sections and inline photos.
+            {isAchievements ? (
+              'Create, edit, or delete national skill development awards, honors, issuer names, and badges displayed on the website.'
+            ) : (
+              'Create, edit, or delete full editorial magazine articles with multi-section content and inline photos.'
+            )}
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', background: '#000648', padding: '6px', borderRadius: '12px', border: '1.5px solid #f2b733' }}>
-          <button
-            type="button"
-            onClick={() => setActiveSubTab('blogs')}
-            style={{
-              padding: '10px 18px', borderRadius: '8px', border: 'none',
-              fontWeight: 900, fontSize: '0.86rem', cursor: 'pointer',
-              background: activeSubTab === 'blogs' ? '#f2b733' : 'transparent',
-              color: activeSubTab === 'blogs' ? '#000648' : '#ffffff',
-              display: 'flex', alignItems: 'center', gap: '6px',
-              boxShadow: activeSubTab === 'blogs' ? '0 4px 12px rgba(242,183,51,0.3)' : 'none'
-            }}
-          >
-            <HiNewspaper size={18} /> Blog & Magazine Articles ({ (blogs || []).length })
-          </button>
+        {!hideSubTabs && (
+          <div style={{ display: 'flex', gap: '8px', background: '#000648', padding: '6px', borderRadius: '12px', border: '1.5px solid #f2b733' }}>
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('blogs')}
+              style={{
+                padding: '10px 18px', borderRadius: '8px', border: 'none',
+                fontWeight: 900, fontSize: '0.86rem', cursor: 'pointer',
+                background: activeSubTab === 'blogs' ? '#f2b733' : 'transparent',
+                color: activeSubTab === 'blogs' ? '#000648' : '#ffffff',
+                display: 'flex', alignItems: 'center', gap: '6px',
+                boxShadow: activeSubTab === 'blogs' ? '0 4px 12px rgba(242,183,51,0.3)' : 'none'
+              }}
+            >
+              <HiNewspaper size={18} /> Blog & Magazine Articles ({ (blogs || []).length })
+            </button>
 
-          <button
-            type="button"
-            onClick={() => setActiveSubTab('achievements')}
-            style={{
-              padding: '10px 18px', borderRadius: '8px', border: 'none',
-              fontWeight: 900, fontSize: '0.86rem', cursor: 'pointer',
-              background: activeSubTab === 'achievements' ? '#f2b733' : 'transparent',
-              color: activeSubTab === 'achievements' ? '#000648' : '#ffffff',
-              display: 'flex', alignItems: 'center', gap: '6px',
-              boxShadow: activeSubTab === 'achievements' ? '0 4px 12px rgba(242,183,51,0.3)' : 'none'
-            }}
-          >
-            <HiBadgeCheck size={18} /> EZER Achievements ({ (achievements || []).length })
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setActiveSubTab('achievements')}
+              style={{
+                padding: '10px 18px', borderRadius: '8px', border: 'none',
+                fontWeight: 900, fontSize: '0.86rem', cursor: 'pointer',
+                background: activeSubTab === 'achievements' ? '#f2b733' : 'transparent',
+                color: activeSubTab === 'achievements' ? '#000648' : '#ffffff',
+                display: 'flex', alignItems: 'center', gap: '6px',
+                boxShadow: activeSubTab === 'achievements' ? '0 4px 12px rgba(242,183,51,0.3)' : 'none'
+              }}
+            >
+              <HiBadgeCheck size={18} /> EZER Achievements ({ (achievements || []).length })
+            </button>
+          </div>
+        )}
       </div>
 
       {activeSubTab === 'executive' && (

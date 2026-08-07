@@ -143,8 +143,8 @@ export default function AdminDashboard() {
           {activeTab === 'platform' && <PlatformManager />}
           {activeTab === 'support' && <SupportCardsManager />}
           {activeTab === 'executive' && <ExecutiveSection executiveLeaders={executiveLeaders} updateExecutiveLeader={updateExecutiveLeader} />}
-          {activeTab === 'blog' && <BlogManager initialSubTab="blogs" />}
-          {activeTab === 'achievements' && <BlogManager initialSubTab="achievements" />}
+          {activeTab === 'blog' && <BlogManager initialSubTab="blogs" hideSubTabs={true} />}
+          {activeTab === 'achievements' && <BlogManager initialSubTab="achievements" hideSubTabs={true} />}
           {activeTab === 'outcomes' && <GraduateOutcomesManager />}
           {activeTab === 'mentors' && <SeniorMentorsManager />}
           {activeTab === 'videos' && <VideoReviewsManager />}
