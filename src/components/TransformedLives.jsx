@@ -4,35 +4,54 @@ import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc } from '../utils/imageUtils';
 
+import CarouselDotsNav from './CarouselDotsNav';
+
 export default function TransformedLives() {
   const { transformedLives, outcomesHeader } = useSiteData();
   const sliderRef = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const displayList = (transformedLives && transformedLives.length > 0) ? transformedLives : [];
 
   // Auto Scroll Loop with Pause on Mouse Hover
   useEffect(() => {
-    if (isHovered) return;
+    if (isHovered || !displayList.length) return;
     const interval = setInterval(() => {
-      if (sliderRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
-        if (scrollLeft + clientWidth >= scrollWidth - 10) {
-          sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          sliderRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+      setActiveIndex((prev) => {
+        const next = (prev + 1) % displayList.length;
+        if (sliderRef.current) {
+          sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
         }
-      }
+        return next;
+      });
     }, 3500);
 
     return () => clearInterval(interval);
-  }, [isHovered]);
+  }, [isHovered, displayList.length]);
 
-  const handleScroll = (direction) => {
+  const handlePrev = () => {
+    if (!displayList.length) return;
+    const next = (activeIndex - 1 + displayList.length) % displayList.length;
+    setActiveIndex(next);
     if (sliderRef.current) {
-      const scrollAmount = 320;
-      sliderRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
+      sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+    }
+  };
+
+  const handleNext = () => {
+    if (!displayList.length) return;
+    const next = (activeIndex + 1) % displayList.length;
+    setActiveIndex(next);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelect = (idx) => {
+    setActiveIndex(idx);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: idx * 320, behavior: 'smooth' });
     }
   };
 
@@ -77,42 +96,15 @@ export default function TransformedLives() {
 
           {/* Controls & Track Wrapper */}
           <div style={{ position: 'relative' }}>
-            {/* Center-Aligned Scroll Controls */}
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '12px', marginBottom: '20px', width: '100%' }}>
-              <m.button
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.94 }}
-                type="button"
-                onClick={() => handleScroll('left')}
-                aria-label="Previous story"
-                style={{
-                  width: '38px', height: '38px', borderRadius: '50%',
-                  border: '1.5px solid #000638', background: '#ffffff',
-                  color: '#000638', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', cursor: 'pointer',
-                  boxShadow: '0 2px 6px rgba(0, 6, 56, 0.06)',
-                }}
-              >
-                <HiChevronLeft size={20} />
-              </m.button>
-
-              <m.button
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.94 }}
-                type="button"
-                onClick={() => handleScroll('right')}
-                aria-label="Next story"
-                style={{
-                  width: '38px', height: '38px', borderRadius: '50%',
-                  border: '1.5px solid #000638', background: '#000638',
-                  color: '#f2b733', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', cursor: 'pointer',
-                  boxShadow: '0 4px 10px rgba(0, 6, 56, 0.18)',
-                }}
-              >
-                <HiChevronRight size={20} />
-              </m.button>
-            </div>
+            {/* Standardized Centered < . . . > Controls */}
+            <CarouselDotsNav
+              totalItems={displayList.length}
+              activeIndex={activeIndex}
+              onPrev={handlePrev}
+              onNext={handleNext}
+              onSelectIndex={handleSelect}
+              style={{ marginBottom: '24px', marginTop: 0 }}
+            />
 
             {/* Horizontal Slider Track */}
             <div

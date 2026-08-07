@@ -1,5 +1,5 @@
-import React from 'react';
-import { HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import React, { useState } from 'react';
+import CarouselDotsNav from '../CarouselDotsNav';
 
 const DEFAULT_CAPSTONES = [
   {
@@ -27,13 +27,36 @@ const DEFAULT_CAPSTONES = [
 
 export default function CapstoneProjectsSlider({ projects, courseTools }) {
   const displayProjects = (projects && projects.length > 0) ? projects : DEFAULT_CAPSTONES;
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const handlePrev = () => {
+    if (!displayProjects.length) return;
+    const next = (activeIndex - 1 + displayProjects.length) % displayProjects.length;
+    setActiveIndex(next);
+    const el = document.getElementById('projects-slider-track');
+    if (el) el.scrollTo({ left: next * 340, behavior: 'smooth' });
+  };
+
+  const handleNext = () => {
+    if (!displayProjects.length) return;
+    const next = (activeIndex + 1) % displayProjects.length;
+    setActiveIndex(next);
+    const el = document.getElementById('projects-slider-track');
+    if (el) el.scrollTo({ left: next * 340, behavior: 'smooth' });
+  };
+
+  const handleSelect = (idx) => {
+    setActiveIndex(idx);
+    const el = document.getElementById('projects-slider-track');
+    if (el) el.scrollTo({ left: idx * 340, behavior: 'smooth' });
+  };
 
   if (!displayProjects || displayProjects.length === 0) return null;
 
   return (
     <section className="section" style={{ background: '#f8fafc', padding: '32px 0' }}>
       <div className="container">
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '28px', flexWrap: 'wrap', gap: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '28px', width: '100%' }}>
           <div>
             <span className="badge badge-primary" style={{ marginBottom: '8px' }}>Hands-On Labs</span>
             <h2 style={{ color: '#000648', margin: 0, fontSize: 'clamp(1.8rem, 3.5vw, 2.4rem)', fontWeight: 900 }}>
@@ -44,54 +67,15 @@ export default function CapstoneProjectsSlider({ projects, courseTools }) {
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', maxWidth: 'fit-content' }}>
-            <button
-              type="button"
-              onClick={() => {
-                const el = document.getElementById('projects-slider-track');
-                if (el) el.scrollBy({ left: -340, behavior: 'smooth' });
-              }}
-              aria-label="Scroll projects left"
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                background: '#ffffff',
-                border: '1.5px solid #000648',
-                color: '#000648',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)'
-              }}
-            >
-              <HiChevronLeft size={20} />
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                const el = document.getElementById('projects-slider-track');
-                if (el) el.scrollBy({ left: 340, behavior: 'smooth' });
-              }}
-              aria-label="Scroll projects right"
-              style={{
-                width: '38px',
-                height: '38px',
-                borderRadius: '50%',
-                background: '#000648',
-                border: '1.5px solid #000648',
-                color: '#ffffff',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)'
-              }}
-            >
-              <HiChevronRight size={20} />
-            </button>
-          </div>
+          {/* Standardized Centered < . . . > Controls */}
+          <CarouselDotsNav
+            totalItems={displayProjects.length}
+            activeIndex={activeIndex}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onSelectIndex={handleSelect}
+            style={{ margin: '16px auto 0' }}
+          />
         </div>
 
         <div

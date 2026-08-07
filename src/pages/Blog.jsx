@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
-import { HiBadgeCheck, HiNewspaper, HiArrowRight, HiSparkles, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import { HiBadgeCheck, HiNewspaper, HiArrowRight, HiSparkles } from 'react-icons/hi';
 import { handleImgError } from '../utils/imageUtils';
 import CTABanner from '../components/CTABanner';
+import CarouselDotsNav from '../components/CarouselDotsNav';
 
 export default function Blog({ onOpenDemoModal }) {
   const { blogs, achievements } = useSiteData();
+  const [awardActiveIdx, setAwardActiveIdx] = useState(0);
 
   const featuredCoverArticle = (blogs && blogs[0]) || {
     id: 'blog-1',
@@ -188,52 +190,39 @@ export default function Blog({ onOpenDemoModal }) {
 
         {/* SECTION 2: NATIONAL AWARDS & ACHIEVEMENTS (HORIZONTAL LEFT-RIGHT SCROLL CAROUSEL) */}
         <div style={{ marginBottom: '40px' }}>
-          <div className="section-header-bar" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px', marginBottom: '20px' }}>
+          <div className="section-header-bar" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px', marginBottom: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <HiBadgeCheck size={26} color="#000648" />
               <h3 style={{ color: '#000648', margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>National Awards & Achievements</h3>
             </div>
 
-            {/* Left & Right Centered Scroll Controls */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', maxWidth: 'fit-content' }}>
-              <button
-                type="button"
-                onClick={() => {
-                  const track = document.getElementById('awards-scroll-track');
-                  if (track) track.scrollBy({ left: -340, behavior: 'smooth' });
-                }}
-                aria-label="Scroll left"
-                className="award-scroll-btn"
-                style={{
-                  width: '38px', height: '38px', borderRadius: '50%',
-                  border: '1.5px solid #000648', background: '#ffffff',
-                  color: '#000648', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', cursor: 'pointer',
-                  boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)'
-                }}
-              >
-                <HiChevronLeft size={20} />
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  const track = document.getElementById('awards-scroll-track');
-                  if (track) track.scrollBy({ left: 340, behavior: 'smooth' });
-                }}
-                aria-label="Scroll right"
-                className="award-scroll-btn"
-                style={{
-                  width: '38px', height: '38px', borderRadius: '50%',
-                  border: '1.5px solid #000648', background: '#000648',
-                  color: '#ffffff', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', cursor: 'pointer',
-                  boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)'
-                }}
-              >
-                <HiChevronRight size={20} />
-              </button>
-            </div>
+            {/* Standardized Centered < . . . > Controls */}
+            <CarouselDotsNav
+              totalItems={(achievements || []).length}
+              activeIndex={awardActiveIdx}
+              onPrev={() => {
+                const list = achievements || [];
+                if (!list.length) return;
+                const next = (awardActiveIdx - 1 + list.length) % list.length;
+                setAwardActiveIdx(next);
+                const track = document.getElementById('awards-scroll-track');
+                if (track) track.scrollTo({ left: next * 340, behavior: 'smooth' });
+              }}
+              onNext={() => {
+                const list = achievements || [];
+                if (!list.length) return;
+                const next = (awardActiveIdx + 1) % list.length;
+                setAwardActiveIdx(next);
+                const track = document.getElementById('awards-scroll-track');
+                if (track) track.scrollTo({ left: next * 340, behavior: 'smooth' });
+              }}
+              onSelectIndex={(idx) => {
+                setAwardActiveIdx(idx);
+                const track = document.getElementById('awards-scroll-track');
+                if (track) track.scrollTo({ left: idx * 340, behavior: 'smooth' });
+              }}
+              style={{ margin: '8px auto 0' }}
+            />
           </div>
 
           {/* Horizontal Scroll Track */}

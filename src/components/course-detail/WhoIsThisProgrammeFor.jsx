@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
-import { HiUserGroup, HiBriefcase, HiAcademicCap, HiDesktopComputer, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import React, { useRef, useState } from 'react';
+import { HiUserGroup, HiBriefcase, HiAcademicCap, HiDesktopComputer } from 'react-icons/hi';
+import CarouselDotsNav from '../CarouselDotsNav';
 
 const programAudienceData = [
   {
@@ -26,13 +27,7 @@ const programAudienceData = [
 
 export default function WhoIsThisProgrammeFor({ audienceList }) {
   const scrollTrackRef = useRef(null);
-
-  const handleScroll = (direction) => {
-    if (scrollTrackRef.current) {
-      const scrollAmount = direction === 'left' ? -320 : 320;
-      scrollTrackRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const cardsToRender = audienceList && audienceList.length > 0 ? audienceList.map((item, idx) => {
     if (typeof item === 'string') {
@@ -46,67 +41,68 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
     return item;
   }) : programAudienceData;
 
+  const handlePrev = () => {
+    if (!cardsToRender.length) return;
+    const next = (activeIndex - 1 + cardsToRender.length) % cardsToRender.length;
+    setActiveIndex(next);
+    if (scrollTrackRef.current) {
+      scrollTrackRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+    }
+  };
+
+  const handleNext = () => {
+    if (!cardsToRender.length) return;
+    const next = (activeIndex + 1) % cardsToRender.length;
+    setActiveIndex(next);
+    if (scrollTrackRef.current) {
+      scrollTrackRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelect = (idx) => {
+    setActiveIndex(idx);
+    if (scrollTrackRef.current) {
+      scrollTrackRef.current.scrollTo({ left: idx * 320, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="section-alt" style={{ padding: '24px 0' }}>
       <div className="container">
-        {/* Header & Scroll Controls */}
+        {/* Header & Title */}
         <div
           style={{
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '32px',
-            flexWrap: 'wrap',
-            gap: '16px',
+            textAlign: 'center',
+            marginBottom: '28px',
+            width: '100%',
           }}
         >
-          <div>
-            <span className="section-tag">
-              Target Profiles
-            </span>
-            <h2
-              style={{
-                fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)',
-                fontWeight: 700,
-                color: '#0f172a',
-                marginTop: '8px',
-              }}
-            >
-              Who is this Program For?
-            </h2>
-          </div>
+          <span className="section-tag">
+            Target Profiles
+          </span>
+          <h2
+            style={{
+              fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)',
+              fontWeight: 700,
+              color: '#0f172a',
+              marginTop: '8px',
+            }}
+          >
+            Who is this Program For?
+          </h2>
 
-          {/* Centered Navigation Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', width: '100%', maxWidth: 'fit-content' }}>
-            <button
-              type="button"
-              onClick={() => handleScroll('left')}
-              aria-label="Scroll left"
-              style={{
-                width: '38px', height: '38px', borderRadius: '50%',
-                border: '1.5px solid #000648', background: '#ffffff',
-                color: '#000648', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)'
-              }}
-            >
-              <HiChevronLeft size={20} />
-            </button>
-            <button
-              type="button"
-              onClick={() => handleScroll('right')}
-              aria-label="Scroll right"
-              style={{
-                width: '38px', height: '38px', borderRadius: '50%',
-                border: '1.5px solid #000648', background: '#000648',
-                color: '#ffffff', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer',
-                boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)'
-              }}
-            >
-              <HiChevronRight size={20} />
-            </button>
-          </div>
+          {/* Standardized Centered < . . . > Controls */}
+          <CarouselDotsNav
+            totalItems={cardsToRender.length}
+            activeIndex={activeIndex}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onSelectIndex={handleSelect}
+            style={{ margin: '16px auto 0' }}
+          />
         </div>
 
         {/* Audience Cards Track */}

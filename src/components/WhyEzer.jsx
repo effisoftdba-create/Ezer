@@ -9,17 +9,37 @@ import {
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc } from '../utils/imageUtils';
 
+import CarouselDotsNav from './CarouselDotsNav';
+
 export default function WhyEzer() {
   const { supportCards } = useSiteData();
   const sliderRef = useRef(null);
+  const [activeIndex, setActiveIndex] = React.useState(0);
 
-  const handleScroll = (direction) => {
+  const cardsList = supportCards || [];
+
+  const handlePrev = () => {
+    if (!cardsList.length) return;
+    const next = (activeIndex - 1 + cardsList.length) % cardsList.length;
+    setActiveIndex(next);
     if (sliderRef.current) {
-      const scrollAmount = 340;
-      sliderRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth'
-      });
+      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+    }
+  };
+
+  const handleNext = () => {
+    if (!cardsList.length) return;
+    const next = (activeIndex + 1) % cardsList.length;
+    setActiveIndex(next);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelect = (idx) => {
+    setActiveIndex(idx);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: idx * 340, behavior: 'smooth' });
     }
   };
 
@@ -27,72 +47,31 @@ export default function WhyEzer() {
     <section className="section" style={{ background: '#ffffff', borderBottom: '1px solid #e2e8f0', padding: '36px 0' }}>
       <div className="container">
         
-        {/* Header with Title & Navigation Arrows */}
+        {/* Header with Title */}
         <div style={{
-          display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between',
-          marginBottom: '36px', flexWrap: 'wrap', gap: '16px'
+          display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+          marginBottom: '28px', width: '100%'
         }}>
-          <div>
-            <span className="section-tag">
-              <HiSparkles size={14} style={{ color: '#f2b733' }} />
-              The EZER Advantage
-            </span>
-            <h2 style={{ color: '#000648', fontSize: 'clamp(1.35rem, 2.2vw, 1.7rem)', marginTop: '4px' }}>
-              Why EZER Learning Solution
-            </h2>
-            <p style={{ color: '#475569', fontSize: '0.86rem', maxWidth: '520px', marginTop: '4px', lineHeight: 1.6 }}>
-              We bridge the gap between classroom theory and real corporate tech jobs through end-to-end outcome support.
-            </p>
-          </div>
+          <span className="section-tag">
+            <HiSparkles size={14} style={{ color: '#f2b733' }} />
+            The EZER Advantage
+          </span>
+          <h2 style={{ color: '#000648', fontSize: 'clamp(1.35rem, 2.2vw, 1.7rem)', marginTop: '4px' }}>
+            Why EZER Learning Solution
+          </h2>
+          <p style={{ color: '#475569', fontSize: '0.86rem', maxWidth: '520px', marginTop: '4px', lineHeight: 1.6 }}>
+            We bridge the gap between classroom theory and real corporate tech jobs through end-to-end outcome support.
+          </p>
 
-          {/* Navigation Arrows */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto' }}>
-            <button
-              type="button"
-              onClick={() => handleScroll('left')}
-              aria-label="Scroll left"
-              style={{
-                width: '40px', height: '40px', borderRadius: '50%',
-                border: '1.5px solid #000648', background: '#ffffff',
-                color: '#000648', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer', transition: 'background-color 0.2s ease, color 0.2s ease',
-                boxShadow: '0 2px 8px rgba(0,6,72,0.08)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#000648';
-                e.currentTarget.style.color = '#f2b733';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#ffffff';
-                e.currentTarget.style.color = '#000648';
-              }}
-            >
-              <HiChevronLeft size={22} />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleScroll('right')}
-              aria-label="Scroll right"
-              style={{
-                width: '40px', height: '40px', borderRadius: '50%',
-                border: '1.5px solid #000648', background: '#000648',
-                color: '#f2b733', display: 'flex', alignItems: 'center',
-                justifyContent: 'center', cursor: 'pointer', transition: 'background-color 0.2s ease, color 0.2s ease',
-                boxShadow: '0 2px 8px rgba(0,6,72,0.15)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#f2b733';
-                e.currentTarget.style.color = '#000648';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#000648';
-                e.currentTarget.style.color = '#f2b733';
-              }}
-            >
-              <HiChevronRight size={22} />
-            </button>
-          </div>
+          {/* Standardized Centered < . . . > Controls */}
+          <CarouselDotsNav
+            totalItems={cardsList.length}
+            activeIndex={activeIndex}
+            onPrev={handlePrev}
+            onNext={handleNext}
+            onSelectIndex={handleSelect}
+            style={{ margin: '16px auto 0' }}
+          />
         </div>
 
         {/* Single-Line Horizontal Scroll Track */}
