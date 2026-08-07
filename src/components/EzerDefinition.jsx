@@ -272,13 +272,9 @@ export default function EzerDefinition() {
                   borderLeft: '4px solid #f2b733',
                   fontSize: '0.94rem',
                   fontWeight: 600,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '14px',
                   boxShadow: '0 4px 16px rgba(0, 6, 72, 0.15)'
                 }}
               >
-                <HiSparkles size={24} style={{ color: '#f2b733', flexShrink: 0 }} />
                 <div>
                   <span style={{ color: '#f2b733', fontWeight: 900, fontSize: '0.98rem' }}>Meaning of EZER: </span>
                   <span style={{ lineHeight: 1.5 }}>
