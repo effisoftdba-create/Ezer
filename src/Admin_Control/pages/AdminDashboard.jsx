@@ -106,7 +106,7 @@ export default function AdminDashboard() {
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSparkles },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
-    { id: 'blog', label: 'Blog & Achievements', icon: HiOutlineNewspaper, count: ((blogs || []).length + (achievements || []).length) },
+    { id: 'blog', label: 'Blog & Articles Editor', icon: HiOutlineNewspaper, count: ((blogs || []).length + (achievements || []).length) },
     { id: 'outcomes', label: 'Graduate Outcomes', icon: HiOutlineUserGroup, count: (transformedLives || []).length },
     { id: 'mentors', label: 'Senior Mentors', icon: HiOutlineUser, count: (seniorMentors || []).length },
     { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: (videoTestimonials || []).length },

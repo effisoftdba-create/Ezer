@@ -45,155 +45,270 @@ export default function ExecutiveLeadership() {
     <section
       style={{
         position: 'relative',
-        background: '#e5e7eb',
-        color: '#0f172a',
-        padding: '64px 20px',
-        borderTop: '2px solid rgba(0, 6, 72, 0.1)',
-        borderBottom: '2px solid rgba(0, 6, 72, 0.1)',
+        background: 'radial-gradient(circle at 50% 30%, #05133b 0%, #000648 55%, #020617 100%)',
+        color: '#ffffff',
+        padding: '80px 20px',
+        borderTop: '2px solid rgba(242, 183, 51, 0.4)',
+        borderBottom: '2px solid rgba(242, 183, 51, 0.4)',
         overflow: 'hidden'
       }}
     >
       <style>{`
-        .editorial-exec-card {
+        /* Golden Ambient Background Accents */
+        .exec-bg-glow-1 {
+          position: absolute;
+          top: 10%;
+          left: 5%;
+          width: 350px;
+          height: 350px;
+          background: radial-gradient(circle, rgba(242,183,51,0.18) 0%, rgba(248,155,41,0) 70%);
+          filter: blur(50px);
+          pointer-events: none;
+        }
+
+        .exec-bg-glow-2 {
+          position: absolute;
+          bottom: 10%;
+          right: 5%;
+          width: 400px;
+          height: 400px;
+          background: radial-gradient(circle, rgba(217,119,6,0.18) 0%, rgba(0,6,72,0) 70%);
+          filter: blur(60px);
+          pointer-events: none;
+        }
+
+        /* Zig-Zag Card Grid Layout */
+        .zigzag-exec-row {
           display: grid;
-          grid-template-columns: minmax(280px, 420px) 1fr;
-          background: #d1d5db;
-          border-radius: 12px;
-          overflow: hidden;
-          box-shadow: 0 15px 35px rgba(0,0,0,0.06);
-          margin-bottom: 36px;
-          border: 1px solid #cbd5e1;
-          transition: transform 0.4s ease, box-shadow 0.4s ease;
+          grid-template-columns: 340px 1fr;
+          gap: 48px;
+          align-items: center;
+          background: rgba(255, 255, 255, 0.03);
+          backdrop-filter: blur(12px);
+          border-radius: 24px;
+          padding: 40px;
+          margin-bottom: 48px;
+          border: 1.5px solid rgba(242, 183, 51, 0.25);
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+          transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
-        .editorial-exec-card:hover {
+        .zigzag-exec-row.reverse {
+          grid-template-columns: 1fr 340px;
+        }
+
+        .zigzag-exec-row:hover {
           transform: translateY(-4px);
-          box-shadow: 0 25px 45px rgba(0,0,0,0.12);
+          border-color: rgba(242, 183, 51, 0.6);
+          box-shadow: 0 30px 60px rgba(242, 183, 51, 0.15);
         }
 
-        .editorial-img-box {
+        /* Glowing Image Card Container Style */
+        .exec-card-container {
+          width: 100%;
+          maxWidth: 340px;
+          height: 360px;
           position: relative;
+          border-radius: 20px;
+          margin: 0 auto;
+        }
+
+        .exec-card-container::before {
+          content: "";
+          z-index: 1;
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(-45deg, #f2b733 0%, #f89b29 50%, #d97706 100%);
+          transform: translate3d(0, 0, 0) scale(0.96);
+          filter: blur(22px);
+          border-radius: 20px;
+          opacity: 0.85;
+          transition: opacity 0.5s ease, filter 0.5s ease;
+        }
+
+        .exec-card-container:hover::before {
+          opacity: 1;
+          filter: blur(28px);
+        }
+
+        .exec-card {
+          position: relative;
+          z-index: 2;
           width: 100%;
           height: 100%;
-          min-height: 380px;
-          background: #111827;
+          border-radius: 20px;
           overflow: hidden;
+          border: 2px solid #f2b733;
+          background: #000648;
+          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
         }
 
-        .editorial-img-box img {
+        .exec-card .img-content {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #000;
+          overflow: hidden;
+          transition: scale 0.6s, rotate 0.6s, filter 1s;
+        }
+
+        .exec-card .img-content img {
           width: 100%;
           height: 100%;
           object-fit: cover;
           object-position: center top;
-          transition: transform 0.6s ease;
+          transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
         }
 
-        .editorial-exec-card:hover .editorial-img-box img {
-          transform: scale(1.04);
+        .exec-card:hover .img-content img {
+          scale: 1.25;
+          rotate: 4deg;
+          filter: blur(4px);
         }
 
-        .editorial-content-box {
-          padding: 48px;
+        .exec-card .card-hover-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          gap: 10px;
+          color: #ffffff;
+          padding: 24px;
+          background: rgba(0, 6, 72, 0.88);
+          backdrop-filter: blur(8px);
+          border-radius: 20px;
+          opacity: 0;
+          pointer-events: none;
+          transform: translateY(40px);
+          transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+        }
+
+        .exec-card .card-hover-overlay .heading {
+          font-size: 1.4rem;
+          font-weight: 900;
+          color: #f2b733;
+        }
+
+        .exec-card .card-hover-overlay .sub-heading {
+          font-size: 0.82rem;
+          font-weight: 800;
+          color: #60a5fa;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+
+        .exec-card:hover .card-hover-overlay {
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
+
+        /* Editorial Content Box */
+        .zigzag-content-box {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          background: #e5e7eb;
         }
 
-        .editorial-tagline {
+        .zigzag-role-badge {
+          display: inline-block;
+          align-self: flex-start;
+          background: rgba(242, 183, 51, 0.15);
+          color: #f2b733;
+          border: 1.5px solid #f2b733;
+          padding: 4px 16px;
+          borderRadius: 50px;
+          font-weight: 900;
+          font-size: 0.78rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          margin-bottom: 14px;
+        }
+
+        .zigzag-tagline {
           font-size: 1.05rem;
-          color: #4b5563;
-          font-weight: 500;
-          margin-bottom: 16px;
+          color: #f2b733;
+          font-weight: 600;
+          font-style: italic;
+          margin-bottom: 12px;
           letter-spacing: -0.01em;
         }
 
-        .editorial-headline {
+        .zigzag-headline {
           font-family: Georgia, 'Times New Roman', serif;
-          font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+          font-size: clamp(1.8rem, 3.2vw, 2.5rem);
           font-weight: 400;
-          color: #111827;
+          color: #ffffff;
           line-height: 1.22;
-          margin: 0 0 24px 0;
+          margin: 0 0 20px 0;
           letter-spacing: -0.02em;
         }
 
-        .editorial-officer-name {
-          font-size: 1.1rem;
+        .zigzag-officer-name {
+          font-size: 1.2rem;
           font-weight: 900;
-          color: #000648;
+          color: #f2b733;
           margin-bottom: 4px;
         }
 
-        .editorial-officer-role {
-          font-size: 0.82rem;
+        .zigzag-officer-role {
+          font-size: 0.84rem;
           font-weight: 800;
-          color: #2563eb;
+          color: #93c5fd;
           text-transform: uppercase;
           letter-spacing: 0.08em;
-          margin-bottom: 16px;
+          margin-bottom: 14px;
         }
 
-        .editorial-bio {
-          font-size: 0.95rem;
-          color: #475569;
-          line-height: 1.6;
-          margin-bottom: 28px;
-          max-width: 640px;
+        .zigzag-bio {
+          font-size: 0.96rem;
+          color: #cbd5e1;
+          line-height: 1.65;
+          margin: 0;
+          max-width: 660px;
         }
 
-        .editorial-readmore-btn {
-          align-self: flex-start;
-          font-size: 0.85rem;
-          font-weight: 900;
-          color: #111827;
-          text-transform: uppercase;
-          letter-spacing: 0.12em;
-          text-decoration: none;
-          padding-bottom: 4px;
-          border-bottom: 3px solid #111827;
-          transition: color 0.3s ease, border-color 0.3s ease;
-          cursor: pointer;
-          background: transparent;
-          border-top: none;
-          border-left: none;
-          border-right: none;
-        }
-
-        .editorial-readmore-btn:hover {
-          color: #2563eb;
-          border-color: #2563eb;
-        }
-
-        @media (max-width: 860px) {
-          .editorial-exec-card {
+        @media (max-width: 900px) {
+          .zigzag-exec-row, .zigzag-exec-row.reverse {
             grid-template-columns: 1fr;
+            padding: 28px 20px;
+            gap: 28px;
           }
-          .editorial-content-box {
-            padding: 28px 24px;
-          }
-          .editorial-img-box {
-            min-height: 320px;
+          .zigzag-exec-row.reverse .exec-card-container {
+            order: -1;
           }
         }
       `}</style>
 
-      <div className="container" style={{ maxWidth: '1240px', margin: '0 auto' }}>
+      {/* Glow Effects */}
+      <div className="exec-bg-glow-1" />
+      <div className="exec-bg-glow-2" />
+
+      <div className="container" style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 3 }}>
         
         {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
           <span
             style={{
               display: 'inline-block',
-              background: '#000648',
-              color: '#f2b733',
-              padding: '6px 22px',
+              background: '#f2b733',
+              color: '#000648',
+              padding: '6px 24px',
               borderRadius: '50px',
               fontWeight: 900,
-              fontSize: '0.78rem',
+              fontSize: '0.8rem',
               textTransform: 'uppercase',
               letterSpacing: '0.12em',
-              marginBottom: '12px'
+              marginBottom: '14px',
+              boxShadow: '0 4px 20px rgba(242,183,51,0.3)'
             }}
           >
             EXECUTIVE LEADERSHIP BOARD
@@ -203,9 +318,9 @@ export default function ExecutiveLeadership() {
             style={{
               fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
               fontWeight: 900,
-              color: '#000648',
+              color: '#ffffff',
               lineHeight: 1.15,
-              marginBottom: '10px',
+              marginBottom: '12px',
               letterSpacing: '-0.02em'
             }}
           >
@@ -215,7 +330,7 @@ export default function ExecutiveLeadership() {
           <p
             style={{
               fontSize: '1.05rem',
-              color: '#475569',
+              color: '#94a3b8',
               maxWidth: '740px',
               margin: '0 auto',
               lineHeight: 1.6
@@ -225,45 +340,99 @@ export default function ExecutiveLeadership() {
           </p>
         </div>
 
-        {/* Editorial Executive Cards Grid */}
+        {/* Zig-Zag Executive Rows */}
         <div>
-          {leaders.map((leader, idx) => (
-            <motion.div
-              key={leader.id || idx}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.12 }}
-              className="editorial-exec-card"
-            >
-              {/* Left Photo Container */}
-              <div className="editorial-img-box">
-                <img
-                  src={resolveImageSrc(leader.image)}
-                  alt={leader.name}
-                  onError={handleImgError}
-                />
-              </div>
+          {leaders.map((leader, idx) => {
+            const isReverse = idx % 2 === 1;
 
-              {/* Right Luxury Editorial Content Box */}
-              <div className="editorial-content-box">
-                <span className="editorial-tagline">{leader.tagline || 'From problem to solution.'}</span>
-                
-                <h3 className="editorial-headline">
-                  {leader.headline || 'A creative and strategic transformation partner for bold businesses.'}
-                </h3>
+            return (
+              <motion.div
+                key={leader.id || idx}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.12 }}
+                className={`zigzag-exec-row ${isReverse ? 'reverse' : ''}`}
+              >
+                {/* Order image / content based on reverse zig-zag */}
+                {!isReverse ? (
+                  <>
+                    {/* Glowing Image Card Container */}
+                    <div className="exec-card-container">
+                      <div className="exec-card">
+                        <div className="img-content">
+                          <img
+                            src={resolveImageSrc(leader.image)}
+                            alt={leader.name}
+                            onError={handleImgError}
+                          />
+                        </div>
+                        <div className="card-hover-overlay">
+                          <div className="heading">{leader.name}</div>
+                          <div className="sub-heading">{leader.roleName || leader.roleTag}</div>
+                          <p style={{ fontSize: '0.8rem', color: '#e2e8f0', margin: '6px 0 0 0', lineHeight: 1.4 }}>
+                            {leader.bio}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
-                <div className="editorial-officer-name">{leader.name}</div>
-                <div className="editorial-officer-role">{leader.roleName || leader.roleTag}</div>
+                    {/* Editorial Content Box */}
+                    <div className="zigzag-content-box">
+                      <span className="zigzag-role-badge">{leader.roleTag} • {leader.roleName}</span>
+                      {leader.tagline && <span className="zigzag-tagline">{leader.tagline}</span>}
+                      
+                      <h3 className="zigzag-headline">
+                        {leader.headline || 'A creative and strategic transformation partner for bold businesses.'}
+                      </h3>
 
-                <p className="editorial-bio">{leader.bio}</p>
+                      <div className="zigzag-officer-name">{leader.name}</div>
+                      <div className="zigzag-officer-role">{leader.roleName}</div>
 
-                <button type="button" className="editorial-readmore-btn">
-                  READ MORE
-                </button>
-              </div>
-            </motion.div>
-          ))}
+                      <p className="zigzag-bio">{leader.bio}</p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Editorial Content Box (Left side for odd index) */}
+                    <div className="zigzag-content-box">
+                      <span className="zigzag-role-badge">{leader.roleTag} • {leader.roleName}</span>
+                      {leader.tagline && <span className="zigzag-tagline">{leader.tagline}</span>}
+                      
+                      <h3 className="zigzag-headline">
+                        {leader.headline || 'Pioneering accessible scholarship funds for high-growth tech careers.'}
+                      </h3>
+
+                      <div className="zigzag-officer-name">{leader.name}</div>
+                      <div className="zigzag-officer-role">{leader.roleName}</div>
+
+                      <p className="zigzag-bio">{leader.bio}</p>
+                    </div>
+
+                    {/* Glowing Image Card Container (Right side for odd index) */}
+                    <div className="exec-card-container">
+                      <div className="exec-card">
+                        <div className="img-content">
+                          <img
+                            src={resolveImageSrc(leader.image)}
+                            alt={leader.name}
+                            onError={handleImgError}
+                          />
+                        </div>
+                        <div className="card-hover-overlay">
+                          <div className="heading">{leader.name}</div>
+                          <div className="sub-heading">{leader.roleName || leader.roleTag}</div>
+                          <p style={{ fontSize: '0.8rem', color: '#e2e8f0', margin: '6px 0 0 0', lineHeight: 1.4 }}>
+                            {leader.bio}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </motion.div>
+            );
+          })}
         </div>
 
       </div>

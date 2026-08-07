@@ -382,34 +382,65 @@ function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
    ──────────────────────────────────────────────────────────── */
 export default function BlogManager() {
   const { blogs, addBlog, updateBlog, deleteBlog, achievements, addAchievement, deleteAchievement, executiveLeaders, updateExecutiveLeader } = useSiteData();
-  const [activeSubTab, setActiveSubTab] = useState('executive');
+  const [activeSubTab, setActiveSubTab] = useState('blogs');
   const [achPickerOpen, setAchPickerOpen] = useState(false);
   const [achPickedImage, setAchPickedImage] = useState('');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #e2e8f0', paddingBottom: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1.5px solid #e2e8f0', paddingBottom: '16px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiBadgeCheck size={26} style={{ color: '#f2b733' }} />
-            Blog, Achievements & Leadership Manager
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
+            <HiNewspaper size={26} style={{ color: '#f2b733' }} />
+            Magazine Articles & Content Management
           </h2>
-          <p style={{ fontSize: '0.84rem', color: '#64748b', marginTop: '4px' }}>
-            Manage executive board photos (CEO, CFO, CTHM), awards, honors, and magazine articles.
+          <p style={{ fontSize: '0.84rem', color: '#64748b', marginTop: '4px', margin: 0 }}>
+            Click <strong>"Blog & Magazine Articles"</strong> below to create, edit, or delete full articles with custom sections and inline photos.
           </p>
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', background: '#f1f5f9', padding: '4px', borderRadius: '10px' }}>
-          <button type="button" onClick={() => setActiveSubTab('executive')} style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer', background: activeSubTab === 'executive' ? '#000648' : 'transparent', color: activeSubTab === 'executive' ? '#f2b733' : '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            Executive Board (CEO, CFO, CTHM)
+        <div style={{ display: 'flex', gap: '8px', background: '#000648', padding: '6px', borderRadius: '12px', border: '1.5px solid #f2b733' }}>
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('blogs')}
+            style={{
+              padding: '10px 18px', borderRadius: '8px', border: 'none',
+              fontWeight: 900, fontSize: '0.86rem', cursor: 'pointer',
+              background: activeSubTab === 'blogs' ? '#f2b733' : 'transparent',
+              color: activeSubTab === 'blogs' ? '#000648' : '#ffffff',
+              display: 'flex', alignItems: 'center', gap: '6px',
+              boxShadow: activeSubTab === 'blogs' ? '0 4px 12px rgba(242,183,51,0.3)' : 'none'
+            }}
+          >
+            <HiNewspaper size={18} /> Blog & Magazine Articles ({ (blogs || []).length })
           </button>
 
-          <button type="button" onClick={() => setActiveSubTab('achievements')} style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer', background: activeSubTab === 'achievements' ? '#000648' : 'transparent', color: activeSubTab === 'achievements' ? '#f2b733' : '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiBadgeCheck size={16} /> EZER Achievements ({ (achievements || []).length })
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('executive')}
+            style={{
+              padding: '10px 18px', borderRadius: '8px', border: 'none',
+              fontWeight: 900, fontSize: '0.86rem', cursor: 'pointer',
+              background: activeSubTab === 'executive' ? '#f2b733' : 'transparent',
+              color: activeSubTab === 'executive' ? '#000648' : '#ffffff',
+              display: 'flex', alignItems: 'center', gap: '6px'
+            }}
+          >
+            Executive Board (CEO / Leaders)
           </button>
 
-          <button type="button" onClick={() => setActiveSubTab('blogs')} style={{ padding: '8px 16px', borderRadius: '8px', border: 'none', fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer', background: activeSubTab === 'blogs' ? '#000648' : 'transparent', color: activeSubTab === 'blogs' ? '#f2b733' : '#64748b', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiNewspaper size={16} /> Blog Posts ({ (blogs || []).length })
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('achievements')}
+            style={{
+              padding: '10px 18px', borderRadius: '8px', border: 'none',
+              fontWeight: 900, fontSize: '0.86rem', cursor: 'pointer',
+              background: activeSubTab === 'achievements' ? '#f2b733' : 'transparent',
+              color: activeSubTab === 'achievements' ? '#000648' : '#ffffff',
+              display: 'flex', alignItems: 'center', gap: '6px'
+            }}
+          >
+            <HiBadgeCheck size={18} /> EZER Achievements ({ (achievements || []).length })
           </button>
         </div>
       </div>
