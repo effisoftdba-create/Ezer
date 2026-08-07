@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { HiX, HiCheckCircle, HiCreditCard, HiQrcode, HiLockClosed } from 'react-icons/hi';
+import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 export default function CoursePurchaseModal({ isOpen, onClose, course }) {
+  const { addLead } = useSiteData();
   const [step, setStep] = useState(1); // 1: Select Plan & Details, 2: Payment Method, 3: Success Receipt
   const [paymentOption, setPaymentOption] = useState('full'); // 'full' | 'emi'
   const [paymentMethod, setPaymentMethod] = useState('upi'); // 'upi' | 'card'
@@ -31,10 +33,32 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
     setStep(2);
   };
 
+  const recordStudentEnrollment = (txnId) => {
+    try {
+      if (addLead) {
+        addLead({
+          name: fullName || 'Enrolled Student',
+          email: email || 'student@ezer.org',
+          phone: phone || 'Unspecified',
+          course: course.title || 'Executive IT Course',
+          paymentStatus: 'PAID',
+          amountPaid: '₹9',
+          transactionId: txnId,
+          status: 'Enrolled',
+          city: 'Online Enrollment',
+          timestamp: new Date().toISOString()
+        });
+      }
+    } catch (e) {
+      console.warn('[PurchaseModal] Failed to record lead:', e);
+    }
+  };
+
   const handleCompletePurchase = async () => {
     setIsProcessing(true);
+    let generatedReceipt = 'EZER-PAY-' + Math.floor(100000 + Math.random() * 900000);
+
     try {
-      // 1. Call secure backend API to create order (No secrets or computed amounts sent from client)
       const res = await fetch('/api/checkout/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -50,7 +74,6 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
         throw new Error(orderData.error || 'Failed to create order');
       }
 
-      // 2. Client sends payment verification to backend
       const verifyRes = await fetch('/api/checkout/verify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -67,7 +90,9 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
       setIsProcessing(false);
 
       if (verifyData.success) {
-        setReceiptNumber(verifyData.payment ? verifyData.payment.id : 'EZER-PAY-' + Math.floor(100000 + Math.random() * 900000));
+        generatedReceipt = verifyData.payment ? verifyData.payment.id : generatedReceipt;
+        setReceiptNumber(generatedReceipt);
+        recordStudentEnrollment(generatedReceipt);
         setStep(3);
       } else {
         alert('Payment verification failed: ' + (verifyData.error || 'Unknown error'));
@@ -75,8 +100,8 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
     } catch (err) {
       console.warn('[Checkout] Fallback local verification mode active:', err);
       setIsProcessing(false);
-      const generatedReceipt = 'EZER-PAY-' + Math.floor(100000 + Math.random() * 900000);
       setReceiptNumber(generatedReceipt);
+      recordStudentEnrollment(generatedReceipt);
       setStep(3);
     }
   };

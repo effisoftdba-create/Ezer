@@ -35,14 +35,18 @@ export default function LeadsManager() {
   // Filtered Leads
   const filteredLeads = useMemo(() => {
     const term = searchTerm.toLowerCase().trim();
-    if (!term) {
-      return filterStatus === 'All'
-        ? leadsList
-        : leadsList.filter((lead) => lead.status === filterStatus);
-    }
     return leadsList.filter((lead) => {
-      const matchesStatus = filterStatus === 'All' || lead.status === filterStatus;
-      const haystack = `${lead.name || ''} ${lead.email || ''} ${lead.phone || ''} ${lead.city || ''} ${lead.course || ''} ${lead.otherCourseText || ''}`.toLowerCase();
+      let matchesStatus = true;
+
+      if (filterStatus === 'Paid Students (₹9)') {
+        matchesStatus = lead.paymentStatus === 'PAID' || lead.amountPaid === '₹9' || lead.status === 'Enrolled';
+      } else if (filterStatus !== 'All') {
+        matchesStatus = lead.status === filterStatus;
+      }
+
+      if (!term) return matchesStatus;
+
+      const haystack = `${lead.name || ''} ${lead.email || ''} ${lead.phone || ''} ${lead.city || ''} ${lead.course || ''} ${lead.otherCourseText || ''} ${lead.transactionId || ''}`.toLowerCase();
       return matchesStatus && haystack.includes(term);
     });
   }, [leadsList, filterStatus, searchTerm]);
@@ -153,7 +157,7 @@ export default function LeadsManager() {
       {/* Search & Status Filter Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '20px' }}>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-          {['All', 'Pending', 'Contacted', 'In Progress', 'Resolved', 'Closed'].map((st) => (
+          {['All', 'Paid Students (₹9)', 'Enrolled', 'Pending', 'Contacted', 'In Progress', 'Resolved', 'Closed'].map((st) => (
             <button
               key={st}
               type="button"

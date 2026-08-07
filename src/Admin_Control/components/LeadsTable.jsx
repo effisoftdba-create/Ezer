@@ -1,10 +1,11 @@
 import React from 'react';
-import { HiAcademicCap, HiPhone, HiMail, HiLocationMarker, HiChatAlt2, HiTrash } from 'react-icons/hi';
+import { HiAcademicCap, HiPhone, HiMail, HiLocationMarker, HiChatAlt2, HiTrash, HiCheckCircle } from 'react-icons/hi';
 
 const STATUS_COLORS = {
   Pending: { bg: '#fef3c7', color: '#92400e', border: '#fde68a' },
   Contacted: { bg: '#e0f2fe', color: '#075985', border: '#bae6fd' },
   'In Progress': { bg: '#f3e8ff', color: '#6b21a8', border: '#e9d5ff' },
+  Enrolled: { bg: '#dcfce7', color: '#166534', border: '#86efac' },
   Resolved: { bg: '#dcfce7', color: '#166534', border: '#bbf7d0' },
   Closed: { bg: '#f1f5f9', color: '#475569', border: '#e2e8f0' }
 };
@@ -25,8 +26,8 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
           <thead>
             <tr style={{ background: '#f8fafc', color: '#475569', fontWeight: 800, fontSize: '0.75rem', textTransform: 'uppercase', position: 'sticky', top: 0, zIndex: 15, boxShadow: '0 2px 8px rgba(0,0,0,0.05)' }}>
               <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Student Info</th>
-              <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Target Course / Custom Goal</th>
-              <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Contact & Location</th>
+              <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Selected Course</th>
+              <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Contact & Payment</th>
               <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>Status</th>
               <th style={{ padding: '14px 18px', background: '#f8fafc', borderBottom: '2px solid #e2e8f0', textAlign: 'right' }}>Actions</th>
             </tr>
@@ -42,13 +43,20 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
               filteredLeads.map((lead) => {
                 const statusInfo = STATUS_COLORS[lead.status] || STATUS_COLORS.Pending;
                 const isOthers = lead.course === 'Others' || lead.course === 'Other';
+                const isPaid = lead.paymentStatus === 'PAID' || lead.amountPaid || lead.status === 'Enrolled';
+
                 return (
                   <tr key={lead.id} style={{ borderBottom: '1px solid #f1f5f9', transition: 'background-color 0.15s ease' }}>
                     <td style={{ padding: '14px 16px' }}>
-                      <div style={{ fontWeight: 800, color: '#000648' }}>{lead.name}</div>
+                      <div style={{ fontWeight: 800, color: '#000648', fontSize: '0.92rem' }}>{lead.name}</div>
                       <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '2px' }}>
-                        {new Date(lead.timestamp).toLocaleString()}
+                        {new Date(lead.timestamp || lead.date || Date.now()).toLocaleString()}
                       </div>
+                      {isPaid && (
+                        <div style={{ marginTop: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#dcfce7', color: '#166534', border: '1px solid #86efac', padding: '2px 8px', borderRadius: '50px', fontSize: '0.7rem', fontWeight: 900 }}>
+                          <HiCheckCircle size={12} /> PAID ({lead.amountPaid || '₹9'})
+                        </div>
+                      )}
                     </td>
 
                     <td style={{ padding: '14px 16px' }}>
@@ -70,9 +78,9 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
                       <div style={{ fontSize: '0.75rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
                         <HiMail size={14} /> {lead.email}
                       </div>
-                      {(lead.city || lead.state) && (
-                        <div style={{ fontSize: '0.72rem', color: '#94a3b8', display: 'flex', alignItems: 'center', gap: '4px', marginTop: '2px' }}>
-                          <HiLocationMarker size={12} /> {[lead.city, lead.state, lead.country].filter(Boolean).join(', ')}
+                      {lead.transactionId && (
+                        <div style={{ fontSize: '0.7rem', color: '#166534', fontWeight: 700, marginTop: '2px' }}>
+                          TXN: {lead.transactionId}
                         </div>
                       )}
                     </td>
@@ -80,7 +88,7 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
                     <td style={{ padding: '14px 16px' }}>
                       <select
                         aria-label={`Change status for ${lead.name}`}
-                        value={lead.status}
+                        value={lead.status || 'Pending'}
                         onChange={(e) => handleStatusChange(lead.id, e.target.value)}
                         style={{
                           padding: '4px 10px', borderRadius: '50px',
@@ -92,26 +100,34 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
                         <option value="Pending">Pending</option>
                         <option value="Contacted">Contacted</option>
                         <option value="In Progress">In Progress</option>
+                        <option value="Enrolled">Enrolled</option>
                         <option value="Resolved">Resolved</option>
                         <option value="Closed">Closed</option>
                       </select>
                     </td>
 
                     <td style={{ padding: '14px 16px', textAlign: 'right' }}>
-                      <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
                         <button
                           type="button"
-                          aria-label={`View comments for ${lead.name}`}
                           onClick={() => setSelectedLeadId(lead.id)}
-                          style={{ padding: '6px 12px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                          style={{
+                            padding: '5px 12px', background: '#000648', color: '#f2b733',
+                            border: 'none', borderRadius: '6px', fontSize: '0.76rem',
+                            fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
+                          }}
                         >
-                          <HiChatAlt2 size={14} /> Comments ({(lead.comments || []).length})
+                          <HiChatAlt2 size={14} /> Notes & Details
                         </button>
+
                         <button
                           type="button"
-                          aria-label={`Delete lead for ${lead.name}`}
                           onClick={() => handleDeleteLeadClick(lead.id, lead.name)}
-                          style={{ padding: '6px 10px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+                          style={{
+                            padding: '5px 8px', background: '#fee2e2', color: '#dc2626',
+                            border: 'none', borderRadius: '6px', cursor: 'pointer'
+                          }}
+                          title="Delete Lead Entry"
                         >
                           <HiTrash size={14} />
                         </button>
