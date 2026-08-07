@@ -179,7 +179,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
                 marginBottom: '12px'
               }}
             >
-              <HiSparkles size={16} /> ▶ COURSE LIVE DEMO & PRACTICAL VIDEO PREVIEW
+              <HiSparkles size={16} /> COURSE LIVE DEMO & PRACTICAL VIDEO PREVIEW
             </span>
             <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: 900, margin: '4px 0 0' }}>
               Watch Live Instructor Training Session

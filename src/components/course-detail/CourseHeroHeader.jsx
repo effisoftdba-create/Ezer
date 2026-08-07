@@ -5,8 +5,40 @@ export default function CourseHeroHeader({ course, onOpenDemoModal, onOpenPurcha
   return (
     <div>
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
-        <span className="section-tag" style={{ background: 'rgba(242, 183, 51, 0.15)', borderColor: 'rgba(242, 183, 51, 0.3)', color: '#f2b733' }}>
-          {course.badge || 'Live Executive Cohort'}
+        <span
+          className="high-demand-badge-animated"
+          style={{
+            background: 'linear-gradient(135deg, rgba(242, 183, 51, 0.25) 0%, rgba(217, 160, 42, 0.15) 100%)',
+            border: '1.5px solid #f2b733',
+            color: '#f2b733',
+            fontSize: '0.78rem',
+            fontWeight: 900,
+            padding: '6px 16px',
+            borderRadius: '50px',
+            textTransform: 'uppercase',
+            letterSpacing: '0.06em',
+            boxShadow: '0 4px 14px rgba(242, 183, 51, 0.2)',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px) scale(1.05)';
+            e.currentTarget.style.boxShadow = '0 0 24px rgba(242, 183, 51, 0.6)';
+            e.currentTarget.style.background = '#f2b733';
+            e.currentTarget.style.color = '#000648';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+            e.currentTarget.style.boxShadow = '0 4px 14px rgba(242, 183, 51, 0.2)';
+            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(242, 183, 51, 0.25) 0%, rgba(217, 160, 42, 0.15) 100%)';
+            e.currentTarget.style.color = '#f2b733';
+          }}
+        >
+          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#f2b733', display: 'inline-block', boxShadow: '0 0 8px #f2b733' }} />
+          {course.badge || 'High Demand'}
         </span>
         <span
           style={{

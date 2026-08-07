@@ -69,7 +69,7 @@ export function SiteProvider({ children }) {
             if (decoded.courses) safeSetStorage(STORAGE_COURSES_KEY, decoded.courses);
             if (decoded.popupConfig) safeSetStorage(STORAGE_POPUP_CONFIG_KEY, decoded.popupConfig);
             if (decoded.heroSlides) safeSetStorage(STORAGE_SLIDES_KEY, decoded.heroSlides);
-            alert('✅ Mobile Sync Successful! This mobile device has been updated with your admin settings.');
+            alert('Mobile Sync Successful! This mobile device has been updated with your admin settings.');
             window.location.href = window.location.origin + window.location.pathname + '#/';
             window.location.reload();
           }

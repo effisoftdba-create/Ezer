@@ -62,6 +62,10 @@ export default function CourseManager() {
 
   const handleOpenEdit = (course) => {
     setEditingId(course.id || course.slug);
+    const safeModulesStr = Array.isArray(course.curriculumModules)
+      ? course.curriculumModules.map((m) => (typeof m === 'object' ? `${m.num || ''} ${m.title || ''}`.trim() : String(m))).filter(Boolean).join(', ')
+      : '';
+
     setFormData({
       title: course.title || '',
       slug: course.slug || '',
@@ -77,16 +81,14 @@ export default function CourseManager() {
       startDate: course.startDate || 'Next Week',
       languages: course.languages || 'Tamil, English, Hindi',
       fee: course.fee || '₹45,000 + 18% GST',
-      price: course.price || '₹29,999',
+      price: course.price || '₹9',
       originalPrice: course.originalPrice || '₹42,000',
       hashLink: course.hashLink || `#${(course.title || 'course').replace(/[^a-zA-Z0-9]/g, '')}_course`,
       tools: Array.isArray(course.tools) ? course.tools.join(', ') : (course.tools || ''),
       projectsList: Array.isArray(course.projects) ? course.projects : (DEFAULT_COURSE_STATE.projectsList),
       whoIsItForList: Array.isArray(course.whoIsItFor) ? course.whoIsItFor : (DEFAULT_COURSE_STATE.whoIsItForList),
       admissionStepsList: Array.isArray(course.admissionSteps) ? course.admissionSteps : (DEFAULT_COURSE_STATE.admissionStepsList),
-      modulesStr: Array.isArray(course.curriculumModules)
-        ? course.curriculumModules.map((m) => `${m.num || ''} ${m.title || ''}`).join(', ')
-        : ''
+      modulesStr: safeModulesStr
     });
     setIsEditing(true);
   };

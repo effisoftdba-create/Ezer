@@ -152,7 +152,7 @@ export default function PaymentCard({ course, onEnrollClick }) {
               </div>
 
               <div style={{ background: 'rgba(242, 183, 51, 0.15)', color: '#f2b733', padding: '6px 16px', borderRadius: '50px', fontSize: '0.75rem', fontWeight: 800, marginBottom: '24px' }}>
-                ★ {course?.duration || '3 Months'} Full Cohort & Placement Support
+                {course?.duration || '3 Months'} Full Cohort & Placement Support
               </div>
 
               <button

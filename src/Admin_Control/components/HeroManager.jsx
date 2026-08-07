@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
+import { resolveImageSrc } from '../../utils/imageUtils';
 import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck } from 'react-icons/hi';
 
 export default function HeroManager() {
@@ -213,7 +214,7 @@ export default function HeroManager() {
             >
               <div style={{ height: '95px', borderRadius: '8px', overflow: 'hidden', background: '#000648', position: 'relative' }}>
                 <img
-                  src={slide.url}
+                  src={resolveImageSrc(slide.url || slide.image)}
                   alt={slide.headline || slide.badge || 'Hero Slide Image'}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   onError={(e) => {

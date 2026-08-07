@@ -56,7 +56,7 @@ function ExecutiveGlassStack({ leaders }) {
       </div>
 
       <span style={{ position: 'relative', zIndex: 2, fontSize: '0.78rem', color: '#000648', fontWeight: 800, marginTop: '8px', textAlign: 'center' }}>
-        ★ Hover cards to expand Executive Leaders (CEO, CFO, CTHM)
+        Hover cards to expand Executive Leaders (CEO, CFO, CTHM)
       </span>
     </div>
   );

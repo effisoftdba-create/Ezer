@@ -160,7 +160,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
             >
               <div>
                 <div style={{ fontWeight: 900, fontSize: '0.92rem', color: '#000648' }}>Official 1-Time Instant Access</div>
-                <div style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 800, marginTop: '2px' }}>★ Instant Course Enrollment for ₹9</div>
+                <div style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 800, marginTop: '2px' }}>Instant Course Enrollment for ₹9</div>
               </div>
               <span style={{ background: '#000648', color: '#f2b733', padding: '6px 14px', borderRadius: '50px', fontWeight: 900, fontSize: '0.8rem' }}>
                 ₹9 ONLY

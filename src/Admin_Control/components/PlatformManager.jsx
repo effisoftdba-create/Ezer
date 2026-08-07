@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
+import { resolveImageSrc } from '../../utils/imageUtils';
 import { HiCheck, HiPhotograph, HiSparkles } from 'react-icons/hi';
 
 export default function PlatformManager() {
@@ -78,7 +79,7 @@ export default function PlatformManager() {
                 />
               </div>
               <span style={{ position: 'relative', zIndex: 3, fontSize: '0.72rem', color: '#f2b733', fontWeight: 800, textAlign: 'center', marginTop: '8px' }}>
-                ★ Live Section Showcase Photo Preview
+                Live Section Showcase Photo Preview
               </span>
             </div>
           </div>
