@@ -18,7 +18,7 @@ export function getNormalizedVideoConfig(url) {
   if (ytMatch && ytMatch[1]) {
     return {
       type: 'iframe',
-      src: `https://www.youtube-nocookie.com/embed/${ytMatch[1]}?autoplay=0&rel=0&modestbranding=1`,
+      src: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=0&rel=0&modestbranding=1`,
       title: 'YouTube Video Player'
     };
   }
@@ -49,8 +49,9 @@ export function getNormalizedVideoConfig(url) {
   };
 }
 
-export default function VideoPlayer({ videoUrl, poster, title = 'Course Preview Video' }) {
-  const config = getNormalizedVideoConfig(videoUrl);
+export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?v=aircAruvnKk', poster, title = 'Course Preview Video' }) {
+  const effectiveUrl = videoUrl || 'https://www.youtube.com/watch?v=aircAruvnKk';
+  const config = getNormalizedVideoConfig(effectiveUrl);
 
   if (config.type === 'none') {
     return (

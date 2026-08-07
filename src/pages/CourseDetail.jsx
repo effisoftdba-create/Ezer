@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { HiChevronLeft, HiChevronRight, HiCheckCircle, HiSparkles } from 'react-icons/hi';
+import { HiChevronLeft, HiChevronRight, HiCheckCircle, HiSparkles, HiAcademicCap } from 'react-icons/hi';
 import { motion } from 'framer-motion';
 import { getCourseBySlug } from '../data/courses';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
@@ -87,7 +87,10 @@ export default function CourseDetail({ onOpenDemoModal }) {
     );
   }
 
-  // Generate modules list for Zig-Zag cards
+  // Active YouTube video URL fallback
+  const activeVideoUrl = course.videoUrl || 'https://www.youtube.com/watch?v=aircAruvnKk';
+
+  // Modules List for Admin-driven Detailed Breakdown
   const modulesList = course.curriculumModules || [
     {
       num: "01",
@@ -146,7 +149,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
         </div>
       </section>
 
-      {/* 2. FULL-WIDTH FULL-SCREEN VIDEO PLAYER SECTION (NO SIDE EMPTY SPACES) */}
+      {/* 2. FULL-WIDTH VIDEO PLAYER SECTION (NEXT RIGHT AFTER HERO) */}
       <section
         style={{
           width: '100%',
@@ -158,7 +161,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
         }}
       >
         <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(16px, 3vw, 48px)' }}>
-          <div style={{ textAlign: 'center', marginBottom: '28px' }}>
+          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
             <span
               style={{
                 display: 'inline-flex',
@@ -179,7 +182,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
               <HiSparkles size={16} /> ▶ COURSE LIVE DEMO & PRACTICAL VIDEO PREVIEW
             </span>
             <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: 900, margin: '4px 0 0' }}>
-              Experience the Live Class Environment
+              Watch Live Instructor Training Session
             </h2>
           </div>
 
@@ -190,24 +193,15 @@ export default function CourseDetail({ onOpenDemoModal }) {
             transition={{ duration: 0.6 }}
             style={{ width: '100%', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(0,0,0,0.5)' }}
           >
-            <VideoPlayer videoUrl={course.videoUrl} poster={course.image} title={course.title} />
+            <VideoPlayer videoUrl={activeVideoUrl} poster={course.image} title={course.title} />
           </motion.div>
         </div>
       </section>
 
-      {/* 3. OUR STUDENTS GET HIRED BY TOP COMPANIES */}
-      <HiredCompaniesGrid transitions={learnerTransitions} />
-
-      {/* 4. CAPSTONE PROJECTS SLIDER */}
-      <CapstoneProjectsSlider projects={course.projects} courseTools={course.tools} />
-
-      {/* 5. OFFICIAL CERTIFICATION TRUST SEAL */}
-      <VerifiableCertificateBanner courseTitle={course.title} onOpenDemoModal={onOpenDemoModal} />
-
-      {/* 6. DETAILED COURSE DESCRIPTION & ZIG-ZAG CARDS SECTION (FRAMER MOTION) */}
-      <section className="section" style={{ background: '#ffffff', padding: '80px 0', position: 'relative' }}>
+      {/* 3. DETAILED MODULE BREAKDOWN SECTION (MOVED NEXT TO VIDEO PLAYER) */}
+      <section className="section" style={{ background: '#ffffff', padding: '72px 0', position: 'relative' }}>
         <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto 60px' }}>
+          <div style={{ textAlign: 'center', maxWidth: '820px', margin: '0 auto 48px' }}>
             <span className="section-tag" style={{ marginBottom: '10px' }}>Detailed Module Breakdown</span>
             <h2 style={{ color: '#000648', fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 900, marginBottom: '16px' }}>
               In-Depth Curriculum & Learning Modules
@@ -217,141 +211,108 @@ export default function CourseDetail({ onOpenDemoModal }) {
             </p>
           </div>
 
-          {/* Zig-Zag Alternating Cards */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '64px', width: '100%' }}>
-            {modulesList.map((mod, idx) => {
-              const isEven = idx % 2 === 1;
-              return (
-                <motion.div
-                  key={mod.num || idx}
-                  initial={{ opacity: 0, x: isEven ? 40 : -40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(min(440px, 100%), 1fr))',
-                    gap: '48px',
-                    alignItems: 'center',
-                    background: isEven ? '#f8fafc' : '#ffffff',
-                    padding: '40px',
-                    borderRadius: '24px',
-                    border: '1.5px solid #e2e8f0',
-                    boxShadow: '0 12px 36px rgba(0, 6, 72, 0.06)',
-                  }}
-                >
-                  {/* TEXT CONTENT COLUMN */}
-                  <div style={{ order: isEven ? 2 : 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
-                      <span
-                        style={{
-                          width: '42px',
-                          height: '42px',
-                          borderRadius: '50%',
-                          background: '#000648',
-                          color: '#f2b733',
-                          fontSize: '1.1rem',
-                          fontWeight: 900,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          boxShadow: '0 4px 14px rgba(0,6,72,0.2)'
-                        }}
-                      >
-                        {mod.num || `0${idx + 1}`}
-                      </span>
-                      <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                        MODULE {idx + 1} ARCHITECTURE
-                      </span>
-                    </div>
-
-                    <h3 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#000648', marginBottom: '16px', lineHeight: 1.3 }}>
-                      {mod.title}
-                    </h3>
-
-                    <ul style={{ padding: 0, margin: '0 0 24px 0', listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                      {mod.topics?.map((topic, tIdx) => (
-                        <li key={tIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.95rem', color: '#334155', lineHeight: 1.5 }}>
-                          <HiCheckCircle size={20} style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} />
-                          <span>{topic}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* VISUAL ACCENT COLUMN */}
-                  <div style={{ order: isEven ? 1 : 2, display: 'flex', justifyContent: 'center' }}>
-                    <div
+          {/* Module Cards Grid (Admin Editable) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '28px', width: '100%' }}>
+            {modulesList.map((mod, idx) => (
+              <motion.div
+                key={mod.num || idx}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                style={{
+                  background: '#f8fafc',
+                  padding: '32px',
+                  borderRadius: '20px',
+                  border: '2px solid #000648',
+                  boxShadow: '0 12px 32px rgba(0, 6, 72, 0.06)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+                    <span
                       style={{
-                        width: '100%',
-                        maxWidth: '460px',
-                        aspectRatio: '4 / 3',
-                        background: 'linear-gradient(135deg, #000648 0%, #0a1478 100%)',
-                        borderRadius: '20px',
-                        padding: '32px',
-                        color: '#ffffff',
+                        width: '38px',
+                        height: '38px',
+                        borderRadius: '50%',
+                        background: '#000648',
+                        color: '#f2b733',
+                        fontSize: '1rem',
+                        fontWeight: 900,
                         display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        boxShadow: '0 16px 40px rgba(0, 6, 72, 0.2)',
-                        border: '2px solid rgba(242, 183, 51, 0.4)',
-                        position: 'relative',
-                        overflow: 'hidden'
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
-                      <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '140px', height: '140px', background: 'radial-gradient(circle, rgba(242,183,51,0.2) 0%, transparent 70%)' }} />
-                      <div>
-                        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(255,255,255,0.1)', padding: '6px 14px', borderRadius: '50px', fontSize: '0.75rem', fontWeight: 800, color: '#f2b733', marginBottom: '16px' }}>
-                          <HiSparkles size={14} /> Practical Lab Environment
-                        </div>
-                        <h4 style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>
-                          {mod.title}
-                        </h4>
-                        <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: 1.5, margin: 0 }}>
-                          Master production deployment with 1:1 code reviews from senior industry tech leads.
-                        </p>
-                      </div>
-
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '20px' }}>
-                        {Array.isArray(course.tools) ? (
-                          course.tools.slice(0, 4).map((tool, i) => (
-                            <span key={i} style={{ background: 'rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.72rem', fontWeight: 700, padding: '4px 10px', borderRadius: '6px' }}>
-                              {tool}
-                            </span>
-                          ))
-                        ) : (
-                          <span style={{ background: 'rgba(255,255,255,0.15)', color: '#ffffff', fontSize: '0.72rem', fontWeight: 700, padding: '4px 10px', borderRadius: '6px' }}>
-                            Live Sandboxes
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                      {mod.num || `0${idx + 1}`}
+                    </span>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                      MODULE {idx + 1}
+                    </span>
                   </div>
-                </motion.div>
-              );
-            })}
+
+                  <h3 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#000648', marginBottom: '14px', lineHeight: 1.3 }}>
+                    {mod.title}
+                  </h3>
+
+                  <ul style={{ padding: 0, margin: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {mod.topics?.map((topic, tIdx) => (
+                      <li key={tIdx} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', fontSize: '0.92rem', color: '#334155', lineHeight: 1.5 }}>
+                        <HiCheckCircle size={18} style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} />
+                        <span>{topic}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 7. GROWTH PRO PAYMENT CARD SECTION (PLACED DOWN AFTER DESCRIPTION) */}
-      <section className="section" style={{ background: '#f8fafc', padding: '80px 0', borderTop: '1px solid #e2e8f0' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 40px' }}>
-            <span className="section-tag" style={{ marginBottom: '10px' }}>Instant Enrollment</span>
-            <h2 style={{ color: '#000648', fontSize: 'clamp(1.8rem, 3.2vw, 2.5rem)', fontWeight: 900, marginBottom: '12px' }}>
-              Enroll Today & Unlock Your IT Career Growth
+      {/* 4. EZER BRAND PAYMENT SECTION (#000648 Navy & #f2b733 Gold - NO SIDE MARGIN GAPS) */}
+      <section className="section" style={{ background: '#000648', padding: '72px 0', borderTop: '3px solid #f2b733', borderBottom: '3px solid #f2b733' }}>
+        <div className="container" style={{ width: '100%', maxWidth: '100%', padding: '0 clamp(16px, 4vw, 64px)' }}>
+          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto 40px' }}>
+            <span
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: 'rgba(242, 183, 51, 0.18)',
+                color: '#f2b733',
+                padding: '6px 20px',
+                borderRadius: '50px',
+                fontSize: '0.78rem',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+                marginBottom: '12px'
+              }}
+            >
+              <HiSparkles size={16} /> OFFICIAL INSTANT ENROLLMENT
+            </span>
+            <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 900, marginBottom: '12px' }}>
+              Enroll Today & Unlock 12-Month Placement Support
             </h2>
-            <p style={{ fontSize: '0.98rem', color: '#64748b', margin: 0, lineHeight: 1.6 }}>
-              Get immediate access to live cohort classes, 12-month placement assistance, labs & 1:1 mentorship.
+            <p style={{ fontSize: '1rem', color: '#cbd5e1', margin: 0, lineHeight: 1.6 }}>
+              Get full access to live classes, hands-on practical labs, 1:1 mentorship, and corporate referral support.
             </p>
           </div>
 
+          {/* Full Container Width Payment Card */}
           <PaymentCard course={course} onEnrollClick={() => setIsPurchaseModalOpen(true)} />
         </div>
       </section>
 
-      {/* 8. ADDITIONAL SECTIONS (CAMPUS IMMERSION, ADMISSION STEPS, FACULTY, FAQ) */}
+      {/* 5. ADDITIONAL SECTIONS (HIRED COMPANIES, ADMISSION STEPS, FACULTY, FAQ) */}
+      <HiredCompaniesGrid transitions={learnerTransitions} />
+      <CapstoneProjectsSlider projects={course.projects} courseTools={course.tools} />
+      <VerifiableCertificateBanner courseTitle={course.title} onOpenDemoModal={onOpenDemoModal} />
+
       <section className="section" style={{ background: '#ffffff', padding: '72px 0' }}>
         <div className="container" style={{ maxWidth: '1140px' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '48px', width: '100%' }}>
@@ -360,7 +321,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
               <CampusImmersionBanner immersion={course.campusImmersion} />
             )}
 
-            {/* ADMISSION STEPS (HOW IT WORKS TIMELINE - 6 STEPS) */}
+            {/* ADMISSION STEPS */}
             <CourseAdmissionSteps steps={course.admissionSteps} />
 
             {/* WHO IS THIS PROGRAMME FOR? */}

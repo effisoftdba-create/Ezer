@@ -148,39 +148,22 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
               </span>
             </div>
 
-            {/* Payment Options */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div
-                role="button"
-                tabIndex={0}
-                aria-label="Select 1-Time Full Payment option"
-                onClick={() => setPaymentOption('full')}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setPaymentOption('full'); }}
-                style={{
-                  padding: '14px', borderRadius: '12px', cursor: 'pointer',
-                  border: paymentOption === 'full' ? '2px solid #000648' : '1.5px solid #e2e8f0',
-                  background: paymentOption === 'full' ? '#f0f4ff' : '#ffffff'
-                }}
-              >
-                <div style={{ fontWeight: 800, fontSize: '0.88rem', color: '#000648' }}>1-Time Full Payment</div>
-                <div style={{ fontSize: '0.75rem', color: '#166534', fontWeight: 700, marginTop: '2px' }}>★ Save ₹2,000 Instant Discount</div>
+            {/* Single Official 1-Time Payment Badge */}
+            <div
+              style={{
+                padding: '14px 18px', borderRadius: '12px',
+                border: '2px solid #000648',
+                background: '#f0f4ff',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+              }}
+            >
+              <div>
+                <div style={{ fontWeight: 900, fontSize: '0.92rem', color: '#000648' }}>Official 1-Time Instant Access</div>
+                <div style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 800, marginTop: '2px' }}>★ Instant Course Enrollment for ₹9</div>
               </div>
-
-              <div
-                role="button"
-                tabIndex={0}
-                aria-label="Select No-Cost EMI option"
-                onClick={() => setPaymentOption('emi')}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setPaymentOption('emi'); }}
-                style={{
-                  padding: '14px', borderRadius: '12px', cursor: 'pointer',
-                  border: paymentOption === 'emi' ? '2px solid #000648' : '1.5px solid #e2e8f0',
-                  background: paymentOption === 'emi' ? '#f0f4ff' : '#ffffff'
-                }}
-              >
-                <div style={{ fontWeight: 800, fontSize: '0.88rem', color: '#000648' }}>No-Cost EMI</div>
-                <div style={{ fontSize: '0.75rem', color: '#475569', fontWeight: 700, marginTop: '2px' }}>From ₹2,499/month</div>
-              </div>
+              <span style={{ background: '#000648', color: '#f2b733', padding: '6px 14px', borderRadius: '50px', fontWeight: 900, fontSize: '0.8rem' }}>
+                ₹9 ONLY
+              </span>
             </div>
 
             {/* Candidate Details Inputs */}
