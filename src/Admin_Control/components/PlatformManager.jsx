@@ -5,7 +5,16 @@ import { HiCheck, HiPhotograph, HiSparkles } from 'react-icons/hi';
 
 export default function PlatformManager() {
   const { ezerDefinition, updateEzerDefinition } = useSiteData();
-  const [formData, setFormData] = useState(ezerDefinition);
+  const safeDef = (ezerDefinition && typeof ezerDefinition === 'object') ? ezerDefinition : {};
+  const [formData, setFormData] = useState({
+    tag: safeDef.tag || 'Empowering Career Switchers',
+    headline: safeDef.headline || 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
+    description: safeDef.description || '',
+    image: safeDef.image || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=800',
+    acronymText: safeDef.acronymText || '',
+    imageFit: safeDef.imageFit || 'cover',
+    imagePosition: safeDef.imagePosition || 'center center'
+  });
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 

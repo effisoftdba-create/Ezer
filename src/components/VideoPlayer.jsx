@@ -89,12 +89,15 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
       className="ezer-video-player-container"
       style={{
         width: '100%',
+        maxWidth: '1000px',
+        margin: '0 auto',
         aspectRatio: '16 / 9',
-        borderRadius: '16px',
+        maxHeight: '65vh',
+        borderRadius: '20px',
         overflow: 'hidden',
         background: '#000000',
-        boxShadow: '0 12px 32px rgba(0, 6, 72, 0.25)',
-        border: '1.5px solid rgba(242, 183, 51, 0.3)',
+        boxShadow: '0 16px 48px rgba(0, 6, 72, 0.4)',
+        border: '2px solid #f2b733',
         position: 'relative'
       }}
     >

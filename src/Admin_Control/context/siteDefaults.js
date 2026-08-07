@@ -402,25 +402,28 @@ export const defaultExecutiveLeaders = [
 
 export function getInitialState() {
   const prodConfig = defaultPopupConfig;
+  const storedDef = getStored(STORAGE_PLATFORM_KEY, defaultPlatformDef);
+  const safePlatformDef = (storedDef && typeof storedDef === 'object') ? { ...defaultPlatformDef, ...storedDef } : defaultPlatformDef;
+
   return {
-    heroSlides: getStored(STORAGE_SLIDES_KEY, defaultSlides),
-    courses: getStored(STORAGE_COURSES_KEY, phase1Courses),
-    ezerDefinition: getStored(STORAGE_PLATFORM_KEY, defaultPlatformDef),
-    supportCards: getStored(STORAGE_SUPPORT_CARDS_KEY, defaultSupportCards),
-    transformedLives: getStored(STORAGE_TRANSFORMED_KEY, defaultTransformedLives),
-    outcomesHeader: getStored(STORAGE_OUTCOMES_HEADER_KEY, defaultOutcomesHeader),
-    seniorMentors: getStored(STORAGE_MENTORS_KEY, defaultSeniorMentors),
-    mentorsHeader: getStored(STORAGE_MENTORS_HEADER_KEY, defaultMentorsHeader),
-    videoTestimonials: getStored(STORAGE_VIDEOS_KEY, defaultVideoTestimonials),
-    testimonialsHero: getStored(STORAGE_TESTIMONIALS_HERO_KEY, defaultTestimonialsHero),
-    writtenTestimonials: getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials),
-    faqList: getStored(STORAGE_FAQS_KEY, generalFaqs),
-    contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo),
-    popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, prodConfig),
-    leads: getStored(STORAGE_LEADS_KEY, defaultLeads),
-    blogs: getStored(STORAGE_BLOGS_KEY, defaultBlogs),
-    achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements),
-    executiveLeaders: getStored(STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders),
+    heroSlides: getStored(STORAGE_SLIDES_KEY, defaultSlides) || defaultSlides,
+    courses: getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses,
+    ezerDefinition: safePlatformDef,
+    supportCards: getStored(STORAGE_SUPPORT_CARDS_KEY, defaultSupportCards) || defaultSupportCards,
+    transformedLives: getStored(STORAGE_TRANSFORMED_KEY, defaultTransformedLives) || defaultTransformedLives,
+    outcomesHeader: getStored(STORAGE_OUTCOMES_HEADER_KEY, defaultOutcomesHeader) || defaultOutcomesHeader,
+    seniorMentors: getStored(STORAGE_MENTORS_KEY, defaultSeniorMentors) || defaultSeniorMentors,
+    mentorsHeader: getStored(STORAGE_MENTORS_HEADER_KEY, defaultMentorsHeader) || defaultMentorsHeader,
+    videoTestimonials: getStored(STORAGE_VIDEOS_KEY, defaultVideoTestimonials) || defaultVideoTestimonials,
+    testimonialsHero: getStored(STORAGE_TESTIMONIALS_HERO_KEY, defaultTestimonialsHero) || defaultTestimonialsHero,
+    writtenTestimonials: getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials) || initialTestimonials,
+    faqList: getStored(STORAGE_FAQS_KEY, generalFaqs) || generalFaqs,
+    contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo) || defaultContactInfo,
+    popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, prodConfig) || prodConfig,
+    leads: getStored(STORAGE_LEADS_KEY, defaultLeads) || defaultLeads,
+    blogs: getStored(STORAGE_BLOGS_KEY, defaultBlogs) || defaultBlogs,
+    achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements) || defaultAchievements,
+    executiveLeaders: getStored(STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders) || defaultExecutiveLeaders,
   };
 }
 

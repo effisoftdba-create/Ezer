@@ -95,8 +95,9 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
     }}>
       <div style={{
-        background: '#ffffff', color: '#000648', width: '100%', maxWidth: '580px',
-        borderRadius: '24px', overflow: 'hidden', boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
+        background: '#ffffff', color: '#000648', width: '100%', maxWidth: '560px',
+        maxHeight: '90vh', overflowY: 'auto',
+        borderRadius: '24px', boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
         position: 'relative', border: '2px solid #f2b733'
       }}>
         {/* Modal Header */}
