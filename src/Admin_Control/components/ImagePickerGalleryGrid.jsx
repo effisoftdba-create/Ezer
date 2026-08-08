@@ -12,30 +12,36 @@ function getGalleryTileAspect(aspectRatio) {
 }
 
 export default function ImagePickerGalleryGrid({
-  combinedGalleryImages,
-  activeSelectedUrl,
-  uploadedImages,
+  combinedGalleryImages = [],
+  activeSelectedUrl = '',
+  uploadedImages = [],
   onSelectUrl,
+  handleGallerySelect,
   onDeleteUploaded,
+  handleDeleteUploadedImage,
   aspectRatio
 }) {
+  const safeCombined = Array.isArray(combinedGalleryImages) ? combinedGalleryImages : [];
+  const safeUploaded = Array.isArray(uploadedImages) ? uploadedImages : [];
+  const selectFn = onSelectUrl || handleGallerySelect || (() => {});
+  const deleteFn = onDeleteUploaded || handleDeleteUploadedImage || (() => {});
   const tileAspect = getGalleryTileAspect(aspectRatio);
 
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
         <span style={{ fontSize: '0.825rem', fontWeight: 800, color: '#000648' }}>
-          Option 2: Select from Curated Gallery Presets & Your Uploads ({combinedGalleryImages.length})
+          Option 2: Select from Curated Gallery Presets & Your Uploads ({safeCombined.length})
         </span>
-        {uploadedImages.length > 0 && (
+        {safeUploaded.length > 0 && (
           <span style={{ fontSize: '0.725rem', color: '#166534', fontWeight: 700 }}>
-            Includes {uploadedImages.length} uploaded picture{uploadedImages.length > 1 ? 's' : ''}
+            Includes {safeUploaded.length} uploaded picture{safeUploaded.length > 1 ? 's' : ''}
           </span>
         )}
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(135px, 1fr))', gap: '12px' }}>
-        {combinedGalleryImages.map((img) => {
+        {safeCombined.map((img) => {
           const isSelected = activeSelectedUrl === img.url || activeSelectedUrl === img.fullUrl;
           return (
             <div
@@ -44,7 +50,7 @@ export default function ImagePickerGalleryGrid({
             >
               <button
                 type="button"
-                onClick={() => onSelectUrl(img.url)}
+                onClick={() => selectFn(img.url)}
                 aria-label={`Select image: ${img.label}`}
                 style={{
                   width: '100%',
@@ -76,7 +82,7 @@ export default function ImagePickerGalleryGrid({
               {img.isUploaded && (
                 <button
                   type="button"
-                  onClick={(e) => onDeleteUploaded(img.url, e)}
+                  onClick={(e) => deleteFn(img.url, e)}
                   title="Remove uploaded image from storage"
                   aria-label={`Delete uploaded image ${img.label}`}
                   style={{

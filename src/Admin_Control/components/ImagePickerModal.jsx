@@ -381,11 +381,14 @@ export default function ImagePickerModal({
 
         <ImagePickerGalleryGrid
           combinedGalleryImages={combinedGalleryImages}
+          uploadedImages={uploadedImages}
           selectedUrl={selectedUrl}
           activeSelectedUrl={activeSelectedUrl}
           handleGallerySelect={handleGallerySelect}
           handleDeleteUploadedImage={handleDeleteUploadedImage}
+          aspectRatio={activeRatio}
         />
+
 
         {/* BOTTOM ACTION BUTTON BAR */}
         <div style={{
