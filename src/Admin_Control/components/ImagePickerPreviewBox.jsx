@@ -163,11 +163,11 @@ export default function ImagePickerPreviewBox({
                   objectPosition: computedPosStr,
                   transform: `scale(${zoomScale})`,
                   transformOrigin: computedPosStr,
-                  mixBlendMode: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? 'multiply' : 'normal',
                   pointerEvents: 'none',
                   transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                 }}
               />
+
 
 
 

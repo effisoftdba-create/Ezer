@@ -344,10 +344,10 @@ export default function HiringPartnersManager() {
                         objectPosition: partner.imagePosition || 'center center',
                         transform: partner.imageZoom ? `scale(${partner.imageZoom})` : 'none',
                         transformOrigin: partner.imagePosition || 'center center',
-                        mixBlendMode: 'multiply',
                         display: 'block'
                       }}
                     />
+
                   )}
                 </div>
 
@@ -498,14 +498,15 @@ export default function HiringPartnersManager() {
                       alt="Logo preview"
                       onError={(e) => { e.target.style.display = 'none'; }}
                       style={{
-                        maxHeight: '30px', maxWidth: '100%',
+                        maxHeight: '28px', maxWidth: '140px',
                         objectFit: formData.imageFit || 'contain',
                         objectPosition: formData.imagePosition || 'center center',
                         transform: formData.imageZoom ? `scale(${formData.imageZoom})` : 'none',
                         transformOrigin: formData.imagePosition || 'center center',
-                        mixBlendMode: 'multiply'
+                        display: 'block'
                       }}
                     />
+
 
                   )}
                 </div>

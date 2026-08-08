@@ -259,10 +259,10 @@ function LogoCard({ logo }) {
             objectPosition: logo.imagePosition || 'center center',
             transform: logo.imageZoom ? `scale(${logo.imageZoom})` : 'none',
             transformOrigin: logo.imagePosition || 'center center',
-            mixBlendMode: 'multiply',
             display: 'block'
           }}
         />
+
       )}
     </m.div>
   );
