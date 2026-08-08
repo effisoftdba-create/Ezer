@@ -23,7 +23,10 @@ import {
   STORAGE_BLOGS_KEY,
   STORAGE_ACHIEVEMENTS_KEY,
   STORAGE_EXECUTIVE_LEADERS_KEY,
+  STORAGE_HIRING_PARTNERS_KEY,
+
   defaultExecutiveLeaders,
+  defaultHiringPartners,
   defaultSlides,
   defaultPlatformDef,
   defaultSupportCards,
@@ -36,6 +39,7 @@ import {
   siteReducer,
   safeSetStorage
 } from './siteDefaults';
+
 import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../../services/firebaseService';
 
 const SiteContext = createContext();
@@ -84,7 +88,8 @@ export function SiteProvider({ children }) {
     leads,
     blogs,
     achievements,
-    executiveLeaders
+    executiveLeaders,
+    hiringPartners
   } = state;
 
   // Check for mobile sync token in URL
@@ -136,6 +141,8 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_BLOGS_KEY, blogs); }, [blogs]);
   useEffect(() => { safeSetStorage(STORAGE_ACHIEVEMENTS_KEY, achievements); }, [achievements]);
   useEffect(() => { safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, executiveLeaders); }, [executiveLeaders]);
+  useEffect(() => { safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, hiringPartners); }, [hiringPartners]);
+
 
   // Firebase Real-time Firestore & Realtime DB Subscriptions with Merged Defaults Protection
   useEffect(() => {
@@ -586,6 +593,28 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [leads]);
 
+  const addHiringPartner = useCallback((partnerData) => {
+    const newPartner = { id: `partner-${Date.now()}`, ...partnerData };
+    const updated = [...(hiringPartners || []), newPartner];
+    dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: updated });
+    saveDocument('hiringPartners', newPartner.id, newPartner);
+    triggerStateToast('SAVED');
+  }, [hiringPartners]);
+
+  const updateHiringPartner = useCallback((id, updatedData) => {
+    const updated = (hiringPartners || []).map((p) => (p.id === id ? { ...p, ...updatedData } : p));
+    dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: updated });
+    saveCollectionArray('hiringPartners', updated);
+    triggerStateToast('SAVED');
+  }, [hiringPartners]);
+
+  const deleteHiringPartner = useCallback((partnerId) => {
+    const updated = (hiringPartners || []).filter((p) => p.id !== partnerId);
+    dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: updated });
+    removeDocument('hiringPartners', String(partnerId));
+    triggerStateToast('SAVED');
+  }, [hiringPartners]);
+
   const resetAllToDefaults = useCallback(() => {
     localStorage.clear();
     dispatch({ type: 'RESET_ALL' });
@@ -611,6 +640,7 @@ export function SiteProvider({ children }) {
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
+    hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
@@ -631,8 +661,10 @@ export function SiteProvider({ children }) {
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
+    hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     resetAllToDefaults
   ]);
+
 
   return <SiteContext.Provider value={value}>{children}</SiteContext.Provider>;
 }

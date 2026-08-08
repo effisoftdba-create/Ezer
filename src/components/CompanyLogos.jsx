@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
+import { resolveImageSrc } from '../utils/imageUtils';
+
 
 const baseLogosRow1 = [
   {
@@ -185,6 +188,7 @@ const baseLogosRow3 = [
 ];
 
 function LogoCard({ logo }) {
+  const isSvgStr = typeof logo.image === 'string' && logo.image.startsWith('<svg');
   return (
     <m.div
       whileHover={{ scale: 1.06, borderColor: '#000648', boxShadow: '0 6px 18px rgba(0,6,72,0.12)' }}
@@ -203,7 +207,24 @@ function LogoCard({ logo }) {
         transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
       }}
     >
-      {logo.icon}
+      {logo.icon ? (
+        logo.icon
+      ) : isSvgStr ? (
+        <div dangerouslySetInnerHTML={{ __html: logo.image }} style={{ display: 'flex', alignItems: 'center' }} />
+      ) : (
+        <img
+          src={resolveImageSrc(logo.image || 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg')}
+          alt={logo.name || 'Hiring Partner'}
+          style={{
+            maxHeight: '30px',
+            maxWidth: '130px',
+            objectFit: logo.imageFit || 'contain',
+            objectPosition: logo.imagePosition || 'center center',
+            transform: logo.imageZoom ? `scale(${logo.imageZoom})` : 'none',
+            transformOrigin: logo.imagePosition || 'center center'
+          }}
+        />
+      )}
     </m.div>
   );
 }
@@ -213,9 +234,9 @@ function MarqueeRow({ items, direction = 'left', duration = 32 }) {
 
   // Multiply items 3 times with stable unique ids for seamless 0% -> -50% loop
   const duplicatedItems = [
-    ...items.map((item) => ({ ...item, uId: `${item.id}-dup-1` })),
-    ...items.map((item) => ({ ...item, uId: `${item.id}-dup-2` })),
-    ...items.map((item) => ({ ...item, uId: `${item.id}-dup-3` }))
+    ...items.map((item, idx) => ({ ...item, uId: `${item.id || idx}-dup-1` })),
+    ...items.map((item, idx) => ({ ...item, uId: `${item.id || idx}-dup-2` })),
+    ...items.map((item, idx) => ({ ...item, uId: `${item.id || idx}-dup-3` }))
   ];
 
   return (
@@ -251,6 +272,19 @@ function MarqueeRow({ items, direction = 'left', duration = 32 }) {
 }
 
 export default function CompanyLogos() {
+  const { hiringPartners } = useSiteData();
+  const safePartners = (Array.isArray(hiringPartners) && hiringPartners.length > 0)
+    ? hiringPartners.filter((p) => p.status !== 'Hidden')
+    : [];
+
+  const row1Items = safePartners.filter((p) => p.row === 'Row 1' || !p.row);
+  const row2Items = safePartners.filter((p) => p.row === 'Row 2');
+  const row3Items = safePartners.filter((p) => p.row === 'Row 3');
+
+  const finalRow1 = row1Items.length > 0 ? row1Items : baseLogosRow1;
+  const finalRow2 = row2Items.length > 0 ? row2Items : baseLogosRow2;
+  const finalRow3 = row3Items.length > 0 ? row3Items : baseLogosRow3;
+
   return (
     <LazyMotion features={domAnimation}>
       <section
@@ -291,20 +325,21 @@ export default function CompanyLogos() {
           </div>
         </div>
 
-        {/* 3-Row Infinite Ticker Container for PC View & Mobile (Slower & Smooth Scrolling) */}
+        {/* 3-Row Infinite Ticker Container for PC View & Mobile */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflow: 'hidden' }}>
           
           {/* Row 1: Leftward Smooth Scroll */}
-          <MarqueeRow items={baseLogosRow1} direction="left" duration={35} />
+          <MarqueeRow items={finalRow1} direction="left" duration={35} />
 
           {/* Row 2: Rightward Smooth Scroll */}
-          <MarqueeRow items={baseLogosRow2} direction="right" duration={38} />
+          <MarqueeRow items={finalRow2} direction="right" duration={38} />
 
           {/* Row 3: Leftward Smooth Scroll */}
-          <MarqueeRow items={baseLogosRow3} direction="left" duration={35} />
+          <MarqueeRow items={finalRow3} direction="left" duration={35} />
 
         </div>
       </section>
     </LazyMotion>
   );
 }
+

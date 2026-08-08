@@ -4,6 +4,7 @@ import { isAuthenticated, logoutAdmin } from '../utils/authService';
 import { useSiteData } from '../context/SiteContext';
 
 import HeroManager from '../components/HeroManager';
+import HiringPartnersManager from '../components/HiringPartnersManager';
 import CourseManager from '../components/CourseManager';
 import PlatformManager from '../components/PlatformManager';
 import SupportCardsManager from '../components/SupportCardsManager';
@@ -33,8 +34,10 @@ import {
   HiOutlinePhone,
   HiOutlineTemplate,
   HiOutlineMailOpen,
-  HiOutlineNewspaper
+  HiOutlineNewspaper,
+  HiOutlineOfficeBuilding
 } from 'react-icons/hi';
+
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('leads');
@@ -105,6 +108,7 @@ export default function AdminDashboard() {
   const tabs = [
     { id: 'leads', label: 'Lead Submissions', icon: HiOutlineMailOpen, count: (leads || []).length },
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: (heroSlides || []).length },
+    { id: 'partners', label: 'Hiring Partners & Logos', icon: HiOutlineOfficeBuilding, count: (hiringPartners || []).length },
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSparkles },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
@@ -139,6 +143,7 @@ export default function AdminDashboard() {
         <main ref={mainRef} key={activeTab} className="uipro-fade-in" style={{ flex: 1, height: '100%', overflowY: 'auto', background: '#ffffff', borderRadius: '16px', padding: '32px', boxShadow: '0 8px 30px rgba(0,0,0,0.03)', border: '1.5px solid #e2e8f0' }}>
           {activeTab === 'leads' && <LeadsManager />}
           {activeTab === 'hero' && <HeroManager />}
+          {activeTab === 'partners' && <HiringPartnersManager />}
           {activeTab === 'courses' && <CourseManager />}
           {activeTab === 'platform' && <PlatformManager />}
           {activeTab === 'support' && <SupportCardsManager />}

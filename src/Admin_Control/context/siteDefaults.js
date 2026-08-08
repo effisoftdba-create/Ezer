@@ -21,6 +21,26 @@ export const STORAGE_LEADS_KEY = 'ezer_leads:v12_mobile_cache_purge_v2';
 export const STORAGE_BLOGS_KEY = 'ezer_blogs:v12_mobile_cache_purge_v2';
 export const STORAGE_ACHIEVEMENTS_KEY = 'ezer_achievements:v12_mobile_cache_purge_v2';
 export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v12_mobile_cache_purge_v2';
+export const STORAGE_HIRING_PARTNERS_KEY = 'ezer_hiring_partners:v12_mobile_cache_purge_v2';
+
+export const defaultHiringPartners = [
+  { id: 'partner-1', name: 'TCS Tata', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg', row: 'Row 1', status: 'Active', website: 'https://www.tcs.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-2', name: 'Infosys', image: 'https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg', row: 'Row 1', status: 'Active', website: 'https://www.infosys.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-3', name: 'Wipro', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg', row: 'Row 1', status: 'Active', website: 'https://www.wipro.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-4', name: 'HCLTech', image: 'https://upload.wikimedia.org/wikipedia/commons/0/07/HCLTech_Logo.svg', row: 'Row 1', status: 'Active', website: 'https://www.hcltech.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-5', name: 'Zoho Corporation', image: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Zoho_logo.svg', row: 'Row 1', status: 'Active', website: 'https://www.zoho.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-6', name: 'Capgemini', image: 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Capgemini_2017_logo.svg', row: 'Row 2', status: 'Active', website: 'https://www.capgemini.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-7', name: 'Accenture', image: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Accenture.svg', row: 'Row 2', status: 'Active', website: 'https://www.accenture.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-8', name: 'Cognizant', image: 'https://upload.wikimedia.org/wikipedia/commons/4/43/Cognizant_logo_2022.svg', row: 'Row 2', status: 'Active', website: 'https://www.cognizant.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-9', name: 'Amazon Web Services', image: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg', row: 'Row 2', status: 'Active', website: 'https://aws.amazon.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-10', name: 'Google Cloud', image: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg', row: 'Row 2', status: 'Active', website: 'https://cloud.google.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-11', name: 'Microsoft Azure', image: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg', row: 'Row 3', status: 'Active', website: 'https://azure.microsoft.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-12', name: 'IBM Global', image: 'https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg', row: 'Row 3', status: 'Active', website: 'https://www.ibm.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-13', name: 'Freshworks', image: 'https://upload.wikimedia.org/wikipedia/commons/8/89/Freshworks_Logo.svg', row: 'Row 3', status: 'Active', website: 'https://www.freshworks.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-14', name: 'L&T Technology Services', image: 'https://upload.wikimedia.org/wikipedia/commons/e/e5/L%26T_Technology_Services_logo.svg', row: 'Row 3', status: 'Active', website: 'https://www.ltts.com', imagePosition: 'center center', imageFit: 'contain' },
+  { id: 'partner-15', name: 'Tech Mahindra', image: 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Tech_Mahindra_New_Logo.svg', row: 'Row 3', status: 'Active', website: 'https://www.techmahindra.com', imagePosition: 'center center', imageFit: 'contain' }
+];
+
 
 export const defaultPopupConfig = {
   title: 'Register For Free Demo',
@@ -440,7 +460,9 @@ export function getInitialState() {
     blogs: getStored(STORAGE_BLOGS_KEY, defaultBlogs) || defaultBlogs,
     achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements) || defaultAchievements,
     executiveLeaders: safeExec,
+    hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners
   };
+
 }
 
 export function siteReducer(state, action) {

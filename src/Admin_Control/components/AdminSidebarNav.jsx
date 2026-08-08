@@ -7,7 +7,8 @@ const CATEGORIES = [
   },
   {
     title: 'HOMEPAGE & BRANDING',
-    ids: ['hero', 'platform', 'support', 'executive']
+    ids: ['hero', 'partners', 'platform', 'support', 'executive']
+
   },
   {
     title: 'ACADEMY CATALOG',
