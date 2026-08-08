@@ -223,9 +223,12 @@ export default function Footer() {
           alignItems: 'center', gap: '12px', fontSize: '0.75rem', color: '#94a3b8',
         }}>
           <div>&copy; {new Date().getFullYear()} EZER Learning Solutions. All rights reserved.</div>
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
             <Link to="/privacy-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Privacy Policy</Link>
             <Link to="/student-admission-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Student Admission Policy & Agreement</Link>
+            <span style={{ fontSize: '0.68rem', color: '#64748b' }}>
+              Developed by <a href="https://effisoft.co/" target="_blank" rel="noopener noreferrer" style={{ color: '#cbd5e1', textDecoration: 'underline' }}>Effisoft Technologies</a>
+            </span>
           </div>
         </div>
       </div>

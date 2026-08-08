@@ -154,24 +154,25 @@ export default function ExecutiveLeadership() {
         }
 
         .exec-card .img-content {
+          position: relative;
           width: 100%;
           height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
           background: #000;
           overflow: hidden;
-          transition: scale 0.6s, rotate 0.6s, filter 1s;
         }
 
         .exec-card .img-content img {
+          position: absolute;
+          top: 0;
+          left: 0;
           width: 100%;
           height: 100%;
-          transition: transform 0.6s cubic-bezier(0.23, 1, 0.320, 1), object-position 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+          display: block;
+          transition: transform 0.4s cubic-bezier(0.23, 1, 0.320, 1), object-position 0.4s cubic-bezier(0.23, 1, 0.320, 1);
         }
 
         .exec-card:hover .img-content img {
-          filter: brightness(1.1);
+          filter: brightness(1.08);
         }
 
         .exec-card .card-hover-overlay {
@@ -372,8 +373,12 @@ export default function ExecutiveLeadership() {
                             alt={leader.name}
                             onError={handleImgError}
                             style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
                               width: '100%',
                               height: '100%',
+                              display: 'block',
                               objectPosition: leader.imagePosition || leader.position || 'center center',
                               objectFit: leader.imageFit || leader.fit || 'cover',
                               transform: `scale(${leader.imageZoom || leader.zoom || 1})`,
@@ -433,8 +438,12 @@ export default function ExecutiveLeadership() {
                             alt={leader.name}
                             onError={handleImgError}
                             style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
                               width: '100%',
                               height: '100%',
+                              display: 'block',
                               objectPosition: leader.imagePosition || leader.position || 'center center',
                               objectFit: leader.imageFit || leader.fit || 'cover',
                               transform: `scale(${leader.imageZoom || leader.zoom || 1})`,
