@@ -125,11 +125,8 @@ export function SiteProvider({ children }) {
     };
   }, []);
 
-  // Sync state changes to Firebase Firestore
-  useEffect(() => { if (courses?.length) saveCollectionArray('courses', courses); }, [courses]);
-  useEffect(() => { if (heroSlides?.length) saveCollectionArray('heroSlides', heroSlides); }, [heroSlides]);
-  useEffect(() => { if (leads?.length) saveCollectionArray('leads', leads); }, [leads]);
-  useEffect(() => { if (blogs?.length) saveCollectionArray('blogs', blogs); }, [blogs]);
+  // Sync state changes to Firebase Firestore on active modifications
+
 
 
   // Action Dispatchers

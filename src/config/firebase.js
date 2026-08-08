@@ -8,7 +8,8 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'ezer-learning-platform-8f1b1',
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'ezer-learning-platform-8f1b1.firebasestorage.app',
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '656530228571',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:656530228571:web:0e312e3cf2b775e25d067e'
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:656530228571:web:0e312e3cf2b775e25d067e',
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || undefined
 };
 
 export const isFirebaseConfigured = Boolean(
@@ -27,17 +28,19 @@ if (isFirebaseConfigured) {
     try {
       db = getFirestore(app);
     } catch (e) {
-      console.warn('[Firebase] Firestore init notice:', e);
+      db = null;
     }
-    try {
-      realtimeDb = getDatabase(app);
-    } catch (e) {
-      console.warn('[Firebase] Realtime DB init notice:', e);
+    if (firebaseConfig.databaseURL) {
+      try {
+        realtimeDb = getDatabase(app);
+      } catch (e) {
+        realtimeDb = null;
+      }
     }
     console.log('[Firebase] Initialized successfully');
   } catch (error) {
-    console.error('[Firebase] Initialization error:', error);
     db = null;
+    realtimeDb = null;
   }
 } else {
   console.info('[Firebase] Config incomplete. Running in Local Storage Fallback Mode.');

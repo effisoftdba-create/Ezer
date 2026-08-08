@@ -10,7 +10,29 @@ export function subscribeToCollection(collectionName, onUpdate) {
     return () => {};
   }
 
-  // 1. Listen via Realtime Database if available
+  // 1. Primary: Firestore snapshot listener
+  if (db) {
+    try {
+      const colRef = collection(db, collectionName);
+      return onSnapshot(
+        colRef,
+        (snapshot) => {
+          const items = snapshot.docs.map((docItem) => ({
+            id: docItem.id,
+            ...docItem.data()
+          }));
+          if (items && items.length > 0) onUpdate(items);
+        },
+        () => {
+          // Silent permission fallback
+        }
+      );
+    } catch (err) {
+      // Fallback
+    }
+  }
+
+  // 2. Secondary: Realtime Database
   if (realtimeDb) {
     try {
       const dbRef = ref(realtimeDb, collectionName);
@@ -23,34 +45,12 @@ export function subscribeToCollection(collectionName, onUpdate) {
             if (items && items.length > 0) onUpdate(items);
           }
         },
-        (error) => {
-          console.debug(`[Firebase Realtime DB] Notice for ${collectionName}:`, error);
+        () => {
+          // Silent permission fallback
         }
       );
     } catch (err) {
-      console.debug(`[Firebase Realtime DB] Listener notice:`, err);
-    }
-  }
-
-  // 2. Listen via Firestore if available
-  if (db) {
-    try {
-      const colRef = collection(db, collectionName);
-      return onSnapshot(
-        colRef,
-        (snapshot) => {
-          const items = snapshot.docs.map((docItem) => ({
-            id: docItem.id,
-            ...docItem.data()
-          }));
-          if (items.length > 0) onUpdate(items);
-        },
-        (error) => {
-          console.debug(`[Firebase Firestore] Notice for ${collectionName}:`, error);
-        }
-      );
-    } catch (err) {
-      console.debug(`[Firebase Firestore] Listener notice:`, err);
+      // Fallback
     }
   }
 
@@ -58,7 +58,7 @@ export function subscribeToCollection(collectionName, onUpdate) {
 }
 
 /**
- * Save document to Realtime Database / Firestore
+ * Save document
  */
 export async function saveDocument(collectionName, docId, data) {
   if (!isFirebaseConfigured) return false;
@@ -66,23 +66,23 @@ export async function saveDocument(collectionName, docId, data) {
 
   let saved = false;
 
-  if (realtimeDb) {
-    try {
-      const dbRef = ref(realtimeDb, `${collectionName}/${cleanId}`);
-      await set(dbRef, { ...data, updatedAt: new Date().toISOString() });
-      saved = true;
-    } catch (err) {
-      console.debug(`[Firebase Realtime DB] Save notice:`, err);
-    }
-  }
-
-  if (db && !saved) {
+  if (db) {
     try {
       const docRef = doc(db, collectionName, cleanId);
       await setDoc(docRef, { ...data, updatedAt: new Date().toISOString() }, { merge: true });
       saved = true;
     } catch (err) {
-      console.debug(`[Firebase Firestore] Save notice:`, err);
+      // Catch permission/network errors
+    }
+  }
+
+  if (!saved && realtimeDb) {
+    try {
+      const dbRef = ref(realtimeDb, `${collectionName}/${cleanId}`);
+      await set(dbRef, { ...data, updatedAt: new Date().toISOString() });
+      saved = true;
+    } catch (err) {
+      // Catch permission/network errors
     }
   }
 
@@ -98,23 +98,23 @@ export async function removeDocument(collectionName, docId) {
 
   let removed = false;
 
-  if (realtimeDb) {
-    try {
-      const dbRef = ref(realtimeDb, `${collectionName}/${cleanId}`);
-      await remove(dbRef);
-      removed = true;
-    } catch (err) {
-      console.debug(`[Firebase Realtime DB] Delete notice:`, err);
-    }
-  }
-
-  if (db && !removed) {
+  if (db) {
     try {
       const docRef = doc(db, collectionName, cleanId);
       await deleteDoc(docRef);
       removed = true;
     } catch (err) {
-      console.debug(`[Firebase Firestore] Delete notice:`, err);
+      // Catch permission/network errors
+    }
+  }
+
+  if (!removed && realtimeDb) {
+    try {
+      const dbRef = ref(realtimeDb, `${collectionName}/${cleanId}`);
+      await remove(dbRef);
+      removed = true;
+    } catch (err) {
+      // Catch permission/network errors
     }
   }
 
@@ -134,7 +134,6 @@ export async function saveCollectionArray(collectionName, itemsArray) {
     await Promise.all(savePromises);
     return true;
   } catch (err) {
-    console.debug(`[Firebase] Save collection notice for ${collectionName}:`, err);
     return false;
   }
 }
