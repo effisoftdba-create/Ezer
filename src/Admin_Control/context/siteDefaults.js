@@ -63,7 +63,7 @@ export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v12_mobile_cache_purg
 export const STORAGE_LEADS_KEY = 'ezer_leads:v12_mobile_cache_purge_v2';
 export const STORAGE_BLOGS_KEY = 'ezer_blogs:v12_mobile_cache_purge_v2';
 export const STORAGE_ACHIEVEMENTS_KEY = 'ezer_achievements:v12_mobile_cache_purge_v2';
-export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v12_mobile_cache_purge_v2';
+export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v14_fix_image_aspect_position';
 export const STORAGE_HIRING_PARTNERS_KEY = 'ezer_hiring_partners:v12_mobile_cache_purge_v2';
 export const STORAGE_PAYMENT_CONFIG_KEY = 'ezer_payment_config:v12_mobile_cache_purge_v2';
 
@@ -423,7 +423,6 @@ export function safeSetStorage(key, val) {
 }
 
 export const defaultExecutiveLeaders = [
-
   {
     id: 'exec-1',
     roleTag: 'CEO',
@@ -432,7 +431,13 @@ export const defaultExecutiveLeaders = [
     image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=700&h=700',
     tagline: 'From problem to solution.',
     headline: 'A creative and strategic transformation partner for bold businesses.',
-    bio: 'Visionary Leader driving native language tech education, corporate placement partnerships, and pan-India EdTech growth.'
+    bio: 'Visionary Leader driving native language tech education, corporate placement partnerships, and pan-India EdTech growth.',
+    imagePosition: 'center top',
+    position: 'center top',
+    imageFit: 'cover',
+    fit: 'cover',
+    imageZoom: 1,
+    zoom: 1
   },
   {
     id: 'exec-2',
@@ -442,7 +447,13 @@ export const defaultExecutiveLeaders = [
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=700',
     tagline: 'Financial integrity & student affordability.',
     headline: 'Pioneering accessible scholarship funds for high-growth tech careers.',
-    bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.'
+    bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.',
+    imagePosition: 'center top',
+    position: 'center top',
+    imageFit: 'cover',
+    fit: 'cover',
+    imageZoom: 1,
+    zoom: 1
   },
   {
     id: 'exec-3',
@@ -452,7 +463,13 @@ export const defaultExecutiveLeaders = [
     image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=700&h=700',
     tagline: 'Curriculum innovation & hands-on labs.',
     headline: 'Architecting AI-integrated practical capstones for production readiness.',
-    bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.'
+    bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.',
+    imagePosition: 'center top',
+    position: 'center top',
+    imageFit: 'cover',
+    fit: 'cover',
+    imageZoom: 1,
+    zoom: 1
   }
 ];
 

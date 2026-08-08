@@ -379,10 +379,10 @@ export default function ExecutiveLeadership() {
                               width: '100%',
                               height: '100%',
                               display: 'block',
-                              objectPosition: leader.imagePosition || leader.position || 'center center',
+                              objectPosition: leader.imagePosition || leader.position || 'center top',
                               objectFit: leader.imageFit || leader.fit || 'cover',
-                              transform: `scale(${leader.imageZoom || leader.zoom || 1})`,
-                              transformOrigin: leader.imagePosition || leader.position || 'center center'
+                              transform: (leader.imageZoom || leader.zoom || 1) !== 1 ? `scale(${leader.imageZoom || leader.zoom})` : 'none',
+                              transformOrigin: leader.imagePosition || leader.position || 'center top'
                             }}
                           />
 
@@ -444,10 +444,10 @@ export default function ExecutiveLeadership() {
                               width: '100%',
                               height: '100%',
                               display: 'block',
-                              objectPosition: leader.imagePosition || leader.position || 'center center',
+                              objectPosition: leader.imagePosition || leader.position || 'center top',
                               objectFit: leader.imageFit || leader.fit || 'cover',
-                              transform: `scale(${leader.imageZoom || leader.zoom || 1})`,
-                              transformOrigin: leader.imagePosition || leader.position || 'center center'
+                              transform: (leader.imageZoom || leader.zoom || 1) !== 1 ? `scale(${leader.imageZoom || leader.zoom})` : 'none',
+                              transformOrigin: leader.imagePosition || leader.position || 'center top'
                             }}
                           />
 

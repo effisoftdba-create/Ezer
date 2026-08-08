@@ -438,6 +438,29 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                   <button type="button" onClick={() => setPickerOpen(true)} style={{ padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                     Choose Photo
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        imagePosition: 'center top',
+                        position: 'center top',
+                        imageFit: 'cover',
+                        fit: 'cover',
+                        imageZoom: 1,
+                        zoom: 1
+                      }));
+                      alert('Executive photo alignment & zoom reset to default center top.');
+                    }}
+                    title="Reset executive photo alignment to default center top"
+                    style={{
+                      padding: '8px 12px', background: '#f1f5f9', color: '#000648',
+                      border: '1.5px solid #cbd5e1', borderRadius: '6px', fontWeight: 700,
+                      fontSize: '0.78rem', cursor: 'pointer', whiteSpace: 'nowrap'
+                    }}
+                  >
+                    ↺ Reset Alignment
+                  </button>
                 </div>
               </div>
 
