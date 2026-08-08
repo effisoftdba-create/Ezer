@@ -3,7 +3,7 @@ import { HiX, HiCheckCircle, HiCreditCard, HiQrcode, HiLockClosed } from 'react-
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 export default function CoursePurchaseModal({ isOpen, onClose, course }) {
-  const { addLead, contactInfo } = useSiteData();
+  const { addLead, contactInfo, paymentConfig } = useSiteData();
   const [step, setStep] = useState(1); // 1: Select Plan & Details, 2: Payment Method, 3: Success Receipt
   const [paymentMethod, setPaymentMethod] = useState('upi'); // 'upi' | 'card'
   const [fullName, setFullName] = useState('');
@@ -26,7 +26,12 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
 
   if (!isOpen || !course) return null;
 
-  const finalPrice = 9;
+  const finalPrice = paymentConfig?.enrollmentPrice !== undefined ? paymentConfig.enrollmentPrice : 9;
+  const discountBadge = paymentConfig?.discountBadge || '99% OFF SPECIAL';
+  const priceLabel = paymentConfig?.priceLabel || 'Full Course Access + Mentorship';
+  const enrollmentLabel = paymentConfig?.enrollmentLabel || 'INSTANT COHORT ENROLLMENT';
+  const paymentMethodsList = (paymentConfig?.paymentMethods || []).filter(m => m.enabled !== false);
+
 
   const handleProceedToPayment = (e) => {
     e.preventDefault();
@@ -168,16 +173,17 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
             <div style={{ background: '#f0fdf4', border: '1.5px solid #86efac', borderRadius: '12px', padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <div>
                 <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  INSTANT COHORT ENROLLMENT
+                  {enrollmentLabel}
                 </span>
                 <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#000648', lineHeight: 1.1 }}>
-                  ₹{finalPrice.toLocaleString('en-IN')} <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>(Full Course Access + Mentorship)</span>
+                  ₹{finalPrice.toLocaleString('en-IN')} <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>({priceLabel})</span>
                 </div>
               </div>
               <span style={{ background: '#000648', color: '#f2b733', fontSize: '0.72rem', fontWeight: 900, padding: '4px 10px', borderRadius: '50px' }}>
-                99% OFF SPECIAL
+                {discountBadge}
               </span>
             </div>
+
 
             <div>
               <label htmlFor="student_full_name" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>

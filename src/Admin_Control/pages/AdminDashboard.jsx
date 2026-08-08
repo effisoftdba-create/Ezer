@@ -6,6 +6,7 @@ import { useSiteData } from '../context/SiteContext';
 import HeroManager from '../components/HeroManager';
 import HiringPartnersManager from '../components/HiringPartnersManager';
 import CourseManager from '../components/CourseManager';
+import CoursePaymentManager from '../components/CoursePaymentManager';
 import PlatformManager from '../components/PlatformManager';
 import SupportCardsManager from '../components/SupportCardsManager';
 import GraduateOutcomesManager from '../components/GraduateOutcomesManager';
@@ -24,6 +25,7 @@ import UIStateDisplay, { STATE_TYPES } from '../../components/UIStateDisplay';
 import {
   HiOutlinePhotograph,
   HiOutlineAcademicCap,
+  HiOutlineCurrencyRupee,
   HiOutlineSparkles,
   HiOutlineBadgeCheck,
   HiOutlineUserGroup,
@@ -37,6 +39,7 @@ import {
   HiOutlineNewspaper,
   HiOutlineOfficeBuilding
 } from 'react-icons/hi';
+
 
 
 export default function AdminDashboard() {
@@ -112,6 +115,7 @@ export default function AdminDashboard() {
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: (heroSlides || []).length },
     { id: 'partners', label: 'Hiring Partners & Logos', icon: HiOutlineOfficeBuilding, count: (hiringPartners || []).length },
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },
+    { id: 'payment', label: 'Course Fees & Payment Methods', icon: HiOutlineCurrencyRupee },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSparkles },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
     { id: 'executive', label: 'Executive Board (CEO / Leaders)', icon: HiOutlineUserGroup, count: (executiveLeaders || []).length },
@@ -147,6 +151,7 @@ export default function AdminDashboard() {
           {activeTab === 'hero' && <HeroManager />}
           {activeTab === 'partners' && <HiringPartnersManager />}
           {activeTab === 'courses' && <CourseManager />}
+          {activeTab === 'payment' && <CoursePaymentManager />}
           {activeTab === 'platform' && <PlatformManager />}
           {activeTab === 'support' && <SupportCardsManager />}
           {activeTab === 'executive' && <ExecutiveSection executiveLeaders={executiveLeaders} updateExecutiveLeader={updateExecutiveLeader} />}
@@ -163,4 +168,5 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
+
 }

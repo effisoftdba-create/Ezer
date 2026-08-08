@@ -134,54 +134,55 @@ export default function TestimonialFormModal({
             </div>
           </div>
 
-          {/* Star Rating & Avatar URL */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '14px' }}>
-            <div>
-              <label htmlFor="testi_avatar_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Alumni Avatar Picture URL
-              </label>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                {formData.avatar && (
-                  <img
-                    src={resolveImageSrc(formData.avatar)}
-                    alt="Avatar preview"
-                    style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #cbd5e1' }}
-                  />
-                )}
-                <input
-                  id="testi_avatar_field"
-                  type="text"
-                  placeholder="https://..."
-                  value={formData.avatar || ''}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, avatar: e.target.value }))}
-                  style={{ flex: 1, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                />
-                <button
-                  type="button"
-                  onClick={onOpenImagePicker}
-                  style={{ padding: '9px 12px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', whiteSpace: 'nowrap' }}
-                >
-                  <HiPhotograph size={15} /> Choose
-                </button>
-              </div>
-            </div>
+          {/* Star Rating */}
+          <div>
+            <label htmlFor="testi_rating_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              Star Rating *
+            </label>
+            <select
+              id="testi_rating_field"
+              value={formData.rating || 5}
+              onChange={(e) => setFormData((prev) => ({ ...prev, rating: Number(e.target.value) }))}
+              style={{ width: '100%', maxWidth: '220px', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 700, background: '#ffffff' }}
+            >
+              <option value={5}>⭐⭐⭐⭐⭐ 5 Stars</option>
+              <option value={4}>⭐⭐⭐⭐ 4 Stars</option>
+              <option value={3}>⭐⭐⭐ 3 Stars</option>
+            </select>
+          </div>
 
-            <div>
-              <label htmlFor="testi_rating_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Star Rating *
-              </label>
-              <select
-                id="testi_rating_field"
-                value={formData.rating || 5}
-                onChange={(e) => setFormData((prev) => ({ ...prev, rating: Number(e.target.value) }))}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 700, background: '#ffffff' }}
+          {/* Alumni Avatar Picture */}
+          <div>
+            <label htmlFor="testi_avatar_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              Alumni Avatar Picture URL (Rec. Square 1:1)
+            </label>
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              {formData.avatar && (
+                <img
+                  src={resolveImageSrc(formData.avatar)}
+                  alt="Avatar preview"
+                  style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #cbd5e1', flexShrink: 0 }}
+                />
+              )}
+              <input
+                id="testi_avatar_field"
+                type="text"
+                placeholder="https://..."
+                value={formData.avatar || ''}
+                onChange={(e) => setFormData((prev) => ({ ...prev, avatar: e.target.value }))}
+                style={{ flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+              />
+              <button
+                type="button"
+                onClick={onOpenImagePicker}
+                style={{ padding: '9px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0 }}
               >
-                <option value={5}>⭐⭐⭐⭐⭐ 5 Stars</option>
-                <option value={4}>⭐⭐⭐⭐ 4 Stars</option>
-                <option value={3}>⭐⭐⭐ 3 Stars</option>
-              </select>
+                <HiPhotograph size={15} /> Choose Image
+              </button>
             </div>
           </div>
+
+
 
           {/* Review Text / Quote */}
           <div>

@@ -24,6 +24,8 @@ import {
   STORAGE_ACHIEVEMENTS_KEY,
   STORAGE_EXECUTIVE_LEADERS_KEY,
   STORAGE_HIRING_PARTNERS_KEY,
+  STORAGE_PAYMENT_CONFIG_KEY,
+  defaultPaymentConfig,
 
   defaultExecutiveLeaders,
   defaultHiringPartners,
@@ -89,7 +91,8 @@ export function SiteProvider({ children }) {
     blogs,
     achievements,
     executiveLeaders,
-    hiringPartners
+    hiringPartners,
+    paymentConfig
   } = state;
 
   // Check for mobile sync token in URL
@@ -142,6 +145,7 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_ACHIEVEMENTS_KEY, achievements); }, [achievements]);
   useEffect(() => { safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, executiveLeaders); }, [executiveLeaders]);
   useEffect(() => { safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, hiringPartners); }, [hiringPartners]);
+  useEffect(() => { safeSetStorage(STORAGE_PAYMENT_CONFIG_KEY, paymentConfig); }, [paymentConfig]);
 
 
   // Firebase Real-time Firestore & Realtime DB Subscriptions with Merged Defaults Protection
@@ -566,6 +570,13 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, []);
 
+  const updatePaymentConfig = useCallback((config) => {
+    const payload = { id: 'main', ...config };
+    dispatch({ type: 'SET_KEY', key: 'paymentConfig', value: payload });
+    saveDocument('paymentConfig', 'main', payload);
+    triggerStateToast('SAVED');
+  }, []);
+
   const addLead = useCallback((leadData) => {
     const newLead = { id: String(Date.now()), ...leadData, date: new Date().toLocaleString() };
     const updated = [newLead, ...(leads || [])];
@@ -683,6 +694,7 @@ export function SiteProvider({ children }) {
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
+    paymentConfig, updatePaymentConfig,
     resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
@@ -705,6 +717,7 @@ export function SiteProvider({ children }) {
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
+    paymentConfig, updatePaymentConfig,
     resetAllToDefaults
   ]);
 

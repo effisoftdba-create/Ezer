@@ -22,6 +22,22 @@ export const STORAGE_BLOGS_KEY = 'ezer_blogs:v12_mobile_cache_purge_v2';
 export const STORAGE_ACHIEVEMENTS_KEY = 'ezer_achievements:v12_mobile_cache_purge_v2';
 export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v12_mobile_cache_purge_v2';
 export const STORAGE_HIRING_PARTNERS_KEY = 'ezer_hiring_partners:v12_mobile_cache_purge_v2';
+export const STORAGE_PAYMENT_CONFIG_KEY = 'ezer_payment_config:v12_mobile_cache_purge_v2';
+
+export const defaultPaymentConfig = {
+  enrollmentPrice: 9,
+  originalPrice: 49999,
+  discountBadge: '99% OFF SPECIAL',
+  priceLabel: 'Full Course Access + Mentorship',
+  enrollmentLabel: 'INSTANT COHORT ENROLLMENT',
+  paymentMethods: [
+    { id: 'upi', label: 'UPI / GooglePay / PhonePe / Paytm', subtitle: 'Instant QR Code Scan & Pay', enabled: true },
+    { id: 'card', label: 'Credit Card / Debit Card', subtitle: 'Visa, MasterCard, RuPay, Amex', enabled: true }
+  ],
+  payButtonLabel: 'Pay & Unlock Course',
+  successMessage: 'Welcome to EZER Learning Solutions!',
+  successSubtext: 'Your seat has been locked successfully.'
+};
 
 export const defaultHiringPartners = [
   { id: 'partner-1', name: 'TCS Tata', image: '<svg viewBox="0 0 190 50" style="height:28px"><path d="M10 12 L45 12 M27.5 12 L27.5 40" stroke="#000648" stroke-width="6" stroke-linecap="square"/><text x="50" y="38" font-family="sans-serif" font-size="30" font-weight="900" fill="#000648" letter-spacing="-0.5px">TCS</text><rect x="115" y="16" width="3" height="24" fill="#f2b733"/><text x="126" y="36" font-family="sans-serif" font-size="16" font-weight="900" fill="#000648" letter-spacing="1px">TATA</text></svg>', row: 'Row 1', status: 'Active', imagePosition: 'center center', imageFit: 'contain' },
@@ -462,7 +478,8 @@ export function getInitialState() {
     blogs: getStored(STORAGE_BLOGS_KEY, defaultBlogs) || defaultBlogs,
     achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements) || defaultAchievements,
     executiveLeaders: safeExec,
-    hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners
+    hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners,
+    paymentConfig: getStored(STORAGE_PAYMENT_CONFIG_KEY, defaultPaymentConfig) || defaultPaymentConfig
   };
 
 }
