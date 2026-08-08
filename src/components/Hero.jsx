@@ -71,6 +71,8 @@ export default function Hero({ onOpenDemoModal }) {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.4 }}
+                  className="hero-animated-text-container"
+                  style={{ minHeight: '270px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
                 >
                   <div
                     style={{
@@ -249,6 +251,9 @@ export default function Hero({ onOpenDemoModal }) {
 
         <style>{`
           @media (max-width: 900px) {
+            .hero-animated-text-container {
+              min-height: 295px !important;
+            }
             .hero-split-container {
               grid-template-columns: 1fr !important;
               display: flex !important;
@@ -273,6 +278,7 @@ export default function Hero({ onOpenDemoModal }) {
             }
           }
         `}</style>
+
       </section>
     </LazyMotion>
   );

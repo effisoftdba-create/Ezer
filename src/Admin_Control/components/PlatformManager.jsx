@@ -14,7 +14,8 @@ export default function PlatformManager() {
     image: safeDef.image || 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=700&h=800',
     acronymText: safeDef.acronymText || '',
     imageFit: safeDef.imageFit || 'cover',
-    imagePosition: safeDef.imagePosition || 'center center'
+    imagePosition: safeDef.imagePosition || 'center center',
+    imageZoom: safeDef.imageZoom || 1
   });
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -57,30 +58,37 @@ export default function PlatformManager() {
         padding: '24px', boxShadow: '0 4px 14px rgba(0,0,0,0.02)'
       }}>
         {/* Main Section Showcase Preview Matching Live Website Graphic */}
-        <div style={{ marginBottom: '24px', display: 'grid', gridTemplateColumns: '260px 1fr', gap: '24px', alignItems: 'center' }}>
+        <div style={{ marginBottom: '24px', display: 'grid', gridTemplateColumns: '280px 1fr', gap: '24px', alignItems: 'center' }}>
           <div>
             <span style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-              Live Section Portrait Photo Preview (4:5 Ratio)
+              Live Section Photo Preview (4:3 Aspect Ratio)
             </span>
             
-            {/* Live Showcase Single Photo Preview matching EzerDefinition.jsx vertical portrait card */}
+            {/* Live Showcase Single Photo Preview matching EzerDefinition.jsx card */}
             <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '16px 12px', background: '#050b1c', borderRadius: '16px', border: '1.5px solid #cbd5e1' }}>
               <div 
                 style={{
-                  position: 'relative', zIndex: 2, width: '100%', maxWidth: '200px',
-                  aspectRatio: '4 / 5', height: '250px',
+                  position: 'relative', zIndex: 2, width: '100%', maxWidth: '240px',
+                  aspectRatio: '4 / 3', height: '180px',
                   borderRadius: '16px', overflow: 'hidden', border: '2.5px solid #000648',
-                  boxShadow: '0 12px 28px rgba(0,0,0,0.3)', background: '#ffffff'
+                  boxShadow: '0 12px 28px rgba(0,0,0,0.3)', background: '#000648'
                 }}
               >
                 <img 
                   src={resolveImageSrc(formData.image)} 
                   alt={formData.headline} 
-                  style={{ width: '100%', height: '100%', objectFit: formData.imageFit || 'cover', objectPosition: formData.imagePosition || 'center center', display: 'block' }} 
+                  style={{
+                    width: '100%', height: '100%',
+                    objectFit: formData.imageFit || 'cover',
+                    objectPosition: formData.imagePosition || 'center center',
+                    transform: formData.imageZoom ? `scale(${formData.imageZoom})` : 'none',
+                    transformOrigin: formData.imagePosition || 'center center',
+                    display: 'block'
+                  }} 
                 />
               </div>
               <span style={{ position: 'relative', zIndex: 3, fontSize: '0.72rem', color: '#f2b733', fontWeight: 800, textAlign: 'center', marginTop: '10px' }}>
-                Live Section Portrait Photo Preview
+                Live Section Preview (4:3 Ratio)
               </span>
             </div>
           </div>
@@ -112,7 +120,7 @@ export default function PlatformManager() {
               </button>
             </div>
             <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0, lineHeight: 1.4 }}>
-              Click <strong>Choose Photo</strong> to select or crop your picture with vertical portrait (4:5 ratio) matching the live website display.
+              Click <strong>Choose Photo</strong> to select, zoom, or align your picture matching the live website display.
             </p>
           </div>
         </div>
@@ -200,11 +208,17 @@ export default function PlatformManager() {
         currentImage={formData.image}
         currentPosition={formData.imagePosition}
         currentFit={formData.imageFit}
-        onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, imagePosition: pos || 'center center', imageFit: fit || 'cover' }))}
-
+        currentZoom={formData.imageZoom || 1}
+        onSelectImage={(url, pos, fit, zoom) => setFormData((prev) => ({
+          ...prev,
+          image: url,
+          imagePosition: pos || 'center center',
+          imageFit: fit || 'cover',
+          imageZoom: zoom || prev.imageZoom || 1
+        }))}
         targetArea="Platform Showcase Main Photo"
-        aspectRatio="Portrait / Vertical (4:5)"
-        recommendedDimensions="600 x 750 px"
+        aspectRatio="Standard (4:3)"
+        recommendedDimensions="800 x 600 px"
       />
     </div>
   );

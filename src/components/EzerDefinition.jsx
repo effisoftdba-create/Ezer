@@ -137,11 +137,12 @@ export default function EzerDefinition() {
                   zIndex: 2,
                   width: '100%',
                   maxWidth: '460px',
+                  aspectRatio: '4 / 3',
                   borderRadius: '20px',
                   overflow: 'hidden',
                   boxShadow: '0 20px 40px rgba(0, 6, 72, 0.18)',
                   border: '2px solid #000648',
-                  background: '#ffffff'
+                  background: '#000648'
                 }}
               >
                 <img 
@@ -149,14 +150,16 @@ export default function EzerDefinition() {
                   alt={ezerDefinition.headline}
                   style={{
                     width: '100%',
-                    height: 'auto',
-                    minHeight: '340px',
+                    height: '100%',
                     objectFit: ezerDefinition.imageFit || 'cover',
                     objectPosition: ezerDefinition.imagePosition || 'center center',
+                    transform: ezerDefinition.imageZoom ? `scale(${ezerDefinition.imageZoom})` : 'none',
+                    transformOrigin: ezerDefinition.imagePosition || 'center center',
                     display: 'block'
                   }}
                 />
               </div>
+
 
               {/* Floating Language Badges */}
               <div 
