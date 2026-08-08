@@ -24,7 +24,7 @@ import {
   siteReducer,
   safeSetStorage
 } from './siteDefaults';
-import { subscribeToCollection, saveCollectionArray } from '../../services/firebaseService';
+import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../../services/firebaseService';
 
 
 const SiteContext = createContext();
@@ -116,14 +116,22 @@ export function SiteProvider({ children }) {
     const unsubBlogs = subscribeToCollection('blogs', (items) => {
       if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'blogs', value: items });
     });
+    const unsubDef = subscribeToCollection('ezerDefinition', (items) => {
+      if (items && items.length > 0) {
+        const mainDef = items.find((i) => i.id === 'main') || items[0];
+        if (mainDef) dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: mainDef });
+      }
+    });
 
     return () => {
       unsubCourses();
       unsubHero();
       unsubLeads();
       unsubBlogs();
+      unsubDef();
     };
   }, []);
+
 
   // Sync state changes to Firebase Firestore on active modifications
 
@@ -220,9 +228,12 @@ export function SiteProvider({ children }) {
   }, [courses]);
 
   const updateEzerDefinition = useCallback((def) => {
-    dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: def });
+    const payload = { id: 'main', ...def };
+    dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: payload });
+    saveDocument('ezerDefinition', 'main', payload);
     triggerStateToast('SAVED');
   }, []);
+
 
   const updateSupportCards = useCallback((cards) => {
     dispatch({ type: 'SET_KEY', key: 'supportCards', value: cards });
