@@ -302,7 +302,7 @@ export default function HiringPartnersManager() {
 
                 <div
                   style={{
-                    height: '52px',
+                    height: '48px',
                     width: '100%',
                     background: '#ffffff',
                     borderRadius: '12px',
@@ -313,11 +313,12 @@ export default function HiringPartnersManager() {
                     justifyContent: 'center',
                     padding: '6px 14px',
                     marginBottom: '10px',
-                    overflow: 'hidden'
+                    overflow: 'hidden',
+                    boxSizing: 'border-box'
                   }}
                 >
                   {renderSvg ? (
-                    <div dangerouslySetInnerHTML={{ __html: renderSvg }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+                    <div dangerouslySetInnerHTML={{ __html: renderSvg }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '140px', maxHeight: '28px', overflow: 'hidden' }} />
                   ) : isFailed || !partner.image ? (
                     <div style={{ fontWeight: 900, color: '#000648', fontSize: '0.95rem', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span style={{ color: '#115DFC', fontSize: '1.1rem' }}>●</span> {partner.name}
@@ -328,18 +329,21 @@ export default function HiringPartnersManager() {
                       alt={partner.name}
                       onError={() => handleImageError(partner.id)}
                       style={{
-                        maxHeight: '32px',
-                        maxWidth: '100%',
+                        maxHeight: '28px',
+                        maxWidth: '140px',
+                        width: 'auto',
+                        height: 'auto',
                         objectFit: partner.imageFit || 'contain',
                         objectPosition: partner.imagePosition || 'center center',
                         transform: partner.imageZoom ? `scale(${partner.imageZoom})` : 'none',
                         transformOrigin: partner.imagePosition || 'center center',
-                        mixBlendMode: 'multiply'
+                        mixBlendMode: 'multiply',
+                        display: 'block'
                       }}
                     />
-
                   )}
                 </div>
+
 
                 <div style={{ fontWeight: 800, fontSize: '0.9rem', color: '#000648' }}>
                   {partner.name}

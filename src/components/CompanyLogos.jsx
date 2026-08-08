@@ -222,8 +222,11 @@ function LogoCard({ logo }) {
     <m.div
       whileHover={{ scale: 1.06, borderColor: '#000648', boxShadow: '0 6px 18px rgba(0,6,72,0.12)' }}
       style={{
+        width: '180px',
+        minWidth: '180px',
+        maxWidth: '180px',
         height: '48px',
-        padding: '6px 18px',
+        padding: '6px 14px',
         background: '#ffffff',
         borderRadius: '12px',
         border: '1.5px solid #e2e8f0',
@@ -232,6 +235,8 @@ function LogoCard({ logo }) {
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
+        overflow: 'hidden',
+        boxSizing: 'border-box',
         cursor: 'pointer',
         transition: 'border-color 0.2s ease, box-shadow 0.2s ease'
       }}
@@ -239,26 +244,29 @@ function LogoCard({ logo }) {
       {logo.icon ? (
         logo.icon
       ) : renderSvg ? (
-        <div dangerouslySetInnerHTML={{ __html: renderSvg }} style={{ display: 'flex', alignItems: 'center' }} />
+        <div dangerouslySetInnerHTML={{ __html: renderSvg }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '148px', maxHeight: '28px', overflow: 'hidden' }} />
       ) : (
         <img
           src={resolveImageSrc(logo.image)}
           alt={logo.name || 'Hiring Partner'}
           onError={() => setImgError(true)}
           style={{
-            maxHeight: '30px',
-            maxWidth: '130px',
+            maxHeight: '28px',
+            maxWidth: '140px',
+            width: 'auto',
+            height: 'auto',
             objectFit: logo.imageFit || 'contain',
             objectPosition: logo.imagePosition || 'center center',
             transform: logo.imageZoom ? `scale(${logo.imageZoom})` : 'none',
             transformOrigin: logo.imagePosition || 'center center',
-            mixBlendMode: 'multiply'
+            mixBlendMode: 'multiply',
+            display: 'block'
           }}
         />
-
       )}
     </m.div>
   );
+
 }
 
 

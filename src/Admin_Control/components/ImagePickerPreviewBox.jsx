@@ -153,8 +153,12 @@ export default function ImagePickerPreviewBox({
                 src={activeSrc}
                 alt="Desktop preview"
                 style={{
-                  width: '100%',
-                  height: '100%',
+                  maxWidth: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '80%' : '100%',
+                  maxHeight: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '65%' : '100%',
+                  margin: 'auto',
+                  display: 'block',
+                  position: 'absolute',
+                  top: 0, left: 0, right: 0, bottom: 0,
                   objectFit: fitMode,
                   objectPosition: computedPosStr,
                   transform: `scale(${zoomScale})`,
@@ -164,6 +168,7 @@ export default function ImagePickerPreviewBox({
                   transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                 }}
               />
+
 
 
               {/* Rule of Thirds Grid Overlay */}
