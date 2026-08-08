@@ -16,27 +16,47 @@ export default function ImagePickerPreviewBox({
   previewDims,
   activeSelectedUrl,
   fitMode,
-  dragOffset,
-  zoomScale,
+  dragOffset = { x: 0, y: 0 },
+  zoomScale = 1,
+  mobileDragOffset = { x: 0, y: 0 },
+  mobileZoom = 1,
+  activeTarget = 'desktop',
+  setActiveTarget,
   isDragging,
   handleMouseDown
 }) {
-  const [devicePreviewMode, setDevicePreviewMode] = useState('desktop');
+  const [devicePreviewMode, setDevicePreviewMode] = useState('dual');
   const [showGridLines, setShowGridLines] = useState(true);
 
   const activeSrc = resolveImageSrc(activeSelectedUrl);
-  const posX = Math.min(100, Math.max(0, 50 + dragOffset.x));
-  const posY = Math.min(100, Math.max(0, 50 + dragOffset.y));
-  const computedPosStr = `${posX}% ${posY}%`;
 
-  const onMouseDownHandler = (e) => {
+  const desktopPosX = Math.min(100, Math.max(0, 50 + dragOffset.x));
+  const desktopPosY = Math.min(100, Math.max(0, 50 + dragOffset.y));
+  const desktopPosStr = `${desktopPosX}% ${desktopPosY}%`;
+
+  const mobPosX = Math.min(100, Math.max(0, 50 + mobileDragOffset.x));
+  const mobPosY = Math.min(100, Math.max(0, 50 + mobileDragOffset.y));
+  const mobilePosStr = `${mobPosX}% ${mobPosY}%`;
+
+  const onMouseDownDesktop = (e) => {
     e.preventDefault();
-    if (typeof handleMouseDown === 'function') handleMouseDown(e.clientX, e.clientY);
+    if (typeof handleMouseDown === 'function') handleMouseDown(e.clientX, e.clientY, 'desktop');
   };
 
-  const onTouchStartHandler = (e) => {
+  const onTouchStartDesktop = (e) => {
     if (e.touches && e.touches[0]) {
-      if (typeof handleMouseDown === 'function') handleMouseDown(e.touches[0].clientX, e.touches[0].clientY);
+      if (typeof handleMouseDown === 'function') handleMouseDown(e.touches[0].clientX, e.touches[0].clientY, 'desktop');
+    }
+  };
+
+  const onMouseDownMobile = (e) => {
+    e.preventDefault();
+    if (typeof handleMouseDown === 'function') handleMouseDown(e.clientX, e.clientY, 'mobile');
+  };
+
+  const onTouchStartMobile = (e) => {
+    if (e.touches && e.touches[0]) {
+      if (typeof handleMouseDown === 'function') handleMouseDown(e.touches[0].clientX, e.touches[0].clientY, 'mobile');
     }
   };
 
@@ -48,7 +68,6 @@ export default function ImagePickerPreviewBox({
           <span style={{ fontSize: '0.75rem', fontWeight: 900, color: '#000648', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '6px' }}>
             Device Screen Adjustment & Live Preview
           </span>
-
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
@@ -121,21 +140,30 @@ export default function ImagePickerPreviewBox({
         
         {/* DESKTOP VIEW CONTAINER */}
         {(devicePreviewMode === 'desktop' || devicePreviewMode === 'dual') && (
-          <div style={{ background: '#ffffff', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '14px' }}>
+          <div 
+            onClick={() => setActiveTarget && setActiveTarget('desktop')}
+            style={{ 
+              background: '#ffffff', 
+              border: activeTarget === 'desktop' ? '2px solid #000648' : '1.5px solid #cbd5e1', 
+              borderRadius: '12px', 
+              padding: '14px',
+              boxShadow: activeTarget === 'desktop' ? '0 4px 14px rgba(0,6,72,0.1)' : 'none'
+            }}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <HiDesktopComputer color="#115DFC" size={16} /> Desktop View ({previewDims.ratio})
               </span>
               <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#166534', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                <HiSelector size={12} /> Drag image to adjust focus
+                <HiSelector size={12} /> Drag image to adjust PC focus
               </span>
             </div>
 
             <div
               role="region"
               aria-label="Desktop screen preview - drag image to adjust position"
-              onMouseDown={onMouseDownHandler}
-              onTouchStart={onTouchStartHandler}
+              onMouseDown={onMouseDownDesktop}
+              onTouchStart={onTouchStartDesktop}
               style={{
                 aspectRatio: previewDims.ratio,
                 maxHeight: '260px',
@@ -145,7 +173,7 @@ export default function ImagePickerPreviewBox({
                 background: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '#ffffff' : '#000648',
                 boxShadow: '0 4px 14px rgba(17,93,252,0.2)',
                 position: 'relative',
-                cursor: isDragging ? 'grabbing' : 'grab',
+                cursor: (isDragging && activeTarget === 'desktop') ? 'grabbing' : 'grab',
                 userSelect: 'none',
                 touchAction: 'none'
               }}
@@ -161,16 +189,13 @@ export default function ImagePickerPreviewBox({
                   position: 'absolute',
                   top: 0, left: 0, right: 0, bottom: 0,
                   objectFit: fitMode,
-                  objectPosition: computedPosStr,
+                  objectPosition: desktopPosStr,
                   transform: `scale(${zoomScale})`,
-                  transformOrigin: computedPosStr,
+                  transformOrigin: desktopPosStr,
                   pointerEvents: 'none',
                   transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                 }}
               />
-
-
-
 
               {/* Rule of Thirds Grid Overlay */}
               {showGridLines && (
@@ -181,13 +206,12 @@ export default function ImagePickerPreviewBox({
                 </div>
               )}
 
-
               <div style={{
                 position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,6,72,0.85)',
                 color: '#f2b733', fontSize: '0.65rem', padding: '3px 8px', borderRadius: '4px',
                 pointerEvents: 'none', fontWeight: 700, border: '1px solid rgba(242,183,51,0.4)'
               }}>
-                Pos: {computedPosStr} | Zoom: {Math.round(zoomScale * 100)}%
+                PC Pos: {desktopPosStr} | Zoom: {Math.round(zoomScale * 100)}%
               </div>
             </div>
           </div>
@@ -195,13 +219,25 @@ export default function ImagePickerPreviewBox({
 
         {/* MOBILE PHONE FRAME SCREEN MOCKUP */}
         {(devicePreviewMode === 'mobile' || devicePreviewMode === 'dual') && (
-          <div style={{ background: '#ffffff', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '14px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <div 
+            onClick={() => setActiveTarget && setActiveTarget('mobile')}
+            style={{ 
+              background: '#ffffff', 
+              border: activeTarget === 'mobile' ? '2px solid #000648' : '1.5px solid #cbd5e1', 
+              borderRadius: '12px', 
+              padding: '14px', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center',
+              boxShadow: activeTarget === 'mobile' ? '0 4px 14px rgba(0,6,72,0.1)' : 'none'
+            }}
+          >
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <HiDeviceMobile color="#115DFC" size={16} /> Mobile Phone Screen (iPhone/Android 9:16)
+                <HiDeviceMobile color="#115DFC" size={16} /> Mobile Phone Screen (9:16)
               </span>
               <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#115DFC', background: '#e0e7ff', padding: '1px 6px', borderRadius: '4px' }}>
-                Live Phone Alignment
+                Separate Mobile Zoom
               </span>
             </div>
 
@@ -209,7 +245,7 @@ export default function ImagePickerPreviewBox({
             <div
               style={{
                 width: '190px',
-                height: '280px',
+                height: '260px',
                 background: '#0f172a',
                 borderRadius: '24px',
                 padding: '10px 8px 12px',
@@ -230,8 +266,8 @@ export default function ImagePickerPreviewBox({
               <div
                 role="region"
                 aria-label="Mobile screen preview - drag image to adjust position"
-                onMouseDown={onMouseDownHandler}
-                onTouchStart={onTouchStartHandler}
+                onMouseDown={onMouseDownMobile}
+                onTouchStart={onTouchStartMobile}
                 style={{
                   width: '100%',
                   flex: 1,
@@ -240,7 +276,7 @@ export default function ImagePickerPreviewBox({
                   overflow: 'hidden',
                   position: 'relative',
                   border: '1.5px solid #115DFC',
-                  cursor: isDragging ? 'grabbing' : 'grab',
+                  cursor: (isDragging && activeTarget === 'mobile') ? 'grabbing' : 'grab',
                   userSelect: 'none',
                   touchAction: 'none'
                 }}
@@ -252,15 +288,15 @@ export default function ImagePickerPreviewBox({
                     width: '100%',
                     height: '100%',
                     objectFit: fitMode,
-                    objectPosition: computedPosStr,
-                    transform: `scale(${zoomScale})`,
-                    transformOrigin: computedPosStr,
+                    objectPosition: mobilePosStr,
+                    transform: `scale(${mobileZoom})`,
+                    transformOrigin: mobilePosStr,
                     pointerEvents: 'none',
                     transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                   }}
                 />
 
-                {/* Simulated Overlay Badge Pill as seen on Live Site */}
+                {/* Simulated Overlay Badge Pill */}
                 <div
                   style={{
                     position: 'absolute',
@@ -294,8 +330,8 @@ export default function ImagePickerPreviewBox({
                 )}
               </div>
 
-              <div style={{ fontSize: '0.62rem', color: '#94a3b8', marginTop: '6px', fontWeight: 700 }}>
-                Mobile Alignment OK
+              <div style={{ fontSize: '0.62rem', color: '#f2b733', marginTop: '6px', fontWeight: 800 }}>
+                Mobile Pos: {mobilePosStr} | {Math.round(mobileZoom * 100)}%
               </div>
             </div>
           </div>

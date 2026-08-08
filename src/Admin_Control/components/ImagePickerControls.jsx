@@ -1,16 +1,10 @@
 import React from 'react';
-import { HiZoomIn, HiZoomOut, HiAdjustments, HiCheck } from 'react-icons/hi';
-
-const ASPECT_RATIO_PRESETS = [
-  { label: 'Rectangle (16:9)', value: 'Rectangle (16:9)' },
-  { label: 'Standard (4:3)', value: 'Standard (4:3)' },
-  { label: 'Square (1:1)', value: 'Square (1:1)' },
-  { label: 'Portrait (3:4) 📱', value: 'Portrait / Vertical (3:4)' },
-  { label: 'Tall Mobile (9:16)', value: 'Mobile Vertical (9:16)' }
-];
+import { HiZoomIn, HiZoomOut, HiAdjustments, HiCheck, HiDesktopComputer, HiDeviceMobile } from 'react-icons/hi';
 
 export default function ImagePickerControls({
   POSITION_PRESETS,
+  activeTarget = 'desktop',
+  setActiveTarget,
   dragOffset,
   setDragOffset,
   zoomScale,
@@ -18,23 +12,56 @@ export default function ImagePickerControls({
   fitMode,
   setFitMode,
   handlePresetPosition,
-  aspectRatio,
-  onSelectAspectRatio,
   onAutoRemoveBackground,
   onUndoBackground
 }) {
   return (
     <div style={{ background: '#f1f5f9', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '16px', marginBottom: '20px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', flexWrap: 'wrap', gap: '8px' }}>
-        <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <HiAdjustments color="#115DFC" size={18} /> Interactive Fit, Aspect Ratio & Position Controls
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <HiAdjustments color="#115DFC" size={18} /> Focus, Zoom & Position Controls
+          </span>
+
+          {/* PC vs Mobile Mode Selection Tab */}
+          {setActiveTarget && (
+            <div style={{ display: 'flex', background: '#cbd5e1', borderRadius: '6px', padding: '2px', gap: '2px' }}>
+              <button
+                type="button"
+                onClick={() => setActiveTarget('desktop')}
+                style={{
+                  padding: '3px 10px', borderRadius: '4px', border: 'none',
+                  background: activeTarget === 'desktop' ? '#000648' : 'transparent',
+                  color: activeTarget === 'desktop' ? '#f2b733' : '#334155',
+                  fontWeight: 800, fontSize: '0.73rem', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: '4px'
+                }}
+              >
+                <HiDesktopComputer size={13} /> PC View
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTarget('mobile')}
+                style={{
+                  padding: '3px 10px', borderRadius: '4px', border: 'none',
+                  background: activeTarget === 'mobile' ? '#000648' : 'transparent',
+                  color: activeTarget === 'mobile' ? '#f2b733' : '#334155',
+                  fontWeight: 800, fontSize: '0.73rem', cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: '4px'
+                }}
+              >
+                <HiDeviceMobile size={13} /> Mobile View
+              </button>
+            </div>
+          )}
+        </div>
+
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
           {onAutoRemoveBackground && (
             <button
               type="button"
               onClick={onAutoRemoveBackground}
-              title="Automatically remove white/black/checkerboard background box"
+              title="Automatically remove white/black background box"
               style={{
                 padding: '4px 12px', background: 'linear-gradient(135deg, #115DFC, #7c3aed)',
                 color: '#ffffff', border: 'none', borderRadius: '6px',
@@ -45,13 +72,13 @@ export default function ImagePickerControls({
             >
               Auto-Remove Background
             </button>
-
           )}
+
           {onUndoBackground && (
             <button
               type="button"
               onClick={onUndoBackground}
-              title="Revert back to original image before background removal"
+              title="Revert back to original image"
               style={{
                 padding: '4px 12px', background: '#ffffff',
                 color: '#dc2626', border: '1.5px solid #fecaca', borderRadius: '6px',
@@ -62,47 +89,16 @@ export default function ImagePickerControls({
               ↺ Undo Cut & Restore
             </button>
           )}
+
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', background: '#e0e7ff', padding: '3px 10px', borderRadius: '6px' }}>
-            Zoom: {Math.round(zoomScale * 100)}%
+            {activeTarget === 'mobile' ? 'Mobile' : 'PC'} Zoom: {Math.round(zoomScale * 100)}%
           </span>
 
-
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#166534', background: '#dcfce7', padding: '3px 10px', borderRadius: '6px' }}>
-            Fit Mode: {fitMode === 'contain' ? 'Full Image (Contain)' : 'Cover (Fill)'}
+            Fit Mode: {fitMode === 'contain' ? 'Full (Contain)' : 'Cover (Fill)'}
           </span>
         </div>
       </div>
-
-
-      {/* ASPECT RATIO SELECTOR PRESETS BAR */}
-      {onSelectAspectRatio && (
-        <div style={{ marginBottom: '14px', background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '10px', padding: '10px' }}>
-          <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
-            Target Container Aspect Ratio (Choose height high vs width wide preview):
-          </div>
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-            {ASPECT_RATIO_PRESETS.map((ar) => {
-              const isSel = (aspectRatio || '').toLowerCase().includes(ar.value.toLowerCase().split(' ')[0]);
-              return (
-                <button
-                  key={ar.value}
-                  type="button"
-                  onClick={() => onSelectAspectRatio(ar.value)}
-                  style={{
-                    padding: '5px 12px', borderRadius: '6px',
-                    border: isSel ? '2px solid #115DFC' : '1px solid #cbd5e1',
-                    background: isSel ? '#000648' : '#f8fafc',
-                    color: isSel ? '#f2b733' : '#334155',
-                    fontWeight: isSel ? 800 : 600, fontSize: '0.75rem', cursor: 'pointer'
-                  }}
-                >
-                  {ar.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '16px', alignItems: 'start' }}>
         {/* Fit Mode Toggle & Presets */}
@@ -142,7 +138,7 @@ export default function ImagePickerControls({
           </div>
 
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '6px' }}>
-            2. Quick Alignment & Manual 4-Way Nudge Controls
+            2. Quick Alignment & Manual Nudge ({activeTarget === 'mobile' ? 'Mobile View' : 'PC Desktop View'})
           </div>
           <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
             {POSITION_PRESETS.map((p) => (
@@ -167,7 +163,7 @@ export default function ImagePickerControls({
           {setDragOffset && (
             <div style={{ background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
               <span style={{ fontSize: '0.725rem', fontWeight: 800, color: '#000648' }}>
-                Nudge Position:
+                Nudge ({activeTarget.toUpperCase()}):
               </span>
               <div style={{ display: 'flex', gap: '4px' }}>
                 <button
@@ -218,7 +214,7 @@ export default function ImagePickerControls({
         {/* Zoom & Direct Position Sliders */}
         <div>
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '6px' }}>
-            3. Zoom Level & Up/Down Position Sliders
+            3. {activeTarget === 'mobile' ? 'Mobile' : 'PC'} Zoom Level & Sliders
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
             <button

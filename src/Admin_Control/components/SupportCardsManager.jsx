@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
-import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck } from 'react-icons/hi';
+import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck, HiX } from 'react-icons/hi';
 import { resolveImageSrc } from '../../utils/imageUtils';
 
 const DEFAULT_CARD_STATE = {
@@ -110,130 +111,158 @@ export default function SupportCardsManager() {
         </button>
       </div>
 
-      {isEditing && (
-        <form onSubmit={handleSave} style={{
-          background: '#f8fafc', border: '2px solid #cbd5e1', borderRadius: '14px',
-          padding: '24px', marginBottom: '28px', boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
-        }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.1rem', fontWeight: 800, color: '#000648' }}>
-            {editingId ? 'Edit Support Feature Card' : 'Add New Support Feature Card'}
-          </h3>
-
-          {/* Dual Image Preview */}
-          <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '20px', alignItems: 'center', marginBottom: '16px' }}>
-            <div>
-              <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                Photo Preview
-              </span>
-              <div style={{ height: '80px', borderRadius: '10px', overflow: 'hidden', border: '2px solid #000648', background: '#000648' }}>
-                <img src={resolveImageSrc(formData.image)} alt={formData.title} style={{ width: '100%', height: '100%', objectFit: formData.fit || 'cover', objectPosition: formData.position || 'center center' }} />
+      {/* Editor Modal Portal */}
+      {isEditing && ReactDOM.createPortal(
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsEditing(false);
+          }}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'rgba(0, 6, 72, 0.82)', backdropFilter: 'blur(6px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '16px', animation: 'fadeIn 0.2s ease'
+          }}
+        >
+          <div
+            style={{
+              background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '580px',
+              boxShadow: '0 25px 50px -12px rgba(0, 6, 72, 0.4)', border: '1.5px solid #e2e8f0',
+              overflow: 'hidden', animation: 'modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              display: 'flex', flexDirection: 'column', maxHeight: '90vh'
+            }}
+          >
+            <div style={{ background: '#000648', padding: '16px 20px', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  SUPPORT CARD EDITOR
+                </span>
+                <h3 style={{ margin: '2px 0 0 0', fontSize: '1.15rem', fontWeight: 900, color: '#ffffff' }}>
+                  {editingId ? 'Edit Support Feature Card' : 'Add New Support Feature Card'}
+                </h3>
               </div>
+              <button
+                type="button"
+                onClick={() => setIsEditing(false)}
+                aria-label="Close modal button"
+                style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <HiX size={18} />
+              </button>
             </div>
 
-            <div>
-              <label htmlFor="support_card_image_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                Card Banner Photo Source / URL
-              </label>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <input
-                  id="support_card_image_input"
-                  type="text"
-                  value={formData.image}
-                  onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                  placeholder="Image path or URL"
-                  style={{ flex: 1, padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+            <form onSubmit={handleSave} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <label htmlFor="support_card_image_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  Card Banner Photo Source / URL
+                </label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  {formData.image && (
+                    <img
+                      src={resolveImageSrc(formData.image)}
+                      alt="Card preview"
+                      style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #cbd5e1', flexShrink: 0 }}
+                    />
+                  )}
+                  <input
+                    id="support_card_image_input"
+                    type="text"
+                    value={formData.image}
+                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                    placeholder="Image path or URL"
+                    style={{ flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setIsImagePickerOpen(true)}
+                    aria-label="Choose photo"
+                    style={{ padding: '9px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0 }}
+                  >
+                    <HiPhotograph size={15} /> Choose Photo
+                  </button>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+                <div>
+                  <label htmlFor="support_card_title" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                    Card Title *
+                  </label>
+                  <input
+                    id="support_card_title"
+                    type="text"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    placeholder="e.g. Pre-Employment Support"
+                    style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="support_card_subtitle" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                    Subtitle / Badge Text
+                  </label>
+                  <input
+                    id="support_card_subtitle"
+                    type="text"
+                    value={formData.subtitle}
+                    onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
+                    placeholder="e.g. Career Readiness Phase"
+                    style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="support_card_desc" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  Description Text *
+                </label>
+                <textarea
+                  id="support_card_desc"
+                  rows={2}
+                  value={formData.desc}
+                  onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
+                  placeholder="Detailed explanation..."
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
                   required
                 />
+              </div>
+
+              <div>
+                <label htmlFor="support_card_bullets" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  Bullet Highlights (One per line)
+                </label>
+                <textarea
+                  id="support_card_bullets"
+                  rows={3}
+                  value={formData.bullets}
+                  onChange={(e) => setFormData({ ...formData, bullets: e.target.value })}
+                  placeholder="Resume & LinkedIn profile optimization&#10;1-on-1 technical mock interviews&#10;GitHub portfolio & capstone review"
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>
                 <button
                   type="button"
-                  onClick={() => setIsImagePickerOpen(true)}
-                  aria-label="Choose photo"
-                  style={{ padding: '9px 14px', background: '#115DFC', color: '#fff', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
+                  onClick={() => setIsEditing(false)}
+                  style={{ padding: '9px 18px', background: '#f1f5f9', color: '#475569', border: '1px solid #cbd5e1', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}
                 >
-                  <HiPhotograph size={16} /> Choose
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  style={{ padding: '9px 22px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 900, fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 4px 12px rgba(0,6,72,0.2)' }}
+                >
+                  <HiCheck size={18} /> Save Support Card
                 </button>
               </div>
-            </div>
+            </form>
           </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-            <div>
-              <label htmlFor="support_card_title" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                Card Title *
-              </label>
-              <input
-                id="support_card_title"
-                type="text"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="e.g. Pre-Employment Support"
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="support_card_subtitle" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                Subtitle / Badge Text
-              </label>
-              <input
-                id="support_card_subtitle"
-                type="text"
-                value={formData.subtitle}
-                onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                placeholder="e.g. Career Readiness Phase"
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label htmlFor="support_card_desc" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Description Text
-            </label>
-            <textarea
-              id="support_card_desc"
-              rows={2}
-              value={formData.desc}
-              onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
-              placeholder="Detailed explanation..."
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              required
-            />
-          </div>
-
-          <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="support_card_bullets" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Bullet Highlights (One per line)
-            </label>
-            <textarea
-              id="support_card_bullets"
-              rows={3}
-              value={formData.bullets}
-              onChange={(e) => setFormData({ ...formData, bullets: e.target.value })}
-              placeholder="Resume & LinkedIn profile optimization&#10;1-on-1 technical mock interviews&#10;GitHub portfolio & capstone review"
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-            />
-          </div>
-
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-            <button
-              type="button"
-              onClick={() => setIsEditing(false)}
-              aria-label="Cancel editing"
-              style={{ padding: '9px 16px', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              aria-label="Save support card"
-              style={{ padding: '9px 20px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <HiCheck size={18} /> Save Card
-            </button>
-          </div>
-        </form>
+        </div>,
+        document.body
       )}
 
       {/* Cards List */}

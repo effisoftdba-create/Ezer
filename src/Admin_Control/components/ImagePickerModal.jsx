@@ -100,21 +100,24 @@ export default function ImagePickerModal({
   const [customUrl, setCustomUrl] = useState('');
   const [originalUncutUrl, setOriginalUncutUrl] = useState(currentImage || '');
   const [fitModeOverride, setFitModeOverride] = useState(null);
-  const [zoomScale, setZoomScale] = useState(currentZoom || 1);
-  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
+  // Independent PC (desktop) and Mobile alignment state
+  const [activeTarget, setActiveTarget] = useState('desktop'); // 'desktop' or 'mobile'
+  const [desktopZoom, setDesktopZoom] = useState(currentZoom || 1);
+  const [desktopDragOffset, setDesktopDragOffset] = useState({ x: 0, y: 0 });
+  const [mobileZoom, setMobileZoom] = useState(currentZoom || 1);
+  const [mobileDragOffset, setMobileDragOffset] = useState({ x: 0, y: 0 });
+
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
-  const [aspectRatioOverride, setAspectRatioOverride] = useState(null);
   const dragStartRef = useRef({ x: 0, y: 0 });
-  const presetPosRef = useRef(currentPosition || '50% 50%');
 
   useEffect(() => {
     if (isOpen && currentImage) {
       setOriginalUncutUrl(currentImage);
     }
   }, [isOpen, currentImage]);
-
 
   const [uploadedImages, setUploadedImages] = useState(() => {
     try {
@@ -133,40 +136,58 @@ export default function ImagePickerModal({
     } catch (e) {}
   }, [uploadedImages]);
 
-  // Parse initial position and zoom level on mount or when props change
+  // Parse initial position and zoom level on mount
   useEffect(() => {
     if (isOpen) {
-      if (currentZoom && currentZoom > 0) setZoomScale(parseFloat(currentZoom));
+      const initZoom = (currentZoom && currentZoom > 0) ? parseFloat(currentZoom) : 1;
+      setDesktopZoom(initZoom);
+      setMobileZoom(initZoom);
+
       if (currentPosition) {
-        presetPosRef.current = currentPosition;
-        if (currentPosition.includes('top')) setDragOffset({ x: 0, y: -35 });
-        else if (currentPosition.includes('bottom')) setDragOffset({ x: 0, y: 35 });
-        else if (currentPosition.includes('left')) setDragOffset({ x: -35, y: 0 });
-        else if (currentPosition.includes('right')) setDragOffset({ x: 35, y: 0 });
+        let initialOffset = { x: 0, y: 0 };
+        if (currentPosition.includes('top')) initialOffset = { x: 0, y: -35 };
+        else if (currentPosition.includes('bottom')) initialOffset = { x: 0, y: 35 };
+        else if (currentPosition.includes('left')) initialOffset = { x: -35, y: 0 };
+        else if (currentPosition.includes('right')) initialOffset = { x: 35, y: 0 };
         else if (currentPosition.includes('%')) {
           const parts = currentPosition.split(' ');
           const xPct = parseFloat(parts[0]) || 50;
           const yPct = parseFloat(parts[1]) || 50;
-          setDragOffset({ x: Math.round(xPct - 50), y: Math.round(yPct - 50) });
+          initialOffset = { x: Math.round(xPct - 50), y: Math.round(yPct - 50) };
         }
+        setDesktopDragOffset(initialOffset);
+        setMobileDragOffset(initialOffset);
       }
     }
   }, [currentPosition, currentZoom, isOpen]);
 
-  // Smooth dragging across window
-  const handlePointerDown = (clientX, clientY) => {
+  // Dynamic active target getters and setters
+  const activeZoom = activeTarget === 'mobile' ? mobileZoom : desktopZoom;
+  const setActiveZoom = activeTarget === 'mobile' ? setMobileZoom : setDesktopZoom;
+  const activeOffset = activeTarget === 'mobile' ? mobileDragOffset : desktopDragOffset;
+  const setActiveOffset = activeTarget === 'mobile' ? setMobileDragOffset : setDesktopDragOffset;
+
+  // Pointer drag gesture handling with NATURAL direction physics
+  const handlePointerDown = (clientX, clientY, targetMode = 'desktop') => {
+    setActiveTarget(targetMode);
     setIsDragging(true);
-    dragStartRef.current = { x: clientX - (dragOffset.x * 2), y: clientY - (dragOffset.y * 2) };
+    const currOffset = targetMode === 'mobile' ? mobileDragOffset : desktopDragOffset;
+    // Store drag origin matching natural mouse movement direction
+    dragStartRef.current = { x: clientX - currOffset.x, y: clientY - currOffset.y };
   };
 
   const handlePointerMove = useCallback((clientX, clientY) => {
     if (!isDragging) return;
-    const deltaX = Math.round((clientX - dragStartRef.current.x) / 2);
-    const deltaY = Math.round((clientY - dragStartRef.current.y) / 2);
+    const deltaX = Math.round(clientX - dragStartRef.current.x);
+    const deltaY = Math.round(clientY - dragStartRef.current.y);
     const clampedX = Math.min(48, Math.max(-48, deltaX));
     const clampedY = Math.min(48, Math.max(-48, deltaY));
-    setDragOffset({ x: clampedX, y: clampedY });
-  }, [isDragging]);
+    if (activeTarget === 'mobile') {
+      setMobileDragOffset({ x: clampedX, y: clampedY });
+    } else {
+      setDesktopDragOffset({ x: clampedX, y: clampedY });
+    }
+  }, [isDragging, activeTarget]);
 
   useEffect(() => {
     if (!isDragging) return;
@@ -193,28 +214,39 @@ export default function ImagePickerModal({
 
   const selectedUrl = selectedUrlOverride !== null ? selectedUrlOverride : (currentImage || DEFAULT_PRESET_IMAGES[0].url);
   const fitMode = fitModeOverride !== null ? fitModeOverride : (currentFit || 'cover');
-  const activeRatio = aspectRatioOverride !== null ? aspectRatioOverride : (aspectRatio || 'Rectangle (16:9)');
   const activeSelectedUrl = customUrl.trim() || selectedUrl;
-  const previewDims = getPreviewDimensions(activeRatio);
+  const previewDims = getPreviewDimensions(aspectRatio);
 
   const combinedGalleryImages = [
     ...uploadedImages.map((img) => ({ label: img.label || 'Uploaded Image', url: img.url, isUploaded: true })),
     ...DEFAULT_PRESET_IMAGES
   ];
 
-  const posX = Math.min(100, Math.max(0, 50 + dragOffset.x));
-  const posY = Math.min(100, Math.max(0, 50 + dragOffset.y));
-  const computedPosStr = `${posX}% ${posY}%`;
+  const desktopPosX = Math.min(100, Math.max(0, 50 + desktopDragOffset.x));
+  const desktopPosY = Math.min(100, Math.max(0, 50 + desktopDragOffset.y));
+  const desktopPosStr = `${desktopPosX}% ${desktopPosY}%`;
+
+  const mobilePosX = Math.min(100, Math.max(0, 50 + mobileDragOffset.x));
+  const mobilePosY = Math.min(100, Math.max(0, 50 + mobileDragOffset.y));
+  const mobilePosStr = `${mobilePosX}% ${mobilePosY}%`;
 
   const handleConfirm = () => {
     if (activeSelectedUrl) {
-      if (typeof onSelectImage === 'function') onSelectImage(activeSelectedUrl, computedPosStr, fitMode, zoomScale);
-      if (typeof onSelectPosition === 'function') onSelectPosition(computedPosStr, fitMode, zoomScale);
+      if (typeof onSelectImage === 'function') {
+        onSelectImage(activeSelectedUrl, desktopPosStr, fitMode, desktopZoom, {
+          mobilePosition: mobilePosStr,
+          mobileZoom: mobileZoom
+        });
+      }
+      if (typeof onSelectPosition === 'function') {
+        onSelectPosition(desktopPosStr, fitMode, desktopZoom, {
+          mobilePosition: mobilePosStr,
+          mobileZoom: mobileZoom
+        });
+      }
       if (typeof onClose === 'function') onClose();
     }
   };
-
-
 
   const handleAutoRemoveBackground = async () => {
     if (!activeSelectedUrl) return;
@@ -282,8 +314,7 @@ export default function ImagePickerModal({
   };
 
   const handlePresetPosition = (preset) => {
-    presetPosRef.current = preset.value;
-    setDragOffset({ x: preset.x, y: preset.y });
+    setActiveOffset({ x: preset.x, y: preset.y });
   };
 
   const handleGallerySelect = (url) => {
@@ -291,7 +322,6 @@ export default function ImagePickerModal({
     setSelectedUrlOverride(url);
     setCustomUrl('');
   };
-
 
   const modalJSX = (
     <div style={{
@@ -313,14 +343,15 @@ export default function ImagePickerModal({
         background: '#ffffff',
         borderRadius: '20px',
         width: '100%',
-        maxWidth: '840px',
-        maxHeight: '90vh',
+        maxWidth: '860px',
+        maxHeight: '92vh',
         overflowY: 'auto',
         padding: '24px',
         boxShadow: '0 25px 60px rgba(0,6,72,0.5)',
         border: '2px solid #f2b733',
         margin: 0
       }}>
+        {/* HEADER BANNER */}
         <ImagePickerHeaderBanner
           targetArea={targetArea}
           aspectRatio={aspectRatio}
@@ -328,37 +359,7 @@ export default function ImagePickerModal({
           onClose={onClose}
         />
 
-        <ImagePickerPreviewBox
-          currentImage={currentImage}
-          currentFit={currentFit}
-          currentPosition={currentPosition}
-          previewDims={previewDims}
-          activeSelectedUrl={activeSelectedUrl}
-          fitMode={fitMode}
-          dragOffset={dragOffset}
-          zoomScale={zoomScale}
-          isDragging={isDragging}
-          handleMouseDown={handlePointerDown}
-        />
-
-        <ImagePickerControls
-          POSITION_PRESETS={POSITION_PRESETS}
-          dragOffset={dragOffset}
-          setDragOffset={setDragOffset}
-          zoomScale={zoomScale}
-          setZoomScale={setZoomScale}
-          fitMode={fitMode}
-          setFitMode={setFitModeOverride}
-          handlePresetPosition={handlePresetPosition}
-          aspectRatio={activeRatio}
-          onSelectAspectRatio={(val) => setAspectRatioOverride(val)}
-          onAutoRemoveBackground={handleAutoRemoveBackground}
-          onUndoBackground={originalUncutUrl && originalUncutUrl !== activeSelectedUrl ? handleUndoBackgroundCut : null}
-        />
-
-
-
-        {/* DRAG & DROP FILE UPLOAD ZONE */}
+        {/* TOP IMAGE CHOOSER / DRAG & DROP & URL INPUT (REORGANIZED TO TOP) */}
         <div 
           onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
           onDragLeave={(e) => { e.preventDefault(); setIsDragOver(false); }}
@@ -376,17 +377,15 @@ export default function ImagePickerModal({
             }
           }}
           style={{
-            marginBottom: '20px',
+            marginBottom: '16px',
             border: isDragOver ? '2.5px dashed #f2b733' : '2px dashed #cbd5e1',
             background: isDragOver ? 'rgba(242, 183, 51, 0.12)' : '#f8fafc',
             borderRadius: '12px',
-            padding: '16px',
-            textAlign: 'center',
-            transition: 'border-color 0.2s ease, background-color 0.2s ease',
-            cursor: 'pointer'
+            padding: '14px 16px',
+            transition: 'border-color 0.2s ease, background-color 0.2s ease'
           }}
         >
-          <label htmlFor="custom_image_url_picker" style={{ fontSize: '0.825rem', fontWeight: 700, color: '#000648', display: 'block', marginBottom: '8px' }}>
+          <label htmlFor="custom_image_url_picker" style={{ fontSize: '0.825rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '6px' }}>
             Option 1: Enter Custom Image URL or Drag & Drop Image File Here
           </label>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -395,10 +394,14 @@ export default function ImagePickerModal({
               type="text"
               placeholder="Paste image web URL..."
               value={customUrl}
-              onChange={(e) => setCustomUrl(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setCustomUrl(val);
+                setSelectedUrlOverride(val);
+              }}
               style={{
                 flex: 1,
-                minWidth: '220px',
+                minWidth: '240px',
                 padding: '10px 14px',
                 borderRadius: '8px',
                 border: '1.5px solid #cbd5e1',
@@ -433,16 +436,39 @@ export default function ImagePickerModal({
           </div>
         </div>
 
-        <ImagePickerGalleryGrid
-          combinedGalleryImages={combinedGalleryImages}
-          uploadedImages={uploadedImages}
-          selectedUrl={selectedUrl}
+        {/* IMAGE PREVIEW BOX (WITH SEPARATE PC & MOBILE DRAG/ZOOM HANDLERS) */}
+        <ImagePickerPreviewBox
+          currentImage={currentImage}
+          currentFit={currentFit}
+          currentPosition={currentPosition}
+          previewDims={previewDims}
           activeSelectedUrl={activeSelectedUrl}
-          handleGallerySelect={handleGallerySelect}
-          handleDeleteUploadedImage={handleDeleteUploadedImage}
-          aspectRatio={activeRatio}
+          fitMode={fitMode}
+          dragOffset={desktopDragOffset}
+          zoomScale={desktopZoom}
+          mobileDragOffset={mobileDragOffset}
+          mobileZoom={mobileZoom}
+          activeTarget={activeTarget}
+          setActiveTarget={setActiveTarget}
+          isDragging={isDragging}
+          handleMouseDown={handlePointerDown}
         />
 
+        {/* CONTROLS AREA */}
+        <ImagePickerControls
+          POSITION_PRESETS={POSITION_PRESETS}
+          activeTarget={activeTarget}
+          setActiveTarget={setActiveTarget}
+          dragOffset={activeOffset}
+          setDragOffset={setActiveOffset}
+          zoomScale={activeZoom}
+          setZoomScale={setActiveZoom}
+          fitMode={fitMode}
+          setFitMode={setFitModeOverride}
+          handlePresetPosition={handlePresetPosition}
+          onAutoRemoveBackground={handleAutoRemoveBackground}
+          onUndoBackground={originalUncutUrl && originalUncutUrl !== activeSelectedUrl ? handleUndoBackgroundCut : null}
+        />
 
         {/* BOTTOM ACTION BUTTON BAR */}
         <div style={{
@@ -450,8 +476,8 @@ export default function ImagePickerModal({
           justify: 'flex-end',
           gap: '12px',
           borderTop: '1.5px solid #cbd5e1',
-          paddingTop: '16px',
-          marginTop: '16px'
+          paddingTop: '14px',
+          marginBottom: '16px'
         }}>
           <button
             type="button"
@@ -486,6 +512,17 @@ export default function ImagePickerModal({
             Confirm Image & Alignments
           </button>
         </div>
+
+        {/* PRESET GALLERY GRID (SHOWN AT BOTTOM) */}
+        <ImagePickerGalleryGrid
+          combinedGalleryImages={combinedGalleryImages}
+          uploadedImages={uploadedImages}
+          selectedUrl={selectedUrl}
+          activeSelectedUrl={activeSelectedUrl}
+          handleGallerySelect={handleGallerySelect}
+          handleDeleteUploadedImage={handleDeleteUploadedImage}
+          aspectRatio={aspectRatio}
+        />
       </div>
     </div>
   );

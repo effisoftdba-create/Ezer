@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
-import { HiPlus, HiTrash, HiPencil, HiCheck, HiQuestionMarkCircle } from 'react-icons/hi';
+import { HiPlus, HiTrash, HiPencil, HiCheck, HiQuestionMarkCircle, HiX } from 'react-icons/hi';
 
 export default function FaqManager() {
   const { faqList, updateFaqList } = useSiteData();
@@ -114,63 +115,96 @@ export default function FaqManager() {
         ))}
       </div>
 
-      {isEditingItem && (
-        <form onSubmit={handleSaveItem} style={{
-          background: '#f8fafc', border: '2px solid #cbd5e1', borderRadius: '14px',
-          padding: '20px', marginBottom: '24px'
-        }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648' }}>
-            {editingItemIdx !== null ? 'Edit FAQ Item' : `Add New FAQ under "${currentCategory.category}"`}
-          </h3>
+      {/* Editor Modal Portal */}
+      {isEditingItem && ReactDOM.createPortal(
+        <div
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsEditingItem(false);
+          }}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 9999,
+            background: 'rgba(0, 6, 72, 0.82)', backdropFilter: 'blur(6px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            padding: '16px', animation: 'fadeIn 0.2s ease'
+          }}
+        >
+          <div
+            style={{
+              background: '#ffffff', borderRadius: '16px', width: '100%', maxWidth: '560px',
+              boxShadow: '0 25px 50px -12px rgba(0, 6, 72, 0.4)', border: '1.5px solid #e2e8f0',
+              overflow: 'hidden', animation: 'modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              display: 'flex', flexDirection: 'column', maxHeight: '90vh'
+            }}
+          >
+            <div style={{ background: '#000648', padding: '16px 20px', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  FAQ QUESTION EDITOR
+                </span>
+                <h3 style={{ margin: '2px 0 0 0', fontSize: '1.1rem', fontWeight: 900, color: '#ffffff' }}>
+                  {editingItemIdx !== null ? 'Edit FAQ Item' : `Add New FAQ under "${currentCategory.category}"`}
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsEditingItem(false)}
+                aria-label="Close modal button"
+                style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <HiX size={18} />
+              </button>
+            </div>
 
-          <div style={{ marginBottom: '16px' }}>
-            <label htmlFor="faq_question_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Question Title *
-            </label>
-            <input
-              id="faq_question_input"
-              type="text"
-              value={formData.q}
-              onChange={(e) => setFormData({ ...formData, q: e.target.value })}
-              placeholder="e.g. What is EZER Learning Solution's core difference?"
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              required
-            />
-          </div>
+            <form onSubmit={handleSaveItem} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div>
+                <label htmlFor="faq_question_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  Question Title *
+                </label>
+                <input
+                  id="faq_question_input"
+                  type="text"
+                  value={formData.q}
+                  onChange={(e) => setFormData({ ...formData, q: e.target.value })}
+                  placeholder="e.g. What is EZER Learning Solution's core difference?"
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                  required
+                />
+              </div>
 
-          <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="faq_answer_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Answer Description *
-            </label>
-            <textarea
-              id="faq_answer_input"
-              rows={3}
-              value={formData.a}
-              onChange={(e) => setFormData({ ...formData, a: e.target.value })}
-              placeholder="Detailed answer text..."
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
-              required
-            />
-          </div>
+              <div>
+                <label htmlFor="faq_answer_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  Answer Description *
+                </label>
+                <textarea
+                  id="faq_answer_input"
+                  rows={4}
+                  value={formData.a}
+                  onChange={(e) => setFormData({ ...formData, a: e.target.value })}
+                  placeholder="Detailed answer text..."
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                  required
+                />
+              </div>
 
-          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-            <button
-              type="button"
-              onClick={() => setIsEditingItem(false)}
-              aria-label="Cancel editing"
-              style={{ padding: '8px 14px', background: '#e2e8f0', color: '#475569', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer' }}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              aria-label="Save FAQ"
-              style={{ padding: '8px 18px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
-              <HiCheck size={18} /> Save FAQ
-            </button>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>
+                <button
+                  type="button"
+                  onClick={() => setIsEditingItem(false)}
+                  style={{ padding: '9px 18px', background: '#f1f5f9', color: '#475569', border: '1px solid #cbd5e1', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  style={{ padding: '9px 22px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 900, fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', boxShadow: '0 4px 12px rgba(0,6,72,0.2)' }}
+                >
+                  <HiCheck size={18} /> Save FAQ
+                </button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>,
+        document.body
       )}
 
       {/* FAQ Items List */}
