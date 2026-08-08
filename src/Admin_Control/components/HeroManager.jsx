@@ -32,7 +32,9 @@ export default function HeroManager() {
       url: slide.url || slide.image || '',
       position: slide.position || slide.imagePosition || 'center center',
       fit: slide.fit || slide.imageFit || 'cover',
-      zoom: slide.zoom || slide.imageZoom || 1
+      zoom: slide.zoom || slide.imageZoom || 1,
+      mobilePosition: slide.mobilePosition || 'center center',
+      mobileZoom: slide.mobileZoom || 1
     });
     setIsEditing(true);
   };
@@ -165,6 +167,27 @@ export default function HeroManager() {
                   >
                     <HiPhotograph size={15} /> Choose
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        position: 'center center',
+                        fit: 'cover',
+                        zoom: 1,
+                        mobilePosition: 'center center',
+                        mobileZoom: 1
+                      }));
+                      alert('Image alignment & zoom reset to default center (100%). Click Save Slide to apply.');
+                    }}
+                    title="Reset image alignment and zoom level back to normal default center"
+                    style={{
+                      padding: '9px 12px', background: '#f1f5f9', color: '#000648', border: '1.5px solid #cbd5e1',
+                      borderRadius: '8px', fontWeight: 700, cursor: 'pointer', fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0
+                    }}
+                  >
+                    ↺ Reset Alignment
+                  </button>
                 </div>
               </div>
 
@@ -296,13 +319,15 @@ export default function HeroManager() {
         currentPosition={formData.position}
         currentFit={formData.fit}
         currentZoom={formData.zoom}
-        onSelectImage={(url, position, fit, zoom) =>
+        onSelectImage={(url, position, fit, zoom, mobileOpts) =>
           setFormData((prev) => ({
             ...prev,
             url,
             position: position || prev.position || 'center center',
             fit: fit || prev.fit || 'cover',
-            zoom: zoom || prev.zoom || 1
+            zoom: zoom || prev.zoom || 1,
+            mobilePosition: mobileOpts?.mobilePosition || prev.mobilePosition || 'center center',
+            mobileZoom: mobileOpts?.mobileZoom || prev.mobileZoom || 1
           }))
         }
         targetArea="Hero Slide Right Photo Frame"

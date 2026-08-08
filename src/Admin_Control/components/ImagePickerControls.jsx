@@ -168,7 +168,7 @@ export default function ImagePickerControls({
               <div style={{ display: 'flex', gap: '4px' }}>
                 <button
                   type="button"
-                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x - 15 }))}
+                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x + 5 }))}
                   title="Move Image Left"
                   style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
                 >
@@ -176,7 +176,7 @@ export default function ImagePickerControls({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x + 15 }))}
+                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x - 5 }))}
                   title="Move Image Right"
                   style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
                 >
@@ -184,7 +184,7 @@ export default function ImagePickerControls({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y - 15 }))}
+                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y + 5 }))}
                   title="Move Image Up"
                   style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
                 >
@@ -192,7 +192,7 @@ export default function ImagePickerControls({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y + 15 }))}
+                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y - 5 }))}
                   title="Move Image Down"
                   style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
                 >
@@ -200,7 +200,10 @@ export default function ImagePickerControls({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setDragOffset({ x: 0, y: 0 })}
+                  onClick={() => {
+                    setDragOffset({ x: 0, y: 0 });
+                    setZoomScale(1);
+                  }}
                   title="Reset to Center"
                   style={{ padding: '3px 8px', background: '#e0e7ff', border: '1px solid #c7d2fe', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#115DFC' }}
                 >
@@ -257,7 +260,7 @@ export default function ImagePickerControls({
           <div style={{ background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '8px', marginBottom: '8px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.725rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
               <span>▲ Move Up / Down ▼</span>
-              <span style={{ color: '#115DFC' }}>Y: {50 + dragOffset.y}%</span>
+              <span style={{ color: '#115DFC' }}>Y: {Math.min(100, Math.max(0, 50 - dragOffset.y))}%</span>
             </div>
             <input
               type="range"
@@ -274,7 +277,7 @@ export default function ImagePickerControls({
           <div style={{ background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '8px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.725rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
               <span>◄ Move Left / Right ►</span>
-              <span style={{ color: '#115DFC' }}>X: {50 + dragOffset.x}%</span>
+              <span style={{ color: '#115DFC' }}>X: {Math.min(100, Math.max(0, 50 - dragOffset.x))}%</span>
             </div>
             <input
               type="range"

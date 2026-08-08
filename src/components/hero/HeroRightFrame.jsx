@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { m, AnimatePresence } from 'framer-motion';
 import { resolveImageSrc, resolveWebPSrc } from '../../utils/imageUtils';
 
 export default function HeroRightFrame({ currentSlide, safeActive }) {
-  const imagePos = currentSlide.position || currentSlide.imagePosition || 'center center';
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 900);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 900);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const imagePos = isMobile
+    ? (currentSlide.mobilePosition || currentSlide.position || currentSlide.imagePosition || 'center center')
+    : (currentSlide.position || currentSlide.imagePosition || 'center center');
   const imageFit = currentSlide.fit || currentSlide.imageFit || 'cover';
+  const imageZoom = isMobile
+    ? (currentSlide.mobileZoom || currentSlide.zoom || currentSlide.imageZoom || 1)
+    : (currentSlide.zoom || currentSlide.imageZoom || 1);
 
   return (
     <div
@@ -29,7 +42,7 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
           transition={{ duration: 0.5, ease: 'easeOut' }}
           style={{ width: '100%', height: '100%', position: 'absolute', inset: 0 }}
         >
-          <picture style={{ width: '100%', height: '100%' }}>
+          <picture style={{ width: '100%', height: '100%', display: 'block' }}>
             <source srcSet={resolveWebPSrc(currentSlide.url || currentSlide.image).webp} type="image/webp" />
             <img
               src={resolveImageSrc(currentSlide.url || currentSlide.image)}
@@ -39,7 +52,7 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
                 height: '100%',
                 objectFit: imageFit,
                 objectPosition: imagePos,
-                transform: `scale(${currentSlide.zoom || currentSlide.imageZoom || 1})`,
+                transform: `scale(${imageZoom})`,
                 transformOrigin: imagePos,
                 transition: 'transform 0.2s ease, object-position 0.2s ease, object-fit 0.2s ease',
               }}
@@ -91,3 +104,4 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
     </div>
   );
 }
+

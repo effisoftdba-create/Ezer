@@ -190,6 +190,8 @@ export default function ImagePickerPreviewBox({
                 src={activeSrc}
                 alt="Desktop preview"
                 style={{
+                  width: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? 'auto' : '100%',
+                  height: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? 'auto' : '100%',
                   maxWidth: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '80%' : '100%',
                   maxHeight: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '65%' : '100%',
                   margin: 'auto',
