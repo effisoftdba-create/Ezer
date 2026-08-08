@@ -5,6 +5,8 @@ import ImagePickerGalleryGrid from './ImagePickerGalleryGrid';
 import ImagePickerControls from './ImagePickerControls';
 import ImagePickerHeaderBanner from './ImagePickerHeaderBanner';
 import ImagePickerPreviewBox from './ImagePickerPreviewBox';
+import { removeImageBackground } from '../../utils/backgroundRemover';
+
 
 const STORAGE_UPLOADED_IMAGES_KEY = 'ezer_uploaded_images:v3';
 
@@ -206,6 +208,20 @@ export default function ImagePickerModal({
 
 
 
+  const handleAutoRemoveBackground = async () => {
+    if (!activeSelectedUrl) return;
+    setIsUploading(true);
+    try {
+      const transparentUri = await removeImageBackground(activeSelectedUrl);
+      setSelectedUrlOverride(transparentUri);
+      setCustomUrl(transparentUri);
+    } catch (err) {
+      console.warn('Background removal failed:', err);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleFileUpload = (e) => {
     const file = e?.target?.files?.[0];
     if (!file) return;
@@ -219,19 +235,25 @@ export default function ImagePickerModal({
     const reader = new FileReader();
     reader.onloadend = async () => {
       const rawDataUri = reader.result;
-      const compressedWebUri = await compressImageForWeb(rawDataUri, 600, 0.6);
+      let finalUri = await compressImageForWeb(rawDataUri, 600, 0.6);
 
-      setCustomUrl(compressedWebUri);
-      setSelectedUrlOverride(compressedWebUri);
+      // Auto-remove background box for company logos
+      if (previewDims.ratio === '180/48') {
+        finalUri = await removeImageBackground(finalUri);
+      }
+
+      setCustomUrl(finalUri);
+      setSelectedUrlOverride(finalUri);
 
       setUploadedImages((prev) => [
-        { label: `Upload ${prev.length + 1}`, url: compressedWebUri, date: new Date().toLocaleTimeString() },
+        { label: `Upload ${prev.length + 1}`, url: finalUri, date: new Date().toLocaleTimeString() },
         ...prev
       ]);
       setIsUploading(false);
     };
     reader.readAsDataURL(file);
   };
+
 
   const handleDeleteUploadedImage = (url, e) => {
     e.stopPropagation();
@@ -310,7 +332,9 @@ export default function ImagePickerModal({
           handlePresetPosition={handlePresetPosition}
           aspectRatio={activeRatio}
           onSelectAspectRatio={(val) => setAspectRatioOverride(val)}
+          onAutoRemoveBackground={handleAutoRemoveBackground}
         />
+
 
         {/* DRAG & DROP FILE UPLOAD ZONE */}
         <div 

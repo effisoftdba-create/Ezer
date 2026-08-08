@@ -19,7 +19,8 @@ export default function ImagePickerControls({
   setFitMode,
   handlePresetPosition,
   aspectRatio,
-  onSelectAspectRatio
+  onSelectAspectRatio,
+  onAutoRemoveBackground
 }) {
   return (
     <div style={{ background: '#f1f5f9', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '16px', marginBottom: '20px' }}>
@@ -27,7 +28,23 @@ export default function ImagePickerControls({
         <span style={{ fontSize: '0.85rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
           <HiAdjustments color="#115DFC" size={18} /> Interactive Fit, Aspect Ratio & Position Controls
         </span>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+          {onAutoRemoveBackground && (
+            <button
+              type="button"
+              onClick={onAutoRemoveBackground}
+              title="Automatically remove white/black/checkerboard background box"
+              style={{
+                padding: '4px 12px', background: 'linear-gradient(135deg, #115DFC, #7c3aed)',
+                color: '#ffffff', border: 'none', borderRadius: '6px',
+                fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer',
+                boxShadow: '0 2px 8px rgba(17,93,252,0.25)',
+                display: 'flex', alignItems: 'center', gap: '4px'
+              }}
+            >
+              ✨ Auto-Remove Background
+            </button>
+          )}
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', background: '#e0e7ff', padding: '3px 10px', borderRadius: '6px' }}>
             Zoom: {Math.round(zoomScale * 100)}%
           </span>
@@ -36,6 +53,7 @@ export default function ImagePickerControls({
           </span>
         </div>
       </div>
+
 
       {/* ASPECT RATIO SELECTOR PRESETS BAR */}
       {onSelectAspectRatio && (

@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import { resolveImageSrc } from '../../utils/imageUtils';
+import { removeImageBackground } from '../../utils/backgroundRemover';
+
 import {
   HiPlus,
   HiTrash,
@@ -136,17 +138,27 @@ export default function HiringPartnersManager() {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name.trim()) return;
 
+    let finalData = { ...formData };
+    if (finalData.image && typeof finalData.image === 'string' && !finalData.image.trim().startsWith('<svg')) {
+      try {
+        finalData.image = await removeImageBackground(finalData.image);
+      } catch (err) {
+        console.warn('Background removal on submit:', err);
+      }
+    }
+
     if (editingId) {
-      updateHiringPartner(editingId, formData);
+      updateHiringPartner(editingId, finalData);
     } else {
-      addHiringPartner(formData);
+      addHiringPartner(finalData);
     }
     setIsModalOpen(false);
   };
+
 
   const handleDelete = (id, name) => {
     if (window.confirm(`Are you sure you want to remove "${name}" from Hiring Partners?`)) {
@@ -321,9 +333,11 @@ export default function HiringPartnersManager() {
                         objectFit: partner.imageFit || 'contain',
                         objectPosition: partner.imagePosition || 'center center',
                         transform: partner.imageZoom ? `scale(${partner.imageZoom})` : 'none',
-                        transformOrigin: partner.imagePosition || 'center center'
+                        transformOrigin: partner.imagePosition || 'center center',
+                        mixBlendMode: 'multiply'
                       }}
                     />
+
                   )}
                 </div>
 
@@ -477,9 +491,11 @@ export default function HiringPartnersManager() {
                         objectFit: formData.imageFit || 'contain',
                         objectPosition: formData.imagePosition || 'center center',
                         transform: formData.imageZoom ? `scale(${formData.imageZoom})` : 'none',
-                        transformOrigin: formData.imagePosition || 'center center'
+                        transformOrigin: formData.imagePosition || 'center center',
+                        mixBlendMode: 'multiply'
                       }}
                     />
+
                   )}
                 </div>
               </div>

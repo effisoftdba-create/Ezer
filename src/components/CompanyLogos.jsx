@@ -251,9 +251,11 @@ function LogoCard({ logo }) {
             objectFit: logo.imageFit || 'contain',
             objectPosition: logo.imagePosition || 'center center',
             transform: logo.imageZoom ? `scale(${logo.imageZoom})` : 'none',
-            transformOrigin: logo.imagePosition || 'center center'
+            transformOrigin: logo.imagePosition || 'center center',
+            mixBlendMode: 'multiply'
           }}
         />
+
       )}
     </m.div>
   );
