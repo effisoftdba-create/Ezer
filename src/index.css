@@ -752,6 +752,82 @@ img { max-width: 100%; display: block; }
   transform: translateX(100%);
 }
 
+/* ═══════════════════════════════════════════════════════════
+   EZER FLYING ANIMATION ENROLL BUTTON SYSTEM
+   ═══════════════════════════════════════════════════════════ */
+.ezer-fly-enroll-btn {
+  font-family: var(--font-heading), sans-serif;
+  font-size: 1.05rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #f2b733 0%, #d9a02a 100%);
+  color: #000648;
+  padding: 0.85em 1.4em;
+  padding-left: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(242, 183, 51, 0.4);
+  position: relative;
+  width: 100%;
+}
+
+.ezer-fly-enroll-btn span {
+  display: inline-block;
+  margin-left: 0.4em;
+  transition: all 0.35s ease-in-out;
+  white-space: nowrap;
+}
+
+.ezer-fly-enroll-btn .svg-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.35s ease-in-out;
+}
+
+.ezer-fly-enroll-btn svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.35s ease-in-out;
+}
+
+.ezer-fly-enroll-btn:hover {
+  background: linear-gradient(135deg, #ffc53d 0%, #e5a930 100%);
+  box-shadow: 0 10px 32px rgba(242, 183, 51, 0.65);
+  transform: scale(1.02);
+}
+
+.ezer-fly-enroll-btn:hover .svg-wrapper {
+  animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+
+.ezer-fly-enroll-btn:hover svg {
+  transform: translateX(1.2em) rotate(45deg) scale(1.15);
+}
+
+.ezer-fly-enroll-btn:hover span {
+  transform: translateX(4.5em);
+}
+
+.ezer-fly-enroll-btn:active {
+  transform: scale(0.96);
+}
+
+@keyframes fly-1 {
+  from {
+    transform: translateY(0.1em);
+  }
+  to {
+    transform: translateY(-0.1em);
+  }
+}
+
+
 
 
 

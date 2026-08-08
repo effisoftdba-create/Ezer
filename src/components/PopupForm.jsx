@@ -110,9 +110,7 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
     >
       <div
         style={{
-          background: `linear-gradient(rgba(255, 255, 255, ${overlayAlpha}), rgba(255, 255, 255, ${overlayAlpha})), url("${bgImgUrl}")`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          background: '#ffffff',
           borderRadius: '16px',
           width: '100%',
           maxWidth: 'min(440px, 94vw)',
@@ -125,7 +123,27 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
           animation: 'modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
         }}
       >
-        <div style={{ maxHeight: 'calc(90vh - 24px)', overflowY: 'auto' }}>
+        {/* Clipped & Scaled Background Watermark Image Layer */}
+        {bgImgUrl && (
+          <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+            <img
+              src={bgImgUrl}
+              alt=""
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: popupConfig.bodyBgFit || popupConfig.imageFit || 'cover',
+                objectPosition: popupConfig.bodyBgPosition || popupConfig.imagePosition || 'center center',
+                transform: (popupConfig.bodyBgZoom || popupConfig.imageZoom || 1) !== 1 ? `scale(${popupConfig.bodyBgZoom || popupConfig.imageZoom})` : 'none',
+                transformOrigin: popupConfig.bodyBgPosition || popupConfig.imagePosition || 'center center',
+                opacity: (popupConfig.bodyBgOpacity !== undefined ? popupConfig.bodyBgOpacity : 15) / 100
+              }}
+            />
+          </div>
+        )}
+
+        <div style={{ maxHeight: 'calc(90vh - 24px)', overflowY: 'auto', position: 'relative', zIndex: 1 }}>
+
           <PopupHeader onClose={onClose} overrideConfig={popupConfig} />
           <div style={{ padding: 'clamp(16px, 4vw, 22px)' }}>
             {status.success ? (

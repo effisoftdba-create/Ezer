@@ -14,8 +14,9 @@ import {
 import PaginationControls from '../../components/PaginationControls';
 
 export default function LeadsManager() {
-  const { leads, updateLeadStatus, addLeadComment, deleteLead } = useSiteData();
+  const { leads, updateLeadStatus, addLeadComment, updateLeadDetails, deleteLead } = useSiteData();
   const leadsList = useMemo(() => leads || [], [leads]);
+
 
   const [filterStatus, setFilterStatus] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -76,8 +77,16 @@ export default function LeadsManager() {
   }, [leadsList]);
 
   const handleStatusChange = (id, newStatus) => {
-    updateLeadStatus(id, newStatus);
-    addLeadComment(id, `Status updated to "${newStatus}".`, 'System');
+    updateLeadDetails(id, { status: newStatus });
+  };
+
+  const handleSaveLeadDetails = (id, newStatus, commentText, author) => {
+    updateLeadDetails(id, {
+      status: newStatus,
+      commentText: commentText,
+      author: author
+    });
+    setNewCommentText('');
   };
 
   const handleAddCommentSubmit = (e) => {
@@ -86,6 +95,7 @@ export default function LeadsManager() {
     addLeadComment(selectedLeadId, newCommentText.trim(), adminAuthorName || 'Admin Counselor');
     setNewCommentText('');
   };
+
 
   const handleDeleteLeadClick = (id, name) => {
     if (window.confirm(`Delete lead entry for "${name}"?`)) {
@@ -218,12 +228,14 @@ export default function LeadsManager() {
         selectedLead={selectedLead}
         setSelectedLeadId={setSelectedLeadId}
         handleStatusChange={handleStatusChange}
+        handleSaveLeadDetails={handleSaveLeadDetails}
         handleAddCommentSubmit={handleAddCommentSubmit}
         adminAuthorName={adminAuthorName}
         setAdminAuthorName={setAdminAuthorName}
         newCommentText={newCommentText}
         setNewCommentText={setNewCommentText}
       />
+
     </div>
   );
 }

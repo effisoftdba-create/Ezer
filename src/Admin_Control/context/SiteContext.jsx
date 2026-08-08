@@ -594,6 +594,40 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [leads]);
 
+  const updateLeadDetails = useCallback((id, { status, commentText, author }) => {
+    const updated = (leads || []).map((lead) => {
+      if (lead.id === id) {
+        const nextComments = [...(lead.comments || [])];
+        if (status && status !== lead.status) {
+          nextComments.push({
+            id: `comment-${Date.now()}-sys`,
+            text: `Status updated to "${status}".`,
+            author: 'System',
+            date: new Date().toLocaleString()
+          });
+        }
+        if (commentText && commentText.trim()) {
+          nextComments.push({
+            id: `comment-${Date.now()}-user`,
+            text: commentText.trim(),
+            author: author || 'Admin Counselor',
+            date: new Date().toLocaleString()
+          });
+        }
+        return {
+          ...lead,
+          status: status || lead.status,
+          comments: nextComments
+        };
+      }
+      return lead;
+    });
+    dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
+    saveCollectionArray('leads', updated);
+    triggerStateToast('SAVED');
+  }, [leads]);
+
+
   const deleteLead = useCallback((leadId) => {
     const updated = (leads || []).filter(l => l.id !== leadId);
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
@@ -644,7 +678,7 @@ export function SiteProvider({ children }) {
     faqList, updateFaqs,
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
-    leads, addLead, updateLeadStatus, addLeadComment, deleteLead,
+    leads, addLead, updateLeadStatus, addLeadComment, updateLeadDetails, deleteLead,
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
@@ -665,7 +699,8 @@ export function SiteProvider({ children }) {
     faqList, updateFaqs,
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
-    leads, addLead, updateLeadStatus, addLeadComment, deleteLead,
+    leads, addLead, updateLeadStatus, addLeadComment, updateLeadDetails, deleteLead,
+
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,

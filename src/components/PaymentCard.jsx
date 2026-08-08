@@ -158,29 +158,29 @@ export default function PaymentCard({ course, onEnrollClick }) {
 
               <button
                 type="button"
+                className="ezer-fly-enroll-btn"
                 onClick={handleCheckout}
                 disabled={loading}
-                style={{
-                  width: '100%',
-                  padding: '16px 28px',
-                  borderRadius: '50px',
-                  background: 'linear-gradient(135deg, #f2b733 0%, #d9a02a 100%)',
-                  color: '#000648',
-                  fontWeight: 900,
-                  fontSize: '1.05rem',
-                  border: 'none',
-                  cursor: loading ? 'not-allowed' : 'pointer',
-                  boxShadow: '0 6px 24px rgba(242, 183, 51, 0.35)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px',
-                  transition: 'transform 0.2s ease, boxShadow 0.2s ease'
-                }}
               >
-                <HiLockClosed size={18} />
+                <div className="svg-wrapper">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </div>
                 <span>{loading ? 'Processing...' : 'Enroll Now for ₹9'}</span>
               </button>
+
             </div>
           </div>
         </div>

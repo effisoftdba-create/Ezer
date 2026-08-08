@@ -6,6 +6,7 @@ export default function LeadDetailsModal({
   selectedLead,
   setSelectedLeadId,
   handleStatusChange,
+  handleSaveLeadDetails,
   handleAddCommentSubmit,
   adminAuthorName,
   setAdminAuthorName,
@@ -26,18 +27,26 @@ export default function LeadDetailsModal({
 
   const handleSaveAll = (e) => {
     e.preventDefault();
-    handleStatusChange(selectedLead.id, localStatus);
-
-    if (newCommentText && newCommentText.trim()) {
-      handleAddCommentSubmit(e);
+    if (typeof handleSaveLeadDetails === 'function') {
+      handleSaveLeadDetails(
+        selectedLead.id,
+        localStatus,
+        newCommentText,
+        adminAuthorName || 'Admin Counselor'
+      );
+    } else {
+      handleStatusChange(selectedLead.id, localStatus);
+      if (newCommentText && newCommentText.trim()) {
+        handleAddCommentSubmit(e);
+      }
     }
 
     setIsSaved(true);
     setTimeout(() => {
       setIsSaved(false);
-      setSelectedLeadId(null);
-    }, 800);
+    }, 600);
   };
+
 
   const modalContent = (
     <div
