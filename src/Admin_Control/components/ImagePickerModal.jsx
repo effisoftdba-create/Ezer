@@ -30,6 +30,7 @@ const POSITION_PRESETS = [
 function getPreviewDimensions(aspectRatio) {
   if (!aspectRatio) return { ratio: '16/9', height: '160px' };
   const lower = aspectRatio.toLowerCase();
+  if (lower.includes('180:48') || lower.includes('180/48') || lower.includes('logo') || lower.includes('company')) return { ratio: '180/48', height: '100px' };
   if (lower.includes('340:360') || lower.includes('340x360')) return { ratio: '340/360', height: '220px' };
   if (lower.includes('1:1') || lower.includes('square')) return { ratio: '1/1', height: '200px' };
   if (lower.includes('4:3')) return { ratio: '4/3', height: '180px' };
@@ -39,6 +40,7 @@ function getPreviewDimensions(aspectRatio) {
   if (lower.includes('portrait') || lower.includes('9:16')) return { ratio: '9/16', height: '260px' };
   return { ratio: '16/9', height: '160px' };
 }
+
 
 function compressImageForWeb(dataUri, maxDimension = 900, quality = 0.75) {
   return new Promise((resolve) => {
