@@ -165,10 +165,10 @@ export default function ImagePickerControls({
               <span style={{ fontSize: '0.725rem', fontWeight: 800, color: '#000648' }}>
                 Nudge ({activeTarget.toUpperCase()}):
               </span>
-              <div style={{ display: 'flex', gap: '4px' }}>
+              <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                 <button
                   type="button"
-                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x + 5 }))}
+                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x - 5 }))}
                   title="Move Image Left"
                   style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
                 >
@@ -176,7 +176,7 @@ export default function ImagePickerControls({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x - 5 }))}
+                  onClick={() => setDragOffset((prev) => ({ ...prev, x: prev.x + 5 }))}
                   title="Move Image Right"
                   style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
                 >
@@ -184,7 +184,7 @@ export default function ImagePickerControls({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y + 5 }))}
+                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y - 5 }))}
                   title="Move Image Up"
                   style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
                 >
@@ -192,7 +192,7 @@ export default function ImagePickerControls({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y - 5 }))}
+                  onClick={() => setDragOffset((prev) => ({ ...prev, y: prev.y + 5 }))}
                   title="Move Image Down"
                   style={{ padding: '3px 8px', background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#000648' }}
                 >
@@ -204,10 +204,10 @@ export default function ImagePickerControls({
                     setDragOffset({ x: 0, y: 0 });
                     setZoomScale(1);
                   }}
-                  title="Reset to Center"
+                  title="Reset focus to 50% 50% Center"
                   style={{ padding: '3px 8px', background: '#e0e7ff', border: '1px solid #c7d2fe', borderRadius: '5px', fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', color: '#115DFC' }}
                 >
-                  ↺ Reset
+                  ↺ Reset Center
                 </button>
               </div>
             </div>

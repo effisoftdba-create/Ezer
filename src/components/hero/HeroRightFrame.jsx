@@ -52,7 +52,7 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
                 height: '100%',
                 objectFit: imageFit,
                 objectPosition: imagePos,
-                transform: `scale(${imageZoom})`,
+                transform: (imageZoom !== 1) ? `scale(${imageZoom})` : 'none',
                 transformOrigin: imagePos,
                 transition: 'transform 0.2s ease, object-position 0.2s ease, object-fit 0.2s ease',
               }}

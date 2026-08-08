@@ -333,9 +333,9 @@ export default function ImagePickerPreviewBox({
                 }}
                 style={{
                   width: '100%',
-                  aspectRatio: previewDims.ratio,
+                  aspectRatio: currentRatio,
                   maxHeight: '190px',
-                  background: '#000638',
+                  background: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '#ffffff' : '#000648',
                   borderRadius: '14px',
                   overflow: 'hidden',
                   position: 'relative',
@@ -350,8 +350,14 @@ export default function ImagePickerPreviewBox({
                   src={activeSrc}
                   alt="Mobile screen preview"
                   style={{
-                    width: '100%',
-                    height: '100%',
+                    width: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? 'auto' : '100%',
+                    height: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? 'auto' : '100%',
+                    maxWidth: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '80%' : '100%',
+                    maxHeight: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '65%' : '100%',
+                    margin: 'auto',
+                    display: 'block',
+                    position: 'absolute',
+                    top: 0, left: 0, right: 0, bottom: 0,
                     objectFit: fitMode,
                     objectPosition: mobilePosStr,
                     transform: `scale(${mobileZoom})`,
