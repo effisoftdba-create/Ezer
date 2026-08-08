@@ -173,8 +173,10 @@ export default function TransformedLives() {
                           alt={item.name}
                           style={{
                             width: '84px', height: '84px', borderRadius: '50%',
-                            objectFit: 'cover',
-                            objectPosition: item.imagePosition || 'center center',
+                            objectFit: item.fit || item.imageFit || 'cover',
+                            objectPosition: item.position || item.imagePosition || 'center center',
+                            transform: `scale(${item.zoom || item.imageZoom || 1})`,
+                            transformOrigin: 'center center',
                             display: 'block',
                             border: '2.5px solid #ffffff'
                           }}

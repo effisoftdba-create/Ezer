@@ -382,7 +382,7 @@ export default function ExecutiveLeadership() {
                               objectPosition: leader.imagePosition || leader.position || 'center center',
                               objectFit: leader.imageFit || leader.fit || 'cover',
                               transform: `scale(${leader.imageZoom || leader.zoom || 1})`,
-                              transformOrigin: leader.imagePosition || leader.position || 'center center'
+                              transformOrigin: 'center center'
                             }}
                           />
 
@@ -447,7 +447,7 @@ export default function ExecutiveLeadership() {
                               objectPosition: leader.imagePosition || leader.position || 'center center',
                               objectFit: leader.imageFit || leader.fit || 'cover',
                               transform: `scale(${leader.imageZoom || leader.zoom || 1})`,
-                              transformOrigin: leader.imagePosition || leader.position || 'center center'
+                              transformOrigin: 'center center'
                             }}
                           />
 

@@ -30,9 +30,9 @@ export default function HeroManager() {
       headline: slide.headline || '',
       sub: slide.sub || '',
       url: slide.url || slide.image || '',
-      imagePosition: slide.imagePosition || 'center center',
-      imageFit: slide.imageFit || 'cover',
-      imageZoom: slide.imageZoom || 1
+      position: slide.position || slide.imagePosition || 'center center',
+      fit: slide.fit || slide.imageFit || 'cover',
+      zoom: slide.zoom || slide.imageZoom || 1
     });
     setIsEditing(true);
   };
@@ -295,10 +295,19 @@ export default function HeroManager() {
         currentImage={formData.url}
         currentPosition={formData.position}
         currentFit={formData.fit}
-        onSelectImage={(url, position, fit) => setFormData((prev) => ({ ...prev, url, position: position || 'center center', fit: fit || 'cover' }))}
-        targetArea="Hero Slide Photo"
-        aspectRatio="Rectangle (16:9)"
-        recommendedDimensions="1200 x 675 px"
+        currentZoom={formData.zoom}
+        onSelectImage={(url, position, fit, zoom) =>
+          setFormData((prev) => ({
+            ...prev,
+            url,
+            position: position || prev.position || 'center center',
+            fit: fit || prev.fit || 'cover',
+            zoom: zoom || prev.zoom || 1
+          }))
+        }
+        targetArea="Hero Slide Right Photo Frame"
+        aspectRatio="Standard (4:3)"
+        recommendedDimensions="1200 x 900 px"
       />
     </div>
   );

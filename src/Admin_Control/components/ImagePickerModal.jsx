@@ -157,7 +157,7 @@ export default function ImagePickerModal({
           const parts = currentPosition.split(' ');
           const xPct = parseFloat(parts[0]) || 50;
           const yPct = parseFloat(parts[1]) || 50;
-          initialOffset = { x: Math.round(50 - xPct), y: Math.round(50 - yPct) };
+          initialOffset = { x: Math.round(xPct - 50), y: Math.round(yPct - 50) };
         }
         setDesktopDragOffset(initialOffset);
         setMobileDragOffset(initialOffset);
@@ -225,12 +225,12 @@ export default function ImagePickerModal({
     ...DEFAULT_PRESET_IMAGES
   ];
 
-  const desktopPosX = Math.min(100, Math.max(0, 50 - desktopDragOffset.x));
-  const desktopPosY = Math.min(100, Math.max(0, 50 - desktopDragOffset.y));
+  const desktopPosX = Math.min(100, Math.max(0, 50 + desktopDragOffset.x));
+  const desktopPosY = Math.min(100, Math.max(0, 50 + desktopDragOffset.y));
   const desktopPosStr = `${desktopPosX}% ${desktopPosY}%`;
 
-  const mobilePosX = Math.min(100, Math.max(0, 50 - mobileDragOffset.x));
-  const mobilePosY = Math.min(100, Math.max(0, 50 - mobileDragOffset.y));
+  const mobilePosX = Math.min(100, Math.max(0, 50 + mobileDragOffset.x));
+  const mobilePosY = Math.min(100, Math.max(0, 50 + mobileDragOffset.y));
   const mobilePosStr = `${mobilePosX}% ${mobilePosY}%`;
 
   const handleConfirm = () => {
