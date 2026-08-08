@@ -1,6 +1,9 @@
 import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
 import { triggerStateToast } from '../../utils/toastService';
 import { batchFetchRelatedData } from '../../utils/dbQueries';
+import { phase1Courses } from '../../data/courses';
+import { testimonials as initialTestimonials } from '../../data/testimonials';
+import { generalFaqs } from '../../data/faq';
 import {
   STORAGE_SLIDES_KEY,
   STORAGE_COURSES_KEY,
@@ -20,6 +23,15 @@ import {
   STORAGE_BLOGS_KEY,
   STORAGE_ACHIEVEMENTS_KEY,
   STORAGE_EXECUTIVE_LEADERS_KEY,
+  defaultExecutiveLeaders,
+  defaultSlides,
+  defaultPlatformDef,
+  defaultSupportCards,
+  defaultTransformedLives,
+  defaultSeniorMentors,
+  defaultVideoTestimonials,
+  defaultBlogs,
+  defaultAchievements,
   getInitialState,
   siteReducer,
   safeSetStorage
@@ -27,6 +39,29 @@ import {
 import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../../services/firebaseService';
 
 const SiteContext = createContext();
+
+function mergeCollection(defaults, firebaseItems, primaryKey = 'id') {
+  if (!Array.isArray(firebaseItems) || firebaseItems.length === 0) return defaults || [];
+  if (!Array.isArray(defaults) || defaults.length === 0) return firebaseItems;
+
+  const itemMap = new Map();
+  defaults.forEach((defItem) => {
+    const key = String(defItem[primaryKey] || defItem.id || defItem.roleTag || defItem.badge || defItem.title || defItem.slug || '');
+    if (key) itemMap.set(key, defItem);
+  });
+
+  firebaseItems.forEach((fbItem) => {
+    const key = String(fbItem[primaryKey] || fbItem.id || fbItem.roleTag || fbItem.badge || fbItem.title || fbItem.slug || '');
+    if (key) {
+      const existing = itemMap.get(key) || {};
+      itemMap.set(key, { ...existing, ...fbItem });
+    } else {
+      itemMap.set(String(Date.now() + Math.random()), fbItem);
+    }
+  });
+
+  return Array.from(itemMap.values());
+}
 
 export function SiteProvider({ children }) {
   const [state, dispatch] = useReducer(siteReducer, null, getInitialState);
@@ -102,28 +137,40 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_ACHIEVEMENTS_KEY, achievements); }, [achievements]);
   useEffect(() => { safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, executiveLeaders); }, [executiveLeaders]);
 
-  // Firebase Real-time Firestore & Realtime DB Subscriptions across ALL collections
+  // Firebase Real-time Firestore & Realtime DB Subscriptions with Merged Defaults Protection
   useEffect(() => {
     const unsubCourses = subscribeToCollection('courses', (items) => {
-      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'courses', value: items });
+      if (items && items.length > 0) {
+        const merged = mergeCollection(phase1Courses, items, 'id');
+        dispatch({ type: 'SET_KEY', key: 'courses', value: merged });
+      }
     });
     const unsubHero = subscribeToCollection('heroSlides', (items) => {
-      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'heroSlides', value: items });
+      if (items && items.length > 0) {
+        const merged = mergeCollection(defaultSlides, items, 'id');
+        dispatch({ type: 'SET_KEY', key: 'heroSlides', value: merged });
+      }
     });
     const unsubLeads = subscribeToCollection('leads', (items) => {
       if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'leads', value: items });
     });
     const unsubBlogs = subscribeToCollection('blogs', (items) => {
-      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'blogs', value: items });
+      if (items && items.length > 0) {
+        const merged = mergeCollection(defaultBlogs, items, 'id');
+        dispatch({ type: 'SET_KEY', key: 'blogs', value: merged });
+      }
     });
     const unsubDef = subscribeToCollection('ezerDefinition', (items) => {
       if (items && items.length > 0) {
         const mainDef = items.find((i) => i.id === 'main') || items[0];
-        if (mainDef) dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: mainDef });
+        if (mainDef) dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: { ...defaultPlatformDef, ...mainDef } });
       }
     });
     const unsubExecs = subscribeToCollection('executiveLeaders', (items) => {
-      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: items });
+      if (items && items.length > 0) {
+        const merged = mergeCollection(defaultExecutiveLeaders, items, 'id');
+        dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: merged });
+      }
     });
     const unsubPopup = subscribeToCollection('popupConfig', (items) => {
       if (items && items.length > 0) {
@@ -138,16 +185,28 @@ export function SiteProvider({ children }) {
       }
     });
     const unsubMentors = subscribeToCollection('seniorMentors', (items) => {
-      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: items });
+      if (items && items.length > 0) {
+        const merged = mergeCollection(defaultSeniorMentors, items, 'id');
+        dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: merged });
+      }
     });
     const unsubTesti = subscribeToCollection('writtenTestimonials', (items) => {
-      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: items });
+      if (items && items.length > 0) {
+        const merged = mergeCollection(initialTestimonials, items, 'id');
+        dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: merged });
+      }
     });
     const unsubVideo = subscribeToCollection('videoTestimonials', (items) => {
-      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: items });
+      if (items && items.length > 0) {
+        const merged = mergeCollection(defaultVideoTestimonials, items, 'id');
+        dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: merged });
+      }
     });
     const unsubFaq = subscribeToCollection('faqList', (items) => {
-      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'faqList', value: items });
+      if (items && items.length > 0) {
+        const merged = mergeCollection(generalFaqs, items, 'id');
+        dispatch({ type: 'SET_KEY', key: 'faqList', value: merged });
+      }
     });
 
     return () => {
@@ -166,7 +225,7 @@ export function SiteProvider({ children }) {
     };
   }, []);
 
-  // Action Dispatchers with Full-Stack Realtime Sync
+  // Action Dispatchers with Array Integrity & Full-Stack Realtime Sync
   const updateExecutiveLeaders = useCallback((newExecs) => {
     dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: newExecs });
     saveCollectionArray('executiveLeaders', newExecs);
@@ -174,10 +233,10 @@ export function SiteProvider({ children }) {
   }, []);
 
   const updateExecutiveLeader = useCallback((id, updatedLeader) => {
-    const updated = (executiveLeaders || []).map((l) => (l.id === id || l.roleTag === id ? { ...l, ...updatedLeader } : l));
+    const baseList = (executiveLeaders && executiveLeaders.length >= 3) ? executiveLeaders : defaultExecutiveLeaders;
+    const updated = baseList.map((l) => (l.id === id || l.roleTag === id ? { ...l, ...updatedLeader } : l));
     dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: updated });
-    const target = updated.find((l) => l.id === id || l.roleTag === id);
-    if (target) saveDocument('executiveLeaders', String(target.id || target.roleTag), target);
+    saveCollectionArray('executiveLeaders', updated);
     triggerStateToast('SAVED');
   }, [executiveLeaders]);
 
@@ -198,8 +257,7 @@ export function SiteProvider({ children }) {
   const updateBlog = useCallback((id, updatedData) => {
     const updated = (blogs || []).map((b) => (b.id === id || b.slug === id ? { ...b, ...updatedData } : b));
     dispatch({ type: 'SET_KEY', key: 'blogs', value: updated });
-    const target = updated.find((b) => b.id === id || b.slug === id);
-    if (target) saveDocument('blogs', String(target.id || target.slug), target);
+    saveCollectionArray('blogs', updated);
     triggerStateToast('SAVED');
   }, [blogs]);
 
@@ -227,8 +285,7 @@ export function SiteProvider({ children }) {
   const updateAchievement = useCallback((id, updatedData) => {
     const updated = (achievements || []).map((a) => (a.id === id ? { ...a, ...updatedData } : a));
     dispatch({ type: 'SET_KEY', key: 'achievements', value: updated });
-    const target = updated.find((a) => a.id === id);
-    if (target) saveDocument('achievements', String(target.id), target);
+    saveCollectionArray('achievements', updated);
     triggerStateToast('SAVED');
   }, [achievements]);
 
@@ -258,8 +315,7 @@ export function SiteProvider({ children }) {
       slide.id === id || slide.badge === id ? { ...slide, ...updatedSlide } : slide
     );
     dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
-    const target = updated.find((s) => s.id === id || s.badge === id);
-    if (target) saveDocument('heroSlides', String(target.id || target.badge), target);
+    saveCollectionArray('heroSlides', updated);
     triggerStateToast('SAVED');
   }, [heroSlides]);
 
@@ -286,8 +342,7 @@ export function SiteProvider({ children }) {
   const updateCourse = useCallback((id, updatedCourse) => {
     const updated = (courses || []).map((c) => (c.id === id || c.slug === id ? { ...c, ...updatedCourse } : c));
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
-    const target = updated.find((c) => c.id === id || c.slug === id);
-    if (target) saveDocument('courses', String(target.id || target.slug), target);
+    saveCollectionArray('courses', updated);
     triggerStateToast('SAVED');
   }, [courses]);
 
@@ -324,8 +379,7 @@ export function SiteProvider({ children }) {
       card.id === id || card.title === id ? { ...card, ...updatedCard } : card
     );
     dispatch({ type: 'SET_KEY', key: 'supportCards', value: updated });
-    const target = updated.find((c) => c.id === id || c.title === id);
-    if (target) saveDocument('supportCards', String(target.id || target.title), target);
+    saveCollectionArray('supportCards', updated);
     triggerStateToast('SAVED');
   }, [supportCards]);
 
@@ -355,8 +409,7 @@ export function SiteProvider({ children }) {
       life.id === id ? { ...life, ...updatedLife } : life
     );
     dispatch({ type: 'SET_KEY', key: 'transformedLives', value: updated });
-    const target = updated.find((l) => l.id === id);
-    if (target) saveDocument('transformedLives', String(target.id), target);
+    saveCollectionArray('transformedLives', updated);
     triggerStateToast('SAVED');
   }, [transformedLives]);
 
@@ -393,8 +446,7 @@ export function SiteProvider({ children }) {
       mentor.id === id ? { ...mentor, ...updatedMentor } : mentor
     );
     dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: updated });
-    const target = updated.find((m) => m.id === id);
-    if (target) saveDocument('seniorMentors', String(target.id), target);
+    saveCollectionArray('seniorMentors', updated);
     triggerStateToast('SAVED');
   }, [seniorMentors]);
 
@@ -431,8 +483,7 @@ export function SiteProvider({ children }) {
       video.id === id ? { ...video, ...updatedVideo } : video
     );
     dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: updated });
-    const target = updated.find((v) => v.id === id);
-    if (target) saveDocument('videoTestimonials', String(target.id), target);
+    saveCollectionArray('videoTestimonials', updated);
     triggerStateToast('SAVED');
   }, [videoTestimonials]);
 
@@ -469,8 +520,7 @@ export function SiteProvider({ children }) {
       t.id === id || t.author === id ? { ...t, ...updatedTestimonial } : t
     );
     dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
-    const target = updated.find((t) => t.id === id || t.author === id);
-    if (target) saveDocument('writtenTestimonials', String(target.id || target.author), target);
+    saveCollectionArray('writtenTestimonials', updated);
     triggerStateToast('SAVED');
   }, [writtenTestimonials]);
 
@@ -512,8 +562,7 @@ export function SiteProvider({ children }) {
   const updateLeadStatus = useCallback((id, status) => {
     const updated = (leads || []).map((lead) => (lead.id === id ? { ...lead, status } : lead));
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
-    const target = updated.find((l) => l.id === id);
-    if (target) saveDocument('leads', String(target.id), target);
+    saveCollectionArray('leads', updated);
     triggerStateToast('SAVED');
   }, [leads]);
 
@@ -526,8 +575,7 @@ export function SiteProvider({ children }) {
       return lead;
     });
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
-    const target = updated.find((l) => l.id === id);
-    if (target) saveDocument('leads', String(target.id), target);
+    saveCollectionArray('leads', updated);
     triggerStateToast('SAVED');
   }, [leads]);
 
