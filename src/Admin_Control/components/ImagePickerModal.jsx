@@ -114,8 +114,12 @@ export default function ImagePickerModal({
   const dragStartRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    if (isOpen && currentImage) {
-      setOriginalUncutUrl(currentImage);
+    if (isOpen) {
+      setSelectedUrlOverride(null);
+      setCustomUrl('');
+      if (currentImage) {
+        setOriginalUncutUrl(currentImage);
+      }
     }
   }, [isOpen, currentImage]);
 
@@ -145,15 +149,15 @@ export default function ImagePickerModal({
 
       if (currentPosition) {
         let initialOffset = { x: 0, y: 0 };
-        if (currentPosition.includes('top')) initialOffset = { x: 0, y: -35 };
-        else if (currentPosition.includes('bottom')) initialOffset = { x: 0, y: 35 };
-        else if (currentPosition.includes('left')) initialOffset = { x: -35, y: 0 };
-        else if (currentPosition.includes('right')) initialOffset = { x: 35, y: 0 };
+        if (currentPosition.includes('top')) initialOffset = { x: 0, y: 35 };
+        else if (currentPosition.includes('bottom')) initialOffset = { x: 0, y: -35 };
+        else if (currentPosition.includes('left')) initialOffset = { x: 35, y: 0 };
+        else if (currentPosition.includes('right')) initialOffset = { x: -35, y: 0 };
         else if (currentPosition.includes('%')) {
           const parts = currentPosition.split(' ');
           const xPct = parseFloat(parts[0]) || 50;
           const yPct = parseFloat(parts[1]) || 50;
-          initialOffset = { x: Math.round(xPct - 50), y: Math.round(yPct - 50) };
+          initialOffset = { x: Math.round(50 - xPct), y: Math.round(50 - yPct) };
         }
         setDesktopDragOffset(initialOffset);
         setMobileDragOffset(initialOffset);
@@ -172,7 +176,6 @@ export default function ImagePickerModal({
     setActiveTarget(targetMode);
     setIsDragging(true);
     const currOffset = targetMode === 'mobile' ? mobileDragOffset : desktopDragOffset;
-    // Store drag origin matching natural mouse movement direction
     dragStartRef.current = { x: clientX - currOffset.x, y: clientY - currOffset.y };
   };
 
@@ -198,7 +201,7 @@ export default function ImagePickerModal({
     const onMouseUp = () => setIsDragging(false);
 
     window.addEventListener('mousemove', onMouseMove);
-    window.addEventListener('touchmove', onTouchMove);
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
     window.addEventListener('mouseup', onMouseUp);
     window.addEventListener('touchend', onMouseUp);
 
@@ -222,12 +225,12 @@ export default function ImagePickerModal({
     ...DEFAULT_PRESET_IMAGES
   ];
 
-  const desktopPosX = Math.min(100, Math.max(0, 50 + desktopDragOffset.x));
-  const desktopPosY = Math.min(100, Math.max(0, 50 + desktopDragOffset.y));
+  const desktopPosX = Math.min(100, Math.max(0, 50 - desktopDragOffset.x));
+  const desktopPosY = Math.min(100, Math.max(0, 50 - desktopDragOffset.y));
   const desktopPosStr = `${desktopPosX}% ${desktopPosY}%`;
 
-  const mobilePosX = Math.min(100, Math.max(0, 50 + mobileDragOffset.x));
-  const mobilePosY = Math.min(100, Math.max(0, 50 + mobileDragOffset.y));
+  const mobilePosX = Math.min(100, Math.max(0, 50 - mobileDragOffset.x));
+  const mobilePosY = Math.min(100, Math.max(0, 50 - mobileDragOffset.y));
   const mobilePosStr = `${mobilePosX}% ${mobilePosY}%`;
 
   const handleConfirm = () => {

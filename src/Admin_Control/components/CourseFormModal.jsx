@@ -28,13 +28,25 @@ export default function CourseFormModal({
     const list = formData.whoIsItForList || [];
     setFormData((prev) => ({
       ...prev,
-      whoIsItForList: [...list, 'Target audience profile description']
+      whoIsItForList: [
+        ...list,
+        {
+          title: 'Target Candidate Profile',
+          desc: 'Target audience profile description and career transition goals'
+        }
+      ]
     }));
   };
 
-  const handleUpdateWhoFor = (index, value) => {
+  const handleUpdateWhoForField = (index, field, value) => {
     const list = [...(formData.whoIsItForList || [])];
-    list[index] = value;
+    const curr = list[index];
+    let baseObj = typeof curr === 'string'
+      ? { title: 'Candidate Profile', desc: curr }
+      : { ...curr };
+
+    baseObj[field] = value;
+    list[index] = baseObj;
     setFormData((prev) => ({ ...prev, whoIsItForList: list }));
   };
 
@@ -43,9 +55,12 @@ export default function CourseFormModal({
     setFormData((prev) => ({ ...prev, whoIsItForList: list }));
   };
 
-  const audienceItems = (formData.whoIsItForList || []).map((item, idx) =>
-    typeof item === 'string' ? { id: `aud-${idx}`, text: item, origIdx: idx } : item
-  );
+  const audienceItems = (formData.whoIsItForList || []).map((item, idx) => {
+    if (typeof item === 'string') {
+      return { id: `aud-${idx}`, origIdx: idx, title: 'Candidate Profile', desc: item };
+    }
+    return { ...item, id: `aud-${idx}`, origIdx: idx };
+  });
 
   const modalJSX = (
     <div style={{
@@ -276,6 +291,20 @@ export default function CourseFormModal({
                   />
                 </div>
 
+                <div style={{ marginBottom: '14px' }}>
+                  <label htmlFor="course_video_url" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                    YouTube Demo / Practical Training Video Link (videoUrl)
+                  </label>
+                  <input
+                    id="course_video_url"
+                    type="text"
+                    value={formData.videoUrl || ''}
+                    onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                    placeholder="e.g. https://www.youtube.com/watch?v=aircAruvnKk or https://youtu.be/..."
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                  />
+                </div>
+
                 <div>
                   <label htmlFor="course_description" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
                     Course Overview & Subtitle
@@ -311,7 +340,7 @@ export default function CourseFormModal({
                       Target Candidate Profiles ("Who Is This Course For?")
                     </h4>
                     <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                      Add target profiles like freshers, non-IT switchers, manual testers, etc.
+                      Edit titles and inner descriptions for freshers, non-IT switchers, manual testers, etc.
                     </span>
                   </div>
                   <button
@@ -319,33 +348,72 @@ export default function CourseFormModal({
                     onClick={handleAddWhoFor}
                     style={{ padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', fontSize: '0.82rem' }}
                   >
-                    + Add Profile
+                    + Add Target Profile
                   </button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {audienceItems.map((item, idx) => (
-                    <div key={item.id} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                      <label htmlFor={`audience_input_${item.id}`} style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', width: '24px' }}>
-                        #{idx + 1}
-                      </label>
-                      <input
-                        id={`audience_input_${item.id}`}
-                        type="text"
-                        value={item.text}
-                        onChange={(e) => handleUpdateWhoFor(item.origIdx !== undefined ? item.origIdx : idx, e.target.value)}
-                        placeholder={`Audience Profile #${idx + 1}`}
-                        style={{ flex: 1, padding: '8px 12px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleDeleteWhoFor(item.origIdx !== undefined ? item.origIdx : idx)}
-                        style={{ padding: '6px 10px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  {audienceItems.map((item, idx) => {
+                    const origIndex = item.origIdx !== undefined ? item.origIdx : idx;
+                    const itemTitle = item.title || item.name || `Target Profile #${idx + 1}`;
+                    const itemDesc = item.desc || item.description || item.text || '';
+
+                    return (
+                      <div
+                        key={item.id || idx}
+                        style={{
+                          background: '#f8fafc',
+                          border: '1.5px solid #cbd5e1',
+                          borderRadius: '12px',
+                          padding: '14px',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          gap: '10px'
+                        }}
                       >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontSize: '0.78rem', fontWeight: 900, color: '#000648', background: '#e0e7ff', padding: '2px 8px', borderRadius: '4px' }}>
+                            Profile Card #{idx + 1}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteWhoFor(origIndex)}
+                            style={{ padding: '4px 10px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+                          >
+                            Remove Card
+                          </button>
+                        </div>
+
+                        <div>
+                          <label htmlFor={`aud_title_${item.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                            Candidate Profile Title *
+                          </label>
+                          <input
+                            id={`aud_title_${item.id}`}
+                            type="text"
+                            value={itemTitle}
+                            onChange={(e) => handleUpdateWhoForField(origIndex, 'title', e.target.value)}
+                            placeholder="e.g. Aspiring IT & Tech Professionals"
+                            style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
+                          />
+                        </div>
+
+                        <div>
+                          <label htmlFor={`aud_desc_${item.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                            Profile Description & Inner Content *
+                          </label>
+                          <textarea
+                            id={`aud_desc_${item.id}`}
+                            rows={2}
+                            value={itemDesc}
+                            onChange={(e) => handleUpdateWhoForField(origIndex, 'desc', e.target.value)}
+                            placeholder="Working Engineers seeking transition into cloud, DevOps, AI, testing & infra roles..."
+                            style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             )}

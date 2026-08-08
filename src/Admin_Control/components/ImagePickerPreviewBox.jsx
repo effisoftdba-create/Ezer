@@ -141,13 +141,17 @@ export default function ImagePickerPreviewBox({
         {/* DESKTOP VIEW CONTAINER */}
         {(devicePreviewMode === 'desktop' || devicePreviewMode === 'dual') && (
           <div 
+            role="button"
+            tabIndex={0}
             onClick={() => setActiveTarget && setActiveTarget('desktop')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTarget && setActiveTarget('desktop'); }}
             style={{ 
               background: '#ffffff', 
               border: activeTarget === 'desktop' ? '2px solid #000648' : '1.5px solid #cbd5e1', 
               borderRadius: '12px', 
               padding: '14px',
-              boxShadow: activeTarget === 'desktop' ? '0 4px 14px rgba(0,6,72,0.1)' : 'none'
+              boxShadow: activeTarget === 'desktop' ? '0 4px 14px rgba(0,6,72,0.1)' : 'none',
+              outline: 'none'
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
@@ -160,10 +164,14 @@ export default function ImagePickerPreviewBox({
             </div>
 
             <div
-              role="region"
+              role="button"
+              tabIndex={0}
               aria-label="Desktop screen preview - drag image to adjust position"
               onMouseDown={onMouseDownDesktop}
               onTouchStart={onTouchStartDesktop}
+              onKeyDown={(e) => {
+                if (e.key === 'ArrowLeft') handleMouseDown(0, 0, 'desktop');
+              }}
               style={{
                 aspectRatio: previewDims.ratio,
                 maxHeight: '260px',
@@ -220,7 +228,10 @@ export default function ImagePickerPreviewBox({
         {/* MOBILE PHONE FRAME SCREEN MOCKUP */}
         {(devicePreviewMode === 'mobile' || devicePreviewMode === 'dual') && (
           <div 
+            role="button"
+            tabIndex={0}
             onClick={() => setActiveTarget && setActiveTarget('mobile')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTarget && setActiveTarget('mobile'); }}
             style={{ 
               background: '#ffffff', 
               border: activeTarget === 'mobile' ? '2px solid #000648' : '1.5px solid #cbd5e1', 
@@ -229,7 +240,8 @@ export default function ImagePickerPreviewBox({
               display: 'flex', 
               flexDirection: 'column', 
               alignItems: 'center',
-              boxShadow: activeTarget === 'mobile' ? '0 4px 14px rgba(0,6,72,0.1)' : 'none'
+              boxShadow: activeTarget === 'mobile' ? '0 4px 14px rgba(0,6,72,0.1)' : 'none',
+              outline: 'none'
             }}
           >
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
@@ -264,13 +276,18 @@ export default function ImagePickerPreviewBox({
 
               {/* Screen Area with Drag Event Handlers */}
               <div
-                role="region"
+                role="button"
+                tabIndex={0}
                 aria-label="Mobile screen preview - drag image to adjust position"
                 onMouseDown={onMouseDownMobile}
                 onTouchStart={onTouchStartMobile}
+                onKeyDown={(e) => {
+                  if (e.key === 'ArrowLeft') handleMouseDown(0, 0, 'mobile');
+                }}
                 style={{
                   width: '100%',
-                  flex: 1,
+                  aspectRatio: previewDims.ratio,
+                  maxHeight: '190px',
                   background: '#000638',
                   borderRadius: '14px',
                   overflow: 'hidden',
@@ -278,7 +295,8 @@ export default function ImagePickerPreviewBox({
                   border: '1.5px solid #115DFC',
                   cursor: (isDragging && activeTarget === 'mobile') ? 'grabbing' : 'grab',
                   userSelect: 'none',
-                  touchAction: 'none'
+                  touchAction: 'none',
+                  margin: 'auto 0'
                 }}
               >
                 <img
