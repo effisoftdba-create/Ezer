@@ -3,7 +3,38 @@ import { testimonials as initialTestimonials, videoStories } from '../../data/te
 import { generalFaqs } from '../../data/faq';
 import productionData from '../../data/productionData.json';
 
-export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v12_mobile_cache_purge_v2';
+export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v13_3line_text_sync';
+
+export const defaultSlides = [
+  {
+    id: 'slide-1',
+    url: 'images/hero/hero_section_1.jpg',
+    headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
+    sub: "EZER Learning Solutions is India's top tech-driven platform delivering live online, job-oriented IT courses. Learn from corporate tech practitioners with hands-on labs, 12-month placement assistance, and 3-year community access.",
+    badge: 'Empowering Career Switchers',
+  },
+  {
+    id: 'slide-2',
+    url: 'images/hero/devops.avif',
+    headline: 'Deploy, Automate, and Scale Like a Real DevOps Engineer',
+    sub: 'Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with real production cloud labs. Build enterprise CI/CD pipelines and accelerate your IT career switch with dedicated 1-on-1 expert mentor reviews.',
+    badge: 'Cloud & DevOps Masterclass',
+  },
+  {
+    id: 'slide-3',
+    url: 'images/hero/full-stack-development.jpg',
+    headline: 'Build Modern AI-Powered Web Applications',
+    sub: 'Master React, Node.js, Next.js & PostgreSQL supercharged with cutting-edge AI coding assistants. Develop full-stack scalable web applications from scratch and build a high-impact portfolio that gets you hired.',
+    badge: 'Full Stack with AI',
+  },
+  {
+    id: 'slide-4',
+    url: 'images/hero/AI_machine_learning.png',
+    headline: 'From Python Basics to Deploying Real ML Models',
+    sub: 'A hands-on, project-based path into AI & Machine Learning — live, instructor-led, and practical. Learn data engineering, neural networks, and model deployment strategies backed by 12-month career placement support.',
+    badge: 'AI & Data Science Track',
+  },
+];
 export const STORAGE_COURSES_KEY = 'ezer_courses:v12_mobile_cache_purge_v2';
 export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v12_mobile_cache_purge_v2';
 export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v12_mobile_cache_purge_v2';
@@ -97,36 +128,7 @@ export const defaultPopupConfig = {
   ]
 };
 
-export const defaultSlides = [
-  {
-    id: 'slide-1',
-    url: 'images/hero/hero_section_1.jpg',
-    headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
-    sub: "EZER Learning Solutions is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses. Taught by corporate-experienced IT professionals, EZER offers personalized live online training, hands-on labs, 12-month placement support, and up to 3 years of community access.",
-    badge: 'Empowering Career Switchers',
-  },
-  {
-    id: 'slide-2',
-    url: 'images/hero/devops.avif',
-    headline: 'Deploy, Automate, and Scale Like a Real DevOps Engineer',
-    sub: 'Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with hands-on production labs.',
-    badge: 'Cloud & DevOps Masterclass',
-  },
-  {
-    id: 'slide-3',
-    url: 'images/hero/full-stack-development.jpg',
-    headline: 'Build Modern AI-Powered Web Applications',
-    sub: 'Master React, Node.js, Next.js & PostgreSQL supercharged with AI coding assistants.',
-    badge: 'Full Stack with AI',
-  },
-  {
-    id: 'slide-4',
-    url: 'images/hero/AI_machine_learning.png',
-    headline: 'From Python Basics to Deploying Real ML Models',
-    sub: 'A hands-on, project-based path into AI & Machine Learning — live, instructor-led, and practical.',
-    badge: 'AI & Data Science Track',
-  },
-];
+
 
 export const defaultPlatformDef = {
   tag: 'Empowering Career Switchers',
