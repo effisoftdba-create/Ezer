@@ -72,7 +72,7 @@ export default function Hero({ onOpenDemoModal }) {
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.4 }}
                   className="hero-animated-text-container"
-                  style={{ minHeight: '270px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
+                  style={{ minHeight: '360px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
                 >
 
 
@@ -232,7 +232,7 @@ export default function Hero({ onOpenDemoModal }) {
         <style>{`
           @media (max-width: 900px) {
             .hero-animated-text-container {
-              min-height: 295px !important;
+              min-height: 330px !important;
             }
             .hero-split-container {
               grid-template-columns: 1fr !important;
