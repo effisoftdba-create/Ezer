@@ -34,6 +34,23 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.name?.trim() || !formData.email?.trim() || !formData.phone?.trim() || !formData.course) {
+      setStatus({ submitting: false, success: false, error: 'Please fill in all required details.' });
+      if (siteData?.notifyState) {
+        siteData.notifyState('form_validation', 'Missing Required Details', 'Please fill in all required fields to proceed.');
+      }
+      return;
+    }
+
+    const cleanPhone = (formData.phone || '').replace(/\D/g, '');
+    if (cleanPhone.length !== 10) {
+      setStatus({ submitting: false, success: false, error: 'Please enter a valid 10-digit mobile number.' });
+      if (siteData?.notifyState) {
+        siteData.notifyState('form_validation', 'Invalid Mobile Number', 'Please enter a valid 10-digit mobile number.');
+      }
+      return;
+    }
+
     if (!formData.agreeTerms) {
       setStatus({ submitting: false, success: false, error: 'Please accept terms and conditions.' });
       if (siteData?.notifyState) {
@@ -43,6 +60,7 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
     }
 
     setStatus({ submitting: true, success: false, error: '' });
+
     if (siteData?.notifyState) {
       siteData.notifyState('loading', 'Submitting Enquiry...', 'Syncing your details with our admissions desk.');
     }

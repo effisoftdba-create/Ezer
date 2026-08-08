@@ -120,8 +120,9 @@ export default function GraduateOutcomesManager() {
       {/* Section Header Editor */}
       <form onSubmit={handleHeaderSave} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '20px', marginBottom: '24px' }}>
         <h3 style={{ margin: '0 0 12px 0', fontSize: '1rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <HiSparkles color="#f2b733" size={18} /> Edit Section Title & Tagline
+          Edit Section Title & Tagline
         </h3>
+
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '16px', marginBottom: '12px' }}>
           <div>

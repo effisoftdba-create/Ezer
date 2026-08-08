@@ -197,8 +197,9 @@ export default function PlatformManager() {
               cursor: 'pointer', boxShadow: '0 4px 14px rgba(0,6,72,0.2)', display: 'flex', alignItems: 'center', gap: '8px'
             }}
           >
-            <HiSparkles size={18} /> Update Platform Showcase
+            Update Platform Showcase
           </button>
+
         </div>
       </form>
 

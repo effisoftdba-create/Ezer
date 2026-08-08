@@ -84,8 +84,9 @@ export default function Blog({ onOpenDemoModal }) {
             marginBottom: '18px', border: '1.5px solid rgba(242, 183, 51, 0.4)',
             boxShadow: '0 0 24px rgba(242, 183, 51, 0.3)'
           }}>
-            <HiSparkles size={16} /> EZER TECH MAGAZINE • VOL. 2026 EDITION
+            EZER TECH MAGAZINE • VOL. 2026 EDITION
           </span>
+
 
           <h1 style={{
             fontSize: 'clamp(2.2rem, 4.2vw, 3.6rem)',
@@ -123,8 +124,9 @@ export default function Blog({ onOpenDemoModal }) {
               onError={handleImgError}
             />
             <span className="cover-story-tag">
-              <HiSparkles size={14} /> COVER STORY
+              COVER STORY
             </span>
+
           </div>
 
           <div className="featured-cover-content">

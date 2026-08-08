@@ -180,8 +180,9 @@ export default function CourseDetail({ onOpenDemoModal }) {
                 marginBottom: '10px'
               }}
             >
-              <HiSparkles size={16} /> COURSE LIVE DEMO & PRACTICAL VIDEO PREVIEW
+              COURSE LIVE DEMO & PRACTICAL VIDEO PREVIEW
             </span>
+
             <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.6rem, 3vw, 2.4rem)', fontWeight: 900, margin: '4px 0 0' }}>
               Watch Live Instructor Training Session
             </h2>
@@ -348,8 +349,9 @@ export default function CourseDetail({ onOpenDemoModal }) {
                 marginBottom: '10px'
               }}
             >
-              <HiSparkles size={16} /> OFFICIAL INSTANT ENROLLMENT
+              OFFICIAL INSTANT ENROLLMENT
             </span>
+
             <h2 style={{ color: '#ffffff', fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)', fontWeight: 900, marginBottom: '10px' }}>
               Enroll Today & Unlock 12-Month Placement Support
             </h2>

@@ -87,8 +87,9 @@ export default function PaymentCard({ course, onEnrollClick }) {
                   marginBottom: '16px'
                 }}
               >
-                <HiSparkles size={14} /> OFFICIAL EZER COHORT ACCESS
+                OFFICIAL EZER COHORT ACCESS
               </div>
+
 
               <h3 style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.2rem)', fontWeight: 900, color: '#ffffff', marginBottom: '12px', lineHeight: 1.2 }}>
                 {course?.title || 'EZER IT Certification'}

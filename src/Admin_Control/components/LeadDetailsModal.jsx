@@ -44,8 +44,10 @@ export default function LeadDetailsModal({
     setIsSaved(true);
     setTimeout(() => {
       setIsSaved(false);
-    }, 600);
+      setSelectedLeadId(null);
+    }, 450);
   };
+
 
 
   const modalContent = (

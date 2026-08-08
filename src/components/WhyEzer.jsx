@@ -53,9 +53,9 @@ export default function WhyEzer() {
           marginBottom: '28px', width: '100%'
         }}>
           <span className="section-tag">
-            <HiSparkles size={14} style={{ color: '#f2b733' }} />
             The EZER Advantage
           </span>
+
           <h2 style={{ color: '#000648', fontSize: 'clamp(1.35rem, 2.2vw, 1.7rem)', marginTop: '4px' }}>
             Why EZER Learning Solution
           </h2>

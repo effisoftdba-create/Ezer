@@ -111,8 +111,9 @@ export default function PopupManager() {
           boxShadow: '0 4px 16px rgba(0,6,72,0.06)'
         }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiSparkles color="#f2b733" size={20} /> Modal Headers & Submit Button Text
+            Modal Headers & Submit Button Text
           </h3>
+
 
           <div style={{ marginBottom: '16px' }}>
             <label htmlFor="popup_title_input" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>

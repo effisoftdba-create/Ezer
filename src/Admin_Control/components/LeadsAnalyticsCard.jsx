@@ -5,11 +5,11 @@ export default function LeadsAnalyticsCard({ sortedCourseAnalytics, totalCount }
   return (
     <div style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '20px', marginBottom: '28px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
-        <HiSparkles color="#f2b733" size={20} />
         <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: '#000648' }}>
           Course Demand & Custom "Others" Interest Breakdown
         </h3>
       </div>
+
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
         {sortedCourseAnalytics.map(([cName, count]) => {

@@ -8,6 +8,7 @@ import { resolveImageSrc } from '../../utils/imageUtils';
 const DEFAULT_TESTIMONIAL_STATE = {
   author: '',
   role: '',
+  track: 'Software Testing – Playwright',
   text: '',
   rating: 5,
   avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
@@ -53,12 +54,14 @@ export default function TestimonialsManager() {
     setFormData({
       author: item.author || item.name || '',
       role: item.role || item.designation || '',
+      track: item.track || item.course || 'Cloud DevOps with AI',
       text: item.text || item.content || item.review || '',
       rating: item.rating || 5,
       avatar: item.avatar || item.image || ''
     });
     setIsEditing(true);
   };
+
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -172,9 +175,15 @@ export default function TestimonialsManager() {
                 <img src={resolveImageSrc(item.avatar || item.image)} alt={item.author || item.name} style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }} />
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>{item.author || item.name}</h4>
-                  <div style={{ fontSize: '0.725rem', color: '#64748b' }}>{item.role || item.designation}</div>
+                  <div style={{ fontSize: '0.725rem', color: '#64748b', fontWeight: 600 }}>{item.role || item.designation}</div>
+                  {item.track && (
+                    <div style={{ fontSize: '0.68rem', color: '#000648', background: '#f1f5f9', border: '1px solid #cbd5e1', padding: '1px 7px', borderRadius: '50px', fontWeight: 700, marginTop: '3px', display: 'inline-block' }}>
+                      Track: {item.track}
+                    </div>
+                  )}
                 </div>
               </div>
+
 
               <div style={{ display: 'flex', gap: '2px', color: '#f2b733', marginBottom: '8px' }}>
                 {[...Array(item.rating || 5)].map((_, i) => (

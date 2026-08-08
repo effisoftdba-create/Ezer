@@ -44,6 +44,8 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
                 const statusInfo = STATUS_COLORS[lead.status] || STATUS_COLORS.Pending;
                 const isOthers = lead.course === 'Others' || lead.course === 'Other';
                 const isPaid = lead.paymentStatus === 'PAID' || lead.amountPaid || lead.status === 'Enrolled';
+                const comments = lead.comments || [];
+                const latestComment = comments.length > 0 ? comments[comments.length - 1] : null;
 
                 return (
                   <tr key={lead.id} style={{ borderBottom: '1px solid #f1f5f9', transition: 'background-color 0.15s ease' }}>
@@ -55,6 +57,14 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
                       {isPaid && (
                         <div style={{ marginTop: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px', background: '#dcfce7', color: '#166534', border: '1px solid #86efac', padding: '2px 8px', borderRadius: '50px', fontSize: '0.7rem', fontWeight: 900 }}>
                           <HiCheckCircle size={12} /> PAID ({lead.amountPaid || '₹9'})
+                        </div>
+                      )}
+                      {latestComment && (
+                        <div style={{ marginTop: '6px', padding: '4px 8px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '0.73rem', color: '#334155', display: 'flex', alignItems: 'center', gap: '5px', maxWidth: '260px' }}>
+                          <HiChatAlt2 size={13} color="#115DFC" style={{ flexShrink: 0 }} />
+                          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontWeight: 600 }}>
+                            <strong style={{ color: '#000648' }}>{latestComment.author}:</strong> "{latestComment.text}"
+                          </span>
                         </div>
                       )}
                     </td>
@@ -117,7 +127,7 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
                             fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
                           }}
                         >
-                          <HiChatAlt2 size={14} /> Notes & Details
+                          <HiChatAlt2 size={14} /> Notes & Details {comments.length > 0 && <span style={{ background: '#f2b733', color: '#000648', borderRadius: '50px', padding: '1px 6px', fontSize: '0.68rem', fontWeight: 900, marginLeft: '2px' }}>{comments.length}</span>}
                         </button>
 
                         <button
@@ -133,6 +143,7 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
                         </button>
                       </div>
                     </td>
+
                   </tr>
                 );
               })

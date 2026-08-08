@@ -145,17 +145,38 @@ export default function PopupFormFields({
             id="popup-phone"
             aria-label="Mobile Phone Number"
             type="tel"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={10}
             name="phone"
             required
             placeholder="Enter 10-digit mobile number"
-            value={formData.phone}
-            onChange={handleChange}
-            style={{ ...inputStyle, flexGrow: 1 }}
+            value={formData.phone || ''}
+            onChange={(e) => {
+              const onlyNums = e.target.value.replace(/\D/g, '').slice(0, 10);
+              handleChange({
+                target: {
+                  name: 'phone',
+                  value: onlyNums
+                }
+              });
+            }}
+            style={{
+              ...inputStyle,
+              flexGrow: 1,
+              borderColor: formData.phone && formData.phone.length > 0 && formData.phone.length < 10 ? '#dc2626' : '#cbd5e1'
+            }}
             onFocus={handleFocus}
             onBlur={handleBlur}
           />
         </div>
+        {formData.phone && formData.phone.length > 0 && formData.phone.length < 10 && (
+          <div style={{ color: '#dc2626', fontSize: '0.74rem', marginTop: '4px', fontWeight: 700 }}>
+            ⚠️ Please enter a valid 10-digit mobile number ({formData.phone.length}/10 digits)
+          </div>
+        )}
       </div>
+
 
       {/* Country */}
       <div>

@@ -217,12 +217,21 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
                 <input
                   id="student_phone"
                   type="tel"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={10}
                   required
-                  placeholder="+91 98765 43210"
+                  placeholder="Enter 10-digit mobile number"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                   style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.875rem' }}
                 />
+                {phone && phone.length > 0 && phone.length < 10 && (
+                  <div style={{ color: '#dc2626', fontSize: '0.73rem', marginTop: '4px', fontWeight: 700 }}>
+                    ⚠️ Please enter a valid 10-digit mobile number ({phone.length}/10)
+                  </div>
+                )}
+
               </div>
             </div>
 

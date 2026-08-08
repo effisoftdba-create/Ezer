@@ -345,8 +345,9 @@ export default function BlogDetail({ onOpenDemoModal }) {
               fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em',
               border: '1.5px solid rgba(242, 183, 51, 0.4)'
             }}>
-              <HiSparkles size={16} /> SPECIAL EDITORIAL FEATURE
+              SPECIAL EDITORIAL FEATURE
             </span>
+
 
             <span style={{ fontSize: '0.78rem', color: '#ffffff', background: 'rgba(255,255,255,0.12)', padding: '5px 16px', borderRadius: '50px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid rgba(255,255,255,0.2)' }}>
               <HiLocationMarker size={15} color="#f2b733" /> {article.seoGeoAeoTag}

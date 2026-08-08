@@ -176,9 +176,9 @@ export default function About({ onOpenDemoModal }) {
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <span className="section-tag">
-              <HiSparkles size={14} style={{ color: '#f2b733' }} />
               Strategic Goals
             </span>
+
             <h2 style={{ color: '#000648', fontSize: 'clamp(1.7rem, 2.8vw, 2.2rem)', fontWeight: 900, marginTop: '6px' }}>
               Core Objectives
             </h2>

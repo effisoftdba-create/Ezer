@@ -43,8 +43,9 @@ export default function ImagePickerControls({
                 display: 'flex', alignItems: 'center', gap: '4px'
               }}
             >
-              ✨ Auto-Remove Background
+              Auto-Remove Background
             </button>
+
           )}
           {onUndoBackground && (
             <button

@@ -18,7 +18,8 @@ const courseIcons = {
   'iitd-vlsi-design': <HiChip size={18} />,
   'cloud-devops-ai': <HiCloud size={18} />,
   'software-testing-playwright': <HiTerminal size={18} />,
-  'ai-machine-learning': <HiSparkles size={18} />,
+  'ai-machine-learning': <HiChip size={18} />,
+
   'it-infrastructure-sysadmin': <HiServer size={18} />,
 };
 
@@ -125,7 +126,8 @@ export default function Navbar({ onOpenDemoModal }) {
                           </div>
                           
                           {phase1Courses.map((course) => {
-                            const icon = courseIcons[course.slug] || <HiSparkles size={18} />;
+                            const icon = courseIcons[course.slug] || <HiChip size={18} />;
+
                             return (
                               <Link key={course.id} to={`/courses/${course.slug}`}
                                 onClick={() => { setDropdownOpen(false); setMobileMenuOpen(false); }}

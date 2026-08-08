@@ -93,9 +93,9 @@ export default function CourseFormModal({
               COURSE CATALOG EDITOR PORTAL
             </span>
             <h3 style={{ margin: '2px 0 0 0', fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <HiSparkles color="#f2b733" size={20} />
               {editingId ? `Editing Program: ${formData.title || 'Course'}` : 'Add New Course Program & Page Sections'}
             </h3>
+
           </div>
 
           <button

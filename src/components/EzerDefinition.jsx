@@ -220,9 +220,9 @@ export default function EzerDefinition() {
                     gap: '6px'
                   }}
                 >
-                  <HiSparkles size={14} style={{ color: '#f2b733' }} />
                   {ezerDefinition.tag}
                 </span>
+
               </div>
 
               <h2 

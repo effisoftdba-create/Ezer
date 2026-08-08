@@ -139,9 +139,9 @@ export default function ArticleFormModal({
               EZER TECH MAGAZINE EDITORIAL PORTAL
             </span>
             <h3 style={{ margin: '2px 0 0 0', fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <HiSparkles color="#f2b733" size={20} />
               {editingArticle ? `Edit Article: ${formData.title}` : 'Create & Publish New Magazine Article'}
             </h3>
+
           </div>
 
           <button
