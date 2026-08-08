@@ -27,8 +27,10 @@ export default function ImagePickerPreviewBox({
 }) {
   const [devicePreviewMode, setDevicePreviewMode] = useState('dual');
   const [showGridLines, setShowGridLines] = useState(true);
+  const [aspectRatioMode, setAspectRatioMode] = useState(null);
 
   const activeSrc = resolveImageSrc(activeSelectedUrl);
+  const currentRatio = aspectRatioMode || previewDims.ratio;
 
   const desktopPosX = Math.min(100, Math.max(0, 50 + dragOffset.x));
   const desktopPosY = Math.min(100, Math.max(0, 50 + dragOffset.y));
@@ -71,6 +73,49 @@ export default function ImagePickerPreviewBox({
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+          {/* Aspect Ratio Switcher Tabs */}
+          <div style={{ display: 'flex', background: '#cbd5e1', borderRadius: '8px', padding: '3px', gap: '3px' }}>
+            <button
+              type="button"
+              onClick={() => setAspectRatioMode('1/1')}
+              style={{
+                padding: '4px 9px', borderRadius: '6px', border: 'none',
+                background: currentRatio === '1/1' ? '#000648' : 'transparent',
+                color: currentRatio === '1/1' ? '#f2b733' : '#334155',
+                fontWeight: currentRatio === '1/1' ? 900 : 600,
+                fontSize: '0.72rem', cursor: 'pointer'
+              }}
+            >
+              1:1 Square
+            </button>
+            <button
+              type="button"
+              onClick={() => setAspectRatioMode('4/3')}
+              style={{
+                padding: '4px 9px', borderRadius: '6px', border: 'none',
+                background: currentRatio === '4/3' ? '#000648' : 'transparent',
+                color: currentRatio === '4/3' ? '#f2b733' : '#334155',
+                fontWeight: currentRatio === '4/3' ? 900 : 600,
+                fontSize: '0.72rem', cursor: 'pointer'
+              }}
+            >
+              4:3 Desktop
+            </button>
+            <button
+              type="button"
+              onClick={() => setAspectRatioMode('16/9')}
+              style={{
+                padding: '4px 9px', borderRadius: '6px', border: 'none',
+                background: currentRatio === '16/9' ? '#000648' : 'transparent',
+                color: currentRatio === '16/9' ? '#f2b733' : '#334155',
+                fontWeight: currentRatio === '16/9' ? 900 : 600,
+                fontSize: '0.72rem', cursor: 'pointer'
+              }}
+            >
+              16:9 Wide
+            </button>
+          </div>
+
           {/* Rule of Thirds Grid Toggle */}
           <button
             type="button"
@@ -85,7 +130,7 @@ export default function ImagePickerPreviewBox({
               display: 'flex', alignItems: 'center', gap: '4px'
             }}
           >
-            <HiViewGrid size={14} /> Grid Overlay {showGridLines ? 'ON' : 'OFF'}
+            <HiViewGrid size={14} /> Grid {showGridLines ? 'ON' : 'OFF'}
           </button>
 
           {/* Device Preview Mode Switcher */}
@@ -156,7 +201,7 @@ export default function ImagePickerPreviewBox({
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <HiDesktopComputer color="#115DFC" size={16} /> Desktop View ({previewDims.ratio})
+                <HiDesktopComputer color="#115DFC" size={16} /> Desktop View ({currentRatio})
               </span>
               <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#166534', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
                 <HiSelector size={12} /> Drag image to adjust PC focus
@@ -173,7 +218,7 @@ export default function ImagePickerPreviewBox({
                 if (e.key === 'ArrowLeft') handleMouseDown(0, 0, 'desktop');
               }}
               style={{
-                aspectRatio: previewDims.ratio,
+                aspectRatio: currentRatio,
                 maxHeight: '260px',
                 borderRadius: '10px',
                 overflow: 'hidden',
