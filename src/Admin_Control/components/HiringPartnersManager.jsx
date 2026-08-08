@@ -37,8 +37,14 @@ const BRAND_SVGS_MAP = {
 };
 
 function getCompanySvg(name, currentImage) {
-  if (typeof currentImage === 'string' && currentImage.trim().startsWith('<svg')) {
-    return currentImage;
+  if (typeof currentImage === 'string' && currentImage.trim()) {
+    const trimmed = currentImage.trim();
+    if (trimmed.startsWith('<svg')) {
+      return trimmed;
+    }
+    if (trimmed.startsWith('data:image') || trimmed.startsWith('http') || trimmed.startsWith('images/')) {
+      return null; // Render user custom image!
+    }
   }
   const lower = (name || '').toLowerCase();
   let found = null;
@@ -47,6 +53,7 @@ function getCompanySvg(name, currentImage) {
   });
   return found;
 }
+
 
 const CORPORATE_LOGO_PRESETS = [
   { name: 'TCS Tata', svg: BRAND_SVGS_MAP['tcs'] },

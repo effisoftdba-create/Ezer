@@ -98,6 +98,7 @@ export default function ImagePickerModal({
 }) {
   const [selectedUrlOverride, setSelectedUrlOverride] = useState(null);
   const [customUrl, setCustomUrl] = useState('');
+  const [originalUncutUrl, setOriginalUncutUrl] = useState(currentImage || '');
   const [fitModeOverride, setFitModeOverride] = useState(null);
   const [zoomScale, setZoomScale] = useState(currentZoom || 1);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -107,6 +108,13 @@ export default function ImagePickerModal({
   const [aspectRatioOverride, setAspectRatioOverride] = useState(null);
   const dragStartRef = useRef({ x: 0, y: 0 });
   const presetPosRef = useRef(currentPosition || '50% 50%');
+
+  useEffect(() => {
+    if (isOpen && currentImage) {
+      setOriginalUncutUrl(currentImage);
+    }
+  }, [isOpen, currentImage]);
+
 
   const [uploadedImages, setUploadedImages] = useState(() => {
     try {
@@ -210,6 +218,9 @@ export default function ImagePickerModal({
 
   const handleAutoRemoveBackground = async () => {
     if (!activeSelectedUrl) return;
+    if (!originalUncutUrl || originalUncutUrl === activeSelectedUrl) {
+      setOriginalUncutUrl(activeSelectedUrl);
+    }
     setIsUploading(true);
     try {
       const transparentUri = await removeImageBackground(activeSelectedUrl);
@@ -219,6 +230,13 @@ export default function ImagePickerModal({
       console.warn('Background removal failed:', err);
     } finally {
       setIsUploading(false);
+    }
+  };
+
+  const handleUndoBackgroundCut = () => {
+    if (originalUncutUrl) {
+      setSelectedUrlOverride(originalUncutUrl);
+      setCustomUrl(originalUncutUrl);
     }
   };
 
@@ -235,11 +253,12 @@ export default function ImagePickerModal({
     const reader = new FileReader();
     reader.onloadend = async () => {
       const rawDataUri = reader.result;
-      let finalUri = await compressImageForWeb(rawDataUri, 600, 0.6);
+      const compressedUri = await compressImageForWeb(rawDataUri, 600, 0.6);
+      setOriginalUncutUrl(compressedUri);
 
-      // Auto-remove background box for company logos
+      let finalUri = compressedUri;
       if (previewDims.ratio === '180/48') {
-        finalUri = await removeImageBackground(finalUri);
+        finalUri = await removeImageBackground(compressedUri);
       }
 
       setCustomUrl(finalUri);
@@ -253,7 +272,6 @@ export default function ImagePickerModal({
     };
     reader.readAsDataURL(file);
   };
-
 
   const handleDeleteUploadedImage = (url, e) => {
     e.stopPropagation();
@@ -269,9 +287,11 @@ export default function ImagePickerModal({
   };
 
   const handleGallerySelect = (url) => {
+    setOriginalUncutUrl(url);
     setSelectedUrlOverride(url);
     setCustomUrl('');
   };
+
 
   const modalJSX = (
     <div style={{
@@ -333,7 +353,9 @@ export default function ImagePickerModal({
           aspectRatio={activeRatio}
           onSelectAspectRatio={(val) => setAspectRatioOverride(val)}
           onAutoRemoveBackground={handleAutoRemoveBackground}
+          onUndoBackground={originalUncutUrl && originalUncutUrl !== activeSelectedUrl ? handleUndoBackgroundCut : null}
         />
+
 
 
         {/* DRAG & DROP FILE UPLOAD ZONE */}

@@ -20,7 +20,8 @@ export default function ImagePickerControls({
   handlePresetPosition,
   aspectRatio,
   onSelectAspectRatio,
-  onAutoRemoveBackground
+  onAutoRemoveBackground,
+  onUndoBackground
 }) {
   return (
     <div style={{ background: '#f1f5f9', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '16px', marginBottom: '20px' }}>
@@ -45,9 +46,26 @@ export default function ImagePickerControls({
               ✨ Auto-Remove Background
             </button>
           )}
+          {onUndoBackground && (
+            <button
+              type="button"
+              onClick={onUndoBackground}
+              title="Revert back to original image before background removal"
+              style={{
+                padding: '4px 12px', background: '#ffffff',
+                color: '#dc2626', border: '1.5px solid #fecaca', borderRadius: '6px',
+                fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: '4px'
+              }}
+            >
+              ↺ Undo Cut & Restore
+            </button>
+          )}
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#115DFC', background: '#e0e7ff', padding: '3px 10px', borderRadius: '6px' }}>
             Zoom: {Math.round(zoomScale * 100)}%
           </span>
+
+
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#166534', background: '#dcfce7', padding: '3px 10px', borderRadius: '6px' }}>
             Fit Mode: {fitMode === 'contain' ? 'Full Image (Contain)' : 'Cover (Fill)'}
           </span>

@@ -215,6 +215,12 @@ export function SiteProvider({ children }) {
         dispatch({ type: 'SET_KEY', key: 'faqList', value: merged });
       }
     });
+    const unsubPartners = subscribeToCollection('hiringPartners', (items) => {
+      if (items && items.length > 0) {
+        const merged = mergeCollection(defaultHiringPartners, items, 'id');
+        dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: merged });
+      }
+    });
 
     return () => {
       unsubCourses();
@@ -229,7 +235,9 @@ export function SiteProvider({ children }) {
       unsubTesti();
       unsubVideo();
       unsubFaq();
+      if (typeof unsubPartners === 'function') unsubPartners();
     };
+
   }, []);
 
   // Action Dispatchers with Array Integrity & Full-Stack Realtime Sync
