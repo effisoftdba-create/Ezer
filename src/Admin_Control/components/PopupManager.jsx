@@ -217,21 +217,20 @@ export default function PopupManager() {
         currentImage={pickerTarget === 'header' ? formData.image : (formData.bodyBgImage || formData.image)}
         currentPosition={formData.imagePosition}
         currentFit={formData.imageFit}
-        onSelectImage={(url, pos, fit) => {
-          if (pickerTarget === 'header') {
-            setFormData((prev) => ({
-              ...prev,
-              image: url,
-              imagePosition: pos || 'center center',
-              imageFit: fit || 'cover'
-            }));
-          } else {
-            setFormData((prev) => ({
-              ...prev,
-              bodyBgImage: url
-            }));
-          }
+        onSelectImage={(url, pos, fit, zoom) => {
+          setFormData((prev) => ({
+            ...prev,
+            image: url,
+            bodyBgImage: url,
+            imagePosition: pos || 'center center',
+            imageFit: fit || 'contain',
+            imageZoom: zoom || 1,
+            bodyBgPosition: pos || 'center center',
+            bodyBgFit: fit || 'contain',
+            bodyBgZoom: zoom || 1
+          }));
         }}
+
         targetArea="Popup Form Body Watermark Photo"
         aspectRatio="Portrait / Vertical (3:4)"
         recommendedDimensions="600 x 800 px"

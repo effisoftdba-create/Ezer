@@ -20,24 +20,45 @@ export default function PopupLivePreviewBox({ formData, previewFormData, setPrev
         borderRadius: '20px', padding: '20px', display: 'flex', justifyContent: 'center'
       }}>
         <div style={{
-          background: `linear-gradient(rgba(255, 255, 255, ${overlayAlpha}), rgba(255, 255, 255, ${overlayAlpha})), url("${bodyBgUrl}")`,
-          backgroundSize: 'cover', backgroundPosition: 'center',
+          background: '#ffffff',
           borderRadius: '16px', width: '100%', maxWidth: '400px',
           border: '3px solid #000648', outline: '2px solid #f2b733', outlineOffset: '-5px',
-          overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.3)'
+          overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+          position: 'relative'
         }}>
-          <PopupHeader onClose={() => {}} overrideConfig={formData} />
+          {bodyBgUrl && (
+            <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
+              <img
+                src={bodyBgUrl}
+                alt=""
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: formData.bodyBgFit || formData.imageFit || 'contain',
+                  objectPosition: formData.bodyBgPosition || formData.imagePosition || 'center center',
+                  transform: (formData.bodyBgZoom || formData.imageZoom || 1) !== 1 ? `scale(${formData.bodyBgZoom || formData.imageZoom})` : 'none',
+                  transformOrigin: formData.bodyBgPosition || formData.imagePosition || 'center center',
+                  opacity: bgOpacity / 100
+                }}
+              />
+            </div>
+          )}
 
-          <div style={{ padding: '18px 20px', maxHeight: '520px', overflowY: 'auto' }}>
-            <PopupFormFields
-              formData={previewFormData}
-              handleChange={(e) => setPreviewFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
-              handleSubmit={(e) => e.preventDefault()}
-              status={{ submitting: false, error: '' }}
-              overrideConfig={formData}
-            />
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <PopupHeader onClose={() => {}} overrideConfig={formData} />
+
+            <div style={{ padding: '18px 20px', maxHeight: '520px', overflowY: 'auto' }}>
+              <PopupFormFields
+                formData={previewFormData}
+                handleChange={(e) => setPreviewFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
+                handleSubmit={(e) => e.preventDefault()}
+                status={{ submitting: false, error: '' }}
+                overrideConfig={formData}
+              />
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   );
