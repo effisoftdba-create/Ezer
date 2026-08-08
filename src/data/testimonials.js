@@ -28,7 +28,7 @@ export const testimonials = [
     company: "RemitBee",
     background: "9 Years Career Gap After Graduation",
     course: "Software Testing – Playwright",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=400",
     quote: "Restarting my career after a 9-year break felt impossible until I joined EZER's live cohort. The mentor support and small batch size made all the difference.",
     linkedIn: "https://linkedin.com"
   },
@@ -52,7 +52,7 @@ export const videoStories = [
     name: "Mohammed Esa Khan J",
     company: "Cloud DevOps Graduate",
     embedUrl: "https://www.youtube.com/embed/hQcFE0RD0cQ",
-    thumbnail: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400",
+    thumbnail: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=400",
   },
   {
     id: 2,

@@ -24,7 +24,7 @@ export default function ExecutiveLeadership() {
         roleTag: 'CFO',
         roleName: 'Chief Financial Officer',
         name: 'Meenakshi Sundaram',
-        image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=700',
+        image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=700&h=700',
         tagline: 'Financial integrity & student affordability.',
         headline: 'Pioneering accessible scholarship funds for high-growth tech careers.',
         bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.'

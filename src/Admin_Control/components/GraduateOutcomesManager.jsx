@@ -10,7 +10,7 @@ const DEFAULT_GRADUATE_STATE = {
   company: '',
   beforeRole: '',
   afterRole: '',
-  image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300'
+  image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300&h=300'
 };
 
 export default function GraduateOutcomesManager() {
@@ -49,7 +49,7 @@ export default function GraduateOutcomesManager() {
       company: 'TCS Digital',
       beforeRole: 'Fresher, B.Tech',
       afterRole: 'Cloud Operations Engineer',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300'
+      image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300&h=300'
     });
     setIsEditing(true);
   };

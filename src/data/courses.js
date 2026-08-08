@@ -349,7 +349,7 @@ export const phase1Courses = [
       {
         name: "Meera Krishnan",
         role: "Lead Business Intelligence Manager @ Global Analytics",
-        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300",
+        image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300&h=300",
         bio: "8+ years delivering Power BI dashboards and enterprise SQL data models. Mentored 1,500+ data analysts.",
         tags: ["Power BI Lead", "SQL Expert", "Tableau Certified"]
       }
@@ -485,7 +485,7 @@ export const phase1Courses = [
       {
         name: "Kavitha Ranganathan",
         role: "Senior SRE Lead @ Global Cloud Systems",
-        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300",
+        image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300&h=300",
         bio: "Specialist in Kubernetes zero-downtime deployments and IaC automation with Terraform.",
         tags: ["Terraform Expert", "SRE Architecture", "GitOps Specialist"]
       }

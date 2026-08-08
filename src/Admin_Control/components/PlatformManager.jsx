@@ -11,7 +11,7 @@ export default function PlatformManager() {
     tag: safeDef.tag || 'Empowering Career Switchers',
     headline: safeDef.headline || 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
     description: safeDef.description || '',
-    image: safeDef.image || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=800',
+    image: safeDef.image || 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=700&h=800',
     acronymText: safeDef.acronymText || '',
     imageFit: safeDef.imageFit || 'cover',
     imagePosition: safeDef.imagePosition || 'center center'

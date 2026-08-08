@@ -48,7 +48,7 @@ By working directly with active corporate engineers who serve as personal mentor
         content: `Graduating from a course is only half the battle. EZER's 12-Month Dedicated Placement Support ensures candidates receive continuous mock technical interviews, resume optimization tailored for Applicant Tracking Systems (ATS), and direct referral pathways to 250+ corporate hiring partners across India.
 
 Every graduate earns an official QR-verifiable executive certificate accredited under ISO 9001:2015 standards, giving hiring managers total verification confidence during recruitment.`,
-        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1000",
+        image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=1000",
         caption: "Graduate candidates participating in corporate mock interview drives."
       },
       {

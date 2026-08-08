@@ -9,7 +9,7 @@ const DEFAULT_CARD_STATE = {
   subtitle: 'Career Readiness Phase',
   desc: 'Comprehensive guidance before you start applying — build a high-impact profile that catches recruiter attention.',
   bullets: 'Resume & LinkedIn profile optimization\n1-on-1 technical mock interviews\nGitHub portfolio & capstone review',
-  image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=400',
+  image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=600&h=400',
   position: 'center center',
   fit: 'cover'
 };
