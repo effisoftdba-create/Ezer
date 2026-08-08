@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import { resolveImageSrc } from '../../utils/imageUtils';
@@ -14,23 +15,53 @@ import {
   HiX
 } from 'react-icons/hi';
 
-// Clean, 100% reliable vector SVG corporate logo presets
+const BRAND_SVGS_MAP = {
+  'tcs': '<svg viewBox="0 0 190 50" style="height:28px"><path d="M10 12 L45 12 M27.5 12 L27.5 40" stroke="#000648" stroke-width="6" stroke-linecap="square"/><text x="50" y="38" font-family="sans-serif" font-size="30" font-weight="900" fill="#000648" letter-spacing="-0.5px">TCS</text><rect x="115" y="16" width="3" height="24" fill="#f2b733"/><text x="126" y="36" font-family="sans-serif" font-size="16" font-weight="900" fill="#000648" letter-spacing="1px">TATA</text></svg>',
+  'infosys': '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#006699" letter-spacing="-1px">Infosys</text></svg>',
+  'wipro': '<svg viewBox="0 0 150 50" style="height:28px"><circle cx="16" cy="18" r="5" fill="#e42528"/><circle cx="28" cy="18" r="5" fill="#f2b733"/><circle cx="16" cy="30" r="5" fill="#006699"/><circle cx="28" cy="30" r="5" fill="#0dba4b"/><text x="42" y="36" font-family="sans-serif" font-size="28" font-weight="900" fill="#000648">wipro</text></svg>',
+  'hcl': '<svg viewBox="0 0 170 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#00529b">HCL</text><text x="80" y="36" font-family="sans-serif" font-size="24" font-weight="800" fill="#f2b733">Tech</text></svg>',
+  'hcltech': '<svg viewBox="0 0 170 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#00529b">HCL</text><text x="80" y="36" font-family="sans-serif" font-size="24" font-weight="800" fill="#f2b733">Tech</text></svg>',
+  'zoho': '<svg viewBox="0 0 160 50" style="height:28px"><rect x="4" y="10" width="28" height="28" rx="6" fill="#e42528"/><text x="11" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">Z</text><rect x="36" y="10" width="28" height="28" rx="6" fill="#006699"/><text x="42" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">O</text><rect x="68" y="10" width="28" height="28" rx="6" fill="#0dba4b"/><text x="74" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">H</text><rect x="100" y="10" width="28" height="28" rx="6" fill="#f2b733"/><text x="106" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#000648">O</text></svg>',
+  'capgemini': '<svg viewBox="0 0 190 50" style="height:28px"><path d="M12 25 C12 15, 25 10, 25 25 C25 40, 38 35, 38 25" stroke="#0070ad" stroke-width="5" fill="none" stroke-linecap="round"/><text x="48" y="34" font-family="sans-serif" font-size="26" font-weight="900" fill="#0070ad">Capgemini</text></svg>',
+  'accenture': '<svg viewBox="0 0 180 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="28" font-weight="900" fill="#000648">accenture</text><path d="M136 12 L150 22 L136 32" stroke="#a100ff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  'cognizant': '<svg viewBox="0 0 170 50" style="height:28px"><text x="5" y="35" font-family="sans-serif" font-size="27" font-weight="900" fill="#0033a0">Cognizant</text></svg>',
+  'amazon': '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="32" font-family="sans-serif" font-size="28" font-weight="900" fill="#131921">amazon</text><path d="M10 38 Q 55 46, 95 35" fill="none" stroke="#ff9900" stroke-width="3.5" stroke-linecap="round"/><path d="M90 32 L98 35 L93 40" fill="none" stroke="#ff9900" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  'google': '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">G</text><text x="34" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">o</text><text x="56" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#FBBC05">o</text><text x="78" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">g</text><text x="100" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#34A853">l</text><text x="110" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">e</text></svg>',
+  'microsoft': '<svg viewBox="0 0 170 50" style="height:28px"><rect x="5" y="10" width="13" height="13" fill="#f25022"/><rect x="21" y="10" width="13" height="13" fill="#7fba00"/><rect x="5" y="26" width="13" height="13" fill="#00a4ef"/><rect x="21" y="26" width="13" height="13" fill="#ffb900"/><text x="42" y="34" font-family="sans-serif" font-size="26" font-weight="800" fill="#475569">Microsoft</text></svg>',
+  'ibm': '<svg viewBox="0 0 130 50" style="height:28px"><text x="5" y="36" font-family="monospace" font-size="36" font-weight="900" fill="#052FAD" letter-spacing="2px">IBM</text></svg>',
+  'freshworks': '<svg viewBox="0 0 180 50" style="height:28px"><circle cx="18" cy="25" r="12" fill="#ff5a5f"/><text x="36" y="34" font-family="sans-serif" font-size="24" font-weight="900" fill="#000648">freshworks</text></svg>',
+  'l&t': '<svg viewBox="0 0 160 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#0033a0">L&T</text><text x="70" y="36" font-family="sans-serif" font-size="22" font-weight="800" fill="#f2b733">Tech</text></svg>',
+  'tech mahindra': '<svg viewBox="0 0 210 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#e42528">Tech</text><text x="75" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#000648">Mahindra</text></svg>'
+};
+
+function getCompanySvg(name, currentImage) {
+  if (typeof currentImage === 'string' && currentImage.trim().startsWith('<svg')) {
+    return currentImage;
+  }
+  const lower = (name || '').toLowerCase();
+  let found = null;
+  Object.keys(BRAND_SVGS_MAP).forEach((key) => {
+    if (lower.includes(key)) found = BRAND_SVGS_MAP[key];
+  });
+  return found;
+}
+
 const CORPORATE_LOGO_PRESETS = [
-  { name: 'TCS Tata', svg: '<svg viewBox="0 0 190 50" style="height:28px"><path d="M10 12 L45 12 M27.5 12 L27.5 40" stroke="#000648" stroke-width="6" stroke-linecap="square"/><text x="50" y="38" font-family="sans-serif" font-size="30" font-weight="900" fill="#000648" letter-spacing="-0.5px">TCS</text><rect x="115" y="16" width="3" height="24" fill="#f2b733"/><text x="126" y="36" font-family="sans-serif" font-size="16" font-weight="900" fill="#000648" letter-spacing="1px">TATA</text></svg>' },
-  { name: 'Infosys', svg: '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#006699" letter-spacing="-1px">Infosys</text></svg>' },
-  { name: 'Wipro', svg: '<svg viewBox="0 0 150 50" style="height:28px"><circle cx="16" cy="18" r="5" fill="#e42528"/><circle cx="28" cy="18" r="5" fill="#f2b733"/><circle cx="16" cy="30" r="5" fill="#006699"/><circle cx="28" cy="30" r="5" fill="#0dba4b"/><text x="42" y="36" font-family="sans-serif" font-size="28" font-weight="900" fill="#000648">wipro</text></svg>' },
-  { name: 'HCLTech', svg: '<svg viewBox="0 0 170 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#00529b">HCL</text><text x="80" y="36" font-family="sans-serif" font-size="24" font-weight="800" fill="#f2b733">Tech</text></svg>' },
-  { name: 'Zoho', svg: '<svg viewBox="0 0 160 50" style="height:28px"><rect x="4" y="10" width="28" height="28" rx="6" fill="#e42528"/><text x="11" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">Z</text><rect x="36" y="10" width="28" height="28" rx="6" fill="#006699"/><text x="42" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">O</text><rect x="68" y="10" width="28" height="28" rx="6" fill="#0dba4b"/><text x="74" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">H</text><rect x="100" y="10" width="28" height="28" rx="6" fill="#f2b733"/><text x="106" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#000648">O</text></svg>' },
-  { name: 'Capgemini', svg: '<svg viewBox="0 0 190 50" style="height:28px"><path d="M12 25 C12 15, 25 10, 25 25 C25 40, 38 35, 38 25" stroke="#0070ad" stroke-width="5" fill="none" stroke-linecap="round"/><text x="48" y="34" font-family="sans-serif" font-size="26" font-weight="900" fill="#0070ad">Capgemini</text></svg>' },
-  { name: 'Accenture', svg: '<svg viewBox="0 0 180 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="28" font-weight="900" fill="#000648">accenture</text><path d="M136 12 L150 22 L136 32" stroke="#a100ff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
-  { name: 'Cognizant', svg: '<svg viewBox="0 0 170 50" style="height:28px"><text x="5" y="35" font-family="sans-serif" font-size="27" font-weight="900" fill="#0033a0">Cognizant</text></svg>' },
-  { name: 'Amazon', svg: '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="32" font-family="sans-serif" font-size="28" font-weight="900" fill="#131921">amazon</text><path d="M10 38 Q 55 46, 95 35" fill="none" stroke="#ff9900" stroke-width="3.5" stroke-linecap="round"/><path d="M90 32 L98 35 L93 40" fill="none" stroke="#ff9900" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>' },
-  { name: 'Google Cloud', svg: '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">G</text><text x="34" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">o</text><text x="56" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#FBBC05">o</text><text x="78" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">g</text><text x="100" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#34A853">l</text><text x="110" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">e</text></svg>' },
-  { name: 'Microsoft', svg: '<svg viewBox="0 0 170 50" style="height:28px"><rect x="5" y="10" width="13" height="13" fill="#f25022"/><rect x="21" y="10" width="13" height="13" fill="#7fba00"/><rect x="5" y="26" width="13" height="13" fill="#00a4ef"/><rect x="21" y="26" width="13" height="13" fill="#ffb900"/><text x="42" y="34" font-family="sans-serif" font-size="26" font-weight="800" fill="#475569">Microsoft</text></svg>' },
-  { name: 'IBM', svg: '<svg viewBox="0 0 130 50" style="height:28px"><text x="5" y="36" font-family="monospace" font-size="36" font-weight="900" fill="#052FAD" letter-spacing="2px">IBM</text></svg>' },
-  { name: 'Freshworks', svg: '<svg viewBox="0 0 180 50" style="height:28px"><circle cx="18" cy="25" r="12" fill="#ff5a5f"/><text x="36" y="34" font-family="sans-serif" font-size="24" font-weight="900" fill="#000648">freshworks</text></svg>' },
-  { name: 'L&T Services', svg: '<svg viewBox="0 0 160 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#0033a0">L&T</text><text x="70" y="36" font-family="sans-serif" font-size="22" font-weight="800" fill="#f2b733">Tech</text></svg>' },
-  { name: 'Tech Mahindra', svg: '<svg viewBox="0 0 210 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#e42528">Tech</text><text x="75" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#000648">Mahindra</text></svg>' }
+  { name: 'TCS Tata', svg: BRAND_SVGS_MAP['tcs'] },
+  { name: 'Infosys', svg: BRAND_SVGS_MAP['infosys'] },
+  { name: 'Wipro', svg: BRAND_SVGS_MAP['wipro'] },
+  { name: 'HCLTech', svg: BRAND_SVGS_MAP['hcltech'] },
+  { name: 'Zoho', svg: BRAND_SVGS_MAP['zoho'] },
+  { name: 'Capgemini', svg: BRAND_SVGS_MAP['capgemini'] },
+  { name: 'Accenture', svg: BRAND_SVGS_MAP['accenture'] },
+  { name: 'Cognizant', svg: BRAND_SVGS_MAP['cognizant'] },
+  { name: 'Amazon', svg: BRAND_SVGS_MAP['amazon'] },
+  { name: 'Google Cloud', svg: BRAND_SVGS_MAP['google'] },
+  { name: 'Microsoft', svg: BRAND_SVGS_MAP['microsoft'] },
+  { name: 'IBM', svg: BRAND_SVGS_MAP['ibm'] },
+  { name: 'Freshworks', svg: BRAND_SVGS_MAP['freshworks'] },
+  { name: 'L&T Services', svg: BRAND_SVGS_MAP['l&t'] },
+  { name: 'Tech Mahindra', svg: BRAND_SVGS_MAP['tech mahindra'] }
 ];
 
 export default function HiringPartnersManager() {
@@ -41,7 +72,6 @@ export default function HiringPartnersManager() {
   const [rowFilter, setRowFilter] = useState('All');
   const [failedImages, setFailedImages] = useState({});
 
-  // Form State for Add / Edit Modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
@@ -56,19 +86,17 @@ export default function HiringPartnersManager() {
 
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
 
-  // Statistics
-  const activeCount = safePartners.filter((p) => p.status === 'Active').length;
-  const row1Count = safePartners.filter((p) => p.row === 'Row 1').length;
+  const filteredPartners = safePartners.filter((partner) => {
+    const matchesSearch = (partner.name || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRow = rowFilter === 'All' || partner.row === rowFilter;
+    return matchesSearch && matchesRow;
+  });
+
+  const totalCount = safePartners.length;
+  const activeCount = safePartners.filter((p) => p.status !== 'Hidden').length;
+  const row1Count = safePartners.filter((p) => p.row === 'Row 1' || !p.row).length;
   const row2Count = safePartners.filter((p) => p.row === 'Row 2').length;
   const row3Count = safePartners.filter((p) => p.row === 'Row 3').length;
-
-  const filteredPartners = useMemo(() => {
-    return safePartners.filter((p) => {
-      const matchSearch = (p.name || '').toLowerCase().includes(searchTerm.toLowerCase());
-      const matchRow = rowFilter === 'All' || p.row === rowFilter;
-      return matchSearch && matchRow;
-    });
-  }, [safePartners, searchTerm, rowFilter]);
 
   const handleOpenAddModal = () => {
     setEditingId(null);
@@ -102,16 +130,16 @@ export default function HiringPartnersManager() {
     setFormData((prev) => ({
       ...prev,
       name: prev.name || preset.name,
-      image: preset.svg
+      image: preset.svg,
+      imagePosition: 'center center',
+      imageFit: 'contain'
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name.trim()) {
-      alert('Company Name is required.');
-      return;
-    }
+    if (!formData.name.trim()) return;
+
     if (editingId) {
       updateHiringPartner(editingId, formData);
     } else {
@@ -165,26 +193,26 @@ export default function HiringPartnersManager() {
         </button>
       </div>
 
-      {/* Stats Bar */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '14px', marginBottom: '24px' }}>
-        <div style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '12px', padding: '12px 14px' }}>
-          <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase' }}>Total Partners</div>
-          <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>{safePartners.length}</div>
+      {/* Overview Stats Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '12px', marginBottom: '20px' }}>
+        <div style={{ background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748b' }}>TOTAL PARTNERS</div>
+          <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>{totalCount}</div>
         </div>
-        <div style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: '12px', padding: '12px 14px' }}>
-          <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase' }}>Active on Site</div>
-          <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#15803d', marginTop: '2px' }}>{activeCount}</div>
+        <div style={{ background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748b' }}>ACTIVE ON SITE</div>
+          <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#166534', marginTop: '2px' }}>{activeCount}</div>
         </div>
-        <div style={{ background: '#eff6ff', border: '1.5px solid #bfdbfe', borderRadius: '12px', padding: '12px 14px' }}>
-          <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#1e40af', textTransform: 'uppercase' }}>Row 1 (Top)</div>
-          <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#1d4ed8', marginTop: '2px' }}>{row1Count}</div>
+        <div style={{ background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748b' }}>ROW 1 (TOP)</div>
+          <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#115DFC', marginTop: '2px' }}>{row1Count}</div>
         </div>
-        <div style={{ background: '#faf5ff', border: '1.5px solid #e9d5ff', borderRadius: '12px', padding: '12px 14px' }}>
-          <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#6b21a8', textTransform: 'uppercase' }}>Row 2 (Middle)</div>
-          <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#7e22ce', marginTop: '2px' }}>{row2Count}</div>
+        <div style={{ background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748b' }}>ROW 2 (MIDDLE)</div>
+          <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#7c3aed', marginTop: '2px' }}>{row2Count}</div>
         </div>
-        <div style={{ background: '#fff7ed', border: '1.5px solid #fed7aa', borderRadius: '12px', padding: '12px 14px' }}>
-          <div style={{ fontSize: '0.7rem', fontWeight: 800, color: '#9a3412', textTransform: 'uppercase' }}>Row 3 (Bottom)</div>
+        <div style={{ background: '#ffffff', padding: '12px 14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: 700, color: '#64748b' }}>ROW 3 (BOTTOM)</div>
           <div style={{ fontSize: '1.3rem', fontWeight: 900, color: '#c2410c', marginTop: '2px' }}>{row3Count}</div>
         </div>
       </div>
@@ -202,7 +230,6 @@ export default function HiringPartnersManager() {
           />
         </div>
 
-        {/* Row Selector Tabs */}
         <div style={{ display: 'flex', background: '#e2e8f0', borderRadius: '8px', padding: '3px', gap: '3px' }}>
           {['All', 'Row 1', 'Row 2', 'Row 3'].map((row) => (
             <button
@@ -226,7 +253,7 @@ export default function HiringPartnersManager() {
       {/* Partners Cards Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
         {filteredPartners.map((partner) => {
-          const isSvgStr = typeof partner.image === 'string' && partner.image.startsWith('<svg');
+          const renderSvg = getCompanySvg(partner.name, partner.image);
           const isFailed = failedImages[partner.id];
 
           return (
@@ -261,7 +288,6 @@ export default function HiringPartnersManager() {
                   </button>
                 </div>
 
-                {/* Live Pill Logo Card Matching Live Website (180:48 ratio) */}
                 <div
                   style={{
                     height: '52px',
@@ -278,8 +304,8 @@ export default function HiringPartnersManager() {
                     overflow: 'hidden'
                   }}
                 >
-                  {isSvgStr ? (
-                    <div dangerouslySetInnerHTML={{ __html: partner.image }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+                  {renderSvg ? (
+                    <div dangerouslySetInnerHTML={{ __html: renderSvg }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
                   ) : isFailed || !partner.image ? (
                     <div style={{ fontWeight: 900, color: '#000648', fontSize: '0.95rem', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span style={{ color: '#115DFC', fontSize: '1.1rem' }}>●</span> {partner.name}
@@ -306,7 +332,6 @@ export default function HiringPartnersManager() {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div style={{ display: 'flex', gap: '8px', borderTop: '1px solid #f1f5f9', paddingTop: '10px' }}>
                 <button
                   type="button"
@@ -336,22 +361,23 @@ export default function HiringPartnersManager() {
         })}
       </div>
 
-      {/* Clean Compact Centered Edit/Add Modal */}
-      {isModalOpen && (
+      {isModalOpen && ReactDOM.createPortal(
         <div style={{
-          position: 'fixed', inset: 0, zIndex: 10000, background: 'rgba(0, 6, 72, 0.75)',
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          zIndex: 999999, background: 'rgba(0, 6, 72, 0.8)',
           backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-          padding: '16px'
+          padding: '16px', overflowY: 'auto'
         }}>
           <div style={{
             background: '#ffffff', borderRadius: '20px', maxWidth: '520px', width: '100%',
-            boxShadow: '0 25px 50px -12px rgba(0, 6, 72, 0.35)', border: '2px solid #000648',
-            overflow: 'hidden', display: 'flex', flexDirection: 'column'
+            maxHeight: '90vh', overflowY: 'auto',
+            boxShadow: '0 25px 50px rgba(0, 6, 72, 0.4)', border: '2.5px solid #000648',
+            display: 'flex', flexDirection: 'column'
           }}>
-            {/* Modal Header */}
             <div style={{
               padding: '16px 20px', background: '#000648', color: '#ffffff',
-              display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              position: 'sticky', top: 0, zIndex: 10
             }}>
               <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#f2b733', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <HiOfficeBuilding size={18} /> {editingId ? 'Edit Partner Logo' : 'Add Corporate Partner'}
@@ -365,10 +391,7 @@ export default function HiringPartnersManager() {
               </button>
             </div>
 
-            {/* Modal Body */}
-            <form onSubmit={handleSubmit} style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              
-              {/* Company Name */}
+            <form onSubmit={handleSubmit} style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1 }}>
               <div>
                 <label htmlFor="modal_company_name" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
                   Company Name*
@@ -384,7 +407,6 @@ export default function HiringPartnersManager() {
                 />
               </div>
 
-              {/* Quick Select Presets Grid */}
               <div>
                 <span style={{ fontSize: '0.73rem', fontWeight: 800, color: '#115DFC', display: 'block', marginBottom: '6px' }}>
                   ⚡ Quick Vector Logo Presets (1-Click Fill):
@@ -407,7 +429,6 @@ export default function HiringPartnersManager() {
                 </div>
               </div>
 
-              {/* Logo URL Input & Image Picker */}
               <div>
                 <label htmlFor="modal_company_logo" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
                   Company Logo Image Source or SVG*
@@ -435,7 +456,6 @@ export default function HiringPartnersManager() {
                 </div>
               </div>
 
-              {/* Live Pill Preview inside Modal */}
               <div>
                 <span style={{ fontSize: '0.73rem', fontWeight: 800, color: '#64748b', display: 'block', marginBottom: '4px' }}>
                   Homepage Pill Badge Live Preview (Exact 180:48 ratio):
@@ -445,8 +465,8 @@ export default function HiringPartnersManager() {
                   border: '1.5px solid #cbd5e1', boxShadow: '0 2px 8px rgba(0, 6, 72, 0.06)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '6px 18px', overflow: 'hidden'
                 }}>
-                  {formData.image.startsWith('<svg') ? (
-                    <div dangerouslySetInnerHTML={{ __html: formData.image }} />
+                  {getCompanySvg(formData.name, formData.image) ? (
+                    <div dangerouslySetInnerHTML={{ __html: getCompanySvg(formData.name, formData.image) }} />
                   ) : (
                     <img
                       src={resolveImageSrc(formData.image || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe')}
@@ -464,7 +484,6 @@ export default function HiringPartnersManager() {
                 </div>
               </div>
 
-              {/* Marquee Row & Active Status */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div>
                   <label htmlFor="modal_row_select" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
@@ -498,8 +517,7 @@ export default function HiringPartnersManager() {
                 </div>
               </div>
 
-              {/* Modal Actions */}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #f1f5f9' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid #f1f5f9', position: 'sticky', bottom: 0, background: '#ffffff', paddingBottom: '4px' }}>
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
@@ -523,10 +541,10 @@ export default function HiringPartnersManager() {
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
-      {/* Integrated Image Picker Modal locked to Company Logo Pill (180:48) ratio */}
       {isImagePickerOpen && (
         <ImagePickerModal
           isOpen={isImagePickerOpen}

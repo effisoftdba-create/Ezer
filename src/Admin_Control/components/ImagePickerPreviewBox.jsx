@@ -141,7 +141,7 @@ export default function ImagePickerPreviewBox({
                 borderRadius: '10px',
                 overflow: 'hidden',
                 border: '2px solid #115DFC',
-                background: '#000648',
+                background: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '#ffffff' : '#000648',
                 boxShadow: '0 4px 14px rgba(17,93,252,0.2)',
                 position: 'relative',
                 cursor: isDragging ? 'grabbing' : 'grab',
@@ -166,12 +166,13 @@ export default function ImagePickerPreviewBox({
 
               {/* Rule of Thirds Grid Overlay */}
               {showGridLines && (
-                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', border: '1px dashed rgba(255,255,255,0.25)', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: '1fr 1fr 1fr' }}>
+                <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', border: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '1px dashed rgba(0,0,0,0.2)' : '1px dashed rgba(255,255,255,0.25)', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: '1fr 1fr 1fr' }}>
                   {[...Array(9)].map((_, i) => (
-                    <div key={i} style={{ border: '0.5px dashed rgba(255,255,255,0.2)' }} />
+                    <div key={i} style={{ border: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '0.5px dashed rgba(0,0,0,0.15)' : '0.5px dashed rgba(255,255,255,0.2)' }} />
                   ))}
                 </div>
               )}
+
 
               <div style={{
                 position: 'absolute', bottom: '6px', right: '6px', background: 'rgba(0,6,72,0.85)',
