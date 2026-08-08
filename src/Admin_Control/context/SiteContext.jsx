@@ -26,7 +26,6 @@ import {
 } from './siteDefaults';
 import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../../services/firebaseService';
 
-
 const SiteContext = createContext();
 
 export function SiteProvider({ children }) {
@@ -68,21 +67,22 @@ export function SiteProvider({ children }) {
         if (rawToken) {
           const decoded = JSON.parse(decodeURIComponent(rawToken));
           if (decoded && typeof decoded === 'object') {
-            if (decoded.courses) safeSetStorage(STORAGE_COURSES_KEY, decoded.courses);
-            if (decoded.popupConfig) safeSetStorage(STORAGE_POPUP_CONFIG_KEY, decoded.popupConfig);
-            if (decoded.heroSlides) safeSetStorage(STORAGE_SLIDES_KEY, decoded.heroSlides);
-            alert('Mobile Sync Successful! This mobile device has been updated with your admin settings.');
-            window.location.href = window.location.origin + window.location.pathname + '#/';
-            window.location.reload();
+            Object.keys(decoded).forEach((key) => {
+              if (decoded[key]) {
+                dispatch({ type: 'SET_KEY', key, value: decoded[key] });
+              }
+            });
+            window.history.replaceState({}, document.title, window.location.pathname);
+            triggerStateToast('SAVED');
           }
         }
       }
     } catch (e) {
-      console.warn('[SiteContext] Mobile sync parsing failed:', e);
+      console.warn('[SyncToken] Could not parse token:', e);
     }
   }, []);
 
-  // LocalStorage Sync Effects
+  // Sync internal state to LocalStorage
   useEffect(() => { safeSetStorage(STORAGE_SLIDES_KEY, heroSlides); }, [heroSlides]);
   useEffect(() => { safeSetStorage(STORAGE_COURSES_KEY, courses); }, [courses]);
   useEffect(() => { safeSetStorage(STORAGE_PLATFORM_KEY, ezerDefinition); }, [ezerDefinition]);
@@ -102,7 +102,7 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_ACHIEVEMENTS_KEY, achievements); }, [achievements]);
   useEffect(() => { safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, executiveLeaders); }, [executiveLeaders]);
 
-  // Firebase Real-time Firestore Subscriptions
+  // Firebase Real-time Firestore & Realtime DB Subscriptions across ALL collections
   useEffect(() => {
     const unsubCourses = subscribeToCollection('courses', (items) => {
       if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'courses', value: items });
@@ -122,6 +122,33 @@ export function SiteProvider({ children }) {
         if (mainDef) dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: mainDef });
       }
     });
+    const unsubExecs = subscribeToCollection('executiveLeaders', (items) => {
+      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: items });
+    });
+    const unsubPopup = subscribeToCollection('popupConfig', (items) => {
+      if (items && items.length > 0) {
+        const mainConfig = items.find((i) => i.id === 'main') || items[0];
+        if (mainConfig) dispatch({ type: 'SET_KEY', key: 'popupConfig', value: mainConfig });
+      }
+    });
+    const unsubContact = subscribeToCollection('contactInfo', (items) => {
+      if (items && items.length > 0) {
+        const mainContact = items.find((i) => i.id === 'main') || items[0];
+        if (mainContact) dispatch({ type: 'SET_KEY', key: 'contactInfo', value: mainContact });
+      }
+    });
+    const unsubMentors = subscribeToCollection('seniorMentors', (items) => {
+      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: items });
+    });
+    const unsubTesti = subscribeToCollection('writtenTestimonials', (items) => {
+      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: items });
+    });
+    const unsubVideo = subscribeToCollection('videoTestimonials', (items) => {
+      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: items });
+    });
+    const unsubFaq = subscribeToCollection('faqList', (items) => {
+      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'faqList', value: items });
+    });
 
     return () => {
       unsubCourses();
@@ -129,65 +156,100 @@ export function SiteProvider({ children }) {
       unsubLeads();
       unsubBlogs();
       unsubDef();
+      unsubExecs();
+      unsubPopup();
+      unsubContact();
+      unsubMentors();
+      unsubTesti();
+      unsubVideo();
+      unsubFaq();
     };
   }, []);
 
-
-  // Sync state changes to Firebase Firestore on active modifications
-
-
-
-  // Action Dispatchers
+  // Action Dispatchers with Full-Stack Realtime Sync
   const updateExecutiveLeaders = useCallback((newExecs) => {
     dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: newExecs });
+    saveCollectionArray('executiveLeaders', newExecs);
     triggerStateToast('SAVED');
   }, []);
 
   const updateExecutiveLeader = useCallback((id, updatedLeader) => {
     const updated = (executiveLeaders || []).map((l) => (l.id === id || l.roleTag === id ? { ...l, ...updatedLeader } : l));
     dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: updated });
+    const target = updated.find((l) => l.id === id || l.roleTag === id);
+    if (target) saveDocument('executiveLeaders', String(target.id || target.roleTag), target);
     triggerStateToast('SAVED');
   }, [executiveLeaders]);
+
   const updateBlogs = useCallback((newBlogs) => {
     dispatch({ type: 'SET_KEY', key: 'blogs', value: newBlogs });
+    saveCollectionArray('blogs', newBlogs);
     triggerStateToast('SAVED');
   }, []);
 
   const addBlog = useCallback((blogData) => {
     const newBlog = { id: `blog-${Date.now()}`, ...blogData };
-    dispatch({ type: 'SET_KEY', key: 'blogs', value: [newBlog, ...(blogs || [])] });
+    const updated = [newBlog, ...(blogs || [])];
+    dispatch({ type: 'SET_KEY', key: 'blogs', value: updated });
+    saveDocument('blogs', newBlog.id, newBlog);
+    triggerStateToast('SAVED');
+  }, [blogs]);
+
+  const updateBlog = useCallback((id, updatedData) => {
+    const updated = (blogs || []).map((b) => (b.id === id || b.slug === id ? { ...b, ...updatedData } : b));
+    dispatch({ type: 'SET_KEY', key: 'blogs', value: updated });
+    const target = updated.find((b) => b.id === id || b.slug === id);
+    if (target) saveDocument('blogs', String(target.id || target.slug), target);
     triggerStateToast('SAVED');
   }, [blogs]);
 
   const deleteBlog = useCallback((blogId) => {
-    dispatch({ type: 'SET_KEY', key: 'blogs', value: (blogs || []).filter(b => b.id !== blogId) });
+    const updated = (blogs || []).filter(b => b.id !== blogId);
+    dispatch({ type: 'SET_KEY', key: 'blogs', value: updated });
+    removeDocument('blogs', String(blogId));
     triggerStateToast('SAVED');
   }, [blogs]);
 
   const updateAchievements = useCallback((newAch) => {
     dispatch({ type: 'SET_KEY', key: 'achievements', value: newAch });
+    saveCollectionArray('achievements', newAch);
     triggerStateToast('SAVED');
   }, []);
 
   const addAchievement = useCallback((achData) => {
     const newAch = { id: `ach-${Date.now()}`, ...achData };
-    dispatch({ type: 'SET_KEY', key: 'achievements', value: [newAch, ...(achievements || [])] });
+    const updated = [newAch, ...(achievements || [])];
+    dispatch({ type: 'SET_KEY', key: 'achievements', value: updated });
+    saveDocument('achievements', newAch.id, newAch);
+    triggerStateToast('SAVED');
+  }, [achievements]);
+
+  const updateAchievement = useCallback((id, updatedData) => {
+    const updated = (achievements || []).map((a) => (a.id === id ? { ...a, ...updatedData } : a));
+    dispatch({ type: 'SET_KEY', key: 'achievements', value: updated });
+    const target = updated.find((a) => a.id === id);
+    if (target) saveDocument('achievements', String(target.id), target);
     triggerStateToast('SAVED');
   }, [achievements]);
 
   const deleteAchievement = useCallback((achId) => {
-    dispatch({ type: 'SET_KEY', key: 'achievements', value: (achievements || []).filter(a => a.id !== achId) });
+    const updated = (achievements || []).filter(a => a.id !== achId);
+    dispatch({ type: 'SET_KEY', key: 'achievements', value: updated });
+    removeDocument('achievements', String(achId));
     triggerStateToast('SAVED');
   }, [achievements]);
 
   const updateHeroSlides = useCallback((slides) => {
     dispatch({ type: 'SET_KEY', key: 'heroSlides', value: slides });
+    saveCollectionArray('heroSlides', slides);
     triggerStateToast('SAVED');
   }, []);
 
   const addHeroSlide = useCallback((newSlide) => {
     const slide = { id: `hero-${Date.now()}`, ...newSlide };
-    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: [...(heroSlides || []), slide] });
+    const updated = [...(heroSlides || []), slide];
+    dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
+    saveDocument('heroSlides', slide.id, slide);
     triggerStateToast('SAVED');
   }, [heroSlides]);
 
@@ -196,34 +258,43 @@ export function SiteProvider({ children }) {
       slide.id === id || slide.badge === id ? { ...slide, ...updatedSlide } : slide
     );
     dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
+    const target = updated.find((s) => s.id === id || s.badge === id);
+    if (target) saveDocument('heroSlides', String(target.id || target.badge), target);
     triggerStateToast('SAVED');
   }, [heroSlides]);
 
   const deleteHeroSlide = useCallback((id) => {
     const updated = (heroSlides || []).filter((slide) => slide.id !== id && slide.badge !== id);
     dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
+    removeDocument('heroSlides', String(id));
     triggerStateToast('SAVED');
   }, [heroSlides]);
 
   const updateCourses = useCallback((newCourses) => {
     dispatch({ type: 'SET_KEY', key: 'courses', value: newCourses });
+    saveCollectionArray('courses', newCourses);
     triggerStateToast('SAVED');
   }, []);
 
   const addCourse = useCallback((newCourse) => {
-    dispatch({ type: 'SET_KEY', key: 'courses', value: [newCourse, ...(courses || [])] });
+    const updated = [newCourse, ...(courses || [])];
+    dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
+    saveDocument('courses', String(newCourse.id || newCourse.slug), newCourse);
     triggerStateToast('SAVED');
   }, [courses]);
 
   const updateCourse = useCallback((id, updatedCourse) => {
     const updated = (courses || []).map((c) => (c.id === id || c.slug === id ? { ...c, ...updatedCourse } : c));
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
+    const target = updated.find((c) => c.id === id || c.slug === id);
+    if (target) saveDocument('courses', String(target.id || target.slug), target);
     triggerStateToast('SAVED');
   }, [courses]);
 
   const deleteCourse = useCallback((id) => {
     const updated = (courses || []).filter((c) => c.id !== id && c.slug !== id);
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
+    removeDocument('courses', String(id));
     triggerStateToast('SAVED');
   }, [courses]);
 
@@ -234,15 +305,17 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, []);
 
-
   const updateSupportCards = useCallback((cards) => {
     dispatch({ type: 'SET_KEY', key: 'supportCards', value: cards });
+    saveCollectionArray('supportCards', cards);
     triggerStateToast('SAVED');
   }, []);
 
   const addSupportCard = useCallback((newCard) => {
     const card = { id: `support-${Date.now()}`, ...newCard };
-    dispatch({ type: 'SET_KEY', key: 'supportCards', value: [...(supportCards || []), card] });
+    const updated = [...(supportCards || []), card];
+    dispatch({ type: 'SET_KEY', key: 'supportCards', value: updated });
+    saveDocument('supportCards', card.id, card);
     triggerStateToast('SAVED');
   }, [supportCards]);
 
@@ -251,23 +324,29 @@ export function SiteProvider({ children }) {
       card.id === id || card.title === id ? { ...card, ...updatedCard } : card
     );
     dispatch({ type: 'SET_KEY', key: 'supportCards', value: updated });
+    const target = updated.find((c) => c.id === id || c.title === id);
+    if (target) saveDocument('supportCards', String(target.id || target.title), target);
     triggerStateToast('SAVED');
   }, [supportCards]);
 
   const deleteSupportCard = useCallback((id) => {
     const updated = (supportCards || []).filter((card) => card.id !== id && card.title !== id);
     dispatch({ type: 'SET_KEY', key: 'supportCards', value: updated });
+    removeDocument('supportCards', String(id));
     triggerStateToast('SAVED');
   }, [supportCards]);
 
   const updateTransformedLives = useCallback((lives) => {
     dispatch({ type: 'SET_KEY', key: 'transformedLives', value: lives });
+    saveCollectionArray('transformedLives', lives);
     triggerStateToast('SAVED');
   }, []);
 
   const addTransformedLife = useCallback((newLife) => {
     const life = { id: `life-${Date.now()}`, ...newLife };
-    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: [...(transformedLives || []), life] });
+    const updated = [...(transformedLives || []), life];
+    dispatch({ type: 'SET_KEY', key: 'transformedLives', value: updated });
+    saveDocument('transformedLives', life.id, life);
     triggerStateToast('SAVED');
   }, [transformedLives]);
 
@@ -276,28 +355,36 @@ export function SiteProvider({ children }) {
       life.id === id ? { ...life, ...updatedLife } : life
     );
     dispatch({ type: 'SET_KEY', key: 'transformedLives', value: updated });
+    const target = updated.find((l) => l.id === id);
+    if (target) saveDocument('transformedLives', String(target.id), target);
     triggerStateToast('SAVED');
   }, [transformedLives]);
 
   const deleteTransformedLife = useCallback((id) => {
     const updated = (transformedLives || []).filter((life) => life.id !== id);
     dispatch({ type: 'SET_KEY', key: 'transformedLives', value: updated });
+    removeDocument('transformedLives', String(id));
     triggerStateToast('SAVED');
   }, [transformedLives]);
 
   const updateOutcomesHeader = useCallback((header) => {
-    dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: header });
+    const payload = { id: 'main', ...header };
+    dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: payload });
+    saveDocument('outcomesHeader', 'main', payload);
     triggerStateToast('SAVED');
   }, []);
 
   const updateSeniorMentors = useCallback((mentors) => {
     dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: mentors });
+    saveCollectionArray('seniorMentors', mentors);
     triggerStateToast('SAVED');
   }, []);
 
   const addSeniorMentor = useCallback((newMentor) => {
     const mentor = { id: `mentor-${Date.now()}`, ...newMentor };
-    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: [...(seniorMentors || []), mentor] });
+    const updated = [...(seniorMentors || []), mentor];
+    dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: updated });
+    saveDocument('seniorMentors', mentor.id, mentor);
     triggerStateToast('SAVED');
   }, [seniorMentors]);
 
@@ -306,28 +393,36 @@ export function SiteProvider({ children }) {
       mentor.id === id ? { ...mentor, ...updatedMentor } : mentor
     );
     dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: updated });
+    const target = updated.find((m) => m.id === id);
+    if (target) saveDocument('seniorMentors', String(target.id), target);
     triggerStateToast('SAVED');
   }, [seniorMentors]);
 
   const deleteSeniorMentor = useCallback((id) => {
     const updated = (seniorMentors || []).filter((mentor) => mentor.id !== id);
     dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: updated });
+    removeDocument('seniorMentors', String(id));
     triggerStateToast('SAVED');
   }, [seniorMentors]);
 
   const updateMentorsHeader = useCallback((header) => {
-    dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: header });
+    const payload = { id: 'main', ...header };
+    dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: payload });
+    saveDocument('mentorsHeader', 'main', payload);
     triggerStateToast('SAVED');
   }, []);
 
   const updateVideoTestimonials = useCallback((videos) => {
     dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: videos });
+    saveCollectionArray('videoTestimonials', videos);
     triggerStateToast('SAVED');
   }, []);
 
   const addVideoTestimonial = useCallback((newVideo) => {
     const video = { id: `video-${Date.now()}`, ...newVideo };
-    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: [...(videoTestimonials || []), video] });
+    const updated = [...(videoTestimonials || []), video];
+    dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: updated });
+    saveDocument('videoTestimonials', video.id, video);
     triggerStateToast('SAVED');
   }, [videoTestimonials]);
 
@@ -336,28 +431,36 @@ export function SiteProvider({ children }) {
       video.id === id ? { ...video, ...updatedVideo } : video
     );
     dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: updated });
+    const target = updated.find((v) => v.id === id);
+    if (target) saveDocument('videoTestimonials', String(target.id), target);
     triggerStateToast('SAVED');
   }, [videoTestimonials]);
 
   const deleteVideoTestimonial = useCallback((id) => {
     const updated = (videoTestimonials || []).filter((video) => video.id !== id);
     dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: updated });
+    removeDocument('videoTestimonials', String(id));
     triggerStateToast('SAVED');
   }, [videoTestimonials]);
 
   const updateTestimonialsHero = useCallback((hero) => {
-    dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: hero });
+    const payload = { id: 'main', ...hero };
+    dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: payload });
+    saveDocument('testimonialsHero', 'main', payload);
     triggerStateToast('SAVED');
   }, []);
 
   const updateWrittenTestimonials = useCallback((testimonials) => {
     dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: testimonials });
+    saveCollectionArray('writtenTestimonials', testimonials);
     triggerStateToast('SAVED');
   }, []);
 
   const addWrittenTestimonial = useCallback((newTestimonial) => {
     const testimonial = { id: `testi-${Date.now()}`, ...newTestimonial };
-    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: [...(writtenTestimonials || []), testimonial] });
+    const updated = [...(writtenTestimonials || []), testimonial];
+    dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
+    saveDocument('writtenTestimonials', testimonial.id, testimonial);
     triggerStateToast('SAVED');
   }, [writtenTestimonials]);
 
@@ -366,39 +469,51 @@ export function SiteProvider({ children }) {
       t.id === id || t.author === id ? { ...t, ...updatedTestimonial } : t
     );
     dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
+    const target = updated.find((t) => t.id === id || t.author === id);
+    if (target) saveDocument('writtenTestimonials', String(target.id || target.author), target);
     triggerStateToast('SAVED');
   }, [writtenTestimonials]);
 
   const deleteWrittenTestimonial = useCallback((id) => {
     const updated = (writtenTestimonials || []).filter((t) => t.id !== id && t.author !== id);
     dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
+    removeDocument('writtenTestimonials', String(id));
     triggerStateToast('SAVED');
   }, [writtenTestimonials]);
 
   const updateFaqs = useCallback((faqs) => {
     dispatch({ type: 'SET_KEY', key: 'faqList', value: faqs });
+    saveCollectionArray('faqList', faqs);
     triggerStateToast('SAVED');
   }, []);
 
   const updateContactInfo = useCallback((info) => {
-    dispatch({ type: 'SET_KEY', key: 'contactInfo', value: info });
+    const payload = { id: 'main', ...info };
+    dispatch({ type: 'SET_KEY', key: 'contactInfo', value: payload });
+    saveDocument('contactInfo', 'main', payload);
     triggerStateToast('SAVED');
   }, []);
 
   const updatePopupConfig = useCallback((config) => {
-    dispatch({ type: 'SET_KEY', key: 'popupConfig', value: config });
+    const payload = { id: 'main', ...config };
+    dispatch({ type: 'SET_KEY', key: 'popupConfig', value: payload });
+    saveDocument('popupConfig', 'main', payload);
     triggerStateToast('SAVED');
   }, []);
 
   const addLead = useCallback((leadData) => {
-    const newLead = { id: Date.now(), ...leadData, date: new Date().toLocaleString() };
-    dispatch({ type: 'SET_KEY', key: 'leads', value: [newLead, ...(leads || [])] });
+    const newLead = { id: String(Date.now()), ...leadData, date: new Date().toLocaleString() };
+    const updated = [newLead, ...(leads || [])];
+    dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
+    saveDocument('leads', newLead.id, newLead);
     triggerStateToast('SAVED');
   }, [leads]);
 
   const updateLeadStatus = useCallback((id, status) => {
     const updated = (leads || []).map((lead) => (lead.id === id ? { ...lead, status } : lead));
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
+    const target = updated.find((l) => l.id === id);
+    if (target) saveDocument('leads', String(target.id), target);
     triggerStateToast('SAVED');
   }, [leads]);
 
@@ -411,25 +526,17 @@ export function SiteProvider({ children }) {
       return lead;
     });
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
+    const target = updated.find((l) => l.id === id);
+    if (target) saveDocument('leads', String(target.id), target);
     triggerStateToast('SAVED');
   }, [leads]);
 
   const deleteLead = useCallback((leadId) => {
-    dispatch({ type: 'SET_KEY', key: 'leads', value: (leads || []).filter(l => l.id !== leadId) });
+    const updated = (leads || []).filter(l => l.id !== leadId);
+    dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
+    removeDocument('leads', String(leadId));
     triggerStateToast('SAVED');
   }, [leads]);
-
-  const updateBlog = useCallback((id, updatedData) => {
-    const updated = (blogs || []).map((b) => (b.id === id || b.slug === id ? { ...b, ...updatedData } : b));
-    dispatch({ type: 'SET_KEY', key: 'blogs', value: updated });
-    triggerStateToast('SAVED');
-  }, [blogs]);
-
-  const updateAchievement = useCallback((id, updatedData) => {
-    const updated = (achievements || []).map((a) => (a.id === id ? { ...a, ...updatedData } : a));
-    dispatch({ type: 'SET_KEY', key: 'achievements', value: updated });
-    triggerStateToast('SAVED');
-  }, [achievements]);
 
   const resetAllToDefaults = useCallback(() => {
     localStorage.clear();
@@ -449,14 +556,14 @@ export function SiteProvider({ children }) {
     videoTestimonials, updateVideoTestimonials, addVideoTestimonial, updateVideoTestimonial, deleteVideoTestimonial,
     testimonialsHero, updateTestimonialsHero,
     writtenTestimonials, updateWrittenTestimonials, addWrittenTestimonial, updateWrittenTestimonial, deleteWrittenTestimonial,
-    faqList, updateFaqs, updateFaqList: updateFaqs,
+    faqList, updateFaqs,
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
     leads, addLead, updateLeadStatus, addLeadComment, deleteLead,
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
-    resetAllToDefaults, resetToDefault: resetAllToDefaults
+    resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
     courses, updateCourses, addCourse, updateCourse, deleteCourse,
