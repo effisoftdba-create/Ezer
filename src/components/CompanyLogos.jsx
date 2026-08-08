@@ -188,7 +188,9 @@ const baseLogosRow3 = [
 ];
 
 function LogoCard({ logo }) {
+  const [imgError, setImgError] = useState(false);
   const isSvgStr = typeof logo.image === 'string' && logo.image.startsWith('<svg');
+
   return (
     <m.div
       whileHover={{ scale: 1.06, borderColor: '#000648', boxShadow: '0 6px 18px rgba(0,6,72,0.12)' }}
@@ -211,10 +213,15 @@ function LogoCard({ logo }) {
         logo.icon
       ) : isSvgStr ? (
         <div dangerouslySetInnerHTML={{ __html: logo.image }} style={{ display: 'flex', alignItems: 'center' }} />
+      ) : imgError || !logo.image ? (
+        <div style={{ fontWeight: 900, color: '#000648', fontSize: '0.92rem', letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '6px', whiteSpace: 'nowrap' }}>
+          <span style={{ color: '#115DFC', fontSize: '0.85rem' }}>●</span> {logo.name || 'Hiring Partner'}
+        </div>
       ) : (
         <img
-          src={resolveImageSrc(logo.image || 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Tata_Consultancy_Services_Logo.svg')}
+          src={resolveImageSrc(logo.image)}
           alt={logo.name || 'Hiring Partner'}
+          onError={() => setImgError(true)}
           style={{
             maxHeight: '30px',
             maxWidth: '130px',
@@ -228,6 +235,7 @@ function LogoCard({ logo }) {
     </m.div>
   );
 }
+
 
 function MarqueeRow({ items, direction = 'left', duration = 32 }) {
   const shouldReduceMotion = useReducedMotion();
