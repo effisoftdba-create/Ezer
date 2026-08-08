@@ -9,7 +9,7 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'ezer-learning-platform-8f1b1.firebasestorage.app',
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '656530228571',
   appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:656530228571:web:0e312e3cf2b775e25d067e',
-  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || undefined
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || 'https://ezer-learning-platform-8f1b1-default-rtdb.firebaseio.com'
 };
 
 export const isFirebaseConfigured = Boolean(
@@ -30,15 +30,15 @@ if (isFirebaseConfigured) {
     } catch (e) {
       db = null;
     }
-    if (firebaseConfig.databaseURL) {
-      try {
-        realtimeDb = getDatabase(app);
-      } catch (e) {
-        realtimeDb = null;
-      }
+    try {
+      realtimeDb = getDatabase(app);
+    } catch (e) {
+      console.warn('[Firebase] Realtime DB init error:', e);
+      realtimeDb = null;
     }
-    console.log('[Firebase] Initialized successfully');
+    console.log('[Firebase] Initialized successfully with Realtime DB & Firestore');
   } catch (error) {
+    console.error('[Firebase] Initialization error:', error);
     db = null;
     realtimeDb = null;
   }
