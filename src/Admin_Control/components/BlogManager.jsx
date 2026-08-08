@@ -275,7 +275,8 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
     tagline: 'From problem to solution.',
     headline: 'A creative and strategic transformation partner for bold businesses.',
     imagePosition: 'center top',
-    imageFit: 'cover'
+    imageFit: 'cover',
+    imageTransform: 'none'
   });
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -290,7 +291,8 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
       tagline: exec.tagline || 'From problem to solution.',
       headline: exec.headline || 'A creative and strategic transformation partner for bold businesses.',
       imagePosition: exec.imagePosition || 'center top',
-      imageFit: exec.imageFit || 'cover'
+      imageFit: exec.imageFit || 'cover',
+      imageTransform: exec.imageTransform || 'none'
     });
   };
 
@@ -378,12 +380,13 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                 currentImage={formData.image}
                 currentPosition={formData.imagePosition}
                 currentFit={formData.imageFit}
-                onSelectImage={(url, pos, fit) => {
+                onSelectImage={(url, pos, fit, trans) => {
                   setFormData((prev) => ({
                     ...prev,
                     image: url,
                     imagePosition: pos || prev.imagePosition || 'center top',
-                    imageFit: fit || prev.imageFit || 'cover'
+                    imageFit: fit || prev.imageFit || 'cover',
+                    imageTransform: trans || prev.imageTransform || 'none'
                   }));
                   setPickerOpen(false);
                 }}
@@ -392,6 +395,7 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                 recommendedDimensions="700 x 740 px"
               />
             )}
+
 
           </form>
         ) : (

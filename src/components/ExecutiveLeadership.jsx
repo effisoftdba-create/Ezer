@@ -377,8 +377,10 @@ export default function ExecutiveLeadership() {
                             onError={handleImgError}
                             style={{
                               objectPosition: leader.imagePosition || 'center top',
-                              objectFit: leader.imageFit || 'cover'
+                              objectFit: leader.imageFit || 'cover',
+                              transform: leader.imageTransform || 'none'
                             }}
+
                           />
 
                         </div>
@@ -434,8 +436,10 @@ export default function ExecutiveLeadership() {
                             onError={handleImgError}
                             style={{
                               objectPosition: leader.imagePosition || 'center top',
-                              objectFit: leader.imageFit || 'cover'
+                              objectFit: leader.imageFit || 'cover',
+                              transform: leader.imageTransform || 'none'
                             }}
+
                           />
 
                         </div>

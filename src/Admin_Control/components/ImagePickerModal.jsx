@@ -190,14 +190,18 @@ export default function ImagePickerModal({
   const posX = Math.min(100, Math.max(0, 50 + dragOffset.x));
   const posY = Math.min(100, Math.max(0, 50 + dragOffset.y));
   const computedPosStr = `${posX}% ${posY}%`;
+  const transformStyleStr = (dragOffset.x !== 0 || dragOffset.y !== 0 || zoomScale !== 1)
+    ? `translate(${dragOffset.x * 2.5}px, ${dragOffset.y * 2.5}px) scale(${zoomScale})`
+    : 'none';
 
   const handleConfirm = () => {
     if (activeSelectedUrl) {
-      if (typeof onSelectImage === 'function') onSelectImage(activeSelectedUrl, computedPosStr, fitMode);
-      if (typeof onSelectPosition === 'function') onSelectPosition(computedPosStr, fitMode);
+      if (typeof onSelectImage === 'function') onSelectImage(activeSelectedUrl, computedPosStr, fitMode, transformStyleStr);
+      if (typeof onSelectPosition === 'function') onSelectPosition(computedPosStr, fitMode, transformStyleStr);
       if (typeof onClose === 'function') onClose();
     }
   };
+
 
   const handleFileUpload = (e) => {
     const file = e?.target?.files?.[0];

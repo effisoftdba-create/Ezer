@@ -4,7 +4,6 @@ import {
   HiDeviceMobile,
   HiViewGrid,
   HiSelector,
-  HiCheck,
   HiSparkles,
   HiRefresh
 } from 'react-icons/hi';
@@ -20,17 +19,16 @@ export default function ImagePickerPreviewBox({
   dragOffset,
   zoomScale,
   isDragging,
-  handleMouseDown,
-  handleMouseMove,
-  handleMouseUp
+  handleMouseDown
 }) {
-  const [devicePreviewMode, setDevicePreviewMode] = useState('desktop'); // 'desktop' | 'mobile' | 'dual'
+  const [devicePreviewMode, setDevicePreviewMode] = useState('desktop');
   const [showGridLines, setShowGridLines] = useState(true);
 
   const activeSrc = resolveImageSrc(activeSelectedUrl);
   const posX = Math.min(100, Math.max(0, 50 + dragOffset.x));
   const posY = Math.min(100, Math.max(0, 50 + dragOffset.y));
   const computedPosStr = `${posX}% ${posY}%`;
+  const transformStyleStr = `translate(${dragOffset.x * 2.5}px, ${dragOffset.y * 2.5}px) scale(${zoomScale})`;
 
   const onMouseDownHandler = (e) => {
     e.preventDefault();
@@ -129,7 +127,7 @@ export default function ImagePickerPreviewBox({
                 <HiDesktopComputer color="#115DFC" size={16} /> Desktop View ({previewDims.ratio})
               </span>
               <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#166534', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                <HiSelector size={12} /> Drag image to adjust
+                <HiSelector size={12} /> Drag image up/down/left/right to adjust
               </span>
             </div>
 
@@ -160,7 +158,7 @@ export default function ImagePickerPreviewBox({
                   height: '100%',
                   objectFit: fitMode,
                   objectPosition: computedPosStr,
-                  transform: `scale(${zoomScale})`,
+                  transform: transformStyleStr,
                   pointerEvents: 'none',
                   transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                 }}
@@ -246,7 +244,7 @@ export default function ImagePickerPreviewBox({
                     height: '100%',
                     objectFit: fitMode,
                     objectPosition: computedPosStr,
-                    transform: `scale(${zoomScale})`,
+                    transform: transformStyleStr,
                     pointerEvents: 'none',
                     transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                   }}
