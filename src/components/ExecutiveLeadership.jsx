@@ -374,13 +374,11 @@ export default function ExecutiveLeadership() {
                             style={{
                               width: '100%',
                               height: '100%',
-                              objectPosition: leader.imagePosition || 'center top',
-                              objectFit: leader.imageFit || 'cover',
-                              transform: leader.imageZoom ? `scale(${leader.imageZoom})` : (leader.imageTransform || 'none'),
-                              transformOrigin: leader.imagePosition || 'center top'
+                              objectPosition: leader.imagePosition || leader.position || 'center center',
+                              objectFit: leader.imageFit || leader.fit || 'cover',
+                              transform: `scale(${leader.imageZoom || leader.zoom || 1})`,
+                              transformOrigin: leader.imagePosition || leader.position || 'center center'
                             }}
-
-
                           />
 
                         </div>
@@ -437,13 +435,11 @@ export default function ExecutiveLeadership() {
                             style={{
                               width: '100%',
                               height: '100%',
-                              objectPosition: leader.imagePosition || 'center top',
-                              objectFit: leader.imageFit || 'cover',
-                              transform: leader.imageZoom ? `scale(${leader.imageZoom})` : (leader.imageTransform || 'none'),
-                              transformOrigin: leader.imagePosition || 'center top'
+                              objectPosition: leader.imagePosition || leader.position || 'center center',
+                              objectFit: leader.imageFit || leader.fit || 'cover',
+                              transform: `scale(${leader.imageZoom || leader.zoom || 1})`,
+                              transformOrigin: leader.imagePosition || leader.position || 'center center'
                             }}
-
-
                           />
 
                         </div>

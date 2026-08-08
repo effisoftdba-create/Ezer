@@ -344,8 +344,9 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
       bio: exec.bio || '',
       tagline: exec.tagline || 'From problem to solution.',
       headline: exec.headline || 'A creative and strategic transformation partner for bold businesses.',
-      imagePosition: exec.imagePosition || 'center top',
-      imageFit: exec.imageFit || 'cover',
+      imagePosition: exec.imagePosition || exec.position || 'center top',
+      imageFit: exec.imageFit || exec.fit || 'cover',
+      imageZoom: exec.imageZoom || exec.zoom || 1,
       imageTransform: exec.imageTransform || 'none'
     });
   };
