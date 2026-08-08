@@ -37,7 +37,7 @@ export default function TestimonialFormModal({
           background: '#ffffff',
           borderRadius: '16px',
           width: '100%',
-          maxWidth: '560px',
+          maxWidth: '580px',
           boxShadow: '0 25px 50px -12px rgba(0, 6, 72, 0.4)',
           border: '1.5px solid #e2e8f0',
           overflow: 'hidden',
@@ -88,13 +88,13 @@ export default function TestimonialFormModal({
 
             <div>
               <label htmlFor="testi_role_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Current Designation & Firm *
+                Current Designation & Role *
               </label>
               <input
                 id="testi_role_field"
                 type="text"
                 required
-                placeholder="e.g. FULL STACK QA SPECIALIST @ PIXIS"
+                placeholder="e.g. Full Stack QA Specialist"
                 value={formData.role || ''}
                 onChange={(e) => setFormData((prev) => ({ ...prev, role: e.target.value }))}
                 style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
@@ -102,8 +102,22 @@ export default function TestimonialFormModal({
             </div>
           </div>
 
-          {/* Course Track & Rating */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '14px' }}>
+          {/* Firm / Company & Course Track */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
+            <div>
+              <label htmlFor="testi_company_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                Firm / Company Name
+              </label>
+              <input
+                id="testi_company_field"
+                type="text"
+                placeholder="e.g. Pixis"
+                value={formData.company || ''}
+                onChange={(e) => setFormData((prev) => ({ ...prev, company: e.target.value }))}
+                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+              />
+            </div>
+
             <div>
               <label htmlFor="testi_track_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
                 Course Track / Program Specialization *
@@ -117,6 +131,39 @@ export default function TestimonialFormModal({
                 onChange={(e) => setFormData((prev) => ({ ...prev, track: e.target.value }))}
                 style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
               />
+            </div>
+          </div>
+
+          {/* Star Rating & Avatar URL */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '14px' }}>
+            <div>
+              <label htmlFor="testi_avatar_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                Alumni Avatar Picture URL
+              </label>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                {formData.avatar && (
+                  <img
+                    src={resolveImageSrc(formData.avatar)}
+                    alt="Avatar preview"
+                    style={{ width: '38px', height: '38px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #cbd5e1' }}
+                  />
+                )}
+                <input
+                  id="testi_avatar_field"
+                  type="text"
+                  placeholder="https://..."
+                  value={formData.avatar || ''}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, avatar: e.target.value }))}
+                  style={{ flex: 1, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                />
+                <button
+                  type="button"
+                  onClick={onOpenImagePicker}
+                  style={{ padding: '9px 12px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', whiteSpace: 'nowrap' }}
+                >
+                  <HiPhotograph size={15} /> Choose
+                </button>
+              </div>
             </div>
 
             <div>
@@ -136,10 +183,10 @@ export default function TestimonialFormModal({
             </div>
           </div>
 
-          {/* Review Text */}
+          {/* Review Text / Quote */}
           <div>
             <label htmlFor="testi_text_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-              Testimonial Review Content *
+              Testimonial Review Content / Quote *
             </label>
             <textarea
               id="testi_text_field"
@@ -150,37 +197,6 @@ export default function TestimonialFormModal({
               onChange={(e) => setFormData((prev) => ({ ...prev, text: e.target.value }))}
               style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', lineHeight: 1.5 }}
             />
-          </div>
-
-          {/* Avatar Picture */}
-          <div>
-            <label htmlFor="testi_avatar_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-              Alumni Avatar Picture URL (Rec. Square 1:1)
-            </label>
-            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-              {formData.avatar && (
-                <img
-                  src={resolveImageSrc(formData.avatar)}
-                  alt="Avatar preview"
-                  style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #cbd5e1' }}
-                />
-              )}
-              <input
-                id="testi_avatar_field"
-                type="text"
-                placeholder="https://..."
-                value={formData.avatar || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, avatar: e.target.value }))}
-                style={{ flex: 1, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-              <button
-                type="button"
-                onClick={onOpenImagePicker}
-                style={{ padding: '9px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', whiteSpace: 'nowrap' }}
-              >
-                <HiPhotograph size={16} /> Choose Image
-              </button>
-            </div>
           </div>
 
           {/* Footer Buttons */}

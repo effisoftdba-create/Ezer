@@ -8,6 +8,7 @@ import { resolveImageSrc } from '../../utils/imageUtils';
 const DEFAULT_TESTIMONIAL_STATE = {
   author: '',
   role: '',
+  company: '',
   track: 'Software Testing – Playwright',
   text: '',
   rating: 5,
@@ -50,18 +51,18 @@ export default function TestimonialsManager() {
   };
 
   const handleOpenEdit = (item) => {
-    setEditingId(item.id);
+    setEditingId(item.id || item.author || item.name);
     setFormData({
       author: item.author || item.name || '',
       role: item.role || item.designation || '',
-      track: item.track || item.course || 'Cloud DevOps with AI',
-      text: item.text || item.content || item.review || '',
+      company: item.company || '',
+      track: item.track || item.course || 'Software Testing – Playwright',
+      text: item.text || item.quote || item.content || item.review || '',
       rating: item.rating || 5,
       avatar: item.avatar || item.image || ''
     });
     setIsEditing(true);
   };
-
 
   const handleSave = (e) => {
     e.preventDefault();
@@ -70,13 +71,32 @@ export default function TestimonialsManager() {
       return;
     }
 
+    const payload = {
+      ...formData,
+      id: editingId || `testi-${Date.now()}`,
+      name: formData.author,
+      author: formData.author,
+      role: formData.role,
+      company: formData.company,
+      course: formData.track,
+      track: formData.track,
+      quote: formData.text,
+      text: formData.text,
+      review: formData.text,
+      content: formData.text,
+      image: formData.avatar,
+      avatar: formData.avatar,
+      rating: formData.rating || 5
+    };
+
     if (editingId) {
-      updateWrittenTestimonial(editingId, formData);
+      updateWrittenTestimonial(editingId, payload);
     } else {
-      addWrittenTestimonial(formData);
+      addWrittenTestimonial(payload);
     }
     setIsEditing(false);
   };
+
 
   const handleDelete = (id, author) => {
     if (window.confirm(`Are you sure you want to remove ${author}'s review?`)) {
@@ -175,12 +195,15 @@ export default function TestimonialsManager() {
                 <img src={resolveImageSrc(item.avatar || item.image)} alt={item.author || item.name} style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }} />
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>{item.author || item.name}</h4>
-                  <div style={{ fontSize: '0.725rem', color: '#64748b', fontWeight: 600 }}>{item.role || item.designation}</div>
-                  {item.track && (
-                    <div style={{ fontSize: '0.68rem', color: '#000648', background: '#f1f5f9', border: '1px solid #cbd5e1', padding: '1px 7px', borderRadius: '50px', fontWeight: 700, marginTop: '3px', display: 'inline-block' }}>
-                      Track: {item.track}
+                  <div style={{ fontSize: '0.725rem', color: '#64748b', fontWeight: 600 }}>
+                    {item.role || item.designation} {item.company ? `@ ${item.company}` : ''}
+                  </div>
+                  {(item.track || item.course) && (
+                    <div style={{ fontSize: '0.68rem', color: '#000648', background: '#eff6ff', border: '1px solid #bfdbfe', padding: '1px 7px', borderRadius: '50px', fontWeight: 700, marginTop: '3px', display: 'inline-block' }}>
+                      Track: {item.track || item.course}
                     </div>
                   )}
+
                 </div>
               </div>
 
@@ -192,7 +215,7 @@ export default function TestimonialsManager() {
               </div>
 
               <p style={{ fontSize: '0.8rem', color: '#475569', lineHeight: 1.4, margin: 0 }}>
-                "{item.text || item.content || item.review}"
+                "{item.text || item.quote || item.content || item.review}"
               </p>
             </div>
 
