@@ -86,6 +86,7 @@ export default function ImagePickerModal({
   currentImage = '',
   currentPosition = '50% 50%',
   currentFit = 'cover',
+  currentZoom = 1,
   onSelectPosition,
   targetArea = 'Website Image',
   aspectRatio = 'Rectangle (16:9)',
@@ -94,7 +95,7 @@ export default function ImagePickerModal({
   const [selectedUrlOverride, setSelectedUrlOverride] = useState(null);
   const [customUrl, setCustomUrl] = useState('');
   const [fitModeOverride, setFitModeOverride] = useState(null);
-  const [zoomScale, setZoomScale] = useState(1);
+  const [zoomScale, setZoomScale] = useState(currentZoom || 1);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -120,22 +121,25 @@ export default function ImagePickerModal({
     } catch (e) {}
   }, [uploadedImages]);
 
-  // Parse initial position on mount or when currentPosition changes
+  // Parse initial position and zoom level on mount or when props change
   useEffect(() => {
-    if (currentPosition) {
-      presetPosRef.current = currentPosition;
-      if (currentPosition.includes('top')) setDragOffset({ x: 0, y: -35 });
-      else if (currentPosition.includes('bottom')) setDragOffset({ x: 0, y: 35 });
-      else if (currentPosition.includes('left')) setDragOffset({ x: -35, y: 0 });
-      else if (currentPosition.includes('right')) setDragOffset({ x: 35, y: 0 });
-      else if (currentPosition.includes('%')) {
-        const parts = currentPosition.split(' ');
-        const xPct = parseFloat(parts[0]) || 50;
-        const yPct = parseFloat(parts[1]) || 50;
-        setDragOffset({ x: Math.round(xPct - 50), y: Math.round(yPct - 50) });
+    if (isOpen) {
+      if (currentZoom && currentZoom > 0) setZoomScale(parseFloat(currentZoom));
+      if (currentPosition) {
+        presetPosRef.current = currentPosition;
+        if (currentPosition.includes('top')) setDragOffset({ x: 0, y: -35 });
+        else if (currentPosition.includes('bottom')) setDragOffset({ x: 0, y: 35 });
+        else if (currentPosition.includes('left')) setDragOffset({ x: -35, y: 0 });
+        else if (currentPosition.includes('right')) setDragOffset({ x: 35, y: 0 });
+        else if (currentPosition.includes('%')) {
+          const parts = currentPosition.split(' ');
+          const xPct = parseFloat(parts[0]) || 50;
+          const yPct = parseFloat(parts[1]) || 50;
+          setDragOffset({ x: Math.round(xPct - 50), y: Math.round(yPct - 50) });
+        }
       }
     }
-  }, [currentPosition, isOpen]);
+  }, [currentPosition, currentZoom, isOpen]);
 
   // Smooth dragging across window
   const handlePointerDown = (clientX, clientY) => {
@@ -151,7 +155,6 @@ export default function ImagePickerModal({
     const clampedY = Math.min(48, Math.max(-48, deltaY));
     setDragOffset({ x: clampedX, y: clampedY });
   }, [isDragging]);
-
 
   useEffect(() => {
     if (!isDragging) return;
@@ -190,17 +193,15 @@ export default function ImagePickerModal({
   const posX = Math.min(100, Math.max(0, 50 + dragOffset.x));
   const posY = Math.min(100, Math.max(0, 50 + dragOffset.y));
   const computedPosStr = `${posX}% ${posY}%`;
-  const transformStyleStr = (dragOffset.x !== 0 || dragOffset.y !== 0 || zoomScale !== 1)
-    ? `translate(${dragOffset.x * 2.5}px, ${dragOffset.y * 2.5}px) scale(${zoomScale})`
-    : 'none';
 
   const handleConfirm = () => {
     if (activeSelectedUrl) {
-      if (typeof onSelectImage === 'function') onSelectImage(activeSelectedUrl, computedPosStr, fitMode, transformStyleStr);
-      if (typeof onSelectPosition === 'function') onSelectPosition(computedPosStr, fitMode, transformStyleStr);
+      if (typeof onSelectImage === 'function') onSelectImage(activeSelectedUrl, computedPosStr, fitMode, zoomScale);
+      if (typeof onSelectPosition === 'function') onSelectPosition(computedPosStr, fitMode, zoomScale);
       if (typeof onClose === 'function') onClose();
     }
   };
+
 
 
   const handleFileUpload = (e) => {

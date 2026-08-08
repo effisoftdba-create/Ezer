@@ -28,7 +28,6 @@ export default function ImagePickerPreviewBox({
   const posX = Math.min(100, Math.max(0, 50 + dragOffset.x));
   const posY = Math.min(100, Math.max(0, 50 + dragOffset.y));
   const computedPosStr = `${posX}% ${posY}%`;
-  const transformStyleStr = `translate(${dragOffset.x * 2.5}px, ${dragOffset.y * 2.5}px) scale(${zoomScale})`;
 
   const onMouseDownHandler = (e) => {
     e.preventDefault();
@@ -127,7 +126,7 @@ export default function ImagePickerPreviewBox({
                 <HiDesktopComputer color="#115DFC" size={16} /> Desktop View ({previewDims.ratio})
               </span>
               <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#166534', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                <HiSelector size={12} /> Drag image up/down/left/right to adjust
+                <HiSelector size={12} /> Drag image to adjust focus
               </span>
             </div>
 
@@ -158,7 +157,8 @@ export default function ImagePickerPreviewBox({
                   height: '100%',
                   objectFit: fitMode,
                   objectPosition: computedPosStr,
-                  transform: transformStyleStr,
+                  transform: `scale(${zoomScale})`,
+                  transformOrigin: computedPosStr,
                   pointerEvents: 'none',
                   transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                 }}
@@ -178,7 +178,7 @@ export default function ImagePickerPreviewBox({
                 color: '#f2b733', fontSize: '0.65rem', padding: '3px 8px', borderRadius: '4px',
                 pointerEvents: 'none', fontWeight: 700, border: '1px solid rgba(242,183,51,0.4)'
               }}>
-                Pos: {computedPosStr} | {fitMode}
+                Pos: {computedPosStr} | Zoom: {Math.round(zoomScale * 100)}%
               </div>
             </div>
           </div>
@@ -244,7 +244,8 @@ export default function ImagePickerPreviewBox({
                     height: '100%',
                     objectFit: fitMode,
                     objectPosition: computedPosStr,
-                    transform: transformStyleStr,
+                    transform: `scale(${zoomScale})`,
+                    transformOrigin: computedPosStr,
                     pointerEvents: 'none',
                     transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                   }}

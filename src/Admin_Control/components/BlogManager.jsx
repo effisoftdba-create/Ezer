@@ -380,13 +380,14 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                 currentImage={formData.image}
                 currentPosition={formData.imagePosition}
                 currentFit={formData.imageFit}
-                onSelectImage={(url, pos, fit, trans) => {
+                currentZoom={formData.imageZoom || 1}
+                onSelectImage={(url, pos, fit, zoom) => {
                   setFormData((prev) => ({
                     ...prev,
                     image: url,
                     imagePosition: pos || prev.imagePosition || 'center top',
                     imageFit: fit || prev.imageFit || 'cover',
-                    imageTransform: trans || prev.imageTransform || 'none'
+                    imageZoom: zoom || prev.imageZoom || 1
                   }));
                   setPickerOpen(false);
                 }}
@@ -395,6 +396,7 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                 recommendedDimensions="700 x 740 px"
               />
             )}
+
 
 
           </form>

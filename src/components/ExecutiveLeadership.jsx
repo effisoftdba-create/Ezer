@@ -376,10 +376,14 @@ export default function ExecutiveLeadership() {
                             alt={leader.name}
                             onError={handleImgError}
                             style={{
+                              width: '100%',
+                              height: '100%',
                               objectPosition: leader.imagePosition || 'center top',
                               objectFit: leader.imageFit || 'cover',
-                              transform: leader.imageTransform || 'none'
+                              transform: leader.imageZoom ? `scale(${leader.imageZoom})` : (leader.imageTransform || 'none'),
+                              transformOrigin: leader.imagePosition || 'center top'
                             }}
+
 
                           />
 
@@ -435,10 +439,14 @@ export default function ExecutiveLeadership() {
                             alt={leader.name}
                             onError={handleImgError}
                             style={{
+                              width: '100%',
+                              height: '100%',
                               objectPosition: leader.imagePosition || 'center top',
                               objectFit: leader.imageFit || 'cover',
-                              transform: leader.imageTransform || 'none'
+                              transform: leader.imageZoom ? `scale(${leader.imageZoom})` : (leader.imageTransform || 'none'),
+                              transformOrigin: leader.imagePosition || 'center top'
                             }}
+
 
                           />
 
