@@ -198,9 +198,10 @@ export default function PlatformManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
-        currentPosition={formData.position}
-        currentFit={formData.fit}
-        onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
+        currentPosition={formData.imagePosition}
+        currentFit={formData.imageFit}
+        onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, imagePosition: pos || 'center center', imageFit: fit || 'cover' }))}
+
         targetArea="Platform Showcase Main Photo"
         aspectRatio="Portrait / Vertical (4:5)"
         recommendedDimensions="600 x 750 px"

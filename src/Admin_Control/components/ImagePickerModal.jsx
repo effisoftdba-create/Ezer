@@ -20,20 +20,22 @@ const DEFAULT_PRESET_IMAGES = [
 ];
 
 const POSITION_PRESETS = [
-  { label: 'Center', value: 'center center', x: 0, y: 0 },
-  { label: 'Top Focus', value: 'center top', x: 0, y: -40 },
-  { label: 'Bottom Focus', value: 'center bottom', x: 0, y: 40 },
-  { label: 'Left Focus', value: 'left center', x: -40, y: 0 },
-  { label: 'Right Focus', value: 'right center', x: 40, y: 0 }
+  { label: 'Center', value: '50% 50%', x: 0, y: 0 },
+  { label: 'Top Focus', value: '50% 15%', x: 0, y: -35 },
+  { label: 'Bottom Focus', value: '50% 85%', x: 0, y: 35 },
+  { label: 'Left Focus', value: '15% 50%', x: -35, y: 0 },
+  { label: 'Right Focus', value: '85% 50%', x: 35, y: 0 }
 ];
 
 function getPreviewDimensions(aspectRatio) {
   if (!aspectRatio) return { ratio: '16/9', height: '160px' };
   const lower = aspectRatio.toLowerCase();
+  if (lower.includes('340:360') || lower.includes('340x360')) return { ratio: '340/360', height: '220px' };
   if (lower.includes('1:1') || lower.includes('square')) return { ratio: '1/1', height: '200px' };
   if (lower.includes('4:3')) return { ratio: '4/3', height: '180px' };
   if (lower.includes('3:2')) return { ratio: '3/2', height: '170px' };
   if (lower.includes('3:4') || lower.includes('vertical')) return { ratio: '3/4', height: '240px' };
+  if (lower.includes('4:5')) return { ratio: '4/5', height: '250px' };
   if (lower.includes('portrait') || lower.includes('9:16')) return { ratio: '9/16', height: '260px' };
   return { ratio: '16/9', height: '160px' };
 }
@@ -82,7 +84,7 @@ export default function ImagePickerModal({
   onClose,
   onSelectImage,
   currentImage = '',
-  currentPosition = 'center center',
+  currentPosition = '50% 50%',
   currentFit = 'cover',
   onSelectPosition,
   targetArea = 'Website Image',
@@ -99,7 +101,7 @@ export default function ImagePickerModal({
   const [isDragOver, setIsDragOver] = useState(false);
   const [aspectRatioOverride, setAspectRatioOverride] = useState(null);
   const dragStartRef = useRef({ x: 0, y: 0 });
-  const presetPosRef = useRef(currentPosition || 'center center');
+  const presetPosRef = useRef(currentPosition || '50% 50%');
 
   const [uploadedImages, setUploadedImages] = useState(() => {
     try {
@@ -118,12 +120,58 @@ export default function ImagePickerModal({
     } catch (e) {}
   }, [uploadedImages]);
 
-  const handleMouseMove = useCallback((e) => {
+  // Parse initial position on mount or when currentPosition changes
+  useEffect(() => {
+    if (currentPosition) {
+      presetPosRef.current = currentPosition;
+      if (currentPosition.includes('top')) setDragOffset({ x: 0, y: -35 });
+      else if (currentPosition.includes('bottom')) setDragOffset({ x: 0, y: 35 });
+      else if (currentPosition.includes('left')) setDragOffset({ x: -35, y: 0 });
+      else if (currentPosition.includes('right')) setDragOffset({ x: 35, y: 0 });
+      else if (currentPosition.includes('%')) {
+        const parts = currentPosition.split(' ');
+        const xPct = parseFloat(parts[0]) || 50;
+        const yPct = parseFloat(parts[1]) || 50;
+        setDragOffset({ x: Math.round(xPct - 50), y: Math.round(yPct - 50) });
+      }
+    }
+  }, [currentPosition, isOpen]);
+
+  // Smooth dragging across window
+  const handlePointerDown = (clientX, clientY) => {
+    setIsDragging(true);
+    dragStartRef.current = { x: clientX - (dragOffset.x * 3), y: clientY - (dragOffset.y * 3) };
+  };
+
+  const handlePointerMove = useCallback((clientX, clientY) => {
     if (!isDragging) return;
-    const newX = Math.min(80, Math.max(-80, Math.round((e.clientX - dragStartRef.current.x))));
-    const newY = Math.min(80, Math.max(-80, Math.round((e.clientY - dragStartRef.current.y))));
-    setDragOffset({ x: newX, y: newY });
+    const deltaX = Math.round((clientX - dragStartRef.current.x) / 3);
+    const deltaY = Math.round((clientY - dragStartRef.current.y) / 3);
+    const clampedX = Math.min(48, Math.max(-48, deltaX));
+    const clampedY = Math.min(48, Math.max(-48, deltaY));
+    setDragOffset({ x: clampedX, y: clampedY });
   }, [isDragging]);
+
+  useEffect(() => {
+    if (!isDragging) return;
+    const onMouseMove = (e) => handlePointerMove(e.clientX, e.clientY);
+    const onTouchMove = (e) => {
+      if (e.touches && e.touches[0]) handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+    };
+    const onMouseUp = () => setIsDragging(false);
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('touchmove', onTouchMove);
+    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('touchend', onMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('touchmove', onTouchMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('touchend', onMouseUp);
+    };
+  }, [isDragging, handlePointerMove]);
 
   if (!isOpen) return null;
 
@@ -138,9 +186,9 @@ export default function ImagePickerModal({
     ...DEFAULT_PRESET_IMAGES
   ];
 
-  const computedPosStr = (dragOffset.x !== 0 || dragOffset.y !== 0)
-    ? `${50 + dragOffset.x}% ${50 + dragOffset.y}%`
-    : presetPosRef.current;
+  const posX = Math.min(100, Math.max(0, 50 + dragOffset.x));
+  const posY = Math.min(100, Math.max(0, 50 + dragOffset.y));
+  const computedPosStr = `${posX}% ${posY}%`;
 
   const handleConfirm = () => {
     if (activeSelectedUrl) {
@@ -184,14 +232,6 @@ export default function ImagePickerModal({
       setSelectedUrlOverride(DEFAULT_PRESET_IMAGES[0].url);
     }
   };
-
-  const handleMouseDown = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-    dragStartRef.current = { x: e.clientX - dragOffset.x, y: e.clientY - dragOffset.y };
-  };
-
-  const handleMouseUp = () => setIsDragging(false);
 
   const handlePresetPosition = (preset) => {
     presetPosRef.current = preset.value;
@@ -248,9 +288,7 @@ export default function ImagePickerModal({
           dragOffset={dragOffset}
           zoomScale={zoomScale}
           isDragging={isDragging}
-          handleMouseDown={handleMouseDown}
-          handleMouseMove={handleMouseMove}
-          handleMouseUp={handleMouseUp}
+          handleMouseDown={handlePointerDown}
         />
 
         <ImagePickerControls
@@ -301,44 +339,74 @@ export default function ImagePickerModal({
             <input
               id="custom_image_url_picker"
               type="text"
-              placeholder="https://example.com/image.jpg or drop image file"
-              value={customUrl.startsWith('data:') ? '(Uploaded image compressed & ready)' : customUrl}
+              placeholder="Paste image web URL..."
+              value={customUrl}
               onChange={(e) => setCustomUrl(e.target.value)}
               style={{
-                flex: 1, padding: '10px 14px', borderRadius: '8px', border: '1.5px solid #cbd5e1',
-                fontSize: '0.875rem', outline: 'none'
+                flex: 1,
+                minWidth: '220px',
+                padding: '10px 14px',
+                borderRadius: '8px',
+                border: '1.5px solid #cbd5e1',
+                fontSize: '0.85rem'
               }}
             />
-            <label htmlFor="image_file_upload_input" style={{
-              background: isUploading ? '#64748b' : '#000648', color: '#f2b733', border: 'none', padding: '10px 16px',
-              borderRadius: '8px', cursor: isUploading ? 'wait' : 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
-              fontSize: '0.825rem', fontWeight: 800
-            }}>
-              <HiUpload size={16} /> {isUploading ? 'Optimizing...' : 'Upload / Drop File'}
-              <input id="image_file_upload_input" type="file" accept="image/*" disabled={isUploading} onChange={handleFileUpload} style={{ display: 'none' }} />
+            <label
+              htmlFor="file_upload_input"
+              style={{
+                padding: '10px 16px',
+                background: '#000648',
+                color: '#ffffff',
+                borderRadius: '8px',
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px'
+              }}
+            >
+              <HiUpload size={16} color="#f2b733" />
+              {isUploading ? 'Uploading...' : 'Browse Local PC Image'}
             </label>
+            <input
+              id="file_upload_input"
+              type="file"
+              accept="image/*"
+              onChange={handleFileUpload}
+              style={{ display: 'none' }}
+            />
           </div>
-          <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, display: 'inline-block', marginTop: '6px' }}>
-            💡 Drag & drop any image file directly onto this box to upload with live ratio preview ({activeRatio})
-          </span>
         </div>
 
         <ImagePickerGalleryGrid
           combinedGalleryImages={combinedGalleryImages}
+          selectedUrl={selectedUrl}
           activeSelectedUrl={activeSelectedUrl}
-          uploadedImages={uploadedImages}
-          onSelectUrl={handleGallerySelect}
-          onDeleteUploaded={handleDeleteUploadedImage}
-          aspectRatio={aspectRatio}
+          handleGallerySelect={handleGallerySelect}
+          handleDeleteUploadedImage={handleDeleteUploadedImage}
         />
 
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #e2e8f0' }}>
+        {/* BOTTOM ACTION BUTTON BAR */}
+        <div style={{
+          display: 'flex',
+          justify: 'flex-end',
+          gap: '12px',
+          borderTop: '1.5px solid #cbd5e1',
+          paddingTop: '16px',
+          marginTop: '16px'
+        }}>
           <button
             type="button"
             onClick={onClose}
             style={{
-              padding: '10px 20px', borderRadius: '8px', border: '1px solid #cbd5e1',
-              background: '#ffffff', color: '#475569', fontWeight: 700, cursor: 'pointer'
+              padding: '10px 20px',
+              borderRadius: '8px',
+              border: '1.5px solid #cbd5e1',
+              background: '#ffffff',
+              color: '#475569',
+              fontWeight: 700,
+              cursor: 'pointer'
             }}
           >
             Cancel
@@ -347,18 +415,23 @@ export default function ImagePickerModal({
             type="button"
             onClick={handleConfirm}
             style={{
-              padding: '10px 24px', borderRadius: '8px', border: 'none',
-              background: '#000648', color: '#f2b733', fontWeight: 800, cursor: 'pointer'
+              padding: '10px 24px',
+              borderRadius: '8px',
+              border: 'none',
+              background: '#000648',
+              color: '#f2b733',
+              fontWeight: 800,
+              fontSize: '0.9rem',
+              cursor: 'pointer',
+              boxShadow: '0 4px 14px rgba(0,6,72,0.2)'
             }}
           >
-            Use Selected Image
+            Confirm Image & Alignments
           </button>
         </div>
       </div>
     </div>
   );
 
-  return typeof document !== 'undefined'
-    ? ReactDOM.createPortal(modalJSX, document.body)
-    : modalJSX;
+  return ReactDOM.createPortal(modalJSX, document.body);
 }

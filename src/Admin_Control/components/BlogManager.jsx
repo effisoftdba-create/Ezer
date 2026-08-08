@@ -273,7 +273,9 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
     roleTag: 'CEO', roleName: 'Chief Executive Officer',
     name: '', image: '', bio: '',
     tagline: 'From problem to solution.',
-    headline: 'A creative and strategic transformation partner for bold businesses.'
+    headline: 'A creative and strategic transformation partner for bold businesses.',
+    imagePosition: 'center top',
+    imageFit: 'cover'
   });
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -286,7 +288,9 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
       image: exec.image || '',
       bio: exec.bio || '',
       tagline: exec.tagline || 'From problem to solution.',
-      headline: exec.headline || 'A creative and strategic transformation partner for bold businesses.'
+      headline: exec.headline || 'A creative and strategic transformation partner for bold businesses.',
+      imagePosition: exec.imagePosition || 'center top',
+      imageFit: exec.imageFit || 'cover'
     });
   };
 
@@ -348,7 +352,7 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
               <div style={{ display: 'flex', gap: '8px' }}>
                 <input id="exec_photo_url" type="text" value={formData.image} onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))} style={{ flex: 1, padding: '8px 10px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.84rem' }} required />
                 <button type="button" onClick={() => setPickerOpen(true)} style={{ padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer' }}>
-                  Choose Photo
+                  Choose Photo & Position
                 </button>
               </div>
             </div>
@@ -372,12 +376,23 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                 isOpen={pickerOpen}
                 onClose={() => setPickerOpen(false)}
                 currentImage={formData.image}
-                onSelectImage={(url) => { setFormData((prev) => ({ ...prev, image: url })); setPickerOpen(false); }}
+                currentPosition={formData.imagePosition}
+                currentFit={formData.imageFit}
+                onSelectImage={(url, pos, fit) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    image: url,
+                    imagePosition: pos || prev.imagePosition || 'center top',
+                    imageFit: fit || prev.imageFit || 'cover'
+                  }));
+                  setPickerOpen(false);
+                }}
                 targetArea={`Executive Photo (${formData.roleTag})`}
-                aspectRatio="Square (1:1)"
-                recommendedDimensions="700 x 700 px"
+                aspectRatio="Portrait (340:360)"
+                recommendedDimensions="700 x 740 px"
               />
             )}
+
           </form>
         ) : (
           <div style={{ fontSize: '0.82rem', color: '#64748b' }}>

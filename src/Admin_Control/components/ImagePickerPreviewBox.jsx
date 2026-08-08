@@ -28,8 +28,20 @@ export default function ImagePickerPreviewBox({
   const [showGridLines, setShowGridLines] = useState(true);
 
   const activeSrc = resolveImageSrc(activeSelectedUrl);
-  const currentSrc = currentImage ? resolveImageSrc(currentImage) : null;
-  const computedPosStr = `${50 + dragOffset.x}% ${50 + dragOffset.y}%`;
+  const posX = Math.min(100, Math.max(0, 50 + dragOffset.x));
+  const posY = Math.min(100, Math.max(0, 50 + dragOffset.y));
+  const computedPosStr = `${posX}% ${posY}%`;
+
+  const onMouseDownHandler = (e) => {
+    e.preventDefault();
+    if (typeof handleMouseDown === 'function') handleMouseDown(e.clientX, e.clientY);
+  };
+
+  const onTouchStartHandler = (e) => {
+    if (e.touches && e.touches[0]) {
+      if (typeof handleMouseDown === 'function') handleMouseDown(e.touches[0].clientX, e.touches[0].clientY);
+    }
+  };
 
   return (
     <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '16px', padding: '18px', marginBottom: '20px' }}>
@@ -124,13 +136,11 @@ export default function ImagePickerPreviewBox({
             <div
               role="region"
               aria-label="Desktop screen preview - drag image to adjust position"
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
+              onMouseDown={onMouseDownHandler}
+              onTouchStart={onTouchStartHandler}
               style={{
                 aspectRatio: previewDims.ratio,
-                maxHeight: '220px',
+                maxHeight: '260px',
                 borderRadius: '10px',
                 overflow: 'hidden',
                 border: '2px solid #115DFC',
@@ -138,7 +148,8 @@ export default function ImagePickerPreviewBox({
                 boxShadow: '0 4px 14px rgba(17,93,252,0.2)',
                 position: 'relative',
                 cursor: isDragging ? 'grabbing' : 'grab',
-                userSelect: 'none'
+                userSelect: 'none',
+                touchAction: 'none'
               }}
             >
               <img
@@ -149,7 +160,7 @@ export default function ImagePickerPreviewBox({
                   height: '100%',
                   objectFit: fitMode,
                   objectPosition: computedPosStr,
-                  transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) scale(${zoomScale})`,
+                  transform: `scale(${zoomScale})`,
                   pointerEvents: 'none',
                   transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                 }}
@@ -212,10 +223,8 @@ export default function ImagePickerPreviewBox({
               <div
                 role="region"
                 aria-label="Mobile screen preview - drag image to adjust position"
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
-                onMouseUp={handleMouseUp}
-                onMouseLeave={handleMouseUp}
+                onMouseDown={onMouseDownHandler}
+                onTouchStart={onTouchStartHandler}
                 style={{
                   width: '100%',
                   flex: 1,
@@ -225,7 +234,8 @@ export default function ImagePickerPreviewBox({
                   position: 'relative',
                   border: '1.5px solid #115DFC',
                   cursor: isDragging ? 'grabbing' : 'grab',
-                  userSelect: 'none'
+                  userSelect: 'none',
+                  touchAction: 'none'
                 }}
               >
                 <img
@@ -236,7 +246,7 @@ export default function ImagePickerPreviewBox({
                     height: '100%',
                     objectFit: fitMode,
                     objectPosition: computedPosStr,
-                    transform: `translate(${dragOffset.x}px, ${dragOffset.y}px) scale(${zoomScale})`,
+                    transform: `scale(${zoomScale})`,
                     pointerEvents: 'none',
                     transition: isDragging ? 'none' : 'transform 0.15s ease, object-position 0.15s ease'
                   }}

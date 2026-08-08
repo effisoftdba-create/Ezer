@@ -375,7 +375,12 @@ export default function ExecutiveLeadership() {
                             src={resolveImageSrc(leader.image)}
                             alt={leader.name}
                             onError={handleImgError}
+                            style={{
+                              objectPosition: leader.imagePosition || 'center top',
+                              objectFit: leader.imageFit || 'cover'
+                            }}
                           />
+
                         </div>
                         <div className="card-hover-overlay">
                           <div className="heading">{leader.name}</div>
@@ -427,7 +432,12 @@ export default function ExecutiveLeadership() {
                             src={resolveImageSrc(leader.image)}
                             alt={leader.name}
                             onError={handleImgError}
+                            style={{
+                              objectPosition: leader.imagePosition || 'center top',
+                              objectFit: leader.imageFit || 'cover'
+                            }}
                           />
+
                         </div>
                         <div className="card-hover-overlay">
                           <div className="heading">{leader.name}</div>
