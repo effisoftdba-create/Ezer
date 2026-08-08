@@ -60,7 +60,14 @@ function mergeCollection(defaults, firebaseItems, primaryKey = 'id') {
     const key = String(fbItem[primaryKey] || fbItem.id || fbItem.roleTag || fbItem.badge || fbItem.title || fbItem.slug || '');
     if (key) {
       const existing = itemMap.get(key) || {};
-      itemMap.set(key, { ...existing, ...fbItem });
+      const merged = { ...existing, ...fbItem };
+      if (!merged.position && existing.position) merged.position = existing.position;
+      if (!merged.imagePosition && existing.imagePosition) merged.imagePosition = existing.imagePosition;
+      if (!merged.fit && existing.fit) merged.fit = existing.fit;
+      if (!merged.imageFit && existing.imageFit) merged.imageFit = existing.imageFit;
+      if (!merged.zoom && existing.zoom) merged.zoom = existing.zoom;
+      if (!merged.imageZoom && existing.imageZoom) merged.imageZoom = existing.imageZoom;
+      itemMap.set(key, merged);
     } else {
       itemMap.set(String(Date.now() + Math.random()), fbItem);
     }
@@ -253,7 +260,24 @@ export function SiteProvider({ children }) {
 
   const updateExecutiveLeader = useCallback((id, updatedLeader) => {
     const baseList = (executiveLeaders && executiveLeaders.length >= 3) ? executiveLeaders : defaultExecutiveLeaders;
-    const updated = baseList.map((l) => (l.id === id || l.roleTag === id ? { ...l, ...updatedLeader } : l));
+    const updated = baseList.map((l) => {
+      if (l.id === id || l.roleTag === id) {
+        const pos = updatedLeader.imagePosition || updatedLeader.position || l.imagePosition || l.position || 'center center';
+        const fit = updatedLeader.imageFit || updatedLeader.fit || l.imageFit || l.fit || 'cover';
+        const zoom = updatedLeader.imageZoom || updatedLeader.zoom || l.imageZoom || l.zoom || 1;
+        return {
+          ...l,
+          ...updatedLeader,
+          imagePosition: pos,
+          position: pos,
+          imageFit: fit,
+          fit: fit,
+          imageZoom: zoom,
+          zoom: zoom
+        };
+      }
+      return l;
+    });
     dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: updated });
     saveCollectionArray('executiveLeaders', updated);
     triggerStateToast('SAVED');
@@ -330,9 +354,24 @@ export function SiteProvider({ children }) {
   }, [heroSlides]);
 
   const updateHeroSlide = useCallback((id, updatedSlide) => {
-    const updated = (heroSlides || []).map((slide) =>
-      slide.id === id || slide.badge === id ? { ...slide, ...updatedSlide } : slide
-    );
+    const updated = (heroSlides || []).map((slide) => {
+      if (slide.id === id || slide.badge === id || slide.headline === id) {
+        const pos = updatedSlide.position || updatedSlide.imagePosition || slide.position || slide.imagePosition || 'center center';
+        const fit = updatedSlide.fit || updatedSlide.imageFit || slide.fit || slide.imageFit || 'cover';
+        const zoom = updatedSlide.zoom || updatedSlide.imageZoom || slide.zoom || slide.imageZoom || 1;
+        return {
+          ...slide,
+          ...updatedSlide,
+          position: pos,
+          imagePosition: pos,
+          fit: fit,
+          imageFit: fit,
+          zoom: zoom,
+          imageZoom: zoom
+        };
+      }
+      return slide;
+    });
     dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
     saveCollectionArray('heroSlides', updated);
     triggerStateToast('SAVED');
