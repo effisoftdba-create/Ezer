@@ -3,12 +3,12 @@ import { getFirestore } from 'firebase/firestore';
 import { getDatabase } from 'firebase/database';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || '',
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '',
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || '',
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '',
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '',
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || ''
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || 'AIzaSyAkMQEGr8hy1KgJ4wYaZIstlBryjZKrolw',
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || 'ezer-learning-platform-8f1b1.firebaseapp.com',
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || 'ezer-learning-platform-8f1b1',
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || 'ezer-learning-platform-8f1b1.firebasestorage.app',
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '656530228571',
+  appId: import.meta.env.VITE_FIREBASE_APP_ID || '1:656530228571:web:0e312e3cf2b775e25d067e'
 };
 
 export const isFirebaseConfigured = Boolean(
