@@ -80,15 +80,16 @@ export async function saveDocument(collectionName, docId, data) {
   }
 
   // 2. Firestore (Secondary)
-  if (db) {
+  if (!saved && db) {
     try {
       const docRef = doc(db, collectionName, cleanId);
       await setDoc(docRef, { ...data, updatedAt: new Date().toISOString() }, { merge: true });
       saved = true;
     } catch (err) {
-      console.warn(`[Firebase Firestore] Save notice:`, err);
+      console.debug(`[Firebase Firestore] Save notice:`, err);
     }
   }
+
 
   return saved;
 }
