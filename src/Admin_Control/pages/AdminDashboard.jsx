@@ -58,9 +58,11 @@ export default function AdminDashboard() {
     blogs,
     achievements,
     executiveLeaders,
+    hiringPartners,
     updateExecutiveLeader,
     resetToDefault
   } = useSiteData();
+
 
   const isAuth = isAuthenticated();
 
