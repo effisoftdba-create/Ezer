@@ -72,7 +72,7 @@ export default function Hero({ onOpenDemoModal }) {
                   exit={{ opacity: 0, x: 20 }}
                   transition={{ duration: 0.4 }}
                   className="hero-animated-text-container"
-                  style={{ minHeight: '360px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
+                  style={{ minHeight: '250px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
                 >
 
 
@@ -82,7 +82,7 @@ export default function Hero({ onOpenDemoModal }) {
                       fontWeight: 900,
                       color: '#000648',
                       lineHeight: 1.12,
-                      marginBottom: '18px',
+                      marginBottom: '14px',
                       fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
                       letterSpacing: '-0.02em',
                     }}
@@ -116,7 +116,7 @@ export default function Hero({ onOpenDemoModal }) {
                       width: '72px',
                       height: '4px',
                       background: 'linear-gradient(90deg, #000648 0%, #f2b733 100%)',
-                      marginBottom: '20px',
+                      marginBottom: '14px',
                       borderRadius: '4px',
                     }}
                   />
@@ -126,7 +126,7 @@ export default function Hero({ onOpenDemoModal }) {
                       fontSize: 'clamp(0.95rem, 1.2vw, 1.05rem)',
                       color: '#334155',
                       lineHeight: 1.65,
-                      marginBottom: '32px',
+                      marginBottom: '16px',
                       maxWidth: '560px',
                       fontWeight: 500,
                     }}
@@ -232,7 +232,7 @@ export default function Hero({ onOpenDemoModal }) {
         <style>{`
           @media (max-width: 900px) {
             .hero-animated-text-container {
-              min-height: 330px !important;
+              min-height: 240px !important;
             }
             .hero-split-container {
               grid-template-columns: 1fr !important;
