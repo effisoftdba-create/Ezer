@@ -24,6 +24,8 @@ import {
   siteReducer,
   safeSetStorage
 } from './siteDefaults';
+import { subscribeToCollection, saveCollectionArray } from '../../services/firebaseService';
+
 
 const SiteContext = createContext();
 
@@ -99,6 +101,36 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_BLOGS_KEY, blogs); }, [blogs]);
   useEffect(() => { safeSetStorage(STORAGE_ACHIEVEMENTS_KEY, achievements); }, [achievements]);
   useEffect(() => { safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, executiveLeaders); }, [executiveLeaders]);
+
+  // Firebase Real-time Firestore Subscriptions
+  useEffect(() => {
+    const unsubCourses = subscribeToCollection('courses', (items) => {
+      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'courses', value: items });
+    });
+    const unsubHero = subscribeToCollection('heroSlides', (items) => {
+      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'heroSlides', value: items });
+    });
+    const unsubLeads = subscribeToCollection('leads', (items) => {
+      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'leads', value: items });
+    });
+    const unsubBlogs = subscribeToCollection('blogs', (items) => {
+      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'blogs', value: items });
+    });
+
+    return () => {
+      unsubCourses();
+      unsubHero();
+      unsubLeads();
+      unsubBlogs();
+    };
+  }, []);
+
+  // Sync state changes to Firebase Firestore
+  useEffect(() => { if (courses?.length) saveCollectionArray('courses', courses); }, [courses]);
+  useEffect(() => { if (heroSlides?.length) saveCollectionArray('heroSlides', heroSlides); }, [heroSlides]);
+  useEffect(() => { if (leads?.length) saveCollectionArray('leads', leads); }, [leads]);
+  useEffect(() => { if (blogs?.length) saveCollectionArray('blogs', blogs); }, [blogs]);
+
 
   // Action Dispatchers
   const updateExecutiveLeaders = useCallback((newExecs) => {

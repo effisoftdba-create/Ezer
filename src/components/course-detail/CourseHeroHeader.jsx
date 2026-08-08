@@ -18,7 +18,7 @@ export default function CourseHeroHeader({ course, onOpenDemoModal, onOpenPurcha
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
             boxShadow: '0 4px 14px rgba(242, 183, 51, 0.2)',
-            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             cursor: 'pointer',
             display: 'inline-flex',
             alignItems: 'center',

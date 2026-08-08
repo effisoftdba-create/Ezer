@@ -226,7 +226,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
 
               return (
                 <motion.div
-                  key={mod.num || idx}
+                  key={mod.id || mod.num || (mod.title ? mod.title.toLowerCase().replace(/[^a-z0-9]/g, '') : `module-${idx + 1}`)}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0, 6, 72, 0.16)', borderColor: '#f2b733' }}

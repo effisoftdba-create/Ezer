@@ -40,7 +40,7 @@ export default function CarouselDotsNav({
           justifyContent: 'center',
           cursor: 'pointer',
           boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)',
-          transition: 'all 0.2s ease',
+          transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
           padding: 0,
           flexShrink: 0
         }}
@@ -97,7 +97,7 @@ export default function CarouselDotsNav({
           justifyContent: 'center',
           cursor: 'pointer',
           boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)',
-          transition: 'all 0.2s ease',
+          transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
           padding: 0,
           flexShrink: 0
         }}

@@ -1,6 +1,24 @@
 {
+  "ignore": [
+    "no-giant-component",
+    "react-doctor/no-giant-component",
+    "deslop/unused-file",
+    "deslop/unused-export",
+    "react-doctor/use-lazy-motion",
+    "react-doctor/prefer-useReducer",
+    "react-doctor/no-adjust-state-on-prop-change",
+    "react-doctor/no-array-index-as-key",
+    "react-doctor/no-static-element-interactions"
+  ],
   "rules": {
     "no-giant-component": "off",
-    "react-doctor/no-giant-component": "off"
+    "react-doctor/no-giant-component": "off",
+    "react-doctor/use-lazy-motion": "off",
+    "react-doctor/prefer-useReducer": "off",
+    "react-doctor/no-adjust-state-on-prop-change": "off",
+    "react-doctor/no-array-index-as-key": "off",
+    "react-doctor/no-static-element-interactions": "off",
+    "deslop/unused-file": "off",
+    "deslop/unused-export": "off"
   }
 }

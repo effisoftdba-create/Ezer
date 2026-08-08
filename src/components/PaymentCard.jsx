@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import { HiCheck, HiLockClosed, HiSparkles } from 'react-icons/hi';
 
+const COURSE_FEATURES = [
+  'Live Online Instructor-Led Cohort Sessions',
+  '12-Month Dedicated Placement Assistance & Resume Reviews',
+  'Hands-on Practical Labs & Production Capstone Projects',
+  '1:1 Code Reviews & Mentorship by Senior Engineers',
+  'Verifiable ISO 9001:2015 Professional IT Certification',
+  'Up to 3 Years Access to Alumni Network & Community'
+];
+
 export default function PaymentCard({ course, onEnrollClick }) {
   const [loading, setLoading] = useState(false);
 
@@ -17,14 +26,6 @@ export default function PaymentCard({ course, onEnrollClick }) {
     }
   };
 
-  const courseFeatures = [
-    'Live Online Instructor-Led Cohort Sessions',
-    '12-Month Dedicated Placement Assistance & Resume Reviews',
-    'Hands-on Practical Labs & Production Capstone Projects',
-    '1:1 Code Reviews & Mentorship by Senior Engineers',
-    'Verifiable ISO 9001:2015 Professional IT Certification',
-    'Up to 3 Years Access to Alumni Network & Community'
-  ];
 
   return (
     <div style={{ width: '100%', margin: '0 auto', display: 'flex', justifyContent: 'center' }}>
@@ -98,8 +99,8 @@ export default function PaymentCard({ course, onEnrollClick }) {
               </p>
 
               <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', padding: 0, margin: 0, listStyle: 'none' }}>
-                {courseFeatures.map((feat, idx) => (
-                  <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.88rem', color: '#f8fafc' }}>
+                {COURSE_FEATURES.map((feat) => (
+                  <li key={feat} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.88rem', color: '#f8fafc' }}>
                     <span
                       style={{
                         width: '20px',

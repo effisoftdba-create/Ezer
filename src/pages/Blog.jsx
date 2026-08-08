@@ -6,6 +6,33 @@ import { handleImgError } from '../utils/imageUtils';
 import CTABanner from '../components/CTABanner';
 import CarouselDotsNav from '../components/CarouselDotsNav';
 
+const DEFAULT_ARTICLES = [
+  {
+    id: 'blog-default-1',
+    slug: 'native-language-learning-breaking-barriers',
+    title: 'Native Language Learning: Breaking Barriers for Non-IT Career Aspirants',
+    category: 'Education Impact',
+    summary: 'How learning complex software concepts in Tamil, Hindi, and English accelerates comprehension and boosts interview confidence.',
+    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800'
+  },
+  {
+    id: 'blog-default-2',
+    slug: 'rise-of-ai-assisted-full-stack-developers',
+    title: 'The Rise of AI-Assisted Full Stack Developers in Top Tech Corporates',
+    category: 'Industry Trends',
+    summary: 'Why modern engineering teams look for developers who leverage AI tools to build scalable production apps in record time.',
+    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800'
+  },
+  {
+    id: 'blog-default-3',
+    slug: '12-month-placement-assistance-framework',
+    title: '12-Month Placement Assistance: How EZER Prepares Students for Tech Interviews',
+    category: 'Career Success',
+    summary: 'Inside EZER’s mentorship framework: mock technical interviews, resume building, and direct corporate referral pathways.',
+    image: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80&w=800'
+  }
+];
+
 export default function Blog({ onOpenDemoModal }) {
   const { blogs, achievements } = useSiteData();
   const [awardActiveIdx, setAwardActiveIdx] = useState(0);
@@ -21,38 +48,11 @@ export default function Blog({ onOpenDemoModal }) {
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200'
   };
 
-  const defaultArticles = [
-    {
-      id: 'blog-default-1',
-      slug: 'native-language-learning-breaking-barriers',
-      title: 'Native Language Learning: Breaking Barriers for Non-IT Career Aspirants',
-      category: 'Education Impact',
-      summary: 'How learning complex software concepts in Tamil, Hindi, and English accelerates comprehension and boosts interview confidence.',
-      image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800'
-    },
-    {
-      id: 'blog-default-2',
-      slug: 'rise-of-ai-assisted-full-stack-developers',
-      title: 'The Rise of AI-Assisted Full Stack Developers in Top Tech Corporates',
-      category: 'Industry Trends',
-      summary: 'Why modern engineering teams look for developers who leverage AI tools to build scalable production apps in record time.',
-      image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800'
-    },
-    {
-      id: 'blog-default-3',
-      slug: '12-month-placement-assistance-framework',
-      title: '12-Month Placement Assistance: How EZER Prepares Students for Tech Interviews',
-      category: 'Career Success',
-      summary: 'Inside EZER’s mentorship framework: mock technical interviews, resume building, and direct corporate referral pathways.',
-      image: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&q=80&w=800'
-    }
-  ];
-
   // Guarantee 3+ articles are rendered in grid (no empty gaps)
   const userBlogList = (blogs && blogs.length > 1) ? blogs.slice(1) : [];
   const articlesToDisplay = userBlogList.length >= 3 
     ? userBlogList 
-    : [...userBlogList, ...defaultArticles.slice(0, 3 - userBlogList.length)];
+    : [...userBlogList, ...DEFAULT_ARTICLES.slice(0, 3 - userBlogList.length)];
 
   return (
     <div style={{ background: '#f8fafc', color: '#0f172a', minHeight: '100vh', paddingBottom: 0, position: 'relative', overflow: 'hidden' }}>

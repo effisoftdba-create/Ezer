@@ -44,6 +44,9 @@ export default function LeadDetailsModal({
       onClick={(e) => {
         if (e.target === e.currentTarget) setSelectedLeadId(null);
       }}
+      onKeyDown={(e) => {
+        if (e.key === 'Escape' || e.key === 'Enter') setSelectedLeadId(null);
+      }}
       style={{
         position: 'fixed',
         top: 0,

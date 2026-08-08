@@ -301,7 +301,7 @@ export default function ArticleFormModal({
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {formData.sections.map((sec, idx) => (
-                  <div key={idx} style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div key={sec.id || (sec.title ? `sec-${sec.title.toLowerCase().replace(/[^a-z0-9]/g, '')}` : `sec-block-${sec.content ? sec.content.substring(0, 10) : 'item'}`)} style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontWeight: 900, fontSize: '0.84rem', color: '#000648' }}>
                         Section #{idx + 1}
@@ -318,36 +318,42 @@ export default function ArticleFormModal({
                     </div>
 
                     <div>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Section Header Title</label>
+                      <label htmlFor={`sec-title-${idx}`} style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Section Header Title</label>
                       <input
+                        id={`sec-title-${idx}`}
                         type="text"
                         value={sec.title || ''}
                         onChange={(e) => handleUpdateSection(idx, 'title', e.target.value)}
                         placeholder={`e.g. ${idx + 1}. The Changing Tech Landscape`}
+                        aria-label="Section Header Title"
                         style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 800, color: '#000648' }}
                       />
                     </div>
 
                     <div>
-                      <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Section Detailed Paragraph Content</label>
+                      <label htmlFor={`sec-content-${idx}`} style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Section Detailed Paragraph Content</label>
                       <textarea
+                        id={`sec-content-${idx}`}
                         rows={4}
                         value={sec.content || ''}
                         onChange={(e) => handleUpdateSection(idx, 'content', e.target.value)}
                         placeholder="Write detailed paragraphs, statistics, or case studies for this section..."
+                        aria-label="Section Detailed Paragraph Content"
                         style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', lineHeight: 1.5 }}
                       />
                     </div>
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                       <div>
-                        <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Section Inline Photo URL</label>
+                        <label htmlFor={`sec-img-${idx}`} style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Section Inline Photo URL</label>
                         <div style={{ display: 'flex', gap: '8px' }}>
                           <input
+                            id={`sec-img-${idx}`}
                             type="text"
                             value={sec.image || ''}
                             onChange={(e) => handleUpdateSection(idx, 'image', e.target.value)}
                             placeholder="https://images.unsplash.com/photo-..."
+                            aria-label="Section Inline Photo URL"
                             style={{ flex: 1, padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
                           />
                           <button
@@ -361,12 +367,14 @@ export default function ArticleFormModal({
                       </div>
 
                       <div>
-                        <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Photo Caption</label>
+                        <label htmlFor={`sec-caption-${idx}`} style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569', display: 'block', marginBottom: '4px' }}>Photo Caption</label>
                         <input
+                          id={`sec-caption-${idx}`}
                           type="text"
                           value={sec.caption || ''}
                           onChange={(e) => handleUpdateSection(idx, 'caption', e.target.value)}
                           placeholder="e.g. Masterclass in session at Perungudi campus."
+                          aria-label="Photo Caption"
                           style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
                         />
                       </div>

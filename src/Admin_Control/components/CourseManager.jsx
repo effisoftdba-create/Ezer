@@ -45,6 +45,12 @@ const DEFAULT_COURSE_STATE = {
   modulesStr: '01: Cloud Architecture, 02: Containerization with Docker, 03: Kubernetes & CI/CD Pipelines'
 };
 
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const mainEl = document.querySelector('main');
+  if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
 export default function CourseManager() {
   const { courses, addCourse, updateCourse, deleteCourse } = useSiteData();
 
@@ -53,12 +59,6 @@ export default function CourseManager() {
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [formData, setFormData] = useState(DEFAULT_COURSE_STATE);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    const mainEl = document.querySelector('main');
-    if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   const handleOpenAdd = () => {
     setEditingId(null);
@@ -70,7 +70,10 @@ export default function CourseManager() {
   const handleOpenEdit = (course) => {
     setEditingId(course.id || course.slug);
     const safeModulesStr = Array.isArray(course.curriculumModules)
-      ? course.curriculumModules.map((m) => (typeof m === 'object' ? `${m.num || ''} ${m.title || ''}`.trim() : String(m))).filter(Boolean).join(', ')
+      ? course.curriculumModules.flatMap((m) => {
+          const val = typeof m === 'object' ? `${m.num || ''} ${m.title || ''}`.trim() : String(m).trim();
+          return val ? [val] : [];
+        }).join(', ')
       : '';
 
     setFormData({

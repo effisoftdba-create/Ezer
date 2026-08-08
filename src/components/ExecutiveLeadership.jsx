@@ -357,7 +357,7 @@ export default function ExecutiveLeadership() {
 
             return (
               <motion.div
-                key={leader.id || idx}
+                key={leader.id || leader.roleTag || (leader.name ? leader.name.toLowerCase().replace(/[^a-z0-9]/g, '') : 'executive')}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

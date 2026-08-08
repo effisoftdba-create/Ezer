@@ -398,15 +398,15 @@ export default function BlogDetail({ onOpenDemoModal }) {
             <HiCheckCircle size={24} color="#000648" /> Executive Summary & Key Takeaways
           </h4>
           <ul style={{ margin: 0, paddingLeft: '22px', color: '#1e293b', fontSize: '1.02rem', lineHeight: 1.75, fontWeight: 500 }}>
-            {article.takeaways.map((item, i) => (
-              <li key={i} style={{ marginBottom: '6px' }}>{item}</li>
+            {article.takeaways.map((item) => (
+              <li key={item} style={{ marginBottom: '6px' }}>{item}</li>
             ))}
           </ul>
         </div>
 
         {/* Article Body Sections */}
         {article.sections.map((sec, idx) => (
-          <article key={idx} style={{ marginBottom: '56px' }}>
+          <article key={sec.id || (sec.title ? sec.title.toLowerCase().replace(/[^a-z0-9]/g, '') : `sec-${sec.content ? sec.content.substring(0, 10) : 'block'}`)} style={{ marginBottom: '56px' }}>
             <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', fontWeight: 900, color: '#000648', marginBottom: '18px', lineHeight: 1.25 }}>
               {sec.title}
             </h2>
