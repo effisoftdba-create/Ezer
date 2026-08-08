@@ -178,23 +178,23 @@ export default function ImagePickerControls({
           )}
         </div>
 
-        {/* Zoom Slider */}
+        {/* Zoom & Direct Position Sliders */}
         <div>
           <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '6px' }}>
-            3. Zoom Level Control
+            3. Zoom Level & Up/Down Position Sliders
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
             <button
               type="button"
               onClick={() => setZoomScale((z) => Math.max(0.5, +(z - 0.15).toFixed(2)))}
               aria-label="Zoom out"
               style={{
-                padding: '8px 12px', background: '#ffffff', border: '1.5px solid #cbd5e1',
+                padding: '6px 10px', background: '#ffffff', border: '1.5px solid #cbd5e1',
                 borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px',
                 fontSize: '0.75rem', fontWeight: 800, color: '#000648'
               }}
             >
-              <HiZoomOut size={16} /> Out
+              <HiZoomOut size={14} /> Out
             </button>
             <input
               type="range"
@@ -211,16 +211,51 @@ export default function ImagePickerControls({
               onClick={() => setZoomScale((z) => Math.min(3, +(z + 0.15).toFixed(2)))}
               aria-label="Zoom in"
               style={{
-                padding: '8px 12px', background: '#ffffff', border: '1.5px solid #cbd5e1',
+                padding: '6px 10px', background: '#ffffff', border: '1.5px solid #cbd5e1',
                 borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px',
                 fontSize: '0.75rem', fontWeight: 800, color: '#000648'
               }}
             >
-              <HiZoomIn size={16} /> In
+              <HiZoomIn size={14} /> In
             </button>
+          </div>
+
+          {/* Vertical Up/Down Slider */}
+          <div style={{ background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '8px', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.725rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+              <span>▲ Move Up / Down ▼</span>
+              <span style={{ color: '#115DFC' }}>Y: {50 + dragOffset.y}%</span>
+            </div>
+            <input
+              type="range"
+              min="-45"
+              max="45"
+              value={dragOffset.y}
+              onChange={(e) => setDragOffset((prev) => ({ ...prev, y: parseInt(e.target.value, 10) }))}
+              aria-label="Vertical Up Down position slider"
+              style={{ width: '100%', accentColor: '#000648', cursor: 'pointer', height: '6px' }}
+            />
+          </div>
+
+          {/* Horizontal Left/Right Slider */}
+          <div style={{ background: '#ffffff', border: '1px solid #cbd5e1', borderRadius: '8px', padding: '8px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.725rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+              <span>◄ Move Left / Right ►</span>
+              <span style={{ color: '#115DFC' }}>X: {50 + dragOffset.x}%</span>
+            </div>
+            <input
+              type="range"
+              min="-45"
+              max="45"
+              value={dragOffset.x}
+              onChange={(e) => setDragOffset((prev) => ({ ...prev, x: parseInt(e.target.value, 10) }))}
+              aria-label="Horizontal Left Right position slider"
+              style={{ width: '100%', accentColor: '#000648', cursor: 'pointer', height: '6px' }}
+            />
           </div>
         </div>
       </div>
     </div>
   );
 }
+

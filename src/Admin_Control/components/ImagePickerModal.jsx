@@ -140,17 +140,18 @@ export default function ImagePickerModal({
   // Smooth dragging across window
   const handlePointerDown = (clientX, clientY) => {
     setIsDragging(true);
-    dragStartRef.current = { x: clientX - (dragOffset.x * 3), y: clientY - (dragOffset.y * 3) };
+    dragStartRef.current = { x: clientX - (dragOffset.x * 2), y: clientY - (dragOffset.y * 2) };
   };
 
   const handlePointerMove = useCallback((clientX, clientY) => {
     if (!isDragging) return;
-    const deltaX = Math.round((clientX - dragStartRef.current.x) / 3);
-    const deltaY = Math.round((clientY - dragStartRef.current.y) / 3);
+    const deltaX = Math.round((clientX - dragStartRef.current.x) / 2);
+    const deltaY = Math.round((clientY - dragStartRef.current.y) / 2);
     const clampedX = Math.min(48, Math.max(-48, deltaX));
     const clampedY = Math.min(48, Math.max(-48, deltaY));
     setDragOffset({ x: clampedX, y: clampedY });
   }, [isDragging]);
+
 
   useEffect(() => {
     if (!isDragging) return;
