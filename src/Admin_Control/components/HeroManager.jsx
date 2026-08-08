@@ -319,6 +319,8 @@ export default function HeroManager() {
         currentPosition={formData.position}
         currentFit={formData.fit}
         currentZoom={formData.zoom}
+        currentMobilePosition={formData.mobilePosition}
+        currentMobileZoom={formData.mobileZoom}
         onSelectImage={(url, position, fit, zoom, mobileOpts) =>
           setFormData((prev) => ({
             ...prev,

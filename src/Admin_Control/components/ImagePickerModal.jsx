@@ -91,6 +91,8 @@ export default function ImagePickerModal({
   currentPosition = '50% 50%',
   currentFit = 'cover',
   currentZoom = 1,
+  currentMobilePosition,
+  currentMobileZoom,
   onSelectPosition,
   targetArea = 'Website Image',
   aspectRatio = 'Rectangle (16:9)',
@@ -105,7 +107,7 @@ export default function ImagePickerModal({
   const [activeTarget, setActiveTarget] = useState('desktop'); // 'desktop' or 'mobile'
   const [desktopZoom, setDesktopZoom] = useState(currentZoom || 1);
   const [desktopDragOffset, setDesktopDragOffset] = useState({ x: 0, y: 0 });
-  const [mobileZoom, setMobileZoom] = useState(currentZoom || 1);
+  const [mobileZoom, setMobileZoom] = useState(currentMobileZoom || currentZoom || 1);
   const [mobileDragOffset, setMobileDragOffset] = useState({ x: 0, y: 0 });
 
   const [isDragging, setIsDragging] = useState(false);
@@ -144,8 +146,9 @@ export default function ImagePickerModal({
   useEffect(() => {
     if (isOpen) {
       const initZoom = (currentZoom && currentZoom > 0) ? parseFloat(currentZoom) : 1;
+      const initMobZoom = (currentMobileZoom && currentMobileZoom > 0) ? parseFloat(currentMobileZoom) : initZoom;
       setDesktopZoom(initZoom);
-      setMobileZoom(initZoom);
+      setMobileZoom(initMobZoom);
 
       if (currentPosition) {
         let initialOffset = { x: 0, y: 0 };
@@ -162,8 +165,24 @@ export default function ImagePickerModal({
         setDesktopDragOffset(initialOffset);
         setMobileDragOffset(initialOffset);
       }
+
+      const mobPos = currentMobilePosition || currentPosition;
+      if (mobPos) {
+        let mobOffset = { x: 0, y: 0 };
+        if (mobPos.includes('top')) mobOffset = { x: 0, y: 35 };
+        else if (mobPos.includes('bottom')) mobOffset = { x: 0, y: -35 };
+        else if (mobPos.includes('left')) mobOffset = { x: 35, y: 0 };
+        else if (mobPos.includes('right')) mobOffset = { x: -35, y: 0 };
+        else if (mobPos.includes('%')) {
+          const parts = mobPos.split(' ');
+          const xPct = parseFloat(parts[0]) || 50;
+          const yPct = parseFloat(parts[1]) || 50;
+          mobOffset = { x: Math.round(50 - xPct), y: Math.round(50 - yPct) };
+        }
+        setMobileDragOffset(mobOffset);
+      }
     }
-  }, [currentPosition, currentZoom, isOpen]);
+  }, [currentPosition, currentZoom, currentMobilePosition, currentMobileZoom, isOpen]);
 
   // Dynamic active target getters and setters
   const activeZoom = activeTarget === 'mobile' ? mobileZoom : desktopZoom;

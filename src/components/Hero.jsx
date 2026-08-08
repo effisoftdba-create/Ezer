@@ -244,8 +244,10 @@ export default function Hero({ onOpenDemoModal }) {
             }
             .hero-right-photo-column {
               order: 2 !important;
-              min-height: 360px !important;
-              height: 360px !important;
+              width: 100% !important;
+              aspect-ratio: 1 / 1 !important;
+              min-height: 300px !important;
+              max-height: 480px !important;
             }
             .hero-badge-pill {
               top: 10px !important;

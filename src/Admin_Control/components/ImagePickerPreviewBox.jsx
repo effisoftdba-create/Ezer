@@ -32,12 +32,12 @@ export default function ImagePickerPreviewBox({
   const activeSrc = resolveImageSrc(activeSelectedUrl);
   const currentRatio = aspectRatioMode || previewDims.ratio;
 
-  const desktopPosX = Math.min(100, Math.max(0, 50 + dragOffset.x));
-  const desktopPosY = Math.min(100, Math.max(0, 50 + dragOffset.y));
+  const desktopPosX = Math.min(100, Math.max(0, 50 - dragOffset.x));
+  const desktopPosY = Math.min(100, Math.max(0, 50 - dragOffset.y));
   const desktopPosStr = `${desktopPosX}% ${desktopPosY}%`;
 
-  const mobPosX = Math.min(100, Math.max(0, 50 + mobileDragOffset.x));
-  const mobPosY = Math.min(100, Math.max(0, 50 + mobileDragOffset.y));
+  const mobPosX = Math.min(100, Math.max(0, 50 - mobileDragOffset.x));
+  const mobPosY = Math.min(100, Math.max(0, 50 - mobileDragOffset.y));
   const mobilePosStr = `${mobPosX}% ${mobPosY}%`;
 
   const onMouseDownDesktop = (e) => {
