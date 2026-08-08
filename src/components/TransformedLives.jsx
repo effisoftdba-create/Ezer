@@ -21,7 +21,8 @@ export default function TransformedLives() {
       setActiveIndex((prev) => {
         const next = (prev + 1) % displayList.length;
         if (sliderRef.current) {
-          sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+          const cardWidth = sliderRef.current.children[0]?.offsetWidth ? (sliderRef.current.children[0].offsetWidth + 20) : 315;
+          sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
         }
         return next;
       });
@@ -35,7 +36,8 @@ export default function TransformedLives() {
     const next = (activeIndex - 1 + displayList.length) % displayList.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+      const cardWidth = sliderRef.current.children[0]?.offsetWidth ? (sliderRef.current.children[0].offsetWidth + 20) : 315;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -44,14 +46,16 @@ export default function TransformedLives() {
     const next = (activeIndex + 1) % displayList.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+      const cardWidth = sliderRef.current.children[0]?.offsetWidth ? (sliderRef.current.children[0].offsetWidth + 20) : 315;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: idx * 320, behavior: 'smooth' });
+      const cardWidth = sliderRef.current.children[0]?.offsetWidth ? (sliderRef.current.children[0].offsetWidth + 20) : 315;
+      sliderRef.current.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -114,7 +118,8 @@ export default function TransformedLives() {
               onMouseLeave={() => setIsHovered(false)}
               style={{
                 display: 'flex', gap: '20px', overflowX: 'auto',
-                scrollBehavior: 'smooth', padding: '12px 4px 24px', width: '100%',
+                scrollSnapType: 'x mandatory',
+                scrollBehavior: 'smooth', padding: '12px 10px 24px', width: '100%',
               }}
             >
               {transformedLives.map((item) => (
@@ -123,7 +128,8 @@ export default function TransformedLives() {
                   whileHover={{ y: -8, scale: 1.02 }}
                   transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                   style={{
-                    flex: '0 0 295px',
+                    flex: '0 0 min(290px, 82vw)',
+                    scrollSnapAlign: 'center',
                     background: '#ffffff',
                     borderRadius: '24px',
                     border: '2px solid #000638',

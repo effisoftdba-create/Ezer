@@ -167,15 +167,11 @@ export default function ExecutiveLeadership() {
         .exec-card .img-content img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
-          object-position: center top;
-          transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
+          transition: transform 0.6s cubic-bezier(0.23, 1, 0.320, 1), object-position 0.6s cubic-bezier(0.23, 1, 0.320, 1);
         }
 
         .exec-card:hover .img-content img {
-          scale: 1.25;
-          rotate: 4deg;
-          filter: blur(4px);
+          filter: brightness(1.1);
         }
 
         .exec-card .card-hover-overlay {

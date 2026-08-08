@@ -29,7 +29,10 @@ const DEFAULT_VIDEO_STATE = {
   name: 'Kavitha R',
   company: 'Cloud DevOps Graduate',
   embedUrl: 'https://www.youtube.com/embed/hQcFE0RD0cQ',
-  thumbnail: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=400'
+  thumbnail: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=400',
+  imagePosition: 'center center',
+  imageFit: 'cover',
+  imageZoom: 1
 };
 
 export default function VideoReviewsManager() {
@@ -54,7 +57,10 @@ export default function VideoReviewsManager() {
       name: video.name || '',
       company: video.company || '',
       embedUrl: video.embedUrl || '',
-      thumbnail: video.thumbnail || ''
+      thumbnail: video.thumbnail || '',
+      imagePosition: video.imagePosition || video.position || 'center center',
+      imageFit: video.imageFit || video.fit || 'cover',
+      imageZoom: video.imageZoom || video.zoom || 1
     });
     setIsEditing(true);
   };
