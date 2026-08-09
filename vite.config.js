@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  root: 'frontend',
   plugins: [react()],
   base: '/Ezer/',
   server: {
@@ -16,6 +17,8 @@ export default defineConfig({
     }
   },
   build: {
+    outDir: '../dist',
+    emptyOutDir: true,
     target: 'esnext',
     cssMinify: true,
     cssCodeSplit: true,
@@ -32,4 +35,5 @@ export default defineConfig({
     }
   }
 })
+
 
