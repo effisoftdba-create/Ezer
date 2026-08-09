@@ -1,5 +1,5 @@
 import React from 'react';
-import { LazyMotion, domAnimation, m } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 
