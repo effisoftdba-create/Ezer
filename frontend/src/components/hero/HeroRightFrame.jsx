@@ -49,7 +49,7 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
               alt={currentSlide.headline || 'EZER Learning IT Training Slide'}
               width="800"
               height="480"
-              fetchpriority="high"
+              fetchPriority="high"
               loading="eager"
               decoding="async"
               style={{

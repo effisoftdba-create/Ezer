@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { HiChevronLeft, HiChevronRight, HiCheckCircle, HiSparkles, HiAcademicCap } from 'react-icons/hi';
-import { motion } from 'framer-motion';
+import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { getCourseBySlug } from '../data/courses';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { handleImgError, resolveImageSrc } from '../utils/imageUtils';

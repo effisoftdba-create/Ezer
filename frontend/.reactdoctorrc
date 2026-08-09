@@ -1,5 +1,4 @@
 {
-  "$schema": "https://react.doctor/schema.json",
   "rules": {
     "no-giant-component": "off",
     "prefer-useReducer": "off",
