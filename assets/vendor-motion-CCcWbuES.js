@@ -1,4 +1,4 @@
-import{r as x}from"./vendor-react-Du1JvB3A.js";var Qs={exports:{}},ce={};/**
+import{r as x}from"./vendor-core-Du1JvB3A.js";var Qs={exports:{}},ce={};/**
  * @license React
  * react-jsx-runtime.production.min.js
  *
