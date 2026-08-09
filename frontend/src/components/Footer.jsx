@@ -222,17 +222,38 @@ export default function Footer() {
 
         {/* Bottom Bar */}
         <div style={{
-          paddingTop: '20px', borderTop: '1px solid rgba(242,183,51,0.2)',
-          display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between',
-          alignItems: 'center', gap: '12px', fontSize: '0.75rem', color: '#94a3b8',
+          paddingTop: '20px',
+          borderTop: '1px solid rgba(242,183,51,0.2)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '12px',
+          fontSize: '0.75rem',
+          color: '#94a3b8',
+          textAlign: 'center'
         }}>
-          <div>&copy; {new Date().getFullYear()} EZER Learning Solutions. All rights reserved.</div>
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <Link to="/privacy-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Privacy Policy</Link>
-            <Link to="/student-admission-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Student Admission Policy & Agreement</Link>
-            <span style={{ fontSize: '0.68rem', color: '#64748b' }}>
-              Developed by <a href="https://effisoft.co/" target="_blank" rel="noopener noreferrer" style={{ color: '#cbd5e1', textDecoration: 'underline' }}>Effisoft Technologies</a>
-            </span>
+          <div style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '16px',
+            width: '100%'
+          }}>
+            <div>&copy; {new Date().getFullYear()} EZER Learning Solutions. All rights reserved.</div>
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <Link to="/privacy-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Privacy Policy</Link>
+              <Link to="/student-admission-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Student Admission Policy & Agreement</Link>
+            </div>
+          </div>
+          
+          <div style={{
+            fontSize: '0.625rem',
+            color: '#64748b',
+            textAlign: 'center',
+            marginTop: '2px'
+          }}>
+            Developed by <a href="https://effisoft.co/" target="_blank" rel="noopener noreferrer" style={{ color: '#cbd5e1', textDecoration: 'underline' }}>Effisoft Technologies</a>
           </div>
         </div>
       </div>

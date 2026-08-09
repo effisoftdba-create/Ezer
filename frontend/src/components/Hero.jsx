@@ -74,7 +74,30 @@ export default function Hero({ onOpenDemoModal }) {
                   className="hero-animated-text-container"
                   style={{ minHeight: '250px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
                 >
-
+                  {currentSlide.badge && (
+                    <div style={{ marginBottom: '12px' }}>
+                      <span
+                        className="hero-badge-pill-inline"
+                        style={{
+                          background: 'rgba(0, 6, 72, 0.08)',
+                          color: '#000648',
+                          fontSize: '0.75rem',
+                          fontWeight: 800,
+                          padding: '5px 14px',
+                          borderRadius: '50px',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.06em',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          border: '1px solid rgba(0, 6, 72, 0.15)'
+                        }}
+                      >
+                        <HiSparkles color="#f2b733" size={14} />
+                        {currentSlide.badge}
+                      </span>
+                    </div>
+                  )}
 
                   <h1
                     style={{

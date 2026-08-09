@@ -281,7 +281,7 @@ export default function EzerDefinition() {
                 <div>
                   <span style={{ color: '#f2b733', fontWeight: 900, fontSize: '0.98rem' }}>Meaning of EZER: </span>
                   <span style={{ lineHeight: 1.5 }}>
-                    Ezer means "Helper, Strength, and Support" — acting as a dependable support system that helps students, aspirants, and professionals become job-ready and corporate-relevant.
+                    {ezerDefinition.acronymText || ezerDefinition.meaningText || 'Ezer means "Helper, Strength, and Support" — acting as a dependable support system that helps students, aspirants, and professionals become job-ready and corporate-relevant.'}
                   </span>
                 </div>
               </div>

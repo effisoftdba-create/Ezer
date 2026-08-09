@@ -79,25 +79,26 @@ export default function AdminHeaderNav({ handleReset, handleLogout }) {
 
         <button
           type="button"
-          onClick={handleReset}
-          title="Reset site content to default data"
-          aria-label="Reset site content to default data"
+          onClick={() => window.location.reload()}
+          title="Refresh current page"
+          aria-label="Refresh current page"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
             padding: '8px 14px',
-            background: 'rgba(255, 255, 255, 0.08)',
-            color: '#cbd5e1',
+            background: 'rgba(255, 255, 255, 0.12)',
+            color: '#ffffff',
             borderRadius: '8px',
-            border: '1px solid rgba(255, 255, 255, 0.18)',
+            border: '1px solid rgba(255, 255, 255, 0.25)',
             fontSize: '0.825rem',
             fontWeight: 700,
-            cursor: 'pointer'
+            cursor: 'pointer',
+            transition: 'background-color 0.2s ease'
           }}
         >
           <HiOutlineRefresh size={15} />
-          <span>Reset</span>
+          <span>Refresh</span>
         </button>
 
         <button
