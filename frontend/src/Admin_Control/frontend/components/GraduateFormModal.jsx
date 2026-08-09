@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HiX, HiCheck, HiPhotograph } from 'react-icons/hi';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 
 export default function GraduateFormModal({
   isEditing,

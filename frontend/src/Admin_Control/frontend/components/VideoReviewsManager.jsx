@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck, HiPlay, HiX } from 'react-icons/hi';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 
 function formatYouTubeEmbedUrl(urlStr) {
   if (!urlStr) return '';

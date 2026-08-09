@@ -5,7 +5,7 @@ import ImagePickerGalleryGrid from './ImagePickerGalleryGrid';
 import ImagePickerControls from './ImagePickerControls';
 import ImagePickerHeaderBanner from './ImagePickerHeaderBanner';
 import ImagePickerPreviewBox from './ImagePickerPreviewBox';
-import { removeImageBackground } from '../../utils/backgroundRemover';
+import { removeImageBackground } from '../../../utils/backgroundRemover';
 
 
 const STORAGE_UPLOADED_IMAGES_KEY = 'ezer_uploaded_images:v3';

@@ -1,7 +1,7 @@
 import React from 'react';
-import PopupHeader from '../../components/popup/PopupHeader';
-import PopupFormFields from '../../components/popup/PopupFormFields';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import PopupHeader from '../../../components/popup/PopupHeader';
+import PopupFormFields from '../../../components/popup/PopupFormFields';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 import { HiEye } from 'react-icons/hi';
 
 export default function PopupLivePreviewBox({ formData, previewFormData, setPreviewFormData }) {

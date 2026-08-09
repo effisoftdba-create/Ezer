@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
-import { resolveImageSrc } from '../../utils/imageUtils';
-import { removeImageBackground } from '../../utils/backgroundRemover';
+import { resolveImageSrc } from '../../../utils/imageUtils';
+import { removeImageBackground } from '../../../utils/backgroundRemover';
 
 import {
   HiPlus,

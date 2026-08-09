@@ -3,7 +3,7 @@ import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import CourseFormModal from './CourseFormModal';
 import { HiPlus, HiTrash, HiPencil, HiSearch } from 'react-icons/hi';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 
 const DEFAULT_COURSE_STATE = {
   title: '',

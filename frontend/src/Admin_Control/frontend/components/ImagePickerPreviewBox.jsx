@@ -7,7 +7,7 @@ import {
   HiSparkles,
   HiRefresh
 } from 'react-icons/hi';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 
 export default function ImagePickerPreviewBox({
   currentImage,

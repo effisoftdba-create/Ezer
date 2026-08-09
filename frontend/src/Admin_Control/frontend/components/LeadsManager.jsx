@@ -11,7 +11,7 @@ import {
   HiSearch
 } from 'react-icons/hi';
 
-import PaginationControls from '../../components/PaginationControls';
+import PaginationControls from '../../../components/PaginationControls';
 
 export default function LeadsManager() {
   const { leads, updateLeadStatus, addLeadComment, updateLeadDetails, deleteLead } = useSiteData();

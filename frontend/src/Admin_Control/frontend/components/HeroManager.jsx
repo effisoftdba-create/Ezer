@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck, HiX } from 'react-icons/hi';
 
 export default function HeroManager() {

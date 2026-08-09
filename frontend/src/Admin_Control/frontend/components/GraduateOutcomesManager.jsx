@@ -1,50 +1,56 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
-import SeniorMentorFormModal from './SeniorMentorFormModal';
+import GraduateFormModal from './GraduateFormModal';
 import { HiPlus, HiTrash, HiPencil, HiCheck, HiSparkles } from 'react-icons/hi';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 
-const DEFAULT_MENTOR_STATE = {
-  name: 'Arun Kumar S',
-  designation: 'Principal Cloud Architect @ TechCorp',
-  image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300&h=300',
-  bio: '11+ years designing multi-cloud architectures across AWS and Azure. Mentored 2,500+ engineers into DevOps career roles.',
-  tags: 'AWS Certified, Kubernetes Lead, DevOps Veteran'
+const DEFAULT_GRADUATE_STATE = {
+  name: '',
+  company: '',
+  beforeRole: '',
+  afterRole: '',
+  image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300&h=300'
 };
 
-export default function SeniorMentorsManager() {
+export default function GraduateOutcomesManager() {
   const {
-    seniorMentors,
-    mentorsHeader,
-    updateMentorsHeader,
-    addSeniorMentor,
-    updateSeniorMentor,
-    deleteSeniorMentor
+    transformedLives,
+    outcomesHeader,
+    updateOutcomesHeader,
+    addTransformedLife,
+    updateTransformedLife,
+    deleteTransformedLife
   } = useSiteData();
 
-  const [headerFormData, setHeaderFormData] = useState(mentorsHeader || {
-    tag: 'SENIOR MENTORS',
-    headline: 'Learn Directly From Senior Engineers & Academic Mentors',
-    sub: 'Gain real-world insights from instructors with years of industry tenure across top technology firms.'
+  const [headerFormData, setHeaderFormData] = useState(outcomesHeader || {
+    tag: 'CAREER PLACEMENT OUTCOMES',
+    headline: 'Our Graduates Get Hired by Leading Tech Firms',
+    sub: 'Join a community of engineers building impactful, high-growth software careers.'
   });
 
   const [saveHeaderSuccess, setSaveHeaderSuccess] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
-  const [formData, setFormData] = useState(DEFAULT_MENTOR_STATE);
+  const [formData, setFormData] = useState(DEFAULT_GRADUATE_STATE);
 
   const handleHeaderSave = (e) => {
     e.preventDefault();
-    updateMentorsHeader(headerFormData);
+    updateOutcomesHeader(headerFormData);
     setSaveHeaderSuccess(true);
     setTimeout(() => setSaveHeaderSuccess(false), 3000);
   };
 
   const handleOpenAdd = () => {
     setEditingId(null);
-    setFormData(DEFAULT_MENTOR_STATE);
+    setFormData({
+      name: 'R Anitha',
+      company: 'TCS Digital',
+      beforeRole: 'Fresher, B.Tech',
+      afterRole: 'Cloud Operations Engineer',
+      image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300&h=300'
+    });
     setIsEditing(true);
   };
 
@@ -52,46 +58,31 @@ export default function SeniorMentorsManager() {
     setEditingId(item.id);
     setFormData({
       name: item.name || '',
-      designation: item.designation || '',
-      image: item.image || '',
-      bio: item.bio || item.experience || '',
-      tags: Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || ''
+      company: item.company || '',
+      beforeRole: item.beforeRole || '',
+      afterRole: item.afterRole || '',
+      image: item.image || ''
     });
     setIsEditing(true);
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.designation) {
-      alert('Mentor Name and Designation are required.');
+    if (!formData.name || !formData.company) {
+      alert('Student Name and Placed Company are required.');
       return;
     }
-
-    const tagList = formData.tags
-      .split(',')
-      .map((t) => t.trim())
-      .filter(Boolean);
-
-    const payload = {
-      name: formData.name,
-      designation: formData.designation,
-      image: formData.image,
-      bio: formData.bio,
-      tags: tagList
-    };
-
     if (editingId) {
-      updateSeniorMentor(editingId, payload);
+      updateTransformedLife(editingId, formData);
     } else {
-      addSeniorMentor(payload);
+      addTransformedLife(formData);
     }
-
     setIsEditing(false);
   };
 
   const handleDelete = (id, name) => {
-    if (window.confirm(`Are you sure you want to remove mentor ${name}?`)) {
-      deleteSeniorMentor(id);
+    if (window.confirm(`Are you sure you want to remove ${name}'s success story?`)) {
+      deleteTransformedLife(id);
     }
   };
 
@@ -103,10 +94,10 @@ export default function SeniorMentorsManager() {
       }}>
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000648', margin: 0 }}>
-            Senior Mentors & Faculty Manager
+            "Our Graduates Get Hired" Placement Outcomes
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Update the instructor showcase section and senior mentors profiles.
+            Manage the section header and graduate outcome cards visible across all course pages.
           </p>
         </div>
 
@@ -121,7 +112,7 @@ export default function SeniorMentorsManager() {
               fontSize: '0.875rem'
             }}
           >
-            <HiPlus size={18} /> Add Senior Mentor
+            <HiPlus size={18} /> Add Graduate Card
           </button>
         )}
       </div>
@@ -135,9 +126,9 @@ export default function SeniorMentorsManager() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '16px', marginBottom: '12px' }}>
           <div>
-            <label htmlFor="mentor_tag_field" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Section Tag</label>
+            <label htmlFor="outcome_tag_field" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Section Tag</label>
             <input
-              id="mentor_tag_field"
+              id="outcome_tag_field"
               type="text"
               value={headerFormData.tag}
               onChange={(e) => setHeaderFormData((prev) => ({ ...prev, tag: e.target.value }))}
@@ -145,9 +136,9 @@ export default function SeniorMentorsManager() {
             />
           </div>
           <div>
-            <label htmlFor="mentor_headline_field" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Main Headline</label>
+            <label htmlFor="outcome_headline_field" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Main Headline</label>
             <input
-              id="mentor_headline_field"
+              id="outcome_headline_field"
               type="text"
               value={headerFormData.headline}
               onChange={(e) => setHeaderFormData((prev) => ({ ...prev, headline: e.target.value }))}
@@ -157,9 +148,9 @@ export default function SeniorMentorsManager() {
         </div>
 
         <div style={{ marginBottom: '16px' }}>
-          <label htmlFor="mentor_sub_field" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Subtitle / Description</label>
+          <label htmlFor="outcome_sub_field" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Subtitle / Description</label>
           <input
-            id="mentor_sub_field"
+            id="outcome_sub_field"
             type="text"
             value={headerFormData.sub}
             onChange={(e) => setHeaderFormData((prev) => ({ ...prev, sub: e.target.value }))}
@@ -168,7 +159,7 @@ export default function SeniorMentorsManager() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}>
-          {saveHeaderSuccess && <span style={{ color: '#166534', fontWeight: 700, fontSize: '0.8rem' }}>Mentors Header Saved!</span>}
+          {saveHeaderSuccess && <span style={{ color: '#166534', fontWeight: 700, fontSize: '0.8rem' }}>Section Header Saved!</span>}
           <button
             type="submit"
             style={{ padding: '8px 16px', background: '#000648', color: '#ffffff', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}
@@ -178,8 +169,8 @@ export default function SeniorMentorsManager() {
         </div>
       </form>
 
-      {/* Senior Mentor Form Modal */}
-      <SeniorMentorFormModal
+      {/* Graduate Card Form */}
+      <GraduateFormModal
         isEditing={isEditing}
         editingId={editingId}
         formData={formData}
@@ -189,29 +180,24 @@ export default function SeniorMentorsManager() {
         onOpenImagePicker={() => setIsImagePickerOpen(true)}
       />
 
-      {/* Senior Mentors List */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
-        {seniorMentors.map((item) => (
+      {/* Graduate Cards List */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '16px' }}>
+        {transformedLives.map((item) => (
           <div key={item.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                <img src={resolveImageSrc(item.image)} alt={item.name} style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #000648' }} />
+                <img src={resolveImageSrc(item.image)} alt={item.name} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #000648' }} />
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800, color: '#000648' }}>{item.name}</h4>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>{item.designation}</div>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#166534', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px' }}>
+                    {item.company}
+                  </span>
                 </div>
               </div>
 
-              <p style={{ fontSize: '0.8rem', color: '#475569', lineHeight: 1.4, margin: '0 0 10px 0' }}>
-                {item.bio}
-              </p>
-
-              <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
-                {Array.isArray(item.tags) && item.tags.map((tg) => (
-                  <span key={tg} style={{ fontSize: '0.68rem', fontWeight: 700, color: '#000648', background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>
-                    {tg}
-                  </span>
-                ))}
+              <div style={{ fontSize: '0.8rem', color: '#475569', lineHeight: 1.4 }}>
+                <div><strong>Before:</strong> {item.beforeRole || 'N/A'}</div>
+                <div><strong>After:</strong> {item.afterRole || 'Software Engineer'}</div>
               </div>
             </div>
 
@@ -242,9 +228,9 @@ export default function SeniorMentorsManager() {
         currentPosition={formData.position}
         currentFit={formData.fit}
         onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
-        targetArea="Senior Mentor Profile"
+        targetArea="Graduate Placement Card Photo"
         aspectRatio="Square (1:1)"
-        recommendedDimensions="400 x 400 px"
+        recommendedDimensions="300 x 300 px"
       />
     </div>
   );

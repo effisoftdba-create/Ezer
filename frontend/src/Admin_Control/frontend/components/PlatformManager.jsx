@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 import { HiCheck, HiPhotograph, HiSparkles } from 'react-icons/hi';
 
 export default function PlatformManager() {

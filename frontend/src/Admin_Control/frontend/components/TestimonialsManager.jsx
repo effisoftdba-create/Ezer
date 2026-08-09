@@ -3,7 +3,7 @@ import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import TestimonialFormModal from './TestimonialFormModal';
 import { HiPlus, HiTrash, HiPencil, HiCheck, HiStar } from 'react-icons/hi';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 
 const DEFAULT_TESTIMONIAL_STATE = {
   author: '',

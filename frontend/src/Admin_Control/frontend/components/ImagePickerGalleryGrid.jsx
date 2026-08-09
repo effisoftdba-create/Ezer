@@ -1,6 +1,6 @@
 import React from 'react';
 import { HiCheck, HiTrash } from 'react-icons/hi';
-import { resolveImageSrc } from '../../utils/imageUtils';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 
 function getGalleryTileAspect(aspectRatio) {
   if (!aspectRatio) return '16/9';
