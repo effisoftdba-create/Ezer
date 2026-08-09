@@ -171,6 +171,10 @@ export default function TransformedLives() {
                         <img
                           src={resolveImageSrc(item.image)}
                           alt={item.name}
+                          width="84"
+                          height="84"
+                          loading="lazy"
+                          decoding="async"
                           style={{
                             width: '84px', height: '84px', borderRadius: '50%',
                             objectFit: item.fit || item.imageFit || 'cover',

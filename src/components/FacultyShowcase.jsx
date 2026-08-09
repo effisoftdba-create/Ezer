@@ -103,6 +103,10 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
               <img
                 src={resolveImageSrc(prof.image)}
                 alt={prof.name}
+                width="64"
+                height="64"
+                loading="lazy"
+                decoding="async"
                 style={{
                   width: '64px',
                   height: '64px',

@@ -250,6 +250,10 @@ function LogoCard({ logo }) {
           src={resolveImageSrc(logo.image)}
           alt={logo.name || 'Hiring Partner'}
           onError={() => setImgError(true)}
+          width="140"
+          height="28"
+          loading="lazy"
+          decoding="async"
           style={{
             maxHeight: '28px',
             maxWidth: '140px',

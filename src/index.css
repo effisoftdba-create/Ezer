@@ -3,8 +3,6 @@
    Navy (#000648) + Gold (#f2b733) — 15 LPA Level Clean & Modern
    ═══════════════════════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;700;800&display=swap');
-
 :root {
   --navy: #000648;
   --navy-light: #0a1478;
@@ -16,14 +14,14 @@
   --off-white: #f8fafc;
   --gray-50: #f8fafc;
   --gray-100: #f1f5f9;
-  --gray-200: #e2e8f0;
-  --gray-300: #cbd5e1;
-  --gray-400: #94a3b8;
-  --gray-500: #64748b;
-  --gray-600: #475569;
-  --gray-700: #334155;
-  --gray-800: #1e293b;
-  --gray-900: #0f172a;
+  --gray-200: #cbd5e1;
+  --gray-300: #94a3b8;
+  --gray-400: #64748b;
+  --gray-500: #475569;
+  --gray-600: #334155;
+  --gray-700: #1e293b;
+  --gray-800: #0f172a;
+  --gray-900: #000648;
 
   /* Global Typography Scale */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -138,6 +136,7 @@ img { max-width: 100%; display: block; }
   padding: 10px 22px; border-radius: var(--radius-md); font-weight: 700;
   font-size: 0.82rem; transition: all 0.2s ease; cursor: pointer; border: none;
   text-decoration: none; user-select: none;
+  min-height: 44px;
 }
 
 .btn-primary {

@@ -55,9 +55,13 @@ export default function Navbar({ onOpenDemoModal }) {
               <img 
                 src={`${import.meta.env.BASE_URL || '/'}images/logo_navy.png`} 
                 alt="EZER Learning Solutions Crest Logo" 
+                width="160"
+                height="46"
+                decoding="async"
                 style={{
                   height: '46px',
                   width: 'auto',
+                  aspectRatio: '160/46',
                   objectFit: 'contain',
                 }} 
               />

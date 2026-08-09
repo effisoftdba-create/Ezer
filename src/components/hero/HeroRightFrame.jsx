@@ -47,6 +47,10 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
             <img
               src={resolveImageSrc(currentSlide.url || currentSlide.image)}
               alt={currentSlide.headline || 'EZER Learning IT Training Slide'}
+              width="800"
+              height="480"
+              fetchpriority="high"
+              decoding="async"
               style={{
                 width: '100%',
                 height: '100%',

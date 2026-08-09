@@ -17,12 +17,14 @@ export default defineConfig({
   },
   build: {
     target: 'esnext',
+    cssMinify: true,
     cssCodeSplit: true,
-    chunkSizeWarningLimit: 500,
+    minify: 'esbuild',
+    chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
         manualChunks: {
-          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-core': ['react', 'react-dom', 'react-router-dom'],
           'vendor-motion': ['framer-motion'],
           'vendor-icons': ['react-icons']
         }
@@ -30,3 +32,4 @@ export default defineConfig({
     }
   }
 })
+

@@ -25,7 +25,11 @@ export default function Footer() {
               <img 
                 src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`} 
                 alt="EZER Learning Solutions Crest Logo" 
-                style={{ height: '46px', width: 'auto', objectFit: 'contain', mixBlendMode: 'screen' }} 
+                width="160"
+                height="46"
+                loading="lazy"
+                decoding="async"
+                style={{ height: '46px', width: 'auto', aspectRatio: '160/46', objectFit: 'contain', mixBlendMode: 'screen' }} 
               />
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1 }}>
@@ -48,11 +52,12 @@ export default function Footer() {
                   href={url}
                   target={url !== '#' ? '_blank' : '_self'}
                   rel={url !== '#' ? 'noopener noreferrer' : ''}
+                  aria-label={name}
                   style={{
                     color: '#000648', background: '#f2b733',
-                    width: '30px', height: '30px', borderRadius: '50%',
+                    width: '44px', height: '44px', borderRadius: '50%',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '0.85rem', transition: 'background-color 0.2s ease, transform 0.2s ease', textDecoration: 'none'
+                    fontSize: '0.95rem', transition: 'background-color 0.2s ease, transform 0.2s ease', textDecoration: 'none'
                   }} 
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = '#ffffff';
@@ -62,7 +67,6 @@ export default function Footer() {
                     e.currentTarget.style.background = '#f2b733';
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
-                  aria-label={`${name} page`}
                 >
                   <Icon />
                 </a>

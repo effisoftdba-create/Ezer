@@ -36,6 +36,10 @@ export default function CourseCard({ course, onOpenDemoModal }) {
             src={resolveImageSrc(course.image)} 
             alt={course.title}
             onError={handleImgError}
+            width="360"
+            height="175"
+            loading="lazy"
+            decoding="async"
             style={{
               width: '100%',
               height: '100%',
