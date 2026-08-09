@@ -50,6 +50,7 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
               width="800"
               height="480"
               fetchpriority="high"
+              loading="eager"
               decoding="async"
               style={{
                 width: '100%',
