@@ -1,20 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 export default function EzerBrandPreloader() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (typeof window !== 'undefined' && (navigator.userAgent.includes('Chrome-Lighthouse') || navigator.userAgent.includes('HeadlessChromium'))) {
-      setLoading(false);
-      return;
-    }
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 200);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (!loading) return null;
+  return null;
 
   return (
     <div

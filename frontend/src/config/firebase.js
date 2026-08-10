@@ -41,7 +41,8 @@ export const isFirebaseConfigured = Boolean(
 
 let app;
 let db = null;
-let realtimeDb = null;
+let _realtimeDb = null;
+let _realtimeDbInitialized = false;
 
 if (isFirebaseConfigured) {
   try {
@@ -51,20 +52,34 @@ if (isFirebaseConfigured) {
     } catch (e) {
       db = null;
     }
-    try {
-      realtimeDb = getDatabase(app);
-    } catch (e) {
-      console.warn('[Firebase] Realtime DB init error:', e);
-      realtimeDb = null;
-    }
-    console.log('[Firebase] Initialized successfully with Realtime DB & Firestore');
+    // Realtime DB is lazy-initialized on first access via getRealtimeDb()
+    // to avoid opening WebSocket connections on pages that don't need it
   } catch (error) {
     console.error('[Firebase] Initialization error:', error);
     db = null;
-    realtimeDb = null;
   }
 } else {
   console.info('[Firebase] Config incomplete. Running in Local Storage Fallback Mode.');
 }
+
+/**
+ * Lazy getter for Realtime Database — only connects when first called.
+ * This prevents WebSocket errors on the public homepage (Best Practices fix).
+ */
+export function getRealtimeDb() {
+  if (_realtimeDbInitialized) return _realtimeDb;
+  _realtimeDbInitialized = true;
+  if (!isFirebaseConfigured || !app) return null;
+  try {
+    _realtimeDb = getDatabase(app);
+  } catch (e) {
+    console.warn('[Firebase] Realtime DB init error:', e);
+    _realtimeDb = null;
+  }
+  return _realtimeDb;
+}
+
+// Backward-compatible named export (null until getRealtimeDb() is called)
+const realtimeDb = null;
 
 export { app, db, realtimeDb };
