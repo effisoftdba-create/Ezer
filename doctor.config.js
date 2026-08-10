@@ -3,6 +3,8 @@ export default {
     'no-giant-component': 'off',
     'react-doctor/no-giant-component': 'off',
     'artifact-env-leak': 'off',
-    'react-doctor/artifact-env-leak': 'off'
+    'react-doctor/artifact-env-leak': 'off',
+    'deslop/unused-file': 'off',
+    'unused-file': 'off'
   }
 };

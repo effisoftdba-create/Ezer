@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
-import { HiPlus, HiTrash, HiPencil, HiNewspaper, HiBadgeCheck, HiPhotograph, HiCalendar, HiX } from 'react-icons/hi';
+import { HiPlus, HiTrash, HiPencil, HiNewspaper, HiBadgeCheck, HiPhotograph, HiCalendar, HiX, HiSparkles } from 'react-icons/hi';
 import ImagePickerModal from './ImagePickerModal';
 import ArticleFormModal from './ArticleFormModal';
 
@@ -260,6 +260,14 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
     }
   };
 
+  const handleSetCoverStory = (targetBlog) => {
+    (blogs || []).forEach((b) => {
+      updateBlog(b.id, { ...b, featured: b.id === targetBlog.id });
+    });
+  };
+
+  const coverBlogId = (blogs && (blogs.find(b => b.featured) || blogs[0]))?.id;
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -268,7 +276,7 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
             Published Magazine Articles ({(blogs || []).length})
           </h3>
           <span style={{ fontSize: '0.78rem', color: '#64748b' }}>
-            Create, edit, or remove full editorial magazine articles with multi-section content and inline photos.
+            Manage Hero Cover Story and Editorial Tech Articles rendered on the website.
           </span>
         </div>
         <button
@@ -281,50 +289,86 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '18px' }}>
-        {(blogs || []).map((blog) => (
-          <div key={blog.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-            <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
-              <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px' }}>
-                {blog.category}
-              </span>
-            </div>
-
-            <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <h4 style={{ fontSize: '0.98rem', fontWeight: 800, color: '#000648', lineHeight: 1.35 }}>{blog.title}</h4>
-                <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <HiCalendar size={13} /> {blog.date} • by {blog.author}
-                </div>
-                <p style={{ fontSize: '0.8rem', color: '#475569', marginTop: '10px', lineHeight: 1.5 }}>{blog.summary}</p>
-                {blog.sections && blog.sections.length > 0 && (
-                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#115DFC', marginTop: '6px', display: 'inline-block' }}>
-                    {blog.sections.length} content section{blog.sections.length > 1 ? 's' : ''}
+        {(blogs || []).map((blog) => {
+          const isCover = blog.id === coverBlogId;
+          return (
+            <div
+              key={blog.id}
+              style={{
+                background: '#ffffff',
+                border: isCover ? '2px solid #f2b733' : '1.5px solid #e2e8f0',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: isCover ? '0 6px 20px rgba(242, 183, 51, 0.25)' : '0 4px 12px rgba(0,0,0,0.03)',
+                position: 'relative'
+              }}
+            >
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
+                <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px' }}>
+                  {blog.category}
+                </span>
+                {isCover && (
+                  <span style={{ position: 'absolute', top: '10px', right: '10px', background: '#f2b733', color: '#000648', fontSize: '0.68rem', fontWeight: 900, padding: '4px 10px', borderRadius: '50px', boxShadow: '0 2px 8px rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <HiSparkles size={12} /> HERO COVER STORY
                   </span>
                 )}
               </div>
 
-              <div style={{ display: 'flex', gap: '8px', marginTop: '14px', justifyContent: 'flex-end' }}>
-                <button
-                  type="button"
-                  onClick={() => handleOpenEdit(blog)}
-                  style={{ padding: '6px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontSize: '0.78rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-                >
-                  <HiPencil size={14} /> Edit Article
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (window.confirm(`Delete article "${blog.title}"?`)) deleteBlog(blog.id);
-                  }}
-                  style={{ padding: '6px 12px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
-                >
-                  <HiTrash size={14} /> Delete
-                </button>
+              <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                  <h4 style={{ fontSize: '0.98rem', fontWeight: 800, color: '#000648', lineHeight: 1.35 }}>{blog.title}</h4>
+                  <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <HiCalendar size={13} /> {blog.date} • by {blog.author}
+                  </div>
+                  <p style={{ fontSize: '0.8rem', color: '#475569', marginTop: '10px', lineHeight: 1.5 }}>{blog.summary}</p>
+                  {blog.sections && blog.sections.length > 0 && (
+                    <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#115DFC', marginTop: '6px', display: 'inline-block' }}>
+                      {blog.sections.length} content section{blog.sections.length > 1 ? 's' : ''}
+                    </span>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '14px', justifyContent: 'space-between', alignItems: 'center', paddingTop: '10px', borderTop: '1px solid #f1f5f9' }}>
+                  {!isCover ? (
+                    <button
+                      type="button"
+                      onClick={() => handleSetCoverStory(blog)}
+                      style={{ padding: '5px 10px', background: '#fef3c7', border: '1px solid #fde68a', color: '#92400e', borderRadius: '6px', fontSize: '0.74rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                      <HiSparkles size={12} /> Set as Cover Story
+                    </button>
+                  ) : (
+                    <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#d97706', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <HiBadgeCheck size={14} /> Active Cover Story
+                    </span>
+                  )}
+
+                  <div style={{ display: 'flex', gap: '6px' }}>
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEdit(blog)}
+                      style={{ padding: '6px 12px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontSize: '0.78rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                      <HiPencil size={14} /> Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm(`Delete article "${blog.title}"?`)) deleteBlog(blog.id);
+                      }}
+                      style={{ padding: '6px 10px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.76rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                      <HiTrash size={14} /> Delete
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <ArticleFormModal

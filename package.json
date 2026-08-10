@@ -33,7 +33,9 @@
       "no-giant-component": "off",
       "react-doctor/no-giant-component": "off",
       "artifact-env-leak": "off",
-      "react-doctor/artifact-env-leak": "off"
+      "react-doctor/artifact-env-leak": "off",
+      "deslop/unused-file": "off",
+      "unused-file": "off"
     }
   },
   "react-doctor": {
@@ -42,6 +44,8 @@
       "react-doctor/no-giant-component": "off",
       "artifact-env-leak": "off",
       "react-doctor/artifact-env-leak": "off",
+      "deslop/unused-file": "off",
+      "unused-file": "off",
       "prefer-useReducer": "off",
       "react-doctor/prefer-useReducer": "off",
       "no-static-element-interactions": "off",
@@ -80,8 +84,7 @@
       "react-doctor/no-unknown-property": "off",
       "public-env-secret-name": "off",
       "react-doctor/public-env-secret-name": "off",
-      "deslop/unused-export": "off",
-      "deslop/unused-file": "off"
+      "deslop/unused-export": "off"
     }
   }
 }

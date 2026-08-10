@@ -37,7 +37,7 @@ export default function Blog({ onOpenDemoModal }) {
   const { blogs, achievements } = useSiteData();
   const [awardActiveIdx, setAwardActiveIdx] = useState(0);
 
-  const featuredCoverArticle = (blogs && blogs[0]) || {
+  const featuredCoverArticle = (blogs && (blogs.find(b => b.featured) || blogs[0])) || {
     id: 'blog-1',
     slug: 'how-non-it-professionals-transition-into-ai',
     title: 'How Non-IT Professionals Are Transitioning Into AI & Software Development in 2026',
@@ -48,8 +48,8 @@ export default function Blog({ onOpenDemoModal }) {
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200'
   };
 
-  // Guarantee 3+ articles are rendered in grid (no empty gaps)
-  const userBlogList = (blogs && blogs.length > 1) ? blogs.slice(1) : [];
+  // Filter out the cover story so remaining articles are rendered in grid
+  const userBlogList = (blogs && blogs.length > 0) ? blogs.filter((b) => b.id !== featuredCoverArticle.id) : [];
   const articlesToDisplay = userBlogList.length >= 3 
     ? userBlogList 
     : [...userBlogList, ...DEFAULT_ARTICLES.slice(0, 3 - userBlogList.length)];
