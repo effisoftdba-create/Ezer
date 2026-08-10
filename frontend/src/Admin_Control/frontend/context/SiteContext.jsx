@@ -782,3 +782,5 @@ export function useSiteData() {
   }
   return context;
 }
+
+export default SiteProvider;
