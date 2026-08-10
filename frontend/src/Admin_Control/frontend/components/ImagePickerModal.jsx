@@ -100,6 +100,23 @@ export default function ImagePickerModal({
   const originalUncutUrlRef = useRef(currentImage || '');
   const [fitModeOverride, setFitModeOverride] = useState(null);
 
+  const [uploadedImages, setUploadedImages] = useState(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_UPLOADED_IMAGES_KEY);
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_UPLOADED_IMAGES_KEY, JSON.stringify(uploadedImages));
+    } catch (e) {
+      // ignore
+    }
+  }, [uploadedImages]);
+
   // Independent PC (desktop) and Mobile alignment state
   const [activeTarget, setActiveTarget] = useState('desktop'); // 'desktop' or 'mobile'
   const [desktopZoom, setDesktopZoom] = useState(currentZoom || 1);
@@ -206,8 +223,8 @@ export default function ImagePickerModal({
 
   const handleAutoRemoveBackground = async () => {
     if (!activeSelectedUrl) return;
-    if (!originalUncutUrl || originalUncutUrl === activeSelectedUrl) {
-      setOriginalUncutUrl(activeSelectedUrl);
+    if (!originalUncutUrlRef.current || originalUncutUrlRef.current === activeSelectedUrl) {
+      originalUncutUrlRef.current = activeSelectedUrl;
     }
     setIsUploading(true);
     try {
@@ -274,7 +291,7 @@ export default function ImagePickerModal({
   };
 
   const handleGallerySelect = (url) => {
-    setOriginalUncutUrl(url);
+    originalUncutUrlRef.current = url;
     setSelectedUrlOverride(url);
     setCustomUrl('');
   };
