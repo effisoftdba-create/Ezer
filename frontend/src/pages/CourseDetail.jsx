@@ -1,8 +1,7 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { HiChevronLeft, HiChevronRight, HiCheckCircle, HiSparkles, HiAcademicCap } from 'react-icons/hi';
-import * as m from 'framer-motion';
-const motion = m;
+import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { getCourseBySlug } from '../data/courses';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { handleImgError, resolveImageSrc } from '../utils/imageUtils';
@@ -112,6 +111,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
   ];
 
   return (
+    <LazyMotion features={domAnimation}>
     <div style={{ background: '#ffffff', color: '#1e293b' }}>
       {/* 1. HERO PROGRAM OVERVIEW SECTION */}
       <section
@@ -132,21 +132,21 @@ export default function CourseDetail({ onOpenDemoModal }) {
               alignItems: 'center',
             }}
           >
-            <motion.div
+            <m.div
               initial={{ opacity: 0, x: -24 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5 }}
             >
               <CourseHeroHeader course={course} onOpenDemoModal={onOpenDemoModal} onOpenPurchaseModal={() => setIsPurchaseModalOpen(true)} />
-            </motion.div>
+            </m.div>
 
-            <motion.div
+            <m.div
               initial={{ opacity: 0, scale: 0.96, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.15 }}
             >
               <CourseApplicationCard course={course} onOpenPurchaseModal={() => setIsPurchaseModalOpen(true)} />
-            </motion.div>
+            </m.div>
           </div>
         </div>
       </section>
@@ -189,7 +189,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
             </h2>
           </div>
 
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -197,7 +197,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
             style={{ width: '100%', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(0,0,0,0.5)' }}
           >
             <VideoPlayer videoUrl={activeVideoUrl} poster={course.image} title={course.title} />
-          </motion.div>
+          </m.div>
         </div>
       </section>
 
@@ -227,7 +227,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
               ][modPos % 6];
 
               return (
-                <motion.div
+                <m.div
                   key={mod.id ? `mod-id-${mod.id}` : (mod.num ? `mod-n-${mod.num}` : (mod.title ? `mod-t-${mod.title}` : `mod-p-${modPos}`))}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -323,7 +323,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
                       </span>
                     </div>
                   </div>
-                </motion.div>
+                </m.div>
               );
             })}
           </div>
@@ -414,5 +414,6 @@ export default function CourseDetail({ onOpenDemoModal }) {
         course={course}
       />
     </div>
+    </LazyMotion>
   );
 }

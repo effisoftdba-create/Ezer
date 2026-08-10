@@ -1,5 +1,4 @@
-import * as m from 'framer-motion';
-const motion = m;
+import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 
@@ -42,6 +41,7 @@ export default function ExecutiveLeadership() {
     ];
 
   return (
+    <LazyMotion features={domAnimation}>
     <section
       className="exec-section-compact"
       style={{
@@ -353,7 +353,7 @@ export default function ExecutiveLeadership() {
             const isReverse = idx % 2 === 1;
 
             return (
-              <motion.div
+              <m.div
                 key={leader.id || leader.roleTag || (leader.name ? leader.name.toLowerCase().replace(/[^a-z0-9]/g, '') : 'executive')}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -463,12 +463,13 @@ export default function ExecutiveLeadership() {
                     </div>
                   </>
                 )}
-              </motion.div>
+              </m.div>
             );
           })}
         </div>
 
       </div>
     </section>
+    </LazyMotion>
   );
 }
