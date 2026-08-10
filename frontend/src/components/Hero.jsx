@@ -36,6 +36,8 @@ export default function Hero({ onOpenDemoModal }) {
         style={{
           position: 'relative',
           width: '100%',
+          minHeight: '520px',
+          contain: 'layout style',
           background: '#faf9f6',
           padding: '0',
           overflow: 'hidden',

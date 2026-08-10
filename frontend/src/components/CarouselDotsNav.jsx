@@ -29,10 +29,10 @@ export default function CarouselDotsNav({
         onClick={onPrev}
         aria-label="Previous slide"
         style={{
-          width: '40px',
-          height: '40px',
-          minWidth: '40px',
-          minHeight: '40px',
+          width: '28px',
+          height: '28px',
+          minWidth: '28px',
+          minHeight: '28px',
           borderRadius: '50%',
           border: '1.5px solid #000648',
           background: '#ffffff',
@@ -47,7 +47,7 @@ export default function CarouselDotsNav({
           flexShrink: 0
         }}
       >
-        <HiChevronLeft size={20} />
+        <HiChevronLeft size={15} />
       </button>
 
       {/* Middle Pill & Dots Container */}
@@ -55,9 +55,9 @@ export default function CarouselDotsNav({
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '2px',
+          gap: '4px',
           background: 'rgba(0, 6, 72, 0.06)',
-          padding: '4px 10px',
+          padding: '3px 8px',
           borderRadius: '50px',
           border: '1px solid rgba(0, 6, 72, 0.08)'
         }}
@@ -69,22 +69,20 @@ export default function CarouselDotsNav({
             onClick={() => onSelectIndex && onSelectIndex(i)}
             aria-label={`Go to slide ${i + 1}`}
             style={{
-              padding: '10px 4px',
+              padding: '2px',
               border: 'none',
               background: 'transparent',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              minWidth: '24px',
-              minHeight: '36px'
+              justifyContent: 'center'
             }}
           >
             <span
               style={{
                 display: 'block',
-                width: activeIndex === i ? '18px' : '8px',
-                height: '8px',
+                width: activeIndex === i ? '14px' : '6px',
+                height: '6px',
                 borderRadius: '50px',
                 background: activeIndex === i ? '#000648' : '#cbd5e1',
                 transition: 'width 0.3s ease, background-color 0.3s ease'
@@ -100,10 +98,10 @@ export default function CarouselDotsNav({
         onClick={onNext}
         aria-label="Next slide"
         style={{
-          width: '40px',
-          height: '40px',
-          minWidth: '40px',
-          minHeight: '40px',
+          width: '28px',
+          height: '28px',
+          minWidth: '28px',
+          minHeight: '28px',
           borderRadius: '50%',
           border: '1.5px solid #000648',
           background: '#000648',
@@ -118,7 +116,7 @@ export default function CarouselDotsNav({
           flexShrink: 0
         }}
       >
-        <HiChevronRight size={20} />
+        <HiChevronRight size={15} />
       </button>
     </div>
   );

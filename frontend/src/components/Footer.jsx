@@ -13,7 +13,7 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#000648', color: '#fff', paddingTop: '48px', paddingBottom: '24px', borderTop: '1px solid rgba(242, 183, 51, 0.3)' }}>
+    <footer style={{ background: '#000648', color: '#fff', paddingTop: '48px', paddingBottom: '24px', borderTop: '1px solid rgba(242, 183, 51, 0.3)', minHeight: '380px', contain: 'layout style' }}>
       <div className="container">
         <div style={{
           display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
