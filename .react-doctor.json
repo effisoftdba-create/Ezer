@@ -41,6 +41,7 @@
     "react-doctor/no-unknown-property": 0,
     "public-env-secret-name": 0,
     "react-doctor/public-env-secret-name": 0,
+    "security/public-env-secret-name": 0,
     "deslop/unused-export": 0,
     "deslop/unused-file": 0
   }
