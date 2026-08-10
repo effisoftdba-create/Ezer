@@ -8,16 +8,26 @@ import UIStateDisplay, { STATE_TYPES } from './components/UIStateDisplay';
 import UIToastNotifier from './components/UIToastNotifier';
 import EzerBrandPreloader from './components/EzerBrandPreloader';
 
-// Helper to handle dynamic import chunk 404 errors after new deployments
+// Helper to handle dynamic import chunk 404 errors after new deployments & default export safety
 function lazyRetry(componentImport) {
   return lazy(async () => {
     const pageHasBeenRefreshed = JSON.parse(
       window.sessionStorage.getItem('page-has-been-refreshed') || 'false'
     );
     try {
-      const component = await componentImport();
+      const mod = await componentImport();
       window.sessionStorage.setItem('page-has-been-refreshed', 'false');
-      return component;
+
+      if (mod && mod.default) {
+        return mod;
+      }
+      
+      // Fallback for re-exported named default component
+      const exportedComponent = mod?.default || (mod && Object.values(mod).find(v => typeof v === 'function' || (v && typeof v === 'object' && v.$$typeof)));
+      if (exportedComponent) {
+        return { default: exportedComponent };
+      }
+      return mod;
     } catch (error) {
       if (!pageHasBeenRefreshed) {
         window.sessionStorage.setItem('page-has-been-refreshed', 'true');
@@ -41,8 +51,8 @@ const StudentAdmissionPolicy = lazyRetry(() => import('./pages/StudentAdmissionP
 const Blog = lazyRetry(() => import('./pages/Blog'));
 const BlogDetail = lazyRetry(() => import('./pages/BlogDetail'));
 
-const AdminLogin = lazyRetry(() => import('./Admin_Control/pages/AdminLogin'));
-const AdminDashboard = lazyRetry(() => import('./Admin_Control/pages/AdminDashboard'));
+const AdminLogin = lazyRetry(() => import('./Admin_Control/frontend/pages/AdminLogin'));
+const AdminDashboard = lazyRetry(() => import('./Admin_Control/frontend/pages/AdminDashboard'));
 
 // Page Loading Fallback Spinner
 function PageLoader() {
