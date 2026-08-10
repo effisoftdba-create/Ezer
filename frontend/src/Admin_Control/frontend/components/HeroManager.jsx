@@ -18,10 +18,12 @@ export default function HeroManager() {
   });
 
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData({ headline: '', sub: '', url: '' });
+    setFormErrors({});
     setIsEditing(true);
   };
 
@@ -37,13 +39,20 @@ export default function HeroManager() {
       mobilePosition: slide.mobilePosition || 'center center',
       mobileZoom: slide.mobileZoom || 1
     });
+    setFormErrors({});
     setIsEditing(true);
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.headline || !formData.url) {
-      alert('Headline and Image URL are required.');
+    const errors = {};
+    if (!formData.url?.trim()) errors.url = true;
+    if (!formData.headline?.trim()) errors.headline = true;
+    if (!formData.sub?.trim()) errors.sub = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      alert('Please fill out all required areas highlighted in RED below.');
       return;
     }
 
@@ -153,10 +162,17 @@ export default function HeroManager() {
                     id="hero_url_input"
                     type="text"
                     value={formData.url}
-                    onChange={(e) => setFormData({ ...formData, url: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, url: e.target.value });
+                      if (formErrors.url) setFormErrors((prev) => ({ ...prev, url: false }));
+                    }}
                     placeholder="Image path or URL"
-                    style={{ flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                    required
+                    style={{
+                      flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px',
+                      border: formErrors.url ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                      boxShadow: formErrors.url ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                      fontSize: '0.85rem'
+                    }}
                   />
                   <button
                     type="button"
@@ -191,36 +207,53 @@ export default function HeroManager() {
                     ↺ Reset Alignment
                   </button>
                 </div>
+                {formErrors.url && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Image Source URL is required</span>}
               </div>
 
               <div>
-                <label htmlFor="hero_headline_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                <label htmlFor="hero_headline_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.headline ? '#ef4444' : '#334155', marginBottom: '4px' }}>
                   Headline Text *
                 </label>
                 <input
                   id="hero_headline_input"
                   type="text"
                   value={formData.headline}
-                  onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, headline: e.target.value });
+                    if (formErrors.headline) setFormErrors((prev) => ({ ...prev, headline: false }));
+                  }}
                   placeholder="e.g. Deploy, Automate, and Scale Like a Real DevOps Engineer"
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                  required
+                  style={{
+                    width: '100%', padding: '9px 12px', borderRadius: '8px',
+                    border: formErrors.headline ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                    boxShadow: formErrors.headline ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                    fontSize: '0.85rem'
+                  }}
                 />
+                {formErrors.headline && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Headline Text is required</span>}
               </div>
 
               <div>
-                <label htmlFor="hero_sub_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                <label htmlFor="hero_sub_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.sub ? '#ef4444' : '#334155', marginBottom: '4px' }}>
                   Sub-description Text *
                 </label>
                 <textarea
                   id="hero_sub_input"
                   rows={3}
                   value={formData.sub}
-                  onChange={(e) => setFormData({ ...formData, sub: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, sub: e.target.value });
+                    if (formErrors.sub) setFormErrors((prev) => ({ ...prev, sub: false }));
+                  }}
                   placeholder="Detailed summary line shown below headline..."
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', lineHeight: 1.5 }}
-                  required
+                  style={{
+                    width: '100%', padding: '9px 12px', borderRadius: '8px',
+                    border: formErrors.sub ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                    boxShadow: formErrors.sub ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                    fontSize: '0.85rem', lineHeight: 1.5
+                  }}
                 />
+                {formErrors.sub && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Sub-description Text is required</span>}
               </div>
 
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>

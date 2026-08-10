@@ -8,6 +8,8 @@ export default function GraduateFormModal({
   editingId,
   formData,
   setFormData,
+  formErrors = {},
+  setFormErrors = () => {},
   onSave,
   onCancel,
   onOpenImagePicker
@@ -23,14 +25,13 @@ export default function GraduateFormModal({
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 9999,
-        background: 'rgba(0, 6, 72, 0.82)',
+        background: 'rgba(0, 6, 72, 0.75)',
         backdropFilter: 'blur(6px)',
+        zIndex: 10000,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '16px',
-        animation: 'fadeIn 0.2s ease'
+        padding: '20px'
       }}
     >
       <div
@@ -72,33 +73,49 @@ export default function GraduateFormModal({
         <form onSubmit={onSave} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
-              <label htmlFor="student_name_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="student_name_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.name ? '#ef4444' : '#334155', display: 'block', marginBottom: '4px' }}>
                 Graduate / Student Name *
               </label>
               <input
                 id="student_name_field"
                 type="text"
-                required
                 placeholder="e.g. Vignesh G"
                 value={formData.name || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, name: e.target.value }));
+                  if (formErrors.name) setFormErrors((prev) => ({ ...prev, name: false }));
+                }}
+                style={{
+                  width: '100%', padding: '9px 12px', borderRadius: '8px',
+                  border: formErrors.name ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                  boxShadow: formErrors.name ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                  fontSize: '0.85rem'
+                }}
               />
+              {formErrors.name && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Name is required</span>}
             </div>
 
             <div>
-              <label htmlFor="student_company_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="student_company_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.company ? '#ef4444' : '#334155', display: 'block', marginBottom: '4px' }}>
                 Hired Company Name *
               </label>
               <input
                 id="student_company_field"
                 type="text"
-                required
                 placeholder="e.g. Agnikul Cosmos"
                 value={formData.company || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, company: e.target.value }))}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, company: e.target.value }));
+                  if (formErrors.company) setFormErrors((prev) => ({ ...prev, company: false }));
+                }}
+                style={{
+                  width: '100%', padding: '9px 12px', borderRadius: '8px',
+                  border: formErrors.company ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                  boxShadow: formErrors.company ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                  fontSize: '0.85rem'
+                }}
               />
+              {formErrors.company && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Company is required</span>}
             </div>
           </div>
 
@@ -133,8 +150,8 @@ export default function GraduateFormModal({
           </div>
 
           <div>
-            <label htmlFor="student_photo_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-              Graduate Photo URL (Rec. Square 1:1)
+            <label htmlFor="student_photo_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.image ? '#ef4444' : '#334155', display: 'block', marginBottom: '4px' }}>
+              Graduate Photo URL * (Rec. Square 1:1)
             </label>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               {formData.image && (
@@ -149,8 +166,16 @@ export default function GraduateFormModal({
                 type="text"
                 placeholder="https://..."
                 value={formData.image || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))}
-                style={{ flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, image: e.target.value }));
+                  if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
+                }}
+                style={{
+                  flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px',
+                  border: formErrors.image ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                  boxShadow: formErrors.image ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                  fontSize: '0.85rem'
+                }}
               />
               <button
                 type="button"
@@ -160,6 +185,7 @@ export default function GraduateFormModal({
                 <HiPhotograph size={15} /> Choose Photo
               </button>
             </div>
+            {formErrors.image && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Graduate Photo is required</span>}
           </div>
 
           {/* Footer Buttons */}

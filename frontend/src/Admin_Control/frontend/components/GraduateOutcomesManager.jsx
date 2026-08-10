@@ -42,15 +42,18 @@ export default function GraduateOutcomesManager() {
     setTimeout(() => setSaveHeaderSuccess(false), 3000);
   };
 
+  const [formErrors, setFormErrors] = useState({});
+
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData({
-      name: 'R Anitha',
-      company: 'TCS Digital',
+      name: '',
+      company: '',
       beforeRole: 'Fresher, B.Tech',
       afterRole: 'Cloud Operations Engineer',
       image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=300&h=300'
     });
+    setFormErrors({});
     setIsEditing(true);
   };
 
@@ -71,15 +74,23 @@ export default function GraduateOutcomesManager() {
       mobilePosition: item.mobilePosition || item.position || '50% 50%',
       mobileZoom: item.mobileZoom || item.zoom || 1
     });
+    setFormErrors({});
     setIsEditing(true);
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.company) {
-      alert('Student Name and Placed Company are required.');
+    const errors = {};
+    if (!formData.name?.trim()) errors.name = true;
+    if (!formData.company?.trim()) errors.company = true;
+    if (!formData.image?.trim()) errors.image = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      alert('Please fill out all required areas highlighted in RED below.');
       return;
     }
+
     if (editingId) {
       updateTransformedLife(editingId, formData);
     } else {
@@ -183,6 +194,8 @@ export default function GraduateOutcomesManager() {
         editingId={editingId}
         formData={formData}
         setFormData={setFormData}
+        formErrors={formErrors}
+        setFormErrors={setFormErrors}
         onSave={handleSave}
         onCancel={() => setIsEditing(false)}
         onOpenImagePicker={() => setIsImagePickerOpen(true)}

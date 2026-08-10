@@ -70,7 +70,7 @@ export default function Navbar({ onOpenDemoModal }) {
                 <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#000648', letterSpacing: '-0.02em', lineHeight: 1 }}>
                   EZER
                 </span>
-                <span style={{ fontSize: '0.58rem', fontWeight: 800, color: '#d9a02a', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap' }}>
+                <span style={{ fontSize: '0.58rem', fontWeight: 800, color: '#b45309', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap' }}>
                   Learning Solutions
                 </span>
               </div>
