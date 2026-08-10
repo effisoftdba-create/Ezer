@@ -61,7 +61,7 @@ export const STORAGE_FAQS_KEY = 'ezer_faqs:v12_mobile_cache_purge_v2';
 export const STORAGE_CONTACT_KEY = 'ezer_contact:v12_mobile_cache_purge_v2';
 export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v12_mobile_cache_purge_v2';
 export const STORAGE_LEADS_KEY = 'ezer_leads:v12_mobile_cache_purge_v2';
-export const STORAGE_BLOGS_KEY = 'ezer_blogs:v12_mobile_cache_purge_v2';
+export const STORAGE_BLOGS_KEY = 'ezer_blogs:v16_sync_4_articles_all_views';
 export const STORAGE_ACHIEVEMENTS_KEY = 'ezer_achievements:v12_mobile_cache_purge_v2';
 export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v14_fix_image_aspect_position';
 export const STORAGE_HIRING_PARTNERS_KEY = 'ezer_hiring_partners:v12_mobile_cache_purge_v2';
@@ -530,7 +530,13 @@ export function getInitialState() {
     contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo) || defaultContactInfo,
     popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, prodConfig) || prodConfig,
     leads: getStored(STORAGE_LEADS_KEY, defaultLeads) || defaultLeads,
-    blogs: getStored(STORAGE_BLOGS_KEY, defaultBlogs) || defaultBlogs,
+    blogs: (() => {
+      const raw = getStored(STORAGE_BLOGS_KEY, defaultBlogs);
+      if (!Array.isArray(raw) || raw.length < defaultBlogs.length) {
+        return defaultBlogs;
+      }
+      return raw;
+    })(),
     achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements) || defaultAchievements,
     executiveLeaders: safeExec,
     hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners,
