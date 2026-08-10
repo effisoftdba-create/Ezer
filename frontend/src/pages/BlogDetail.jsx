@@ -385,7 +385,15 @@ export default function BlogDetail({ onOpenDemoModal }) {
             src={resolveImageSrc(article.image)}
             alt={article.title}
             onError={handleImgError}
-            style={{ width: '100%', maxHeight: '560px', objectFit: 'cover', display: 'block' }}
+            style={{
+              width: '100%',
+              maxHeight: '560px',
+              objectFit: article.fit || article.imageFit || 'cover',
+              objectPosition: article.position || article.imagePosition || 'center center',
+              transform: (article.zoom || article.imageZoom || 1) !== 1 ? `scale(${article.zoom || article.imageZoom})` : 'none',
+              transformOrigin: article.position || article.imagePosition || 'center center',
+              display: 'block'
+            }}
           />
         </div>
       </div>
@@ -422,7 +430,17 @@ export default function BlogDetail({ onOpenDemoModal }) {
                   src={sec.image}
                   alt={sec.title}
                   onError={handleImgError}
-                  style={{ width: '100%', borderRadius: '20px', maxHeight: '520px', objectFit: 'cover', display: 'block', boxShadow: '0 15px 35px rgba(0,0,0,0.12)' }}
+                  style={{
+                    width: '100%',
+                    borderRadius: '20px',
+                    maxHeight: '520px',
+                    objectFit: sec.fit || sec.imageFit || 'cover',
+                    objectPosition: sec.position || sec.imagePosition || 'center center',
+                    transform: (sec.zoom || sec.imageZoom || 1) !== 1 ? `scale(${sec.zoom || sec.imageZoom})` : 'none',
+                    transformOrigin: sec.position || sec.imagePosition || 'center center',
+                    display: 'block',
+                    boxShadow: '0 15px 35px rgba(0,0,0,0.12)'
+                  }}
                 />
                 {sec.caption && (
                   <figcaption style={{ fontSize: '0.88rem', color: '#64748b', textAlign: 'center', marginTop: '12px', fontStyle: 'italic', fontWeight: 600 }}>

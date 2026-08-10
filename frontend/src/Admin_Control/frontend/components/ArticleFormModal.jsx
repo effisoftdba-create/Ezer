@@ -419,12 +419,40 @@ export default function ArticleFormModal({
           isOpen={pickerOpen}
           onClose={() => setPickerOpen(false)}
           currentImage={activeImageTarget === null ? formData.image : (formData.sections[activeImageTarget]?.image || '')}
-          onSelectImage={(url) => {
+          currentPosition={activeImageTarget === null ? (formData.imagePosition || formData.position || 'center center') : (formData.sections[activeImageTarget]?.imagePosition || formData.sections[activeImageTarget]?.position || 'center center')}
+          currentFit={activeImageTarget === null ? (formData.imageFit || formData.fit || 'cover') : (formData.sections[activeImageTarget]?.imageFit || formData.sections[activeImageTarget]?.fit || 'cover')}
+          currentZoom={activeImageTarget === null ? (formData.imageZoom || formData.zoom || 1) : (formData.sections[activeImageTarget]?.imageZoom || formData.sections[activeImageTarget]?.zoom || 1)}
+          onSelectImage={(url, pos, fit, zoom) => {
             if (activeImageTarget === null) {
-              setFormData((prev) => ({ ...prev, image: url }));
+              setFormData((prev) => ({
+                ...prev,
+                image: url,
+                imagePosition: pos || 'center center',
+                position: pos || 'center center',
+                imageFit: fit || 'cover',
+                fit: fit || 'cover',
+                imageZoom: zoom || 1,
+                zoom: zoom || 1
+              }));
             } else {
-              handleUpdateSection(activeImageTarget, 'image', url);
+              setFormData((prev) => {
+                const nextSections = [...(prev.sections || [])];
+                if (nextSections[activeImageTarget]) {
+                  nextSections[activeImageTarget] = {
+                    ...nextSections[activeImageTarget],
+                    image: url,
+                    imagePosition: pos || 'center center',
+                    position: pos || 'center center',
+                    imageFit: fit || 'cover',
+                    fit: fit || 'cover',
+                    imageZoom: zoom || 1,
+                    zoom: zoom || 1
+                  };
+                }
+                return { ...prev, sections: nextSections };
+              });
             }
+            setPickerOpen(false);
           }}
           targetArea="Magazine Article Image"
           aspectRatio="Landscape (16:9)"

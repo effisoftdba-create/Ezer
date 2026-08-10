@@ -122,11 +122,16 @@ export default function Blog({ onOpenDemoModal }) {
               src={featuredCoverArticle.image}
               alt={featuredCoverArticle.title}
               onError={handleImgError}
+              style={{
+                objectFit: featuredCoverArticle.fit || featuredCoverArticle.imageFit || 'cover',
+                objectPosition: featuredCoverArticle.position || featuredCoverArticle.imagePosition || 'center center',
+                transform: (featuredCoverArticle.zoom || featuredCoverArticle.imageZoom || 1) !== 1 ? `scale(${featuredCoverArticle.zoom || featuredCoverArticle.imageZoom})` : 'none',
+                transformOrigin: featuredCoverArticle.position || featuredCoverArticle.imagePosition || 'center center'
+              }}
             />
             <span className="cover-story-tag">
               COVER STORY
             </span>
-
           </div>
 
           <div className="featured-cover-content">
@@ -165,7 +170,17 @@ export default function Blog({ onOpenDemoModal }) {
             {(articlesToDisplay || []).map((blog) => (
               <article key={blog.id} className="magazine-card">
                 <div className="card-image-box">
-                  <img src={blog.image} alt={blog.title} onError={handleImgError} />
+                  <img
+                    src={blog.image}
+                    alt={blog.title}
+                    onError={handleImgError}
+                    style={{
+                      objectFit: blog.fit || blog.imageFit || 'cover',
+                      objectPosition: blog.position || blog.imagePosition || 'center center',
+                      transform: (blog.zoom || blog.imageZoom || 1) !== 1 ? `scale(${blog.zoom || blog.imageZoom})` : 'none',
+                      transformOrigin: blog.position || blog.imagePosition || 'center center'
+                    }}
+                  />
                   <span className="card-cat-tag">
                     {blog.category || 'Tech Article'}
                   </span>
@@ -232,7 +247,16 @@ export default function Blog({ onOpenDemoModal }) {
             {(achievements || []).map((ach) => (
               <div key={ach.id} className="award-horizontal-card">
                 <div className="card-image-box">
-                  <img src={ach.image} alt={ach.title} />
+                  <img
+                    src={ach.image}
+                    alt={ach.title}
+                    style={{
+                      objectFit: ach.fit || ach.imageFit || 'cover',
+                      objectPosition: ach.position || ach.imagePosition || 'center center',
+                      transform: (ach.zoom || ach.imageZoom || 1) !== 1 ? `scale(${ach.zoom || ach.imageZoom})` : 'none',
+                      transformOrigin: ach.position || ach.imagePosition || 'center center'
+                    }}
+                  />
                   <span className="award-year-tag">
                     {ach.year}
                   </span>
