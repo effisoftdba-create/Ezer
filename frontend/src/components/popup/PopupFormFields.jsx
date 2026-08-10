@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 const inputStyle = {
   width: '100%',
@@ -31,6 +32,8 @@ export default function PopupFormFields({
   status,
   overrideConfig
 }) {
+  const { courses } = useSiteData() || {};
+
   const config = overrideConfig || {
     submitBtnText: 'Register Now',
     showStateCity: true,
@@ -55,12 +58,19 @@ export default function PopupFormFields({
     ]
   };
 
-  const coursesArray = (config.coursesList && config.coursesList.length > 0) ? config.coursesList : [
+  const dynamicCatalogTitles = Array.isArray(courses) && courses.length > 0
+    ? courses.map((c) => c.title).filter(Boolean)
+    : [];
+
+  const baseCourses = (config.coursesList && config.coursesList.length > 0) ? config.coursesList : [
     'Cloud DevOps with AI',
     'Software Testing – Playwright',
     'AI & Machine Learning',
     'IT Infrastructure & System Administration'
   ];
+
+  // Combine live catalog courses with base fallback list to ensure all new courses automatically show in dropdown
+  const coursesArray = Array.from(new Set([...dynamicCatalogTitles, ...baseCourses]));
 
   const countriesArray = (config.countriesList && config.countriesList.length > 0) ? config.countriesList : [
     'India',

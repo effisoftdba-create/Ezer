@@ -278,11 +278,12 @@ function LogoCard({ logo }) {
 function MarqueeRow({ items, direction = 'left', duration = 32 }) {
   const shouldReduceMotion = useReducedMotion();
 
-  // Multiply items 3 times with stable unique ids for seamless 0% -> -50% loop
+  // Multiply items 4 times so that shifting -50% translates exactly 2 full sets for a 100% seamless, infinite loop without stuck/restart glitches
   const duplicatedItems = [
     ...items.map((item, idx) => ({ ...item, uId: `${item.id || idx}-dup-1` })),
     ...items.map((item, idx) => ({ ...item, uId: `${item.id || idx}-dup-2` })),
-    ...items.map((item, idx) => ({ ...item, uId: `${item.id || idx}-dup-3` }))
+    ...items.map((item, idx) => ({ ...item, uId: `${item.id || idx}-dup-3` })),
+    ...items.map((item, idx) => ({ ...item, uId: `${item.id || idx}-dup-4` }))
   ];
 
   return (

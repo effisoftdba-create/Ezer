@@ -50,27 +50,27 @@ export default function Navbar({ onOpenDemoModal }) {
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '70px' }}>
 
           {/* Animated Brand Crest Logo */}
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none' }}>
+          <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
               <img 
-                src={`${import.meta.env.BASE_URL || '/'}images/logo_navy.png`} 
+                src={`${import.meta.env.BASE_URL || '/'}images/ezer_shield_logo.png`} 
                 alt="EZER Learning Solutions Crest Logo" 
-                width="160"
-                height="46"
+                width="40"
+                height="40"
                 decoding="async"
                 style={{
-                  height: '46px',
-                  width: 'auto',
-                  aspectRatio: '160/46',
+                  height: '38px',
+                  width: '38px',
                   objectFit: 'contain',
+                  flexShrink: 0
                 }} 
               />
 
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#000648', letterSpacing: '-0.02em', lineHeight: 1 }}>
                   EZER
                 </span>
-                <span style={{ fontSize: '0.62rem', fontWeight: 800, color: '#d9a02a', letterSpacing: '0.14em', textTransform: 'uppercase', marginTop: '2px' }}>
+                <span style={{ fontSize: '0.58rem', fontWeight: 800, color: '#d9a02a', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap' }}>
                   Learning Solutions
                 </span>
               </div>
@@ -202,11 +202,28 @@ export default function Navbar({ onOpenDemoModal }) {
               whileTap={{ scale: 0.98 }}
               type="button" 
               onClick={onOpenDemoModal} 
-              className="btn btn-secondary hidden-mobile"
+              className="hidden-mobile"
               style={{
-                padding: '10px 20px', fontSize: '0.82rem', fontWeight: 800,
-                borderRadius: '8px', cursor: 'pointer',
-                boxShadow: '0 4px 14px rgba(242, 183, 51, 0.25)'
+                padding: '10px 20px',
+                fontSize: '0.82rem',
+                fontWeight: 800,
+                borderRadius: '8px',
+                cursor: 'pointer',
+                background: '#f2b733',
+                color: '#000648',
+                border: '1.5px solid #f2b733',
+                boxShadow: '0 4px 14px rgba(242, 183, 51, 0.3)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = '#000648';
+                e.currentTarget.style.color = '#f2b733';
+                e.currentTarget.style.borderColor = '#000648';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = '#f2b733';
+                e.currentTarget.style.color = '#000648';
+                e.currentTarget.style.borderColor = '#f2b733';
               }}
             >
               Book Free Demo Class

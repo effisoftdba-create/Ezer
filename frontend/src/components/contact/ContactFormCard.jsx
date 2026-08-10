@@ -1,7 +1,22 @@
 import React from 'react';
 import { HiCheckCircle, HiPaperAirplane } from 'react-icons/hi';
+import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 export default function ContactFormCard({ formData, setFormData, submitted, handleSubmit }) {
+  const { courses } = useSiteData() || {};
+
+  const baseCourses = [
+    'Cloud DevOps with AI',
+    'Software Testing – Playwright',
+    'AI & Machine Learning',
+    'IT Infrastructure & System Administration'
+  ];
+
+  const dynamicTitles = Array.isArray(courses) && courses.length > 0
+    ? courses.map((c) => c.title).filter(Boolean)
+    : [];
+
+  const catalogOptions = Array.from(new Set([...dynamicTitles, ...baseCourses]));
   return (
     <div
       style={{
@@ -89,10 +104,9 @@ export default function ContactFormCard({ formData, setFormData, submitted, hand
               value={formData.course}
               onChange={(e) => setFormData({ ...formData, course: e.target.value })}
             >
-              <option value="Cloud DevOps with AI">Cloud DevOps with AI</option>
-              <option value="Software Testing – Playwright">Software Testing – Playwright</option>
-              <option value="AI & Machine Learning">AI & Machine Learning</option>
-              <option value="IT Infrastructure & System Administration">IT Infrastructure & System Administration</option>
+              {catalogOptions.map((title) => (
+                <option key={title} value={title}>{title}</option>
+              ))}
             </select>
           </div>
 

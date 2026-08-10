@@ -22,6 +22,27 @@ export default function CourseFormModal({
 }) {
   const [activeTab, setActiveTab] = useState('basic');
 
+  const slugify = (text) => (text || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  const handleTitleChange = (newTitle) => {
+    const currentSlug = formData.slug || '';
+    const autoSlugFromPrevTitle = slugify(formData.title || '');
+    const isAutoSynced = !currentSlug || currentSlug === autoSlugFromPrevTitle;
+    const nextSlug = isAutoSynced ? slugify(newTitle) : currentSlug;
+
+    setFormData((prev) => ({
+      ...prev,
+      title: newTitle,
+      slug: nextSlug,
+      hashLink: isAutoSynced ? `#${nextSlug}_course` : prev.hashLink
+    }));
+  };
+
   if (!isEditing) return null;
 
   const handleAddWhoFor = () => {
@@ -201,7 +222,7 @@ export default function CourseFormModal({
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 0.8fr', gap: '14px', marginBottom: '14px' }}>
                   <div>
                     <label htmlFor="course_title" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
                       Course Title *
@@ -211,8 +232,23 @@ export default function CourseFormModal({
                       type="text"
                       required
                       value={formData.title || ''}
-                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      onChange={(e) => handleTitleChange(e.target.value)}
                       placeholder="e.g. Full Stack Development with AI"
+                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="course_slug" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                      Course Slug / URL ID *
+                    </label>
+                    <input
+                      id="course_slug"
+                      type="text"
+                      required
+                      value={formData.slug || ''}
+                      onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                      placeholder="e.g. fullstack-ai-development"
                       style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
                     />
                   </div>
@@ -226,7 +262,7 @@ export default function CourseFormModal({
                       type="text"
                       value={formData.badge || ''}
                       onChange={(e) => setFormData({ ...formData, badge: e.target.value })}
-                      placeholder="e.g. Popular, Live Cohort, Trending"
+                      placeholder="e.g. Popular, Trending"
                       style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
                     />
                   </div>

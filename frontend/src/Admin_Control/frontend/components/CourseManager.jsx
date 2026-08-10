@@ -106,26 +106,49 @@ export default function CourseManager() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.slug) {
-      alert('Course Title and Slug are required.');
+    const rawTitle = (formData.title || '').trim();
+    const computedSlug = (formData.slug || '')
+      .toLowerCase()
+      .trim()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/[\s_]+/g, '-')
+      .replace(/^-+|-+$/g, '') ||
+      rawTitle
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/[\s_]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+    if (!rawTitle) {
+      alert('Course Title is required.');
       return;
     }
 
-    const toolsArray = formData.tools.split(',').map((t) => t.trim()).filter(Boolean);
-    const modulesArray = formData.modulesStr.split(',').map((m, idx) => ({
-      num: `0${idx + 1}`,
-      title: m.trim(),
-      topics: ['Hands-on Lab Exercises', 'Live Industry Scenarios']
-    })).filter((m) => m.title);
+    const courseId = editingId || computedSlug || `course-${Date.now()}`;
+    const toolsArray = typeof formData.tools === 'string'
+      ? formData.tools.split(',').map((t) => t.trim()).filter(Boolean)
+      : (Array.isArray(formData.tools) ? formData.tools : ['AWS', 'Docker']);
+
+    const modulesArray = typeof formData.modulesStr === 'string'
+      ? formData.modulesStr.split(',').map((m, idx) => ({
+          num: `0${idx + 1}`,
+          title: m.trim(),
+          topics: ['Hands-on Lab Exercises', 'Live Industry Scenarios']
+        })).filter((m) => m.title)
+      : [];
 
     const payload = {
       ...formData,
+      id: courseId,
+      title: rawTitle,
+      slug: computedSlug,
+      hashLink: formData.hashLink || `#${computedSlug}_course`,
       position: formData.imagePosition,
       fit: formData.imageFit,
       tools: toolsArray.length > 0 ? toolsArray : ['AWS', 'Docker'],
-      projects: formData.projectsList,
-      whoIsItFor: formData.whoIsItForList,
-      admissionSteps: formData.admissionStepsList,
+      projects: formData.projectsList || [],
+      whoIsItFor: formData.whoIsItForList || [],
+      admissionSteps: formData.admissionStepsList || [],
       curriculumModules: modulesArray.length > 0 ? modulesArray : [{ num: '01', title: 'Fundamentals', topics: ['Core Concepts'] }]
     };
 

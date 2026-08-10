@@ -206,25 +206,27 @@ export default function Hero({ onOpenDemoModal }) {
                     width: '220px',
                     height: '52px',
                     padding: '0 24px',
-                    background: '#000638',
-                    color: '#ffffff',
+                    background: '#f2b733',
+                    color: '#000648',
                     fontWeight: 800,
                     fontSize: '0.88rem',
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     cursor: 'pointer',
-                    border: 'none',
+                    border: '1.5px solid #f2b733',
                     borderRadius: '8px',
-                    boxShadow: '0 4px 14px rgba(0,6,56,0.25)',
-                    transition: 'background-color 0.25s ease, color 0.25s ease, transform 0.25s ease',
+                    boxShadow: '0 4px 14px rgba(242, 183, 51, 0.35)',
+                    transition: 'all 0.25s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#f2b733';
-                    e.currentTarget.style.color = '#000638';
+                    e.currentTarget.style.background = '#000648';
+                    e.currentTarget.style.color = '#f2b733';
+                    e.currentTarget.style.borderColor = '#000648';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#000638';
-                    e.currentTarget.style.color = '#ffffff';
+                    e.currentTarget.style.background = '#f2b733';
+                    e.currentTarget.style.color = '#000648';
+                    e.currentTarget.style.borderColor = '#f2b733';
                   }}
                 >
                   <span>Book Free Demo</span>

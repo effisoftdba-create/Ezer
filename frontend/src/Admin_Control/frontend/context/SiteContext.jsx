@@ -391,9 +391,11 @@ export function SiteProvider({ children }) {
   }, []);
 
   const addCourse = useCallback((newCourse) => {
-    const updated = [newCourse, ...(courses || [])];
+    const courseId = newCourse.id || newCourse.slug || `course-${Date.now()}`;
+    const courseObj = { ...newCourse, id: courseId };
+    const updated = [courseObj, ...(courses || [])];
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
-    saveDocument('courses', String(newCourse.id || newCourse.slug), newCourse);
+    saveDocument('courses', String(courseId), courseObj);
     triggerStateToast('SAVED');
   }, [courses]);
 
