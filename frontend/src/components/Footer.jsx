@@ -225,35 +225,38 @@ export default function Footer() {
           paddingTop: '20px',
           borderTop: '1px solid rgba(242,183,51,0.2)',
           display: 'flex',
-          flexDirection: 'column',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '12px',
-          fontSize: '0.75rem',
-          color: '#94a3b8',
-          textAlign: 'center'
+          flexWrap: 'wrap',
+          gap: '14px',
+          fontSize: '0.78rem',
+          color: '#cbd5e1',
+          width: '100%'
         }}>
-          <div style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '16px',
-            width: '100%'
-          }}>
-            <div>&copy; {new Date().getFullYear()} EZER Learning Solutions. All rights reserved.</div>
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Link to="/privacy-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Privacy Policy</Link>
-              <Link to="/student-admission-policy" style={{ color: '#f2b733', textDecoration: 'none' }}>Student Admission Policy & Agreement</Link>
-            </div>
+          {/* Left Side Corner */}
+          <div style={{ color: '#cbd5e1', textAlign: 'left', flex: '1 1 280px' }}>
+            &copy; 2026 EZER Learning Solutions. All rights reserved.
           </div>
-          
-          <div style={{
-            fontSize: '0.625rem',
-            color: '#64748b',
-            textAlign: 'center',
-            marginTop: '2px'
-          }}>
-            Developed by <a href="https://effisoft.co/" target="_blank" rel="noopener noreferrer" style={{ color: '#cbd5e1', textDecoration: 'underline' }}>Effisoft Technologies</a>
+
+          {/* Center Area */}
+          <div style={{ fontSize: '0.75rem', color: '#cbd5e1', textAlign: 'center', flex: '1 1 200px' }}>
+            Developed by <a href="https://effisoft.co/" target="_blank" rel="noopener noreferrer" style={{ color: '#f2b733', fontWeight: 700, textDecoration: 'underline' }}>Effisoft Technologies</a>
+          </div>
+
+          {/* Right Side Corner */}
+          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'flex-end', flex: '1 1 300px' }}>
+            <Link to="/privacy-policy" style={{ color: '#f2b733', textDecoration: 'none', fontWeight: 600 }}
+              onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+              onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
+            >
+              Privacy Policy
+            </Link>
+            <Link to="/student-admission-policy" style={{ color: '#f2b733', textDecoration: 'none', fontWeight: 600 }}
+              onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
+              onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
+            >
+              Student Admission Policy &amp; Agreement
+            </Link>
           </div>
         </div>
       </div>

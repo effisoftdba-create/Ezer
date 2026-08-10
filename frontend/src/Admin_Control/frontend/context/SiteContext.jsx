@@ -37,6 +37,7 @@ import {
   defaultVideoTestimonials,
   defaultBlogs,
   defaultAchievements,
+  getStored,
   getInitialState,
   siteReducer,
   safeSetStorage
@@ -159,8 +160,10 @@ export function SiteProvider({ children }) {
   useEffect(() => {
     const unsubCourses = subscribeToCollection('courses', (items) => {
       if (items && items.length > 0) {
-        const merged = mergeCollection(phase1Courses, items, 'id');
+        const storedLocal = getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses;
+        const merged = mergeCollection(storedLocal, items, 'id');
         dispatch({ type: 'SET_KEY', key: 'courses', value: merged });
+        safeSetStorage(STORAGE_COURSES_KEY, merged);
       }
     });
     const unsubHero = subscribeToCollection('heroSlides', (items) => {
@@ -393,22 +396,28 @@ export function SiteProvider({ children }) {
   const addCourse = useCallback((newCourse) => {
     const courseId = newCourse.id || newCourse.slug || `course-${Date.now()}`;
     const courseObj = { ...newCourse, id: courseId };
-    const updated = [courseObj, ...(courses || [])];
+    const currentList = Array.isArray(courses) ? courses : (getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses);
+    const updated = [courseObj, ...currentList.filter((c) => c.id !== courseId && c.slug !== courseObj.slug)];
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
+    safeSetStorage(STORAGE_COURSES_KEY, updated);
     saveDocument('courses', String(courseId), courseObj);
     triggerStateToast('SAVED');
   }, [courses]);
 
   const updateCourse = useCallback((id, updatedCourse) => {
-    const updated = (courses || []).map((c) => (c.id === id || c.slug === id ? { ...c, ...updatedCourse } : c));
+    const currentList = Array.isArray(courses) ? courses : (getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses);
+    const updated = currentList.map((c) => (c.id === id || c.slug === id ? { ...c, ...updatedCourse } : c));
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
+    safeSetStorage(STORAGE_COURSES_KEY, updated);
     saveCollectionArray('courses', updated);
     triggerStateToast('SAVED');
   }, [courses]);
 
   const deleteCourse = useCallback((id) => {
-    const updated = (courses || []).filter((c) => c.id !== id && c.slug !== id);
+    const currentList = Array.isArray(courses) ? courses : (getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses);
+    const updated = currentList.filter((c) => c.id !== id && c.slug !== id);
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
+    safeSetStorage(STORAGE_COURSES_KEY, updated);
     removeDocument('courses', String(id));
     triggerStateToast('SAVED');
   }, [courses]);

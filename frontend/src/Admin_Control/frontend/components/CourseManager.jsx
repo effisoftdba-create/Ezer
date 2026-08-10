@@ -167,10 +167,12 @@ export default function CourseManager() {
     }
   };
 
-  const filteredCourses = courses.filter((c) =>
-    c.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.slug.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const safeCourses = Array.isArray(courses) ? courses : [];
+  const filteredCourses = safeCourses.filter((c) => {
+    const titleMatch = (c.title || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const slugMatch = (c.slug || '').toLowerCase().includes(searchTerm.toLowerCase());
+    return titleMatch || slugMatch;
+  });
 
   return (
     <div>
