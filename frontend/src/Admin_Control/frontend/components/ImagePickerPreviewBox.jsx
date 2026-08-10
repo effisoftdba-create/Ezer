@@ -76,49 +76,6 @@ export default function ImagePickerPreviewBox({
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          {/* Aspect Ratio Switcher Tabs */}
-          <div style={{ display: 'flex', background: '#cbd5e1', borderRadius: '8px', padding: '3px', gap: '3px' }}>
-            <button
-              type="button"
-              onClick={() => setAspectRatioMode('1/1')}
-              style={{
-                padding: '4px 9px', borderRadius: '6px', border: 'none',
-                background: currentRatio === '1/1' ? '#000648' : 'transparent',
-                color: currentRatio === '1/1' ? '#f2b733' : '#334155',
-                fontWeight: currentRatio === '1/1' ? 900 : 600,
-                fontSize: '0.72rem', cursor: 'pointer'
-              }}
-            >
-              1:1 Square
-            </button>
-            <button
-              type="button"
-              onClick={() => setAspectRatioMode('4/3')}
-              style={{
-                padding: '4px 9px', borderRadius: '6px', border: 'none',
-                background: currentRatio === '4/3' ? '#000648' : 'transparent',
-                color: currentRatio === '4/3' ? '#f2b733' : '#334155',
-                fontWeight: currentRatio === '4/3' ? 900 : 600,
-                fontSize: '0.72rem', cursor: 'pointer'
-              }}
-            >
-              4:3 Desktop
-            </button>
-            <button
-              type="button"
-              onClick={() => setAspectRatioMode('16/9')}
-              style={{
-                padding: '4px 9px', borderRadius: '6px', border: 'none',
-                background: currentRatio === '16/9' ? '#000648' : 'transparent',
-                color: currentRatio === '16/9' ? '#f2b733' : '#334155',
-                fontWeight: currentRatio === '16/9' ? 900 : 600,
-                fontSize: '0.72rem', cursor: 'pointer'
-              }}
-            >
-              16:9 Wide
-            </button>
-          </div>
-
           {/* Rule of Thirds Grid Toggle */}
           <button
             type="button"

@@ -389,9 +389,9 @@ export default function CourseFormModal({
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  {audienceItems.map((item, itemPos) => {
-                    const origIndex = item.origIdx !== undefined ? item.origIdx : itemPos;
-                    const itemTitle = item.title || item.name || `Target Profile #${itemPos + 1}`;
+                  {audienceItems.map((item, idx) => {
+                    const origIndex = item.origIdx !== undefined ? item.origIdx : idx;
+                    const itemTitle = item.title || item.name || `Target Profile #${idx + 1}`;
                     const itemDesc = item.desc || item.description || item.text || '';
 
                     return (

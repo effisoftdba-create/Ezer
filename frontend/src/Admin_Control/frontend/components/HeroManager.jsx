@@ -245,8 +245,8 @@ export default function HeroManager() {
       )}
 
       <div style={{ display: 'grid', gap: '16px' }}>
-        {heroSlides.map((slide, slidePos) => {
-          const keyId = slide.id ? `slide-id-${slide.id}` : (slide.headline ? `slide-hl-${slide.headline}` : `slide-pos-${slidePos}`);
+        {heroSlides.map((slide, idx) => {
+          const keyId = slide.id ? `slide-id-${slide.id}` : (slide.headline ? `slide-hl-${slide.headline}` : `slide-pos-${idx}`);
           return (
             <div
               key={keyId}

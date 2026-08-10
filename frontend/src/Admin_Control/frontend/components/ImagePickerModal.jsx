@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
-import { HiUpload } from 'react-icons/hi';
+import { HiUpload, HiZoomIn, HiZoomOut, HiRefresh } from 'react-icons/hi';
 import ImagePickerPreviewBox from './ImagePickerPreviewBox';
 import { removeImageBackground } from '../../../utils/backgroundRemover';
 
@@ -439,9 +439,142 @@ export default function ImagePickerModal({
           handleMouseDown={handlePointerDown}
         />
 
+        {/* ZOOM & POSITION ALIGNMENT TOOLBAR */}
+        <div style={{
+          background: '#f8fafc',
+          border: '1.5px solid #cbd5e1',
+          borderRadius: '12px',
+          padding: '14px 16px',
+          marginBottom: '16px',
+          marginTop: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px'
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ fontSize: '0.78rem', fontWeight: 900, color: '#000648', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Active Screen Mode:
+              </span>
+              <div style={{ display: 'flex', background: '#cbd5e1', borderRadius: '8px', padding: '3px', gap: '3px' }}>
+                <button
+                  type="button"
+                  onClick={() => setActiveTarget('desktop')}
+                  style={{
+                    padding: '5px 12px', borderRadius: '6px', border: 'none',
+                    background: activeTarget === 'desktop' ? '#000648' : 'transparent',
+                    color: activeTarget === 'desktop' ? '#f2b733' : '#334155',
+                    fontWeight: activeTarget === 'desktop' ? 900 : 700,
+                    fontSize: '0.78rem', cursor: 'pointer'
+                  }}
+                >
+                  🖥️ PC Screen Focus
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTarget('mobile')}
+                  style={{
+                    padding: '5px 12px', borderRadius: '6px', border: 'none',
+                    background: activeTarget === 'mobile' ? '#000648' : 'transparent',
+                    color: activeTarget === 'mobile' ? '#f2b733' : '#334155',
+                    fontWeight: activeTarget === 'mobile' ? 900 : 700,
+                    fontSize: '0.78rem', cursor: 'pointer'
+                  }}
+                >
+                  📱 Mobile Screen Focus
+                </button>
+              </div>
+            </div>
 
+            <button
+              type="button"
+              onClick={() => {
+                setActiveZoom(1);
+                setActiveOffset({ x: 0, y: 0 });
+              }}
+              style={{
+                padding: '5px 12px', background: '#ffffff', border: '1px solid #cbd5e1',
+                borderRadius: '6px', color: '#000648', fontWeight: 800, fontSize: '0.75rem',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
+              }}
+            >
+              <HiRefresh size={14} /> Reset Zoom &amp; Position
+            </button>
+          </div>
 
-        {/* BOTTOM ACTION BUTTON BAR */}
+          {/* ZOOM SLIDER & ZOOM IN/OUT CONTROLS */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.8rem', fontWeight: 800, color: '#334155', minWidth: '95px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <HiZoomIn size={16} color="#000648" /> Zoom Scale:
+            </span>
+
+            <button
+              type="button"
+              onClick={() => setActiveZoom((prev) => Math.max(1, Math.round((prev - 0.1) * 100) / 100))}
+              disabled={activeZoom <= 1}
+              style={{
+                width: '32px', height: '32px', borderRadius: '6px', border: '1px solid #cbd5e1',
+                background: activeZoom <= 1 ? '#e2e8f0' : '#ffffff', color: '#000648',
+                fontWeight: 900, fontSize: '1rem', cursor: activeZoom <= 1 ? 'not-allowed' : 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}
+              title="Zoom Out (-10%)"
+            >
+              <HiZoomOut size={16} />
+            </button>
+
+            <input
+              type="range"
+              min="1"
+              max="2.5"
+              step="0.05"
+              value={activeZoom}
+              onChange={(e) => setActiveZoom(parseFloat(e.target.value))}
+              style={{ flex: 1, minWidth: '120px', accentColor: '#000648', cursor: 'pointer' }}
+            />
+
+            <button
+              type="button"
+              onClick={() => setActiveZoom((prev) => Math.min(2.5, Math.round((prev + 0.1) * 100) / 100))}
+              disabled={activeZoom >= 2.5}
+              style={{
+                width: '32px', height: '32px', borderRadius: '6px', border: '1px solid #cbd5e1',
+                background: activeZoom >= 2.5 ? '#e2e8f0' : '#ffffff', color: '#000648',
+                fontWeight: 900, fontSize: '1rem', cursor: activeZoom >= 2.5 ? 'not-allowed' : 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}
+              title="Zoom In (+10%)"
+            >
+              <HiZoomIn size={16} />
+            </button>
+
+            <span style={{
+              background: '#000648', color: '#f2b733', padding: '3px 10px',
+              borderRadius: '20px', fontWeight: 900, fontSize: '0.8rem', minWidth: '55px', textAlign: 'center'
+            }}>
+              {Math.round(activeZoom * 100)}%
+            </span>
+          </div>
+
+          {/* QUICK POSITION ALIGNMENTS */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#475569' }}>Quick Align:</span>
+            {POSITION_PRESETS.map((preset) => (
+              <button
+                key={preset.label}
+                type="button"
+                onClick={() => handlePresetPosition(preset)}
+                style={{
+                  padding: '3px 9px', borderRadius: '6px', border: '1px solid #cbd5e1',
+                  background: '#ffffff', color: '#334155', fontSize: '0.72rem', fontWeight: 700,
+                  cursor: 'pointer'
+                }}
+              >
+                {preset.label}
+              </button>
+            ))}
+          </div>
+        </div>
         <div style={{
           display: 'flex',
           justify: 'flex-end',
