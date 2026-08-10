@@ -16,6 +16,7 @@ export default function SeniorMentorFormModal({
 
   const modalContent = (
     <div
+      role="presentation"
       onClick={(e) => {
         if (e.target === e.currentTarget) onCancel();
       }}

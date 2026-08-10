@@ -628,7 +628,7 @@ export function SiteProvider({ children }) {
   }, []);
 
   const addLead = useCallback((leadData) => {
-    const newLead = { id: String(Date.now()), ...leadData, date: new Date().toLocaleString() };
+    const newLead = { id: String(Date.now()), status: 'New', ...leadData, date: new Date().toLocaleString() };
     const updated = [newLead, ...(leads || [])];
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
     saveDocument('leads', newLead.id, newLead);

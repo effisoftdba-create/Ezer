@@ -213,7 +213,7 @@ export default function Navbar({ onOpenDemoModal }) {
                 color: '#000648',
                 border: '1.5px solid #f2b733',
                 boxShadow: '0 4px 14px rgba(242, 183, 51, 0.3)',
-                transition: 'all 0.2s ease',
+                transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#000648';

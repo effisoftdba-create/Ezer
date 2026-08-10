@@ -2,6 +2,7 @@ import React from 'react';
 import { HiAcademicCap, HiPhone, HiMail, HiLocationMarker, HiChatAlt2, HiTrash, HiCheckCircle } from 'react-icons/hi';
 
 const STATUS_COLORS = {
+  New: { bg: '#eff6ff', color: '#1d4ed8', border: '#bfdbfe' },
   Pending: { bg: '#fef3c7', color: '#92400e', border: '#fde68a' },
   Contacted: { bg: '#e0f2fe', color: '#075985', border: '#bae6fd' },
   'In Progress': { bg: '#f3e8ff', color: '#6b21a8', border: '#e9d5ff' },
@@ -41,7 +42,8 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
               </tr>
             ) : (
               filteredLeads.map((lead) => {
-                const statusInfo = STATUS_COLORS[lead.status] || STATUS_COLORS.Pending;
+                const currentSt = lead.status || 'New';
+                const statusInfo = STATUS_COLORS[currentSt] || STATUS_COLORS.New;
                 const isOthers = lead.course === 'Others' || lead.course === 'Other';
                 const isPaid = lead.paymentStatus === 'PAID' || lead.amountPaid || lead.status === 'Enrolled';
                 const comments = lead.comments || [];
@@ -96,24 +98,22 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
                     </td>
 
                     <td style={{ padding: '14px 16px' }}>
-                      <select
-                        aria-label={`Change status for ${lead.name}`}
-                        value={lead.status || 'Pending'}
-                        onChange={(e) => handleStatusChange(lead.id, e.target.value)}
+                      <span
                         style={{
-                          padding: '4px 10px', borderRadius: '50px',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: '4px 12px',
+                          borderRadius: '50px',
                           border: `1px solid ${statusInfo.border}`,
-                          background: statusInfo.bg, color: statusInfo.color,
-                          fontWeight: 800, fontSize: '0.75rem', cursor: 'pointer', outline: 'none'
+                          background: statusInfo.bg,
+                          color: statusInfo.color,
+                          fontWeight: 800,
+                          fontSize: '0.75rem',
+                          whiteSpace: 'nowrap'
                         }}
                       >
-                        <option value="Pending">Pending</option>
-                        <option value="Contacted">Contacted</option>
-                        <option value="In Progress">In Progress</option>
-                        <option value="Enrolled">Enrolled</option>
-                        <option value="Resolved">Resolved</option>
-                        <option value="Closed">Closed</option>
-                      </select>
+                        {currentSt}
+                      </span>
                     </td>
 
                     <td style={{ padding: '14px 16px', textAlign: 'right' }}>

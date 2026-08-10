@@ -13,12 +13,12 @@ export default function LeadDetailsModal({
   newCommentText,
   setNewCommentText
 }) {
-  const [localStatus, setLocalStatus] = useState(selectedLead ? selectedLead.status : 'Pending');
+  const [localStatus, setLocalStatus] = useState(selectedLead ? (selectedLead.status || 'New') : 'New');
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
     if (selectedLead) {
-      setLocalStatus(selectedLead.status || 'Pending');
+      setLocalStatus(selectedLead.status || 'New');
       setIsSaved(false);
     }
   }, [selectedLead]);
@@ -52,11 +52,9 @@ export default function LeadDetailsModal({
 
   const modalContent = (
     <div
+      role="presentation"
       onClick={(e) => {
         if (e.target === e.currentTarget) setSelectedLeadId(null);
-      }}
-      onKeyDown={(e) => {
-        if (e.key === 'Escape' || e.key === 'Enter') setSelectedLeadId(null);
       }}
       style={{
         position: 'fixed',
@@ -187,6 +185,7 @@ export default function LeadDetailsModal({
                 onChange={(e) => setLocalStatus(e.target.value)}
                 style={{ padding: '8px 12px', borderRadius: '8px', border: '2px solid #000648', fontSize: '0.88rem', fontWeight: 900, marginTop: '4px', width: '100%', background: '#ffffff', color: '#000648' }}
               >
+                <option value="New">New</option>
                 <option value="Pending">Pending</option>
                 <option value="Contacted">Contacted</option>
                 <option value="In Progress">In Progress</option>

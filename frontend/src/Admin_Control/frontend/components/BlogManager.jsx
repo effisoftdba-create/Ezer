@@ -81,6 +81,7 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
 
       {isEditing && ReactDOM.createPortal(
         <div
+          role="presentation"
           onClick={(e) => { if (e.target === e.currentTarget) setIsEditing(false); }}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
@@ -103,6 +104,7 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
               </div>
               <button
                 type="button"
+                aria-label="Close honors editor modal"
                 onClick={() => setIsEditing(false)}
                 style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
@@ -375,6 +377,7 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
       {/* Executive Modal Portal */}
       {editingId && ReactDOM.createPortal(
         <div
+          role="presentation"
           onClick={(e) => { if (e.target === e.currentTarget) setEditingId(null); }}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
@@ -397,6 +400,7 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
               </div>
               <button
                 type="button"
+                aria-label="Close executive board editor modal"
                 onClick={() => setEditingId(null)}
                 style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >

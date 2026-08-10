@@ -242,6 +242,7 @@ export default function HiringPartnersManager() {
           <HiSearch size={16} color="#94a3b8" style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)' }} />
           <input
             type="text"
+            aria-label="Search company by name"
             placeholder="Search company by name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -371,6 +372,7 @@ export default function HiringPartnersManager() {
                 </button>
                 <button
                   type="button"
+                  aria-label={`Delete corporate partner ${partner.name}`}
                   onClick={() => handleDelete(partner.id, partner.name)}
                   style={{
                     padding: '6px 10px', borderRadius: '6px', border: '1px solid #fecaca',
@@ -387,7 +389,7 @@ export default function HiringPartnersManager() {
       </div>
 
       {isModalOpen && ReactDOM.createPortal(
-        <div style={{
+        <div role="presentation" style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
           zIndex: 999999, background: 'rgba(0, 6, 72, 0.8)',
           backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -409,6 +411,7 @@ export default function HiringPartnersManager() {
               </h3>
               <button
                 type="button"
+                aria-label="Close corporate partner modal"
                 onClick={() => setIsModalOpen(false)}
                 style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
               >

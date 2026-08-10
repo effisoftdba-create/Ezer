@@ -114,6 +114,7 @@ export default function SupportCardsManager() {
       {/* Editor Modal Portal */}
       {isEditing && ReactDOM.createPortal(
         <div
+          role="presentation"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsEditing(false);
           }}

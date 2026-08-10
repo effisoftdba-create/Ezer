@@ -16,6 +16,7 @@ export default function TestimonialFormModal({
 
   const modalContent = (
     <div
+      role="presentation"
       onClick={(e) => {
         if (e.target === e.currentTarget) onCancel();
       }}

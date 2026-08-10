@@ -39,7 +39,9 @@ export default function LeadsManager() {
     return leadsList.filter((lead) => {
       let matchesStatus = true;
 
-      if (filterStatus === 'Paid Students (₹9)') {
+      if (filterStatus === 'New') {
+        matchesStatus = !lead.status || lead.status === 'New';
+      } else if (filterStatus === 'Paid Students (₹9)') {
         matchesStatus = lead.paymentStatus === 'PAID' || lead.amountPaid === '₹9' || lead.status === 'Enrolled';
       } else if (filterStatus !== 'All') {
         matchesStatus = lead.status === filterStatus;
@@ -167,7 +169,7 @@ export default function LeadsManager() {
       {/* Search & Status Filter Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '16px', flexWrap: 'wrap', marginBottom: '20px' }}>
         <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-          {['All', 'Paid Students (₹9)', 'Enrolled', 'Pending', 'Contacted', 'In Progress', 'Resolved', 'Closed'].map((st) => (
+          {['All', 'New', 'Paid Students (₹9)', 'Enrolled', 'Pending', 'Contacted', 'In Progress', 'Resolved', 'Closed'].map((st) => (
             <button
               key={st}
               type="button"

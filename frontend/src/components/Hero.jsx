@@ -160,9 +160,10 @@ export default function Hero({ onOpenDemoModal }) {
               </AnimatePresence>
 
               {/* Dual Matching Action Buttons */}
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '24px' }}>
+              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '24px' }} className="hero-action-buttons">
                 <Link
                   to="/courses"
+                  className="hero-btn-explore"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -170,6 +171,9 @@ export default function Hero({ onOpenDemoModal }) {
                     gap: '8px',
                     width: '220px',
                     height: '52px',
+                    minHeight: '52px',
+                    maxHeight: '52px',
+                    boxSizing: 'border-box',
                     padding: '0 24px',
                     background: '#000638',
                     color: '#ffffff',
@@ -178,17 +182,20 @@ export default function Hero({ onOpenDemoModal }) {
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
                     textDecoration: 'none',
-                    borderRadius: '8px',
+                    border: '1.5px solid #000638',
+                    borderRadius: '10px',
                     boxShadow: '0 4px 14px rgba(0,6,56,0.25)',
-                    transition: 'background-color 0.25s ease, color 0.25s ease, transform 0.25s ease',
+                    transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = '#f2b733';
                     e.currentTarget.style.color = '#000638';
+                    e.currentTarget.style.borderColor = '#f2b733';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.background = '#000638';
                     e.currentTarget.style.color = '#ffffff';
+                    e.currentTarget.style.borderColor = '#000638';
                   }}
                 >
                   <span>Explore Courses</span>
@@ -198,6 +205,7 @@ export default function Hero({ onOpenDemoModal }) {
                 <button
                   type="button"
                   onClick={onOpenDemoModal}
+                  className="hero-btn-demo"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -205,6 +213,9 @@ export default function Hero({ onOpenDemoModal }) {
                     gap: '8px',
                     width: '220px',
                     height: '52px',
+                    minHeight: '52px',
+                    maxHeight: '52px',
+                    boxSizing: 'border-box',
                     padding: '0 24px',
                     background: '#f2b733',
                     color: '#000648',
@@ -214,9 +225,9 @@ export default function Hero({ onOpenDemoModal }) {
                     textTransform: 'uppercase',
                     cursor: 'pointer',
                     border: '1.5px solid #f2b733',
-                    borderRadius: '8px',
+                    borderRadius: '10px',
                     boxShadow: '0 4px 14px rgba(242, 183, 51, 0.35)',
-                    transition: 'all 0.25s ease',
+                    transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease',
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = '#000648';

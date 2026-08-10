@@ -221,7 +221,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div style={{
+        <div className="footer-bottom-bar" style={{
           paddingTop: '20px',
           borderTop: '1px solid rgba(242,183,51,0.2)',
           display: 'flex',
@@ -233,18 +233,18 @@ export default function Footer() {
           color: '#cbd5e1',
           width: '100%'
         }}>
-          {/* Left Side Corner */}
-          <div style={{ color: '#cbd5e1', textAlign: 'left', flex: '1 1 280px' }}>
+          {/* Left Side Corner / Mobile Centered */}
+          <div className="footer-copyright" style={{ color: '#cbd5e1', flex: '1 1 280px' }}>
             &copy; 2026 EZER Learning Solutions. All rights reserved.
           </div>
 
-          {/* Center Area */}
-          <div style={{ fontSize: '0.75rem', color: '#cbd5e1', textAlign: 'center', flex: '1 1 200px' }}>
-            Developed by <a href="https://effisoft.co/" target="_blank" rel="noopener noreferrer" style={{ color: '#f2b733', fontWeight: 700, textDecoration: 'underline' }}>Effisoft Technologies</a>
+          {/* Center Area / Small Normal White Effisoft Credit */}
+          <div className="footer-dev-credit" style={{ fontSize: '0.68rem', color: '#cbd5e1', fontWeight: 400, flex: '1 1 200px' }}>
+            Developed by <a href="https://effisoft.co/" target="_blank" rel="noopener noreferrer" style={{ color: '#ffffff', fontWeight: 400, fontSize: '0.68rem', textDecoration: 'underline' }}>Effisoft Technologies</a>
           </div>
 
-          {/* Right Side Corner */}
-          <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'flex-end', flex: '1 1 300px' }}>
+          {/* Right Side Corner / Policy Links */}
+          <div className="footer-policy-links" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', flex: '1 1 300px' }}>
             <Link to="/privacy-policy" style={{ color: '#f2b733', textDecoration: 'none', fontWeight: 600 }}
               onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
               onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}

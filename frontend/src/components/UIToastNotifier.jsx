@@ -59,6 +59,7 @@ export default function UIToastNotifier() {
 
   return (
     <div
+      role="presentation"
       style={{
         position: 'fixed',
         inset: 0,

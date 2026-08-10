@@ -118,6 +118,7 @@ export default function FaqManager() {
       {/* Editor Modal Portal */}
       {isEditingItem && ReactDOM.createPortal(
         <div
+          role="presentation"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsEditingItem(false);
           }}
