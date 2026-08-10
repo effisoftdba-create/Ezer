@@ -266,7 +266,7 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
     });
   };
 
-  const coverBlogId = (blogs && (blogs.find(b => b.featured) || blogs[0]))?.id;
+  const coverBlogId = (blogs && Array.isArray(blogs) && (blogs.find(b => b && b.featured) || blogs[0]))?.id;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
