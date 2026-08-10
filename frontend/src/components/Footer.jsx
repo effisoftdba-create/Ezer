@@ -76,9 +76,9 @@ export default function Footer() {
 
           {/* Courses */}
           <div>
-            <h4 style={{ color: '#f2b733', fontSize: '0.85rem', fontWeight: 800, marginBottom: '14px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <h3 style={{ color: '#f2b733', fontSize: '0.85rem', fontWeight: 800, marginBottom: '14px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Live Programs
-            </h4>
+            </h3>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.8rem' }}>
               <li>
                 <Link to="/courses/ai-machine-learning" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
@@ -133,9 +133,9 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h4 style={{ color: '#f2b733', fontSize: '0.85rem', fontWeight: 800, marginBottom: '14px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <h3 style={{ color: '#f2b733', fontSize: '0.85rem', fontWeight: 800, marginBottom: '14px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Navigation
-            </h4>
+            </h3>
             <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.8rem' }}>
               <li>
                 <Link to="/about" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
@@ -190,9 +190,9 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 style={{ color: '#f2b733', fontSize: '0.85rem', fontWeight: 800, marginBottom: '14px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <h3 style={{ color: '#f2b733', fontSize: '0.85rem', fontWeight: 800, marginBottom: '14px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Contact
-            </h4>
+            </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.8rem', color: '#cbd5e1' }}>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                 <HiLocationMarker style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} size={16} />
