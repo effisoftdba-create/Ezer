@@ -379,11 +379,11 @@ export const defaultAchievements = [
 export const defaultBlogs = [
   {
     id: 'blog-1',
-    title: 'How Non-IT Professionals Are Transitioning Into AI & Software Development in 2025',
+    title: 'How Non-IT Professionals Are Transitioning Into AI & Software Development in 2026',
     slug: 'how-non-it-professionals-transition-into-ai',
     category: 'Career Guide',
     author: 'EZER Academic Board',
-    date: 'August 2, 2025',
+    date: 'August 2, 2026',
     summary: 'Discover the exact step-by-step roadmap used by non-tech switchers to master Full Stack AI engineering and land high-growth tech roles.',
     image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800',
     content: 'Transitioning into technology does not require a Computer Science degree. With live online instructor-led training in native languages, practical production projects, and 12-month placement assistance, non-IT candidates are closing skill gaps faster than ever.',
@@ -399,7 +399,31 @@ export const defaultBlogs = [
     summary: 'EZER wins national recognition for native language IT education, outcome-driven mentorship, and outstanding placement metrics.',
     image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
     content: 'We are thrilled to announce that EZER Learning Solutions has been awarded the EdTech Excellence & Innovation Award for 2025. This achievement reflects our commitment to democratizing tech education.',
-    featured: true
+    featured: false
+  },
+  {
+    id: 'blog-3',
+    title: 'Native Language Learning: Breaking Barriers for Non-IT Career Aspirants',
+    slug: 'native-language-learning-breaking-barriers',
+    category: 'Education Impact',
+    author: 'EZER Research Dept',
+    date: 'August 5, 2025',
+    summary: 'How learning complex software concepts in Tamil, Hindi, and English accelerates comprehension and boosts interview confidence.',
+    image: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800',
+    content: 'Comprehending complex data structures, cloud architectures, and AI API integrations is significantly faster when explained in native languages first alongside industry-standard English code syntax.',
+    featured: false
+  },
+  {
+    id: 'blog-4',
+    title: 'The Rise of AI-Assisted Full Stack Developers in Top Tech Corporates',
+    slug: 'rise-of-ai-assisted-full-stack-developers',
+    category: 'Industry Trends',
+    author: 'EZER Tech Desk',
+    date: 'August 8, 2025',
+    summary: 'Why modern engineering teams look for developers who leverage AI tools to build scalable production apps in record time.',
+    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800',
+    content: 'Generative AI and automated coding assistants have shifted software engineering requirements towards developer productivity, architectural design, and prompt-driven full-stack development.',
+    featured: false
   }
 ];
 
