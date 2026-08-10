@@ -25,6 +25,15 @@ const handleBlur = (e) => {
   e.target.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.03)';
 };
 
+const DEFAULT_COURSE_LIST = [
+  'AI/ML',
+  'Full stack development with AI',
+  'Data Analyst',
+  'Cloud DevOps with AI',
+  'Cyber Security',
+  'Spoken English (International standard)'
+];
+
 export default function PopupFormFields({
   formData,
   handleChange,
@@ -43,12 +52,7 @@ export default function PopupFormFields({
     countryLabel: 'Country',
     courseLabel: 'Target Course*',
     termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.',
-    coursesList: [
-      'Cloud DevOps with AI',
-      'Software Testing – Playwright',
-      'AI & Machine Learning',
-      'IT Infrastructure & System Administration'
-    ],
+    coursesList: DEFAULT_COURSE_LIST,
     countriesList: [
       'India',
       'United States',
@@ -58,19 +62,14 @@ export default function PopupFormFields({
     ]
   };
 
-  const dynamicCatalogTitles = Array.isArray(courses) && courses.length > 0
-    ? courses.map((c) => c.title).filter(Boolean)
+  const dynamicCatalogTitles = Array.isArray(courses)
+    ? courses.flatMap((c) => (c && c.title ? [c.title] : []))
     : [];
 
-  const baseCourses = (config.coursesList && config.coursesList.length > 0) ? config.coursesList : [
-    'Cloud DevOps with AI',
-    'Software Testing – Playwright',
-    'AI & Machine Learning',
-    'IT Infrastructure & System Administration'
-  ];
+  const baseCourses = (config.coursesList && config.coursesList.length > 0) ? config.coursesList : DEFAULT_COURSE_LIST;
 
-  // Combine live catalog courses with base fallback list to ensure all new courses automatically show in dropdown
-  const coursesArray = Array.from(new Set([...dynamicCatalogTitles, ...baseCourses]));
+  // Combine live catalog courses with config and default 6 options so all new courses automatically show in popup
+  const coursesArray = Array.from(new Set([...dynamicCatalogTitles, ...baseCourses, ...DEFAULT_COURSE_LIST]));
 
   const countriesArray = (config.countriesList && config.countriesList.length > 0) ? config.countriesList : [
     'India',

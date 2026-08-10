@@ -1,18 +1,33 @@
 import React, { useState } from 'react';
 import { HiPlus, HiTrash, HiPencil, HiCheck, HiOutlineDocumentText } from 'react-icons/hi';
+import { useSiteData } from '../context/SiteContext';
+
+const DEFAULT_COURSE_LIST = [
+  'AI/ML',
+  'Full stack development with AI',
+  'Data Analyst',
+  'Cloud DevOps with AI',
+  'Cyber Security',
+  'Spoken English (International standard)'
+];
 
 export default function PopupFormFieldsManager({ formData, setFormData }) {
+  const { courses: catalogCourses } = useSiteData() || {};
   const [newCourseInput, setNewCourseInput] = useState('');
   const [newCountryInput, setNewCountryInput] = useState('');
   const [editingCourseIdx, setEditingCourseIdx] = useState(null);
   const [editingCourseValue, setEditingCourseValue] = useState('');
 
-  const courses = formData.coursesList || [
-    'Cloud DevOps with AI',
-    'Software Testing – Playwright',
-    'AI & Machine Learning',
-    'IT Infrastructure & System Administration'
-  ];
+  const catalogCourseTitles = Array.isArray(catalogCourses)
+    ? catalogCourses.flatMap((c) => (c && c.title ? [c.title] : []))
+    : [];
+
+  // Merge custom courses, newly created catalog courses, and default 6 options into a unique list
+  const courses = Array.from(new Set([
+    ...(formData.coursesList || []),
+    ...catalogCourseTitles,
+    ...DEFAULT_COURSE_LIST
+  ]));
 
   const countries = formData.countriesList || [
     'India',

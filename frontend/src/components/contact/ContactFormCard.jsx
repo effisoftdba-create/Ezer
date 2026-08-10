@@ -2,21 +2,23 @@ import React from 'react';
 import { HiCheckCircle, HiPaperAirplane } from 'react-icons/hi';
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
+const BASE_COURSES = [
+  'AI/ML',
+  'Full stack development with AI',
+  'Data Analyst',
+  'Cloud DevOps with AI',
+  'Cyber Security',
+  'Spoken English (International standard)'
+];
+
 export default function ContactFormCard({ formData, setFormData, submitted, handleSubmit }) {
   const { courses } = useSiteData() || {};
 
-  const baseCourses = [
-    'Cloud DevOps with AI',
-    'Software Testing – Playwright',
-    'AI & Machine Learning',
-    'IT Infrastructure & System Administration'
-  ];
-
-  const dynamicTitles = Array.isArray(courses) && courses.length > 0
-    ? courses.map((c) => c.title).filter(Boolean)
+  const dynamicTitles = Array.isArray(courses)
+    ? courses.flatMap((c) => (c && c.title ? [c.title] : []))
     : [];
 
-  const catalogOptions = Array.from(new Set([...dynamicTitles, ...baseCourses]));
+  const catalogOptions = Array.from(new Set([...dynamicTitles, ...BASE_COURSES]));
   return (
     <div
       style={{

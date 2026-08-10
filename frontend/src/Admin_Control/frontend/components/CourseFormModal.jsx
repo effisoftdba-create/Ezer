@@ -11,6 +11,13 @@ const TABS = [
   { id: 'audience', label: 'Who is this For?', icon: <HiUserGroup size={16} /> },
 ];
 
+const slugify = (text) => (text || '')
+  .toLowerCase()
+  .trim()
+  .replace(/[^a-z0-9\s-]/g, '')
+  .replace(/[\s_]+/g, '-')
+  .replace(/^-+|-+$/g, '');
+
 export default function CourseFormModal({
   isEditing,
   editingId,
@@ -21,13 +28,6 @@ export default function CourseFormModal({
   onOpenImagePicker
 }) {
   const [activeTab, setActiveTab] = useState('basic');
-
-  const slugify = (text) => (text || '')
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/[\s_]+/g, '-')
-    .replace(/^-+|-+$/g, '');
 
   const handleTitleChange = (newTitle) => {
     const currentSlug = formData.slug || '';

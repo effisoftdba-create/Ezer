@@ -186,17 +186,15 @@ export default function ImagePickerPreviewBox({
         {/* DESKTOP VIEW CONTAINER */}
         {(devicePreviewMode === 'desktop' || devicePreviewMode === 'dual') && (
           <div 
-            role="button"
-            tabIndex={0}
             onClick={() => setActiveTarget && setActiveTarget('desktop')}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTarget && setActiveTarget('desktop'); }}
             style={{ 
               background: '#ffffff', 
               border: activeTarget === 'desktop' ? '2px solid #000648' : '1.5px solid #cbd5e1', 
               borderRadius: '12px', 
               padding: '14px',
               boxShadow: activeTarget === 'desktop' ? '0 4px 14px rgba(0,6,72,0.1)' : 'none',
-              outline: 'none'
+              outline: 'none',
+              cursor: 'pointer'
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
@@ -255,8 +253,8 @@ export default function ImagePickerPreviewBox({
               {/* Rule of Thirds Grid Overlay */}
               {showGridLines && (
                 <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', border: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '1px dashed rgba(0,0,0,0.2)' : '1px dashed rgba(255,255,255,0.25)', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gridTemplateRows: '1fr 1fr 1fr' }}>
-                  {[...Array(9)].map((_, i) => (
-                    <div key={i} style={{ border: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '0.5px dashed rgba(0,0,0,0.15)' : '0.5px dashed rgba(255,255,255,0.2)' }} />
+                  {['cell-0','cell-1','cell-2','cell-3','cell-4','cell-5','cell-6','cell-7','cell-8'].map((cellId) => (
+                    <div key={cellId} style={{ border: (previewDims.ratio === '180/48' || previewDims.ratio.includes('180')) ? '0.5px dashed rgba(0,0,0,0.15)' : '0.5px dashed rgba(255,255,255,0.2)' }} />
                   ))}
                 </div>
               )}
@@ -275,10 +273,7 @@ export default function ImagePickerPreviewBox({
         {/* MOBILE PHONE FRAME SCREEN MOCKUP */}
         {(devicePreviewMode === 'mobile' || devicePreviewMode === 'dual') && (
           <div 
-            role="button"
-            tabIndex={0}
             onClick={() => setActiveTarget && setActiveTarget('mobile')}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTarget && setActiveTarget('mobile'); }}
             style={{ 
               background: '#ffffff', 
               border: activeTarget === 'mobile' ? '2px solid #000648' : '1.5px solid #cbd5e1', 
@@ -288,7 +283,8 @@ export default function ImagePickerPreviewBox({
               flexDirection: 'column', 
               alignItems: 'center',
               boxShadow: activeTarget === 'mobile' ? '0 4px 14px rgba(0,6,72,0.1)' : 'none',
-              outline: 'none'
+              outline: 'none',
+              cursor: 'pointer'
             }}
           >
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>

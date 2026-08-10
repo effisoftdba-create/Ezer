@@ -59,8 +59,6 @@ export default function UIToastNotifier() {
 
   return (
     <div
-      role="button"
-      tabIndex={0}
       style={{
         position: 'fixed',
         inset: 0,
@@ -75,11 +73,6 @@ export default function UIToastNotifier() {
         animation: 'toastBackdropFade 0.25s ease-out'
       }}
       onClick={() => setToasts((prev) => prev.filter((item) => item.id !== currentToast.id))}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === 'Escape') {
-          setToasts((prev) => prev.filter((item) => item.id !== currentToast.id));
-        }
-      }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
