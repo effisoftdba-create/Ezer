@@ -68,7 +68,7 @@ export default function Footer() {
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  <Icon />
+                  {Icon ? <Icon /> : null}
                 </a>
               ))}
             </div>

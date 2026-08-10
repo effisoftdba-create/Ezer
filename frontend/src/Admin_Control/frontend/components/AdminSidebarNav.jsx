@@ -92,7 +92,7 @@ export default function AdminSidebarNav({ tabs, activeTab, setActiveTab }) {
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <Icon size={18} style={{ color: isActive ? '#f2b733' : '#64748b' }} />
+                      {Icon ? <Icon size={18} style={{ color: isActive ? '#f2b733' : '#64748b' }} /> : null}
                       <span>{tab.label}</span>
                     </div>
 
