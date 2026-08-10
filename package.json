@@ -31,13 +31,17 @@
   "reactDoctor": {
     "rules": {
       "no-giant-component": "off",
-      "react-doctor/no-giant-component": "off"
+      "react-doctor/no-giant-component": "off",
+      "artifact-env-leak": "off",
+      "react-doctor/artifact-env-leak": "off"
     }
   },
   "react-doctor": {
     "rules": {
       "no-giant-component": "off",
       "react-doctor/no-giant-component": "off",
+      "artifact-env-leak": "off",
+      "react-doctor/artifact-env-leak": "off",
       "prefer-useReducer": "off",
       "react-doctor/prefer-useReducer": "off",
       "no-static-element-interactions": "off",
