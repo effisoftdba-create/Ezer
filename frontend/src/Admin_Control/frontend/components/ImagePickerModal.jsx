@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import ReactDOM from 'react-dom';
 import { HiUpload } from 'react-icons/hi';
-import ImagePickerGalleryGrid from './ImagePickerGalleryGrid';
-import ImagePickerControls from './ImagePickerControls';
-import ImagePickerHeaderBanner from './ImagePickerHeaderBanner';
 import ImagePickerPreviewBox from './ImagePickerPreviewBox';
 import { removeImageBackground } from '../../../utils/backgroundRemover';
 
@@ -100,7 +97,7 @@ export default function ImagePickerModal({
 }) {
   const [selectedUrlOverride, setSelectedUrlOverride] = useState(null);
   const [customUrl, setCustomUrl] = useState('');
-  const [originalUncutUrl, setOriginalUncutUrl] = useState(currentImage || '');
+  const originalUncutUrlRef = useRef(currentImage || '');
   const [fitModeOverride, setFitModeOverride] = useState(null);
 
   // Independent PC (desktop) and Mobile alignment state
@@ -115,74 +112,11 @@ export default function ImagePickerModal({
   const [isDragOver, setIsDragOver] = useState(false);
   const dragStartRef = useRef({ x: 0, y: 0 });
 
+  // Track open state in effect
+  const prevIsOpenRef = useRef(false);
   useEffect(() => {
-    if (isOpen) {
-      setSelectedUrlOverride(null);
-      setCustomUrl('');
-      if (currentImage) {
-        setOriginalUncutUrl(currentImage);
-      }
-    }
-  }, [isOpen, currentImage]);
-
-  const [uploadedImages, setUploadedImages] = useState(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_UPLOADED_IMAGES_KEY);
-      if (stored) return JSON.parse(stored);
-    } catch (e) {}
-    return [];
-  });
-
-  useEffect(() => {
-    try {
-      const serialized = JSON.stringify(uploadedImages);
-      if (serialized.length < 3 * 1024 * 1024) {
-        localStorage.setItem(STORAGE_UPLOADED_IMAGES_KEY, serialized);
-      }
-    } catch (e) {}
-  }, [uploadedImages]);
-
-  // Parse initial position and zoom level on mount
-  useEffect(() => {
-    if (isOpen) {
-      const initZoom = (currentZoom && currentZoom > 0) ? parseFloat(currentZoom) : 1;
-      const initMobZoom = (currentMobileZoom && currentMobileZoom > 0) ? parseFloat(currentMobileZoom) : initZoom;
-      setDesktopZoom(initZoom);
-      setMobileZoom(initMobZoom);
-
-      if (currentPosition) {
-        let initialOffset = { x: 0, y: 0 };
-        if (currentPosition.includes('top')) initialOffset = { x: 0, y: 35 };
-        else if (currentPosition.includes('bottom')) initialOffset = { x: 0, y: -35 };
-        else if (currentPosition.includes('left')) initialOffset = { x: 35, y: 0 };
-        else if (currentPosition.includes('right')) initialOffset = { x: -35, y: 0 };
-        else if (currentPosition.includes('%')) {
-          const parts = currentPosition.split(' ');
-          const xPct = parseFloat(parts[0]) || 50;
-          const yPct = parseFloat(parts[1]) || 50;
-          initialOffset = { x: Math.round(50 - xPct), y: Math.round(50 - yPct) };
-        }
-        setDesktopDragOffset(initialOffset);
-        setMobileDragOffset(initialOffset);
-      }
-
-      const mobPos = currentMobilePosition || currentPosition;
-      if (mobPos) {
-        let mobOffset = { x: 0, y: 0 };
-        if (mobPos.includes('top')) mobOffset = { x: 0, y: 35 };
-        else if (mobPos.includes('bottom')) mobOffset = { x: 0, y: -35 };
-        else if (mobPos.includes('left')) mobOffset = { x: 35, y: 0 };
-        else if (mobPos.includes('right')) mobOffset = { x: -35, y: 0 };
-        else if (mobPos.includes('%')) {
-          const parts = mobPos.split(' ');
-          const xPct = parseFloat(parts[0]) || 50;
-          const yPct = parseFloat(parts[1]) || 50;
-          mobOffset = { x: Math.round(50 - xPct), y: Math.round(50 - yPct) };
-        }
-        setMobileDragOffset(mobOffset);
-      }
-    }
-  }, [currentPosition, currentZoom, currentMobilePosition, currentMobileZoom, isOpen]);
+    prevIsOpenRef.current = isOpen;
+  }, [isOpen]);
 
   // Dynamic active target getters and setters
   const activeZoom = activeTarget === 'mobile' ? mobileZoom : desktopZoom;
@@ -288,9 +222,9 @@ export default function ImagePickerModal({
   };
 
   const handleUndoBackgroundCut = () => {
-    if (originalUncutUrl) {
-      setSelectedUrlOverride(originalUncutUrl);
-      setCustomUrl(originalUncutUrl);
+    if (originalUncutUrlRef.current) {
+      setSelectedUrlOverride(originalUncutUrlRef.current);
+      setCustomUrl(originalUncutUrlRef.current);
     }
   };
 
@@ -308,7 +242,7 @@ export default function ImagePickerModal({
     reader.onloadend = async () => {
       const rawDataUri = reader.result;
       const compressedUri = await compressImageForWeb(rawDataUri, 600, 0.6);
-      setOriginalUncutUrl(compressedUri);
+      originalUncutUrlRef.current = compressedUri;
 
       let finalUri = compressedUri;
       if (previewDims.ratio === '180/48') {
@@ -374,12 +308,24 @@ export default function ImagePickerModal({
         margin: 0
       }}>
         {/* HEADER BANNER */}
-        <ImagePickerHeaderBanner
-          targetArea={targetArea}
-          aspectRatio={aspectRatio}
-          recommendedDimensions={recommendedDimensions}
-          onClose={onClose}
-        />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1.5px solid #cbd5e1', paddingBottom: '12px' }}>
+          <div>
+            <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 900, color: '#000648' }}>
+              Select &amp; Focus Image for {targetArea}
+            </h3>
+            <div style={{ fontSize: '0.78rem', color: '#64748b', marginTop: '2px' }}>
+              Aspect Ratio: <strong>{aspectRatio}</strong> | Recommended: <strong>{recommendedDimensions}</strong>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close modal"
+            style={{ background: '#e2e8f0', border: 'none', color: '#334155', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', fontWeight: 800 }}
+          >
+            ✕
+          </button>
+        </div>
 
         {/* TOP IMAGE CHOOSER / DRAG & DROP & URL INPUT (REORGANIZED TO TOP) */}
         <div 
@@ -476,21 +422,7 @@ export default function ImagePickerModal({
           handleMouseDown={handlePointerDown}
         />
 
-        {/* CONTROLS AREA */}
-        <ImagePickerControls
-          POSITION_PRESETS={POSITION_PRESETS}
-          activeTarget={activeTarget}
-          setActiveTarget={setActiveTarget}
-          dragOffset={activeOffset}
-          setDragOffset={setActiveOffset}
-          zoomScale={activeZoom}
-          setZoomScale={setActiveZoom}
-          fitMode={fitMode}
-          setFitMode={setFitModeOverride}
-          handlePresetPosition={handlePresetPosition}
-          onAutoRemoveBackground={handleAutoRemoveBackground}
-          onUndoBackground={originalUncutUrl && originalUncutUrl !== activeSelectedUrl ? handleUndoBackgroundCut : null}
-        />
+
 
         {/* BOTTOM ACTION BUTTON BAR */}
         <div style={{
@@ -536,15 +468,41 @@ export default function ImagePickerModal({
         </div>
 
         {/* PRESET GALLERY GRID (SHOWN AT BOTTOM) */}
-        <ImagePickerGalleryGrid
-          combinedGalleryImages={combinedGalleryImages}
-          uploadedImages={uploadedImages}
-          selectedUrl={selectedUrl}
-          activeSelectedUrl={activeSelectedUrl}
-          handleGallerySelect={handleGallerySelect}
-          handleDeleteUploadedImage={handleDeleteUploadedImage}
-          aspectRatio={aspectRatio}
-        />
+        <div style={{ marginTop: '16px' }}>
+          <h4 style={{ margin: '0 0 8px 0', fontSize: '0.9rem', color: '#000648', fontWeight: 800 }}>
+            Choose from Gallery Presets &amp; Uploads ({combinedGalleryImages.length})
+          </h4>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))', gap: '8px', maxHeight: '180px', overflowY: 'auto', padding: '4px' }}>
+            {combinedGalleryImages.map((img, galleryPos) => {
+              const isSelected = activeSelectedUrl === img.url;
+              return (
+                <button
+                  type="button"
+                  key={img.url ? `gal-${img.url}` : `gal-pos-${galleryPos}`}
+                  aria-label={`Select gallery image ${img.label || galleryPos + 1}`}
+                  onClick={() => handleGallerySelect(img.url)}
+                  style={{
+                    position: 'relative',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    border: isSelected ? '2.5px solid #f2b733' : '1.5px solid #cbd5e1',
+                    cursor: 'pointer',
+                    aspectRatio: '4/3',
+                    background: '#f1f5f9',
+                    padding: 0
+                  }}
+                >
+                  <img src={img.url} alt={img.label || 'preset'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  {isSelected && (
+                    <div style={{ position: 'absolute', top: 2, right: 2, background: '#f2b733', color: '#000648', borderRadius: '50%', width: 16, height: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 900 }}>
+                      ✓
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -18,7 +18,3 @@ export const generalRateLimiter = rateLimit({
   legacyHeaders: false
 });
 
-export default {
-  authRateLimiter,
-  generalRateLimiter
-};

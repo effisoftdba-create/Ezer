@@ -99,7 +99,3 @@ export function verifyPayment(req, res) {
   }
 }
 
-export default {
-  createCheckoutOrder,
-  verifyPayment
-};

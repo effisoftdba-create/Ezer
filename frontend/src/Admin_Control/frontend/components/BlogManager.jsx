@@ -11,23 +11,40 @@ import ArticleFormModal from './ArticleFormModal';
 function AchievementSection({ achievements, addAchievement, updateAchievement, deleteAchievement, onOpenPicker, externalImage }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editingAchId, setEditingAchId] = useState(null);
-  const [achTitle, setAchTitle] = useState('');
-  const [achIssuer, setAchIssuer] = useState('');
-  const [achYear, setAchYear] = useState(() => new Date().getFullYear().toString());
-  const [achCategory, setAchCategory] = useState('Excellence Award');
-  const [achImage, setAchImage] = useState('https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800');
-  const [achDesc, setAchDesc] = useState('');
+  const [achForm, setAchForm] = useState({
+    title: '',
+    issuer: '',
+    year: new Date().getFullYear().toString(),
+    category: 'Excellence Award',
+    image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
+    desc: ''
+  });
+
+  const achTitle = achForm.title;
+  const setAchTitle = (v) => setAchForm((prev) => ({ ...prev, title: v }));
+  const achIssuer = achForm.issuer;
+  const setAchIssuer = (v) => setAchForm((prev) => ({ ...prev, issuer: v }));
+  const achYear = achForm.year;
+  const setAchYear = (v) => setAchForm((prev) => ({ ...prev, year: v }));
+  const achCategory = achForm.category;
+  const setAchCategory = (v) => setAchForm((prev) => ({ ...prev, category: v }));
+  const achImage = achForm.image;
+  const setAchImage = (v) => setAchForm((prev) => ({ ...prev, image: v }));
+  const achDesc = achForm.desc;
+  const setAchDesc = (v) => setAchForm((prev) => ({ ...prev, desc: v }));
 
   const currentImage = externalImage || achImage;
 
   const handleOpenAdd = () => {
     setEditingAchId(null);
-    setAchTitle('');
-    setAchIssuer('');
-    setAchYear(new Date().getFullYear().toString());
-    setAchCategory('Excellence Award');
-    setAchImage('https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800');
-    setAchDesc('');
+    setAchForm({
+      title: '',
+      issuer: '',
+      year: new Date().getFullYear().toString(),
+      category: 'Excellence Award',
+      image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
+      desc: ''
+    });
     setIsEditing(true);
   };
 

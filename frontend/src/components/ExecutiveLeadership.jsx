@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import * as m from 'framer-motion';
+const motion = m;
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 

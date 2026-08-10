@@ -5,6 +5,7 @@ import adminRoutes from './routes/adminRoutes.js';
 import checkoutRoutes from './routes/checkoutRoutes.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { initializeAdminUser } from '../database/models/adminModel.js';
+import db from '../database/index.js';
 
 dotenv.config();
 

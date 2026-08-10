@@ -13,15 +13,17 @@ export default function LeadDetailsModal({
   newCommentText,
   setNewCommentText
 }) {
-  const [localStatus, setLocalStatus] = useState(selectedLead ? (selectedLead.status || 'New') : 'New');
+  const initialStatus = selectedLead ? (selectedLead.status || 'New') : 'New';
+  const [localStatus, setLocalStatus] = useState(initialStatus);
   const [isSaved, setIsSaved] = useState(false);
+  const [prevLeadId, setPrevLeadId] = useState(selectedLead ? selectedLead.id : null);
 
-  useEffect(() => {
-    if (selectedLead) {
-      setLocalStatus(selectedLead.status || 'New');
-      setIsSaved(false);
-    }
-  }, [selectedLead]);
+  const currentLeadId = selectedLead ? selectedLead.id : null;
+  if (currentLeadId !== prevLeadId) {
+    setPrevLeadId(currentLeadId);
+    setLocalStatus(initialStatus);
+    setIsSaved(false);
+  }
 
   if (!selectedLead) return null;
 

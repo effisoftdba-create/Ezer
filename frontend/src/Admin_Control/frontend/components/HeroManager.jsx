@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
+import ImagePickerPreviewBox from './ImagePickerPreviewBox';
 import { resolveImageSrc } from '../../../utils/imageUtils';
 import { HiPlus, HiTrash, HiPencil, HiPhotograph, HiCheck, HiX } from 'react-icons/hi';
 
@@ -244,8 +245,8 @@ export default function HeroManager() {
       )}
 
       <div style={{ display: 'grid', gap: '16px' }}>
-        {heroSlides.map((slide, idx) => {
-          const keyId = slide.id || slide.headline || `slide-${idx}`;
+        {heroSlides.map((slide, slidePos) => {
+          const keyId = slide.id ? `slide-id-${slide.id}` : (slide.headline ? `slide-hl-${slide.headline}` : `slide-pos-${slidePos}`);
           return (
             <div
               key={keyId}

@@ -80,13 +80,13 @@ export default function CourseTabProjects({ formData, setFormData }) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '20px' }}>
-        {projects.map((proj, idx) => {
+        {projects.map((proj, projPos) => {
           const keyIdentifier = proj.origIdx !== undefined ? proj.origIdx : proj.id;
           const toolsStr = Array.isArray(proj.tools) ? proj.tools.join(', ') : (proj.tools || '');
 
           return (
             <div
-              key={proj.id || idx}
+              key={proj.id ? `proj-id-${proj.id}` : (proj.title ? `proj-t-${proj.title}` : `proj-p-${projPos}`)}
               style={{
                 background: '#f8fafc',
                 border: '1.5px solid #cbd5e1',

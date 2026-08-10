@@ -34,6 +34,3 @@ export async function adminLogin(req, res) {
   }
 }
 
-export default {
-  adminLogin
-};

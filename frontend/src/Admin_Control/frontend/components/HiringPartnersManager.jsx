@@ -494,7 +494,11 @@ export default function HiringPartnersManager() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '6px 18px', overflow: 'hidden'
                 }}>
                   {getCompanySvg(formData.name, formData.image) ? (
-                    <div dangerouslySetInnerHTML={{ __html: getCompanySvg(formData.name, formData.image) }} />
+                    <img
+                      src={`data:image/svg+xml;utf8,${encodeURIComponent(getCompanySvg(formData.name, formData.image))}`}
+                      alt="Logo SVG preview"
+                      style={{ maxHeight: '28px', maxWidth: '140px', objectFit: 'contain' }}
+                    />
                   ) : (
                     <img
                       src={resolveImageSrc(formData.image || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe')}

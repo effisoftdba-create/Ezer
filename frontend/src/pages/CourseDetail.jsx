@@ -1,7 +1,8 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { HiChevronLeft, HiChevronRight, HiCheckCircle, HiSparkles, HiAcademicCap } from 'react-icons/hi';
-import { motion } from 'framer-motion';
+import * as m from 'framer-motion';
+const motion = m;
 import { getCourseBySlug } from '../data/courses';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { handleImgError, resolveImageSrc } from '../utils/imageUtils';
@@ -215,7 +216,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
 
           {/* Visual Module Cards Grid with Cover Photos & Framer Motion */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))', gap: '28px', width: '100%' }}>
-            {modulesList.map((mod, idx) => {
+            {modulesList.map((mod, modPos) => {
               const coverImg = mod.image || [
                 "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=600",
                 "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=600",
@@ -223,16 +224,16 @@ export default function CourseDetail({ onOpenDemoModal }) {
                 "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=600",
                 "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600",
                 "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600"
-              ][idx % 6];
+              ][modPos % 6];
 
               return (
                 <motion.div
-                  key={mod.id || mod.num || (mod.title ? mod.title.toLowerCase().replace(/[^a-z0-9]/g, '') : `module-${idx + 1}`)}
+                  key={mod.id ? `mod-id-${mod.id}` : (mod.num ? `mod-n-${mod.num}` : (mod.title ? `mod-t-${mod.title}` : `mod-p-${modPos}`))}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0, 6, 72, 0.16)', borderColor: '#f2b733' }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.45, delay: idx * 0.08 }}
+                  transition={{ duration: 0.45, delay: modPos * 0.08 }}
                   style={{
                     background: '#ffffff',
                     borderRadius: '24px',
