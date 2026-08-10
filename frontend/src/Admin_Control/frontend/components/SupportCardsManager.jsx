@@ -38,8 +38,14 @@ export default function SupportCardsManager() {
       desc: card.desc || '',
       bullets: Array.isArray(card.bullets) ? card.bullets.join('\n') : card.bullets || '',
       image: card.image || '',
-      position: card.position || 'center center',
-      fit: card.fit || 'cover'
+      position: card.position || card.imagePosition || '50% 50%',
+      imagePosition: card.position || card.imagePosition || '50% 50%',
+      fit: card.fit || card.imageFit || 'cover',
+      imageFit: card.fit || card.imageFit || 'cover',
+      zoom: card.zoom || card.imageZoom || 1,
+      imageZoom: card.zoom || card.imageZoom || 1,
+      mobilePosition: card.mobilePosition || card.position || '50% 50%',
+      mobileZoom: card.mobileZoom || card.zoom || 1
     });
     setIsEditing(true);
   };
@@ -62,8 +68,14 @@ export default function SupportCardsManager() {
       desc: formData.desc,
       bullets: bulletList,
       image: formData.image,
-      position: formData.position || 'center center',
-      fit: formData.fit || 'cover'
+      position: formData.position || '50% 50%',
+      imagePosition: formData.position || '50% 50%',
+      fit: formData.fit || 'cover',
+      imageFit: formData.fit || 'cover',
+      zoom: formData.zoom || 1,
+      imageZoom: formData.zoom || 1,
+      mobilePosition: formData.mobilePosition || formData.position || '50% 50%',
+      mobileZoom: formData.mobileZoom || formData.zoom || 1
     };
 
     if (editingId) {
@@ -326,9 +338,25 @@ export default function SupportCardsManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
-        currentPosition={formData.position}
-        currentFit={formData.fit}
-        onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
+        currentPosition={formData.position || formData.imagePosition}
+        currentFit={formData.fit || formData.imageFit}
+        currentZoom={formData.zoom || formData.imageZoom || 1}
+        currentMobilePosition={formData.mobilePosition}
+        currentMobileZoom={formData.mobileZoom || 1}
+        onSelectImage={(url, pos, fit, zoom, mobileOpts) =>
+          setFormData((prev) => ({
+            ...prev,
+            image: url,
+            position: pos || '50% 50%',
+            imagePosition: pos || '50% 50%',
+            fit: fit || 'cover',
+            imageFit: fit || 'cover',
+            zoom: zoom || 1,
+            imageZoom: zoom || 1,
+            mobilePosition: mobileOpts?.mobilePosition || pos || '50% 50%',
+            mobileZoom: mobileOpts?.mobileZoom || zoom || 1
+          }))
+        }
         targetArea="Support Feature Card Banner"
         aspectRatio="Rectangle (16:9)"
         recommendedDimensions="600 x 400 px"

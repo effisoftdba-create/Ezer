@@ -49,7 +49,18 @@ function ExecutiveGlassStack({ leaders }) {
               style={{ '--r': rotDeg }}
               title={`${exec.roleName || exec.roleTag} — ${exec.name}`}
             >
-              <img src={exec.image} alt={exec.name || exec.roleTag} />
+              <img
+                src={resolveImageSrc(exec.image)}
+                alt={exec.name || exec.roleTag}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: exec.fit || exec.imageFit || 'cover',
+                  objectPosition: exec.position || exec.imagePosition || 'center top',
+                  transform: (exec.zoom || exec.imageZoom) && (exec.zoom || exec.imageZoom) !== 1 ? `scale(${exec.zoom || exec.imageZoom})` : 'none',
+                  transformOrigin: exec.position || exec.imagePosition || 'center top'
+                }}
+              />
             </div>
           );
         })}

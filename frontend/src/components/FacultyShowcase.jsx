@@ -113,8 +113,8 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
                   borderRadius: '50%',
                   objectFit: prof.fit || prof.imageFit || 'cover',
                   objectPosition: prof.position || prof.imagePosition || 'center center',
-                  transform: `scale(${prof.zoom || prof.imageZoom || 1})`,
-                  transformOrigin: 'center center',
+                  transform: (prof.zoom || prof.imageZoom) && (prof.zoom || prof.imageZoom) !== 1 ? `scale(${prof.zoom || prof.imageZoom})` : 'none',
+                  transformOrigin: prof.position || prof.imagePosition || 'center center',
                   border: '3px solid #f2b733',
                   boxShadow: '0 4px 10px rgba(242, 183, 51, 0.3)'
                 }}

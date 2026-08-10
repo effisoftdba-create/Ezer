@@ -83,8 +83,14 @@ export default function CourseManager() {
       tagline: course.tagline || '',
       description: course.description || '',
       image: course.image || 'images/hero/cloud_deveops.png',
-      imagePosition: course.position || course.imagePosition || 'center center',
+      position: course.position || course.imagePosition || '50% 50%',
+      imagePosition: course.position || course.imagePosition || '50% 50%',
+      fit: course.fit || course.imageFit || 'cover',
       imageFit: course.fit || course.imageFit || 'cover',
+      zoom: course.zoom || course.imageZoom || 1,
+      imageZoom: course.zoom || course.imageZoom || 1,
+      mobilePosition: course.mobilePosition || course.position || '50% 50%',
+      mobileZoom: course.mobileZoom || course.zoom || 1,
       videoUrl: course.videoUrl || '',
       duration: course.duration || '3 Months',
       schedule: course.schedule || 'Weekday & Weekend batches',
@@ -293,14 +299,23 @@ export default function CourseManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
-        currentPosition={formData.imagePosition}
-        currentFit={formData.imageFit}
-        onSelectImage={(url, pos, fit) => {
+        currentPosition={formData.position || formData.imagePosition}
+        currentFit={formData.fit || formData.imageFit}
+        currentZoom={formData.zoom || formData.imageZoom || 1}
+        currentMobilePosition={formData.mobilePosition}
+        currentMobileZoom={formData.mobileZoom || 1}
+        onSelectImage={(url, pos, fit, zoom, mobileOpts) => {
           setFormData((prev) => ({
             ...prev,
             image: url,
-            imagePosition: pos || 'center center',
-            imageFit: fit || 'cover'
+            position: pos || '50% 50%',
+            imagePosition: pos || '50% 50%',
+            fit: fit || 'cover',
+            imageFit: fit || 'cover',
+            zoom: zoom || 1,
+            imageZoom: zoom || 1,
+            mobilePosition: mobileOpts?.mobilePosition || pos || '50% 50%',
+            mobileZoom: mobileOpts?.mobileZoom || zoom || 1
           }));
         }}
         targetArea="Course Card Banner"

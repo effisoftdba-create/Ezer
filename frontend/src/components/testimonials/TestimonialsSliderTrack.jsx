@@ -177,12 +177,15 @@ export default function TestimonialsSliderTrack() {
                 }}
               >
                 <img
-                  src={current.image}
-                  alt={`Portrait of ${current.name}`}
+                  src={current.image || current.avatar}
+                  alt={`Portrait of ${current.name || current.author}`}
                   style={{
                     width: '100%',
                     height: '100%',
-                    objectFit: 'cover'
+                    objectFit: current.fit || current.imageFit || 'cover',
+                    objectPosition: current.position || current.imagePosition || 'center center',
+                    transform: (current.zoom || current.imageZoom) && (current.zoom || current.imageZoom) !== 1 ? `scale(${current.zoom || current.imageZoom})` : 'none',
+                    transformOrigin: current.position || current.imagePosition || 'center center'
                   }}
                 />
               </div>

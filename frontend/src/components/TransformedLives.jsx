@@ -165,7 +165,10 @@ export default function TransformedLives() {
                           borderRadius: '50%',
                           background: 'linear-gradient(135deg, #f2b733 0%, #ffd066 50%, #f2b733 100%)',
                           boxShadow: '0 8px 22px rgba(242, 183, 51, 0.35)',
-                          display: 'inline-block'
+                          display: 'inline-block',
+                          overflow: 'hidden',
+                          width: '90px',
+                          height: '90px'
                         }}
                       >
                         <img
@@ -179,8 +182,8 @@ export default function TransformedLives() {
                             width: '84px', height: '84px', borderRadius: '50%',
                             objectFit: item.fit || item.imageFit || 'cover',
                             objectPosition: item.position || item.imagePosition || 'center center',
-                            transform: `scale(${item.zoom || item.imageZoom || 1})`,
-                            transformOrigin: 'center center',
+                            transform: (item.zoom || item.imageZoom) ? `scale(${item.zoom || item.imageZoom})` : 'none',
+                            transformOrigin: item.position || item.imagePosition || 'center center',
                             display: 'block',
                             border: '2.5px solid #ffffff'
                           }}

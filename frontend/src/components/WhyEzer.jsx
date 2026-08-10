@@ -115,7 +115,15 @@ export default function WhyEzer() {
                 <img 
                   src={resolveImageSrc(r.image)} 
                   alt={r.title} 
-                  style={{ width: '100%', height: '100%', objectFit: r.fit || r.imageFit || 'cover', opacity: 1, objectPosition: r.position || r.imagePosition || 'center center' }} 
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: r.fit || r.imageFit || 'cover',
+                    objectPosition: r.position || r.imagePosition || 'center center',
+                    transform: (r.zoom || r.imageZoom) && (r.zoom || r.imageZoom) !== 1 ? `scale(${r.zoom || r.imageZoom})` : 'none',
+                    transformOrigin: r.position || r.imagePosition || 'center center',
+                    opacity: 1
+                  }} 
                 />
                 
                 {/* Floating Icon Box */}

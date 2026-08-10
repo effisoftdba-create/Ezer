@@ -45,6 +45,8 @@ export default function CourseCard({ course, onOpenDemoModal }) {
               height: '100%',
               objectFit: course.fit || course.imageFit || 'cover',
               objectPosition: course.position || course.imagePosition || 'center center',
+              transform: (course.zoom || course.imageZoom) && (course.zoom || course.imageZoom) !== 1 ? `scale(${course.zoom || course.imageZoom})` : 'none',
+              transformOrigin: course.position || course.imagePosition || 'center center',
               opacity: 1
             }}
           />

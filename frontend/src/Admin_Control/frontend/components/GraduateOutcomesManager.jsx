@@ -61,7 +61,15 @@ export default function GraduateOutcomesManager() {
       company: item.company || '',
       beforeRole: item.beforeRole || '',
       afterRole: item.afterRole || '',
-      image: item.image || ''
+      image: item.image || '',
+      position: item.position || item.imagePosition || '50% 50%',
+      imagePosition: item.position || item.imagePosition || '50% 50%',
+      fit: item.fit || item.imageFit || 'cover',
+      imageFit: item.fit || item.imageFit || 'cover',
+      zoom: item.zoom || item.imageZoom || 1,
+      imageZoom: item.zoom || item.imageZoom || 1,
+      mobilePosition: item.mobilePosition || item.position || '50% 50%',
+      mobileZoom: item.mobileZoom || item.zoom || 1
     });
     setIsEditing(true);
   };
@@ -225,9 +233,25 @@ export default function GraduateOutcomesManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
-        currentPosition={formData.position}
-        currentFit={formData.fit}
-        onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
+        currentPosition={formData.position || formData.imagePosition}
+        currentFit={formData.fit || formData.imageFit}
+        currentZoom={formData.zoom || formData.imageZoom || 1}
+        currentMobilePosition={formData.mobilePosition}
+        currentMobileZoom={formData.mobileZoom || 1}
+        onSelectImage={(url, pos, fit, zoom, mobileOpts) =>
+          setFormData((prev) => ({
+            ...prev,
+            image: url,
+            position: pos || '50% 50%',
+            imagePosition: pos || '50% 50%',
+            fit: fit || 'cover',
+            imageFit: fit || 'cover',
+            zoom: zoom || 1,
+            imageZoom: zoom || 1,
+            mobilePosition: mobileOpts?.mobilePosition || pos || '50% 50%',
+            mobileZoom: mobileOpts?.mobileZoom || zoom || 1
+          }))
+        }
         targetArea="Graduate Placement Card Photo"
         aspectRatio="Square (1:1)"
         recommendedDimensions="300 x 300 px"

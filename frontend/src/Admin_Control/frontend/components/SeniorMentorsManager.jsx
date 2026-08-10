@@ -55,7 +55,15 @@ export default function SeniorMentorsManager() {
       designation: item.designation || '',
       image: item.image || '',
       bio: item.bio || item.experience || '',
-      tags: Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || ''
+      tags: Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || '',
+      position: item.position || item.imagePosition || '50% 50%',
+      imagePosition: item.position || item.imagePosition || '50% 50%',
+      fit: item.fit || item.imageFit || 'cover',
+      imageFit: item.fit || item.imageFit || 'cover',
+      zoom: item.zoom || item.imageZoom || 1,
+      imageZoom: item.zoom || item.imageZoom || 1,
+      mobilePosition: item.mobilePosition || item.position || '50% 50%',
+      mobileZoom: item.mobileZoom || item.zoom || 1
     });
     setIsEditing(true);
   };
@@ -77,7 +85,15 @@ export default function SeniorMentorsManager() {
       designation: formData.designation,
       image: formData.image,
       bio: formData.bio,
-      tags: tagList
+      tags: tagList,
+      position: formData.position || '50% 50%',
+      imagePosition: formData.position || '50% 50%',
+      fit: formData.fit || 'cover',
+      imageFit: formData.fit || 'cover',
+      zoom: formData.zoom || 1,
+      imageZoom: formData.zoom || 1,
+      mobilePosition: formData.mobilePosition || formData.position || '50% 50%',
+      mobileZoom: formData.mobileZoom || formData.zoom || 1
     };
 
     if (editingId) {
@@ -239,9 +255,25 @@ export default function SeniorMentorsManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.image}
-        currentPosition={formData.position}
-        currentFit={formData.fit}
-        onSelectImage={(url, pos, fit) => setFormData((prev) => ({ ...prev, image: url, position: pos || 'center center', fit: fit || 'cover' }))}
+        currentPosition={formData.position || formData.imagePosition}
+        currentFit={formData.fit || formData.imageFit}
+        currentZoom={formData.zoom || formData.imageZoom || 1}
+        currentMobilePosition={formData.mobilePosition}
+        currentMobileZoom={formData.mobileZoom || 1}
+        onSelectImage={(url, pos, fit, zoom, mobileOpts) =>
+          setFormData((prev) => ({
+            ...prev,
+            image: url,
+            position: pos || '50% 50%',
+            imagePosition: pos || '50% 50%',
+            fit: fit || 'cover',
+            imageFit: fit || 'cover',
+            zoom: zoom || 1,
+            imageZoom: zoom || 1,
+            mobilePosition: mobileOpts?.mobilePosition || pos || '50% 50%',
+            mobileZoom: mobileOpts?.mobileZoom || zoom || 1
+          }))
+        }
         targetArea="Senior Mentor Profile"
         aspectRatio="Square (1:1)"
         recommendedDimensions="400 x 400 px"

@@ -59,7 +59,15 @@ export default function TestimonialsManager() {
       track: item.track || item.course || 'Software Testing – Playwright',
       text: item.text || item.quote || item.content || item.review || '',
       rating: item.rating || 5,
-      avatar: item.avatar || item.image || ''
+      avatar: item.avatar || item.image || '',
+      position: item.position || item.imagePosition || '50% 50%',
+      imagePosition: item.position || item.imagePosition || '50% 50%',
+      fit: item.fit || item.imageFit || 'cover',
+      imageFit: item.fit || item.imageFit || 'cover',
+      zoom: item.zoom || item.imageZoom || 1,
+      imageZoom: item.zoom || item.imageZoom || 1,
+      mobilePosition: item.mobilePosition || item.position || '50% 50%',
+      mobileZoom: item.mobileZoom || item.zoom || 1
     });
     setIsEditing(true);
   };
@@ -243,7 +251,26 @@ export default function TestimonialsManager() {
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
         currentImage={formData.avatar}
-        onSelectImage={(url) => setFormData((prev) => ({ ...prev, avatar: url }))}
+        currentPosition={formData.position || formData.imagePosition}
+        currentFit={formData.fit || formData.imageFit}
+        currentZoom={formData.zoom || formData.imageZoom || 1}
+        currentMobilePosition={formData.mobilePosition}
+        currentMobileZoom={formData.mobileZoom || 1}
+        onSelectImage={(url, pos, fit, zoom, mobileOpts) =>
+          setFormData((prev) => ({
+            ...prev,
+            avatar: url,
+            image: url,
+            position: pos || '50% 50%',
+            imagePosition: pos || '50% 50%',
+            fit: fit || 'cover',
+            imageFit: fit || 'cover',
+            zoom: zoom || 1,
+            imageZoom: zoom || 1,
+            mobilePosition: mobileOpts?.mobilePosition || pos || '50% 50%',
+            mobileZoom: mobileOpts?.mobileZoom || zoom || 1
+          }))
+        }
         targetArea="Alumni Review Avatar"
         aspectRatio="Square (1:1)"
         recommendedDimensions="200 x 200 px"
