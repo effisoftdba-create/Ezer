@@ -117,6 +117,18 @@ export default function App() {
   const isAdminRoute = isPathAdmin || isHashAdmin || isSearchAdmin;
   const isDashboardRoute = fullSearch.includes('dashboard') || fullHash.includes('dashboard') || fullPath.includes('dashboard');
 
+  // Clean up temporary cache-busting query parameter (?t=1786354415743) from browser address bar
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.search.includes('?t=')) {
+      try {
+        const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
+        window.history.replaceState({}, document.title, cleanUrl);
+      } catch (e) {
+        // ignore
+      }
+    }
+  }, []);
+
   // Scroll to top on route change
   useEffect(() => {
     window.scrollTo(0, 0);
