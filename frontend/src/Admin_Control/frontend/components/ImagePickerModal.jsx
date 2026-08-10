@@ -80,6 +80,29 @@ function compressImageForWeb(dataUri, maxDimension = 900, quality = 0.75) {
   });
 }
 
+function parsePositionToOffset(posStr) {
+  if (!posStr) return { x: 0, y: 0 };
+  let xPercent = 50;
+  let yPercent = 50;
+
+  if (typeof posStr === 'string' && posStr.includes('%')) {
+    const parts = posStr.trim().split(/\s+/);
+    if (parts[0] && parts[0].includes('%')) xPercent = parseFloat(parts[0]) || 50;
+    if (parts[1] && parts[1].includes('%')) yPercent = parseFloat(parts[1]) || 50;
+  } else if (typeof posStr === 'string') {
+    const lower = posStr.toLowerCase();
+    if (lower.includes('top')) yPercent = 15;
+    if (lower.includes('bottom')) yPercent = 85;
+    if (lower.includes('left')) xPercent = 15;
+    if (lower.includes('right')) xPercent = 85;
+  }
+
+  return {
+    x: Math.round(50 - xPercent),
+    y: Math.round(50 - yPercent)
+  };
+}
+
 export default function ImagePickerModal({
   isOpen,
   onClose,
@@ -120,9 +143,19 @@ export default function ImagePickerModal({
   // Independent PC (desktop) and Mobile alignment state
   const [activeTarget, setActiveTarget] = useState('desktop'); // 'desktop' or 'mobile'
   const [desktopZoom, setDesktopZoom] = useState(currentZoom || 1);
-  const [desktopDragOffset, setDesktopDragOffset] = useState({ x: 0, y: 0 });
+  const [desktopDragOffset, setDesktopDragOffset] = useState(() => parsePositionToOffset(currentPosition));
   const [mobileZoom, setMobileZoom] = useState(currentMobileZoom || currentZoom || 1);
-  const [mobileDragOffset, setMobileDragOffset] = useState({ x: 0, y: 0 });
+  const [mobileDragOffset, setMobileDragOffset] = useState(() => parsePositionToOffset(currentMobilePosition || currentPosition));
+
+  // Sync zoom and drag offset whenever modal opens or props change
+  useEffect(() => {
+    if (isOpen) {
+      setDesktopZoom(currentZoom || 1);
+      setMobileZoom(currentMobileZoom || currentZoom || 1);
+      setDesktopDragOffset(parsePositionToOffset(currentPosition));
+      setMobileDragOffset(parsePositionToOffset(currentMobilePosition || currentPosition));
+    }
+  }, [isOpen, currentImage, currentPosition, currentZoom, currentMobilePosition, currentMobileZoom]);
 
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
