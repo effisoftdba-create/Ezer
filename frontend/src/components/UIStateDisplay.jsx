@@ -101,7 +101,7 @@ const STATE_CONFIGS = {
 
 export default function UIStateDisplay({ type = 'empty', title, message, onRetry, actionLabel }) {
   const config = STATE_CONFIGS[type] || STATE_CONFIGS.empty;
-  const Icon = config.icon;
+  const Icon = config.icon || HiOutlineFolderOpen;
 
   const displayTitle = title || config.title;
   const displayMessage = message || config.message;
