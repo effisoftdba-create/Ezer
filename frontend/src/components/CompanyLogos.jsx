@@ -358,7 +358,7 @@ export default function CompanyLogos() {
             <span className="section-tag" style={{ fontSize: '0.68rem', padding: '3px 10px' }}>
               Corporate Hiring Partners
             </span>
-            <h3
+            <h2
               style={{
                 fontSize: '0.96rem',
                 fontWeight: 800,
@@ -368,7 +368,7 @@ export default function CompanyLogos() {
               }}
             >
               Our Graduates Are Hired At Top Global Technology Companies
-            </h3>
+            </h2>
           </div>
         </div>
 

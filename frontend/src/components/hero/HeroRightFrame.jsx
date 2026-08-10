@@ -36,7 +36,7 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
       <AnimatePresence mode="wait">
         <m.div
           key={currentSlide.id || safeActive}
-          initial={{ opacity: 0, scale: 1.03 }}
+          initial={safeActive === 0 ? false : { opacity: 0, scale: 1.02 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.98 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}

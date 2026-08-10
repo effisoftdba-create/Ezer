@@ -29,25 +29,38 @@ export default function CarouselDotsNav({
         onClick={onPrev}
         aria-label="Previous slide"
         style={{
-          width: '28px',
-          height: '28px',
-          minWidth: '28px',
-          minHeight: '28px',
-          borderRadius: '50%',
-          border: '1.5px solid #000648',
-          background: '#ffffff',
-          color: '#000648',
-          display: 'flex',
+          width: '44px',
+          height: '44px',
+          minWidth: '44px',
+          minHeight: '44px',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          cursor: 'pointer',
-          boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)',
-          transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
           padding: 0,
-          flexShrink: 0
+          flexShrink: 0,
+          touchAction: 'manipulation'
         }}
       >
-        <HiChevronLeft size={15} />
+        <span
+          style={{
+            width: '28px',
+            height: '28px',
+            borderRadius: '50%',
+            border: '1.5px solid #000648',
+            background: '#ffffff',
+            color: '#000648',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 2px 6px rgba(0, 6, 72, 0.08)',
+            transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease'
+          }}
+        >
+          <HiChevronLeft size={15} />
+        </span>
       </button>
 
       {/* Middle Pill & Dots Container */}
@@ -55,9 +68,9 @@ export default function CarouselDotsNav({
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '4px',
+          gap: '0px',
           background: 'rgba(0, 6, 72, 0.06)',
-          padding: '3px 8px',
+          padding: '2px 6px',
           borderRadius: '50px',
           border: '1px solid rgba(0, 6, 72, 0.08)'
         }}
@@ -69,13 +82,18 @@ export default function CarouselDotsNav({
             onClick={() => onSelectIndex && onSelectIndex(i)}
             aria-label={`Go to slide ${i + 1}`}
             style={{
-              padding: '2px',
+              width: '44px',
+              height: '44px',
+              minWidth: '44px',
+              minHeight: '44px',
               border: 'none',
               background: 'transparent',
               cursor: 'pointer',
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              padding: 0,
+              touchAction: 'manipulation'
             }}
           >
             <span
@@ -98,25 +116,38 @@ export default function CarouselDotsNav({
         onClick={onNext}
         aria-label="Next slide"
         style={{
-          width: '28px',
-          height: '28px',
-          minWidth: '28px',
-          minHeight: '28px',
-          borderRadius: '50%',
-          border: '1.5px solid #000648',
-          background: '#000648',
-          color: '#ffffff',
-          display: 'flex',
+          width: '44px',
+          height: '44px',
+          minWidth: '44px',
+          minHeight: '44px',
+          background: 'transparent',
+          border: 'none',
+          cursor: 'pointer',
+          display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          cursor: 'pointer',
-          boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)',
-          transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
           padding: 0,
-          flexShrink: 0
+          flexShrink: 0,
+          touchAction: 'manipulation'
         }}
       >
-        <HiChevronRight size={15} />
+        <span
+          style={{
+            width: '28px',
+            height: '28px',
+            borderRadius: '50%',
+            border: '1.5px solid #000648',
+            background: '#000648',
+            color: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: '0 4px 10px rgba(0, 6, 72, 0.2)',
+            transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease'
+          }}
+        >
+          <HiChevronRight size={15} />
+        </span>
       </button>
     </div>
   );
