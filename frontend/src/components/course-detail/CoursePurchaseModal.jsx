@@ -121,7 +121,7 @@ function downloadStudentReceiptImage(payment) {
 }
 
 export default function CoursePurchaseModal({ isOpen, onClose, course }) {
-  const { addLead, addPayment, contactInfo, paymentConfig } = useSiteData();
+  const { addLead, addPayment, contactInfo, paymentConfig, payments } = useSiteData();
   const [step, setStep] = useState(1); // 1: Details, 2: Gateway & Verification, 3: Success Receipt
   const [paymentMethod, setPaymentMethod] = useState('upi'); // 'upi' | 'card'
   const [fullName, setFullName] = useState('');
@@ -208,8 +208,19 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
 
     const cleanRef = upiRefId.trim();
     if (paymentMethod === 'upi') {
-      if (!cleanRef || cleanRef.length < 6) {
-        setVerifyError('Please enter your valid 12-digit UPI Transaction / UTR reference number from Google Pay or PhonePe.');
+      if (!cleanRef || cleanRef.length < 10) {
+        setVerifyError('Please enter a valid 10 to 12 digit UPI Transaction / UTR reference number from Google Pay or PhonePe.');
+        return;
+      }
+
+      // STRICT ANTI-REPLAY SECURITY CHECK: Prevent reusing an already verified/submitted UTR number
+      const currentPayList = Array.isArray(payments) ? payments : [];
+      const isDuplicateUtr = currentPayList.some(
+        (p) => (p.upiTransactionId || '').trim().toLowerCase() === cleanRef.toLowerCase()
+      );
+
+      if (isDuplicateUtr) {
+        setVerifyError(`SECURITY ERROR: UTR #${cleanRef} has already been verified and recorded for another transaction. Reusing used payment UTRs is strictly blocked.`);
         return;
       }
     } else if (paymentMethod === 'card') {
