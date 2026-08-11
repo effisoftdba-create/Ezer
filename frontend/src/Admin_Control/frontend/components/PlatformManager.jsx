@@ -212,112 +212,20 @@ export default function PlatformManager() {
         </div>
       </form>
 
-      {/* About Us Brand Video Manager */}
-      <div style={{ marginTop: '40px', paddingTop: '32px', borderTop: '2px dashed #cbd5e1' }}>
-        <div style={{ marginBottom: '20px' }}>
-          <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#000648', margin: 0 }}>
-            About Us Brand Video Showcase Manager
-          </h3>
-          <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Update the video title, description, and video link displayed on the About Us page below Vision & Mission. Supports YouTube and Google Drive URLs.
+      {/* Guidance box pointing to dedicated About Us Brand Videos (2 Links) sidebar menu */}
+      <div style={{
+        marginTop: '32px', paddingTop: '24px', borderTop: '1px dashed #cbd5e1',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px',
+        background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: '14px', padding: '18px 20px'
+      }}>
+        <div>
+          <h4 style={{ margin: '0 0 4px 0', fontSize: '0.92rem', fontWeight: 800, color: '#166534' }}>
+            Looking to manage About Us Page Brand Showcase Videos?
+          </h4>
+          <p style={{ margin: 0, fontSize: '0.82rem', color: '#15803d' }}>
+            To update the 2 Brand Video Showcase cards (YouTube or Google Drive links, titles & descriptions) displayed on the About Us page below Vision & Mission, please use the dedicated left sidebar menu item: <strong>"About Us Brand Videos (2 Links)"</strong>.
           </p>
         </div>
-
-        {videoSaveSuccess && (
-          <div style={{
-            padding: '12px 16px', background: '#f0fdf4', border: '1px solid #86efac',
-            color: '#166534', borderRadius: '8px', marginBottom: '16px', fontWeight: 700,
-            display: 'flex', alignItems: 'center', gap: '8px'
-          }}>
-            <HiCheck size={18} /> About Us video configuration updated successfully!
-          </div>
-        )}
-
-        <form onSubmit={(e) => {
-          e.preventDefault();
-          updateAboutVideo(videoFormData);
-          setVideoSaveSuccess(true);
-          setTimeout(() => setVideoSaveSuccess(false), 3000);
-        }} style={{
-          background: '#ffffff', border: '1.5px solid #cbd5e1', borderRadius: '14px',
-          padding: '24px', boxShadow: '0 4px 14px rgba(0,0,0,0.02)'
-        }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-            <div>
-              <label htmlFor="video_tag_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                Section Tag / Badge
-              </label>
-              <input
-                id="video_tag_input"
-                type="text"
-                value={videoFormData.tag}
-                onChange={(e) => setVideoFormData({ ...videoFormData, tag: e.target.value })}
-                placeholder="e.g. EXPERIENCE EZER LEARNING"
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="video_url_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                Video URL (YouTube or Google Drive) *
-              </label>
-              <input
-                id="video_url_input"
-                type="text"
-                value={videoFormData.videoUrl}
-                onChange={(e) => setVideoFormData({ ...videoFormData, videoUrl: e.target.value })}
-                placeholder="https://www.youtube.com/watch?v=... or https://drive.google.com/file/d/..."
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
-                required
-              />
-            </div>
-          </div>
-
-          <div style={{ marginBottom: '16px' }}>
-            <label htmlFor="video_title_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Video Section Title
-            </label>
-            <input
-              id="video_title_input"
-              type="text"
-              value={videoFormData.title}
-              onChange={(e) => setVideoFormData({ ...videoFormData, title: e.target.value })}
-              placeholder="e.g. Watch Our Platform & Learning Methodology in Action"
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
-              required
-            />
-          </div>
-
-          <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="video_desc_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Video Description Text
-            </label>
-            <textarea
-              id="video_desc_input"
-              rows={3}
-              value={videoFormData.description}
-              onChange={(e) => setVideoFormData({ ...videoFormData, description: e.target.value })}
-              placeholder="See how our corporate-experienced instructors deliver live interactive classes..."
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
-              required
-            />
-          </div>
-
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button
-              type="submit"
-              aria-label="Save About video settings"
-              style={{
-                padding: '10px 24px', background: '#000648', color: '#f2b733',
-                border: 'none', borderRadius: '10px', fontWeight: 800, fontSize: '0.875rem',
-                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px'
-              }}
-            >
-              Update About Us Video
-            </button>
-          </div>
-        </form>
       </div>
 
       <ImagePickerModal
