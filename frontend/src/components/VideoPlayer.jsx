@@ -67,27 +67,20 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
         }
         .ezer-drive-embed-wrapper iframe {
           width: 100% !important;
-          height: 118% !important;
-          margin-top: -7.5% !important;
+          height: 100% !important;
           border: 0 !important;
           display: block !important;
+          transform: scale(1.16) translateY(-7%) !important;
+          transform-origin: center top !important;
         }
         @media (max-width: 768px) {
           .ezer-video-player-container {
             border-radius: 12px !important;
           }
-          .ezer-drive-embed-wrapper iframe {
-            height: 124% !important;
-            margin-top: -10% !important;
-          }
         }
         @media (max-width: 480px) {
           .ezer-video-player-container {
             border-radius: 10px !important;
-          }
-          .ezer-drive-embed-wrapper iframe {
-            height: 128% !important;
-            margin-top: -11.5% !important;
           }
         }
       `}</style>
