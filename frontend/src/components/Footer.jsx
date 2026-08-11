@@ -13,39 +13,39 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#000648', color: '#fff', paddingTop: '48px', paddingBottom: '24px', borderTop: '1px solid rgba(242, 183, 51, 0.3)', minHeight: '380px', contain: 'layout style' }}>
+    <footer style={{ background: '#000648', color: '#fff', paddingTop: '36px', paddingBottom: '16px', borderTop: '1px solid rgba(242, 183, 51, 0.3)', contain: 'layout style' }}>
       <div className="container">
         <div style={{
           display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '32px', marginBottom: '36px',
+          gap: '28px', marginBottom: '24px',
         }}>
           {/* Brand */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '12px' }}>
               <img 
-                src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`} 
+                src={`${import.meta.env.BASE_URL || '/'}images/ezer_shield_logo.png`} 
                 alt="EZER Learning Solutions Crest Logo" 
-                width="160"
-                height="46"
+                width="40"
+                height="40"
                 loading="lazy"
                 decoding="async"
-                style={{ height: '46px', width: 'auto', aspectRatio: '160/46', objectFit: 'contain', mixBlendMode: 'screen' }} 
+                style={{ height: '40px', width: '40px', objectFit: 'contain', flexShrink: 0 }} 
               />
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1 }}>
                   EZER
                 </span>
-                <span style={{ fontSize: '0.6rem', fontWeight: 800, color: '#f2b733', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px' }}>
+                <span style={{ fontSize: '0.6rem', fontWeight: 800, color: '#f2b733', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap' }}>
                   Learning Solutions
                 </span>
               </div>
-            </div>
+            </Link>
 
-            <p style={{ fontSize: '0.78rem', lineHeight: 1.6, color: '#cbd5e1', marginBottom: '16px' }}>
+            <p style={{ fontSize: '0.78rem', lineHeight: 1.55, color: '#cbd5e1', marginBottom: '14px', maxWidth: '320px' }}>
               Live online, practical, job-oriented IT training with pre- and post-employment placement support for up to 1 year.
             </p>
             
-            <div style={{ display: 'flex', gap: '12px' }}>
+            <div style={{ display: 'flex', gap: '10px' }}>
               {socialLinks.map(({ name, Icon, url }) => (
                 <a
                   key={name}
@@ -55,9 +55,9 @@ export default function Footer() {
                   aria-label={name}
                   style={{
                     color: '#000648', background: '#f2b733',
-                    width: '44px', height: '44px', borderRadius: '50%',
+                    width: '38px', height: '38px', borderRadius: '50%',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '0.95rem', transition: 'background-color 0.2s ease, transform 0.2s ease', textDecoration: 'none'
+                    fontSize: '0.9rem', transition: 'background-color 0.2s ease, transform 0.2s ease', textDecoration: 'none'
                   }} 
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = '#ffffff';
@@ -76,12 +76,12 @@ export default function Footer() {
 
           {/* Courses */}
           <div>
-            <h3 style={{ color: '#f2b733', fontSize: '0.85rem', fontWeight: 800, marginBottom: '14px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <h3 style={{ color: '#f2b733', fontSize: '0.82rem', fontWeight: 800, marginBottom: '12px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Live Programs
             </h3>
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.8rem' }}>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.78rem', padding: 0, margin: 0, listStyle: 'none' }}>
               <li>
-                <Link to="/courses/ai-machine-learning" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/courses/ai-machine-learning" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -89,7 +89,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/courses/full-stack-dev-ai" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/courses/full-stack-dev-ai" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -97,7 +97,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/courses/data-analyst" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/courses/data-analyst" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -105,7 +105,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/courses/cloud-devops-ai" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/courses/cloud-devops-ai" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -113,7 +113,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/courses/cyber-security" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/courses/cyber-security" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -121,7 +121,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/courses/spoken-english" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/courses/spoken-english" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -133,12 +133,12 @@ export default function Footer() {
 
           {/* Navigation */}
           <div>
-            <h3 style={{ color: '#f2b733', fontSize: '0.85rem', fontWeight: 800, marginBottom: '14px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <h3 style={{ color: '#f2b733', fontSize: '0.82rem', fontWeight: 800, marginBottom: '12px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Navigation
             </h3>
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.8rem' }}>
+            <ul style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.78rem', padding: 0, margin: 0, listStyle: 'none' }}>
               <li>
-                <Link to="/about" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/about" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -146,7 +146,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/courses" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/courses" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -154,7 +154,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/testimonials" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/testimonials" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -162,7 +162,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/blog" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/blog" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -170,7 +170,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/faq" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/faq" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -178,7 +178,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/contact" style={{ color: '#cbd5e1', transition: 'color 0.2s' }}
+                <Link to="/contact" style={{ color: '#cbd5e1', textDecoration: 'none', transition: 'color 0.2s' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -190,17 +190,17 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 style={{ color: '#f2b733', fontSize: '0.85rem', fontWeight: 800, marginBottom: '14px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <h3 style={{ color: '#f2b733', fontSize: '0.82rem', fontWeight: 800, marginBottom: '12px', borderLeft: '3px solid #f2b733', paddingLeft: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Contact
             </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.8rem', color: '#cbd5e1' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.78rem', color: '#cbd5e1' }}>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
-                <HiLocationMarker style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} size={16} />
+                <HiLocationMarker style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} size={15} />
                 <span>Plot No: 90, 3rd Cross Street, Phase-2, Thirumalai Nagar Annexe, Perungudi, Chennai - 600096, Tamil Nadu, India</span>
               </div>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <HiPhone style={{ color: '#f2b733', flexShrink: 0 }} size={16} />
-                <a href="tel:+919876543210" style={{ color: '#cbd5e1' }}
+                <HiPhone style={{ color: '#f2b733', flexShrink: 0 }} size={15} />
+                <a href="tel:+919876543210" style={{ color: '#cbd5e1', textDecoration: 'none' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -208,8 +208,8 @@ export default function Footer() {
                 </a>
               </div>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <HiMail style={{ color: '#f2b733', flexShrink: 0 }} size={16} />
-                <a href="mailto:info@ezerlearning.com" style={{ color: '#cbd5e1' }}
+                <HiMail style={{ color: '#f2b733', flexShrink: 0 }} size={15} />
+                <a href="mailto:info@ezerlearning.com" style={{ color: '#cbd5e1', textDecoration: 'none' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
@@ -220,38 +220,36 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {/* Optimized Compact Footer Bottom Bar */}
         <div className="footer-bottom-bar" style={{
-          paddingTop: '20px',
-          borderTop: '1px solid rgba(242,183,51,0.2)',
+          paddingTop: '16px',
+          borderTop: '1px solid rgba(242,183,51,0.25)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '14px',
+          gap: '10px 20px',
           fontSize: '0.78rem',
           color: '#cbd5e1',
           width: '100%'
         }}>
-          {/* Left Side Corner / Mobile Centered */}
-          <div className="footer-copyright" style={{ color: '#cbd5e1', flex: '1 1 280px' }}>
+          <div className="footer-copyright" style={{ color: '#cbd5e1', fontSize: '0.78rem' }}>
             &copy; 2026 EZER Learning Solutions. All rights reserved.
           </div>
 
-          {/* Center Area / Small Normal White Effisoft Credit */}
-          <div className="footer-dev-credit" style={{ fontSize: '0.68rem', color: '#cbd5e1', fontWeight: 400, flex: '1 1 200px' }}>
-            Developed by <a href="https://effisoft.co/" target="_blank" rel="noopener noreferrer" style={{ color: '#ffffff', fontWeight: 400, fontSize: '0.68rem', textDecoration: 'underline' }}>Effisoft Technologies</a>
+          <div className="footer-dev-credit" style={{ fontSize: '0.74rem', color: '#cbd5e1' }}>
+            Developed by <a href="https://effisoft.co/" target="_blank" rel="noopener noreferrer" style={{ color: '#ffffff', fontWeight: 600, textDecoration: 'underline' }}>Effisoft Technologies</a>
           </div>
 
-          {/* Right Side Corner / Policy Links */}
-          <div className="footer-policy-links" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', flex: '1 1 300px' }}>
-            <Link to="/privacy-policy" style={{ color: '#f2b733', textDecoration: 'none', fontWeight: 600 }}
+          <div className="footer-policy-links" style={{ display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <Link to="/privacy-policy" style={{ color: '#f2b733', textDecoration: 'none', fontWeight: 600, fontSize: '0.78rem' }}
               onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
               onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
             >
               Privacy Policy
             </Link>
-            <Link to="/student-admission-policy" style={{ color: '#f2b733', textDecoration: 'none', fontWeight: 600 }}
+            <span style={{ color: 'rgba(242,183,51,0.4)', fontSize: '0.75rem' }}>|</span>
+            <Link to="/student-admission-policy" style={{ color: '#f2b733', textDecoration: 'none', fontWeight: 600, fontSize: '0.78rem' }}
               onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
               onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
             >
@@ -263,4 +261,5 @@ export default function Footer() {
     </footer>
   );
 }
+
 
