@@ -20,11 +20,6 @@ function VideoPlayerInner({ config, poster, title }) {
     if (url) window.open(url, '_blank', 'noopener,noreferrer');
   };
 
-  const handleOpenDrive = () => {
-    const url = config.originalUrl || config.src;
-    if (url) window.open(url, '_blank', 'noopener,noreferrer');
-  };
-
   if (config.type === 'none') {
     return (
       <div
@@ -84,15 +79,6 @@ function VideoPlayerInner({ config, poster, title }) {
           position: absolute !important;
           top: 0 !important;
           left: 0 !important;
-        }
-        .ezer-video-actions-top {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          z-index: 10;
-          display: flex;
-          align-items: center;
-          gap: 8px;
         }
         .ezer-video-btn {
           background: rgba(0, 6, 72, 0.85);
@@ -187,27 +173,7 @@ function VideoPlayerInner({ config, poster, title }) {
           />
         )}
 
-        {/* Top Actions Bar for Google Drive / external video links */}
-        {isDriveType && (
-          <div className="ezer-video-actions-top">
-            <button
-              type="button"
-              className="ezer-video-btn"
-              onClick={handleOpenDrive}
-              title="Open video directly in Google Drive"
-              aria-label="Open video in Google Drive"
-            >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
-              Open Drive
-            </button>
-          </div>
-        )}
-
-        {/* Fullscreen button — always visible so user can expand anytime */}
+        {/* Fullscreen button — allows user to expand inline video anytime */}
         <button
           type="button"
           className="ezer-video-btn ezer-fullscreen-btn"
@@ -230,5 +196,6 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
   const config = getNormalizedVideoConfig(effectiveUrl);
   return <VideoPlayerInner key={effectiveUrl} config={config} poster={poster} title={title} />;
 }
+
 
 
