@@ -209,7 +209,10 @@ const BRAND_SVGS = {
 function LogoCard({ logo }) {
   const [imgError, setImgError] = useState(false);
   const rawImg = String(logo.image || '').trim();
-  const isSvgStr = rawImg.includes('<svg') || rawImg.includes('%3Csvg');
+
+  // Check all SVG forms: plain SVG string, URL-encoded SVG data URI, or %3Csvg encoded
+  const isSvgStr = rawImg.startsWith('<svg') || rawImg.includes('%3Csvg') || rawImg.includes('%3csvg');
+  const isSvgDataUri = rawImg.startsWith('data:image/svg+xml');
 
   const lowerName = (logo.name || '').toLowerCase();
   let matchedSvg = null;
@@ -218,9 +221,33 @@ function LogoCard({ logo }) {
   });
 
   let renderSvg = null;
-  if (isSvgStr) {
+  let renderImgSrc = null;
+
+  if (logo.icon) {
+    // JSX icon (hardcoded base logos) — rendered directly below
+  } else if (isSvgStr) {
+    // Plain SVG string or %3Csvg URL-encoded
     renderSvg = rawImg.startsWith('<svg') ? rawImg : decodeURIComponent(rawImg);
-  } else if (!logo.image || imgError || logo.image.includes('clearbit') || logo.image.includes('wikimedia')) {
+  } else if (isSvgDataUri) {
+    // data:image/svg+xml;charset=utf-8,... — decode the SVG content
+    try {
+      const svgContent = rawImg.startsWith('data:image/svg+xml;base64,')
+        ? atob(rawImg.split(',')[1])
+        : decodeURIComponent(rawImg.split(',')[1] || '');
+      renderSvg = svgContent || null;
+    } catch {
+      renderSvg = matchedSvg;
+    }
+  } else if (!rawImg || imgError) {
+    // No image or broken image — use brand name lookup
+    renderSvg = matchedSvg;
+  } else {
+    // Has a URL — try to render as an image
+    renderImgSrc = rawImg;
+  }
+
+  // Final fallback: if still no renderSvg and no renderImgSrc, use brand name lookup
+  if (!logo.icon && !renderSvg && !renderImgSrc) {
     renderSvg = matchedSvg;
   }
 
@@ -251,9 +278,9 @@ function LogoCard({ logo }) {
         logo.icon
       ) : renderSvg ? (
         <div dangerouslySetInnerHTML={{ __html: renderSvg }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '148px', maxHeight: '28px', overflow: 'hidden' }} />
-      ) : (
+      ) : renderImgSrc ? (
         <img
-          src={resolveImageSrc(logo.image)}
+          src={resolveImageSrc(renderImgSrc)}
           alt={logo.name || 'Hiring Partner'}
           onError={() => setImgError(true)}
           width="140"
@@ -272,7 +299,11 @@ function LogoCard({ logo }) {
             display: 'block'
           }}
         />
-
+      ) : (
+        // Last resort: show company name as text
+        <span style={{ fontSize: '13px', fontWeight: 700, color: '#000648', textAlign: 'center', letterSpacing: '-0.3px' }}>
+          {logo.name || ''}
+        </span>
       )}
     </m.div>
   );

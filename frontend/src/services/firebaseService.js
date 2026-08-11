@@ -3,9 +3,10 @@ import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firesto
 import { ref, onValue, set, remove } from 'firebase/database';
 
 /**
- * Strip base64 data URI values from an object before saving to Firestore.
- * Firestore has a 1MB document size limit — large base64 images silently fail to save,
- * which causes cross-device sync to break. Images should be hosted URLs, not embedded data.
+ * Strip large base64 binary data URIs from an object before saving to Firestore.
+ * Firestore has a 1MB document size limit — large base64 PNG/JPEG images silently fail to save.
+ * SVG data URIs are tiny (< 5KB) and are KEPT — they're the correct format for logo storage.
+ * Only strip: data:image/png, data:image/jpeg, data:image/webp, data:image/gif
  */
 function stripDataUris(data) {
   if (!data || typeof data !== 'object') return data;
@@ -13,8 +14,13 @@ function stripDataUris(data) {
   for (const key of Object.keys(cleaned)) {
     const val = cleaned[key];
     if (typeof val === 'string' && val.startsWith('data:')) {
-      // Replace with a sentinel so we know an image existed but was too large for Firestore
-      cleaned[key] = cleaned[key + '_url'] || cleaned['imageUrl'] || cleaned['src'] || '';
+      // Only strip large binary image formats — SVGs are tiny and should be kept
+      const isBinaryImage = /^data:image\/(png|jpeg|jpg|webp|gif|bmp)/i.test(val);
+      if (isBinaryImage) {
+        // Replace large binary with a placeholder (can't store in Firestore — use a hosted URL instead)
+        cleaned[key] = '';
+      }
+      // data:image/svg+xml and other small data URIs are kept as-is
     } else if (Array.isArray(val)) {
       cleaned[key] = val.map((item) =>
         typeof item === 'object' && item !== null ? stripDataUris(item) : item
