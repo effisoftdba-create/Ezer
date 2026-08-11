@@ -134,19 +134,8 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [receiptNumber, setReceiptNumber] = useState('');
   const [verifyError, setVerifyError] = useState('');
-  const [isLeadSubmittedOnly, setIsLeadSubmittedOnly] = useState(false);
 
   const waGroupUrl = (contactInfo && contactInfo.whatsappGroupUrl) || 'https://chat.whatsapp.com/EZERStudentCohortOfficial';
-
-  // Direct Automatic Redirect to WhatsApp upon Step 3 Completion
-  useEffect(() => {
-    if (step === 3) {
-      const redirectTimer = setTimeout(() => {
-        window.location.href = waGroupUrl;
-      }, 4000);
-      return () => clearTimeout(redirectTimer);
-    }
-  }, [step, waGroupUrl]);
 
   if (!isOpen || !course) return null;
 
@@ -163,7 +152,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
       alert('Please fill out your full name, email, and 10-digit mobile number.');
       return;
     }
-    // Record Lead as Interested/Pending
+    // Record Lead into Database immediately upon Step 1 Submission
     if (addLead) {
       addLead({
         name: fullName.trim(),
@@ -177,29 +166,8 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
         timestamp: new Date().toISOString()
       });
     }
+    // Directly navigate to Step 2 (UPI Payment QR Code & UTR Verification)
     setStep(2);
-  };
-
-  const handleLeadOnlySubmit = (e) => {
-    e.preventDefault();
-    if (!fullName.trim() || !email.trim() || !phone.trim() || phone.trim().length < 10) {
-      alert('Please fill out your full name, email, and 10-digit mobile number.');
-      return;
-    }
-    if (addLead) {
-      addLead({
-        name: fullName.trim(),
-        email: email.trim(),
-        phone: phone.trim(),
-        course: course.title || 'Executive IT Course',
-        paymentStatus: 'NOT_PAID',
-        amountPaid: '₹0',
-        status: 'Submitted Application',
-        city: 'Online Registration',
-        timestamp: new Date().toISOString()
-      });
-    }
-    setIsLeadSubmittedOnly(true);
   };
 
   const handleVerifyAndPay = async (e) => {
@@ -399,71 +367,17 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
               </div>
             </div>
 
-            {isLeadSubmittedOnly ? (
-              <div style={{ padding: '24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px' }}>
-                  <HiCheckCircle size={36} />
-                </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', margin: 0 }}>
-                  Application Submitted Successfully!
-                </h3>
-                <p style={{ fontSize: '0.85rem', color: '#475569', margin: 0 }}>
-                  Thank you, <strong>{fullName}</strong>. Your lead registration for <strong>{course.title}</strong> has been logged into our Lead Submissions database.
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%', marginTop: '10px' }}>
-                  <button
-                    type="button"
-                    onClick={() => { setIsLeadSubmittedOnly(false); setStep(2); }}
-                    style={{
-                      width: '100%', padding: '12px', borderRadius: '50px',
-                      background: '#f2b733', color: '#000648', fontWeight: 900, fontSize: '0.9rem',
-                      border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(242,183,51,0.3)'
-                    }}
-                  >
-                    Proceed to Pay & Confirm Seat (₹{finalPrice})
-                  </button>
-                  <a
-                    href="https://chat.whatsapp.com/EZERLearnersGroup"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
-                      width: '100%', padding: '12px', background: '#25D366', color: '#ffffff',
-                      borderRadius: '50px', fontWeight: 900, fontSize: '0.88rem', textDecoration: 'none',
-                      boxShadow: '0 4px 14px rgba(37, 211, 102, 0.3)'
-                    }}
-                  >
-                    Join Official Student WhatsApp Group ↗
-                  </a>
-                </div>
-              </div>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '8px' }}>
-                <button
-                  type="submit"
-                  style={{
-                    width: '100%', padding: '14px', borderRadius: '50px',
-                    background: '#f2b733', color: '#000648', fontWeight: 900, fontSize: '1rem',
-                    border: 'none', cursor: 'pointer', boxShadow: '0 4px 18px rgba(242,183,51,0.4)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
-                  }}
-                >
-                  Proceed to Pay & Confirm Seat (₹{finalPrice}) <HiLockClosed size={18} />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleLeadOnlySubmit}
-                  style={{
-                    width: '100%', padding: '12px', borderRadius: '50px',
-                    background: '#f8fafc', color: '#000648', fontWeight: 800, fontSize: '0.88rem',
-                    border: '1.5px solid #cbd5e1', cursor: 'pointer'
-                  }}
-                >
-                  Submit Lead Application Only
-                </button>
-              </div>
-            )}
+            <button
+              type="submit"
+              style={{
+                marginTop: '10px', width: '100%', padding: '14px', borderRadius: '50px',
+                background: '#f2b733', color: '#000648', fontWeight: 900, fontSize: '1.05rem',
+                border: 'none', cursor: 'pointer', boxShadow: '0 4px 18px rgba(242,183,51,0.4)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
+              }}
+            >
+              Proceed to Payment & Unlock Course (₹{finalPrice}) <HiLockClosed size={18} />
+            </button>
           </form>
         )}
 
