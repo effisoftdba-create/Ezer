@@ -168,14 +168,18 @@ export function SiteProvider({ children }) {
     try {
       unsubs.push(subscribeToCollection('courses', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'courses', value: items });
-          safeSetStorage(STORAGE_COURSES_KEY, items);
+          const storedLocal = getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'courses', value: merged });
+          safeSetStorage(STORAGE_COURSES_KEY, merged);
         }
       }));
       unsubs.push(subscribeToCollection('heroSlides', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'heroSlides', value: items });
-          safeSetStorage(STORAGE_SLIDES_KEY, items);
+          const storedLocal = getStored(STORAGE_SLIDES_KEY, defaultSlides) || defaultSlides;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'heroSlides', value: merged });
+          safeSetStorage(STORAGE_SLIDES_KEY, merged);
         }
       }));
       unsubs.push(subscribeToCollection('leads', (items) => {
@@ -186,15 +190,18 @@ export function SiteProvider({ children }) {
       }));
       unsubs.push(subscribeToCollection('blogs', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'blogs', value: items });
-          safeSetStorage(STORAGE_BLOGS_KEY, items);
+          const storedLocal = getStored(STORAGE_BLOGS_KEY, defaultBlogs) || defaultBlogs;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'blogs', value: merged });
+          safeSetStorage(STORAGE_BLOGS_KEY, merged);
         }
       }));
       unsubs.push(subscribeToCollection('ezerDefinition', (items) => {
         if (Array.isArray(items) && items.length > 0) {
           const mainDef = items.find((i) => i.id === 'main') || items[0];
           if (mainDef) {
-            const updated = { ...defaultPlatformDef, ...mainDef };
+            const storedLocal = getStored(STORAGE_PLATFORM_KEY, defaultPlatformDef) || defaultPlatformDef;
+            const updated = { ...storedLocal, ...mainDef };
             dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: updated });
             safeSetStorage(STORAGE_PLATFORM_KEY, updated);
           }
@@ -202,8 +209,10 @@ export function SiteProvider({ children }) {
       }));
       unsubs.push(subscribeToCollection('executiveLeaders', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: items });
-          safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, items);
+          const storedLocal = getStored(STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders) || defaultExecutiveLeaders;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: merged });
+          safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, merged);
         }
       }));
       unsubs.push(subscribeToCollection('popupConfig', (items) => {
@@ -226,38 +235,50 @@ export function SiteProvider({ children }) {
       }));
       unsubs.push(subscribeToCollection('seniorMentors', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: items });
-          safeSetStorage(STORAGE_MENTORS_KEY, items);
+          const storedLocal = getStored(STORAGE_MENTORS_KEY, defaultSeniorMentors) || defaultSeniorMentors;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: merged });
+          safeSetStorage(STORAGE_MENTORS_KEY, merged);
         }
       }));
       unsubs.push(subscribeToCollection('writtenTestimonials', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: items });
-          safeSetStorage(STORAGE_WRITTEN_TESTIMONIALS_KEY, items);
+          const storedLocal = getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials) || initialTestimonials;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: merged });
+          safeSetStorage(STORAGE_WRITTEN_TESTIMONIALS_KEY, merged);
         }
       }));
       unsubs.push(subscribeToCollection('videoTestimonials', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: items });
-          safeSetStorage(STORAGE_VIDEOS_KEY, items);
+          const storedLocal = getStored(STORAGE_VIDEOS_KEY, defaultVideoTestimonials) || defaultVideoTestimonials;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: merged });
+          safeSetStorage(STORAGE_VIDEOS_KEY, merged);
         }
       }));
       unsubs.push(subscribeToCollection('faqList', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'faqList', value: items });
-          safeSetStorage(STORAGE_FAQS_KEY, items);
+          const storedLocal = getStored(STORAGE_FAQS_KEY, generalFaqs) || generalFaqs;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'faqList', value: merged });
+          safeSetStorage(STORAGE_FAQS_KEY, merged);
         }
       }));
       unsubs.push(subscribeToCollection('hiringPartners', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: items });
-          safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, items);
+          const storedLocal = getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: merged });
+          safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, merged);
         }
       }));
       unsubs.push(subscribeToCollection('aboutVideos', (items) => {
         if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'aboutVideos', value: items });
-          safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, items);
+          const storedLocal = getStored(STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos) || defaultAboutVideos;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'aboutVideos', value: merged });
+          safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, merged);
         }
       }));
     } catch (err) {

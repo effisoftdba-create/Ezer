@@ -45,54 +45,109 @@ function sanitizeForFirestore(data) {
 }
 
 /**
- * Real-time listener for Firestore
+ * Real-time listener for Firestore and Realtime Database
  */
 export function subscribeToCollection(collectionName, onUpdate) {
   if (!isFirebaseConfigured) {
     return () => {};
   }
 
+  let unsubFirestore = () => {};
+  let unsubRealtime = () => {};
+
+  // 1. Primary: Firestore Listener
   if (db) {
     try {
       const colRef = collection(db, collectionName);
-      return onSnapshot(
+      unsubFirestore = onSnapshot(
         colRef,
         (snapshot) => {
-          const items = snapshot.docs.map((docItem) => ({
-            id: docItem.id,
-            ...docItem.data()
-          }));
-          onUpdate(items);
+          if (!snapshot.empty) {
+            const items = snapshot.docs.map((docItem) => ({
+              id: docItem.id,
+              ...docItem.data()
+            }));
+            onUpdate(items);
+          }
         },
         (error) => {
-          console.error(`[Firebase Firestore] Subscription error on "${collectionName}":`, error);
+          console.warn(`[Firestore Listener Notice] ${collectionName}:`, error.message || error);
         }
       );
     } catch (err) {
-      console.error(`[Firebase Firestore] Failed to subscribe to "${collectionName}":`, err);
+      console.warn(`[Firestore Subscription Error] ${collectionName}:`, err);
     }
   }
 
-  return () => {};
+  // 2. Secondary Dual Sync: Realtime Database Listener
+  const rtdb = getRealtimeDb();
+  if (rtdb) {
+    try {
+      const dbRef = ref(rtdb, collectionName);
+      unsubRealtime = onValue(
+        dbRef,
+        (snapshot) => {
+          const val = snapshot.val();
+          if (val) {
+            let items = [];
+            if (Array.isArray(val)) {
+              items = val.filter(Boolean);
+            } else if (typeof val === 'object') {
+              items = Object.keys(val).map((k) => ({
+                id: k,
+                ...(typeof val[k] === 'object' ? val[k] : { value: val[k] })
+              }));
+            }
+            if (items.length > 0) {
+              onUpdate(items);
+            }
+          }
+        },
+        (err) => {
+          console.warn(`[RealtimeDB Listener Notice] ${collectionName}:`, err.message || err);
+        }
+      );
+    } catch (err) {
+      console.warn(`[RealtimeDB Subscription Error] ${collectionName}:`, err);
+    }
+  }
+
+  return () => {
+    if (typeof unsubFirestore === 'function') unsubFirestore();
+    if (typeof unsubRealtime === 'function') unsubRealtime();
+  };
 }
 
 /**
- * Save document
+ * Save document (Dual Firestore + Realtime DB Sync)
  */
 export async function saveDocument(collectionName, docId, data) {
   if (!isFirebaseConfigured) return false;
   const cleanId = String(docId || `doc_${Date.now()}`);
+  const cleanData = sanitizeForFirestore({ ...data, updatedAt: new Date().toISOString() });
 
   let saved = false;
 
+  // 1. Firestore
   if (db) {
     try {
       const docRef = doc(db, collectionName, cleanId);
-      const cleanData = sanitizeForFirestore({ ...data, updatedAt: new Date().toISOString() });
       await setDoc(docRef, cleanData, { merge: true });
       saved = true;
     } catch (err) {
-      console.warn(`[Firebase Firestore] Save error for ${collectionName}/${cleanId}:`, err.message || err);
+      console.warn(`[Firestore Save Notice] ${collectionName}/${cleanId}:`, err.message || err);
+    }
+  }
+
+  // 2. Realtime Database
+  const rtdb = getRealtimeDb();
+  if (rtdb) {
+    try {
+      const itemRef = ref(rtdb, `${collectionName}/${cleanId}`);
+      await set(itemRef, cleanData);
+      saved = true;
+    } catch (err) {
+      console.warn(`[RealtimeDB Save Notice] ${collectionName}/${cleanId}:`, err.message || err);
     }
   }
 
@@ -100,7 +155,7 @@ export async function saveDocument(collectionName, docId, data) {
 }
 
 /**
- * Delete document
+ * Delete document (Dual Firestore + Realtime DB Removal)
  */
 export async function removeDocument(collectionName, docId) {
   if (!isFirebaseConfigured) return false;
@@ -114,7 +169,18 @@ export async function removeDocument(collectionName, docId) {
       await deleteDoc(docRef);
       removed = true;
     } catch (err) {
-      console.warn(`[Firebase Firestore] Delete notice:`, err);
+      console.warn(`[Firestore Delete Notice] ${collectionName}/${cleanId}:`, err.message || err);
+    }
+  }
+
+  const rtdb = getRealtimeDb();
+  if (rtdb) {
+    try {
+      const itemRef = ref(rtdb, `${collectionName}/${cleanId}`);
+      await remove(itemRef);
+      removed = true;
+    } catch (err) {
+      console.warn(`[RealtimeDB Delete Notice] ${collectionName}/${cleanId}:`, err.message || err);
     }
   }
 
