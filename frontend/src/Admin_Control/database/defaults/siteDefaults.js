@@ -68,64 +68,7 @@ export const STORAGE_HIRING_PARTNERS_KEY = 'ezer_hiring_partners:v18_clean_image
 export const STORAGE_PAYMENT_CONFIG_KEY = 'ezer_payment_config:v18_clean_image_paths';
 export const STORAGE_PAYMENTS_KEY = 'ezer_payments_list:v18_clean_image_paths';
 
-export const defaultPayments = [
-  {
-    id: 'pay-1001',
-    studentName: 'Arun Kumar M',
-    amount: 49999,
-    upiTransactionId: 'UPI/328910482910/OKAXIS',
-    paidTo: 'EZER Learning Solutions Pvt Ltd',
-    paymentMethod: 'Google Pay (UPI)',
-    paidFrom: 'arunkumar98@okaxis (+91 98765 43210)',
-    courseName: 'Full Stack Development with AI',
-    paymentDate: '2026-08-11 10:30 AM',
-    status: 'SUCCESSFUL',
-    email: 'arunkumar.m@gmail.com',
-    phone: '+91 98765 43210'
-  },
-  {
-    id: 'pay-1002',
-    studentName: 'Priya Dharshini R',
-    amount: 49999,
-    upiTransactionId: 'UPI/328941983012/OKHDFCBANK',
-    paidTo: 'EZER Learning Solutions Pvt Ltd',
-    paymentMethod: 'PhonePe (UPI)',
-    paidFrom: 'priyardharshini@okhdfcbank (+91 97102 34567)',
-    courseName: 'Cloud DevOps Masterclass with AI',
-    paymentDate: '2026-08-10 03:15 PM',
-    status: 'SUCCESSFUL',
-    email: 'priya.dharshini@gmail.com',
-    phone: '+91 97102 34567'
-  },
-  {
-    id: 'pay-1003',
-    studentName: 'Karthik Subramanian',
-    amount: 9,
-    upiTransactionId: 'UPI/329001928374/PAYTM',
-    paidTo: 'EZER Learning Solutions Pvt Ltd',
-    paymentMethod: 'Paytm UPI',
-    paidFrom: 'karthik.subra@paytm (+91 94441 87654)',
-    courseName: 'AI & Data Science Cohort Demo',
-    paymentDate: '2026-08-10 11:45 AM',
-    status: 'SUCCESSFUL',
-    email: 'karthik.subramanian@outlook.com',
-    phone: '+91 94441 87654'
-  },
-  {
-    id: 'pay-1004',
-    studentName: 'Sanjay V',
-    amount: 49999,
-    upiTransactionId: 'TXN_CC_9812739182',
-    paidTo: 'EZER Learning Solutions Pvt Ltd',
-    paymentMethod: 'Credit Card (Visa)',
-    paidFrom: 'sanjay.v@gmail.com (**** 4892)',
-    courseName: 'Full Stack Development with AI',
-    paymentDate: '2026-08-09 06:20 PM',
-    status: 'SUCCESSFUL',
-    email: 'sanjay.v@gmail.com',
-    phone: '+91 98840 12345'
-  }
-];
+export const defaultPayments = [];
 
 export const defaultPaymentConfig = {
   enrollmentPrice: 9,
@@ -133,6 +76,9 @@ export const defaultPaymentConfig = {
   discountBadge: '99% OFF SPECIAL',
   priceLabel: 'Full Course Access + Mentorship',
   enrollmentLabel: 'INSTANT COHORT ENROLLMENT',
+  upiVpa: 'ezerlearning@okaxis',
+  upiMerchantName: 'EZER Learning Solutions Pvt. Ltd.',
+  upiQrImageUrl: 'images/payment/upi_qr_code.png',
   paymentMethods: [
     { id: 'upi', label: 'UPI / GooglePay / PhonePe / Paytm', subtitle: 'Instant QR Code Scan & Pay', enabled: true },
     { id: 'card', label: 'Credit Card / Debit Card', subtitle: 'Visa, MasterCard, RuPay, Amex', enabled: true }

@@ -133,6 +133,57 @@ export default function CoursePaymentManager() {
           </div>
         </div>
 
+        {/* UPI QR Code & Merchant Gateway Settings */}
+        <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 14px rgba(0,6,72,0.03)' }}>
+          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <HiQrcode color="#000648" size={20} /> Official UPI QR Code & Merchant Config
+          </h3>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+            <div>
+              <label htmlFor="upi_vpa_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                UPI ID / VPA Address *
+              </label>
+              <input
+                id="upi_vpa_field"
+                type="text"
+                value={formData.upiVpa || 'ezerlearning@okaxis'}
+                onChange={(e) => setFormData((prev) => ({ ...prev, upiVpa: e.target.value }))}
+                placeholder="e.g. ezerlearning@okaxis"
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 800, color: '#000648' }}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="upi_merchant_name_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                Merchant Beneficiary Name
+              </label>
+              <input
+                id="upi_merchant_name_field"
+                type="text"
+                value={formData.upiMerchantName || 'EZER Learning Solutions Pvt. Ltd.'}
+                onChange={(e) => setFormData((prev) => ({ ...prev, upiMerchantName: e.target.value }))}
+                placeholder="EZER Learning Solutions Pvt. Ltd."
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="upi_qr_image_url_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                UPI QR Code Image URL / Asset Path
+              </label>
+              <input
+                id="upi_qr_image_url_field"
+                type="text"
+                value={formData.upiQrImageUrl || 'images/payment/upi_qr_code.png'}
+                onChange={(e) => setFormData((prev) => ({ ...prev, upiQrImageUrl: e.target.value }))}
+                placeholder="images/payment/upi_qr_code.png"
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+              />
+            </div>
+          </div>
+        </div>
+
         {/* Enabled Payment Gateways */}
         <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 14px rgba(0,6,72,0.03)' }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>

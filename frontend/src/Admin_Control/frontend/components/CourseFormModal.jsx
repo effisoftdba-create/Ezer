@@ -271,7 +271,7 @@ export default function CourseFormModal({
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '14px', marginBottom: '14px' }}>
                   <div>
                     <label htmlFor="course_price" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
-                      Special Offer Price *
+                      Cohort Enrollment Fee (₹) *
                     </label>
                     <input
                       id="course_price"

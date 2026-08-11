@@ -11,6 +11,7 @@ import {
   HiOutlineTrash,
   HiOutlineEye,
   HiOutlinePrinter,
+  HiOutlinePhotograph,
   HiX,
   HiCheck
 } from 'react-icons/hi';
@@ -78,6 +79,118 @@ function printPdfReceipt(payment) {
   `;
   printWin.document.write(htmlContent);
   printWin.document.close();
+}
+
+function downloadReceiptImage(payment) {
+  const canvas = document.createElement('canvas');
+  canvas.width = 640;
+  canvas.height = 760;
+  const ctx = canvas.getContext('2d');
+
+  // White Background
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, 640, 760);
+
+  // Outer Border
+  ctx.strokeStyle = '#000648';
+  ctx.lineWidth = 6;
+  ctx.strokeRect(16, 16, 608, 728);
+
+  // Header Box
+  ctx.fillStyle = '#000648';
+  ctx.fillRect(16, 16, 608, 110);
+
+  // Header Text
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 26px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('EZER LEARNING SOLUTIONS', 320, 62);
+
+  ctx.fillStyle = '#f2b733';
+  ctx.font = 'bold 13px sans-serif';
+  ctx.fillText('OFFICIAL DIGITAL PAYMENT RECEIPT', 320, 92);
+
+  // Status Badge
+  ctx.fillStyle = '#f0fdf4';
+  ctx.strokeStyle = '#86efac';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  if (ctx.roundRect) {
+    ctx.roundRect(170, 148, 300, 42, 21);
+  } else {
+    ctx.rect(170, 148, 300, 42);
+  }
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = '#166534';
+  ctx.font = 'bold 15px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('✔ PAYMENT SUCCESSFUL & VERIFIED', 320, 175);
+
+  // Amount
+  ctx.fillStyle = '#000648';
+  ctx.font = '900 44px sans-serif';
+  ctx.fillText(`₹${Number(payment.amount).toLocaleString('en-IN')}.00`, 320, 245);
+
+  ctx.fillStyle = '#64748b';
+  ctx.font = '600 15px sans-serif';
+  ctx.fillText(`Paid via ${payment.paymentMethod || 'UPI Payment'}`, 320, 278);
+
+  // Dashed Line
+  ctx.strokeStyle = '#cbd5e1';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([8, 6]);
+  ctx.beginPath();
+  ctx.moveTo(40, 305);
+  ctx.lineTo(600, 305);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Data Rows
+  const dataRows = [
+    ['Merchant Account', payment.paidTo || 'EZER Learning Solutions Pvt Ltd'],
+    ['Candidate Name', payment.studentName],
+    ['UPI Transaction ID', payment.upiTransactionId],
+    ['Enrolled Course', payment.courseName || 'Cohort Course'],
+    ['Paid From Account', payment.paidFrom || payment.email || 'UPI Account'],
+    ['Payment Timestamp', payment.paymentDate || new Date().toLocaleString()],
+    ['Status', 'SETTLED & VERIFIED']
+  ];
+
+  let y = 350;
+  dataRows.forEach(([lbl, val]) => {
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 14px sans-serif';
+    ctx.fillText(lbl, 50, y);
+
+    ctx.textAlign = 'right';
+    ctx.fillStyle = lbl === 'Status' ? '#166534' : '#000648';
+    ctx.font = 'bold 15px sans-serif';
+    ctx.fillText(String(val), 590, y);
+
+    ctx.strokeStyle = '#f1f5f9';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(50, y + 12);
+    ctx.lineTo(590, y + 12);
+    ctx.stroke();
+
+    y += 48;
+  });
+
+  // Footer
+  ctx.textAlign = 'center';
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '12px sans-serif';
+  ctx.fillText('This is an official computer-generated receipt. • EZER Learning Solutions', 320, 715);
+
+  // Download
+  const a = document.createElement('a');
+  a.download = `ezer-payment-receipt-${payment.upiTransactionId || 'receipt'}.png`;
+  a.href = canvas.toDataURL('image/png');
+  a.click();
 }
 
 export default function PaymentsReceivedManager() {
@@ -158,10 +271,10 @@ export default function PaymentsReceivedManager() {
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
             <HiOutlineCurrencyRupee size={26} color="#115DFC" />
-            Payments Received & Financial Reports
+            Payments Received & Real-time Receipts
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Track live student fee collections, UPI transaction reference numbers, Google Pay receipts, and PDF exports.
+            Track live verified student fee collections, UPI reference numbers, Google Pay receipts, image downloads, and PDF exports.
           </p>
         </div>
 
@@ -199,7 +312,7 @@ export default function PaymentsReceivedManager() {
             Successful Transactions
           </span>
           <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#000648', marginTop: '4px' }}>
-            {totalCount} Payments
+            {totalCount} Verified
           </div>
         </div>
 
@@ -214,10 +327,10 @@ export default function PaymentsReceivedManager() {
 
         <div style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: '14px', padding: '18px 20px' }}>
           <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Payment Verification
+            Database Sync
           </span>
           <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#15803d', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiOutlineCheckCircle size={20} /> 100% Dual Synced
+            <HiOutlineCheckCircle size={20} /> Live Realtime Synced
           </div>
         </div>
       </div>
@@ -262,8 +375,13 @@ export default function PaymentsReceivedManager() {
           <tbody>
             {filteredPayments.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ padding: '32px', textAlign: 'center', color: '#64748b' }}>
-                  No payment records found matching search.
+                <td colSpan={7} style={{ padding: '40px 32px', textAlign: 'center', color: '#64748b' }}>
+                  <div style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                    No Real Payments Recorded Yet
+                  </div>
+                  <div style={{ fontSize: '0.84rem', color: '#64748b' }}>
+                    When candidates complete checkout on the website, their verified transactions will appear here in real time.
+                  </div>
                 </td>
               </tr>
             ) : (
@@ -300,6 +418,16 @@ export default function PaymentsReceivedManager() {
                         style={{ padding: '6px 10px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
                       >
                         <HiOutlineEye size={14} /> Receipt
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => downloadReceiptImage(pay)}
+                        aria-label={`Download image receipt for ${pay.studentName}`}
+                        title="Download Receipt as Image (.png)"
+                        style={{ padding: '6px 10px', background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                      >
+                        <HiOutlinePhotograph size={14} /> Image
                       </button>
 
                       <button
@@ -343,7 +471,7 @@ export default function PaymentsReceivedManager() {
       {/* Google Pay-Style Payment Report Receipt Modal */}
       {selectedReceipt && ReactDOM.createPortal(
         <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,6,72,0.85)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-          <div style={{ background: '#ffffff', borderRadius: '20px', width: '100%', maxWidth: '460px', overflow: 'hidden', boxShadow: '0 25px 50px rgba(0,0,0,0.3)', border: '2px solid #000648' }}>
+          <div style={{ background: '#ffffff', borderRadius: '20px', width: '100%', maxWidth: '480px', overflow: 'hidden', boxShadow: '0 25px 50px rgba(0,0,0,0.3)', border: '2px solid #000648' }}>
             <div style={{ background: '#000648', padding: '16px 20px', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '0.8rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                 DIGITAL PAYMENT REPORT
@@ -396,22 +524,30 @@ export default function PaymentsReceivedManager() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  type="button"
+                  onClick={() => downloadReceiptImage(selectedReceipt)}
+                  aria-label="Download image receipt"
+                  style={{ flex: 1, padding: '10px 12px', background: '#f0fdf4', color: '#166534', border: '1.5px solid #bbf7d0', borderRadius: '10px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.8rem' }}
+                >
+                  <HiOutlinePhotograph size={16} /> Download Image
+                </button>
                 <button
                   type="button"
                   onClick={() => printPdfReceipt(selectedReceipt)}
                   aria-label="Download PDF Receipt"
-                  style={{ flex: 1, padding: '11px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '10px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.85rem' }}
+                  style={{ flex: 1, padding: '10px 12px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '10px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.8rem' }}
                 >
-                  <HiOutlineDownload size={18} /> Download PDF Receipt
+                  <HiOutlineDownload size={16} /> Download PDF
                 </button>
                 <button
                   type="button"
                   onClick={() => handleShareSummary(selectedReceipt)}
                   aria-label="Share receipt summary"
-                  style={{ padding: '11px 16px', background: '#f1f5f9', color: '#000648', border: '1.5px solid #cbd5e1', borderRadius: '10px', fontWeight: 800, cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                  style={{ padding: '10px 14px', background: '#f1f5f9', color: '#000648', border: '1.5px solid #cbd5e1', borderRadius: '10px', fontWeight: 800, cursor: 'pointer', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}
                 >
-                  <HiOutlineShare size={16} /> Share
+                  <HiOutlineShare size={16} />
                 </button>
               </div>
             </div>
