@@ -169,20 +169,39 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
     e.preventDefault();
     setVerifyError('');
 
+    if (paymentMethod === 'upi') {
+      const cleanRef = upiRefId.trim();
+      if (!cleanRef || cleanRef.length < 10) {
+        setVerifyError('Please enter your valid 12-digit UPI Transaction / UTR reference number from Google Pay or PhonePe.');
+        return;
+      }
+
+      // Check if UTR has already been submitted to prevent duplicate payment fraud
+      if (Array.isArray(payments) && payments.some(p => (p.upiTransactionId || '').toLowerCase() === cleanRef.toLowerCase())) {
+        setVerifyError('This UPI Transaction ID has already been recorded or verified. Please check your bank transaction receipt.');
+        return;
+      }
+    } else if (paymentMethod === 'card') {
+      if (!cardNumber || cardNumber.length < 15) {
+        setVerifyError('Please enter a valid 16-digit credit/debit card number.');
+        return;
+      }
+    }
+
     setIsProcessing(true);
 
     try {
-      // Auto-generate verified transaction ID if learner did not manually type reference number
-      const autoTxnRef = upiRefId.trim() || ('UPI/' + Math.floor(100000000000 + Math.random() * 900000000000) + '/OKAXIS');
+      const finalTxnRef = paymentMethod === 'upi' ? upiRefId.trim() : `CARD/${cardNumber.slice(-4)}/${Date.now()}`;
 
-      setReceiptNumber(autoTxnRef);
+      setReceiptNumber(finalTxnRef);
 
       const payRecord = {
         studentName: fullName.trim(),
         email: email.trim(),
         phone: phone.trim(),
         amount: Number(finalPrice) || 9,
-        upiTransactionId: autoTxnRef,
+        upiTransactionId: finalTxnRef,
+        upiVpa: upiVpa,
         paymentMethod: paymentMethod === 'upi' ? 'Google Pay (UPI)' : 'Credit Card (Tokenized)',
         paidTo: upiMerchantName,
         paidFrom: `${email.trim()} (${phone.trim()})`,
@@ -205,7 +224,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
           course: course.title || 'Executive IT Course',
           paymentStatus: 'PAID',
           amountPaid: `₹${finalPrice}`,
-          transactionId: autoTxnRef,
+          transactionId: finalTxnRef,
           status: 'Enrolled',
           city: 'Online Enrollment',
           timestamp: new Date().toISOString()
@@ -214,8 +233,8 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
 
       setStep(3);
     } catch (err) {
-      console.error('[Checkout Auto Verification Error]:', err);
-      setVerifyError('Auto verification failed. Please try again.');
+      console.error('[Checkout Verification Error]:', err);
+      setVerifyError('Verification failed. Please check your transaction details and try again.');
     } finally {
       setIsProcessing(false);
     }
@@ -411,8 +430,31 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
                   />
                 </div>
 
-                <div style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 800, background: '#f0fdf4', padding: '8px 12px', borderRadius: '8px', border: '1px solid #bbf7d0' }}>
-                  ✔ Instant Auto-Verification Enabled — Scan & Pay with Google Pay, PhonePe, or Paytm.
+                <div style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 800, background: '#f0fdf4', padding: '8px 12px', borderRadius: '8px', border: '1px solid #bbf7d0', marginBottom: '14px' }}>
+                  ✔ Step 1: Scan & Pay with Google Pay, PhonePe, or Paytm.<br/>
+                  ✔ Step 2: Enter your 12-digit UTR Ref ID below to verify.
+                </div>
+
+                <div style={{ textAlign: 'left' }}>
+                  <label htmlFor="upi_ref_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                    12-Digit UPI Ref / UTR Transaction ID *
+                  </label>
+                  <input
+                    id="upi_ref_input"
+                    type="text"
+                    required
+                    maxLength={18}
+                    placeholder="e.g. 428910482910 (Copy from Google Pay / PhonePe)"
+                    value={upiRefId}
+                    onChange={(e) => setUpiRefId(e.target.value)}
+                    style={{
+                      width: '100%', padding: '10px 12px', borderRadius: '8px',
+                      border: '1.5px solid #cbd5e1', fontSize: '0.9rem', fontFamily: 'monospace', outline: 'none'
+                    }}
+                  />
+                  <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '4px' }}>
+                    Required for verification: Open Google Pay or PhonePe after payment to copy your 12-digit UPI transaction number.
+                  </div>
                 </div>
               </div>
             ) : (
@@ -454,7 +496,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
               }}
             >
-              {isProcessing ? 'Auto-Verifying Payment...' : `Verify & Unlock Course Access (₹${finalPrice})`}
+              {isProcessing ? 'Verifying Transaction...' : `Submit 12-Digit UTR & Verify Access (₹${finalPrice})`}
             </button>
           </form>
         )}

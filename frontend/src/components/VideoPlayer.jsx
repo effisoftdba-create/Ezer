@@ -42,7 +42,7 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
         .ezer-video-player-container {
           width: 100%;
           aspect-ratio: 16 / 9;
-          min-height: 360px;
+          min-height: 340px;
           border-radius: 16px;
           overflow: hidden;
           background: #000000;
@@ -50,16 +50,20 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
           border: 2px solid #000648;
           position: relative;
         }
+        .ezer-drive-embed iframe {
+          width: 100% !important;
+          height: 100% !important;
+          transform: scale(1.32);
+          transform-origin: center center;
+        }
         @media (max-width: 768px) {
           .ezer-video-player-container {
             aspect-ratio: 16 / 9 !important;
             min-height: 220px !important;
             border-radius: 12px !important;
           }
-          .ezer-video-player-container iframe {
-            width: 100% !important;
-            height: 100% !important;
-            transform: scale(1.15);
+          .ezer-drive-embed iframe {
+            transform: scale(1.38);
             transform-origin: center center;
           }
         }
@@ -69,13 +73,13 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
             min-height: 195px !important;
             border-radius: 10px !important;
           }
-          .ezer-video-player-container iframe {
-            transform: scale(1.22);
+          .ezer-drive-embed iframe {
+            transform: scale(1.48);
             transform-origin: center center;
           }
         }
       `}</style>
-      <div className="ezer-video-player-container">
+      <div className={`ezer-video-player-container ${config.isDrive ? 'ezer-drive-embed' : ''}`}>
         {config.type === 'video' ? (
           <video
             key={config.src}
