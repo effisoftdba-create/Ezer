@@ -9,12 +9,30 @@ const TECH_FALLBACK_IMAGES = [
   "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800"
 ];
 
+const HD_IMAGE_MAP = {
+  'images/hero/hero_section_1.jpg': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/devops.avif': 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/full-stack-development.jpg': 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/AI_machine_learning.png': 'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/data-analysis.jpeg': 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/Cybersecurity.webp': 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/Spoken_english.png': 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/here_section_2.webp': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/optimized/hero_section_1.jpg': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=85&w=1600',
+};
+
 export function resolveImageSrc(urlStr) {
   if (!urlStr) {
     return TECH_FALLBACK_IMAGES[0];
   }
 
   const trimmed = String(urlStr).trim();
+
+  // 0. Auto-upgrade legacy low-res static paths to 1600px HD crystal clear Unsplash images
+  const cleanPathKey = trimmed.replace(/^\//, '');
+  if (HD_IMAGE_MAP[cleanPathKey]) {
+    return HD_IMAGE_MAP[cleanPathKey];
+  }
 
   // 1. Convert raw or URL-encoded inline SVG strings to valid Data URIs
   if (trimmed.startsWith('<svg') || trimmed.includes('<svg') || trimmed.startsWith('%3Csvg') || trimmed.includes('%3Csvg')) {

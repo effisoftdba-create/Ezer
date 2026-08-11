@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HiX, HiCheckCircle, HiCreditCard, HiQrcode, HiLockClosed, HiShieldCheck, HiPhotograph } from 'react-icons/hi';
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
+import { useBodyScrollLock } from '../../hooks/useBodyScrollLock';
 
 function downloadStudentReceiptImage(payment) {
   const canvas = document.createElement('canvas');
@@ -121,6 +122,7 @@ function downloadStudentReceiptImage(payment) {
 }
 
 export default function CoursePurchaseModal({ isOpen, onClose, course }) {
+  useBodyScrollLock(isOpen && Boolean(course));
   const { addLead, addPayment, contactInfo, paymentConfig, payments } = useSiteData();
   const [step, setStep] = useState(1); // 1: Details, 2: Gateway & Verification, 3: Success Receipt
   const [paymentMethod, setPaymentMethod] = useState('upi'); // 'upi' | 'card'
@@ -254,7 +256,8 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
     <div style={{
       position: 'fixed', inset: 0, zIndex: 10000,
       background: 'rgba(0, 6, 72, 0.85)', backdropFilter: 'blur(8px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px'
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px',
+      overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch'
     }}>
       <style>{`
         .modal-form-grid {
@@ -270,10 +273,11 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
       `}</style>
       <div style={{
         background: '#ffffff', color: '#000648', width: '100%', maxWidth: '560px',
-        maxHeight: '90vh', overflowY: 'auto',
+        maxHeight: '90vh', overflowY: 'auto', overscrollBehavior: 'contain',
         borderRadius: '24px', boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
         position: 'relative', border: '2px solid #000648'
       }}>
+
         {/* Modal Header */}
         <div style={{
           background: '#000648', color: '#ffffff', padding: '20px 24px',

@@ -47,8 +47,8 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
             <img
               src={resolveImageSrc(currentSlide.url || currentSlide.image)}
               alt={currentSlide.headline || 'EZER Learning IT Training Slide'}
-              width="800"
-              height="480"
+              width="1600"
+              height="900"
               fetchPriority="high"
               loading="eager"
               decoding="async"
@@ -59,7 +59,7 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
                 objectPosition: imagePos,
                 transform: (imageZoom !== 1) ? `scale(${imageZoom})` : 'none',
                 transformOrigin: imagePos,
-                imageRendering: 'high-quality',
+                imageRendering: '-webkit-optimize-contrast',
                 backfaceVisibility: 'hidden',
                 transition: 'transform 0.2s ease, object-position 0.2s ease, object-fit 0.2s ease',
               }}

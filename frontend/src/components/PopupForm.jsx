@@ -4,10 +4,12 @@ import PopupSuccessState from './popup/PopupSuccessState';
 import PopupFormFields from './popup/PopupFormFields';
 import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc } from '../utils/imageUtils';
+import { useBodyScrollLock } from '../hooks/useBodyScrollLock';
 
 const GOOGLE_SHEETS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_EXAMPLE_DEPLOYMENT_ID/exec';
 
 export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
+  useBodyScrollLock(isOpen);
   const siteData = useSiteData();
   const [formData, setFormData] = useState(() => ({
     name: '',
@@ -124,6 +126,8 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
         justifyContent: 'center',
         padding: '12px',
         animation: 'fadeIn 0.3s ease',
+        overscrollBehavior: 'contain',
+        WebkitOverflowScrolling: 'touch',
       }}
     >
       <div
@@ -160,7 +164,7 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
           </div>
         )}
 
-        <div style={{ maxHeight: 'calc(90vh - 24px)', overflowY: 'auto', position: 'relative', zIndex: 1 }}>
+        <div style={{ maxHeight: 'calc(90vh - 24px)', overflowY: 'auto', position: 'relative', zIndex: 1, overscrollBehavior: 'contain' }}>
 
           <PopupHeader onClose={onClose} overrideConfig={popupConfig} />
           <div style={{ padding: 'clamp(16px, 4vw, 22px)' }}>
@@ -181,3 +185,4 @@ export default function PopupForm({ isOpen, onClose, defaultCourse = '' }) {
     </div>
   );
 }
+
