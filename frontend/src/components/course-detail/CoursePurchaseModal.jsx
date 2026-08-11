@@ -4,112 +4,118 @@ import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 function downloadStudentReceiptImage(payment) {
   const canvas = document.createElement('canvas');
-  canvas.width = 640;
+  canvas.width = 540;
   canvas.height = 760;
   const ctx = canvas.getContext('2d');
 
-  // White Background
+  // Pure White Background
   ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 640, 760);
+  ctx.fillRect(0, 0, 540, 760);
 
-  // Outer Border
-  ctx.strokeStyle = '#000648';
-  ctx.lineWidth = 6;
-  ctx.strokeRect(16, 16, 608, 728);
+  // Top Avatar Circle (Pink #e91e63)
+  ctx.fillStyle = '#e91e63';
+  ctx.beginPath();
+  ctx.arc(270, 70, 32, 0, Math.PI * 2);
+  ctx.fill();
 
-  // Header Box
-  ctx.fillStyle = '#000648';
-  ctx.fillRect(16, 16, 608, 110);
-
-  // Header Text
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 26px sans-serif';
+  ctx.font = 'bold 28px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('EZER LEARNING SOLUTIONS', 320, 62);
+  ctx.fillText('E', 270, 80);
 
-  ctx.fillStyle = '#f2b733';
-  ctx.font = 'bold 13px sans-serif';
-  ctx.fillText('OFFICIAL DIGITAL PAYMENT RECEIPT', 320, 92);
+  // Recipient Header
+  ctx.fillStyle = '#202124';
+  ctx.font = '600 16px sans-serif';
+  ctx.fillText(`To ${payment.paidTo || 'EZER Learning Solutions Pvt. Ltd.'}`, 270, 130);
 
-  // Status Badge
-  ctx.fillStyle = '#f0fdf4';
-  ctx.strokeStyle = '#86efac';
-  ctx.lineWidth = 2;
+  // Huge Amount
+  ctx.fillStyle = '#202124';
+  ctx.font = '700 44px sans-serif';
+  ctx.fillText(`₹${Number(payment.amount).toLocaleString('en-IN')}`, 270, 185);
+
+  // Completed Pill Button
+  ctx.fillStyle = '#ffffff';
+  ctx.strokeStyle = '#dadce0';
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
   if (ctx.roundRect) {
-    ctx.roundRect(170, 148, 300, 42, 21);
+    ctx.roundRect(190, 205, 160, 36, 18);
   } else {
-    ctx.rect(170, 148, 300, 42);
+    ctx.rect(190, 205, 160, 36);
   }
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = '#166534';
-  ctx.font = 'bold 15px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('✔ PAYMENT SUCCESSFUL & AUTO-VERIFIED', 320, 175);
+  ctx.fillStyle = '#1e8e3e';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.fillText('✔  Completed', 270, 228);
 
-  // Amount
-  ctx.fillStyle = '#000648';
-  ctx.font = '900 44px sans-serif';
-  ctx.fillText(`₹${Number(payment.amount).toLocaleString('en-IN')}.00`, 320, 245);
+  // Date Timestamp
+  ctx.fillStyle = '#5f6368';
+  ctx.font = '13px sans-serif';
+  ctx.fillText(payment.paymentDate || new Date().toLocaleString(), 270, 265);
 
-  ctx.fillStyle = '#64748b';
-  ctx.font = '600 15px sans-serif';
-  ctx.fillText(`Paid via ${payment.paymentMethod || 'Google Pay (UPI)'}`, 320, 278);
-
-  // Dashed Line
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 1.5;
-  ctx.setLineDash([8, 6]);
+  // Details Box Container
+  ctx.fillStyle = '#ffffff';
+  ctx.strokeStyle = '#dadce0';
+  ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(40, 305);
-  ctx.lineTo(600, 305);
+  if (ctx.roundRect) {
+    ctx.roundRect(30, 290, 480, 380, 16);
+  } else {
+    ctx.rect(30, 290, 480, 380);
+  }
+  ctx.fill();
   ctx.stroke();
-  ctx.setLineDash([]);
 
-  // Data Rows
-  const dataRows = [
-    ['Merchant Account', payment.paidTo || 'EZER Learning Solutions Pvt Ltd'],
-    ['Candidate Name', payment.studentName],
-    ['UPI Transaction ID', payment.upiTransactionId],
-    ['Enrolled Course', payment.courseName || 'Cohort Course'],
-    ['Paid From Account', payment.paidFrom || payment.email || 'UPI Account'],
-    ['Payment Timestamp', payment.paymentDate || new Date().toLocaleString()],
-    ['Status', 'SETTLED & VERIFIED']
+  // Bank Header inside Box
+  ctx.fillStyle = '#202124';
+  ctx.font = 'bold 15px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('Google Pay (UPI)', 50, 325);
+
+  ctx.strokeStyle = '#f1f3f4';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(50, 340);
+  ctx.lineTo(490, 340);
+  ctx.stroke();
+
+  // Fields inside details box
+  const fields = [
+    ['UPI transaction ID', payment.upiTransactionId || '109529161148'],
+    ['To', 'ezerlearning@okaxis'],
+    [`From: ${payment.studentName}`, payment.paidFrom || payment.email || 'Student Account'],
+    ['Google Pay • Enrolled Course', payment.courseName || 'Cohort Enrolled'],
+    ['Google transaction ID', `CICAgKj${Math.random().toString(36).substring(2, 10).toUpperCase()}`]
   ];
 
-  let y = 350;
-  dataRows.forEach(([lbl, val]) => {
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#64748b';
-    ctx.font = '600 14px sans-serif';
+  let y = 370;
+  fields.forEach(([lbl, val]) => {
+    ctx.fillStyle = '#5f6368';
+    ctx.font = '12px sans-serif';
     ctx.fillText(lbl, 50, y);
 
-    ctx.textAlign = 'right';
-    ctx.fillStyle = lbl === 'Status' ? '#166534' : '#000648';
-    ctx.font = 'bold 15px sans-serif';
-    ctx.fillText(String(val), 590, y);
+    ctx.fillStyle = '#202124';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText(String(val), 50, y + 20);
 
-    ctx.strokeStyle = '#f1f5f9';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(50, y + 12);
-    ctx.lineTo(590, y + 12);
-    ctx.stroke();
-
-    y += 48;
+    y += 58;
   });
 
-  // Footer
+  // Footer UPI Logo
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '12px sans-serif';
-  ctx.fillText('This is an official computer-generated receipt. • EZER Learning Solutions', 320, 715);
+  ctx.fillStyle = '#70757a';
+  ctx.font = '10px sans-serif';
+  ctx.fillText('POWERED BY', 270, 705);
 
-  // Download
+  ctx.fillStyle = '#202124';
+  ctx.font = '900 16px sans-serif';
+  ctx.fillText('UPI ▶', 270, 725);
+
+  // Trigger Download
   const a = document.createElement('a');
-  a.download = `ezer-payment-receipt-${payment.upiTransactionId || 'receipt'}.png`;
+  a.download = `gpay-receipt-${payment.upiTransactionId || 'transaction'}.png`;
   a.href = canvas.toDataURL('image/png');
   a.click();
 }

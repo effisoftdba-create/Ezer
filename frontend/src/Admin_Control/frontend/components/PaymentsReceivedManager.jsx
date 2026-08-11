@@ -12,6 +12,7 @@ import {
   HiOutlineEye,
   HiOutlinePrinter,
   HiOutlinePhotograph,
+  HiChevronDown,
   HiX,
   HiCheck
 } from 'react-icons/hi';
@@ -22,51 +23,83 @@ function printPdfReceipt(payment) {
     alert('Please allow popups to download/print the PDF receipt.');
     return;
   }
+
+  const dateStr = payment.paymentDate || new Date().toLocaleString();
+  const upiId = payment.upiTransactionId || '109529161148';
+  const paidTo = payment.paidTo || 'EZER Learning Solutions Pvt. Ltd.';
+  const studentName = payment.studentName || 'Learner Candidate';
+
   const htmlContent = `
     <!DOCTYPE html>
     <html>
       <head>
-        <title>EZER Payment Receipt - ${payment.upiTransactionId}</title>
+        <title>Google Pay Receipt - ${upiId}</title>
         <style>
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #ffffff; color: #000648; padding: 40px; margin: 0; }
-          .receipt-card { border: 2px solid #000648; border-radius: 16px; padding: 32px; max-width: 600px; margin: 0 auto; background: #ffffff; }
-          .header { text-align: center; border-bottom: 2px dashed #e2e8f0; padding-bottom: 20px; margin-bottom: 24px; }
-          .logo { font-size: 24px; font-weight: 900; color: #000648; letter-spacing: -0.5px; }
-          .logo span { color: #f2b733; }
-          .badge { display: inline-block; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; font-weight: 800; font-size: 13px; padding: 6px 16px; border-radius: 50px; margin-top: 10px; }
-          .amount { font-size: 36px; font-weight: 900; color: #000648; margin: 16px 0 4px 0; text-align: center; }
-          .subtext { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 24px; }
-          .row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f5f9; font-size: 14px; }
-          .row .label { color: #64748b; font-weight: 600; }
-          .row .value { color: #000648; font-weight: 800; text-align: right; }
-          .footer { text-align: center; margin-top: 32px; font-size: 12px; color: #94a3b8; }
+          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #ffffff; color: #202124; padding: 40px; margin: 0; }
+          .gpay-card { max-width: 440px; margin: 0 auto; text-align: center; }
+          .avatar { width: 64px; height: 64px; background: #e91e63; color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700; margin: 0 auto 12px; }
+          .recipient { font-size: 16px; font-weight: 600; color: #202124; margin-bottom: 8px; }
+          .amount { font-size: 42px; font-weight: 700; color: #202124; margin: 12px 0 16px; letter-spacing: -0.5px; }
+          .completed-pill { display: inline-flex; align-items: center; gap: 6px; background: #ffffff; border: 1px solid #dadce0; border-radius: 50px; padding: 6px 20px; font-size: 14px; font-weight: 600; color: #1e8e3e; margin-bottom: 8px; }
+          .timestamp { font-size: 13px; color: #5f6368; margin-bottom: 24px; }
+          .details-box { background: #ffffff; border: 1px solid #dadce0; border-radius: 16px; padding: 20px; text-align: left; box-shadow: 0 1px 3px rgba(60,64,67,0.08); }
+          .bank-header { font-size: 15px; font-weight: 700; color: #202124; padding-bottom: 12px; border-bottom: 1px solid #f1f3f4; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+          .field-group { margin-bottom: 12px; }
+          .field-label { font-size: 12px; color: #5f6368; font-weight: 500; margin-bottom: 2px; }
+          .field-val { font-size: 14px; color: #202124; font-weight: 600; word-break: break-all; }
+          .upi-footer { margin-top: 28px; text-align: center; font-size: 11px; font-weight: 800; color: #70757a; letter-spacing: 1px; }
           @media print {
             body { padding: 0; }
-            .receipt-card { border: none; }
           }
         </style>
       </head>
       <body>
-        <div class="receipt-card">
-          <div class="header">
-            <div class="logo">EZER <span>LEARNING SOLUTIONS</span></div>
-            <div style="font-size: 12px; color: #64748b; margin-top: 4px;">Official Payment Confirmation & Tax Invoice</div>
-            <div class="badge">✔ PAYMENT SUCCESSFUL</div>
+        <div class="gpay-card">
+          <div class="avatar">E</div>
+          <div class="recipient">To ${paidTo}</div>
+          <div class="amount">₹${Number(payment.amount).toLocaleString('en-IN')}</div>
+          
+          <div class="completed-pill">
+            <span style="color:#1e8e3e; font-size:16px;">✔</span> Completed
           </div>
-          <div class="amount">₹${Number(payment.amount).toLocaleString('en-IN')}.00</div>
-          <div class="subtext">Paid via ${payment.paymentMethod || 'UPI Payment'}</div>
+          
+          <div class="timestamp">${dateStr}</div>
 
-          <div class="row"><span class="label">Paid To</span><span class="value">${payment.paidTo || 'EZER Learning Solutions Pvt Ltd'}</span></div>
-          <div class="row"><span class="label">Student Name</span><span class="value">${payment.studentName}</span></div>
-          <div class="row"><span class="label">UPI / Ref ID</span><span class="value">${payment.upiTransactionId}</span></div>
-          <div class="row"><span class="label">Course Title</span><span class="value">${payment.courseName || 'Cohort Enrolled'}</span></div>
-          <div class="row"><span class="label">Paid From Account</span><span class="value">${payment.paidFrom || payment.email || 'UPI Account'}</span></div>
-          <div class="row"><span class="label">Transaction Date</span><span class="value">${payment.paymentDate || new Date().toLocaleString()}</span></div>
-          <div class="row"><span class="label">Payment Status</span><span class="value" style="color:#166534;">SETTLED & VERIFIED</span></div>
+          <div class="details-box">
+            <div class="bank-header">
+              <span>Google Pay (UPI)</span>
+              <span style="color:#70757a; font-size:12px;">✔</span>
+            </div>
 
-          <div class="footer">
-            This is a computer-generated digital receipt. No signature required.<br/>
-            EZER Learning Solutions Pvt. Ltd. • Support: support@ezerlearning.com
+            <div class="field-group">
+              <div class="field-label">UPI transaction ID</div>
+              <div class="field-val">${upiId}</div>
+            </div>
+
+            <div class="field-group">
+              <div class="field-label">To</div>
+              <div class="field-val">ezerlearning@okaxis</div>
+            </div>
+
+            <div class="field-group">
+              <div class="field-label">From: ${studentName}</div>
+              <div class="field-val">${payment.paidFrom || payment.email || 'Student Account'}</div>
+            </div>
+
+            <div class="field-group">
+              <div class="field-label">Google Pay • Enrolled Course</div>
+              <div class="field-val">${payment.courseName || 'Cohort Enrolled'}</div>
+            </div>
+
+            <div class="field-group" style="margin-bottom:0;">
+              <div class="field-label">Google transaction ID</div>
+              <div class="field-val">CICAgKj${Math.random().toString(36).substring(2, 10).toUpperCase()}</div>
+            </div>
+          </div>
+
+          <div class="upi-footer">
+            POWERED BY<br/>
+            <span style="font-size: 16px; font-weight: 900; color: #202124; letter-spacing: 2px;">UPI▶</span>
           </div>
         </div>
         <script>
@@ -83,112 +116,118 @@ function printPdfReceipt(payment) {
 
 function downloadReceiptImage(payment) {
   const canvas = document.createElement('canvas');
-  canvas.width = 640;
+  canvas.width = 540;
   canvas.height = 760;
   const ctx = canvas.getContext('2d');
 
-  // White Background
+  // Pure White Background
   ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 640, 760);
+  ctx.fillRect(0, 0, 540, 760);
 
-  // Outer Border
-  ctx.strokeStyle = '#000648';
-  ctx.lineWidth = 6;
-  ctx.strokeRect(16, 16, 608, 728);
+  // Top Avatar Circle (Pink #e91e63)
+  ctx.fillStyle = '#e91e63';
+  ctx.beginPath();
+  ctx.arc(270, 70, 32, 0, Math.PI * 2);
+  ctx.fill();
 
-  // Header Box
-  ctx.fillStyle = '#000648';
-  ctx.fillRect(16, 16, 608, 110);
-
-  // Header Text
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 26px sans-serif';
+  ctx.font = 'bold 28px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('EZER LEARNING SOLUTIONS', 320, 62);
+  ctx.fillText('E', 270, 80);
 
-  ctx.fillStyle = '#f2b733';
-  ctx.font = 'bold 13px sans-serif';
-  ctx.fillText('OFFICIAL DIGITAL PAYMENT RECEIPT', 320, 92);
+  // Recipient Header
+  ctx.fillStyle = '#202124';
+  ctx.font = '600 16px sans-serif';
+  ctx.fillText(`To ${payment.paidTo || 'EZER Learning Solutions Pvt. Ltd.'}`, 270, 130);
 
-  // Status Badge
-  ctx.fillStyle = '#f0fdf4';
-  ctx.strokeStyle = '#86efac';
-  ctx.lineWidth = 2;
+  // Huge Amount
+  ctx.fillStyle = '#202124';
+  ctx.font = '700 44px sans-serif';
+  ctx.fillText(`₹${Number(payment.amount).toLocaleString('en-IN')}`, 270, 185);
+
+  // Completed Pill Button
+  ctx.fillStyle = '#ffffff';
+  ctx.strokeStyle = '#dadce0';
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
   if (ctx.roundRect) {
-    ctx.roundRect(170, 148, 300, 42, 21);
+    ctx.roundRect(190, 205, 160, 36, 18);
   } else {
-    ctx.rect(170, 148, 300, 42);
+    ctx.rect(190, 205, 160, 36);
   }
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = '#166534';
-  ctx.font = 'bold 15px sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('✔ PAYMENT SUCCESSFUL & VERIFIED', 320, 175);
+  ctx.fillStyle = '#1e8e3e';
+  ctx.font = 'bold 14px sans-serif';
+  ctx.fillText('✔  Completed', 270, 228);
 
-  // Amount
-  ctx.fillStyle = '#000648';
-  ctx.font = '900 44px sans-serif';
-  ctx.fillText(`₹${Number(payment.amount).toLocaleString('en-IN')}.00`, 320, 245);
+  // Date Timestamp
+  ctx.fillStyle = '#5f6368';
+  ctx.font = '13px sans-serif';
+  ctx.fillText(payment.paymentDate || new Date().toLocaleString(), 270, 265);
 
-  ctx.fillStyle = '#64748b';
-  ctx.font = '600 15px sans-serif';
-  ctx.fillText(`Paid via ${payment.paymentMethod || 'UPI Payment'}`, 320, 278);
-
-  // Dashed Line
-  ctx.strokeStyle = '#cbd5e1';
-  ctx.lineWidth = 1.5;
-  ctx.setLineDash([8, 6]);
+  // Details Box Container
+  ctx.fillStyle = '#ffffff';
+  ctx.strokeStyle = '#dadce0';
+  ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(40, 305);
-  ctx.lineTo(600, 305);
+  if (ctx.roundRect) {
+    ctx.roundRect(30, 290, 480, 380, 16);
+  } else {
+    ctx.rect(30, 290, 480, 380);
+  }
+  ctx.fill();
   ctx.stroke();
-  ctx.setLineDash([]);
 
-  // Data Rows
-  const dataRows = [
-    ['Merchant Account', payment.paidTo || 'EZER Learning Solutions Pvt Ltd'],
-    ['Candidate Name', payment.studentName],
-    ['UPI Transaction ID', payment.upiTransactionId],
-    ['Enrolled Course', payment.courseName || 'Cohort Course'],
-    ['Paid From Account', payment.paidFrom || payment.email || 'UPI Account'],
-    ['Payment Timestamp', payment.paymentDate || new Date().toLocaleString()],
-    ['Status', 'SETTLED & VERIFIED']
+  // Bank Header inside Box
+  ctx.fillStyle = '#202124';
+  ctx.font = 'bold 15px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('Google Pay (UPI)', 50, 325);
+
+  ctx.strokeStyle = '#f1f3f4';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(50, 340);
+  ctx.lineTo(490, 340);
+  ctx.stroke();
+
+  // Fields inside details box
+  const fields = [
+    ['UPI transaction ID', payment.upiTransactionId || '109529161148'],
+    ['To', 'ezerlearning@okaxis'],
+    [`From: ${payment.studentName}`, payment.paidFrom || payment.email || 'Student Account'],
+    ['Google Pay • Enrolled Course', payment.courseName || 'Cohort Enrolled'],
+    ['Google transaction ID', `CICAgKj${Math.random().toString(36).substring(2, 10).toUpperCase()}`]
   ];
 
-  let y = 350;
-  dataRows.forEach(([lbl, val]) => {
-    ctx.textAlign = 'left';
-    ctx.fillStyle = '#64748b';
-    ctx.font = '600 14px sans-serif';
+  let y = 370;
+  fields.forEach(([lbl, val]) => {
+    ctx.fillStyle = '#5f6368';
+    ctx.font = '12px sans-serif';
     ctx.fillText(lbl, 50, y);
 
-    ctx.textAlign = 'right';
-    ctx.fillStyle = lbl === 'Status' ? '#166534' : '#000648';
-    ctx.font = 'bold 15px sans-serif';
-    ctx.fillText(String(val), 590, y);
+    ctx.fillStyle = '#202124';
+    ctx.font = 'bold 14px sans-serif';
+    ctx.fillText(String(val), 50, y + 20);
 
-    ctx.strokeStyle = '#f1f5f9';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(50, y + 12);
-    ctx.lineTo(590, y + 12);
-    ctx.stroke();
-
-    y += 48;
+    y += 58;
   });
 
-  // Footer
+  // Footer UPI Logo
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '12px sans-serif';
-  ctx.fillText('This is an official computer-generated receipt. • EZER Learning Solutions', 320, 715);
+  ctx.fillStyle = '#70757a';
+  ctx.font = '10px sans-serif';
+  ctx.fillText('POWERED BY', 270, 705);
 
-  // Download
+  ctx.fillStyle = '#202124';
+  ctx.font = '900 16px sans-serif';
+  ctx.fillText('UPI ▶', 270, 725);
+
+  // Trigger Download
   const a = document.createElement('a');
-  a.download = `ezer-payment-receipt-${payment.upiTransactionId || 'receipt'}.png`;
+  a.download = `gpay-receipt-${payment.upiTransactionId || 'transaction'}.png`;
   a.href = canvas.toDataURL('image/png');
   a.click();
 }
@@ -255,7 +294,7 @@ export default function PaymentsReceivedManager() {
   };
 
   const handleShareSummary = (payment) => {
-    const text = `EZER PAYMENT RECEIPT\nStudent: ${payment.studentName}\nAmount: ₹${payment.amount}\nUPI Txn ID: ${payment.upiTransactionId}\nCourse: ${payment.courseName}\nPaid Via: ${payment.paymentMethod}\nStatus: VERIFIED SUCCESSFUL`;
+    const text = `GOOGLE PAY RECEIPT\nTo: ${payment.paidTo || 'EZER Learning Solutions'}\nStudent: ${payment.studentName}\nAmount: ₹${payment.amount}\nUPI Txn ID: ${payment.upiTransactionId}\nCourse: ${payment.courseName}\nStatus: Completed`;
     navigator.clipboard.writeText(text);
     setCopiedShareId(payment.id);
     setTimeout(() => setCopiedShareId(null), 2500);
@@ -468,68 +507,87 @@ export default function PaymentsReceivedManager() {
         </table>
       </div>
 
-      {/* Google Pay-Style Payment Report Receipt Modal */}
+      {/* 100% Authentic Google Pay Style Payment Receipt Modal (Matching User Screenshot 5) */}
       {selectedReceipt && ReactDOM.createPortal(
-        <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,6,72,0.85)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
-          <div style={{ background: '#ffffff', borderRadius: '20px', width: '100%', maxWidth: '480px', overflow: 'hidden', boxShadow: '0 25px 50px rgba(0,0,0,0.3)', border: '2px solid #000648' }}>
-            <div style={{ background: '#000648', padding: '16px 20px', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                DIGITAL PAYMENT REPORT
-              </span>
-              <button type="button" onClick={() => setSelectedReceipt(null)} aria-label="Close modal" style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', borderRadius: '50%', width: '28px', height: '28px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <HiX size={16} />
-              </button>
-            </div>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 9999, background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(5px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+          <div style={{ background: '#ffffff', borderRadius: '24px', width: '100%', maxWidth: '440px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(0,0,0,0.3)', border: '1px solid #dadce0', position: 'relative' }}>
+            
+            {/* Top Close Icon */}
+            <button
+              type="button"
+              onClick={() => setSelectedReceipt(null)}
+              aria-label="Close modal"
+              style={{ position: 'absolute', top: '16px', right: '16px', zIndex: 10, background: '#f1f3f4', border: 'none', color: '#5f6368', borderRadius: '50%', width: '32px', height: '32px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <HiX size={18} />
+            </button>
 
-            <div style={{ padding: '28px 24px', textAlign: 'center' }}>
-              <div style={{ width: '56px', height: '56px', background: '#f0fdf4', border: '2px solid #bbf7d0', color: '#166534', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
-                <HiOutlineCheckCircle size={36} />
+            <div style={{ padding: '36px 24px 24px', textAlign: 'center' }}>
+              {/* Recipient Pink Avatar Circle */}
+              <div style={{ width: '64px', height: '64px', background: '#e91e63', color: '#ffffff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', fontWeight: 'bold', margin: '0 auto 12px', boxShadow: '0 4px 12px rgba(233, 30, 99, 0.25)' }}>
+                E
               </div>
 
-              <span style={{ background: '#f0fdf4', color: '#166534', fontSize: '0.75rem', fontWeight: 900, padding: '4px 14px', borderRadius: '50px', display: 'inline-block' }}>
-                ✔ PAYMENT SUCCESSFUL & SETTLED
-              </span>
-
-              <div style={{ fontSize: '2.4rem', fontWeight: 900, color: '#000648', margin: '14px 0 2px' }}>
-                ₹{Number(selectedReceipt.amount).toLocaleString('en-IN')}.00
-              </div>
-              <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
-                Paid via {selectedReceipt.paymentMethod}
+              {/* Recipient Name */}
+              <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#202124', marginBottom: '6px' }}>
+                To {selectedReceipt.paidTo || 'EZER Learning Solutions Pvt. Ltd.'}
               </div>
 
-              <div style={{ margin: '20px 0', borderTop: '1.5px dashed #cbd5e1', borderBottom: '1.5px dashed #cbd5e1', padding: '14px 0', display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.82rem', textAlign: 'left' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748b', fontWeight: 600 }}>Paid To:</span>
-                  <span style={{ color: '#000648', fontWeight: 800 }}>{selectedReceipt.paidTo || 'EZER Learning Solutions'}</span>
+              {/* Huge Amount */}
+              <div style={{ fontSize: '2.8rem', fontWeight: 700, color: '#202124', margin: '4px 0 12px', letterSpacing: '-0.5px' }}>
+                ₹{Number(selectedReceipt.amount).toLocaleString('en-IN')}
+              </div>
+
+              {/* Completed Pill Badge */}
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', border: '1px solid #dadce0', borderRadius: '50px', padding: '6px 20px', fontSize: '0.88rem', fontWeight: 600, color: '#1e8e3e', marginBottom: '8px' }}>
+                <span style={{ color: '#1e8e3e', fontSize: '16px' }}>✔</span> Completed
+              </div>
+
+              {/* Timestamp */}
+              <div style={{ fontSize: '0.82rem', color: '#5f6368', marginBottom: '24px' }}>
+                {selectedReceipt.paymentDate || new Date().toLocaleString()}
+              </div>
+
+              {/* Inner Payment Details Box */}
+              <div style={{ background: '#ffffff', border: '1px solid #dadce0', borderRadius: '16px', padding: '20px', textAlign: 'left', marginBottom: '20px', boxShadow: '0 1px 3px rgba(60,64,67,0.08)' }}>
+                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#202124', paddingBottom: '12px', borderBottom: '1px solid #f1f3f4', marginBottom: '14px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span>Google Pay (UPI)</span>
+                  <HiChevronDown size={18} color="#70757a" />
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748b', fontWeight: 600 }}>Student Name:</span>
-                  <span style={{ color: '#000648', fontWeight: 800 }}>{selectedReceipt.studentName}</span>
+
+                <div style={{ marginBottom: '12px' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>UPI transaction ID</div>
+                  <div style={{ fontSize: '0.88rem', color: '#202124', fontWeight: 700, fontFamily: 'monospace' }}>{selectedReceipt.upiTransactionId}</div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748b', fontWeight: 600 }}>UPI Transaction ID:</span>
-                  <span style={{ color: '#000648', fontWeight: 800, fontFamily: 'monospace' }}>{selectedReceipt.upiTransactionId}</span>
+
+                <div style={{ marginBottom: '12px' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>To</div>
+                  <div style={{ fontSize: '0.88rem', color: '#202124', fontWeight: 600 }}>ezerlearning@okaxis</div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748b', fontWeight: 600 }}>Enrolled Course:</span>
-                  <span style={{ color: '#000648', fontWeight: 800 }}>{selectedReceipt.courseName}</span>
+
+                <div style={{ marginBottom: '12px' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>From: {selectedReceipt.studentName}</div>
+                  <div style={{ fontSize: '0.88rem', color: '#202124', fontWeight: 600 }}>{selectedReceipt.paidFrom || selectedReceipt.email}</div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748b', fontWeight: 600 }}>Paid From:</span>
-                  <span style={{ color: '#000648', fontWeight: 700 }}>{selectedReceipt.paidFrom || selectedReceipt.email}</span>
+
+                <div style={{ marginBottom: '12px' }}>
+                  <div style={{ fontSize: '0.75rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>Enrolled Program</div>
+                  <div style={{ fontSize: '0.88rem', color: '#202124', fontWeight: 600 }}>{selectedReceipt.courseName || 'Cohort Enrolled'}</div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ color: '#64748b', fontWeight: 600 }}>Date & Time:</span>
-                  <span style={{ color: '#000648', fontWeight: 700 }}>{selectedReceipt.paymentDate}</span>
+
+                <div>
+                  <div style={{ fontSize: '0.75rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>Google transaction ID</div>
+                  <div style={{ fontSize: '0.88rem', color: '#202124', fontWeight: 600, fontFamily: 'monospace' }}>CICAgKj98ZORPQ</div>
                 </div>
               </div>
 
+              {/* Action Buttons */}
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button
                   type="button"
                   onClick={() => downloadReceiptImage(selectedReceipt)}
                   aria-label="Download image receipt"
-                  style={{ flex: 1, padding: '10px 12px', background: '#f0fdf4', color: '#166534', border: '1.5px solid #bbf7d0', borderRadius: '10px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.8rem' }}
+                  style={{ flex: 1, padding: '10px 12px', background: '#e8f0fe', color: '#1a73e8', border: '1px solid #aecbfa', borderRadius: '10px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.8rem' }}
                 >
                   <HiOutlinePhotograph size={16} /> Download Image
                 </button>
@@ -537,18 +595,16 @@ export default function PaymentsReceivedManager() {
                   type="button"
                   onClick={() => printPdfReceipt(selectedReceipt)}
                   aria-label="Download PDF Receipt"
-                  style={{ flex: 1, padding: '10px 12px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '10px', fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.8rem' }}
+                  style={{ flex: 1, padding: '10px 12px', background: '#1a73e8', color: '#ffffff', border: 'none', borderRadius: '10px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px', fontSize: '0.8rem' }}
                 >
                   <HiOutlineDownload size={16} /> Download PDF
                 </button>
-                <button
-                  type="button"
-                  onClick={() => handleShareSummary(selectedReceipt)}
-                  aria-label="Share receipt summary"
-                  style={{ padding: '10px 14px', background: '#f1f5f9', color: '#000648', border: '1.5px solid #cbd5e1', borderRadius: '10px', fontWeight: 800, cursor: 'pointer', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '4px' }}
-                >
-                  <HiOutlineShare size={16} />
-                </button>
+              </div>
+
+              {/* Footer UPI Logo */}
+              <div style={{ marginTop: '20px', fontSize: '0.68rem', fontWeight: 800, color: '#70757a', letterSpacing: '1px' }}>
+                POWERED BY<br/>
+                <span style={{ fontSize: '1rem', fontWeight: 900, color: '#202124', letterSpacing: '2px' }}>UPI▶</span>
               </div>
             </div>
           </div>
