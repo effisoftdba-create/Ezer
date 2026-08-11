@@ -7,6 +7,7 @@ import HeroManager from '../components/HeroManager';
 import HiringPartnersManager from '../components/HiringPartnersManager';
 import CourseManager from '../components/CourseManager';
 import CoursePaymentManager from '../components/CoursePaymentManager';
+import PaymentsReceivedManager from '../components/PaymentsReceivedManager';
 import PlatformManager from '../components/PlatformManager';
 import AboutVideoManager from '../components/AboutVideoManager';
 import SupportCardsManager from '../components/SupportCardsManager';
@@ -63,6 +64,7 @@ export default function AdminDashboard() {
     achievements,
     executiveLeaders,
     hiringPartners,
+    payments,
     updateExecutiveLeader,
     resetToDefault
   } = useSiteData();
@@ -113,10 +115,11 @@ export default function AdminDashboard() {
 
   const tabs = [
     { id: 'leads', label: 'Lead Submissions', icon: HiOutlineMailOpen, count: (leads || []).length },
+    { id: 'payments-received', label: 'Payments Received & Receipts', icon: HiOutlineCurrencyRupee, count: (payments || []).length },
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: (heroSlides || []).length },
     { id: 'partners', label: 'Hiring Partners & Logos', icon: HiOutlineOfficeBuilding, count: (hiringPartners || []).length },
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },
-    { id: 'payment', label: 'Course Fees & Payment Methods', icon: HiOutlineCurrencyRupee },
+    { id: 'payment', label: 'Course Fees & QR Config', icon: HiOutlineCurrencyRupee },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSwitchHorizontal },
     { id: 'about-videos', label: 'About Us Brand Videos (2 Links)', icon: HiOutlineVideoCamera },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
@@ -150,6 +153,7 @@ export default function AdminDashboard() {
 
         <main ref={mainRef} key={activeTab} className="uipro-fade-in" style={{ flex: 1, height: '100%', overflowY: 'auto', background: '#ffffff', borderRadius: '16px', padding: '32px', boxShadow: '0 8px 30px rgba(0,0,0,0.03)', border: '1.5px solid #e2e8f0' }}>
           {activeTab === 'leads' && <LeadsManager />}
+          {activeTab === 'payments-received' && <PaymentsReceivedManager />}
           {activeTab === 'hero' && <HeroManager />}
           {activeTab === 'partners' && <HiringPartnersManager />}
           {activeTab === 'courses' && <CourseManager />}

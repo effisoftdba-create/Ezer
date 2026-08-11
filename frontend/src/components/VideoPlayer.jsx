@@ -43,11 +43,11 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
         style={{
           width: '100%',
           aspectRatio: '16 / 9',
-          borderRadius: '20px',
+          borderRadius: '16px',
           overflow: 'hidden',
           background: '#000000',
-          boxShadow: '0 16px 48px rgba(0, 6, 72, 0.4)',
-          border: '2px solid #f2b733',
+          boxShadow: '0 8px 24px rgba(0, 6, 72, 0.15)',
+          border: '2px solid #000648',
           position: 'relative'
         }}
       >
@@ -79,27 +79,6 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
           />
         )}
       </div>
-
-      {config.isDrive && (
-        <div style={{ marginTop: '8px', textAlign: 'right' }}>
-          <a
-            href={config.originalUrl || effectiveUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              fontSize: '0.78rem',
-              fontWeight: 800,
-              color: '#000648',
-              textDecoration: 'underline',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px'
-            }}
-          >
-            Watch directly on Google Drive ↗
-          </a>
-        </div>
-      )}
     </div>
   );
 }

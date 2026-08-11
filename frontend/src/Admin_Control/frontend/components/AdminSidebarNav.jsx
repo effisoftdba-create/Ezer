@@ -2,8 +2,8 @@ import React from 'react';
 
 const CATEGORIES = [
   {
-    title: 'LEAD MANAGEMENT',
-    ids: ['leads']
+    title: 'FINANCIAL & LEADS',
+    ids: ['leads', 'payments-received', 'payment']
   },
   {
     title: 'HOMEPAGE & BRANDING',

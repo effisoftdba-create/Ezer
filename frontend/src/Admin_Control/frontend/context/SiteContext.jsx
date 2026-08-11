@@ -26,8 +26,10 @@ import {
   STORAGE_HIRING_PARTNERS_KEY,
   STORAGE_PAYMENT_CONFIG_KEY,
   STORAGE_ABOUT_VIDEOS_KEY,
+  STORAGE_PAYMENTS_KEY,
   defaultPaymentConfig,
   defaultAboutVideos,
+  defaultPayments,
 
   defaultExecutiveLeaders,
   defaultHiringPartners,
@@ -103,7 +105,8 @@ export function SiteProvider({ children }) {
     executiveLeaders,
     hiringPartners,
     paymentConfig,
-    aboutVideos
+    aboutVideos,
+    payments
   } = state;
 
   // Check for mobile sync token in URL
@@ -158,6 +161,7 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, hiringPartners); }, [hiringPartners]);
   useEffect(() => { safeSetStorage(STORAGE_PAYMENT_CONFIG_KEY, paymentConfig); }, [paymentConfig]);
   useEffect(() => { safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, aboutVideos); }, [aboutVideos]);
+  useEffect(() => { safeSetStorage(STORAGE_PAYMENTS_KEY, payments); }, [payments]);
 
 
   // Firebase Real-time Firestore Subscriptions — Authoritative source of truth
@@ -279,6 +283,14 @@ export function SiteProvider({ children }) {
           const merged = mergeCollection(storedLocal, items, 'id');
           dispatch({ type: 'SET_KEY', key: 'aboutVideos', value: merged });
           safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, merged);
+        }
+      }));
+      unsubs.push(subscribeToCollection('payments', (items) => {
+        if (Array.isArray(items) && items.length > 0) {
+          const storedLocal = getStored(STORAGE_PAYMENTS_KEY, defaultPayments) || defaultPayments;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'payments', value: merged });
+          safeSetStorage(STORAGE_PAYMENTS_KEY, merged);
         }
       }));
     } catch (err) {
@@ -761,6 +773,27 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [aboutVideos]);
 
+  const addPayment = useCallback((paymentData) => {
+    const newPay = {
+      id: `pay-${Date.now()}`,
+      status: 'SUCCESSFUL',
+      paidTo: 'EZER Learning Solutions Pvt Ltd',
+      paymentDate: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }),
+      ...paymentData
+    };
+    const updated = [newPay, ...(payments || [])];
+    dispatch({ type: 'SET_KEY', key: 'payments', value: updated });
+    saveDocument('payments', newPay.id, newPay);
+    triggerStateToast('SAVED');
+  }, [payments]);
+
+  const deletePayment = useCallback((paymentId) => {
+    const updated = (payments || []).filter((p) => p.id !== paymentId);
+    dispatch({ type: 'SET_KEY', key: 'payments', value: updated });
+    removeDocument('payments', String(paymentId));
+    triggerStateToast('SAVED');
+  }, [payments]);
+
   const resetAllToDefaults = useCallback(() => {
     localStorage.clear();
     dispatch({ type: 'RESET_ALL' });
@@ -789,6 +822,7 @@ export function SiteProvider({ children }) {
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
+    payments, addPayment, deletePayment,
     resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
@@ -812,6 +846,7 @@ export function SiteProvider({ children }) {
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
+    payments, addPayment, deletePayment,
     resetAllToDefaults
   ]);
 
