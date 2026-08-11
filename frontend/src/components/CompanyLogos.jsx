@@ -208,7 +208,8 @@ const BRAND_SVGS = {
 
 function LogoCard({ logo }) {
   const [imgError, setImgError] = useState(false);
-  const isSvgStr = typeof logo.image === 'string' && logo.image.trim().startsWith('<svg');
+  const rawImg = String(logo.image || '').trim();
+  const isSvgStr = rawImg.includes('<svg') || rawImg.includes('%3Csvg');
 
   const lowerName = (logo.name || '').toLowerCase();
   let matchedSvg = null;
@@ -216,7 +217,12 @@ function LogoCard({ logo }) {
     if (lowerName.includes(key)) matchedSvg = BRAND_SVGS[key];
   });
 
-  const renderSvg = isSvgStr ? logo.image : (!logo.image || imgError || logo.image.includes('clearbit') || logo.image.includes('wikimedia')) ? matchedSvg : null;
+  let renderSvg = null;
+  if (isSvgStr) {
+    renderSvg = rawImg.startsWith('<svg') ? rawImg : decodeURIComponent(rawImg);
+  } else if (!logo.image || imgError || logo.image.includes('clearbit') || logo.image.includes('wikimedia')) {
+    renderSvg = matchedSvg;
+  }
 
   return (
     <m.div

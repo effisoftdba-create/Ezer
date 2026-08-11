@@ -39,8 +39,8 @@ const BRAND_SVGS_MAP = {
 function getCompanySvg(name, currentImage) {
   if (typeof currentImage === 'string' && currentImage.trim()) {
     const trimmed = currentImage.trim();
-    if (trimmed.startsWith('<svg')) {
-      return trimmed;
+    if (trimmed.includes('<svg') || trimmed.includes('%3Csvg')) {
+      return trimmed.startsWith('<svg') ? trimmed : decodeURIComponent(trimmed);
     }
     if (trimmed.startsWith('data:image') || trimmed.startsWith('http') || trimmed.startsWith('images/')) {
       return null; // Render user custom image!

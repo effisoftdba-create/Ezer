@@ -14,11 +14,37 @@ export function resolveImageSrc(urlStr) {
     return TECH_FALLBACK_IMAGES[0];
   }
 
-  if (urlStr.startsWith('data:') || urlStr.startsWith('http://') || urlStr.startsWith('https://')) {
-    return urlStr;
+  const trimmed = String(urlStr).trim();
+
+  // 1. Convert raw or URL-encoded inline SVG strings to valid Data URIs
+  if (trimmed.startsWith('<svg') || trimmed.includes('<svg') || trimmed.startsWith('%3Csvg') || trimmed.includes('%3Csvg')) {
+    let unencoded = trimmed;
+    if (trimmed.includes('%3Csvg') || trimmed.includes('%20') || trimmed.includes('%22')) {
+      try {
+        unencoded = decodeURIComponent(trimmed);
+      } catch (e) {
+        unencoded = trimmed;
+      }
+    }
+    return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(unencoded)}`;
   }
 
-  const cleanPath = urlStr.replace(/^\//, '');
+  // 2. Data URIs
+  if (trimmed.startsWith('data:')) {
+    return trimmed;
+  }
+
+  // 3. External HTTP / HTTPS links
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    // If external domain blocks CORS (pngall.com, logo.wine, pinimg.com), use clean inline SVG logo data URI
+    if (trimmed.includes('pngall.com') || trimmed.includes('logo.wine') || trimmed.includes('pinimg.com')) {
+      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 50"><rect width="160" height="50" rx="8" fill="#000648"/><text x="80" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#f2b733" text-anchor="middle">EZER PARTNER</text></svg>')}`;
+    }
+    return trimmed;
+  }
+
+  // 4. Local relative paths
+  const cleanPath = trimmed.replace(/^\//, '');
   const baseUrl = import.meta.env.BASE_URL || '/';
 
   let finalUrl = '';
@@ -26,15 +52,6 @@ export function resolveImageSrc(urlStr) {
     finalUrl = `./${cleanPath}`;
   } else {
     finalUrl = baseUrl.endsWith('/') ? `${baseUrl}${cleanPath}` : `${baseUrl}/${cleanPath}`;
-  }
-
-  // Optimize Unsplash image query params to match actual display size and format
-  if (finalUrl.includes('images.unsplash.com')) {
-    if (finalUrl.includes('w=')) {
-      finalUrl = finalUrl.replace(/w=\d+/, 'w=500').replace(/q=\d+/, 'q=75');
-    } else {
-      finalUrl += (finalUrl.includes('?') ? '&' : '?') + 'auto=format&fit=crop&w=500&q=75';
-    }
   }
 
   return finalUrl;
