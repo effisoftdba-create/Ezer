@@ -53,7 +53,7 @@ export default function Navbar({ onOpenDemoModal }) {
           <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
             <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
               <img 
-                src={`${import.meta.env.BASE_URL || '/'}images/ezer_shield_logo_optimized.webp`} 
+                src={`${import.meta.env.BASE_URL || '/'}images/ezer_shield_logo.png`} 
                 alt="EZER Learning Solutions Crest Logo" 
                 width="40"
                 height="40"

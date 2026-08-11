@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { HiArrowLeft, HiArrowRight } from 'react-icons/hi';
 import { FaQuoteLeft } from 'react-icons/fa';
+import { LazyMotion, domAnimation, m, AnimatePresence } from 'framer-motion';
 import { useSiteData } from '../../Admin_Control/context/SiteContext';
 import CarouselDotsNav from '../CarouselDotsNav';
 
@@ -60,109 +61,115 @@ export default function TestimonialsSliderTrack() {
   }, [totalCount]);
 
   return (
-    <section
-      style={{
-        position: 'relative',
-        overflow: 'hidden',
-        background: '#ffffff',
-        color: '#0f172a',
-        padding: '80px 0',
-        borderTop: '2px solid #e2e8f0',
-        borderBottom: '2px solid #e2e8f0'
-      }}
-    >
-      {/* Ambient Accent Glows */}
-      <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden' }}>
-        <div
-          style={{
-            position: 'absolute',
-            top: '-96px',
-            left: '-96px',
-            width: '320px',
-            height: '320px',
-            borderRadius: '50%',
-            background: 'rgba(242, 183, 51, 0.2)',
-            filter: 'blur(90px)'
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '50%',
-            right: '-96px',
-            width: '320px',
-            height: '320px',
-            borderRadius: '50%',
-            background: 'rgba(0, 6, 72, 0.1)',
-            filter: 'blur(90px)'
-          }}
-        />
-      </div>
-
-      <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', position: 'relative' }}>
-        {/* Centered Header Row */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '16px', width: '100%' }}>
-          <div>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontSize: '0.78rem',
-                color: '#000648',
-                background: 'rgba(0, 6, 72, 0.08)',
-                border: '1.5px solid rgba(0, 6, 72, 0.15)',
-                borderRadius: '50px',
-                padding: '6px 16px',
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em'
-              }}
-            >
-              <span style={{ height: '8px', width: '8px', borderRadius: '50%', background: '#f2b733' }} />
-              Testimonials
-            </div>
-            <h2
-              style={{
-                fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
-                lineHeight: 1.08,
-                fontWeight: 900,
-                color: '#000648',
-                letterSpacing: '-0.02em',
-                marginTop: '16px',
-                marginBottom: '12px'
-              }}
-            >
-              What our learners are saying
-            </h2>
-            <p style={{ color: '#475569', fontSize: '1.05rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6 }}>
-              Stories from freshers, working professionals, and career switchers who trusted our guides, routes, and placement support.
-            </p>
-          </div>
-
-          {/* Standardized Centered < . . . > Controls */}
-          <CarouselDotsNav
-            totalItems={totalCount}
-            activeIndex={activeIdx}
-            onPrev={handlePrev}
-            onNext={handleNext}
-            onSelectIndex={(idx) => setActiveIdx(idx)}
-            style={{ margin: '12px auto 0' }}
+    <LazyMotion features={domAnimation}>
+      <section
+        style={{
+          position: 'relative',
+          overflow: 'hidden',
+          background: '#ffffff',
+          color: '#0f172a',
+          padding: '72px 0',
+          borderTop: '2px solid #e2e8f0',
+          borderBottom: '2px solid #e2e8f0'
+        }}
+      >
+        {/* Ambient Accent Glows */}
+        <div style={{ pointerEvents: 'none', position: 'absolute', inset: 0, overflow: 'hidden' }}>
+          <div
+            style={{
+              position: 'absolute',
+              top: '-96px',
+              left: '-96px',
+              width: '320px',
+              height: '320px',
+              borderRadius: '50%',
+              background: 'rgba(242, 183, 51, 0.2)',
+              filter: 'blur(90px)'
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              right: '-96px',
+              width: '320px',
+              height: '320px',
+              borderRadius: '50%',
+              background: 'rgba(0, 6, 72, 0.1)',
+              filter: 'blur(90px)'
+            }}
           />
         </div>
 
-        {/* Current Active Testimonial Slide */}
-        <div style={{ marginTop: '48px' }}>
-          <article
-            key={current.id || activeIdx}
-            className="testimonial-slide-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(12, 1fr)',
-              gap: '36px',
-              alignItems: 'center'
-            }}
-          >
+        <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 24px', position: 'relative' }}>
+          {/* Centered Header Row */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '16px', width: '100%' }}>
+            <div>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '0.78rem',
+                  color: '#000648',
+                  background: 'rgba(0, 6, 72, 0.08)',
+                  border: '1.5px solid rgba(0, 6, 72, 0.15)',
+                  borderRadius: '50px',
+                  padding: '6px 16px',
+                  fontWeight: 800,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em'
+                }}
+              >
+                <span style={{ height: '8px', width: '8px', borderRadius: '50%', background: '#f2b733' }} />
+                Testimonials
+              </div>
+              <h2
+                style={{
+                  fontSize: 'clamp(2rem, 3.8vw, 3rem)',
+                  lineHeight: 1.08,
+                  fontWeight: 900,
+                  color: '#000648',
+                  letterSpacing: '-0.02em',
+                  marginTop: '16px',
+                  marginBottom: '12px'
+                }}
+              >
+                What our learners are saying
+              </h2>
+              <p style={{ color: '#475569', fontSize: '1rem', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6 }}>
+                Stories from freshers, working professionals, and career switchers who trusted our guides, routes, and placement support.
+              </p>
+            </div>
+
+            {/* Standardized Centered < . . . > Controls */}
+            <CarouselDotsNav
+              totalItems={totalCount}
+              activeIndex={activeIdx}
+              onPrev={handlePrev}
+              onNext={handleNext}
+              onSelectIndex={(idx) => setActiveIdx(idx)}
+              style={{ margin: '12px auto 0' }}
+            />
+          </div>
+
+          {/* Current Active Testimonial Slide with Smooth Animated Transition */}
+          <div style={{ marginTop: '40px', minHeight: '360px' }}>
+            <AnimatePresence mode="wait">
+              <m.article
+                key={current.id || activeIdx}
+                initial={{ opacity: 0, x: 24 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -24 }}
+                transition={{ duration: 0.35, ease: [0.25, 1, 0.5, 1] }}
+                className="testimonial-slide-grid"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(12, 1fr)',
+                  gap: '36px',
+                  alignItems: 'center'
+                }}
+              >
             {/* Left Column: Portrait Image */}
             <div className="slide-photo-col" style={{ gridColumn: 'span 5' }}>
               <div
@@ -263,28 +270,30 @@ export default function TestimonialsSliderTrack() {
                 </div>
               </div>
             </div>
-          </article>
+              </m.article>
+            </AnimatePresence>
+          </div>
         </div>
-      </div>
 
-      <style>{`
-        @media (max-width: 992px) {
-          .testimonial-slide-grid {
-            grid-template-columns: 1fr !important;
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 24px !important;
+        <style>{`
+          @media (max-width: 992px) {
+            .testimonial-slide-grid {
+              grid-template-columns: 1fr !important;
+              display: flex !important;
+              flex-direction: column !important;
+              gap: 24px !important;
+            }
+            .slide-photo-col, .slide-content-col {
+              grid-column: span 12 !important;
+              width: 100% !important;
+            }
+            .slide-photo-col > div {
+              max-width: 320px;
+              margin: 0 auto;
+            }
           }
-          .slide-photo-col, .slide-content-col {
-            grid-column: span 12 !important;
-            width: 100% !important;
-          }
-          .slide-photo-col > div {
-            max-width: 320px;
-            margin: 0 auto;
-          }
-        }
-      `}</style>
-    </section>
+        `}</style>
+      </section>
+    </LazyMotion>
   );
 }

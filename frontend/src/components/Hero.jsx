@@ -69,22 +69,34 @@ export default function Hero({ onOpenDemoModal }) {
               <AnimatePresence mode="wait">
                 <m.div
                   key={currentSlide.id || safeActive}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -12 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  transition={{ duration: 0.4 }}
+                  exit={{ opacity: 0, x: 12 }}
+                  transition={{ duration: 0.3 }}
                   className="hero-animated-text-container"
-                  style={{ minHeight: '250px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}
+                  style={{
+                    height: '235px',
+                    minHeight: '235px',
+                    maxHeight: '235px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    overflow: 'hidden'
+                  }}
                 >
                   <h1
                     style={{
-                      fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
+                      fontSize: 'clamp(1.7rem, 3.2vw, 2.6rem)',
                       fontWeight: 900,
                       color: '#000648',
-                      lineHeight: 1.12,
-                      marginBottom: '14px',
+                      lineHeight: 1.15,
+                      marginBottom: '10px',
                       fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
                       letterSpacing: '-0.02em',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
                     }}
                   >
                     {currentSlide.headline ? (
@@ -113,22 +125,27 @@ export default function Hero({ onOpenDemoModal }) {
 
                   <div
                     style={{
-                      width: '72px',
+                      width: '64px',
                       height: '4px',
                       background: 'linear-gradient(90deg, #000648 0%, #f2b733 100%)',
-                      marginBottom: '14px',
+                      marginBottom: '10px',
                       borderRadius: '4px',
+                      flexShrink: 0
                     }}
                   />
 
                   <p
                     style={{
-                      fontSize: 'clamp(0.95rem, 1.2vw, 1.05rem)',
+                      fontSize: 'clamp(0.88rem, 1.1vw, 0.98rem)',
                       color: '#334155',
-                      lineHeight: 1.65,
-                      marginBottom: '16px',
+                      lineHeight: 1.55,
+                      marginBottom: '0',
                       maxWidth: '560px',
                       fontWeight: 500,
+                      display: '-webkit-box',
+                      WebkitLineClamp: 3,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden'
                     }}
                   >
                     {currentSlide.sub}
