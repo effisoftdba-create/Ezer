@@ -59,6 +59,8 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
                 objectPosition: imagePos,
                 transform: (imageZoom !== 1) ? `scale(${imageZoom})` : 'none',
                 transformOrigin: imagePos,
+                imageRendering: 'high-quality',
+                backfaceVisibility: 'hidden',
                 transition: 'transform 0.2s ease, object-position 0.2s ease, object-fit 0.2s ease',
               }}
             />
