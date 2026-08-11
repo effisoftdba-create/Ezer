@@ -21,9 +21,9 @@ export function getNormalizedVideoConfig(url) {
     };
   }
 
-  // 2. Google Drive normalization
-  const driveIdMatch = trimmed.match(/(?:file\/d\/|id=)([\w-]+)/);
-  if (trimmed.includes('drive.google.com') && driveIdMatch && driveIdMatch[1]) {
+  // 2. Google Drive normalization (supports /file/d/ID, /open?id=ID, /uc?id=ID, and raw Drive URLs)
+  const driveIdMatch = trimmed.match(/(?:file\/d\/|d\/|id=|open\?id=)([\w-]{20,50})/i);
+  if ((trimmed.includes('drive.google.com') || trimmed.includes('docs.google.com')) && driveIdMatch && driveIdMatch[1]) {
     const fileId = driveIdMatch[1];
     return {
       type: 'iframe',

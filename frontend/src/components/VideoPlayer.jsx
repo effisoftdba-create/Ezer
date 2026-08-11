@@ -70,7 +70,7 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
           height: 100% !important;
           border: 0 !important;
           display: block !important;
-          transform: scale(1.16) translateY(-7%) !important;
+          transform: scale(1.20) translateY(-13%) !important;
           transform-origin: center top !important;
         }
         @media (max-width: 768px) {
