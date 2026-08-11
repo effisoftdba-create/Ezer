@@ -136,7 +136,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div style={{ height: '100vh', maxHeight: '100vh', background: '#f4f6f9', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div style={{ height: '100vh', maxHeight: '100vh', background: '#FBF3E4', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       <div style={{ flexShrink: 0 }}>
         <AdminHeaderNav
           handleReset={handleReset}
