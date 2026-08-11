@@ -21,7 +21,7 @@ export default function PopupLivePreviewBox({ formData, previewFormData, setPrev
       }}>
         <div style={{
           background: '#ffffff',
-          borderRadius: '16px', width: '100%', maxWidth: '400px',
+          borderRadius: '16px', width: '100%', maxWidth: 'min(440px, 100%)',
           border: '3px solid #000648', outline: '2px solid #f2b733', outlineOffset: '-5px',
           overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
           position: 'relative'
@@ -44,10 +44,10 @@ export default function PopupLivePreviewBox({ formData, previewFormData, setPrev
             </div>
           )}
 
-          <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{ maxHeight: 'calc(90vh - 24px)', overflowY: 'auto', position: 'relative', zIndex: 1 }}>
             <PopupHeader onClose={() => {}} overrideConfig={formData} />
 
-            <div style={{ padding: 'clamp(16px, 4vw, 22px)', maxHeight: 'calc(90vh - 80px)', overflowY: 'auto' }}>
+            <div style={{ padding: 'clamp(16px, 4vw, 22px)' }}>
               <PopupFormFields
                 formData={previewFormData}
                 handleChange={(e) => setPreviewFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}

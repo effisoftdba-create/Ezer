@@ -224,10 +224,10 @@ export default function PopupManager() {
             image: url,
             bodyBgImage: url,
             imagePosition: pos || 'center center',
-            imageFit: fit || 'contain',
+            imageFit: fit || 'cover',
             imageZoom: zoom || 1,
             bodyBgPosition: pos || 'center center',
-            bodyBgFit: fit || 'contain',
+            bodyBgFit: fit || 'cover',
             bodyBgZoom: zoom || 1
           }));
         }}

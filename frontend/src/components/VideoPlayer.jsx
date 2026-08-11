@@ -112,6 +112,10 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
           .ezer-video-player-container {
             border-radius: 10px !important;
           }
+          .ezer-video-player-container iframe.is-drive-iframe {
+            height: calc(100% + 50px) !important;
+            top: -50px !important;
+          }
         }
       `}</style>
       <div className="ezer-video-player-container" ref={containerRef}>
@@ -133,12 +137,16 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
             ref={iframeRef}
             src={config.src}
             title={title}
+            className={config.isDrive ? 'is-drive-iframe' : ''}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
             allowFullScreen
             referrerPolicy="no-referrer-when-downgrade"
             style={{
               width: '100%',
-              height: '100%',
+              height: config.isDrive ? 'calc(100% + 56px)' : '100%',
+              position: 'absolute',
+              top: config.isDrive ? '-56px' : 0,
+              left: 0,
               border: 'none',
               display: 'block'
             }}
