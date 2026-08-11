@@ -27,7 +27,7 @@ const BRAND_SVGS_MAP = {
   'capgemini': '<svg viewBox="0 0 190 50" style="height:28px"><path d="M12 25 C12 15, 25 10, 25 25 C25 40, 38 35, 38 25" stroke="#0070ad" stroke-width="5" fill="none" stroke-linecap="round"/><text x="48" y="34" font-family="sans-serif" font-size="26" font-weight="900" fill="#0070ad">Capgemini</text></svg>',
   'accenture': '<svg viewBox="0 0 180 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="28" font-weight="900" fill="#000648">accenture</text><path d="M136 12 L150 22 L136 32" stroke="#a100ff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   'cognizant': '<svg viewBox="0 0 170 50" style="height:28px"><text x="5" y="35" font-family="sans-serif" font-size="27" font-weight="900" fill="#0033a0">Cognizant</text></svg>',
-  'amazon': '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="32" font-family="sans-serif" font-size="28" font-weight="900" fill="#131921">amazon</text><path d="M10 38 Q 55 46, 95 35" fill="none" stroke="#ff9900" stroke-width="3.5" stroke-linecap="round"/><path d="M90 32 L98 35 L93 40" fill="none" stroke="#ff9900" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  'amazon': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" style="height:28px"><text x="5" y="24" font-family="sans-serif" font-size="24" font-weight="900" fill="#000648">amazon</text><path d="M10 30 Q 50 38, 90 28" fill="none" stroke="#ff9900" stroke-width="3" stroke-linecap="round"/><path d="M86 25 L93 28 L89 33" fill="none" stroke="#ff9900" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   'google': '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">G</text><text x="34" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">o</text><text x="56" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#FBBC05">o</text><text x="78" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">g</text><text x="100" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#34A853">l</text><text x="110" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">e</text></svg>',
   'microsoft': '<svg viewBox="0 0 170 50" style="height:28px"><rect x="5" y="10" width="13" height="13" fill="#f25022"/><rect x="21" y="10" width="13" height="13" fill="#7fba00"/><rect x="5" y="26" width="13" height="13" fill="#00a4ef"/><rect x="21" y="26" width="13" height="13" fill="#ffb900"/><text x="42" y="34" font-family="sans-serif" font-size="26" font-weight="800" fill="#475569">Microsoft</text></svg>',
   'ibm': '<svg viewBox="0 0 130 50" style="height:28px"><text x="5" y="36" font-family="monospace" font-size="36" font-weight="900" fill="#052FAD" letter-spacing="2px">IBM</text></svg>',
@@ -337,14 +337,14 @@ export default function HiringPartnersManager() {
                       alt={partner.name}
                       onError={() => handleImageError(partner.id)}
                       style={{
-                        maxHeight: '28px',
-                        maxWidth: '140px',
+                        maxHeight: '34px',
+                        maxWidth: '160px',
                         width: 'auto',
                         height: 'auto',
-                        objectFit: partner.imageFit || 'contain',
+                        objectFit: 'contain',
                         objectPosition: partner.imagePosition || 'center center',
-                        transform: partner.imageZoom ? `scale(${partner.imageZoom})` : 'none',
-                        transformOrigin: partner.imagePosition || 'center center',
+                        transform: (partner.imageZoom && partner.imageZoom !== 1) ? `scale(${Math.min(partner.imageZoom, 1.15)})` : 'none',
+                        transformOrigin: 'center center',
                         display: 'block'
                       }}
                     />
