@@ -13,7 +13,7 @@ import {
 
 import PaginationControls from '../../../components/PaginationControls';
 
-export default function LeadsManager() {
+export default function LeadsManager({ onNavigateToPayments }) {
   const { leads, updateLeadStatus, addLeadComment, updateLeadDetails, deleteLead } = useSiteData();
   const leadsList = useMemo(() => leads || [], [leads]);
 
@@ -213,6 +213,7 @@ export default function LeadsManager() {
         handleStatusChange={handleStatusChange}
         setSelectedLeadId={setSelectedLeadId}
         handleDeleteLeadClick={handleDeleteLeadClick}
+        onNavigateToPayments={onNavigateToPayments}
       />
 
       <PaginationControls

@@ -286,11 +286,10 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('payments', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_PAYMENTS_KEY, defaultPayments) || defaultPayments;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'payments', value: merged });
-          safeSetStorage(STORAGE_PAYMENTS_KEY, merged);
+        if (Array.isArray(items)) {
+          const cleanRealItems = items.filter((p) => p && !['pay-1001', 'pay-1002', 'pay-1003', 'pay-1004'].includes(p.id));
+          dispatch({ type: 'SET_KEY', key: 'payments', value: cleanRealItems });
+          safeSetStorage(STORAGE_PAYMENTS_KEY, cleanRealItems);
         }
       }));
     } catch (err) {

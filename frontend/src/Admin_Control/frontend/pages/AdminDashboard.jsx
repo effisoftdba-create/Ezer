@@ -152,7 +152,7 @@ export default function AdminDashboard() {
         />
 
         <main ref={mainRef} key={activeTab} className="uipro-fade-in" style={{ flex: 1, height: '100%', overflowY: 'auto', background: '#ffffff', borderRadius: '16px', padding: '32px', boxShadow: '0 8px 30px rgba(0,0,0,0.03)', border: '1.5px solid #e2e8f0' }}>
-          {activeTab === 'leads' && <LeadsManager />}
+          {activeTab === 'leads' && <LeadsManager onNavigateToPayments={() => setActiveTab('payments-received')} />}
           {activeTab === 'payments-received' && <PaymentsReceivedManager />}
           {activeTab === 'hero' && <HeroManager />}
           {activeTab === 'partners' && <HiringPartnersManager />}

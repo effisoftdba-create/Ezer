@@ -11,7 +11,7 @@ const STATUS_COLORS = {
   Closed: { bg: '#f1f5f9', color: '#475569', border: '#e2e8f0' }
 };
 
-export default function LeadsTable({ filteredLeads, handleStatusChange, setSelectedLeadId, handleDeleteLeadClick }) {
+export default function LeadsTable({ filteredLeads, handleStatusChange, setSelectedLeadId, handleDeleteLeadClick, onNavigateToPayments }) {
   return (
     <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden', boxShadow: '0 4px 14px rgba(0,0,0,0.02)' }}>
       <div 
@@ -118,6 +118,21 @@ export default function LeadsTable({ filteredLeads, handleStatusChange, setSelec
 
                     <td style={{ padding: '14px 16px', textAlign: 'right' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '8px' }}>
+                        {isPaid && onNavigateToPayments && (
+                          <button
+                            type="button"
+                            onClick={onNavigateToPayments}
+                            title="View official record in Payments Received & Real-time Receipts"
+                            style={{
+                              padding: '5px 10px', background: '#f0fdf4', color: '#166534',
+                              border: '1px solid #86efac', borderRadius: '6px', fontSize: '0.76rem',
+                              fontWeight: 900, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
+                            }}
+                          >
+                            <HiCheckCircle size={14} /> Payment Receipt ↗
+                          </button>
+                        )}
+
                         <button
                           type="button"
                           onClick={() => setSelectedLeadId(lead.id)}

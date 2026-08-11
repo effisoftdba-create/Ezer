@@ -583,7 +583,7 @@ export function getInitialState() {
     hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners,
     paymentConfig: getStored(STORAGE_PAYMENT_CONFIG_KEY, defaultPaymentConfig) || defaultPaymentConfig,
     aboutVideos: getStored(STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos) || defaultAboutVideos,
-    payments: getStored(STORAGE_PAYMENTS_KEY, defaultPayments) || defaultPayments
+    payments: (getStored(STORAGE_PAYMENTS_KEY, defaultPayments) || defaultPayments).filter((p) => p && !['pay-1001', 'pay-1002', 'pay-1003', 'pay-1004'].includes(p.id))
   };
 
 }
