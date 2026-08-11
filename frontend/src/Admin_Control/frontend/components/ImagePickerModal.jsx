@@ -278,6 +278,8 @@ export default function ImagePickerModal({
     }
   };
 
+  const [autoRemoveBg, setAutoRemoveBg] = useState(false);
+
   const handleFileUpload = (e) => {
     const file = e?.target?.files?.[0];
     if (!file) return;
@@ -295,7 +297,7 @@ export default function ImagePickerModal({
       originalUncutUrlRef.current = compressedUri;
 
       let finalUri = compressedUri;
-      if (previewDims.ratio === '180/48') {
+      if (autoRemoveBg) {
         finalUri = await removeImageBackground(compressedUri);
       }
 
@@ -451,6 +453,66 @@ export default function ImagePickerModal({
               onChange={handleFileUpload}
               style={{ display: 'none' }}
             />
+          </div>
+
+          {/* USER-CONTROLLED BACKGROUND REMOVER TOGGLE & MANUAL ACTIONS */}
+          <div style={{
+            marginTop: '10px',
+            paddingTop: '10px',
+            borderTop: '1px dashed #cbd5e1',
+            display: 'flex',
+            alignItems: 'center',
+            justify: 'space-between',
+            flexWrap: 'wrap',
+            gap: '10px'
+          }}>
+            <label style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 800, color: '#000648' }}>
+              <input
+                type="checkbox"
+                checked={autoRemoveBg}
+                onChange={(e) => setAutoRemoveBg(e.target.checked)}
+                style={{ width: '16px', height: '16px', accentColor: '#000648', cursor: 'pointer' }}
+              />
+              Auto-Remove Background on New Uploads
+            </label>
+
+            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={handleAutoRemoveBackground}
+                disabled={isUploading || !activeSelectedUrl}
+                style={{
+                  padding: '6px 12px',
+                  background: '#eff6ff',
+                  border: '1px solid #93c5fd',
+                  borderRadius: '6px',
+                  color: '#1d4ed8',
+                  fontWeight: 800,
+                  fontSize: '0.75rem',
+                  cursor: isUploading ? 'wait' : 'pointer'
+                }}
+              >
+                ✂️ Remove Background Now
+              </button>
+
+              <button
+                type="button"
+                onClick={handleUndoBackgroundCut}
+                disabled={!originalUncutUrlRef.current}
+                style={{
+                  padding: '6px 12px',
+                  background: '#f8fafc',
+                  border: '1px solid #cbd5e1',
+                  borderRadius: '6px',
+                  color: '#475569',
+                  fontWeight: 700,
+                  fontSize: '0.75rem',
+                  cursor: !originalUncutUrlRef.current ? 'not-allowed' : 'pointer'
+                }}
+              >
+                ↩️ Restore Original Background
+              </button>
+            </div>
           </div>
         </div>
 
