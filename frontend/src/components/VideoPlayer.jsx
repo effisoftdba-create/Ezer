@@ -58,18 +58,40 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
           display: block !important;
           transform: none !important;
         }
+        .ezer-drive-embed-wrapper {
+          width: 100%;
+          height: 100%;
+          position: relative;
+          overflow: hidden;
+          background: #000000;
+        }
+        .ezer-drive-embed-wrapper iframe {
+          width: 100% !important;
+          height: 118% !important;
+          margin-top: -7.5% !important;
+          border: 0 !important;
+          display: block !important;
+        }
         @media (max-width: 768px) {
           .ezer-video-player-container {
             border-radius: 12px !important;
+          }
+          .ezer-drive-embed-wrapper iframe {
+            height: 124% !important;
+            margin-top: -10% !important;
           }
         }
         @media (max-width: 480px) {
           .ezer-video-player-container {
             border-radius: 10px !important;
           }
+          .ezer-drive-embed-wrapper iframe {
+            height: 128% !important;
+            margin-top: -11.5% !important;
+          }
         }
       `}</style>
-      <div className={`ezer-video-player-container ${config.isDrive ? 'ezer-drive-embed' : ''}`}>
+      <div className="ezer-video-player-container">
         {config.type === 'video' ? (
           <video
             key={config.src}
@@ -82,7 +104,7 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
             Your browser does not support HTML5 video playback.
           </video>
         ) : (
-          <div style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
+          <div className={config.isDrive ? 'ezer-drive-embed-wrapper' : ''} style={{ width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
             <iframe
               key={config.src}
               src={config.src}

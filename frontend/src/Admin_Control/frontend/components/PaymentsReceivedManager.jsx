@@ -333,44 +333,44 @@ export default function PaymentsReceivedManager() {
         </button>
       </div>
 
-      {/* Overview Stat Cards */}
+      {/* Overview Stat Cards — Single Compact Row */}
       <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '16px', marginBottom: '24px'
+        display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+        gap: '12px', marginBottom: '20px'
       }}>
-        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '18px 20px' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Total Revenue Collected
           </span>
-          <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#000648', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>
             ₹{totalCollected.toLocaleString('en-IN')}
           </div>
         </div>
 
-        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '18px 20px' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Successful Transactions
           </span>
-          <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#000648', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>
             {totalCount} Verified
           </div>
         </div>
 
-        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '18px 20px' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Average Fee Payment
           </span>
-          <div style={{ fontSize: '1.6rem', fontWeight: 900, color: '#000648', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>
             ₹{avgAmount.toLocaleString('en-IN')}
           </div>
         </div>
 
-        <div style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: '14px', padding: '18px 20px' }}>
-          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+        <div style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: '12px', padding: '12px 14px' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Database Sync
           </span>
-          <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#15803d', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiOutlineCheckCircle size={20} /> Live Realtime Synced
+          <div style={{ fontSize: '0.95rem', fontWeight: 900, color: '#15803d', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <HiOutlineCheckCircle size={16} /> Live Realtime Synced
           </div>
         </div>
       </div>
