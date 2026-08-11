@@ -42,44 +42,30 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
         .ezer-video-player-container {
           width: 100%;
           aspect-ratio: 16 / 9;
-          min-height: 340px;
           border-radius: 16px;
           overflow: hidden;
           background: #000000;
           box-shadow: 0 8px 24px rgba(0, 6, 72, 0.15);
           border: 2px solid #000648;
           position: relative;
-          display: flex;
-          align-items: center;
-          justify-content: center;
         }
-        .ezer-drive-embed iframe {
+        .ezer-video-player-container iframe {
           width: 100% !important;
           height: 100% !important;
-          transform: scale(1.18);
-          transform-origin: center center;
-          display: block;
+          border: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          display: block !important;
+          transform: none !important;
         }
         @media (max-width: 768px) {
           .ezer-video-player-container {
-            aspect-ratio: 16 / 9 !important;
-            min-height: 220px !important;
             border-radius: 12px !important;
-          }
-          .ezer-drive-embed iframe {
-            transform: scale(1.22);
-            transform-origin: center center;
           }
         }
         @media (max-width: 480px) {
           .ezer-video-player-container {
-            aspect-ratio: 16 / 9 !important;
-            min-height: 195px !important;
             border-radius: 10px !important;
-          }
-          .ezer-drive-embed iframe {
-            transform: scale(1.28);
-            transform-origin: center center;
           }
         }
       `}</style>
