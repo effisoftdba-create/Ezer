@@ -32,9 +32,13 @@ export default function AboutVideoManager() {
   const [videoList, setVideoList] = useState(initialList);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
-  const handleChange = (index, field, value) => {
-    const updated = [...videoList];
-    updated[index] = { ...updated[index], [field]: value };
+  const handleChange = (targetId, field, value) => {
+    const updated = videoList.map((item, idx) => {
+      if (item.id === targetId || idx === targetId || item.tag === targetId) {
+        return { ...item, [field]: value };
+      }
+      return item;
+    });
     setVideoList(updated);
   };
 

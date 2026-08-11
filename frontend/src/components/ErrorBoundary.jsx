@@ -18,7 +18,8 @@ export default class ErrorBoundary extends React.Component {
   handleHardRefresh = () => {
     try {
       if (typeof window !== 'undefined') {
-        const cleanUrl = window.location.origin + window.location.pathname + '?t=' + Date.now();
+        const currentHash = window.location.hash || '';
+        const cleanUrl = window.location.origin + window.location.pathname + currentHash;
         window.location.href = cleanUrl;
       }
     } catch (e) {

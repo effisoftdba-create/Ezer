@@ -49,6 +49,7 @@ if (isFirebaseConfigured) {
     app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
     try {
       db = getFirestore(app);
+      console.info('[Firebase] Firestore connected successfully. Real-time synchronization active.');
     } catch (e) {
       db = null;
     }

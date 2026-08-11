@@ -20,6 +20,14 @@ export default function HeroManager() {
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (formErrors[name]) {
+      setFormErrors((prev) => ({ ...prev, [name]: false }));
+    }
+  };
+
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData({ headline: '', sub: '', url: '' });

@@ -22,11 +22,11 @@ export function getNormalizedVideoConfig(url) {
   }
 
   // 2. Google Drive normalization
-  const driveMatch = trimmed.match(/\/file\/d\/([\w-]+)/);
-  if (driveMatch && driveMatch[1]) {
+  const driveIdMatch = trimmed.match(/(?:file\/d\/|id=)([\w-]+)/);
+  if (trimmed.includes('drive.google.com') && driveIdMatch && driveIdMatch[1]) {
     return {
       type: 'iframe',
-      src: `https://drive.google.com/file/d/${driveMatch[1]}/preview`,
+      src: `https://drive.google.com/file/d/${driveIdMatch[1]}/preview`,
       title: 'Google Drive Video Player'
     };
   }
