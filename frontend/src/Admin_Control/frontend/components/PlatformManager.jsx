@@ -212,21 +212,6 @@ export default function PlatformManager() {
         </div>
       </form>
 
-      {/* Guidance box pointing to dedicated About Us Brand Videos (2 Links) sidebar menu */}
-      <div style={{
-        marginTop: '32px', paddingTop: '24px', borderTop: '1px dashed #cbd5e1',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px',
-        background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: '14px', padding: '18px 20px'
-      }}>
-        <div>
-          <h4 style={{ margin: '0 0 4px 0', fontSize: '0.92rem', fontWeight: 800, color: '#166534' }}>
-            Looking to manage About Us Page Brand Showcase Videos?
-          </h4>
-          <p style={{ margin: 0, fontSize: '0.82rem', color: '#15803d' }}>
-            To update the 2 Brand Video Showcase cards (YouTube or Google Drive links, titles & descriptions) displayed on the About Us page below Vision & Mission, please use the dedicated left sidebar menu item: <strong>"About Us Brand Videos (2 Links)"</strong>.
-          </p>
-        </div>
-      </div>
 
       <ImagePickerModal
         isOpen={isImagePickerOpen}
