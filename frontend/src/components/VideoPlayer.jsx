@@ -49,12 +49,16 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
           box-shadow: 0 8px 24px rgba(0, 6, 72, 0.15);
           border: 2px solid #000648;
           position: relative;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
         .ezer-drive-embed iframe {
           width: 100% !important;
           height: 100% !important;
-          transform: scale(1.32);
+          transform: scale(1.18);
           transform-origin: center center;
+          display: block;
         }
         @media (max-width: 768px) {
           .ezer-video-player-container {
@@ -63,7 +67,7 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
             border-radius: 12px !important;
           }
           .ezer-drive-embed iframe {
-            transform: scale(1.38);
+            transform: scale(1.22);
             transform-origin: center center;
           }
         }
@@ -74,7 +78,7 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
             border-radius: 10px !important;
           }
           .ezer-drive-embed iframe {
-            transform: scale(1.48);
+            transform: scale(1.28);
             transform-origin: center center;
           }
         }
