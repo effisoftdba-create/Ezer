@@ -34,7 +34,7 @@ export default function PopupLivePreviewBox({ formData, previewFormData, setPrev
                 style={{
                   width: '100%',
                   height: '100%',
-                  objectFit: formData.bodyBgFit || formData.imageFit || 'contain',
+                  objectFit: formData.bodyBgFit || formData.imageFit || 'cover',
                   objectPosition: formData.bodyBgPosition || formData.imagePosition || 'center center',
                   transform: (formData.bodyBgZoom || formData.imageZoom || 1) !== 1 ? `scale(${formData.bodyBgZoom || formData.imageZoom})` : 'none',
                   transformOrigin: formData.bodyBgPosition || formData.imagePosition || 'center center',
@@ -47,7 +47,7 @@ export default function PopupLivePreviewBox({ formData, previewFormData, setPrev
           <div style={{ position: 'relative', zIndex: 1 }}>
             <PopupHeader onClose={() => {}} overrideConfig={formData} />
 
-            <div style={{ padding: '18px 20px', maxHeight: '520px', overflowY: 'auto' }}>
+            <div style={{ padding: 'clamp(16px, 4vw, 22px)', maxHeight: 'calc(90vh - 80px)', overflowY: 'auto' }}>
               <PopupFormFields
                 formData={previewFormData}
                 handleChange={(e) => setPreviewFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }))}
