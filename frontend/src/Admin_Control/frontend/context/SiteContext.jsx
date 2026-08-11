@@ -160,40 +160,38 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, aboutVideos); }, [aboutVideos]);
 
 
-  // Firebase Real-time Firestore & Realtime DB Subscriptions with Merged Defaults Protection
-  // Defer listeners until after initial render to improve first-paint performance
+  // Firebase Real-time Firestore Subscriptions — Authoritative source of truth
+  // Immediate subscription on mount for instant cross-device sync
   useEffect(() => {
     let unsubs = [];
-    const timer = setTimeout(() => {
+
+    try {
       unsubs.push(subscribeToCollection('courses', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'courses', value: merged });
-          safeSetStorage(STORAGE_COURSES_KEY, merged);
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'courses', value: items });
+          safeSetStorage(STORAGE_COURSES_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('heroSlides', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_SLIDES_KEY, defaultSlides) || defaultSlides;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'heroSlides', value: merged });
-          safeSetStorage(STORAGE_SLIDES_KEY, merged);
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'heroSlides', value: items });
+          safeSetStorage(STORAGE_SLIDES_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('leads', (items) => {
-        if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'leads', value: items });
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'leads', value: items });
+          safeSetStorage(STORAGE_LEADS_KEY, items);
+        }
       }));
       unsubs.push(subscribeToCollection('blogs', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_BLOGS_KEY, defaultBlogs) || defaultBlogs;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'blogs', value: merged });
-          safeSetStorage(STORAGE_BLOGS_KEY, merged);
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'blogs', value: items });
+          safeSetStorage(STORAGE_BLOGS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('ezerDefinition', (items) => {
-        if (items && items.length > 0) {
+        if (Array.isArray(items) && items.length > 0) {
           const mainDef = items.find((i) => i.id === 'main') || items[0];
           if (mainDef) {
             const updated = { ...defaultPlatformDef, ...mainDef };
@@ -203,14 +201,13 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('executiveLeaders', (items) => {
-        // Trust Firebase as source of truth — do not merge with stale localStorage defaults
         if (Array.isArray(items) && items.length > 0) {
           dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: items });
           safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('popupConfig', (items) => {
-        if (items && items.length > 0) {
+        if (Array.isArray(items) && items.length > 0) {
           const mainConfig = items.find((i) => i.id === 'main') || items[0];
           if (mainConfig) {
             dispatch({ type: 'SET_KEY', key: 'popupConfig', value: mainConfig });
@@ -219,7 +216,7 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('contactInfo', (items) => {
-        if (items && items.length > 0) {
+        if (Array.isArray(items) && items.length > 0) {
           const mainContact = items.find((i) => i.id === 'main') || items[0];
           if (mainContact) {
             dispatch({ type: 'SET_KEY', key: 'contactInfo', value: mainContact });
@@ -228,55 +225,46 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('seniorMentors', (items) => {
-        // Trust Firebase as source of truth — do not merge with stale localStorage defaults
         if (Array.isArray(items) && items.length > 0) {
           dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: items });
           safeSetStorage(STORAGE_MENTORS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('writtenTestimonials', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials) || initialTestimonials;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: merged });
-          safeSetStorage(STORAGE_WRITTEN_TESTIMONIALS_KEY, merged);
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: items });
+          safeSetStorage(STORAGE_WRITTEN_TESTIMONIALS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('videoTestimonials', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_VIDEOS_KEY, defaultVideoTestimonials) || defaultVideoTestimonials;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: merged });
-          safeSetStorage(STORAGE_VIDEOS_KEY, merged);
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: items });
+          safeSetStorage(STORAGE_VIDEOS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('faqList', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_FAQS_KEY, generalFaqs) || generalFaqs;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'faqList', value: merged });
-          safeSetStorage(STORAGE_FAQS_KEY, merged);
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'faqList', value: items });
+          safeSetStorage(STORAGE_FAQS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('hiringPartners', (items) => {
-        // Trust Firebase as source of truth — do not merge with stale localStorage defaults.
-        // This ensures changes from any device instantly appear on all other devices.
         if (Array.isArray(items) && items.length > 0) {
           dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: items });
           safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('aboutVideos', (items) => {
-        // Trust Firebase as source of truth — do not merge with stale localStorage defaults
         if (Array.isArray(items) && items.length > 0) {
           dispatch({ type: 'SET_KEY', key: 'aboutVideos', value: items });
           safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, items);
         }
       }));
-    }, 1500); // Delay by 1.5 seconds to allow initial content to render
+    } catch (err) {
+      console.error('[SiteContext] Error initializing Firestore subscriptions:', err);
+    }
 
     return () => {
-      clearTimeout(timer);
       unsubs.forEach((unsub) => typeof unsub === 'function' && unsub());
     };
   }, []);

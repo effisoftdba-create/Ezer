@@ -216,9 +216,11 @@ export default function About({ onOpenDemoModal }) {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '48px', maxWidth: '1040px', margin: '0 auto' }}>
-            {videoList.slice(0, 2).map((vid, idx) => (
-              <div
-                key={vid.id || idx}
+            {videoList.slice(0, 2).map((vid) => {
+              const videoKey = vid.id || vid.tag || vid.title || vid.url;
+              return (
+                <div
+                  key={videoKey}
                 style={{
                   background: '#ffffff',
                   border: '1.5px solid #e2e8f0',
@@ -256,7 +258,8 @@ export default function About({ onOpenDemoModal }) {
                   />
                 </div>
               </div>
-            ))}
+            );
+          })}
           </div>
         </div>
       </section>

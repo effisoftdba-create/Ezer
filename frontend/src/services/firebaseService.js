@@ -3,9 +3,11 @@ import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firesto
 import { ref, onValue, set, remove } from 'firebase/database';
 
 /**
- * Strip/limit excessively large base64 data URIs before saving to Firestore.
- * Firestore has a 1MB document limit. All compressed image uploads (PNG/JPEG/WebP)
- * and SVG files are under 800KB and will be KEPT INTACT so they sync across all devices.
+ * Sanitize and validate data before saving to Firestore.
+ * Firestore has a 1MB limit per document.
+ * Data URIs (SVGs, PNGs, JPEGs) under ~900KB are preserved intact.
+ * Oversized data URIs that exceed Firestore payload limits are safely omitted
+ * rather than truncated into corrupt base64 strings.
  */
 function stripDataUris(data) {
   if (!data || typeof data !== 'object') return data;
@@ -13,10 +15,11 @@ function stripDataUris(data) {
   for (const key of Object.keys(cleaned)) {
     const val = cleaned[key];
     if (typeof val === 'string' && val.startsWith('data:')) {
-      // Keep data URIs up to 850KB — this allows uploaded files, logos, and SVGs to save and sync cleanly
-      if (val.length > 850000) {
-        console.warn(`[Firebase] Data URI for field "${key}" is larger than 850KB. Trimming for Firestore.`);
-        cleaned[key] = val.substring(0, 850000);
+      // Keep data URIs up to 900KB — allows SVGs, compressed images, and logos to save intact
+      if (val.length > 900000) {
+        console.warn(`[Firebase] Data URI for field "${key}" exceeds 900KB limit for Firestore document.`);
+        // Omit oversized data URI to prevent Firestore setDoc 1MB size exception
+        cleaned[key] = '';
       }
     } else if (Array.isArray(val)) {
       cleaned[key] = val.map((item) =>
@@ -30,14 +33,13 @@ function stripDataUris(data) {
 }
 
 /**
- * Real-time listener for Firestore or Realtime Database
+ * Real-time listener for Firestore
  */
 export function subscribeToCollection(collectionName, onUpdate) {
   if (!isFirebaseConfigured) {
     return () => {};
   }
 
-  // 1. Primary: Firestore (clean HTTP API, no WebSocket console errors)
   if (db) {
     try {
       const colRef = collection(db, collectionName);
@@ -48,15 +50,14 @@ export function subscribeToCollection(collectionName, onUpdate) {
             id: docItem.id,
             ...docItem.data()
           }));
-          // Always call onUpdate — even for empty arrays so deletions sync across devices
           onUpdate(items);
         },
         (error) => {
-          // Suppress offline/permission notices to avoid console noise
+          console.error(`[Firebase Firestore] Subscription error on "${collectionName}":`, error);
         }
       );
     } catch (err) {
-      // Ignore
+      console.error(`[Firebase Firestore] Failed to subscribe to "${collectionName}":`, err);
     }
   }
 

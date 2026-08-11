@@ -211,10 +211,11 @@ export default function HeroManager() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
+                <label htmlFor="hero_headline_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
                   Headline Text *
                 </label>
                 <input
+                  id="hero_headline_input"
                   type="text"
                   name="headline"
                   placeholder="e.g. Learn Live. Build Real Skills. Get Placed."
@@ -233,10 +234,11 @@ export default function HeroManager() {
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
+                <label htmlFor="hero_sub_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
                   Sub-description Text *
                 </label>
                 <textarea
+                  id="hero_sub_input"
                   name="sub"
                   rows={3}
                   placeholder="e.g. Live online classes led by working corporate professionals..."
@@ -277,8 +279,8 @@ export default function HeroManager() {
       )}
 
       <div style={{ display: 'grid', gap: '16px' }}>
-        {heroSlides.map((slide, idx) => {
-          const keyId = slide.id || slide.headline || slide.url || slide.image || `hero-slide-${idx}`;
+        {heroSlides.map((slide) => {
+          const keyId = slide.id || slide.badge || slide.headline || slide.title || slide.url;
           return (
             <div
               key={keyId}

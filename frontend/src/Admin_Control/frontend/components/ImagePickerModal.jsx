@@ -127,6 +127,7 @@ export default function ImagePickerModal({
   const [customUrl, setCustomUrl] = useState('');
   const originalUncutUrlRef = useRef(currentImage || '');
   const [fitModeOverride, setFitModeOverride] = useState(null);
+  const [autoRemoveBg, setAutoRemoveBg] = useState(false);
 
   const [uploadedImages, setUploadedImages] = useState(() => {
     try {
@@ -283,14 +284,13 @@ export default function ImagePickerModal({
     }
   };
 
-  const [autoRemoveBg, setAutoRemoveBg] = useState(false);
-
   const handleFileUpload = (e) => {
     const file = e?.target?.files?.[0];
     if (!file) return;
 
-    if (file.size > 15 * 1024 * 1024) {
-      alert('Image file size exceeds 15MB limit.');
+    // Check raw file size limit (up to 50MB file size for high-resolution images up to 50MP)
+    if (file.size > 50 * 1024 * 1024) {
+      alert('Image file size exceeds 50MB limit.');
       return;
     }
 
@@ -298,22 +298,41 @@ export default function ImagePickerModal({
     const reader = new FileReader();
     reader.onloadend = async () => {
       const rawDataUri = reader.result;
-      const compressedUri = await compressImageForWeb(rawDataUri, 600, 0.6);
-      originalUncutUrlRef.current = compressedUri;
 
-      let finalUri = compressedUri;
-      if (autoRemoveBg) {
-        finalUri = await removeImageBackground(compressedUri);
-      }
+      // Verify resolution (Megapixels limit < 50MP)
+      const tempImg = new Image();
+      tempImg.onload = async () => {
+        const mp = (tempImg.width * tempImg.height) / 1000000;
+        if (mp > 50) {
+          alert(`Image resolution (${mp.toFixed(1)} MP) exceeds the 50 Megapixel limit. Please upload an image under 50MP.`);
+          setIsUploading(false);
+          return;
+        }
 
-      setCustomUrl(finalUri);
-      setSelectedUrlOverride(finalUri);
+        const compressedUri = await compressImageForWeb(rawDataUri, 750, 0.7);
+        originalUncutUrlRef.current = compressedUri;
 
-      setUploadedImages((prev) => [
-        { label: `Upload ${prev.length + 1}`, url: finalUri, date: new Date().toLocaleTimeString() },
-        ...prev
-      ]);
-      setIsUploading(false);
+        let finalUri = compressedUri;
+        if (autoRemoveBg) {
+          finalUri = await removeImageBackground(compressedUri);
+        }
+
+        setCustomUrl(finalUri);
+        setSelectedUrlOverride(finalUri);
+
+        setUploadedImages((prev) => [
+          { label: `Upload ${prev.length + 1}`, url: finalUri, date: new Date().toLocaleTimeString() },
+          ...prev
+        ]);
+        setIsUploading(false);
+      };
+
+      tempImg.onerror = () => {
+        alert('Failed to process selected image file.');
+        setIsUploading(false);
+      };
+
+      tempImg.src = rawDataUri;
     };
     reader.readAsDataURL(file);
   };
@@ -411,7 +430,7 @@ export default function ImagePickerModal({
           }}
         >
           <label htmlFor="custom_image_url_picker" style={{ fontSize: '0.825rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '6px' }}>
-            Option 1: Enter Custom Image URL or Drag & Drop Image File Here
+            Option 1: Enter Custom Image URL or Drag & Drop Image File Here (Supports images up to 50 Megapixels)
           </label>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             <input

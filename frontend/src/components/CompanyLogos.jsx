@@ -247,9 +247,9 @@ function LogoCard({ logo }) {
   }
 
   // Final fallback: if still no renderSvg and no renderImgSrc, use brand name lookup
-  if (!logo.icon && !renderSvg && !renderImgSrc) {
-    renderSvg = matchedSvg;
-  }
+  const cleanSvgHtml = typeof renderSvg === 'string'
+    ? renderSvg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '')
+    : '';
 
   return (
     <m.div
@@ -276,8 +276,16 @@ function LogoCard({ logo }) {
     >
       {logo.icon ? (
         logo.icon
-      ) : renderSvg ? (
-        <div dangerouslySetInnerHTML={{ __html: renderSvg }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', maxWidth: '148px', maxHeight: '28px', overflow: 'hidden' }} />
+      ) : cleanSvgHtml ? (
+        <img
+          src={`data:image/svg+xml;utf8,${encodeURIComponent(cleanSvgHtml)}`}
+          alt={logo.name || 'Hiring Partner Logo'}
+          width="140"
+          height="28"
+          loading="lazy"
+          decoding="async"
+          style={{ maxHeight: '28px', maxWidth: '148px', objectFit: 'contain' }}
+        />
       ) : renderImgSrc ? (
         <img
           src={resolveImageSrc(renderImgSrc)}
