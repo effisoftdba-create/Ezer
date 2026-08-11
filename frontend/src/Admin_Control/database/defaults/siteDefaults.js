@@ -139,6 +139,16 @@ export const defaultPopupConfig = {
 
 
 
+export const STORAGE_ABOUT_VIDEO_KEY = 'ezer_about_video:v18_clean_image_paths';
+
+export const defaultAboutVideo = {
+  tag: 'EXPERIENCE EZER LEARNING',
+  title: 'Watch Our Platform & Learning Methodology in Action',
+  description: 'See how our corporate-experienced instructors deliver live interactive classes, hands-on cloud labs, and personalized career counseling.',
+  videoUrl: 'https://www.youtube.com/watch?v=aircAruvnKk',
+  poster: 'images/hero/hero_section_1.jpg'
+};
+
 export const defaultPlatformDef = {
   tag: 'Empowering Career Switchers',
   headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
@@ -177,7 +187,7 @@ export const defaultSupportCards = [
     tag: 'EXPERT FACULTY',
     title: 'Mentorship by Industry Practitioners',
     desc: 'Learn from senior leaders and tech experts working at top global organizations',
-    image: 'images/hero/here_section_2.webp',
+    image: 'images/hero/hero_section_1.jpg',
     fit: 'cover',
     position: 'center center',
     bgColor: '#ffffff',
@@ -211,7 +221,7 @@ export const defaultSupportCards = [
     tag: 'ON-DEMAND REVISION',
     title: 'Learning Management Access',
     desc: 'On-demand access to all session recordings for flexible revision and learning',
-    image: 'images/hero/optimized/AI_machine_learning.webp',
+    image: 'images/hero/AI_machine_learning.png',
     fit: 'cover',
     position: 'center center',
     bgColor: '#ffffff',
@@ -431,10 +441,13 @@ export function getStored(key, fallback) {
     const parsed = JSON.parse(item);
     if (parsed !== null && parsed !== undefined) {
       const jsonStr = JSON.stringify(parsed);
-      if (jsonStr.includes('_optimized.webp') || jsonStr.includes('/optimized/')) {
+      if (jsonStr.includes('.webp') || jsonStr.includes('/optimized/')) {
         const cleanedStr = jsonStr
           .replace(/ezer_shield_logo_optimized\.webp/g, 'ezer_shield_logo.png')
           .replace(/logo_white_border_optimized\.webp/g, 'logo_white_border.png')
+          .replace(/AI_machine_learning\.webp/g, 'AI_machine_learning.png')
+          .replace(/Spoken_english\.webp/g, 'Spoken_english.png')
+          .replace(/here_section_2\.webp/g, 'hero_section_1.jpg')
           .replace(/_optimized\.webp/g, '.png')
           .replace(/\/optimized\//g, '/');
         const cleaned = JSON.parse(cleanedStr);
@@ -551,7 +564,8 @@ export function getInitialState() {
     achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements) || defaultAchievements,
     executiveLeaders: safeExec,
     hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners,
-    paymentConfig: getStored(STORAGE_PAYMENT_CONFIG_KEY, defaultPaymentConfig) || defaultPaymentConfig
+    paymentConfig: getStored(STORAGE_PAYMENT_CONFIG_KEY, defaultPaymentConfig) || defaultPaymentConfig,
+    aboutVideo: getStored(STORAGE_ABOUT_VIDEO_KEY, defaultAboutVideo) || defaultAboutVideo
   };
 
 }

@@ -113,7 +113,7 @@
       "tagline": "From Data Foundations to Training and Deploying Production ML Models.",
       "description": "Comprehensive practical program covering Python, Data Analytics, Supervised & Unsupervised Learning, Neural Networks, Deep Learning, and Generative AI fundamentals.",
       "tools": ["Python", "TensorFlow", "PyTorch", "Scikit-Learn", "Pandas", "NumPy", "OpenCV", "Streamlit", "Docker"],
-      "image": "images/hero/optimized/AI_machine_learning.webp",
+      "image": "images/hero/AI_machine_learning.png",
       "imagePosition": "center center",
       "imageFit": "cover",
       "duration": "4 Months",

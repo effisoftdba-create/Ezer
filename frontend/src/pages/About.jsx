@@ -1,6 +1,9 @@
 import React from 'react';
 import { HiCheckCircle, HiLightBulb, HiShieldCheck, HiHeart, HiAcademicCap, HiSparkles, HiTrendingUp, HiUserGroup, HiBriefcase, HiGlobeAlt } from 'react-icons/hi';
 import CTABanner from '../components/CTABanner';
+import VideoPlayer from '../components/VideoPlayer';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
+import { resolveImageSrc } from '../utils/imageUtils';
 
 const gallery = [
   'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800&h=500',
@@ -48,6 +51,15 @@ const coreObjectives = [
 ];
 
 export default function About({ onOpenDemoModal }) {
+  const { aboutVideo } = useSiteData() || {};
+  const videoConfig = aboutVideo || {
+    tag: 'EXPERIENCE EZER LEARNING',
+    title: 'Watch Our Platform & Learning Methodology in Action',
+    description: 'See how our corporate-experienced instructors deliver live interactive classes, hands-on cloud labs, and personalized career counseling.',
+    videoUrl: 'https://www.youtube.com/watch?v=aircAruvnKk',
+    poster: 'images/hero/hero_section_1.jpg'
+  };
+
   return (
     <div style={{ background: '#ffffff' }}>
 
@@ -168,6 +180,33 @@ export default function About({ onOpenDemoModal }) {
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* About Us Brand Video Viewer Section (Supports YouTube & Google Drive) */}
+      <section style={{ padding: '64px 0', background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
+        <div className="container" style={{ maxWidth: '1080px', margin: '0 auto', textAlign: 'center' }}>
+          <div style={{ marginBottom: '32px' }}>
+            <span style={{
+              background: 'rgba(0, 6, 72, 0.07)', color: '#000648', border: '1.5px solid rgba(0, 6, 72, 0.15)',
+              fontSize: '0.75rem', fontWeight: 800, padding: '5px 16px', borderRadius: '50px',
+              textTransform: 'uppercase', letterSpacing: '0.08em', display: 'inline-block', marginBottom: '12px'
+            }}>
+              {videoConfig.tag || 'EXPERIENCE EZER LEARNING'}
+            </span>
+            <h2 style={{ color: '#000648', fontSize: 'clamp(1.7rem, 3vw, 2.4rem)', fontWeight: 900, marginBottom: '12px' }}>
+              {videoConfig.title || 'Watch Our Platform & Learning Methodology in Action'}
+            </h2>
+            <p style={{ color: '#475569', fontSize: '1rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6 }}>
+              {videoConfig.description || 'See how our corporate-experienced instructors deliver live interactive classes, hands-on cloud labs, and personalized career counseling.'}
+            </p>
+          </div>
+
+          <VideoPlayer
+            videoUrl={videoConfig.videoUrl || 'https://www.youtube.com/watch?v=aircAruvnKk'}
+            poster={resolveImageSrc(videoConfig.poster || 'images/hero/hero_section_1.jpg')}
+            title={videoConfig.title || 'EZER About Us Video Showcase'}
+          />
         </div>
       </section>
 

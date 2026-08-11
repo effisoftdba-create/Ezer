@@ -25,7 +25,9 @@ import {
   STORAGE_EXECUTIVE_LEADERS_KEY,
   STORAGE_HIRING_PARTNERS_KEY,
   STORAGE_PAYMENT_CONFIG_KEY,
+  STORAGE_ABOUT_VIDEO_KEY,
   defaultPaymentConfig,
+  defaultAboutVideo,
 
   defaultExecutiveLeaders,
   defaultHiringPartners,
@@ -100,7 +102,8 @@ export function SiteProvider({ children }) {
     achievements,
     executiveLeaders,
     hiringPartners,
-    paymentConfig
+    paymentConfig,
+    aboutVideo
   } = state;
 
   // Check for mobile sync token in URL
@@ -154,6 +157,7 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, executiveLeaders); }, [executiveLeaders]);
   useEffect(() => { safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, hiringPartners); }, [hiringPartners]);
   useEffect(() => { safeSetStorage(STORAGE_PAYMENT_CONFIG_KEY, paymentConfig); }, [paymentConfig]);
+  useEffect(() => { safeSetStorage(STORAGE_ABOUT_VIDEO_KEY, aboutVideo); }, [aboutVideo]);
 
 
   // Firebase Real-time Firestore & Realtime DB Subscriptions with Merged Defaults Protection
@@ -710,6 +714,13 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [hiringPartners]);
 
+  const updateAboutVideo = useCallback((newVideoData) => {
+    const updated = typeof newVideoData === 'object' ? { ...(aboutVideo || defaultAboutVideo), ...newVideoData } : newVideoData;
+    dispatch({ type: 'SET_KEY', key: 'aboutVideo', value: updated });
+    saveDocument('aboutVideo', 'main', updated);
+    triggerStateToast('SAVED');
+  }, [aboutVideo]);
+
   const resetAllToDefaults = useCallback(() => {
     localStorage.clear();
     dispatch({ type: 'RESET_ALL' });
@@ -737,6 +748,7 @@ export function SiteProvider({ children }) {
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
+    aboutVideo, updateAboutVideo,
     resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
@@ -754,12 +766,12 @@ export function SiteProvider({ children }) {
     contactInfo, updateContactInfo,
     popupConfig, updatePopupConfig,
     leads, addLead, updateLeadStatus, addLeadComment, updateLeadDetails, deleteLead,
-
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
+    aboutVideo, updateAboutVideo,
     resetAllToDefaults
   ]);
 
