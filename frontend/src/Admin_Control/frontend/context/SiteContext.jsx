@@ -203,11 +203,10 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('executiveLeaders', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders) || defaultExecutiveLeaders;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: merged });
-          safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, merged);
+        // Trust Firebase as source of truth — do not merge with stale localStorage defaults
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: items });
+          safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('popupConfig', (items) => {
@@ -229,11 +228,10 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('seniorMentors', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_MENTORS_KEY, defaultSeniorMentors) || defaultSeniorMentors;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: merged });
-          safeSetStorage(STORAGE_MENTORS_KEY, merged);
+        // Trust Firebase as source of truth — do not merge with stale localStorage defaults
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: items });
+          safeSetStorage(STORAGE_MENTORS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('writtenTestimonials', (items) => {
@@ -261,19 +259,18 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('hiringPartners', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: merged });
-          safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, merged);
+        // Trust Firebase as source of truth — do not merge with stale localStorage defaults.
+        // This ensures changes from any device instantly appear on all other devices.
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: items });
+          safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, items);
         }
       }));
       unsubs.push(subscribeToCollection('aboutVideos', (items) => {
-        if (items && items.length > 0) {
-          const storedLocal = getStored(STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos) || defaultAboutVideos;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'aboutVideos', value: merged });
-          safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, merged);
+        // Trust Firebase as source of truth — do not merge with stale localStorage defaults
+        if (Array.isArray(items) && items.length > 0) {
+          dispatch({ type: 'SET_KEY', key: 'aboutVideos', value: items });
+          safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, items);
         }
       }));
     }, 1500); // Delay by 1.5 seconds to allow initial content to render

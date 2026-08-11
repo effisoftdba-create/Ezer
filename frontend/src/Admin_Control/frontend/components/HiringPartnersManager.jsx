@@ -149,14 +149,9 @@ export default function HiringPartnersManager() {
     e.preventDefault();
     if (!formData.name.trim()) return;
 
-    let finalData = { ...formData };
-    if (finalData.image && typeof finalData.image === 'string' && !finalData.image.trim().startsWith('<svg')) {
-      try {
-        finalData.image = await removeImageBackground(finalData.image);
-      } catch (err) {
-        console.warn('Background removal on submit:', err);
-      }
-    }
+    // Save image exactly as selected — no silent background removal.
+    // Users can manually trigger background removal via the image picker if needed.
+    const finalData = { ...formData };
 
     if (editingId) {
       updateHiringPartner(editingId, finalData);

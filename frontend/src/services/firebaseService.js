@@ -3,6 +3,30 @@ import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firesto
 import { ref, onValue, set, remove } from 'firebase/database';
 
 /**
+ * Strip base64 data URI values from an object before saving to Firestore.
+ * Firestore has a 1MB document size limit — large base64 images silently fail to save,
+ * which causes cross-device sync to break. Images should be hosted URLs, not embedded data.
+ */
+function stripDataUris(data) {
+  if (!data || typeof data !== 'object') return data;
+  const cleaned = { ...data };
+  for (const key of Object.keys(cleaned)) {
+    const val = cleaned[key];
+    if (typeof val === 'string' && val.startsWith('data:')) {
+      // Replace with a sentinel so we know an image existed but was too large for Firestore
+      cleaned[key] = cleaned[key + '_url'] || cleaned['imageUrl'] || cleaned['src'] || '';
+    } else if (Array.isArray(val)) {
+      cleaned[key] = val.map((item) =>
+        typeof item === 'object' && item !== null ? stripDataUris(item) : item
+      );
+    } else if (typeof val === 'object' && val !== null) {
+      cleaned[key] = stripDataUris(val);
+    }
+  }
+  return cleaned;
+}
+
+/**
  * Real-time listener for Firestore or Realtime Database
  */
 export function subscribeToCollection(collectionName, onUpdate) {
@@ -21,7 +45,8 @@ export function subscribeToCollection(collectionName, onUpdate) {
             id: docItem.id,
             ...docItem.data()
           }));
-          if (items && items.length > 0) onUpdate(items);
+          // Always call onUpdate — even for empty arrays so deletions sync across devices
+          onUpdate(items);
         },
         (error) => {
           // Suppress offline/permission notices to avoid console noise
@@ -45,13 +70,15 @@ export async function saveDocument(collectionName, docId, data) {
   let saved = false;
 
   // 1. Firestore (Primary)
+  // Strip base64 data URIs — they exceed Firestore's 1MB doc limit and silently break cross-device sync
   if (db) {
     try {
       const docRef = doc(db, collectionName, cleanId);
-      await setDoc(docRef, { ...data, updatedAt: new Date().toISOString() }, { merge: true });
+      const cleanData = stripDataUris({ ...data, updatedAt: new Date().toISOString() });
+      await setDoc(docRef, cleanData, { merge: true });
       saved = true;
     } catch (err) {
-      console.debug(`[Firebase Firestore] Save notice:`, err);
+      console.warn(`[Firebase Firestore] Save error for ${collectionName}/${cleanId}:`, err.message || err);
     }
   }
 
