@@ -92,7 +92,7 @@ export default function GraduateFormModal({
                   fontSize: '0.85rem'
                 }}
               />
-              {formErrors.name && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Name is required</span>}
+              {formErrors.name && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Name is required</span>}
             </div>
 
             <div>
@@ -115,7 +115,7 @@ export default function GraduateFormModal({
                   fontSize: '0.85rem'
                 }}
               />
-              {formErrors.company && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Company is required</span>}
+              {formErrors.company && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Company is required</span>}
             </div>
           </div>
 
@@ -185,7 +185,7 @@ export default function GraduateFormModal({
                 <HiPhotograph size={15} /> Choose Photo
               </button>
             </div>
-            {formErrors.image && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Graduate Photo is required</span>}
+            {formErrors.image && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Graduate Photo is required</span>}
           </div>
 
           {/* Footer Buttons */}

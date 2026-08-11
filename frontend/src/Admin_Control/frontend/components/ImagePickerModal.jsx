@@ -501,7 +501,7 @@ export default function ImagePickerModal({
                     fontSize: '0.78rem', cursor: 'pointer'
                   }}
                 >
-                  🖥️ PC Screen Focus
+                  PC Screen Focus
                 </button>
                 <button
                   type="button"

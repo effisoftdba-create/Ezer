@@ -207,53 +207,52 @@ export default function HeroManager() {
                     ↺ Reset Alignment
                   </button>
                 </div>
-                {formErrors.url && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Image Source URL is required</span>}
+                {formErrors.url && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Image Source URL is required</span>}
               </div>
 
               <div>
-                <label htmlFor="hero_headline_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.headline ? '#ef4444' : '#334155', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
                   Headline Text *
                 </label>
                 <input
-                  id="hero_headline_input"
                   type="text"
+                  name="headline"
+                  placeholder="e.g. Learn Live. Build Real Skills. Get Placed."
                   value={formData.headline}
-                  onChange={(e) => {
-                    setFormData({ ...formData, headline: e.target.value });
-                    if (formErrors.headline) setFormErrors((prev) => ({ ...prev, headline: false }));
-                  }}
-                  placeholder="e.g. Deploy, Automate, and Scale Like a Real DevOps Engineer"
+                  onChange={handleChange}
                   style={{
-                    width: '100%', padding: '9px 12px', borderRadius: '8px',
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '8px',
                     border: formErrors.headline ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
-                    boxShadow: formErrors.headline ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
-                    fontSize: '0.85rem'
+                    fontSize: '0.88rem',
+                    fontWeight: 600
                   }}
                 />
-                {formErrors.headline && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Headline Text is required</span>}
+                {formErrors.headline && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Headline Text is required</span>}
               </div>
 
               <div>
-                <label htmlFor="hero_sub_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.sub ? '#ef4444' : '#334155', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
                   Sub-description Text *
                 </label>
                 <textarea
-                  id="hero_sub_input"
+                  name="sub"
                   rows={3}
+                  placeholder="e.g. Live online classes led by working corporate professionals..."
                   value={formData.sub}
-                  onChange={(e) => {
-                    setFormData({ ...formData, sub: e.target.value });
-                    if (formErrors.sub) setFormErrors((prev) => ({ ...prev, sub: false }));
-                  }}
-                  placeholder="Detailed summary line shown below headline..."
+                  onChange={handleChange}
                   style={{
-                    width: '100%', padding: '9px 12px', borderRadius: '8px',
+                    width: '100%',
+                    padding: '10px 14px',
+                    borderRadius: '8px',
                     border: formErrors.sub ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
-                    boxShadow: formErrors.sub ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
-                    fontSize: '0.85rem', lineHeight: 1.5
+                    fontSize: '0.88rem',
+                    fontWeight: 500,
+                    resize: 'vertical'
                   }}
                 />
-                {formErrors.sub && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>⚠️ Sub-description Text is required</span>}
+                {formErrors.sub && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Sub-description Text is required</span>}
               </div>
 
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>

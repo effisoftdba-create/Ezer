@@ -437,7 +437,7 @@ export default function HiringPartnersManager() {
 
               <div>
                 <span style={{ fontSize: '0.73rem', fontWeight: 800, color: '#115DFC', display: 'block', marginBottom: '6px' }}>
-                  ⚡ Quick Vector Logo Presets (1-Click Fill):
+                  Quick Vector Logo Presets (1-Click Fill):
                 </span>
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', maxHeight: '90px', overflowY: 'auto', padding: '6px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                   {CORPORATE_LOGO_PRESETS.map((preset) => (

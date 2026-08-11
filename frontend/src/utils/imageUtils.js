@@ -14,16 +14,17 @@ export function resolveImageSrc(urlStr) {
     return TECH_FALLBACK_IMAGES[0];
   }
 
-  if (urlStr.startsWith('data:')) {
+  if (urlStr.startsWith('data:') || urlStr.startsWith('http://') || urlStr.startsWith('https://')) {
     return urlStr;
   }
 
+  const cleanPath = urlStr.replace(/^\//, '');
+  const baseUrl = import.meta.env.BASE_URL || '/';
+
   let finalUrl = '';
-  if (urlStr.startsWith('http://') || urlStr.startsWith('https://')) {
-    finalUrl = urlStr;
+  if (baseUrl === './') {
+    finalUrl = `./${cleanPath}`;
   } else {
-    const baseUrl = import.meta.env.BASE_URL || '/';
-    const cleanPath = urlStr.replace(/^\//, '');
     finalUrl = baseUrl.endsWith('/') ? `${baseUrl}${cleanPath}` : `${baseUrl}/${cleanPath}`;
   }
 
@@ -50,16 +51,9 @@ export function handleImgError(e) {
 }
 
 /**
- * Generates WebP image source url with JPEG/PNG fallback
+ * Generates WebP image source url with JPEG/PNG fallback safely
  */
 export function resolveWebPSrc(urlStr) {
   const original = resolveImageSrc(urlStr);
-  if (!original) return { webp: '', fallback: '' };
-
-  if (original.endsWith('.jpg') || original.endsWith('.jpeg') || original.endsWith('.png')) {
-    const webpUrl = original.replace(/\.(jpg|jpeg|png)(\?.*)?$/, '.webp$2');
-    return { webp: webpUrl, fallback: original };
-  }
-
   return { webp: original, fallback: original };
 }
