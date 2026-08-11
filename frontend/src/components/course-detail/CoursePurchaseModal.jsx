@@ -4,34 +4,34 @@ import { useSiteData } from '../../Admin_Control/context/SiteContext';
 
 function downloadStudentReceiptImage(payment) {
   const canvas = document.createElement('canvas');
-  canvas.width = 540;
-  canvas.height = 760;
+  canvas.width = 500;
+  canvas.height = 720;
   const ctx = canvas.getContext('2d');
 
   // Pure White Background
   ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, 540, 760);
+  ctx.fillRect(0, 0, 500, 720);
 
   // Top Avatar Circle (Pink #e91e63)
   ctx.fillStyle = '#e91e63';
   ctx.beginPath();
-  ctx.arc(270, 70, 32, 0, Math.PI * 2);
+  ctx.arc(250, 60, 28, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 28px sans-serif';
+  ctx.font = 'bold 24px sans-serif';
   ctx.textAlign = 'center';
-  ctx.fillText('E', 270, 80);
+  ctx.fillText('E', 250, 68);
 
   // Recipient Header
   ctx.fillStyle = '#202124';
-  ctx.font = '600 16px sans-serif';
-  ctx.fillText(`To ${payment.paidTo || 'EZER Learning Solutions Pvt. Ltd.'}`, 270, 130);
+  ctx.font = '600 15px sans-serif';
+  ctx.fillText(`To ${payment.paidTo || 'EZER Learning Solutions Pvt. Ltd.'}`, 250, 115);
 
-  // Huge Amount
+  // Amount
   ctx.fillStyle = '#202124';
-  ctx.font = '700 44px sans-serif';
-  ctx.fillText(`₹${Number(payment.amount).toLocaleString('en-IN')}`, 270, 185);
+  ctx.font = '700 40px sans-serif';
+  ctx.fillText(`₹${Number(payment.amount).toLocaleString('en-IN')}`, 250, 165);
 
   // Completed Pill Button
   ctx.fillStyle = '#ffffff';
@@ -39,21 +39,21 @@ function downloadStudentReceiptImage(payment) {
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   if (ctx.roundRect) {
-    ctx.roundRect(190, 205, 160, 36, 18);
+    ctx.roundRect(175, 185, 150, 32, 16);
   } else {
-    ctx.rect(190, 205, 160, 36);
+    ctx.rect(175, 185, 150, 32);
   }
   ctx.fill();
   ctx.stroke();
 
   ctx.fillStyle = '#1e8e3e';
-  ctx.font = 'bold 14px sans-serif';
-  ctx.fillText('✔  Completed', 270, 228);
+  ctx.font = 'bold 13px sans-serif';
+  ctx.fillText('✔  Completed', 250, 206);
 
   // Date Timestamp
   ctx.fillStyle = '#5f6368';
-  ctx.font = '13px sans-serif';
-  ctx.fillText(payment.paymentDate || new Date().toLocaleString(), 270, 265);
+  ctx.font = '12px sans-serif';
+  ctx.fillText(payment.paymentDate || new Date().toLocaleString(), 250, 240);
 
   // Details Box Container
   ctx.fillStyle = '#ffffff';
@@ -61,57 +61,57 @@ function downloadStudentReceiptImage(payment) {
   ctx.lineWidth = 1;
   ctx.beginPath();
   if (ctx.roundRect) {
-    ctx.roundRect(30, 290, 480, 380, 16);
+    ctx.roundRect(25, 260, 450, 370, 14);
   } else {
-    ctx.rect(30, 290, 480, 380);
+    ctx.rect(25, 260, 450, 370);
   }
   ctx.fill();
   ctx.stroke();
 
   // Bank Header inside Box
   ctx.fillStyle = '#202124';
-  ctx.font = 'bold 15px sans-serif';
+  ctx.font = 'bold 14px sans-serif';
   ctx.textAlign = 'left';
-  ctx.fillText('Google Pay (UPI)', 50, 325);
+  ctx.fillText(payment.paymentMethod || 'Google Pay (UPI)', 45, 295);
 
   ctx.strokeStyle = '#f1f3f4';
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(50, 340);
-  ctx.lineTo(490, 340);
+  ctx.moveTo(45, 310);
+  ctx.lineTo(455, 310);
   ctx.stroke();
 
   // Fields inside details box
   const fields = [
     ['UPI transaction ID', payment.upiTransactionId || '109529161148'],
-    ['To', 'ezerlearning@okaxis'],
+    ['To', payment.upiVpa || 'ezerlearning@okaxis'],
     [`From: ${payment.studentName}`, payment.paidFrom || payment.email || 'Student Account'],
-    ['Google Pay • Enrolled Course', payment.courseName || 'Cohort Enrolled'],
-    ['Google transaction ID', `CICAgKj${Math.random().toString(36).substring(2, 10).toUpperCase()}`]
+    ['Enrolled Program', payment.courseName || 'Cohort Enrolled'],
+    ['EZER Transaction ID', `EZER-TXN-${payment.upiTransactionId || 'SEC10092'}`]
   ];
 
-  let y = 370;
+  let y = 338;
   fields.forEach(([lbl, val]) => {
     ctx.fillStyle = '#5f6368';
-    ctx.font = '12px sans-serif';
-    ctx.fillText(lbl, 50, y);
+    ctx.font = '11px sans-serif';
+    ctx.fillText(lbl, 45, y);
 
     ctx.fillStyle = '#202124';
-    ctx.font = 'bold 14px sans-serif';
-    ctx.fillText(String(val), 50, y + 20);
+    ctx.font = 'bold 13px sans-serif';
+    ctx.fillText(String(val), 45, y + 18);
 
-    y += 58;
+    y += 56;
   });
 
   // Footer UPI Logo
   ctx.textAlign = 'center';
   ctx.fillStyle = '#70757a';
   ctx.font = '10px sans-serif';
-  ctx.fillText('POWERED BY', 270, 705);
+  ctx.fillText('POWERED BY', 250, 668);
 
   ctx.fillStyle = '#202124';
-  ctx.font = '900 16px sans-serif';
-  ctx.fillText('UPI ▶', 270, 725);
+  ctx.font = '900 15px sans-serif';
+  ctx.fillText('UPI ▶', 250, 686);
 
   // Trigger Download
   const a = document.createElement('a');
@@ -454,74 +454,107 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
               }}
             >
-              {isProcessing ? 'Auto-Verifying Payment...' : `Complete Payment & Get Receipt (₹${finalPrice})`}
+              {isProcessing ? 'Auto-Verifying Payment...' : `Verify & Unlock Course Access (₹${finalPrice})`}
             </button>
           </form>
         )}
 
         {/* STEP 3: ENROLLMENT CONFIRMATION RECEIPT & INSTANT IMAGE DOWNLOAD */}
         {step === 3 && (
-          <div style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-            <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 20px rgba(34, 197, 94, 0.3)' }}>
-              <HiCheckCircle size={44} />
+          <div style={{ padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', maxHeight: '85vh', overflowY: 'auto' }}>
+            {/* Top Pink Avatar Circle */}
+            <div style={{ width: '52px', height: '52px', background: '#e91e63', color: '#ffffff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold', margin: '0 auto 4px', boxShadow: '0 4px 10px rgba(233, 30, 99, 0.2)' }}>
+              E
             </div>
 
-            <div>
-              <span style={{ background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.72rem', padding: '4px 14px', borderRadius: '50px' }}>
-                PAYMENT AUTO-VERIFIED & ENROLLED
-              </span>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', margin: '8px 0 4px 0' }}>
-                Welcome to EZER Learning Solutions!
-              </h3>
-              <p style={{ fontSize: '0.85rem', color: '#475569', margin: 0 }}>
-                Your seat in <strong>{course.title}</strong> is confirmed.
-              </p>
+            <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#202124', marginBottom: '2px' }}>
+              To {upiMerchantName || 'EZER Learning Solutions Pvt. Ltd.'}
             </div>
 
-            <div style={{ width: '100%', background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1.5px dashed #cbd5e1', textAlign: 'left', fontSize: '0.82rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                <span style={{ color: '#64748b', fontWeight: 700 }}>Transaction Receipt ID:</span>
-                <span style={{ fontWeight: 900, color: '#000648', fontFamily: 'monospace' }}>{receiptNumber}</span>
+            <div style={{ fontSize: '2.4rem', fontWeight: 700, color: '#202124', margin: '0 0 4px', letterSpacing: '-0.5px' }}>
+              ₹{finalPrice.toLocaleString('en-IN')}
+            </div>
+
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', border: '1px solid #dadce0', borderRadius: '50px', padding: '4px 16px', fontSize: '0.82rem', fontWeight: 600, color: '#1e8e3e', marginBottom: '2px' }}>
+              <span style={{ color: '#1e8e3e', fontSize: '14px' }}>✔</span> Completed
+            </div>
+
+            <div style={{ fontSize: '0.78rem', color: '#5f6368', marginBottom: '8px' }}>
+              {new Date().toLocaleString()}
+            </div>
+
+            {/* Inner Details Box */}
+            <div style={{ width: '100%', background: '#ffffff', border: '1px solid #dadce0', borderRadius: '14px', padding: '16px', textAlign: 'left', boxShadow: '0 1px 3px rgba(60,64,67,0.08)' }}>
+              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#202124', paddingBottom: '10px', borderBottom: '1px solid #f1f3f4', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span>{paymentMethod === 'upi' ? 'Google Pay (UPI)' : 'Credit Card (Tokenized)'}</span>
+                <span style={{ color: '#1e8e3e', fontSize: '12px', fontWeight: 800 }}>✔ VERIFIED</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-                <span style={{ color: '#64748b', fontWeight: 700 }}>Candidate Name:</span>
-                <span style={{ fontWeight: 800, color: '#000648' }}>{fullName}</span>
+
+              <div style={{ marginBottom: '10px' }}>
+                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>UPI transaction ID</div>
+                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 700, fontFamily: 'monospace' }}>{receiptNumber}</div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: '#64748b', fontWeight: 700 }}>Amount Paid:</span>
-                <span style={{ fontWeight: 900, color: '#166534' }}>₹{finalPrice.toLocaleString('en-IN')} (AUTO-VERIFIED)</span>
+
+              <div style={{ marginBottom: '10px' }}>
+                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>To</div>
+                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600 }}>{upiVpa}</div>
+              </div>
+
+              <div style={{ marginBottom: '10px' }}>
+                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>From: {fullName}</div>
+                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600 }}>{email} ({phone})</div>
+              </div>
+
+              <div style={{ marginBottom: '10px' }}>
+                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>Enrolled Program</div>
+                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600 }}>{course.title}</div>
+              </div>
+
+              <div>
+                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>EZER Transaction ID</div>
+                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600, fontFamily: 'monospace' }}>EZER-TXN-{receiptNumber}</div>
               </div>
             </div>
 
-            {/* Instant Download Receipt Image Button */}
-            <div style={{ display: 'flex', gap: '10px', width: '100%' }}>
-              <button
-                type="button"
-                onClick={() => downloadStudentReceiptImage({
-                  studentName: fullName,
-                  amount: finalPrice,
-                  upiTransactionId: receiptNumber,
-                  paymentMethod: paymentMethod === 'upi' ? 'Google Pay (UPI)' : 'Credit Card',
-                  paidTo: upiMerchantName,
-                  courseName: course.title,
-                  email: email,
-                  paymentDate: new Date().toLocaleString()
-                })}
-                style={{
-                  flex: 1, padding: '12px 16px', background: '#f0fdf4', color: '#166534',
-                  border: '1.5px solid #bbf7d0', borderRadius: '12px', fontWeight: 900,
-                  fontSize: '0.85rem', cursor: 'pointer', display: 'flex', alignItems: 'center',
-                  justifyContent: 'center', gap: '6px', boxShadow: '0 4px 12px rgba(22, 101, 52, 0.1)'
-                }}
-              >
-                <HiPhotograph size={18} /> Download Receipt Image (.png)
-              </button>
-            </div>
+            {/* Download Receipt Image Button */}
+            <button
+              type="button"
+              onClick={() => downloadStudentReceiptImage({
+                studentName: fullName,
+                amount: finalPrice,
+                upiTransactionId: receiptNumber,
+                paymentMethod: paymentMethod === 'upi' ? 'Google Pay (UPI)' : 'Credit Card',
+                paidTo: upiMerchantName,
+                upiVpa: upiVpa,
+                courseName: course.title,
+                email: email,
+                paidFrom: `${email} (${phone})`,
+                paymentDate: new Date().toLocaleString()
+              })}
+              style={{
+                width: '100%', padding: '11px 16px', background: '#e8f0fe', color: '#1a73e8',
+                border: '1px solid #aecbfa', borderRadius: '10px', fontWeight: 900,
+                fontSize: '0.82rem', cursor: 'pointer', display: 'flex', alignItems: 'center',
+                justifyContent: 'center', gap: '6px'
+              }}
+            >
+              <HiPhotograph size={18} /> Download Digital Receipt Image (.png)
+            </button>
 
-            {/* Direct Automatic Redirect Notice */}
-            <div style={{ background: '#25D366', color: '#ffffff', padding: '12px 18px', borderRadius: '50px', fontWeight: 900, fontSize: '0.88rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', boxShadow: '0 8px 24px rgba(37, 211, 102, 0.3)' }}>
-              <span>Redirecting to Official Student WhatsApp Group...</span>
-            </div>
+            {/* Direct WhatsApp Group Button */}
+            <a
+              href="https://chat.whatsapp.com/EZERLearnersGroup"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                width: '100%', padding: '12px 18px', background: '#25D366', color: '#ffffff',
+                borderRadius: '50px', fontWeight: 900, fontSize: '0.9rem', textDecoration: 'none',
+                boxShadow: '0 6px 20px rgba(37, 211, 102, 0.35)'
+              }}
+            >
+              Join Official Student WhatsApp Group ↗
+            </a>
           </div>
         )}
       </div>
