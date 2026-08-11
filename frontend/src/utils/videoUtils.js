@@ -24,9 +24,13 @@ export function getNormalizedVideoConfig(url) {
   // 2. Google Drive normalization
   const driveIdMatch = trimmed.match(/(?:file\/d\/|id=)([\w-]+)/);
   if (trimmed.includes('drive.google.com') && driveIdMatch && driveIdMatch[1]) {
+    const fileId = driveIdMatch[1];
     return {
       type: 'iframe',
-      src: `https://drive.google.com/file/d/${driveIdMatch[1]}/preview`,
+      isDrive: true,
+      fileId: fileId,
+      src: `https://drive.google.com/file/d/${fileId}/preview`,
+      originalUrl: `https://drive.google.com/file/d/${fileId}/view?usp=sharing`,
       title: 'Google Drive Video Player'
     };
   }

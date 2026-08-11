@@ -37,46 +37,68 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
   }
 
   return (
-    <div
-      className="ezer-video-player-container"
-      style={{
-        width: '100%',
-        maxWidth: '1040px',
-        margin: '0 auto',
-        aspectRatio: '16 / 9',
-        borderRadius: '20px',
-        overflow: 'hidden',
-        background: '#000000',
-        boxShadow: '0 16px 48px rgba(0, 6, 72, 0.4)',
-        border: '2px solid #f2b733',
-        position: 'relative'
-      }}
-    >
-      {config.type === 'video' ? (
-        <video
-          key={config.src}
-          src={config.src}
-          poster={poster}
-          controls
-          playsInline
-          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-        >
-          Your browser does not support HTML5 video playback.
-        </video>
-      ) : (
-        <iframe
-          key={config.src}
-          src={config.src}
-          title={title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-          style={{
-            width: '100%',
-            height: '100%',
-            border: 'none',
-            display: 'block'
-          }}
-        />
+    <div style={{ width: '100%', maxWidth: '1040px', margin: '0 auto' }}>
+      <div
+        className="ezer-video-player-container"
+        style={{
+          width: '100%',
+          aspectRatio: '16 / 9',
+          borderRadius: '20px',
+          overflow: 'hidden',
+          background: '#000000',
+          boxShadow: '0 16px 48px rgba(0, 6, 72, 0.4)',
+          border: '2px solid #f2b733',
+          position: 'relative'
+        }}
+      >
+        {config.type === 'video' ? (
+          <video
+            key={config.src}
+            src={config.src}
+            poster={poster}
+            controls
+            playsInline
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          >
+            Your browser does not support HTML5 video playback.
+          </video>
+        ) : (
+          <iframe
+            key={config.src}
+            src={config.src}
+            title={title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              display: 'block'
+            }}
+          />
+        )}
+      </div>
+
+      {config.isDrive && (
+        <div style={{ marginTop: '8px', textAlign: 'right' }}>
+          <a
+            href={config.originalUrl || effectiveUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              color: '#000648',
+              textDecoration: 'underline',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px'
+            }}
+          >
+            Watch directly on Google Drive ↗
+          </a>
+        </div>
       )}
     </div>
   );

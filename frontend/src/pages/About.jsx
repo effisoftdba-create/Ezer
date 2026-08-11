@@ -217,7 +217,7 @@ export default function About({ onOpenDemoModal }) {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '48px', maxWidth: '1040px', margin: '0 auto' }}>
             {videoList.slice(0, 2).map((vid) => {
-              const videoKey = vid.id || vid.tag || vid.title || vid.url;
+              const videoKey = String(vid.id || vid.tag || vid.title || vid.videoUrl || 'video-showcase-item');
               return (
                 <div
                   key={videoKey}
@@ -239,7 +239,7 @@ export default function About({ onOpenDemoModal }) {
                       fontSize: '0.7rem', fontWeight: 800, padding: '4px 12px', borderRadius: '50px',
                       textTransform: 'uppercase', letterSpacing: '0.06em', display: 'inline-block', marginBottom: '8px'
                     }}>
-                      {vid.tag || `VIDEO SHOWCASE 0${idx + 1}`}
+                      {vid.tag || 'VIDEO SHOWCASE'}
                     </span>
                     <h3 style={{ color: '#000648', fontSize: '1.25rem', fontWeight: 900, margin: '4px 0 8px 0', lineHeight: 1.35 }}>
                       {vid.title}
