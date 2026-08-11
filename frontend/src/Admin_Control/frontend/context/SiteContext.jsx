@@ -674,12 +674,14 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, []);
 
-  const addLead = useCallback((leadData) => {
+  const addLead = useCallback((leadData, silent = false) => {
     const newLead = { id: String(Date.now()), status: 'New', ...leadData, date: new Date().toLocaleString() };
     const updated = [newLead, ...(leads || [])];
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
     saveDocument('leads', newLead.id, newLead);
-    triggerStateToast('SAVED');
+    if (!silent) {
+      triggerStateToast('SAVED');
+    }
   }, [leads]);
 
   const updateLeadStatus = useCallback((id, status) => {
@@ -772,7 +774,7 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [aboutVideos]);
 
-  const addPayment = useCallback((paymentData) => {
+  const addPayment = useCallback((paymentData, silent = false) => {
     const newPay = {
       id: `pay-${Date.now()}`,
       status: 'SUCCESSFUL',
@@ -783,7 +785,9 @@ export function SiteProvider({ children }) {
     const updated = [newPay, ...(payments || [])];
     dispatch({ type: 'SET_KEY', key: 'payments', value: updated });
     saveDocument('payments', newPay.id, newPay);
-    triggerStateToast('SAVED');
+    if (!silent) {
+      triggerStateToast('SAVED');
+    }
   }, [payments]);
 
   const deletePayment = useCallback((paymentId) => {

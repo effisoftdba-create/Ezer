@@ -152,7 +152,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
       alert('Please fill out your full name, email, and 10-digit mobile number.');
       return;
     }
-    // Record Lead into Database immediately upon Step 1 Submission
+    // Record Lead into Database immediately upon Step 1 Submission (silently)
     if (addLead) {
       addLead({
         name: fullName.trim(),
@@ -164,7 +164,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
         status: 'Interested Lead',
         city: 'Online Registration',
         timestamp: new Date().toISOString()
-      });
+      }, true);
     }
     // Directly navigate to Step 2 (UPI Payment QR Code & UTR Verification)
     setStep(2);
@@ -220,12 +220,12 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
         paymentDate: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
       };
 
-      // Save real payment transaction to Firestore + Realtime DB
+      // Save real payment transaction to Firestore + Realtime DB (silently)
       if (addPayment) {
-        addPayment(payRecord);
+        addPayment(payRecord, true);
       }
 
-      // Save Lead Record with PAID status
+      // Save Lead Record with PAID status (silently)
       if (addLead) {
         addLead({
           name: fullName.trim(),
@@ -238,7 +238,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
           status: 'Enrolled',
           city: 'Online Enrollment',
           timestamp: new Date().toISOString()
-        });
+        }, true);
       }
 
       setStep(3);
