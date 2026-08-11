@@ -3,12 +3,12 @@ import { testimonials as initialTestimonials, videoStories } from '../../../data
 import { generalFaqs } from '../../../data/faq';
 import productionData from '../../../data/productionData.json';
 
-export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v14_fix_image_aspect_position';
+export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v18_clean_image_paths';
 
 export const defaultSlides = [
   {
     id: 'slide-1',
-    url: 'images/hero/optimized/hero_section_1.jpg',
+    url: 'images/hero/hero_section_1.jpg',
     headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
     sub: "EZER Learning Solutions is India's top tech-driven platform delivering live online, job-oriented IT courses. Learn from corporate tech practitioners with hands-on labs, 12-month placement assistance, and 3-year community access.",
     badge: 'Empowering Career Switchers',
@@ -18,7 +18,7 @@ export const defaultSlides = [
   },
   {
     id: 'slide-2',
-    url: 'images/hero/optimized/devops.avif',
+    url: 'images/hero/devops.avif',
     headline: 'Deploy, Automate, and Scale Like a Real DevOps Engineer',
     sub: 'Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with real production cloud labs. Build enterprise CI/CD pipelines and accelerate your IT career switch with dedicated 1-on-1 expert mentor reviews.',
     badge: 'Cloud & DevOps Masterclass',
@@ -38,7 +38,7 @@ export const defaultSlides = [
   },
   {
     id: 'slide-4',
-    url: 'images/hero/optimized/AI_machine_learning.webp',
+    url: 'images/hero/AI_machine_learning.png',
     headline: 'From Python Basics to Deploying Real ML Models',
     sub: 'A hands-on, project-based path into AI & Machine Learning — live, instructor-led, and practical. Learn data engineering, neural networks, and model deployment strategies backed by 12-month career placement support.',
     badge: 'AI & Data Science Track',
@@ -47,25 +47,25 @@ export const defaultSlides = [
     zoom: 1
   },
 ];
-export const STORAGE_COURSES_KEY = 'ezer_courses:v12_mobile_cache_purge_v2';
-export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v12_mobile_cache_purge_v2';
-export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v12_mobile_cache_purge_v2';
-export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v12_mobile_cache_purge_v2';
-export const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v12_mobile_cache_purge_v2';
-export const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v12_mobile_cache_purge_v2';
-export const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v12_mobile_cache_purge_v2';
-export const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v12_mobile_cache_purge_v2';
-export const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v12_mobile_cache_purge_v2';
-export const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v12_mobile_cache_purge_v2';
-export const STORAGE_FAQS_KEY = 'ezer_faqs:v12_mobile_cache_purge_v2';
-export const STORAGE_CONTACT_KEY = 'ezer_contact:v12_mobile_cache_purge_v2';
-export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v12_mobile_cache_purge_v2';
-export const STORAGE_LEADS_KEY = 'ezer_leads:v12_mobile_cache_purge_v2';
-export const STORAGE_BLOGS_KEY = 'ezer_blogs:v16_sync_4_articles_all_views';
-export const STORAGE_ACHIEVEMENTS_KEY = 'ezer_achievements:v12_mobile_cache_purge_v2';
-export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v14_fix_image_aspect_position';
-export const STORAGE_HIRING_PARTNERS_KEY = 'ezer_hiring_partners:v12_mobile_cache_purge_v2';
-export const STORAGE_PAYMENT_CONFIG_KEY = 'ezer_payment_config:v12_mobile_cache_purge_v2';
+export const STORAGE_COURSES_KEY = 'ezer_courses:v18_clean_image_paths';
+export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v18_clean_image_paths';
+export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v18_clean_image_paths';
+export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v18_clean_image_paths';
+export const STORAGE_OUTCOMES_HEADER_KEY = 'ezer_outcomes_header:v18_clean_image_paths';
+export const STORAGE_MENTORS_KEY = 'ezer_senior_mentors:v18_clean_image_paths';
+export const STORAGE_MENTORS_HEADER_KEY = 'ezer_mentors_header:v18_clean_image_paths';
+export const STORAGE_VIDEOS_KEY = 'ezer_video_testimonials:v18_clean_image_paths';
+export const STORAGE_TESTIMONIALS_HERO_KEY = 'ezer_testimonials_hero:v18_clean_image_paths';
+export const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v18_clean_image_paths';
+export const STORAGE_FAQS_KEY = 'ezer_faqs:v18_clean_image_paths';
+export const STORAGE_CONTACT_KEY = 'ezer_contact:v18_clean_image_paths';
+export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v18_clean_image_paths';
+export const STORAGE_LEADS_KEY = 'ezer_leads:v18_clean_image_paths';
+export const STORAGE_BLOGS_KEY = 'ezer_blogs:v18_clean_image_paths';
+export const STORAGE_ACHIEVEMENTS_KEY = 'ezer_achievements:v18_clean_image_paths';
+export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v18_clean_image_paths';
+export const STORAGE_HIRING_PARTNERS_KEY = 'ezer_hiring_partners:v18_clean_image_paths';
+export const STORAGE_PAYMENT_CONFIG_KEY = 'ezer_payment_config:v18_clean_image_paths';
 
 export const defaultPaymentConfig = {
   enrollmentPrice: 9,
@@ -100,21 +100,18 @@ export const defaultHiringPartners = [
   { id: 'partner-15', name: 'Tech Mahindra', image: '<svg viewBox="0 0 210 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#e42528">Tech</text><text x="75" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#000648">Mahindra</text></svg>', row: 'Row 3', status: 'Active', imagePosition: 'center center', imageFit: 'contain' }
 ];
 
-
-
-
 export const defaultPopupConfig = {
   title: 'Register For Free Demo',
   subtitle: 'Book your free live demo class & 1-on-1 career counselling session',
   badge: 'LIMITED SEATS AVAILABLE',
   submitBtnText: 'Register Now',
-  image: 'images/hero/optimized/hero_section_1.jpg',
+  image: 'images/hero/hero_section_1.jpg',
   imagePosition: 'center center',
   imageFit: 'cover',
   photoVisibility: 85,
   photoHeight: 120,
   showPhoto: false,
-  bodyBgImage: 'images/hero/optimized/hero_section_1.jpg',
+  bodyBgImage: 'images/hero/hero_section_1.jpg',
   bodyBgOpacity: 15,
   showStateCity: true,
   nameLabel: 'Full Name*',
@@ -432,7 +429,21 @@ export function getStored(key, fallback) {
     const item = localStorage.getItem(key);
     if (!item) return fallback;
     const parsed = JSON.parse(item);
-    return parsed !== null && parsed !== undefined ? parsed : fallback;
+    if (parsed !== null && parsed !== undefined) {
+      const jsonStr = JSON.stringify(parsed);
+      if (jsonStr.includes('_optimized.webp') || jsonStr.includes('/optimized/')) {
+        const cleanedStr = jsonStr
+          .replace(/ezer_shield_logo_optimized\.webp/g, 'ezer_shield_logo.png')
+          .replace(/logo_white_border_optimized\.webp/g, 'logo_white_border.png')
+          .replace(/_optimized\.webp/g, '.png')
+          .replace(/\/optimized\//g, '/');
+        const cleaned = JSON.parse(cleanedStr);
+        safeSetStorage(key, cleaned);
+        return cleaned;
+      }
+      return parsed;
+    }
+    return fallback;
   } catch {
     return fallback;
   }

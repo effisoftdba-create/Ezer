@@ -36,12 +36,6 @@ export function resolveImageSrc(urlStr) {
     }
   }
 
-  // Cache Busting: append timestamp version parameter to force mobile browsers and CDN to fetch fresh image
-  if (!finalUrl.includes('?v=') && !finalUrl.includes('?t=')) {
-    const separator = finalUrl.includes('?') ? '&' : '?';
-    finalUrl = `${finalUrl}${separator}v=${BUILD_TIMESTAMP}`;
-  }
-
   return finalUrl;
 }
 

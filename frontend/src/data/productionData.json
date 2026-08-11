@@ -44,7 +44,7 @@
     },
     {
       "id": "slide-2",
-      "url": "images/hero/optimized/devops.avif",
+      "url": "images/hero/devops.avif",
       "headline": "Deploy, Automate, and Scale Like a Real DevOps Engineer",
       "sub": "Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with hands-on production labs.",
       "badge": "Cloud & DevOps Masterclass",
@@ -62,7 +62,7 @@
     },
     {
       "id": "slide-4",
-      "url": "images/hero/optimized/AI_machine_learning.webp",
+      "url": "images/hero/AI_machine_learning.png",
       "headline": "From Python Basics to Deploying Real ML Models",
       "sub": "A hands-on, project-based path into AI & Machine Learning — live, instructor-led, and practical.",
       "badge": "AI & Data Science Track",
