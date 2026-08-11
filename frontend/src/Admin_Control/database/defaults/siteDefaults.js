@@ -8,7 +8,7 @@ export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v14_fix_image_aspect_positio
 export const defaultSlides = [
   {
     id: 'slide-1',
-    url: 'images/hero/hero_section_1.jpg',
+    url: 'images/hero/optimized/hero_section_1.jpg',
     headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
     sub: "EZER Learning Solutions is India's top tech-driven platform delivering live online, job-oriented IT courses. Learn from corporate tech practitioners with hands-on labs, 12-month placement assistance, and 3-year community access.",
     badge: 'Empowering Career Switchers',
@@ -18,7 +18,7 @@ export const defaultSlides = [
   },
   {
     id: 'slide-2',
-    url: 'images/hero/devops.avif',
+    url: 'images/hero/optimized/devops.avif',
     headline: 'Deploy, Automate, and Scale Like a Real DevOps Engineer',
     sub: 'Master AWS, Azure, GCP, Docker, Kubernetes, Jenkins & Terraform with real production cloud labs. Build enterprise CI/CD pipelines and accelerate your IT career switch with dedicated 1-on-1 expert mentor reviews.',
     badge: 'Cloud & DevOps Masterclass',
@@ -38,7 +38,7 @@ export const defaultSlides = [
   },
   {
     id: 'slide-4',
-    url: 'images/hero/AI_machine_learning.png',
+    url: 'images/hero/optimized/AI_machine_learning.webp',
     headline: 'From Python Basics to Deploying Real ML Models',
     sub: 'A hands-on, project-based path into AI & Machine Learning — live, instructor-led, and practical. Learn data engineering, neural networks, and model deployment strategies backed by 12-month career placement support.',
     badge: 'AI & Data Science Track',
@@ -108,13 +108,13 @@ export const defaultPopupConfig = {
   subtitle: 'Book your free live demo class & 1-on-1 career counselling session',
   badge: 'LIMITED SEATS AVAILABLE',
   submitBtnText: 'Register Now',
-  image: 'images/hero/hero_section_1.jpg',
+  image: 'images/hero/optimized/hero_section_1.jpg',
   imagePosition: 'center center',
   imageFit: 'cover',
   photoVisibility: 85,
   photoHeight: 120,
   showPhoto: false,
-  bodyBgImage: 'images/hero/hero_section_1.jpg',
+  bodyBgImage: 'images/hero/optimized/hero_section_1.jpg',
   bodyBgOpacity: 15,
   showStateCity: true,
   nameLabel: 'Full Name*',
@@ -163,7 +163,7 @@ export const defaultSupportCards = [
     tag: 'PLACEMENT SUPPORT',
     title: '12-Month Career Placement Support',
     desc: 'Comprehensive resume optimization, interview preparation, and curated job opportunities',
-    image: 'images/hero/hero_section_1.jpg',
+    image: 'images/hero/optimized/hero_section_1.jpg',
     fit: 'cover',
     position: 'center center',
     bgColor: '#ffffff',
@@ -214,7 +214,7 @@ export const defaultSupportCards = [
     tag: 'ON-DEMAND REVISION',
     title: 'Learning Management Access',
     desc: 'On-demand access to all session recordings for flexible revision and learning',
-    image: 'images/hero/AI_machine_learning.png',
+    image: 'images/hero/optimized/AI_machine_learning.webp',
     fit: 'cover',
     position: 'center center',
     bgColor: '#ffffff',
@@ -323,7 +323,7 @@ export const defaultTestimonialsHero = {
   badge: 'STUDENT SUCCESS STORIES',
   headline: 'Real Learners. Real IT Career Outcomes.',
   sub: 'Discover how EZER Learning Solutions helps freshers and career switchers land high-growth tech jobs.',
-  image: 'images/hero/hero_section_1.jpg'
+  image: 'images/hero/optimized/hero_section_1.jpg'
 };
 
 export const defaultContactInfo = {

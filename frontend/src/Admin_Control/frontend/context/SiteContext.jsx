@@ -157,101 +157,93 @@ export function SiteProvider({ children }) {
 
 
   // Firebase Real-time Firestore & Realtime DB Subscriptions with Merged Defaults Protection
+  // Defer listeners until after initial render to improve first-paint performance
   useEffect(() => {
-    const unsubCourses = subscribeToCollection('courses', (items) => {
-      if (items && items.length > 0) {
-        const storedLocal = getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses;
-        const merged = mergeCollection(storedLocal, items, 'id');
-        dispatch({ type: 'SET_KEY', key: 'courses', value: merged });
-        safeSetStorage(STORAGE_COURSES_KEY, merged);
-      }
-    });
-    const unsubHero = subscribeToCollection('heroSlides', (items) => {
-      if (items && items.length > 0) {
-        const merged = mergeCollection(defaultSlides, items, 'id');
-        dispatch({ type: 'SET_KEY', key: 'heroSlides', value: merged });
-      }
-    });
-    const unsubLeads = subscribeToCollection('leads', (items) => {
-      if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'leads', value: items });
-    });
-    const unsubBlogs = subscribeToCollection('blogs', (items) => {
-      if (items && items.length > 0) {
-        const merged = mergeCollection(defaultBlogs, items, 'id');
-        dispatch({ type: 'SET_KEY', key: 'blogs', value: merged });
-      }
-    });
-    const unsubDef = subscribeToCollection('ezerDefinition', (items) => {
-      if (items && items.length > 0) {
-        const mainDef = items.find((i) => i.id === 'main') || items[0];
-        if (mainDef) dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: { ...defaultPlatformDef, ...mainDef } });
-      }
-    });
-    const unsubExecs = subscribeToCollection('executiveLeaders', (items) => {
-      if (items && items.length > 0) {
-        const merged = mergeCollection(defaultExecutiveLeaders, items, 'id');
-        dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: merged });
-      }
-    });
-    const unsubPopup = subscribeToCollection('popupConfig', (items) => {
-      if (items && items.length > 0) {
-        const mainConfig = items.find((i) => i.id === 'main') || items[0];
-        if (mainConfig) dispatch({ type: 'SET_KEY', key: 'popupConfig', value: mainConfig });
-      }
-    });
-    const unsubContact = subscribeToCollection('contactInfo', (items) => {
-      if (items && items.length > 0) {
-        const mainContact = items.find((i) => i.id === 'main') || items[0];
-        if (mainContact) dispatch({ type: 'SET_KEY', key: 'contactInfo', value: mainContact });
-      }
-    });
-    const unsubMentors = subscribeToCollection('seniorMentors', (items) => {
-      if (items && items.length > 0) {
-        const merged = mergeCollection(defaultSeniorMentors, items, 'id');
-        dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: merged });
-      }
-    });
-    const unsubTesti = subscribeToCollection('writtenTestimonials', (items) => {
-      if (items && items.length > 0) {
-        const merged = mergeCollection(initialTestimonials, items, 'id');
-        dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: merged });
-      }
-    });
-    const unsubVideo = subscribeToCollection('videoTestimonials', (items) => {
-      if (items && items.length > 0) {
-        const merged = mergeCollection(defaultVideoTestimonials, items, 'id');
-        dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: merged });
-      }
-    });
-    const unsubFaq = subscribeToCollection('faqList', (items) => {
-      if (items && items.length > 0) {
-        const merged = mergeCollection(generalFaqs, items, 'id');
-        dispatch({ type: 'SET_KEY', key: 'faqList', value: merged });
-      }
-    });
-    const unsubPartners = subscribeToCollection('hiringPartners', (items) => {
-      if (items && items.length > 0) {
-        const merged = mergeCollection(defaultHiringPartners, items, 'id');
-        dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: merged });
-      }
-    });
+    let unsubs = [];
+    const timer = setTimeout(() => {
+      unsubs.push(subscribeToCollection('courses', (items) => {
+        if (items && items.length > 0) {
+          const storedLocal = getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'courses', value: merged });
+          safeSetStorage(STORAGE_COURSES_KEY, merged);
+        }
+      }));
+      unsubs.push(subscribeToCollection('heroSlides', (items) => {
+        if (items && items.length > 0) {
+          const merged = mergeCollection(defaultSlides, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'heroSlides', value: merged });
+        }
+      }));
+      unsubs.push(subscribeToCollection('leads', (items) => {
+        if (items && items.length > 0) dispatch({ type: 'SET_KEY', key: 'leads', value: items });
+      }));
+      unsubs.push(subscribeToCollection('blogs', (items) => {
+        if (items && items.length > 0) {
+          const merged = mergeCollection(defaultBlogs, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'blogs', value: merged });
+        }
+      }));
+      unsubs.push(subscribeToCollection('ezerDefinition', (items) => {
+        if (items && items.length > 0) {
+          const mainDef = items.find((i) => i.id === 'main') || items[0];
+          if (mainDef) dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: { ...defaultPlatformDef, ...mainDef } });
+        }
+      }));
+      unsubs.push(subscribeToCollection('executiveLeaders', (items) => {
+        if (items && items.length > 0) {
+          const merged = mergeCollection(defaultExecutiveLeaders, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: merged });
+        }
+      }));
+      unsubs.push(subscribeToCollection('popupConfig', (items) => {
+        if (items && items.length > 0) {
+          const mainConfig = items.find((i) => i.id === 'main') || items[0];
+          if (mainConfig) dispatch({ type: 'SET_KEY', key: 'popupConfig', value: mainConfig });
+        }
+      }));
+      unsubs.push(subscribeToCollection('contactInfo', (items) => {
+        if (items && items.length > 0) {
+          const mainContact = items.find((i) => i.id === 'main') || items[0];
+          if (mainContact) dispatch({ type: 'SET_KEY', key: 'contactInfo', value: mainContact });
+        }
+      }));
+      unsubs.push(subscribeToCollection('seniorMentors', (items) => {
+        if (items && items.length > 0) {
+          const merged = mergeCollection(defaultSeniorMentors, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: merged });
+        }
+      }));
+      unsubs.push(subscribeToCollection('writtenTestimonials', (items) => {
+        if (items && items.length > 0) {
+          const merged = mergeCollection(initialTestimonials, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: merged });
+        }
+      }));
+      unsubs.push(subscribeToCollection('videoTestimonials', (items) => {
+        if (items && items.length > 0) {
+          const merged = mergeCollection(defaultVideoTestimonials, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: merged });
+        }
+      }));
+      unsubs.push(subscribeToCollection('faqList', (items) => {
+        if (items && items.length > 0) {
+          const merged = mergeCollection(generalFaqs, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'faqList', value: merged });
+        }
+      }));
+      unsubs.push(subscribeToCollection('hiringPartners', (items) => {
+        if (items && items.length > 0) {
+          const merged = mergeCollection(defaultHiringPartners, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: merged });
+        }
+      }));
+    }, 1500); // Delay by 1.5 seconds to allow initial content to render
 
     return () => {
-      unsubCourses();
-      unsubHero();
-      unsubLeads();
-      unsubBlogs();
-      unsubDef();
-      unsubExecs();
-      unsubPopup();
-      unsubContact();
-      unsubMentors();
-      unsubTesti();
-      unsubVideo();
-      unsubFaq();
-      if (typeof unsubPartners === 'function') unsubPartners();
+      clearTimeout(timer);
+      unsubs.forEach((unsub) => typeof unsub === 'function' && unsub());
     };
-
   }, []);
 
   // Action Dispatchers with Array Integrity & Full-Stack Realtime Sync

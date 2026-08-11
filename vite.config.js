@@ -19,20 +19,29 @@ export default defineConfig({
   build: {
     outDir: '../dist',
     emptyOutDir: true,
-    target: 'esnext',
+    target: 'es2020',
     cssMinify: true,
     cssCodeSplit: true,
     minify: 'esbuild',
     chunkSizeWarningLimit: 600,
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor-core': ['react', 'react-dom', 'react-router-dom'],
-          'vendor-motion': ['framer-motion'],
-          'vendor-icons': ['react-icons']
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('firebase')) {
+              return 'vendor-firebase';
+            }
+            if (id.includes('framer-motion')) {
+              return 'vendor-motion';
+            }
+            return 'vendor';
+          }
         }
       }
     }
+  },
+  esbuild: {
+    drop: ['console', 'debugger']
   }
 })
 

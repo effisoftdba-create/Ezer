@@ -42,7 +42,7 @@ export default function PopupHeader({ onClose, overrideConfig }) {
       {/* Brand Logo & Name */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '8px' }}>
         <img
-          src={resolveImageSrc('images/logo_white_border.png')}
+          src={resolveImageSrc('images/logo_white_border_optimized.webp')}
           alt="EZER Crest Logo"
           style={{
             height: '40px',

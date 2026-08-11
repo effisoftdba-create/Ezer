@@ -228,7 +228,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
 
               return (
                 <m.div
-                  key={mod.id ? `mod-id-${mod.id}` : (mod.num ? `mod-n-${mod.num}` : (mod.title ? `mod-t-${mod.title}` : `mod-p-${idx}`))}
+                  key={mod.id || mod.num || mod.title || 'course-module-card'}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0, 6, 72, 0.16)', borderColor: '#f2b733' }}

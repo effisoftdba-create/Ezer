@@ -147,15 +147,15 @@ export default function ImagePickerModal({
   const [mobileZoom, setMobileZoom] = useState(currentMobileZoom || currentZoom || 1);
   const [mobileDragOffset, setMobileDragOffset] = useState(() => parsePositionToOffset(currentMobilePosition || currentPosition));
 
-  // Sync zoom and drag offset whenever modal opens or props change
-  useEffect(() => {
-    if (isOpen) {
-      setDesktopZoom(currentZoom || 1);
-      setMobileZoom(currentMobileZoom || currentZoom || 1);
-      setDesktopDragOffset(parsePositionToOffset(currentPosition));
-      setMobileDragOffset(parsePositionToOffset(currentMobilePosition || currentPosition));
-    }
-  }, [isOpen, currentImage, currentPosition, currentZoom, currentMobilePosition, currentMobileZoom]);
+  // Reset state when modal opens for a new image selection
+  const [prevModalImage, setPrevModalImage] = useState(currentImage);
+  if (isOpen && currentImage !== prevModalImage) {
+    setPrevModalImage(currentImage);
+    setDesktopZoom(currentZoom || 1);
+    setMobileZoom(currentMobileZoom || currentZoom || 1);
+    setDesktopDragOffset(parsePositionToOffset(currentPosition));
+    setMobileDragOffset(parsePositionToOffset(currentMobilePosition || currentPosition));
+  }
 
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -558,6 +558,7 @@ export default function ImagePickerModal({
 
             <input
               type="range"
+              aria-label="Image Zoom Adjustment"
               min="1"
               max="2.5"
               step="0.05"

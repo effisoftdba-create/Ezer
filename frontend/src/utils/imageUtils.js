@@ -27,6 +27,15 @@ export function resolveImageSrc(urlStr) {
     finalUrl = baseUrl.endsWith('/') ? `${baseUrl}${cleanPath}` : `${baseUrl}/${cleanPath}`;
   }
 
+  // Optimize Unsplash image query params to match actual display size and format
+  if (finalUrl.includes('images.unsplash.com')) {
+    if (finalUrl.includes('w=')) {
+      finalUrl = finalUrl.replace(/w=\d+/, 'w=500').replace(/q=\d+/, 'q=75');
+    } else {
+      finalUrl += (finalUrl.includes('?') ? '&' : '?') + 'auto=format&fit=crop&w=500&q=75';
+    }
+  }
+
   // Cache Busting: append timestamp version parameter to force mobile browsers and CDN to fetch fresh image
   if (!finalUrl.includes('?v=') && !finalUrl.includes('?t=')) {
     const separator = finalUrl.includes('?') ? '&' : '?';
