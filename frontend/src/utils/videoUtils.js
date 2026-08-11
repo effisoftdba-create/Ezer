@@ -1,6 +1,6 @@
 /**
  * Normalizes any video URL (YouTube, Google Drive, MP4/direct file, or fallback iframe)
- * into an embeddable format.
+ * into an embeddable format with direct stream support for Google Drive.
  */
 export function getNormalizedVideoConfig(url) {
   if (!url || typeof url !== 'string') {
@@ -16,7 +16,9 @@ export function getNormalizedVideoConfig(url) {
   if (ytMatch && ytMatch[1]) {
     return {
       type: 'iframe',
+      isYouTube: true,
       src: `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=0&rel=0&modestbranding=1`,
+      originalUrl: `https://www.youtube.com/watch?v=${ytMatch[1]}`,
       title: 'YouTube Video Player'
     };
   }
@@ -26,9 +28,11 @@ export function getNormalizedVideoConfig(url) {
   if ((trimmed.includes('drive.google.com') || trimmed.includes('docs.google.com')) && driveIdMatch && driveIdMatch[1]) {
     const fileId = driveIdMatch[1];
     return {
-      type: 'iframe',
+      type: 'drive',
       isDrive: true,
       fileId: fileId,
+      directUrl: `https://lh3.googleusercontent.com/d/${fileId}`,
+      fallbackDirectUrl: `https://drive.google.com/uc?export=download&id=${fileId}`,
       src: `https://drive.google.com/file/d/${fileId}/preview`,
       originalUrl: `https://drive.google.com/file/d/${fileId}/view?usp=sharing`,
       title: 'Google Drive Video Player'
@@ -47,6 +51,8 @@ export function getNormalizedVideoConfig(url) {
   return {
     type: 'iframe',
     src: trimmed,
+    originalUrl: trimmed,
     title: 'Embedded Video Player'
   };
 }
+
