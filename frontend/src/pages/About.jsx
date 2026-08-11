@@ -51,14 +51,27 @@ const coreObjectives = [
 ];
 
 export default function About({ onOpenDemoModal }) {
-  const { aboutVideo } = useSiteData() || {};
-  const videoConfig = aboutVideo || {
-    tag: 'EXPERIENCE EZER LEARNING',
-    title: 'Watch Our Platform & Learning Methodology in Action',
-    description: 'See how our corporate-experienced instructors deliver live interactive classes, hands-on cloud labs, and personalized career counseling.',
-    videoUrl: 'https://www.youtube.com/watch?v=aircAruvnKk',
-    poster: 'images/hero/hero_section_1.jpg'
-  };
+  const { aboutVideos } = useSiteData() || {};
+  const videoList = Array.isArray(aboutVideos) && aboutVideos.length >= 2
+    ? aboutVideos
+    : [
+        {
+          id: 'vid-1',
+          tag: 'VIDEO SHOWCASE 01',
+          title: 'Platform & Learning Methodology in Action',
+          description: 'Watch how our corporate-experienced instructors deliver live interactive classes, hands-on cloud labs, and personalized career counseling.',
+          videoUrl: 'https://www.youtube.com/watch?v=aircAruvnKk',
+          poster: 'images/hero/hero_section_1.jpg'
+        },
+        {
+          id: 'vid-2',
+          tag: 'VIDEO SHOWCASE 02',
+          title: 'Live Hands-On Cloud Labs & Placement Support',
+          description: 'Explore how students gain real enterprise experience working with production CI/CD pipelines, AWS sandboxes, and mock technical interviews.',
+          videoUrl: 'https://www.youtube.com/watch?v=aircAruvnKk',
+          poster: 'images/hero/full-stack-development.jpg'
+        }
+      ];
 
   return (
     <div style={{ background: '#ffffff' }}>
@@ -183,30 +196,68 @@ export default function About({ onOpenDemoModal }) {
         </div>
       </section>
 
-      {/* About Us Brand Video Viewer Section (Supports YouTube & Google Drive) */}
+      {/* About Us Brand Video Showcase Section (Supports 2 Videos: YouTube & Google Drive) */}
       <section style={{ padding: '64px 0', background: '#faf9f6', borderBottom: '1px solid #e2e8f0' }}>
-        <div className="container" style={{ maxWidth: '1080px', margin: '0 auto', textAlign: 'center' }}>
-          <div style={{ marginBottom: '32px' }}>
+        <div className="container" style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <span style={{
               background: 'rgba(0, 6, 72, 0.07)', color: '#000648', border: '1.5px solid rgba(0, 6, 72, 0.15)',
               fontSize: '0.75rem', fontWeight: 800, padding: '5px 16px', borderRadius: '50px',
               textTransform: 'uppercase', letterSpacing: '0.08em', display: 'inline-block', marginBottom: '12px'
             }}>
-              {videoConfig.tag || 'EXPERIENCE EZER LEARNING'}
+              BRAND VIDEO SHOWCASE
             </span>
             <h2 style={{ color: '#000648', fontSize: 'clamp(1.7rem, 3vw, 2.4rem)', fontWeight: 900, marginBottom: '12px' }}>
-              {videoConfig.title || 'Watch Our Platform & Learning Methodology in Action'}
+              Experience Our Platform & Learning Methodology
             </h2>
-            <p style={{ color: '#475569', fontSize: '1rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6 }}>
-              {videoConfig.description || 'See how our corporate-experienced instructors deliver live interactive classes, hands-on cloud labs, and personalized career counseling.'}
+            <p style={{ color: '#475569', fontSize: '1rem', maxWidth: '720px', margin: '0 auto', lineHeight: 1.6 }}>
+              Watch our live classroom walkthroughs, cloud sandbox demonstrations, and student career transformation journey.
             </p>
           </div>
 
-          <VideoPlayer
-            videoUrl={videoConfig.videoUrl || 'https://www.youtube.com/watch?v=aircAruvnKk'}
-            poster={resolveImageSrc(videoConfig.poster || 'images/hero/hero_section_1.jpg')}
-            title={videoConfig.title || 'EZER About Us Video Showcase'}
-          />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(480px, 1fr))', gap: '36px' }}>
+            {videoList.slice(0, 2).map((vid, idx) => (
+              <div
+                key={vid.id || idx}
+                style={{
+                  background: '#ffffff',
+                  border: '1.5px solid #e2e8f0',
+                  borderRadius: '20px',
+                  padding: '24px',
+                  boxShadow: '0 8px 24px rgba(0, 6, 72, 0.05)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justify: 'space-between'
+                }}
+              >
+                <div>
+                  <div style={{ marginBottom: '14px' }}>
+                    <span style={{
+                      background: '#000648', color: '#f2b733',
+                      fontSize: '0.7rem', fontWeight: 800, padding: '4px 12px', borderRadius: '50px',
+                      textTransform: 'uppercase', letterSpacing: '0.06em', display: 'inline-block', marginBottom: '8px'
+                    }}>
+                      {vid.tag || `VIDEO SHOWCASE 0${idx + 1}`}
+                    </span>
+                    <h3 style={{ color: '#000648', fontSize: '1.25rem', fontWeight: 900, margin: '4px 0 8px 0', lineHeight: 1.35 }}>
+                      {vid.title}
+                    </h3>
+                    <p style={{ color: '#475569', fontSize: '0.9rem', margin: 0, lineHeight: 1.6 }}>
+                      {vid.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '16px' }}>
+                  <VideoPlayer
+                    videoUrl={vid.videoUrl}
+                    poster={resolveImageSrc(vid.poster || 'images/hero/hero_section_1.jpg')}
+                    title={vid.title}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

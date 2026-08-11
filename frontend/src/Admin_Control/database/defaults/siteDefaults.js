@@ -139,15 +139,26 @@ export const defaultPopupConfig = {
 
 
 
-export const STORAGE_ABOUT_VIDEO_KEY = 'ezer_about_video:v18_clean_image_paths';
+export const STORAGE_ABOUT_VIDEOS_KEY = 'ezer_about_videos:v20_two_videos';
 
-export const defaultAboutVideo = {
-  tag: 'EXPERIENCE EZER LEARNING',
-  title: 'Watch Our Platform & Learning Methodology in Action',
-  description: 'See how our corporate-experienced instructors deliver live interactive classes, hands-on cloud labs, and personalized career counseling.',
-  videoUrl: 'https://www.youtube.com/watch?v=aircAruvnKk',
-  poster: 'images/hero/hero_section_1.jpg'
-};
+export const defaultAboutVideos = [
+  {
+    id: 'vid-1',
+    tag: 'VIDEO SHOWCASE 01',
+    title: 'Platform & Learning Methodology in Action',
+    description: 'Watch how our corporate-experienced instructors deliver live interactive classes, hands-on cloud labs, and personalized career counseling.',
+    videoUrl: 'https://www.youtube.com/watch?v=aircAruvnKk',
+    poster: 'images/hero/hero_section_1.jpg'
+  },
+  {
+    id: 'vid-2',
+    tag: 'VIDEO SHOWCASE 02',
+    title: 'Live Hands-On Cloud Labs & Placement Support',
+    description: 'Explore how students gain real enterprise experience working with production CI/CD pipelines, AWS sandboxes, and mock technical interviews.',
+    videoUrl: 'https://www.youtube.com/watch?v=aircAruvnKk',
+    poster: 'images/hero/full-stack-development.jpg'
+  }
+];
 
 export const defaultPlatformDef = {
   tag: 'Empowering Career Switchers',
@@ -565,7 +576,7 @@ export function getInitialState() {
     executiveLeaders: safeExec,
     hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners,
     paymentConfig: getStored(STORAGE_PAYMENT_CONFIG_KEY, defaultPaymentConfig) || defaultPaymentConfig,
-    aboutVideo: getStored(STORAGE_ABOUT_VIDEO_KEY, defaultAboutVideo) || defaultAboutVideo
+    aboutVideos: getStored(STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos) || defaultAboutVideos
   };
 
 }

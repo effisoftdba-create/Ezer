@@ -54,6 +54,7 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
     >
       {config.type === 'video' ? (
         <video
+          key={config.src}
           src={config.src}
           poster={poster}
           controls
@@ -64,6 +65,7 @@ export default function VideoPlayer({ videoUrl = 'https://www.youtube.com/watch?
         </video>
       ) : (
         <iframe
+          key={config.src}
           src={config.src}
           title={title}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

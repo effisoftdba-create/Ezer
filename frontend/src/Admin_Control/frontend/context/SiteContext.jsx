@@ -25,9 +25,9 @@ import {
   STORAGE_EXECUTIVE_LEADERS_KEY,
   STORAGE_HIRING_PARTNERS_KEY,
   STORAGE_PAYMENT_CONFIG_KEY,
-  STORAGE_ABOUT_VIDEO_KEY,
+  STORAGE_ABOUT_VIDEOS_KEY,
   defaultPaymentConfig,
-  defaultAboutVideo,
+  defaultAboutVideos,
 
   defaultExecutiveLeaders,
   defaultHiringPartners,
@@ -103,7 +103,7 @@ export function SiteProvider({ children }) {
     executiveLeaders,
     hiringPartners,
     paymentConfig,
-    aboutVideo
+    aboutVideos
   } = state;
 
   // Check for mobile sync token in URL
@@ -157,7 +157,7 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, executiveLeaders); }, [executiveLeaders]);
   useEffect(() => { safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, hiringPartners); }, [hiringPartners]);
   useEffect(() => { safeSetStorage(STORAGE_PAYMENT_CONFIG_KEY, paymentConfig); }, [paymentConfig]);
-  useEffect(() => { safeSetStorage(STORAGE_ABOUT_VIDEO_KEY, aboutVideo); }, [aboutVideo]);
+  useEffect(() => { safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, aboutVideos); }, [aboutVideos]);
 
 
   // Firebase Real-time Firestore & Realtime DB Subscriptions with Merged Defaults Protection
@@ -714,12 +714,12 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [hiringPartners]);
 
-  const updateAboutVideo = useCallback((newVideoData) => {
-    const updated = typeof newVideoData === 'object' ? { ...(aboutVideo || defaultAboutVideo), ...newVideoData } : newVideoData;
-    dispatch({ type: 'SET_KEY', key: 'aboutVideo', value: updated });
-    saveDocument('aboutVideo', 'main', updated);
+  const updateAboutVideos = useCallback((newVideosData) => {
+    const updated = Array.isArray(newVideosData) ? newVideosData : (aboutVideos || defaultAboutVideos);
+    dispatch({ type: 'SET_KEY', key: 'aboutVideos', value: updated });
+    saveCollectionArray('aboutVideos', updated);
     triggerStateToast('SAVED');
-  }, [aboutVideo]);
+  }, [aboutVideos]);
 
   const resetAllToDefaults = useCallback(() => {
     localStorage.clear();
@@ -748,7 +748,7 @@ export function SiteProvider({ children }) {
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
-    aboutVideo, updateAboutVideo,
+    aboutVideos, updateAboutVideos,
     resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
@@ -771,7 +771,7 @@ export function SiteProvider({ children }) {
     executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
-    aboutVideo, updateAboutVideo,
+    aboutVideos, updateAboutVideos,
     resetAllToDefaults
   ]);
 

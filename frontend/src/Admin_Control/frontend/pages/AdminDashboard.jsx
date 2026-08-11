@@ -8,6 +8,7 @@ import HiringPartnersManager from '../components/HiringPartnersManager';
 import CourseManager from '../components/CourseManager';
 import CoursePaymentManager from '../components/CoursePaymentManager';
 import PlatformManager from '../components/PlatformManager';
+import AboutVideoManager from '../components/AboutVideoManager';
 import SupportCardsManager from '../components/SupportCardsManager';
 import GraduateOutcomesManager from '../components/GraduateOutcomesManager';
 import SeniorMentorsManager from '../components/SeniorMentorsManager';
@@ -117,6 +118,7 @@ export default function AdminDashboard() {
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },
     { id: 'payment', label: 'Course Fees & Payment Methods', icon: HiOutlineCurrencyRupee },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSwitchHorizontal },
+    { id: 'about-videos', label: 'About Us Brand Videos (2 Links)', icon: HiOutlineVideoCamera },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
     { id: 'executive', label: 'Executive Board (CEO / Leaders)', icon: HiOutlineUserGroup, count: (executiveLeaders || []).length },
     { id: 'blog', label: 'Blog & Magazine Articles', icon: HiOutlineNewspaper, count: (blogs || []).length },
@@ -153,6 +155,7 @@ export default function AdminDashboard() {
           {activeTab === 'courses' && <CourseManager />}
           {activeTab === 'payment' && <CoursePaymentManager />}
           {activeTab === 'platform' && <PlatformManager />}
+          {activeTab === 'about-videos' && <AboutVideoManager />}
           {activeTab === 'support' && <SupportCardsManager />}
           {activeTab === 'executive' && <ExecutiveSection executiveLeaders={executiveLeaders} updateExecutiveLeader={updateExecutiveLeader} />}
           {activeTab === 'blog' && <BlogManager initialSubTab="blogs" hideSubTabs={true} />}
