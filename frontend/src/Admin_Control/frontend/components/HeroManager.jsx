@@ -279,8 +279,9 @@ export default function HeroManager() {
       )}
 
       <div style={{ display: 'grid', gap: '16px' }}>
-        {heroSlides.map((slide) => {
-          const keyId = slide.id || slide.badge || slide.headline || slide.title || slide.url;
+        {heroSlides.map((slide, slideIndex) => {
+          const slideNum = slideIndex + 1;
+          const keyId = String(slide.id || slide.badge || slide.headline || slide.title || slide.url || `slide-key-${slideNum}`);
           return (
             <div
               key={keyId}
@@ -303,7 +304,7 @@ export default function HeroManager() {
                   position: 'absolute', top: '6px', left: '6px', background: '#000648',
                   color: '#f2b733', fontSize: '0.65rem', fontWeight: 800, padding: '2px 6px', borderRadius: '4px'
                 }}>
-                  Slide #{idx + 1}
+                  Slide #{slideNum}
                 </div>
               </div>
 
@@ -320,7 +321,7 @@ export default function HeroManager() {
                 <button
                   type="button"
                   onClick={() => handleOpenEdit(slide)}
-                  aria-label={`Edit slide ${idx + 1}`}
+                  aria-label={`Edit slide ${slideNum}`}
                   style={{
                     padding: '8px 12px', background: '#f1f5f9', color: '#000648',
                     border: '1.5px solid #cbd5e1', borderRadius: '8px', fontWeight: 700,
@@ -333,7 +334,7 @@ export default function HeroManager() {
                 <button
                   type="button"
                   onClick={() => handleDelete(slide.id || slide.headline)}
-                  aria-label={`Delete slide ${idx + 1}`}
+                  aria-label={`Delete slide ${slideNum}`}
                   style={{
                     padding: '8px 12px', background: '#fef2f2', color: '#dc2626',
                     border: '1.5px solid #fecaca', borderRadius: '8px', fontWeight: 700,

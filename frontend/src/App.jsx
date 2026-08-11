@@ -21,7 +21,7 @@ function lazyRetry(componentImport) {
       if (mod && mod.default) {
         return mod;
       }
-      
+
       // Fallback for re-exported named default component
       const exportedComponent = mod?.default || (mod && Object.values(mod).find(v => typeof v === 'function' || (v && typeof v === 'object' && v.$$typeof)));
       if (exportedComponent) {
@@ -29,7 +29,12 @@ function lazyRetry(componentImport) {
       }
       return mod;
     } catch (error) {
-      if (!pageHasBeenRefreshed) {
+      const isChunkError = error && (
+        String(error?.message || '').includes('Failed to fetch dynamically imported module') ||
+        String(error?.message || '').includes('Importing a module script failed') ||
+        error.name === 'ChunkLoadError'
+      );
+      if (isChunkError && !pageHasBeenRefreshed) {
         window.sessionStorage.setItem('page-has-been-refreshed', 'true');
         window.location.reload();
       }

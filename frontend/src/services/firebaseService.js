@@ -3,30 +3,42 @@ import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firesto
 import { ref, onValue, set, remove } from 'firebase/database';
 
 /**
- * Sanitize and validate data before saving to Firestore.
- * Firestore has a 1MB limit per document.
- * Data URIs (SVGs, PNGs, JPEGs) under ~900KB are preserved intact.
- * Oversized data URIs that exceed Firestore payload limits are safely omitted
- * rather than truncated into corrupt base64 strings.
+ * Sanitize data before saving to Firestore.
+ * Strips non-serializable objects (React JSX nodes, functions, symbols),
+ * and omits data URIs > 900KB to prevent 1MB document limit errors.
  */
-function stripDataUris(data) {
-  if (!data || typeof data !== 'object') return data;
-  const cleaned = { ...data };
-  for (const key of Object.keys(cleaned)) {
-    const val = cleaned[key];
+function sanitizeForFirestore(data) {
+  if (data === null || data === undefined) return null;
+  if (typeof data !== 'object') {
+    if (typeof data === 'function' || typeof data === 'symbol') return undefined;
+    return data;
+  }
+  if (data.$$typeof || data._owner || data._store) return undefined;
+
+  if (Array.isArray(data)) {
+    return data
+      .map((item) => sanitizeForFirestore(item))
+      .filter((item) => item !== undefined);
+  }
+
+  const cleaned = {};
+  for (const key of Object.keys(data)) {
+    const val = data[key];
+    if (val === undefined || typeof val === 'function' || typeof val === 'symbol') continue;
+    if (val && typeof val === 'object' && (val.$$typeof || val._owner || val._store)) continue;
+
     if (typeof val === 'string' && val.startsWith('data:')) {
-      // Keep data URIs up to 900KB — allows SVGs, compressed images, and logos to save intact
       if (val.length > 900000) {
-        console.warn(`[Firebase] Data URI for field "${key}" exceeds 900KB limit for Firestore document.`);
-        // Omit oversized data URI to prevent Firestore setDoc 1MB size exception
+        console.warn(`[Firebase] Data URI for field "${key}" exceeds 900KB limit for Firestore.`);
         cleaned[key] = '';
+      } else {
+        cleaned[key] = val;
       }
-    } else if (Array.isArray(val)) {
-      cleaned[key] = val.map((item) =>
-        typeof item === 'object' && item !== null ? stripDataUris(item) : item
-      );
     } else if (typeof val === 'object' && val !== null) {
-      cleaned[key] = stripDataUris(val);
+      const child = sanitizeForFirestore(val);
+      if (child !== undefined) cleaned[key] = child;
+    } else {
+      cleaned[key] = val;
     }
   }
   return cleaned;
@@ -73,12 +85,10 @@ export async function saveDocument(collectionName, docId, data) {
 
   let saved = false;
 
-  // 1. Firestore (Primary)
-  // Strip base64 data URIs — they exceed Firestore's 1MB doc limit and silently break cross-device sync
   if (db) {
     try {
       const docRef = doc(db, collectionName, cleanId);
-      const cleanData = stripDataUris({ ...data, updatedAt: new Date().toISOString() });
+      const cleanData = sanitizeForFirestore({ ...data, updatedAt: new Date().toISOString() });
       await setDoc(docRef, cleanData, { merge: true });
       saved = true;
     } catch (err) {
