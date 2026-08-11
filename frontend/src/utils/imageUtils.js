@@ -34,12 +34,8 @@ export function resolveImageSrc(urlStr) {
     return trimmed;
   }
 
-  // 3. External HTTP / HTTPS links
+  // 3. External HTTP / HTTPS links — return directly so all pasted image URLs display properly
   if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-    // If external domain blocks CORS (pngall.com, logo.wine, pinimg.com), use clean inline SVG logo data URI
-    if (trimmed.includes('pngall.com') || trimmed.includes('logo.wine') || trimmed.includes('pinimg.com')) {
-      return `data:image/svg+xml;charset=utf-8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 50"><rect width="160" height="50" rx="8" fill="#000648"/><text x="80" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#f2b733" text-anchor="middle">EZER PARTNER</text></svg>')}`;
-    }
     return trimmed;
   }
 

@@ -41,9 +41,14 @@ function getPreviewDimensions(aspectRatio) {
 }
 
 
-function compressImageForWeb(dataUri, maxDimension = 900, quality = 0.75) {
+function compressImageForWeb(dataUri, maxDimension = 750, quality = 0.7) {
   return new Promise((resolve) => {
-    if (!dataUri || !dataUri.startsWith('data:')) {
+    if (!dataUri || typeof dataUri !== 'string') {
+      resolve(dataUri);
+      return;
+    }
+    // Keep non-data URIs (e.g., HTTP URLs) and SVG vector files untouched
+    if (!dataUri.startsWith('data:') || dataUri.includes('image/svg+xml') || dataUri.includes('<svg')) {
       resolve(dataUri);
       return;
     }
