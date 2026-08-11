@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
+import { HiOutlineSearch, HiOutlineChevronDown, HiOutlineX } from 'react-icons/hi';
+import './AdminSidebarNav.css';
 
 const CATEGORIES = [
   {
@@ -27,97 +29,114 @@ const CATEGORIES = [
   }
 ];
 
-export default function AdminSidebarNav({ tabs, activeTab, setActiveTab }) {
+export default function AdminSidebarNav({ tabs, activeTab, setActiveTab, isOpen, onClose }) {
+  const [query, setQuery] = useState('');
+  const [collapsed, setCollapsed] = useState(() => new Set());
+
+  const toggleCategory = (title) => {
+    setCollapsed((prev) => {
+      const next = new Set(prev);
+      if (next.has(title)) next.delete(title);
+      else next.add(title);
+      return next;
+    });
+  };
+
+  const normalizedQuery = query.trim().toLowerCase();
+
+  const visibleCategories = useMemo(() => {
+    return CATEGORIES.map((cat) => ({
+      ...cat,
+      tabs: tabs.filter((t) => cat.ids.includes(t.id) && (!normalizedQuery || t.label.toLowerCase().includes(normalizedQuery)))
+    })).filter((cat) => cat.tabs.length > 0);
+  }, [tabs, normalizedQuery]);
+
+  const handleSelect = (tabId) => {
+    setActiveTab(tabId);
+    if (onClose) onClose();
+  };
+
   return (
-    <aside style={{ width: '280px', flexShrink: 0, height: '100%', overflowY: 'auto' }}>
-      <div
-        style={{
-          background: '#ffffff',
-          border: '1.5px solid #e2e8f0',
-          borderRadius: '16px',
-          padding: '16px 14px',
-          boxShadow: '0 8px 24px rgba(0, 0, 0, 0.03)',
-          maxHeight: '100%',
-          overflowY: 'auto'
-        }}
-      >
-        {CATEGORIES.map((cat, catIdx) => {
-          const categoryTabs = tabs.filter((t) => cat.ids.includes(t.id));
-          if (categoryTabs.length === 0) return null;
+    <>
+      {isOpen && <div className="admin-sidebar-backdrop" onClick={onClose} />}
 
-          return (
-            <div key={cat.title} style={{ marginBottom: catIdx === CATEGORIES.length - 1 ? 0 : '16px' }}>
-              <div
-                style={{
-                  fontSize: '0.68rem',
-                  fontWeight: 900,
-                  color: '#94a3b8',
-                  letterSpacing: '0.08em',
-                  padding: '4px 10px 8px',
-                  textTransform: 'uppercase'
-                }}
-              >
-                {cat.title}
-              </div>
-
-              {categoryTabs.map((tab) => {
-                const Icon = tab.icon;
-                const isActive = activeTab === tab.id;
-
-                return (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    onClick={() => setActiveTab(tab.id)}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justify: 'space-between',
-                      padding: '11px 14px',
-                      borderRadius: '10px',
-                      border: 'none',
-                      background: isActive
-                        ? 'linear-gradient(135deg, #000648 0%, #000c66 100%)'
-                        : 'transparent',
-                      color: isActive ? '#f2b733' : '#334155',
-                      fontWeight: isActive ? 900 : 600,
-                      fontSize: '0.84rem',
-                      cursor: 'pointer',
-                      marginBottom: '4px',
-                      boxShadow: isActive ? '0 4px 14px rgba(0, 6, 72, 0.25)' : 'none',
-                      transition: 'background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease',
-                      borderLeft: isActive ? '4px solid #f2b733' : '4px solid transparent'
-                    }}
-                  >
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      {Icon ? <Icon size={18} style={{ color: isActive ? '#f2b733' : '#64748b' }} /> : null}
-                      <span>{tab.label}</span>
-                    </div>
-
-                    {tab.count !== undefined && (
-                      <span
-                        style={{
-                          fontSize: '0.7rem',
-                          fontWeight: 900,
-                          padding: '2px 8px',
-                          borderRadius: '50px',
-                          background: isActive
-                            ? 'rgba(242, 183, 51, 0.22)'
-                            : '#f1f5f9',
-                          color: isActive ? '#f2b733' : '#64748b'
-                        }}
-                      >
-                        {tab.count}
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
+      <aside className={`admin-sidebar${isOpen ? ' is-open' : ''}`}>
+        <div className="admin-sidebar-panel">
+          <div className="admin-sidebar-head">
+            <div className="admin-sidebar-head-row">
+              <span className="admin-sidebar-heading">Navigation</span>
+              <button type="button" className="admin-sidebar-close" onClick={onClose} aria-label="Close navigation menu">
+                <HiOutlineX size={17} />
+              </button>
             </div>
-          );
-        })}
-      </div>
-    </aside>
+
+            <div className="admin-sidebar-search">
+              <HiOutlineSearch size={16} />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search sections..."
+                aria-label="Search admin navigation"
+              />
+            </div>
+          </div>
+
+          <div className="admin-sidebar-body">
+            {visibleCategories.length === 0 && (
+              <div className="admin-sidebar-empty">No sections match "{query}"</div>
+            )}
+
+            {visibleCategories.map((cat) => {
+              const isCollapsed = !normalizedQuery && collapsed.has(cat.title);
+
+              return (
+                <div key={cat.title} className="admin-sidebar-category">
+                  <button
+                    type="button"
+                    className="admin-sidebar-cat-btn"
+                    onClick={() => toggleCategory(cat.title)}
+                    aria-expanded={!isCollapsed}
+                  >
+                    <span className="admin-sidebar-cat-title">{cat.title}</span>
+                    <HiOutlineChevronDown
+                      size={14}
+                      className={`admin-sidebar-cat-chevron${isCollapsed ? ' is-collapsed' : ''}`}
+                    />
+                  </button>
+
+                  <div className={`admin-sidebar-cat-list${isCollapsed ? ' is-collapsed' : ''}`}>
+                    {cat.tabs.map((tab) => {
+                      const Icon = tab.icon;
+                      const isActive = activeTab === tab.id;
+
+                      return (
+                        <button
+                          key={tab.id}
+                          type="button"
+                          onClick={() => handleSelect(tab.id)}
+                          className={`admin-sidebar-item${isActive ? ' is-active' : ''}`}
+                        >
+                          <span className="admin-sidebar-item-label">
+                            {Icon ? <Icon size={18} className="admin-sidebar-item-icon" /> : null}
+                            <span>{tab.label}</span>
+                          </span>
+
+                          {tab.count !== undefined && (
+                            <span className="admin-sidebar-count">{tab.count}</span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="admin-sidebar-foot">EZER Admin Console</div>
+        </div>
+      </aside>
+    </>
   );
 }

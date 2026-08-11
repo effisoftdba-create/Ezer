@@ -22,6 +22,7 @@ import LeadsManager from '../components/LeadsManager';
 import BlogManager, { ExecutiveSection } from '../components/BlogManager';
 import AdminHeaderNav from '../components/AdminHeaderNav';
 import AdminSidebarNav from '../components/AdminSidebarNav';
+import './AdminDashboard.css';
 
 import UIStateDisplay, { STATE_TYPES } from '../../../components/UIStateDisplay';
 import {
@@ -46,6 +47,7 @@ import {
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('leads');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const mainRef = useRef(null);
 
   const navigate = useNavigate();
@@ -135,23 +137,31 @@ export default function AdminDashboard() {
     { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone }
   ];
 
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    setSidebarOpen(false);
+  };
+
   return (
-    <div style={{ height: '100vh', maxHeight: '100vh', background: '#FBF3E4', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div className="admin-shell">
       <div style={{ flexShrink: 0 }}>
         <AdminHeaderNav
           handleReset={handleReset}
           handleLogout={handleLogout}
+          onMenuClick={() => setSidebarOpen(true)}
         />
       </div>
 
-      <div style={{ display: 'flex', flex: 1, height: 'calc(100vh - 72px)', overflow: 'hidden', padding: '24px', gap: '24px', maxWidth: '1540px', width: '100%', margin: '0 auto' }}>
+      <div className="admin-body">
         <AdminSidebarNav
           tabs={tabs}
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          setActiveTab={handleTabChange}
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
         />
 
-        <main ref={mainRef} key={activeTab} className="uipro-fade-in" style={{ flex: 1, height: '100%', overflowY: 'auto', background: '#ffffff', borderRadius: '16px', padding: '32px', boxShadow: '0 8px 30px rgba(0,0,0,0.03)', border: '1.5px solid #e2e8f0' }}>
+        <main ref={mainRef} key={activeTab} className="uipro-fade-in admin-main">
           {activeTab === 'leads' && <LeadsManager onNavigateToPayments={() => setActiveTab('payments-received')} />}
           {activeTab === 'payments-received' && <PaymentsReceivedManager />}
           {activeTab === 'hero' && <HeroManager />}
