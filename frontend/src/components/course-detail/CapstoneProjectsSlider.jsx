@@ -95,7 +95,10 @@ export default function CapstoneProjectsSlider({ projects, courseTools }) {
               ? 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.'
               : (proj.desc || proj.description || 'Hands-on production capstone project evaluated by corporate mentors.');
             const category = typeof proj === 'object' && proj.category ? proj.category : 'Capstone Project';
-            const tools = (typeof proj === 'object' && proj.tools) ? proj.tools : (courseTools ? courseTools.slice(0, 4) : ['AWS', 'Docker', 'Linux']);
+            const rawTools = (typeof proj === 'object' && proj.tools) ? proj.tools : (courseTools ? courseTools.slice(0, 4) : ['AWS', 'Docker', 'Linux']);
+            const tools = Array.isArray(rawTools)
+              ? rawTools
+              : (typeof rawTools === 'string' ? rawTools.split(',').map((t) => t.trim()).filter(Boolean) : []);
 
             return (
               <div

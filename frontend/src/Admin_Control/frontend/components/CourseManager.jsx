@@ -143,6 +143,17 @@ export default function CourseManager() {
         })).filter((m) => m.title)
       : [];
 
+    const normalizedProjects = (formData.projectsList || []).map((p) => {
+      if (typeof p === 'string') return p;
+      const toolsArr = typeof p.tools === 'string'
+        ? p.tools.split(',').map((t) => t.trim()).filter(Boolean)
+        : (Array.isArray(p.tools) ? p.tools : []);
+      return {
+        ...p,
+        tools: toolsArr
+      };
+    });
+
     const payload = {
       ...formData,
       id: courseId,
@@ -152,7 +163,7 @@ export default function CourseManager() {
       position: formData.imagePosition,
       fit: formData.imageFit,
       tools: toolsArray.length > 0 ? toolsArray : ['AWS', 'Docker'],
-      projects: formData.projectsList || [],
+      projects: normalizedProjects,
       whoIsItFor: formData.whoIsItForList || [],
       admissionSteps: formData.admissionStepsList || [],
       curriculumModules: modulesArray.length > 0 ? modulesArray : [{ num: '01', title: 'Fundamentals', topics: ['Core Concepts'] }]

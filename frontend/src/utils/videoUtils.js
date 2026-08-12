@@ -23,18 +23,19 @@ export function getNormalizedVideoConfig(url) {
     };
   }
 
-  // 2. Google Drive normalization (supports /file/d/ID, /open?id=ID, /uc?id=ID, and raw Drive URLs)
+  // 2. Google Drive normalization (supports /file/d/ID, /open?id=ID, /uc?id=ID, and raw Drive/Accounts URLs)
+  const isGoogleLink = trimmed.includes('drive.google.com') || trimmed.includes('docs.google.com') || trimmed.includes('accounts.google.com');
   const driveIdMatch = trimmed.match(/(?:file\/d\/|d\/|id=|open\?id=)([\w-]{20,50})/i);
-  if ((trimmed.includes('drive.google.com') || trimmed.includes('docs.google.com')) && driveIdMatch && driveIdMatch[1]) {
-    const fileId = driveIdMatch[1];
+  if (isGoogleLink) {
+    const fileId = (driveIdMatch && driveIdMatch[1]) ? driveIdMatch[1] : '';
     return {
       type: 'drive',
       isDrive: true,
       fileId: fileId,
-      directUrl: `https://lh3.googleusercontent.com/d/${fileId}`,
-      fallbackDirectUrl: `https://drive.google.com/uc?export=download&id=${fileId}`,
-      src: `https://drive.google.com/file/d/${fileId}/preview`,
-      originalUrl: `https://drive.google.com/file/d/${fileId}/view?usp=sharing`,
+      directUrl: fileId ? `https://lh3.googleusercontent.com/d/${fileId}` : '',
+      fallbackDirectUrl: fileId ? `https://drive.google.com/uc?export=download&id=${fileId}` : '',
+      src: fileId ? `https://drive.google.com/file/d/${fileId}/preview` : trimmed,
+      originalUrl: fileId ? `https://drive.google.com/file/d/${fileId}/view?usp=sharing` : trimmed,
       title: 'Google Drive Video Player'
     };
   }

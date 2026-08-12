@@ -51,9 +51,52 @@ function VideoPlayerInner({ config, poster, title }) {
     );
   }
 
-  // Render Google Drive component: try direct video first; fallback to drive iframe if CORS/auth required
+  // Render Google Drive component: try direct video first; fallback to direct drive action card if direct playback fails
   const isDriveType = config.type === 'drive' || config.isDrive;
-  const showDriveIframe = isDriveType && driveDirectError;
+  const showDriveFallback = isDriveType && (driveDirectError || !config.directUrl);
+
+  if (isDriveType && showDriveFallback) {
+    const driveWatchUrl = config.originalUrl || config.src || (config.fileId ? `https://drive.google.com/file/d/${config.fileId}/view` : 'https://drive.google.com');
+    return (
+      <div className="ezer-video-player-container" ref={containerRef} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#000648', color: '#ffffff', textAlign: 'center', padding: '24px', position: 'relative' }}>
+        {poster && (
+          <img src={poster} alt={title} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }} />
+        )}
+        <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+          <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(242, 183, 51, 0.25)', border: '2.5px solid #f2b733', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f2b733' }}>
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z"/>
+            </svg>
+          </div>
+          <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 900, color: '#ffffff' }}>{title || 'Google Drive Course Video'}</h4>
+          <p style={{ margin: 0, fontSize: '0.85rem', color: '#cbd5e1', maxWidth: '460px', lineHeight: 1.5 }}>
+            This video is hosted on Google Drive. Click below to play the video directly.
+          </p>
+          <a
+            href={driveWatchUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              marginTop: '4px',
+              padding: '10px 22px',
+              background: '#f2b733',
+              color: '#000648',
+              fontWeight: 900,
+              fontSize: '0.88rem',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              boxShadow: '0 4px 14px rgba(242, 183, 51, 0.4)'
+            }}
+          >
+            ▶ Watch Video on Google Drive ↗
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ width: '100%', maxWidth: '1040px', margin: '0 auto' }}>
@@ -125,7 +168,7 @@ function VideoPlayerInner({ config, poster, title }) {
         }
       `}</style>
       <div className="ezer-video-player-container" ref={containerRef}>
-        {isDriveType && !showDriveIframe ? (
+        {isDriveType ? (
           <video
             key={config.directUrl}
             ref={videoRef}
