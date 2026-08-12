@@ -99,11 +99,15 @@ class TabErrorBoundary extends React.Component {
 export default function AdminDashboard() {
   const currentUser = getCurrentAdminUser();
   const isSuperAdmin = !currentUser || currentUser.role === 'SUPER_ADMIN' || currentUser.allowedTabs === '*';
-  const allowedTabsList = Array.isArray(currentUser?.allowedTabs) ? currentUser.allowedTabs : [];
+  const allowedTabsSet = useMemo(
+    () => new Set(Array.isArray(currentUser?.allowedTabs) ? currentUser.allowedTabs : []),
+    [currentUser?.allowedTabs]
+  );
 
   const [activeTab, setActiveTab] = useState(() => {
     if (isSuperAdmin) return 'leads';
-    return allowedTabsList.length > 0 ? allowedTabsList[0] : 'leads';
+    const firstAllowed = Array.from(allowedTabsSet)[0];
+    return firstAllowed || 'leads';
   });
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -199,7 +203,7 @@ export default function AdminDashboard() {
   // Dynamically filter tabs visible to current logged-in user based on RBAC permissions
   const tabs = allTabs.filter((tab) => {
     if (isSuperAdmin) return true;
-    return allowedTabsList.includes(tab.id);
+    return allowedTabsSet.has(tab.id);
   });
 
   const handleTabChange = (tabId) => {

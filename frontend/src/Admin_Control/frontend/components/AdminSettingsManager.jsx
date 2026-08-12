@@ -16,7 +16,7 @@ import {
   HiCheck
 } from 'react-icons/hi';
 
-export const MODULE_OPTIONS = [
+const MODULE_OPTIONS = [
   { id: 'leads', label: 'Lead Submissions', category: 'Financial & Leads' },
   { id: 'payments-received', label: 'Payments Received', category: 'Financial & Leads' },
   { id: 'payment', label: 'Course Fees & Gateway Config', category: 'Financial & Leads' },
@@ -249,6 +249,7 @@ export default function AdminSettingsManager() {
                 />
                 <button
                   type="button"
+                  aria-label="Toggle password visibility"
                   onClick={() => setShowPassword(!showPassword)}
                   style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#64748b', cursor: 'pointer' }}
                 >
@@ -452,8 +453,9 @@ export default function AdminSettingsManager() {
               Reset Password for {resetPassUser.name}
             </h3>
             <div style={{ margin: '14px 0' }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: 800, display: 'block', marginBottom: '4px' }}>New Password *</label>
+              <label htmlFor="reset_new_password_input" style={{ fontSize: '0.78rem', fontWeight: 800, display: 'block', marginBottom: '4px' }}>New Password *</label>
               <input
+                id="reset_new_password_input"
                 type="text"
                 required
                 placeholder="Enter new password"
