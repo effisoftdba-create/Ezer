@@ -410,7 +410,7 @@ export default function CourseFormModal({
 
                     return (
                       <div
-                        key={item.id ? `aud-id-${item.id}` : (item.title ? `aud-title-${item.title}` : `aud-pos-${itemPos}`)}
+                        key={item.id ? `aud-id-${item.id}` : `aud-pos-${origIndex}`}
                         style={{
                           background: '#f8fafc',
                           border: '1.5px solid #cbd5e1',

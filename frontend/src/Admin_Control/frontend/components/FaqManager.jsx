@@ -212,7 +212,7 @@ export default function FaqManager() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {currentCategory.items?.map((item, idx) => (
           <div
-            key={item.id || item.q}
+            key={item.id || `faq-idx-${idx}`}
             style={{
               background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px',
               padding: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '16px'

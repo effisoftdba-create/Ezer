@@ -84,7 +84,7 @@ export default function CourseTabProjects({ formData, setFormData }) {
 
           return (
             <div
-              key={proj.id ? `proj-id-${proj.id}` : (proj.title ? `proj-t-${proj.title}` : `proj-p-${projPos}`)}
+              key={proj.id ? `proj-id-${proj.id}` : `proj-idx-${idx}`}
               style={{
                 background: '#f8fafc',
                 border: '1.5px solid #cbd5e1',

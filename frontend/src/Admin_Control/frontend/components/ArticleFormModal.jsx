@@ -75,6 +75,7 @@ export default function ArticleFormModal({
       sections: [
         ...prev.sections,
         {
+          id: `sec-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
           title: `${prev.sections.length + 1}. New Sub-Section Title`,
           content: 'Add detailed paragraphs and insights for this section...',
           image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000',
@@ -303,7 +304,7 @@ export default function ArticleFormModal({
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {formData.sections.map((sec, idx) => (
-                  <div key={sec.id || (sec.title ? `sec-${sec.title.toLowerCase().replace(/[^a-z0-9]/g, '')}` : `sec-block-${sec.content ? sec.content.substring(0, 10) : 'item'}`)} style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  <div key={sec.id || `sec-stable-${idx}`} style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '18px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <span style={{ fontWeight: 900, fontSize: '0.84rem', color: '#000648' }}>
                         Section #{idx + 1}

@@ -280,9 +280,9 @@ export default function SupportCardsManager() {
 
       {/* Cards List */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
-        {supportCards.map((card) => (
+        {supportCards.map((card, idx) => (
           <div
-            key={card.id || card.title}
+            key={card.id || `card-idx-${idx}`}
             style={{
               background: '#ffffff', border: '1.5px solid #000648', borderRadius: '14px',
               overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,6,72,0.06)', display: 'flex', flexDirection: 'column'
