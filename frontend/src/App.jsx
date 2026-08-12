@@ -178,32 +178,27 @@ export default function App() {
 
         <main style={{ flexGrow: 1 }}>
           <Suspense fallback={<PageLoader />}>
-            {isAdminRoute ? (
-              isDashboardRoute ? (
-                <AdminDashboard />
-              ) : (
-                <AdminLogin />
-              )
-            ) : (
-              <Routes>
-                <Route path="/" element={<Home onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/about" element={<About onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/courses" element={<Courses onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/courses/:slug" element={<CourseDetail onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/testimonials" element={<TestimonialsPage onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/faq" element={<FAQPage onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/blog" element={<Blog onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/blog/:slug" element={<BlogDetail onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/contact" element={<Contact onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy onOpenDemoModal={handleOpenDemoModal} />} />
-                <Route path="/student-admission-policy" element={<StudentAdmissionPolicy onOpenDemoModal={handleOpenDemoModal} />} />
+            <Routes>
+              {/* Public Website Routes */}
+              <Route path="/" element={<Home onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/about" element={<About onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/courses" element={<Courses onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/courses/:slug" element={<CourseDetail onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/testimonials" element={<TestimonialsPage onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/faq" element={<FAQPage onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/blog" element={<Blog onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/blog/:slug" element={<BlogDetail onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/contact" element={<Contact onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy onOpenDemoModal={handleOpenDemoModal} />} />
+              <Route path="/student-admission-policy" element={<StudentAdmissionPolicy onOpenDemoModal={handleOpenDemoModal} />} />
 
-                {/* Isolated Admin Routes fallback */}
-                <Route path="/admin/login" element={<AdminLogin />} />
-                <Route path="/admin/dashboard/*" element={<AdminDashboard />} />
-                <Route path="/admin" element={<AdminLogin />} />
-              </Routes>
-            )}
+              {/* Dedicated Admin Portal Routes */}
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/admin/dashboard/*" element={<AdminDashboard />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="/admin/*" element={<AdminDashboard />} />
+              <Route path="/admin" element={<AdminLogin />} />
+            </Routes>
           </Suspense>
         </main>
 
