@@ -144,8 +144,13 @@ export function SiteProvider({ children }) {
       }));
       unsubs.push(subscribeToCollection('leads', (items) => {
         if (Array.isArray(items)) {
-          const freshLeads = items.filter((l) => l && l.name && !['test', 'dummy', 'sample'].some((t) => (l.name || '').toLowerCase().includes(t)));
-          dispatch({ type: 'SET_KEY', key: 'leads', value: freshLeads });
+          const validLeads = items
+            .filter(Boolean)
+            .map((l) => ({
+              ...l,
+              name: (l.name || l.fullName || l.email || 'Website Registrant').trim()
+            }));
+          dispatch({ type: 'SET_KEY', key: 'leads', value: validLeads });
         }
       }));
       unsubs.push(subscribeToCollection('blogs', (items) => {
@@ -595,7 +600,15 @@ export function SiteProvider({ children }) {
   }, []);
 
   const addLead = useCallback((leadData, silent = false) => {
-    const newLead = { id: String(Date.now()), status: 'New', ...leadData, date: new Date().toLocaleString() };
+    const nameStr = (leadData?.name || leadData?.fullName || leadData?.email || 'Website Registrant').trim();
+    const newLead = {
+      id: String(Date.now()),
+      status: 'New',
+      ...leadData,
+      name: nameStr,
+      date: leadData?.date || new Date().toLocaleString(),
+      timestamp: leadData?.timestamp || new Date().toISOString()
+    };
     const updated = [newLead, ...(leads || [])];
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
     saveDocument('leads', newLead.id, newLead);

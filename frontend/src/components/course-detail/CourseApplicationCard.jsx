@@ -19,6 +19,10 @@ export default function CourseApplicationCard({ course, onOpenPurchaseModal }) {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    if (!formData.name?.trim() || !formData.email?.trim() || !formData.phone?.trim()) {
+      alert('Please fill in your name, email, and mobile phone number.');
+      return;
+    }
     setFormSubmitted(true);
     if (addLead) {
       addLead({ ...formData, course: course?.title, timestamp: new Date().toISOString(), type: 'cohort_application' });

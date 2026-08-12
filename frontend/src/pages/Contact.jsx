@@ -18,6 +18,10 @@ export default function Contact() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!formData.name?.trim() || !formData.email?.trim() || !formData.phone?.trim()) {
+      alert('Please fill in your name, email, and mobile phone number.');
+      return;
+    }
     setSubmitted(true);
     if (addLead) {
       addLead({ ...formData, timestamp: new Date().toISOString(), type: 'contact_page' });
