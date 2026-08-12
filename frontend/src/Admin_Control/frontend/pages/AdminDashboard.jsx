@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { isAuthenticated, logoutAdmin } from '../utils/authService';
+import { isAuthenticated, logoutAdmin, getCurrentAdminUser } from '../utils/authService';
 import { useSiteData } from '../context/SiteContext';
 
 import HeroManager from '../components/HeroManager';
@@ -20,6 +20,7 @@ import ContactInfoManager from '../components/ContactInfoManager';
 import PopupManager from '../components/PopupManager';
 import LeadsManager from '../components/LeadsManager';
 import BlogManager, { ExecutiveSection } from '../components/BlogManager';
+import AdminSettingsManager from '../components/AdminSettingsManager';
 import AdminHeaderNav from '../components/AdminHeaderNav';
 import AdminSidebarNav from '../components/AdminSidebarNav';
 import './AdminDashboard.css';
@@ -40,10 +41,9 @@ import {
   HiOutlineTemplate,
   HiOutlineMailOpen,
   HiOutlineNewspaper,
-  HiOutlineOfficeBuilding
+  HiOutlineOfficeBuilding,
+  HiOutlineCog
 } from 'react-icons/hi';
-
-
 
 class TabErrorBoundary extends React.Component {
   constructor(props) {
@@ -97,7 +97,15 @@ class TabErrorBoundary extends React.Component {
 }
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('leads');
+  const currentUser = getCurrentAdminUser();
+  const isSuperAdmin = !currentUser || currentUser.role === 'SUPER_ADMIN' || currentUser.allowedTabs === '*';
+  const allowedTabsList = Array.isArray(currentUser?.allowedTabs) ? currentUser.allowedTabs : [];
+
+  const [activeTab, setActiveTab] = useState(() => {
+    if (isSuperAdmin) return 'leads';
+    return allowedTabsList.length > 0 ? allowedTabsList[0] : 'leads';
+  });
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const mainRef = useRef(null);
 
@@ -118,6 +126,7 @@ export default function AdminDashboard() {
     executiveLeaders,
     hiringPartners,
     payments,
+    adminUsers,
     updateExecutiveLeader,
     resetToDefault
   } = useSiteData();
@@ -164,13 +173,13 @@ export default function AdminDashboard() {
 
   const totalFaqs = (faqList || []).reduce((acc, cat) => acc + (cat.items?.length || 0), 0);
 
-  const tabs = [
+  const allTabs = [
     { id: 'leads', label: 'Lead Submissions', icon: HiOutlineMailOpen, count: (leads || []).length },
     { id: 'payments-received', label: 'Payments Received', icon: HiOutlineCurrencyRupee, count: (payments || []).length },
+    { id: 'payment', label: 'Course Fees & Gateway Config', icon: HiOutlineCurrencyRupee },
+    { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: (heroSlides || []).length },
     { id: 'partners', label: 'Hiring Partners & Logos', icon: HiOutlineOfficeBuilding, count: (hiringPartners || []).length },
-    { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },
-    { id: 'payment', label: 'Course Fees & QR Config', icon: HiOutlineCurrencyRupee },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSwitchHorizontal },
     { id: 'about-videos', label: 'About Us Brand Videos (2 Links)', icon: HiOutlineVideoCamera },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
@@ -183,8 +192,15 @@ export default function AdminDashboard() {
     { id: 'testimonials', label: 'Testimonials Page', icon: HiOutlineChatAlt, count: (writtenTestimonials || []).length },
     { id: 'popup', label: 'Lead Popup Modal', icon: HiOutlineTemplate },
     { id: 'faq', label: 'FAQ Manager', icon: HiOutlineQuestionMarkCircle, count: totalFaqs },
-    { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone }
+    { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone },
+    { id: 'settings', label: 'Admin Settings & RBAC Users', icon: HiOutlineCog, count: (adminUsers || []).length }
   ];
+
+  // Dynamically filter tabs visible to current logged-in user based on RBAC permissions
+  const tabs = allTabs.filter((tab) => {
+    if (isSuperAdmin) return true;
+    return allowedTabsList.includes(tab.id);
+  });
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
@@ -214,10 +230,10 @@ export default function AdminDashboard() {
           <TabErrorBoundary tabId={activeTab}>
             {activeTab === 'leads' && <LeadsManager onNavigateToPayments={() => setActiveTab('payments-received')} />}
             {activeTab === 'payments-received' && <PaymentsReceivedManager />}
+            {activeTab === 'payment' && <CoursePaymentManager />}
             {activeTab === 'hero' && <HeroManager />}
             {activeTab === 'partners' && <HiringPartnersManager />}
             {activeTab === 'courses' && <CourseManager />}
-            {activeTab === 'payment' && <CoursePaymentManager />}
             {activeTab === 'platform' && <PlatformManager />}
             {activeTab === 'about-videos' && <AboutVideoManager />}
             {activeTab === 'support' && <SupportCardsManager />}
@@ -231,6 +247,7 @@ export default function AdminDashboard() {
             {activeTab === 'popup' && <PopupManager />}
             {activeTab === 'faq' && <FaqManager />}
             {activeTab === 'contact' && <ContactInfoManager />}
+            {activeTab === 'settings' && <AdminSettingsManager />}
           </TabErrorBoundary>
         </main>
       </div>

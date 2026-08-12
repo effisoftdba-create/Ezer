@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authenticateAdmin, isAuthenticated, getLockoutState } from '../utils/authService';
+import { useSiteData } from '../context/SiteContext';
 import { HiOutlineMail, HiOutlineLockClosed, HiOutlineShieldCheck, HiOutlineEye, HiOutlineEyeOff } from 'react-icons/hi';
 import './AdminLogin.css';
 
@@ -13,6 +14,7 @@ export default function AdminLogin() {
   const [lockoutState, setLockoutState] = useState({ isLocked: false, remainingMinutes: 0 });
 
   const navigate = useNavigate();
+  const { adminUsers } = useSiteData() || {};
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -32,7 +34,16 @@ export default function AdminLogin() {
     setIsLoading(true);
 
     try {
-      const result = await authenticateAdmin(email, password);
+      // Get stored admin users fallback
+      let userList = Array.isArray(adminUsers) ? adminUsers : [];
+      if (userList.length === 0 && typeof localStorage !== 'undefined') {
+        try {
+          const stored = localStorage.getItem('ezer_admin_users');
+          if (stored) userList = JSON.parse(stored);
+        } catch (e) {}
+      }
+
+      const result = await authenticateAdmin(email, password, userList);
       if (result.success) {
         if (typeof window !== 'undefined' && window.location.search.includes('admin')) {
           window.location.href = window.location.origin + window.location.pathname + '?/admin/dashboard';

@@ -27,9 +27,11 @@ import {
   STORAGE_PAYMENT_CONFIG_KEY,
   STORAGE_ABOUT_VIDEOS_KEY,
   STORAGE_PAYMENTS_KEY,
+  STORAGE_ADMIN_USERS_KEY,
   defaultPaymentConfig,
   defaultAboutVideos,
   defaultPayments,
+  defaultAdminUsers,
 
   defaultExecutiveLeaders,
   defaultHiringPartners,
@@ -106,38 +108,9 @@ export function SiteProvider({ children }) {
     hiringPartners,
     paymentConfig,
     aboutVideos,
-    payments
+    payments,
+    adminUsers
   } = state;
-
-  // Check for mobile sync token in URL
-  useEffect(() => {
-    try {
-      const fullUrl = window.location.href || '';
-      if (fullUrl.includes('syncData=') || fullUrl.includes('sync?data=')) {
-        let rawToken = '';
-        if (fullUrl.includes('syncData=')) {
-          rawToken = fullUrl.split('syncData=')[1].split('&')[0];
-        } else if (fullUrl.includes('sync?data=')) {
-          rawToken = fullUrl.split('sync?data=')[1].split('&')[0];
-        }
-
-        if (rawToken) {
-          const decoded = JSON.parse(decodeURIComponent(rawToken));
-          if (decoded && typeof decoded === 'object') {
-            Object.keys(decoded).forEach((key) => {
-              if (decoded[key]) {
-                dispatch({ type: 'SET_KEY', key, value: decoded[key] });
-              }
-            });
-            window.history.replaceState({}, document.title, window.location.pathname);
-            triggerStateToast('SAVED');
-          }
-        }
-      }
-    } catch (e) {
-      console.warn('[SyncToken] Could not parse token:', e);
-    }
-  }, []);
 
   // Sync internal state to LocalStorage
   useEffect(() => { safeSetStorage(STORAGE_SLIDES_KEY, heroSlides); }, [heroSlides]);
@@ -162,6 +135,7 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_PAYMENT_CONFIG_KEY, paymentConfig); }, [paymentConfig]);
   useEffect(() => { safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, aboutVideos); }, [aboutVideos]);
   useEffect(() => { safeSetStorage(STORAGE_PAYMENTS_KEY, payments); }, [payments]);
+  useEffect(() => { safeSetStorage(STORAGE_ADMIN_USERS_KEY, adminUsers); }, [adminUsers]);
 
 
   // Firebase Real-time Firestore Subscriptions — Authoritative source of truth
@@ -839,6 +813,30 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, []);
 
+  const addAdminUser = useCallback((userObj) => {
+    const newUser = {
+      id: `user-${Date.now()}`,
+      createdAt: new Date().toISOString(),
+      status: 'ACTIVE',
+      ...userObj
+    };
+    dispatch({ type: 'ADD_ITEM', key: 'adminUsers', item: newUser });
+    saveDocument('admin_users', newUser.id, newUser);
+    triggerStateToast('SAVED');
+  }, []);
+
+  const updateAdminUser = useCallback((id, updatedData) => {
+    dispatch({ type: 'UPDATE_ITEM', key: 'adminUsers', id, updatedData });
+    saveDocument('admin_users', id, updatedData);
+    triggerStateToast('SAVED');
+  }, []);
+
+  const deleteAdminUser = useCallback((id) => {
+    dispatch({ type: 'DELETE_ITEM', key: 'adminUsers', id });
+    removeDocument('admin_users', id);
+    triggerStateToast('DELETED');
+  }, []);
+
   const value = useMemo(() => ({
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
     courses, updateCourses, addCourse, updateCourse, deleteCourse,
@@ -862,6 +860,7 @@ export function SiteProvider({ children }) {
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
     payments, addPayment, updatePaymentStatus, deletePayment,
+    adminUsers, addAdminUser, updateAdminUser, deleteAdminUser,
     resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
@@ -886,6 +885,7 @@ export function SiteProvider({ children }) {
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
     payments, addPayment, updatePaymentStatus, deletePayment,
+    adminUsers, addAdminUser, updateAdminUser, deleteAdminUser,
     resetAllToDefaults
   ]);
 

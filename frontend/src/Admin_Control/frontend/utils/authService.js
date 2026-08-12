@@ -3,16 +3,22 @@ const LOCKOUT_DURATION_MS = 15 * 60 * 1000;
 const STORAGE_LOCK_KEY = 'ezer_auth_lockout';
 const STORAGE_ATTEMPTS_KEY = 'ezer_auth_attempts';
 const SESSION_TOKEN_KEY = 'ezer_admin_session';
+const SESSION_USER_KEY = 'ezer_admin_user';
 
-const ADMIN_EMAIL = 'admin@ezer.com';
-// SHA-256 hash of 'Admin@123456'
-const ADMIN_PASS_HASH = 'ad89b64d66caa8e30e5d5ce4a9763f4ecc205814c412175f3e2c50027471426d';
+const SUPER_ADMIN_EMAIL = 'effisoftdba@gmail.com';
+const SUPER_ADMIN_PASS = 'dba@effisoft$123';
+// SHA-256 hash of 'dba@effisoft$123'
+const SUPER_ADMIN_PASS_HASH = 'c0282bf83fbc3f679782ea255e2d1d36bb9cf7ed2c0c707577edb7d34199f1bc';
 
 async function hashPassword(password) {
-  const msgBuffer = new TextEncoder().encode(password);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  try {
+    const msgBuffer = new TextEncoder().encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  } catch (e) {
+    return password;
+  }
 }
 
 export function sanitizeInput(str) {
@@ -33,11 +39,11 @@ export function validateLoginSchema(email, password) {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!cleanEmail || !emailRegex.test(cleanEmail)) {
-    errors.push('Invalid input format');
+    errors.push('Invalid email format');
   }
 
-  if (!cleanPassword || cleanPassword.length < 6) {
-    errors.push('Invalid input format');
+  if (!cleanPassword || cleanPassword.length < 4) {
+    errors.push('Invalid password format');
   }
 
   return { isValid: errors.length === 0, cleanEmail, cleanPassword };
@@ -65,7 +71,7 @@ export function getLockoutState() {
   }
 }
 
-export async function authenticateAdmin(email, password) {
+export async function authenticateAdmin(email, password, customUsers = []) {
   const lockState = getLockoutState();
   if (lockState.isLocked) {
     return {
@@ -78,7 +84,7 @@ export async function authenticateAdmin(email, password) {
   const { isValid, cleanEmail, cleanPassword } = validateLoginSchema(email, password);
   if (!isValid) {
     recordFailedAttempt();
-    return { success: false, error: 'Incorrect email or password' };
+    return { success: false, error: 'Incorrect email ID or password' };
   }
 
   const currentAttempts = parseInt(localStorage.getItem(STORAGE_ATTEMPTS_KEY) || '0', 10);
@@ -88,10 +94,12 @@ export async function authenticateAdmin(email, password) {
   }
 
   const inputHash = await hashPassword(cleanPassword);
-  const emailMatch = cleanEmail.toLowerCase() === ADMIN_EMAIL.toLowerCase();
-  const passwordMatch = inputHash === ADMIN_PASS_HASH || cleanPassword === 'Admin@123456';
+  
+  // 1. Super Admin Verification
+  const isSuperEmail = cleanEmail.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase();
+  const isSuperPass = cleanPassword === SUPER_ADMIN_PASS || inputHash === SUPER_ADMIN_PASS_HASH;
 
-  if (emailMatch && passwordMatch) {
+  if (isSuperEmail && isSuperPass) {
     localStorage.removeItem(STORAGE_ATTEMPTS_KEY);
     localStorage.removeItem(STORAGE_LOCK_KEY);
 
@@ -99,13 +107,61 @@ export async function authenticateAdmin(email, password) {
     crypto.getRandomValues(randomArray);
     const randomHex = Array.from(randomArray, (b) => b.toString(16).padStart(2, '0')).join('');
     const token = `ezer_token_${Date.now()}_${randomHex}`;
-    sessionStorage.setItem(SESSION_TOKEN_KEY, token);
+    
+    const superUser = {
+      id: 'super-admin-01',
+      email: SUPER_ADMIN_EMAIL,
+      name: 'Effisoft Super Admin',
+      role: 'SUPER_ADMIN',
+      allowedTabs: '*', // Full unrestricted access
+      status: 'ACTIVE'
+    };
 
-    return { success: true, token };
-  } else {
-    recordFailedAttempt();
-    return { success: false, error: 'Incorrect email or password' };
+    sessionStorage.setItem(SESSION_TOKEN_KEY, token);
+    sessionStorage.setItem(SESSION_USER_KEY, JSON.stringify(superUser));
+
+    return { success: true, token, user: superUser };
   }
+
+  // 2. Custom Sub-Admin Verification
+  const userList = Array.isArray(customUsers) ? customUsers : [];
+  const foundUser = userList.find(
+    (u) => (u.email || '').trim().toLowerCase() === cleanEmail.toLowerCase()
+  );
+
+  if (foundUser) {
+    if (foundUser.status === 'DISABLED') {
+      return { success: false, error: 'Account disabled. Please contact the Super Admin.' };
+    }
+
+    const passMatches = foundUser.password === cleanPassword;
+    if (passMatches) {
+      localStorage.removeItem(STORAGE_ATTEMPTS_KEY);
+      localStorage.removeItem(STORAGE_LOCK_KEY);
+
+      const randomArray = new Uint8Array(16);
+      crypto.getRandomValues(randomArray);
+      const randomHex = Array.from(randomArray, (b) => b.toString(16).padStart(2, '0')).join('');
+      const token = `ezer_token_${Date.now()}_${randomHex}`;
+
+      const sessionUser = {
+        id: foundUser.id || `user-${Date.now()}`,
+        email: foundUser.email,
+        name: foundUser.name || foundUser.email.split('@')[0],
+        role: foundUser.role || 'SUB_ADMIN',
+        allowedTabs: Array.isArray(foundUser.allowedTabs) ? foundUser.allowedTabs : [],
+        status: foundUser.status || 'ACTIVE'
+      };
+
+      sessionStorage.setItem(SESSION_TOKEN_KEY, token);
+      sessionStorage.setItem(SESSION_USER_KEY, JSON.stringify(sessionUser));
+
+      return { success: true, token, user: sessionUser };
+    }
+  }
+
+  recordFailedAttempt();
+  return { success: false, error: 'Incorrect email ID or password' };
 }
 
 function recordFailedAttempt() {
@@ -131,9 +187,20 @@ export function isAuthenticated() {
   }
 }
 
+export function getCurrentAdminUser() {
+  try {
+    const raw = sessionStorage.getItem(SESSION_USER_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) {
+    return null;
+  }
+}
+
 export function logoutAdmin() {
   try {
     sessionStorage.removeItem(SESSION_TOKEN_KEY);
+    sessionStorage.removeItem(SESSION_USER_KEY);
   } catch (e) {
     console.error('Error logging out:', e);
   }

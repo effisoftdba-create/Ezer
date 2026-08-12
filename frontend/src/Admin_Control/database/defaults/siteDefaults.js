@@ -67,8 +67,20 @@ export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v18_clean_i
 export const STORAGE_HIRING_PARTNERS_KEY = 'ezer_hiring_partners:v18_clean_image_paths';
 export const STORAGE_PAYMENT_CONFIG_KEY = 'ezer_payment_config:v18_clean_image_paths';
 export const STORAGE_PAYMENTS_KEY = 'ezer_payments_list:v18_clean_image_paths';
+export const STORAGE_ADMIN_USERS_KEY = 'ezer_admin_users:v18_clean_image_paths';
 
 export const defaultPayments = [];
+export const defaultAdminUsers = [
+  {
+    id: 'user-01',
+    email: 'effisoftdba@gmail.com',
+    name: 'Effisoft Super Admin',
+    role: 'SUPER_ADMIN',
+    allowedTabs: '*',
+    status: 'ACTIVE',
+    createdAt: new Date().toISOString()
+  }
+];
 
 export const defaultPaymentConfig = {
   enrollmentPrice: 9,
@@ -588,7 +600,8 @@ export function getInitialState() {
     hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners,
     paymentConfig: getStored(STORAGE_PAYMENT_CONFIG_KEY, defaultPaymentConfig) || defaultPaymentConfig,
     aboutVideos: getStored(STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos) || defaultAboutVideos,
-    payments: (getStored(STORAGE_PAYMENTS_KEY, defaultPayments) || defaultPayments).filter((p) => p && !['pay-1001', 'pay-1002', 'pay-1003', 'pay-1004'].includes(p.id))
+    payments: (getStored(STORAGE_PAYMENTS_KEY, defaultPayments) || defaultPayments).filter((p) => p && !['pay-1001', 'pay-1002', 'pay-1003', 'pay-1004'].includes(p.id)),
+    adminUsers: getStored(STORAGE_ADMIN_USERS_KEY, defaultAdminUsers) || defaultAdminUsers
   };
 
 }
@@ -597,6 +610,20 @@ export function siteReducer(state, action) {
   switch (action.type) {
     case 'SET_KEY':
       return { ...state, [action.key]: action.value };
+    case 'ADD_ITEM': {
+      const currentList = Array.isArray(state[action.key]) ? state[action.key] : [];
+      return { ...state, [action.key]: [action.item, ...currentList] };
+    }
+    case 'UPDATE_ITEM': {
+      const currentList = Array.isArray(state[action.key]) ? state[action.key] : [];
+      const updatedList = currentList.map((item) => (item.id === action.id ? { ...item, ...action.updatedData } : item));
+      return { ...state, [action.key]: updatedList };
+    }
+    case 'DELETE_ITEM': {
+      const currentList = Array.isArray(state[action.key]) ? state[action.key] : [];
+      const filteredList = currentList.filter((item) => item.id !== action.id);
+      return { ...state, [action.key]: filteredList };
+    }
     case 'RESET_ALL':
       return getInitialState();
     default:

@@ -1,329 +1,111 @@
 import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
-import { HiCheck, HiCreditCard, HiQrcode, HiCurrencyRupee, HiTag, HiShieldCheck } from 'react-icons/hi';
+import { HiCurrencyRupee, HiOutlineClock, HiCheck, HiOutlineUserGroup, HiOutlineSparkles } from 'react-icons/hi';
 
 export default function CoursePaymentManager() {
-  const { paymentConfig, updatePaymentConfig } = useSiteData();
-
-  const [formData, setFormData] = useState(paymentConfig || {
-    enrollmentPrice: 9,
-    originalPrice: 49999,
-    discountBadge: '99% OFF SPECIAL',
-    priceLabel: 'Full Course Access + Mentorship',
-    enrollmentLabel: 'INSTANT COHORT ENROLLMENT',
-    paymentMethods: [
-      { id: 'upi', label: 'UPI / GooglePay / PhonePe / Paytm', subtitle: 'Instant QR Code Scan & Pay', enabled: true },
-      { id: 'card', label: 'Credit Card / Debit Card', subtitle: 'Visa, MasterCard, RuPay, Amex', enabled: true }
-    ],
-    payButtonLabel: 'Pay & Unlock Course',
-    successMessage: 'Welcome to EZER Learning Solutions!',
-    successSubtext: 'Your seat has been locked successfully.'
-  });
-
+  const { paymentConfig, updatePaymentConfig, leads } = useSiteData();
   const [savedSuccess, setSavedSuccess] = useState(false);
+  const [comingSoonNotice, setComingSoonNotice] = useState(
+    paymentConfig?.comingSoonNotice || 'Admissions Opening Soon — VIP Priority Cohort Waitlist Active'
+  );
 
-  const handleSave = (e) => {
+  const waitlistLeads = (leads || []).filter((l) => l.status === 'VIP Waitlist' || l.paymentStatus === 'VIP_WAITLIST');
+
+  const handleSaveConfig = (e) => {
     e.preventDefault();
-    updatePaymentConfig(formData);
+    updatePaymentConfig({
+      ...paymentConfig,
+      comingSoonNotice
+    });
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 3000);
   };
 
-  const handleToggleMethod = (id) => {
-    setFormData((prev) => ({
-      ...prev,
-      paymentMethods: (prev.paymentMethods || []).map((method) =>
-        method.id === id ? { ...method, enabled: !method.enabled } : method
-      )
-    }));
-  };
-
   return (
     <div>
+      {/* Header Bar */}
       <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        marginBottom: '24px', paddingBottom: '16px', borderBottom: '1.5px solid #e2e8f0'
+        marginBottom: '20px', paddingBottom: '14px', borderBottom: '1.5px solid #e2e8f0'
       }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000648', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiCurrencyRupee color="#f2b733" size={26} /> Course Pricing & Payment Gateways Manager
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#000648', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <HiCurrencyRupee color="#f2b733" size={26} />
+            Payment Gateway & Enrollment Processing — Coming Soon
           </h2>
-          <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Control course enrollment fees, discount badges, and active payment gateway options across all live courses.
+          <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '4px 0 0 0' }}>
+            Direct online gateway processing is currently transitioning into VIP Cohort Early-Access Intake mode.
           </p>
         </div>
       </div>
 
-      <form onSubmit={handleSave}>
-        {/* Pricing & Offer Badges Card */}
-        <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 14px rgba(0,6,72,0.03)' }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiTag color="#000648" size={20} /> Course Pricing & Discount Config
-          </h3>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-            <div>
-              <label htmlFor="enrollment_price_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Cohort Enrollment Fee (₹) *
-              </label>
-              <input
-                id="enrollment_price_field"
-                type="number"
-                required
-                min={1}
-                value={formData.enrollmentPrice || 9}
-                onChange={(e) => setFormData((prev) => ({ ...prev, enrollmentPrice: Number(e.target.value) }))}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem', fontWeight: 800, color: '#166534' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="original_price_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Original Standard Course Price (₹)
-              </label>
-              <input
-                id="original_price_field"
-                type="number"
-                value={formData.originalPrice || 49999}
-                onChange={(e) => setFormData((prev) => ({ ...prev, originalPrice: Number(e.target.value) }))}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="discount_badge_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Discount Badge Text
-              </label>
-              <input
-                id="discount_badge_field"
-                type="text"
-                value={formData.discountBadge || '99% OFF SPECIAL'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, discountBadge: e.target.value }))}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem', fontWeight: 700 }}
-              />
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div>
-              <label htmlFor="price_label_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Price Detail Subtitle
-              </label>
-              <input
-                id="price_label_field"
-                type="text"
-                value={formData.priceLabel || 'Full Course Access + Mentorship'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, priceLabel: e.target.value }))}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="enrollment_label_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Banner Header Title
-              </label>
-              <input
-                id="enrollment_label_field"
-                type="text"
-                value={formData.enrollmentLabel || 'INSTANT COHORT ENROLLMENT'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, enrollmentLabel: e.target.value }))}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-          </div>
+      {/* Main Coming Soon Banner Card */}
+      <div style={{
+        background: 'linear-gradient(135deg, #000648 0%, #07157b 100%)',
+        color: '#ffffff', borderRadius: '20px', padding: '36px',
+        border: '2px solid #f2b733', boxShadow: '0 20px 40px rgba(0,6,72,0.25)',
+        textAlign: 'center', marginBottom: '24px', position: 'relative', overflow: 'hidden'
+      }}>
+        <div style={{
+          width: '64px', height: '64px', background: 'rgba(242,183,51,0.15)',
+          border: '2px solid #f2b733', borderRadius: '50%', color: '#f2b733',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'
+        }}>
+          <HiOutlineClock size={36} />
         </div>
 
-        {/* UPI Architecture & Integration Mode Settings */}
-        <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 14px rgba(0,6,72,0.03)' }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiQrcode color="#000648" size={20} /> Official UPI QR Code, App Intents & Integration Protocol
-          </h3>
+        <span style={{ background: '#f2b733', color: '#000648', fontSize: '0.75rem', fontWeight: 900, padding: '4px 14px', borderRadius: '50px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+          COMING SOON • VIP WAITLIST MODE ACTIVE
+        </span>
 
-          <div style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
-            <label htmlFor="integration_mode_select" style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '6px' }}>
-              UPI Integration Protocol Mode *
+        <h3 style={{ fontSize: '1.8rem', fontWeight: 900, margin: '14px 0 8px 0', textShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>
+          Direct Online Payment Gateway Integration
+        </h3>
+
+        <p style={{ fontSize: '0.92rem', color: 'rgba(255,255,255,0.82)', maxWidth: '560px', margin: '0 auto 24px', lineHeight: 1.6 }}>
+          Direct card/UPI payment processing is currently undergoing security upgrades. The public website checkout modal has been updated to collect candidate entries for the **VIP Early-Access Priority Cohort Waitlist**.
+        </p>
+
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 20px', borderRadius: '50px' }}>
+          <HiOutlineUserGroup size={20} color="#f2b733" />
+          <span style={{ fontSize: '0.88rem', fontWeight: 800 }}>Total VIP Waitlist Applicants: <strong style={{ color: '#f2b733', fontSize: '1.05rem' }}>{waitlistLeads.length} Candidates</strong></span>
+        </div>
+      </div>
+
+      {/* Admin Notice Config Form */}
+      <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px' }}>
+        <h4 style={{ fontSize: '1.05rem', fontWeight: 900, color: '#000648', marginTop: 0, marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <HiOutlineSparkles size={20} color="#115DFC" /> Customize Public Coming Soon Headline
+        </h4>
+
+        <form onSubmit={handleSaveConfig} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          <div>
+            <label htmlFor="coming_soon_notice_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
+              Public Modal Banner Announcement
             </label>
-            <select
-              id="integration_mode_select"
-              value={formData.integrationMode || 'direct_p2m'}
-              onChange={(e) => setFormData((prev) => ({ ...prev, integrationMode: e.target.value }))}
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #000648', fontSize: '0.9rem', fontWeight: 800, background: '#fff' }}
-            >
-              <option value="direct_p2m">Zero-Fee Direct Peer-to-Merchant (P2M) — Manual UTR Admin Verification Queue</option>
-              <option value="gateway">Automated Payment Gateway (Razorpay / PhonePe / Pine Labs Webhooks)</option>
-            </select>
-            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '6px' }}>
-              {formData.integrationMode === 'gateway'
-                ? '⚡ Gateway Mode: Payments are verified via webhooks/signature. Instant enrollment.'
-                : '🛡️ Direct P2M Mode: 0% TDR fees. Student submits 12-digit UTR; order goes to On-Hold status awaiting Admin verification in Payments Received Manager.'}
-            </div>
+            <input
+              id="coming_soon_notice_input"
+              type="text"
+              required
+              value={comingSoonNotice}
+              onChange={(e) => setComingSoonNotice(e.target.value)}
+              style={{ width: '100%', padding: '11px 14px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
+            />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-            <div>
-              <label htmlFor="upi_vpa_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                UPI ID / Merchant VPA *
-              </label>
-              <input
-                id="upi_vpa_field"
-                type="text"
-                value={formData.upiVpa || 'ezerlearning@okaxis'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, upiVpa: e.target.value }))}
-                placeholder="e.g. ezerlearning@okaxis"
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 800, color: '#000648' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="upi_merchant_name_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Merchant Beneficiary Name (pn)
-              </label>
-              <input
-                id="upi_merchant_name_field"
-                type="text"
-                value={formData.upiMerchantName || 'EZER Learning Solutions Pvt. Ltd.'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, upiMerchantName: e.target.value }))}
-                placeholder="EZER Learning Solutions Pvt. Ltd."
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="mcc_code_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Merchant Category Code (MCC / mc)
-              </label>
-              <input
-                id="mcc_code_field"
-                type="text"
-                value={formData.mccCode || '8220'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, mccCode: e.target.value }))}
-                placeholder="8220 (Education & Training)"
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-          </div>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            <div>
-              <label htmlFor="transaction_note_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                UPI Transaction Note Template (tn)
-              </label>
-              <input
-                id="transaction_note_field"
-                type="text"
-                value={formData.transactionNote || 'EZER Course Enrollment'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, transactionNote: e.target.value }))}
-                placeholder="EZER Course Enrollment"
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="utr_regex_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                UTR Validation Regex Rule
-              </label>
-              <input
-                id="utr_regex_field"
-                type="text"
-                value={formData.utrRegex || '^[0-9]{12}$'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, utrRegex: e.target.value }))}
-                placeholder="^[0-9]{12}$ (12 Numerical Digits)"
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', fontFamily: 'monospace' }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Enabled Payment Gateways */}
-        <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 14px rgba(0,6,72,0.03)' }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiShieldCheck color="#000648" size={20} /> Active Payment Gateways & Options
-          </h3>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {(formData.paymentMethods || []).map((method) => (
-              <div
-                key={method.id}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  padding: '14px 18px', borderRadius: '12px',
-                  border: method.enabled ? '1.5px solid #86efac' : '1.5px solid #cbd5e1',
-                  background: method.enabled ? '#f0fdf4' : '#f8fafc'
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  {method.id === 'upi' ? <HiQrcode size={24} color="#000648" /> : <HiCreditCard size={24} color="#000648" />}
-                  <div>
-                    <div style={{ fontWeight: 800, fontSize: '0.9rem', color: '#000648' }}>{method.label}</div>
-                    <div style={{ fontSize: '0.78rem', color: '#64748b' }}>{method.subtitle}</div>
-                  </div>
-                </div>
-
-                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '0.82rem', fontWeight: 800, color: method.enabled ? '#166534' : '#64748b' }}>
-                  <input
-                    type="checkbox"
-                    checked={method.enabled}
-                    onChange={() => handleToggleMethod(method.id)}
-                    style={{ width: '18px', height: '18px', cursor: 'pointer' }}
-                  />
-                  {method.enabled ? 'Enabled' : 'Disabled'}
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Buttons & Confirmation Receipt Message */}
-        <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 14px rgba(0,6,72,0.03)' }}>
-          <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648' }}>
-            Checkout Buttons & Receipt Text
-          </h3>
-
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
-            <div>
-              <label htmlFor="pay_button_label_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Pay Button Base Label
-              </label>
-              <input
-                id="pay_button_label_field"
-                type="text"
-                value={formData.payButtonLabel || 'Pay & Unlock Course'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, payButtonLabel: e.target.value }))}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="success_message_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Success Receipt Header
-              </label>
-              <input
-                id="success_message_field"
-                type="text"
-                value={formData.successMessage || 'Welcome to EZER Learning Solutions!'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, successMessage: e.target.value }))}
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Save Bar */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px', paddingTop: '8px' }}>
-          {savedSuccess && <span style={{ color: '#166534', fontWeight: 800, fontSize: '0.88rem' }}>✓ Pricing & Payment Config Saved Live!</span>}
           <button
             type="submit"
             style={{
-              padding: '12px 28px', background: '#000648', color: '#f2b733',
-              border: 'none', borderRadius: '10px', fontWeight: 900, fontSize: '0.95rem',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px',
-              boxShadow: '0 4px 14px rgba(0,6,72,0.2)'
+              padding: '10px 20px', background: '#000648', color: '#f2b733',
+              border: 'none', borderRadius: '50px', fontWeight: 900, fontSize: '0.88rem',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', alignSelf: 'flex-start'
             }}
           >
-            <HiCheck size={20} /> Save Pricing Config
+            {savedSuccess ? <HiCheck size={16} /> : null}
+            {savedSuccess ? 'Banner Announcement Saved!' : 'Save Coming Soon Notice'}
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }

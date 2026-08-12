@@ -191,14 +191,14 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
         email: email.trim(),
         phone: phone.trim(),
         course: course.title || 'Executive IT Course',
-        paymentStatus: 'PENDING_PAYMENT',
-        amountPaid: `₹${finalPrice}`,
-        status: 'Interested Lead',
-        city: 'Online Registration',
+        paymentStatus: 'VIP_WAITLIST',
+        amountPaid: 'VIP Priority Waitlist',
+        status: 'VIP Waitlist',
+        city: 'Online Priority Registration',
         timestamp: new Date().toISOString()
       }, true);
     }
-    setStep(2);
+    setStep(3);
   };
 
   const handleVerifyAndPay = async (e) => {
@@ -380,28 +380,31 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
           </div>
         </div>
 
-        {/* STEP 1: STUDENT ENROLLMENT FORM */}
+        {/* STEP 1: VIP COHORT WAITLIST ENROLLMENT FORM */}
         {step === 1 && (
           <form onSubmit={handleProceedToPayment} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             
-            {/* Price Box */}
+            {/* Admissions Opening Soon Box */}
             <div style={{
               background: 'linear-gradient(135deg, #000648 0%, #0c2080 100%)',
               color: '#ffffff', borderRadius: '16px', padding: '18px 20px',
-              border: '1.5px solid #f2b733', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              border: '1.5px solid #f2b733', display: 'flex', flexDirection: 'column', gap: '6px',
               boxShadow: '0 8px 24px rgba(0,6,72,0.12)'
             }}>
-              <div>
-                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                  {enrollmentLabel}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  🚀 ADMISSIONS OPENING SOON
                 </span>
-                <div style={{ fontSize: '1.75rem', fontWeight: 900, color: '#ffffff', lineHeight: 1.1, marginTop: '2px' }}>
-                  ₹{finalPrice.toLocaleString('en-IN')} <span style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600 }}>({priceLabel})</span>
-                </div>
+                <span style={{ background: '#f2b733', color: '#000648', fontSize: '0.72rem', fontWeight: 900, padding: '4px 10px', borderRadius: '50px' }}>
+                  VIP WAITLIST ACTIVE
+                </span>
               </div>
-              <span style={{ background: '#f2b733', color: '#000648', fontSize: '0.75rem', fontWeight: 900, padding: '6px 12px', borderRadius: '50px', boxShadow: '0 2px 8px rgba(242,183,51,0.4)' }}>
-                {discountBadge}
-              </span>
+              <div style={{ fontSize: '1.1rem', fontWeight: 900, color: '#ffffff', lineHeight: 1.3 }}>
+                Join the VIP Priority Early-Access Cohort Waitlist
+              </div>
+              <p style={{ fontSize: '0.78rem', color: 'rgba(255,255,255,0.85)', margin: 0, lineHeight: 1.4 }}>
+                Online payment gateways are currently undergoing scheduled upgrades. Register your details below to get instant early-access notifications and 1-on-1 counselor guidance when cohort seats open!
+              </p>
             </div>
 
             <div>
@@ -419,52 +422,47 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
               />
             </div>
 
-            <div className="modal-form-grid">
-              <div>
-                <label htmlFor="student_email" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
-                  Email Address *
-                </label>
-                <input
-                  id="student_email"
-                  type="email"
-                  required
-                  placeholder="name@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  style={{ width: '100%', padding: '11px 14px', borderRadius: '10px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
-                />
-              </div>
+            <div>
+              <label htmlFor="student_email" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
+                Email Address *
+              </label>
+              <input
+                id="student_email"
+                type="email"
+                required
+                placeholder="e.g. rahul@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{ width: '100%', padding: '11px 14px', borderRadius: '10px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
+              />
+            </div>
 
-              <div>
-                <label htmlFor="student_phone" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
-                  WhatsApp / Mobile Number *
-                </label>
-                <input
-                  id="student_phone"
-                  type="tel"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  maxLength={10}
-                  required
-                  placeholder="10-digit mobile number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                  style={{ width: '100%', padding: '11px 14px', borderRadius: '10px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
-                />
-              </div>
+            <div>
+              <label htmlFor="student_phone" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
+                WhatsApp Mobile Number *
+              </label>
+              <input
+                id="student_phone"
+                type="tel"
+                required
+                maxLength={10}
+                placeholder="e.g. 9876543210"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                style={{ width: '100%', padding: '11px 14px', borderRadius: '10px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
+              />
             </div>
 
             <button
               type="submit"
               style={{
-                marginTop: '10px', width: '100%', padding: '14px', borderRadius: '50px',
-                background: '#f2b733', color: '#000648', fontWeight: 900, fontSize: '1.05rem',
-                border: 'none', cursor: 'pointer', boxShadow: '0 6px 20px rgba(242,183,51,0.45)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                transition: 'transform 0.2s ease'
+                width: '100%', padding: '14px', borderRadius: '50px',
+                background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '1rem',
+                border: 'none', cursor: 'pointer', boxShadow: '0 6px 20px rgba(0,6,72,0.25)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginTop: '6px'
               }}
             >
-              Proceed to Payment & Unlock Course (₹{finalPrice}) <HiLockClosed size={18} />
+              Submit & Join VIP Priority Cohort Waitlist ➔
             </button>
           </form>
         )}
@@ -670,140 +668,66 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
           </form>
         )}
 
-        {/* STEP 3: ENROLLMENT CONFIRMATION & ACCESS LOCKING */}
+        {/* STEP 3: VIP PRIORITY COHORT WAITLIST CONFIRMATION */}
         {step === 3 && (
-          <div style={{ padding: '24px 20px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px', maxHeight: '85vh', overflowY: 'auto' }}>
-            {/* Top Avatar Circle */}
-            <div style={{ width: '52px', height: '52px', background: '#e91e63', color: '#ffffff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', fontWeight: 'bold', margin: '0 auto 2px', boxShadow: '0 4px 10px rgba(233, 30, 99, 0.2)' }}>
-              E
+          <div style={{ padding: '28px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', maxHeight: '85vh', overflowY: 'auto' }}>
+            <div style={{
+              width: '64px', height: '64px', background: '#f0fdf4',
+              border: '2px solid #bbf7d0', color: '#166534', borderRadius: '50%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '30px'
+            }}>
+              🎉
             </div>
 
-            <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#202124', marginBottom: '2px' }}>
-              To {upiMerchantName || 'EZER Learning Solutions Pvt. Ltd.'}
+            <div>
+              <span style={{ background: '#f2b733', color: '#000648', fontSize: '0.72rem', fontWeight: 900, padding: '4px 14px', borderRadius: '50px', textTransform: 'uppercase' }}>
+                VIP PRIORITY SPOT RESERVED
+              </span>
+              <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', margin: '10px 0 4px 0' }}>
+                You are on the Early-Access Waitlist!
+              </h3>
+              <p style={{ fontSize: '0.84rem', color: '#64748b', margin: 0, maxWidth: '420px', lineHeight: 1.5 }}>
+                Thank you for applying, <strong>{fullName}</strong>! Your VIP priority waitlist spot for <strong>{course.title}</strong> has been logged.
+              </p>
             </div>
 
-            <div style={{ fontSize: '2.4rem', fontWeight: 700, color: '#202124', margin: '0 0 4px', letterSpacing: '-0.5px' }}>
-              ₹{finalPrice.toLocaleString('en-IN')}
-            </div>
-
-            {/* Status Pill Badge */}
-            {integrationMode === 'direct_p2m' && paymentMethod === 'upi' ? (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#fffbe6', border: '1px solid #ffe58f', borderRadius: '50px', padding: '6px 18px', fontSize: '0.82rem', fontWeight: 800, color: '#d48806' }}>
-                <HiOutlineClock size={16} /> Pending Admin Verification (On-Hold)
+            <div style={{ width: '100%', background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '16px', textAlign: 'left' }}>
+              <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                Registered Applicant Details:
               </div>
-            ) : (
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '50px', padding: '6px 18px', fontSize: '0.82rem', fontWeight: 800, color: '#166534' }}>
-                <HiCheckCircle size={16} /> Payment Approved & Completed
-              </div>
-            )}
-
-            <div style={{ fontSize: '0.78rem', color: '#5f6368', marginBottom: '4px' }}>
-              {new Date().toLocaleString()}
-            </div>
-
-            {/* Inner Receipt Details Box */}
-            <div style={{ width: '100%', background: '#ffffff', border: '1px solid #dadce0', borderRadius: '14px', padding: '16px', textAlign: 'left', boxShadow: '0 1px 3px rgba(60,64,67,0.08)' }}>
-              <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#202124', paddingBottom: '10px', borderBottom: '1px solid #f1f3f4', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span>{paymentMethod === 'upi' ? 'Google Pay (UPI)' : 'Credit Card'}</span>
-                <span style={{ color: integrationMode === 'direct_p2m' && paymentMethod === 'upi' ? '#d48806' : '#1e8e3e', fontSize: '12px', fontWeight: 800 }}>
-                  {integrationMode === 'direct_p2m' && paymentMethod === 'upi' ? '⏳ PENDING REVIEW' : '✔ VERIFIED'}
-                </span>
-              </div>
-
-              <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>UPI transaction / UTR ID</div>
-                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 700, fontFamily: 'monospace' }}>{receiptNumber}</div>
-              </div>
-
-              <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>To Merchant VPA</div>
-                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600 }}>{upiVpa}</div>
-              </div>
-
-              <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>From Student</div>
-                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600 }}>{fullName} ({email})</div>
-              </div>
-
-              <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>Enrolled Program</div>
-                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600 }}>{course.title}</div>
-              </div>
-
-              <div>
-                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>EZER Reference Order</div>
-                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600, fontFamily: 'monospace' }}>{activeOrderRef}</div>
+              <div style={{ fontSize: '0.82rem', color: '#334155', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <div><strong>Full Name:</strong> {fullName}</div>
+                <div><strong>Email Address:</strong> {email}</div>
+                <div><strong>WhatsApp Contact:</strong> {phone}</div>
+                <div><strong>Selected Course:</strong> {course.title}</div>
+                <div><strong>Application Status:</strong> <span style={{ color: '#15803d', fontWeight: 800 }}>VIP Priority Waitlist</span></div>
               </div>
             </div>
 
-            {/* CONDITIONAL RENDER: PNG RECEIPT DOWNLOAD & WHATSAPP BUTTON LOCKED UNTIL ADMIN APPROVAL */}
-            {(() => {
-              const currentRecord = (payments || []).find(
-                (p) => String(p.upiTransactionId || p.id || '').trim().toLowerCase() === String(receiptNumber || upiRefId || '').trim().toLowerCase()
-              );
-              const isApprovedByAdmin =
-                currentRecord?.status === 'VERIFIED' ||
-                currentRecord?.status === 'SUCCESSFUL' ||
-                integrationMode === 'gateway' ||
-                paymentMethod === 'card';
+            <a
+              href={waGroupUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                width: '100%', padding: '14px 20px', background: '#25D366', color: '#ffffff',
+                borderRadius: '50px', fontWeight: 900, fontSize: '0.95rem', textDecoration: 'none',
+                boxShadow: '0 6px 20px rgba(37, 211, 102, 0.35)'
+              }}
+            >
+              Join Official Student WhatsApp Group ↗
+            </a>
 
-              if (isApprovedByAdmin) {
-                return (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => downloadStudentReceiptImage({
-                        studentName: fullName,
-                        amount: finalPrice,
-                        upiTransactionId: receiptNumber,
-                        paymentMethod: paymentMethod === 'upi' ? 'Google Pay (UPI)' : 'Credit Card',
-                        paidTo: upiMerchantName,
-                        upiVpa: upiVpa,
-                        courseName: course.title,
-                        email: email,
-                        paidFrom: `${email} (${phone})`,
-                        paymentDate: new Date().toLocaleString()
-                      })}
-                      style={{
-                        width: '100%', padding: '11px 16px', background: '#e8f0fe', color: '#1a73e8',
-                        border: '1px solid #aecbfa', borderRadius: '10px', fontWeight: 900,
-                        fontSize: '0.82rem', cursor: 'pointer', display: 'flex', alignItems: 'center',
-                        justifyContent: 'center', gap: '6px'
-                      }}
-                    >
-                      <HiPhotograph size={18} /> Download Digital Receipt Image (.png)
-                    </button>
-
-                    <a
-                      href={waGroupUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                        width: '100%', padding: '12px 18px', background: '#25D366', color: '#ffffff',
-                        borderRadius: '50px', fontWeight: 900, fontSize: '0.9rem', textDecoration: 'none',
-                        boxShadow: '0 6px 20px rgba(37, 211, 102, 0.35)'
-                      }}
-                    >
-                      ✔ Admin Approved — Join Official Student WhatsApp Group ↗
-                    </a>
-                  </>
-                );
-              }
-
-              return (
-                <div style={{ background: '#fffbe6', border: '1.5px solid #ffe58f', borderRadius: '14px', padding: '16px', textAlign: 'center', width: '100%' }}>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 900, color: '#d48806', marginBottom: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                    <HiLockClosed size={18} /> PNG Receipt & WhatsApp Group Locked (Awaiting Admin Approval)
-                  </div>
-                  <div style={{ fontSize: '0.8rem', color: '#8c6b00', fontWeight: 600, lineHeight: 1.5 }}>
-                    Your 12-digit UTR <span style={{ fontFamily: 'monospace', fontWeight: 800 }}>#{receiptNumber}</span> is submitted to the Admin Verification Queue.
-                    <br />
-                    <strong>Once the admin verifies your bank credit and approves your record in the admin panel, your Official PNG Digital Receipt and WhatsApp Group link will automatically unlock!</strong>
-                  </div>
-                </div>
-              );
-            })()}
+            <button
+              type="button"
+              onClick={onClose}
+              style={{
+                width: '100%', padding: '12px', background: '#f1f5f9', color: '#334155',
+                border: 'none', borderRadius: '50px', fontWeight: 800, fontSize: '0.88rem', cursor: 'pointer'
+              }}
+            >
+              Close & Return to Course Catalog
+            </button>
           </div>
         )}
       </div>
