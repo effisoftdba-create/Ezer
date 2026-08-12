@@ -286,7 +286,8 @@ export default function PaymentsReceivedManager() {
   });
 
   const sortedPayments = useMemo(() => {
-    return filteredPayments.toSorted((a, b) => {
+    const list = Array.from(filteredPayments);
+    return list.sort((a, b) => {
       const getTimestamp = (item) => {
         if (item.timestamp) return new Date(item.timestamp).getTime();
         if (item.createdAt) return new Date(item.createdAt).getTime();
