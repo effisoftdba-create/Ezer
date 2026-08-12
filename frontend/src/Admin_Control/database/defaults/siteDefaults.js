@@ -376,8 +376,6 @@ export const defaultContactInfo = {
   workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM'
 };
 
-export const defaultLeads = [];
-
 export const defaultAchievements = [
   {
     id: 'ach-1',

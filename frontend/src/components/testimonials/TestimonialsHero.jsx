@@ -27,23 +27,25 @@ export default function TestimonialsHero({ onOpenDemoModal }) {
         >
           {/* Left Copy Column */}
           <div>
-            <span
-              style={{
-                background: 'rgba(242, 183, 51, 0.15)',
-                border: '1.5px solid rgba(242, 183, 51, 0.4)',
-                color: '#f2b733',
-                fontSize: '0.8rem',
-                fontWeight: 800,
-                padding: '6px 16px',
-                borderRadius: '50px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.06em',
-                display: 'inline-block',
-                marginBottom: '16px',
-              }}
-            >
-              {testimonialsHero.tag}
-            </span>
+            {Boolean(testimonialsHero?.tag?.trim()) && (
+              <span
+                style={{
+                  background: 'rgba(242, 183, 51, 0.15)',
+                  border: '1.5px solid rgba(242, 183, 51, 0.4)',
+                  color: '#f2b733',
+                  fontSize: '0.8rem',
+                  fontWeight: 800,
+                  padding: '6px 16px',
+                  borderRadius: '50px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.06em',
+                  display: 'inline-block',
+                  marginBottom: '16px',
+                }}
+              >
+                {testimonialsHero.tag}
+              </span>
+            )}
             <h1 style={{ color: '#ffffff', marginBottom: '16px', fontSize: 'clamp(1.75rem, 3.2vw, 2.5rem)', fontWeight: 900, lineHeight: 1.15 }}>
               {testimonialsHero.headline}
             </h1>
