@@ -467,39 +467,13 @@ export const defaultBlogs = [
 ];
 
 export function getStored(key, fallback) {
-  try {
-    const item = localStorage.getItem(key);
-    if (!item) return fallback;
-    const parsed = JSON.parse(item);
-    if (parsed !== null && parsed !== undefined) {
-      const jsonStr = JSON.stringify(parsed);
-      if (jsonStr.includes('.webp') || jsonStr.includes('/optimized/')) {
-        const cleanedStr = jsonStr
-          .replace(/ezer_shield_logo_optimized\.webp/g, 'ezer_shield_logo.png')
-          .replace(/logo_white_border_optimized\.webp/g, 'logo_white_border.png')
-          .replace(/AI_machine_learning\.webp/g, 'AI_machine_learning.png')
-          .replace(/Spoken_english\.webp/g, 'Spoken_english.png')
-          .replace(/here_section_2\.webp/g, 'hero_section_1.jpg')
-          .replace(/_optimized\.webp/g, '.png')
-          .replace(/\/optimized\//g, '/');
-        const cleaned = JSON.parse(cleanedStr);
-        safeSetStorage(key, cleaned);
-        return cleaned;
-      }
-      return parsed;
-    }
-    return fallback;
-  } catch {
-    return fallback;
-  }
+  // Never read state from LocalStorage — return fallback default so state is driven purely from the Database!
+  return fallback;
 }
 
 export function safeSetStorage(key, val) {
-  try {
-    localStorage.setItem(key, JSON.stringify(val));
-  } catch (e) {
-    console.warn(`[SiteContext] Storage write skipped for key "${key}" due to quota limits.`);
-  }
+  // Never store data in LocalStorage as per requirement
+  return;
 }
 
 export const defaultExecutiveLeaders = [
@@ -554,54 +528,31 @@ export const defaultExecutiveLeaders = [
 ];
 
 export function getInitialState() {
-  const prodConfig = defaultPopupConfig;
-  const storedDef = getStored(STORAGE_PLATFORM_KEY, defaultPlatformDef);
-  const safePlatformDef = (storedDef && typeof storedDef === 'object') ? { ...defaultPlatformDef, ...storedDef } : defaultPlatformDef;
-
-  const rawExec = getStored(STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders) || defaultExecutiveLeaders;
-  const safeExec = (Array.isArray(rawExec) ? rawExec : defaultExecutiveLeaders).map((leader) => {
-    if (leader.id === 'exec-3' || leader.roleTag === 'CTHM' || leader.roleName === 'Chief Tech & Academic Officer') {
-      return {
-        ...leader,
-        roleTag: 'CMTO',
-        roleName: 'Chief Marketing Technology Officer'
-      };
-    }
-    return leader;
-  });
-
   return {
-    heroSlides: getStored(STORAGE_SLIDES_KEY, defaultSlides) || defaultSlides,
-    courses: getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses,
-    ezerDefinition: safePlatformDef,
-    supportCards: getStored(STORAGE_SUPPORT_CARDS_KEY, defaultSupportCards) || defaultSupportCards,
-    transformedLives: getStored(STORAGE_TRANSFORMED_KEY, defaultTransformedLives) || defaultTransformedLives,
-    outcomesHeader: getStored(STORAGE_OUTCOMES_HEADER_KEY, defaultOutcomesHeader) || defaultOutcomesHeader,
-    seniorMentors: getStored(STORAGE_MENTORS_KEY, defaultSeniorMentors) || defaultSeniorMentors,
-    mentorsHeader: getStored(STORAGE_MENTORS_HEADER_KEY, defaultMentorsHeader) || defaultMentorsHeader,
-    videoTestimonials: getStored(STORAGE_VIDEOS_KEY, defaultVideoTestimonials) || defaultVideoTestimonials,
-    testimonialsHero: getStored(STORAGE_TESTIMONIALS_HERO_KEY, defaultTestimonialsHero) || defaultTestimonialsHero,
-    writtenTestimonials: getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials) || initialTestimonials,
-    faqList: getStored(STORAGE_FAQS_KEY, generalFaqs) || generalFaqs,
-    contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo) || defaultContactInfo,
-    popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, prodConfig) || prodConfig,
-    leads: getStored(STORAGE_LEADS_KEY, []) || [],
-    blogs: (() => {
-      const raw = getStored(STORAGE_BLOGS_KEY, defaultBlogs);
-      if (!Array.isArray(raw) || raw.length < defaultBlogs.length) {
-        return defaultBlogs;
-      }
-      return raw;
-    })(),
-    achievements: getStored(STORAGE_ACHIEVEMENTS_KEY, defaultAchievements) || defaultAchievements,
-    executiveLeaders: safeExec,
-    hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners,
-    paymentConfig: getStored(STORAGE_PAYMENT_CONFIG_KEY, defaultPaymentConfig) || defaultPaymentConfig,
-    aboutVideos: getStored(STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos) || defaultAboutVideos,
-    payments: getStored(STORAGE_PAYMENTS_KEY, []) || [],
-    adminUsers: getStored(STORAGE_ADMIN_USERS_KEY, defaultAdminUsers) || defaultAdminUsers
+    heroSlides: defaultSlides,
+    courses: phase1Courses,
+    ezerDefinition: defaultPlatformDef,
+    supportCards: defaultSupportCards,
+    transformedLives: defaultTransformedLives,
+    outcomesHeader: defaultOutcomesHeader,
+    seniorMentors: defaultSeniorMentors,
+    mentorsHeader: defaultMentorsHeader,
+    videoTestimonials: defaultVideoTestimonials,
+    testimonialsHero: defaultTestimonialsHero,
+    writtenTestimonials: initialTestimonials,
+    faqList: generalFaqs,
+    contactInfo: defaultContactInfo,
+    popupConfig: defaultPopupConfig,
+    leads: [],
+    blogs: defaultBlogs,
+    achievements: defaultAchievements,
+    executiveLeaders: defaultExecutiveLeaders,
+    hiringPartners: defaultHiringPartners,
+    paymentConfig: defaultPaymentConfig,
+    aboutVideos: defaultAboutVideos,
+    payments: [],
+    adminUsers: defaultAdminUsers
   };
-
 }
 
 export function siteReducer(state, action) {

@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import ContactHeader from '../components/contact/ContactHeader';
 import ContactInfoCards from '../components/contact/ContactInfoCards';
 import ContactFormCard from '../components/contact/ContactFormCard';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 export default function Contact() {
+  const { addLead } = useSiteData() || {};
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,9 +19,9 @@ export default function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setSubmitted(true);
-    const existing = JSON.parse(localStorage.getItem('ezer_leads:v1') || '[]');
-    existing.push({ ...formData, timestamp: new Date().toISOString(), type: 'contact_page' });
-    localStorage.setItem('ezer_leads:v1', JSON.stringify(existing));
+    if (addLead) {
+      addLead({ ...formData, timestamp: new Date().toISOString(), type: 'contact_page' });
+    }
   };
 
   return (

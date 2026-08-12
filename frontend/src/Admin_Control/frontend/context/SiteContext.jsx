@@ -112,53 +112,20 @@ export function SiteProvider({ children }) {
     adminUsers
   } = state;
 
-  // Sync internal state to LocalStorage
-  useEffect(() => { safeSetStorage(STORAGE_SLIDES_KEY, heroSlides); }, [heroSlides]);
-  useEffect(() => { safeSetStorage(STORAGE_COURSES_KEY, courses); }, [courses]);
-  useEffect(() => { safeSetStorage(STORAGE_PLATFORM_KEY, ezerDefinition); }, [ezerDefinition]);
-  useEffect(() => { safeSetStorage(STORAGE_SUPPORT_CARDS_KEY, supportCards); }, [supportCards]);
-  useEffect(() => { safeSetStorage(STORAGE_TRANSFORMED_KEY, transformedLives); }, [transformedLives]);
-  useEffect(() => { safeSetStorage(STORAGE_OUTCOMES_HEADER_KEY, outcomesHeader); }, [outcomesHeader]);
-  useEffect(() => { safeSetStorage(STORAGE_MENTORS_KEY, seniorMentors); }, [seniorMentors]);
-  useEffect(() => { safeSetStorage(STORAGE_MENTORS_HEADER_KEY, mentorsHeader); }, [mentorsHeader]);
-  useEffect(() => { safeSetStorage(STORAGE_VIDEOS_KEY, videoTestimonials); }, [videoTestimonials]);
-  useEffect(() => { safeSetStorage(STORAGE_TESTIMONIALS_HERO_KEY, testimonialsHero); }, [testimonialsHero]);
-  useEffect(() => { safeSetStorage(STORAGE_WRITTEN_TESTIMONIALS_KEY, writtenTestimonials); }, [writtenTestimonials]);
-  useEffect(() => { safeSetStorage(STORAGE_FAQS_KEY, faqList); }, [faqList]);
-  useEffect(() => { safeSetStorage(STORAGE_CONTACT_KEY, contactInfo); }, [contactInfo]);
-  useEffect(() => { safeSetStorage(STORAGE_POPUP_CONFIG_KEY, popupConfig); }, [popupConfig]);
-  useEffect(() => { safeSetStorage(STORAGE_LEADS_KEY, leads); }, [leads]);
-  useEffect(() => { safeSetStorage(STORAGE_BLOGS_KEY, blogs); }, [blogs]);
-  useEffect(() => { safeSetStorage(STORAGE_ACHIEVEMENTS_KEY, achievements); }, [achievements]);
-  useEffect(() => { safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, executiveLeaders); }, [executiveLeaders]);
-  useEffect(() => { safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, hiringPartners); }, [hiringPartners]);
-  useEffect(() => { safeSetStorage(STORAGE_PAYMENT_CONFIG_KEY, paymentConfig); }, [paymentConfig]);
-  useEffect(() => { safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, aboutVideos); }, [aboutVideos]);
-  useEffect(() => { safeSetStorage(STORAGE_PAYMENTS_KEY, payments); }, [payments]);
-  useEffect(() => { safeSetStorage(STORAGE_ADMIN_USERS_KEY, adminUsers); }, [adminUsers]);
-
-
   // Helper to handle authoritative real-time database snapshot updates across devices
-  const handleSyncCollection = (collectionName, items, dispatchKey, storageKey, defaultItems) => {
+  const handleSyncCollection = (collectionName, items, dispatchKey, defaultItems) => {
     if (!Array.isArray(items)) return;
 
     if (items.length > 0) {
-      // Live database snapshot is authoritative across all devices!
+      // Live database snapshot is authoritative across all devices — 100% driven from Database!
       dispatch({ type: 'SET_KEY', key: dispatchKey, value: items });
-      safeSetStorage(storageKey, items);
     } else {
-      // Seed default items once if database is completely empty on initial setup
-      const seedFlagKey = `ezer_seeded_${collectionName}`;
-      const isSeeded = localStorage.getItem(seedFlagKey);
-      if (!isSeeded && Array.isArray(defaultItems) && defaultItems.length > 0) {
-        localStorage.setItem(seedFlagKey, 'true');
+      // Seed default items into Database ONCE if database collection is empty on initial setup
+      if (Array.isArray(defaultItems) && defaultItems.length > 0) {
         saveCollectionArray(collectionName, defaultItems);
         dispatch({ type: 'SET_KEY', key: dispatchKey, value: defaultItems });
-        safeSetStorage(storageKey, defaultItems);
       } else {
-        // Honour empty state when items are intentionally deleted by admin
         dispatch({ type: 'SET_KEY', key: dispatchKey, value: [] });
-        safeSetStorage(storageKey, []);
       }
     }
   };
@@ -170,39 +137,36 @@ export function SiteProvider({ children }) {
 
     try {
       unsubs.push(subscribeToCollection('courses', (items) => {
-        handleSyncCollection('courses', items, 'courses', STORAGE_COURSES_KEY, phase1Courses);
+        handleSyncCollection('courses', items, 'courses', phase1Courses);
       }));
       unsubs.push(subscribeToCollection('heroSlides', (items) => {
-        handleSyncCollection('heroSlides', items, 'heroSlides', STORAGE_SLIDES_KEY, defaultSlides);
+        handleSyncCollection('heroSlides', items, 'heroSlides', defaultSlides);
       }));
       unsubs.push(subscribeToCollection('leads', (items) => {
         if (Array.isArray(items)) {
           const freshLeads = items.filter((l) => l && l.name && !['test', 'dummy', 'sample'].some((t) => (l.name || '').toLowerCase().includes(t)));
           dispatch({ type: 'SET_KEY', key: 'leads', value: freshLeads });
-          safeSetStorage(STORAGE_LEADS_KEY, freshLeads);
         }
       }));
       unsubs.push(subscribeToCollection('blogs', (items) => {
-        handleSyncCollection('blogs', items, 'blogs', STORAGE_BLOGS_KEY, defaultBlogs);
+        handleSyncCollection('blogs', items, 'blogs', defaultBlogs);
       }));
       unsubs.push(subscribeToCollection('ezerDefinition', (items) => {
         if (Array.isArray(items) && items.length > 0) {
           const mainDef = items.find((i) => i.id === 'main') || items[0];
           if (mainDef) {
             dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: mainDef });
-            safeSetStorage(STORAGE_PLATFORM_KEY, mainDef);
           }
         }
       }));
       unsubs.push(subscribeToCollection('executiveLeaders', (items) => {
-        handleSyncCollection('executiveLeaders', items, 'executiveLeaders', STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders);
+        handleSyncCollection('executiveLeaders', items, 'executiveLeaders', defaultExecutiveLeaders);
       }));
       unsubs.push(subscribeToCollection('popupConfig', (items) => {
         if (Array.isArray(items) && items.length > 0) {
           const mainConfig = items.find((i) => i.id === 'main') || items[0];
           if (mainConfig) {
             dispatch({ type: 'SET_KEY', key: 'popupConfig', value: mainConfig });
-            safeSetStorage(STORAGE_POPUP_CONFIG_KEY, mainConfig);
           }
         }
       }));
@@ -211,37 +175,35 @@ export function SiteProvider({ children }) {
           const mainContact = items.find((i) => i.id === 'main') || items[0];
           if (mainContact) {
             dispatch({ type: 'SET_KEY', key: 'contactInfo', value: mainContact });
-            safeSetStorage(STORAGE_CONTACT_KEY, mainContact);
           }
         }
       }));
       unsubs.push(subscribeToCollection('seniorMentors', (items) => {
-        handleSyncCollection('seniorMentors', items, 'seniorMentors', STORAGE_MENTORS_KEY, defaultSeniorMentors);
+        handleSyncCollection('seniorMentors', items, 'seniorMentors', defaultSeniorMentors);
       }));
       unsubs.push(subscribeToCollection('writtenTestimonials', (items) => {
-        handleSyncCollection('writtenTestimonials', items, 'writtenTestimonials', STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials);
+        handleSyncCollection('writtenTestimonials', items, 'writtenTestimonials', initialTestimonials);
       }));
       unsubs.push(subscribeToCollection('videoTestimonials', (items) => {
-        handleSyncCollection('videoTestimonials', items, 'videoTestimonials', STORAGE_VIDEOS_KEY, defaultVideoTestimonials);
+        handleSyncCollection('videoTestimonials', items, 'videoTestimonials', defaultVideoTestimonials);
       }));
       unsubs.push(subscribeToCollection('faqList', (items) => {
-        handleSyncCollection('faqList', items, 'faqList', STORAGE_FAQS_KEY, generalFaqs);
+        handleSyncCollection('faqList', items, 'faqList', generalFaqs);
       }));
       unsubs.push(subscribeToCollection('hiringPartners', (items) => {
-        handleSyncCollection('hiringPartners', items, 'hiringPartners', STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners);
+        handleSyncCollection('hiringPartners', items, 'hiringPartners', defaultHiringPartners);
       }));
       unsubs.push(subscribeToCollection('aboutVideos', (items) => {
-        handleSyncCollection('aboutVideos', items, 'aboutVideos', STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos);
+        handleSyncCollection('aboutVideos', items, 'aboutVideos', defaultAboutVideos);
       }));
       unsubs.push(subscribeToCollection('payments', (items) => {
         if (Array.isArray(items)) {
           const freshPayments = items.filter((p) => p && p.studentName && !['test', 'dummy', 'sample', 'test3'].some((t) => (p.studentName || '').toLowerCase().includes(t)));
           dispatch({ type: 'SET_KEY', key: 'payments', value: freshPayments });
-          safeSetStorage(STORAGE_PAYMENTS_KEY, freshPayments);
         }
       }));
       unsubs.push(subscribeToCollection('adminUsers', (items) => {
-        handleSyncCollection('adminUsers', items, 'adminUsers', STORAGE_ADMIN_USERS_KEY, defaultAdminUsers);
+        handleSyncCollection('adminUsers', items, 'adminUsers', defaultAdminUsers);
       }));
     } catch (err) {
       console.error('[SiteContext] Error initializing Firestore subscriptions:', err);

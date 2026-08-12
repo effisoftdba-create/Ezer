@@ -34,14 +34,7 @@ export default function AdminLogin() {
     setIsLoading(true);
 
     try {
-      // Get stored admin users fallback
       let userList = Array.isArray(adminUsers) ? adminUsers : [];
-      if (userList.length === 0 && typeof localStorage !== 'undefined') {
-        try {
-          const stored = localStorage.getItem('ezer_admin_users');
-          if (stored) userList = JSON.parse(stored);
-        } catch (e) {}
-      }
 
       const result = await authenticateAdmin(email, password, userList);
       if (result.success) {

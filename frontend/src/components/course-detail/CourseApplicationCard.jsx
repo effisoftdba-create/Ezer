@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { HiBadgeCheck } from 'react-icons/hi';
+import { useSiteData } from '../../Admin_Control/frontend/context/SiteContext';
 
 export default function CourseApplicationCard({ course, onOpenPurchaseModal }) {
+  const { addLead } = useSiteData() || {};
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,9 +20,9 @@ export default function CourseApplicationCard({ course, onOpenPurchaseModal }) {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     setFormSubmitted(true);
-    const existing = JSON.parse(localStorage.getItem('ezer_leads:v1') || '[]');
-    existing.push({ ...formData, course: course?.title, timestamp: new Date().toISOString() });
-    localStorage.setItem('ezer_leads:v1', JSON.stringify(existing));
+    if (addLead) {
+      addLead({ ...formData, course: course?.title, timestamp: new Date().toISOString(), type: 'cohort_application' });
+    }
     if (onOpenPurchaseModal) {
       onOpenPurchaseModal();
     }
