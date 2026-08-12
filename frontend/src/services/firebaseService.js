@@ -55,18 +55,26 @@ export function subscribeToCollection(collectionName, onUpdate) {
   let unsubFirestore = () => {};
   let unsubRealtime = () => {};
   let lastJsonPayload = '';
-  let updateTimer = null;
+  let rafId = null;
 
   const debouncedUpdate = (items) => {
     try {
       const jsonStr = JSON.stringify(items);
-      if (jsonStr === lastJsonPayload) return; // Prevent duplicate re-renders from dual DB snapshot firing!
+      if (jsonStr === lastJsonPayload) return; // Deduplicate dual DB snapshots
       lastJsonPayload = jsonStr;
 
-      if (updateTimer) clearTimeout(updateTimer);
-      updateTimer = setTimeout(() => {
-        onUpdate(items);
-      }, 16);
+      if (rafId) {
+        if (typeof cancelAnimationFrame !== 'undefined') cancelAnimationFrame(rafId);
+        else clearTimeout(rafId);
+      }
+
+      if (typeof requestAnimationFrame !== 'undefined') {
+        rafId = requestAnimationFrame(() => {
+          onUpdate(items);
+        });
+      } else {
+        rafId = setTimeout(() => onUpdate(items), 0);
+      }
     } catch (err) {
       onUpdate(items);
     }
