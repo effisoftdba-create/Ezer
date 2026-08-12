@@ -75,10 +75,9 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
         ref={sliderRef}
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+          gridTemplateColumns: displayFaculty.length === 2 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
           gap: '24px',
           width: '100%',
-          maxWidth: '100%',
         }}
       >
         {displayFaculty.map((prof) => (

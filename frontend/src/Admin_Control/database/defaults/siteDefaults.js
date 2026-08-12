@@ -60,13 +60,13 @@ export const STORAGE_WRITTEN_TESTIMONIALS_KEY = 'ezer_written_testimonials:v18_c
 export const STORAGE_FAQS_KEY = 'ezer_faqs:v18_clean_image_paths';
 export const STORAGE_CONTACT_KEY = 'ezer_contact:v18_clean_image_paths';
 export const STORAGE_POPUP_CONFIG_KEY = 'ezer_popup_config:v18_clean_image_paths';
-export const STORAGE_LEADS_KEY = 'ezer_leads:v18_clean_image_paths';
+export const STORAGE_LEADS_KEY = 'ezer_leads:v21_clean_zero';
 export const STORAGE_BLOGS_KEY = 'ezer_blogs:v18_clean_image_paths';
 export const STORAGE_ACHIEVEMENTS_KEY = 'ezer_achievements:v18_clean_image_paths';
 export const STORAGE_EXECUTIVE_LEADERS_KEY = 'ezer_executive_leaders:v18_clean_image_paths';
 export const STORAGE_HIRING_PARTNERS_KEY = 'ezer_hiring_partners:v18_clean_image_paths';
 export const STORAGE_PAYMENT_CONFIG_KEY = 'ezer_payment_config:v18_clean_image_paths';
-export const STORAGE_PAYMENTS_KEY = 'ezer_payments_list:v18_clean_image_paths';
+export const STORAGE_PAYMENTS_KEY = 'ezer_payments_list:v21_clean_zero';
 export const STORAGE_ADMIN_USERS_KEY = 'ezer_admin_users:v18_clean_image_paths';
 
 export const defaultPayments = [];
@@ -587,7 +587,7 @@ export function getInitialState() {
     faqList: getStored(STORAGE_FAQS_KEY, generalFaqs) || generalFaqs,
     contactInfo: getStored(STORAGE_CONTACT_KEY, defaultContactInfo) || defaultContactInfo,
     popupConfig: getStored(STORAGE_POPUP_CONFIG_KEY, prodConfig) || prodConfig,
-    leads: getStored(STORAGE_LEADS_KEY, defaultLeads) || defaultLeads,
+    leads: getStored(STORAGE_LEADS_KEY, []) || [],
     blogs: (() => {
       const raw = getStored(STORAGE_BLOGS_KEY, defaultBlogs);
       if (!Array.isArray(raw) || raw.length < defaultBlogs.length) {
@@ -600,7 +600,7 @@ export function getInitialState() {
     hiringPartners: getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners,
     paymentConfig: getStored(STORAGE_PAYMENT_CONFIG_KEY, defaultPaymentConfig) || defaultPaymentConfig,
     aboutVideos: getStored(STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos) || defaultAboutVideos,
-    payments: (getStored(STORAGE_PAYMENTS_KEY, defaultPayments) || defaultPayments).filter((p) => p && !['pay-1001', 'pay-1002', 'pay-1003', 'pay-1004'].includes(p.id)),
+    payments: getStored(STORAGE_PAYMENTS_KEY, []) || [],
     adminUsers: getStored(STORAGE_ADMIN_USERS_KEY, defaultAdminUsers) || defaultAdminUsers
   };
 

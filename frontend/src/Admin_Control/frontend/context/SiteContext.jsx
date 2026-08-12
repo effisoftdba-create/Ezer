@@ -161,9 +161,10 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('leads', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          dispatch({ type: 'SET_KEY', key: 'leads', value: items });
-          safeSetStorage(STORAGE_LEADS_KEY, items);
+        if (Array.isArray(items)) {
+          const freshLeads = items.filter((l) => l && l.name && !['test', 'dummy', 'sample'].some((t) => (l.name || '').toLowerCase().includes(t)));
+          dispatch({ type: 'SET_KEY', key: 'leads', value: freshLeads });
+          safeSetStorage(STORAGE_LEADS_KEY, freshLeads);
         }
       }));
       unsubs.push(subscribeToCollection('blogs', (items) => {
@@ -261,9 +262,9 @@ export function SiteProvider({ children }) {
       }));
       unsubs.push(subscribeToCollection('payments', (items) => {
         if (Array.isArray(items)) {
-          const cleanRealItems = items.filter((p) => p && !['pay-1001', 'pay-1002', 'pay-1003', 'pay-1004'].includes(p.id));
-          dispatch({ type: 'SET_KEY', key: 'payments', value: cleanRealItems });
-          safeSetStorage(STORAGE_PAYMENTS_KEY, cleanRealItems);
+          const freshPayments = items.filter((p) => p && p.studentName && !['test', 'dummy', 'sample', 'test3'].some((t) => (p.studentName || '').toLowerCase().includes(t)));
+          dispatch({ type: 'SET_KEY', key: 'payments', value: freshPayments });
+          safeSetStorage(STORAGE_PAYMENTS_KEY, freshPayments);
         }
       }));
     } catch (err) {

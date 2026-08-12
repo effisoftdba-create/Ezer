@@ -67,8 +67,34 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
   };
 
   return (
-    <section className="section-alt" style={{ padding: '24px 0' }}>
-      <div className="container">
+    <section className="section-alt" style={{ padding: '32px 0', width: '100%', overflow: 'hidden' }}>
+      <style>{`
+        .who-is-it-for-container {
+          width: 100%;
+          max-width: 1440px;
+          margin: 0 auto;
+          padding: 0 clamp(16px, 3.5vw, 48px);
+        }
+        .who-is-it-for-track {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 20px;
+          width: 100%;
+        }
+        @media (max-width: 860px) {
+          .who-is-it-for-track {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding-bottom: 12px;
+          }
+          .who-is-it-for-track > div {
+            flex: 0 0 min(280px, 85vw);
+            scroll-snap-align: start;
+          }
+        }
+      `}</style>
+      <div className="who-is-it-for-container">
         {/* Header & Title */}
         <div
           style={{
@@ -105,16 +131,8 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
           />
         </div>
 
-        {/* Audience Cards Grid */}
-        <div
-          ref={scrollTrackRef}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
-            gap: '20px',
-            width: '100%',
-          }}
-        >
+        {/* Audience Cards Track — Always 1 Single Line Row on Desktop */}
+        <div ref={scrollTrackRef} className="who-is-it-for-track no-scrollbar">
           {cardsToRender.map((card) => (
             <div
               key={card.title}
@@ -144,11 +162,11 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
                 {card.icon}
               </div>
 
-              <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: '#0f172a', marginBottom: '8px' }}>
+              <h3 style={{ fontSize: '1.02rem', fontWeight: 700, color: '#0f172a', marginBottom: '8px', lineHeight: 1.35 }}>
                 {card.title}
               </h3>
 
-              <p style={{ fontSize: '0.875rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>
+              <p style={{ fontSize: '0.86rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>
                 {card.desc}
               </p>
             </div>
