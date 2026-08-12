@@ -94,7 +94,7 @@ export default function LeadDetailsModal({
           color: '#ffffff',
           padding: '18px 24px',
           display: 'flex',
-          justify: 'space-between',
+          justifyContent: 'space-between',
           alignItems: 'center',
           borderBottom: '2px solid #f2b733',
           flexShrink: 0
@@ -253,7 +253,7 @@ export default function LeadDetailsModal({
           borderTop: '1.5px solid #e2e8f0',
           background: '#f8fafc',
           display: 'flex',
-          justify: 'space-between',
+          justifyContent: 'space-between',
           alignItems: 'center',
           flexShrink: 0,
           borderRadius: '0 0 18px 18px'

@@ -229,7 +229,7 @@ export default function About({ onOpenDemoModal }) {
                   boxShadow: '0 8px 24px rgba(0, 6, 72, 0.05)',
                   display: 'flex',
                   flexDirection: 'column',
-                  justify: 'space-between'
+                  justifyContent: 'space-between'
                 }}
               >
                 <div>

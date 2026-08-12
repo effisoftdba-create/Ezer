@@ -154,14 +154,17 @@ export default function ImagePickerModal({
   const [mobileDragOffset, setMobileDragOffset] = useState(() => parsePositionToOffset(currentMobilePosition || currentPosition));
 
   // Reset state when modal opens for a new image selection
-  const [prevModalImage, setPrevModalImage] = useState(currentImage);
-  if (isOpen && currentImage !== prevModalImage) {
-    setPrevModalImage(currentImage);
-    setDesktopZoom(currentZoom || 1);
-    setMobileZoom(currentMobileZoom || currentZoom || 1);
-    setDesktopDragOffset(parsePositionToOffset(currentPosition));
-    setMobileDragOffset(parsePositionToOffset(currentMobilePosition || currentPosition));
-  }
+  useEffect(() => {
+    if (isOpen) {
+      setSelectedUrlOverride(currentImage || null);
+      setCustomUrl(currentImage || '');
+      originalUncutUrlRef.current = currentImage || '';
+      setDesktopZoom(currentZoom || 1);
+      setMobileZoom(currentMobileZoom || currentZoom || 1);
+      setDesktopDragOffset(parsePositionToOffset(currentPosition));
+      setMobileDragOffset(parsePositionToOffset(currentMobilePosition || currentPosition));
+    }
+  }, [isOpen, currentImage, currentPosition, currentZoom, currentMobilePosition, currentMobileZoom]);
 
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -226,7 +229,7 @@ export default function ImagePickerModal({
 
   const selectedUrl = selectedUrlOverride !== null ? selectedUrlOverride : (currentImage || DEFAULT_PRESET_IMAGES[0].url);
   const fitMode = fitModeOverride !== null ? fitModeOverride : (currentFit || 'cover');
-  const activeSelectedUrl = customUrl.trim() || selectedUrl;
+  const activeSelectedUrl = selectedUrl || customUrl.trim() || DEFAULT_PRESET_IMAGES[0].url;
   const previewDims = getPreviewDimensions(aspectRatio);
 
   const combinedGalleryImages = [
@@ -352,7 +355,7 @@ export default function ImagePickerModal({
   const handleGallerySelect = (url) => {
     originalUncutUrlRef.current = url;
     setSelectedUrlOverride(url);
-    setCustomUrl('');
+    setCustomUrl(url);
   };
 
   const modalJSX = (
@@ -486,7 +489,7 @@ export default function ImagePickerModal({
             borderTop: '1px dashed #cbd5e1',
             display: 'flex',
             alignItems: 'center',
-            justify: 'space-between',
+            justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: '10px'
           }}>
@@ -697,7 +700,7 @@ export default function ImagePickerModal({
         </div>
         <div style={{
           display: 'flex',
-          justify: 'flex-end',
+          justifyContent: 'flex-end',
           gap: '12px',
           borderTop: '1.5px solid #cbd5e1',
           paddingTop: '14px',

@@ -119,7 +119,7 @@ export default function CourseFormModal({
           color: '#ffffff',
           padding: '20px 24px',
           display: 'flex',
-          justify: 'space-between',
+          justifyContent: 'space-between',
           alignItems: 'center',
           borderBottom: '2px solid #f2b733',
           flexShrink: 0
@@ -462,7 +462,7 @@ export default function CourseFormModal({
             borderTop: '1.5px solid #e2e8f0',
             background: '#f8fafc',
             display: 'flex',
-            justify: 'flex-end',
+            justifyContent: 'flex-end',
             gap: '12px',
             flexShrink: 0,
             borderRadius: '0 0 20px 20px'
