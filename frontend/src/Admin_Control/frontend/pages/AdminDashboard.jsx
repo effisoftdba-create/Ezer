@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { isAuthenticated, logoutAdmin, getCurrentAdminUser } from '../utils/authService';
 import { useSiteData } from '../context/SiteContext';
