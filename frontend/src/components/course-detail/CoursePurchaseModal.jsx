@@ -147,6 +147,19 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
   const enrollmentLabel = paymentConfig?.enrollmentLabel || 'INSTANT COHORT ENROLLMENT';
   const upiVpa = paymentConfig?.upiVpa || 'ezerlearning@okaxis';
   const upiMerchantName = paymentConfig?.upiMerchantName || 'EZER Learning Solutions Pvt. Ltd.';
+  const mccCode = paymentConfig?.mccCode || '8220';
+  const transactionNote = paymentConfig?.transactionNote || 'EZER Course Enrollment';
+  const integrationMode = paymentConfig?.integrationMode || 'direct_p2m';
+
+  // Construct NPCI Standardized URI Payload
+  const activeOrderRef = receiptNumber || `EZER-ORD-${Date.now()}`;
+  const upiPayload = `upi://pay?pa=${upiVpa}&pn=${encodeURIComponent(upiMerchantName)}&am=${Number(finalPrice).toFixed(2)}&cu=INR&tr=${activeOrderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}&mode=05`;
+  
+  // Mobile Native App Intents
+  const gpayIntent = `tez://upi/pay?pa=${upiVpa}&pn=${encodeURIComponent(upiMerchantName)}&am=${Number(finalPrice).toFixed(2)}&cu=INR&tr=${activeOrderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}`;
+  const phonepeIntent = `phonepe://pay?pa=${upiVpa}&pn=${encodeURIComponent(upiMerchantName)}&am=${Number(finalPrice).toFixed(2)}&cu=INR&tr=${activeOrderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}`;
+  const paytmIntent = `paytmmp://pay?pa=${upiVpa}&pn=${encodeURIComponent(upiMerchantName)}&am=${Number(finalPrice).toFixed(2)}&cu=INR&tr=${activeOrderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}`;
+  const bhimIntent = `bhim://pay?pa=${upiVpa}&pn=${encodeURIComponent(upiMerchantName)}&am=${Number(finalPrice).toFixed(2)}&cu=INR&tr=${activeOrderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}`;
 
   const handleProceedToPayment = (e) => {
     e.preventDefault();
@@ -178,8 +191,10 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
 
     const cleanRef = upiRefId.trim();
     if (paymentMethod === 'upi') {
-      if (!cleanRef || cleanRef.length < 10) {
-        setVerifyError('Please enter a valid 10 to 12 digit UPI Transaction / UTR reference number from Google Pay or PhonePe.');
+      // STRICT 12-DIGIT NUMERICAL UTR REGEX VALIDATION
+      const utrRegex = /^[0-9]{12}$/;
+      if (!cleanRef || !utrRegex.test(cleanRef)) {
+        setVerifyError('SECURITY VALIDATION FAILED: Please enter a valid 12-digit numerical UTR transaction reference number (e.g., 428910482910) copied from Google Pay or PhonePe.');
         return;
       }
 
@@ -190,7 +205,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
       );
 
       if (isDuplicateUtr) {
-        setVerifyError(`SECURITY ERROR: UTR #${cleanRef} has already been verified and recorded for another transaction. Reusing used payment UTRs is strictly blocked.`);
+        setVerifyError(`SECURITY ERROR: UTR #${cleanRef} has already been recorded for another transaction. Duplicate UTR submissions are strictly blocked.`);
         return;
       }
     } else if (paymentMethod === 'card') {
@@ -204,10 +219,13 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
 
     try {
       const finalTxnRef = paymentMethod === 'upi' ? cleanRef : `CARD/${cardNumber.slice(-4)}/${Date.now()}`;
-
       setReceiptNumber(finalTxnRef);
 
+      const isDirectP2M = integrationMode === 'direct_p2m';
+      const initialStatus = isDirectP2M ? 'PENDING_VERIFICATION' : 'SUCCESSFUL';
+
       const payRecord = {
+        id: `pay-${Date.now()}`,
         studentName: fullName.trim(),
         email: email.trim(),
         phone: phone.trim(),
@@ -218,8 +236,9 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
         paidTo: upiMerchantName,
         paidFrom: `${email.trim()} (${phone.trim()})`,
         courseName: course.title || 'Executive IT Course',
-        status: 'SUCCESSFUL',
-        paymentDate: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
+        status: initialStatus, // 'PENDING_VERIFICATION' under direct P2M mode!
+        paymentDate: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }),
+        orderRefId: activeOrderRef
       };
 
       // Save real payment transaction to Firestore + Realtime DB (silently)
@@ -227,17 +246,17 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
         addPayment(payRecord, true);
       }
 
-      // Save Lead Record with PAID status (silently)
+      // Save Lead Record with status (silently)
       if (addLead) {
         addLead({
           name: fullName.trim(),
           email: email.trim(),
           phone: phone.trim(),
           course: course.title || 'Executive IT Course',
-          paymentStatus: 'PAID',
+          paymentStatus: initialStatus === 'PENDING_VERIFICATION' ? 'PENDING_VERIFICATION' : 'PAID',
           amountPaid: `₹${finalPrice}`,
           transactionId: finalTxnRef,
-          status: 'Enrolled',
+          status: initialStatus === 'PENDING_VERIFICATION' ? 'Pending Review' : 'Enrolled',
           city: 'Online Enrollment',
           timestamp: new Date().toISOString()
         }, true);
@@ -265,9 +284,19 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
           grid-template-columns: 1fr 1fr;
           gap: 12px;
         }
+        .upi-app-grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 8px;
+          margin-top: 12px;
+          margin-bottom: 12px;
+        }
         @media (max-width: 540px) {
           .modal-form-grid {
             grid-template-columns: 1fr !important;
+          }
+          .upi-app-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
           }
         }
       `}</style>
@@ -385,7 +414,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
           </form>
         )}
 
-        {/* STEP 2: AUTO-VERIFIED PAYMENT GATEWAY */}
+        {/* STEP 2: UPI PAYMENT GATEWAY & APP INTENTS */}
         {step === 2 && (
           <form onSubmit={handleVerifyAndPay} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <div style={{ background: '#f8fafc', padding: '14px 18px', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -414,7 +443,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
                   color: '#000648', fontWeight: 800, fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px'
                 }}
               >
-                <HiQrcode size={20} /> Google Pay / UPI
+                <HiQrcode size={20} /> Dynamic UPI QR / Intent
               </button>
               <button
                 type="button"
@@ -432,21 +461,65 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
 
             {paymentMethod === 'upi' ? (
               <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '18px', textAlign: 'center' }}>
-                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '8px' }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', marginBottom: '4px' }}>
                   Merchant VPA: <span style={{ color: '#000648', fontWeight: 900 }}>{upiVpa}</span>
                 </div>
+                <div style={{ fontSize: '0.72rem', color: '#475569', fontWeight: 600, marginBottom: '10px' }}>
+                  Ref: <span style={{ fontFamily: 'monospace', fontWeight: 700 }}>{activeOrderRef}</span> | MCC: <span style={{ fontWeight: 700 }}>{mccCode}</span>
+                </div>
 
+                {/* Mobile Direct App Intent Launch Buttons */}
+                <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '14px' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 900, color: '#000648', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                    📱 Tap To Pay via Installed App (Mobile)
+                  </div>
+                  <div className="upi-app-grid">
+                    <a
+                      href={gpayIntent}
+                      target="_self"
+                      style={{ background: '#4285F4', color: '#fff', padding: '8px 4px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 900, textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                    >
+                      Google Pay
+                    </a>
+                    <a
+                      href={phonepeIntent}
+                      target="_self"
+                      style={{ background: '#5f259f', color: '#fff', padding: '8px 4px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 900, textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                    >
+                      PhonePe
+                    </a>
+                    <a
+                      href={paytmIntent}
+                      target="_self"
+                      style={{ background: '#00baf2', color: '#fff', padding: '8px 4px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 900, textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                    >
+                      Paytm
+                    </a>
+                    <a
+                      href={upiPayload}
+                      target="_self"
+                      style={{ background: '#000648', color: '#f2b733', padding: '8px 4px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 900, textDecoration: 'none', display: 'block', textAlign: 'center' }}
+                    >
+                      Any UPI App
+                    </a>
+                  </div>
+                </div>
+
+                {/* Desktop Auto-Scaling Scannable QR Matrix */}
                 <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '12px', display: 'inline-block', border: '1px solid #cbd5e1', marginBottom: '12px' }}>
                   <img
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(`upi://pay?pa=${upiVpa}&pn=${upiMerchantName}&am=${finalPrice}&cu=INR`)}`}
+                    src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiPayload)}`}
                     alt="Scan UPI QR Code to Pay"
                     style={{ width: '160px', height: '160px', display: 'block' }}
                   />
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, marginTop: '4px' }}>
+                    Desktop: Scan QR with GPay / PhonePe / Paytm / BHIM
+                  </div>
                 </div>
 
                 <div style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 800, background: '#f0fdf4', padding: '8px 12px', borderRadius: '8px', border: '1px solid #bbf7d0', marginBottom: '14px' }}>
-                  ✔ Step 1: Scan & Pay with Google Pay, PhonePe, or Paytm.<br/>
-                  ✔ Step 2: Enter your 12-digit UTR Ref ID below to verify.
+                  ✔ Step 1: Pay ₹{finalPrice} using QR code or App button.<br/>
+                  ✔ Step 2: Copy the 12-digit UTR / Bank Reference No. from your receipt and paste below.
                 </div>
 
                 <div style={{ textAlign: 'left' }}>
@@ -457,17 +530,26 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
                     id="upi_ref_input"
                     type="text"
                     required
-                    maxLength={18}
-                    placeholder="e.g. 428910482910 (Copy from Google Pay / PhonePe)"
+                    maxLength={12}
+                    placeholder="e.g. 428910482910 (Strict 12 digits)"
                     value={upiRefId}
-                    onChange={(e) => setUpiRefId(e.target.value)}
+                    onChange={(e) => setUpiRefId(e.target.value.replace(/\D/g, '').slice(0, 12))}
                     style={{
                       width: '100%', padding: '10px 12px', borderRadius: '8px',
-                      border: '1.5px solid #cbd5e1', fontSize: '0.9rem', fontFamily: 'monospace', outline: 'none'
+                      border: '1.5px solid #cbd5e1', fontSize: '0.95rem', fontFamily: 'monospace', outline: 'none', fontWeight: 800, letterSpacing: '1px'
                     }}
                   />
                   <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '4px' }}>
-                    Required for verification: Open Google Pay or PhonePe after payment to copy your 12-digit UPI transaction number.
+                    {upiRefId.length > 0 && upiRefId.length < 12 && (
+                      <span style={{ color: '#dc2626', fontWeight: 700 }}>
+                        Entered {upiRefId.length}/12 digits. Exactly 12 digits required.
+                      </span>
+                    )}
+                    {upiRefId.length === 12 && (
+                      <span style={{ color: '#166534', fontWeight: 800 }}>
+                        ✓ Valid 12-digit UTR structure. Ready for submission.
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -510,7 +592,7 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'
               }}
             >
-              {isProcessing ? 'Verifying Transaction...' : `Submit 12-Digit UTR & Verify Access (₹${finalPrice})`}
+              {isProcessing ? 'Recording Transaction...' : `Submit 12-Digit UTR & Verify (₹${finalPrice})`}
             </button>
           </form>
         )}
@@ -531,34 +613,50 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
               ₹{finalPrice.toLocaleString('en-IN')}
             </div>
 
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', border: '1px solid #dadce0', borderRadius: '50px', padding: '4px 16px', fontSize: '0.82rem', fontWeight: 600, color: '#1e8e3e', marginBottom: '2px' }}>
-              <span style={{ color: '#1e8e3e', fontSize: '14px' }}>✔</span> Completed
-            </div>
+            {/* Status Pill Badge */}
+            {integrationMode === 'direct_p2m' && paymentMethod === 'upi' ? (
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#fffbe6', border: '1px solid #ffe58f', borderRadius: '50px', padding: '6px 18px', fontSize: '0.82rem', fontWeight: 800, color: '#d48806' }}>
+                <span>⏳</span> Pending Admin Verification (On-Hold)
+              </div>
+            ) : (
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ffffff', border: '1px solid #dadce0', borderRadius: '50px', padding: '4px 16px', fontSize: '0.82rem', fontWeight: 600, color: '#1e8e3e', marginBottom: '2px' }}>
+                <span style={{ color: '#1e8e3e', fontSize: '14px' }}>✔</span> Completed
+              </div>
+            )}
 
-            <div style={{ fontSize: '0.78rem', color: '#5f6368', marginBottom: '8px' }}>
+            <div style={{ fontSize: '0.78rem', color: '#5f6368', marginBottom: '4px' }}>
               {new Date().toLocaleString()}
             </div>
+
+            {/* Direct P2M On-Hold Info Message */}
+            {integrationMode === 'direct_p2m' && paymentMethod === 'upi' && (
+              <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '10px 14px', fontSize: '0.78rem', color: '#166534', fontWeight: 700, textAlign: 'left', width: '100%' }}>
+                ℹ️ <strong>Direct Bank Transfer Recorded</strong>: Your UTR ID <span style={{ fontFamily: 'monospace' }}>#{receiptNumber}</span> has been logged in our verification queue. Admin will cross-check the statement receipt and confirm full access.
+              </div>
+            )}
 
             {/* Inner Details Box */}
             <div style={{ width: '100%', background: '#ffffff', border: '1px solid #dadce0', borderRadius: '14px', padding: '16px', textAlign: 'left', boxShadow: '0 1px 3px rgba(60,64,67,0.08)' }}>
               <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#202124', paddingBottom: '10px', borderBottom: '1px solid #f1f3f4', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span>{paymentMethod === 'upi' ? 'Google Pay (UPI)' : 'Credit Card (Tokenized)'}</span>
-                <span style={{ color: '#1e8e3e', fontSize: '12px', fontWeight: 800 }}>✔ VERIFIED</span>
+                <span style={{ color: integrationMode === 'direct_p2m' && paymentMethod === 'upi' ? '#d48806' : '#1e8e3e', fontSize: '12px', fontWeight: 800 }}>
+                  {integrationMode === 'direct_p2m' && paymentMethod === 'upi' ? '⏳ PENDING REVIEW' : '✔ VERIFIED'}
+                </span>
               </div>
 
               <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>UPI transaction ID</div>
+                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>UPI transaction / UTR ID</div>
                 <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 700, fontFamily: 'monospace' }}>{receiptNumber}</div>
               </div>
 
               <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>To</div>
+                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>To Merchant VPA</div>
                 <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600 }}>{upiVpa}</div>
               </div>
 
               <div style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>From: {fullName}</div>
-                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600 }}>{email} ({phone})</div>
+                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>From Student</div>
+                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600 }}>{fullName} ({email})</div>
               </div>
 
               <div style={{ marginBottom: '10px' }}>
@@ -567,8 +665,8 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
               </div>
 
               <div>
-                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>EZER Transaction ID</div>
-                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600, fontFamily: 'monospace' }}>EZER-TXN-{receiptNumber}</div>
+                <div style={{ fontSize: '0.72rem', color: '#5f6368', fontWeight: 500, marginBottom: '2px' }}>EZER Reference Order</div>
+                <div style={{ fontSize: '0.84rem', color: '#202124', fontWeight: 600, fontFamily: 'monospace' }}>{activeOrderRef}</div>
               </div>
             </div>
 

@@ -97,5 +97,81 @@ export function verifyPayment(req, res) {
     console.error('Error verifying payment:', err);
     res.status(500).json({ success: false, error: 'Verification failed' });
   }
+const submitUtrSchema = z.object({
+  utr: z.string().regex(/^[0-9]{12}$/, 'UTR must be exactly 12 numerical digits'),
+  studentName: z.string().min(1),
+  email: z.string().email(),
+  phone: z.string().min(10),
+  courseId: z.string().optional(),
+  courseName: z.string().optional(),
+  amount: z.number().positive().default(9)
+});
+
+export function createUpiOrder(req, res) {
+  try {
+    const { courseId, amount } = req.body;
+    const orderRef = `EZER-ORD-${Date.now()}`;
+    const upiVpa = process.env.UPI_VPA || 'ezerlearning@okaxis';
+    const merchantName = process.env.UPI_MERCHANT_NAME || 'EZER Learning Solutions Pvt. Ltd.';
+    const mccCode = '8220';
+    const transactionNote = 'EZER Course Enrollment';
+    const finalAmount = amount || 9;
+
+    const upiPayload = `upi://pay?pa=${upiVpa}&pn=${encodeURIComponent(merchantName)}&am=${Number(finalAmount).toFixed(2)}&cu=INR&tr=${orderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}&mode=05`;
+
+    res.json({
+      success: true,
+      orderRef,
+      upiVpa,
+      merchantName,
+      mccCode,
+      amount: finalAmount,
+      upiPayload,
+      appIntents: {
+        gpay: `tez://upi/pay?pa=${upiVpa}&pn=${encodeURIComponent(merchantName)}&am=${Number(finalAmount).toFixed(2)}&cu=INR&tr=${orderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}`,
+        phonepe: `phonepe://pay?pa=${upiVpa}&pn=${encodeURIComponent(merchantName)}&am=${Number(finalAmount).toFixed(2)}&cu=INR&tr=${orderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}`,
+        paytm: `paytmmp://pay?pa=${upiVpa}&pn=${encodeURIComponent(merchantName)}&am=${Number(finalAmount).toFixed(2)}&cu=INR&tr=${orderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}`,
+        bhim: `bhim://pay?pa=${upiVpa}&pn=${encodeURIComponent(merchantName)}&am=${Number(finalAmount).toFixed(2)}&cu=INR&tr=${orderRef}&tn=${encodeURIComponent(transactionNote)}&mc=${mccCode}`
+      }
+    });
+  } catch (err) {
+    console.error('Error creating UPI order:', err);
+    res.status(500).json({ success: false, error: 'Failed to generate UPI order' });
+  }
 }
 
+export function submitUtr(req, res) {
+  try {
+    const parseResult = submitUtrSchema.safeParse(req.body);
+    if (!parseResult.success) {
+      return res.status(400).json({ success: false, error: 'Invalid UTR submission parameters. UTR must be exactly 12 numerical digits.' });
+    }
+
+    const { utr, studentName, email, phone, courseName, amount } = parseResult.data;
+
+    // Check duplicate UTR
+    const existing = recordPayment({
+      id: `pay-${Date.now()}`,
+      upiTransactionId: utr,
+      studentName,
+      email,
+      phone,
+      amount,
+      paymentMethod: 'Google Pay (UPI)',
+      paidTo: process.env.UPI_MERCHANT_NAME || 'EZER Learning Solutions Pvt. Ltd.',
+      paidFrom: `${email} (${phone})`,
+      courseName: courseName || 'Executive IT Course',
+      status: 'PENDING_VERIFICATION',
+      paymentDate: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' })
+    });
+
+    res.json({
+      success: true,
+      message: '12-Digit UTR received successfully. Payment is in PENDING_VERIFICATION (On-Hold) state awaiting admin statement review.',
+      payment: existing
+    });
+  } catch (err) {
+    console.error('Error submitting UTR:', err);
+    res.status(500).json({ success: false, error: 'UTR submission failed' });
+  }
+}

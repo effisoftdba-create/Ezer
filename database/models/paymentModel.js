@@ -32,10 +32,35 @@ export function recordPayment(paymentData) {
   const payments = getAllPayments();
   payments.push(paymentData);
   writeJson(DB_PATHS.PAYMENTS_FILE, payments);
-  return paymentData;
+export function getPaymentByUtr(utr) {
+  const payments = getAllPayments();
+  return payments.find((p) => String(p.upiTransactionId || p.id).toLowerCase() === String(utr).toLowerCase());
+}
+
+export function updatePaymentStatus(paymentId, status, notes = '') {
+  const payments = getAllPayments();
+  let updatedRecord = null;
+  const updatedPayments = payments.map((p) => {
+    if (p.id === paymentId || p.upiTransactionId === paymentId) {
+      updatedRecord = {
+        ...p,
+        status,
+        notes: notes || p.notes || '',
+        updatedAt: new Date().toISOString()
+      };
+      return updatedRecord;
+    }
+    return p;
+  });
+
+  writeJson(DB_PATHS.PAYMENTS_FILE, updatedPayments);
+  return updatedRecord;
 }
 
 export default {
   getAllPayments,
-  recordPayment
+  recordPayment,
+  getPaymentByUtr,
+  updatePaymentStatus
 };
+

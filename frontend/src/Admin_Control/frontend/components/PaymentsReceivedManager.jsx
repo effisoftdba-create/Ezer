@@ -233,11 +233,12 @@ function downloadReceiptImage(payment, upiVpa = 'ezerlearning@okaxis') {
 }
 
 export default function PaymentsReceivedManager() {
-  const { payments, addPayment, deletePayment, paymentConfig } = useSiteData();
+  const { payments, addPayment, updatePaymentStatus, deletePayment, paymentConfig } = useSiteData();
   const paymentList = Array.isArray(payments) ? payments : [];
   const currentUpiVpa = paymentConfig?.upiVpa || 'ezerlearning@okaxis';
 
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('all'); // 'all' | 'pending' | 'verified' | 'rejected'
   const [selectedReceipt, setSelectedReceipt] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [copiedShareId, setCopiedShareId] = useState(null);
@@ -253,18 +254,40 @@ export default function PaymentsReceivedManager() {
     courseName: 'Full Stack Development with AI'
   });
 
+  const pendingCount = paymentList.filter(
+    (p) => p.status === 'PENDING_VERIFICATION' || p.status === 'PENDING'
+  ).length;
+  const verifiedCount = paymentList.filter(
+    (p) => p.status === 'VERIFIED' || p.status === 'SUCCESSFUL' || !p.status
+  ).length;
+  const rejectedCount = paymentList.filter((p) => p.status === 'REJECTED').length;
+
   const filteredPayments = paymentList.filter((p) => {
     const term = searchTerm.toLowerCase();
-    return (
+    const matchesSearch =
       (p.studentName || '').toLowerCase().includes(term) ||
       (p.upiTransactionId || '').toLowerCase().includes(term) ||
       (p.email || '').toLowerCase().includes(term) ||
       (p.phone || '').toLowerCase().includes(term) ||
-      (p.courseName || '').toLowerCase().includes(term)
-    );
+      (p.courseName || '').toLowerCase().includes(term);
+
+    if (!matchesSearch) return false;
+
+    if (activeTab === 'pending') {
+      return p.status === 'PENDING_VERIFICATION' || p.status === 'PENDING';
+    }
+    if (activeTab === 'verified') {
+      return p.status === 'VERIFIED' || p.status === 'SUCCESSFUL' || !p.status;
+    }
+    if (activeTab === 'rejected') {
+      return p.status === 'REJECTED';
+    }
+    return true;
   });
 
-  const totalCollected = paymentList.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
+  const totalCollected = paymentList
+    .filter((p) => p.status !== 'REJECTED')
+    .reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
   const totalCount = paymentList.length;
   const avgAmount = totalCount > 0 ? Math.round(totalCollected / totalCount) : 0;
 
@@ -288,6 +311,18 @@ export default function PaymentsReceivedManager() {
     });
   };
 
+  const handleApproveUtr = (pay) => {
+    if (window.confirm(`Approve payment and verify 12-digit UTR #${pay.upiTransactionId} for ${pay.studentName}?`)) {
+      updatePaymentStatus(pay.id, 'VERIFIED', 'Verified against bank statement receipt');
+    }
+  };
+
+  const handleRejectUtr = (pay) => {
+    if (window.confirm(`Reject payment record for UTR #${pay.upiTransactionId}? This marks student lead as Payment Rejected.`)) {
+      updatePaymentStatus(pay.id, 'REJECTED', 'Invalid or unverified UTR submission');
+    }
+  };
+
   const handleDelete = (id, name) => {
     if (window.confirm(`Delete payment record for "${name}"?`)) {
       deletePayment(id);
@@ -295,7 +330,7 @@ export default function PaymentsReceivedManager() {
   };
 
   const handleShareSummary = (payment) => {
-    const text = `PAYMENT RECEIPT\nTo: ${payment.paidTo || 'EZER Learning Solutions'}\nStudent: ${payment.studentName}\nAmount: ₹${payment.amount}\nUPI Txn ID: ${payment.upiTransactionId}\nCourse: ${payment.courseName}\nChannel: ${payment.paymentMethod || 'Google Pay (UPI)'}\nStatus: Completed`;
+    const text = `PAYMENT RECEIPT\nTo: ${payment.paidTo || 'EZER Learning Solutions'}\nStudent: ${payment.studentName}\nAmount: ₹${payment.amount}\nUPI Txn ID: ${payment.upiTransactionId}\nCourse: ${payment.courseName}\nChannel: ${payment.paymentMethod || 'Google Pay (UPI)'}\nStatus: ${payment.status || 'Completed'}`;
     navigator.clipboard.writeText(text);
     setCopiedShareId(payment.id);
     setTimeout(() => setCopiedShareId(null), 2500);
@@ -311,10 +346,10 @@ export default function PaymentsReceivedManager() {
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
             <HiOutlineCurrencyRupee size={26} color="#115DFC" />
-            Payments Received & Real-time Receipts
+            Payments Received & Direct P2M Verification Queue
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Track live verified student fee collections, UPI reference numbers, Google Pay receipts, image downloads, and PDF exports.
+            Verify 12-digit student UTR reference numbers against bank statements, manage On-Hold orders, approve seats, and export receipts.
           </p>
         </div>
 
@@ -340,28 +375,28 @@ export default function PaymentsReceivedManager() {
       }}>
         <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
           <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Total Revenue Collected
+            Total Verified Revenue
           </span>
           <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>
             ₹{totalCollected.toLocaleString('en-IN')}
           </div>
         </div>
 
-        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
-          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Successful Transactions
+        <div style={{ background: pendingCount > 0 ? '#fffbe6' : '#f8fafc', border: pendingCount > 0 ? '1.5px solid #ffe58f' : '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
+          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: pendingCount > 0 ? '#d48806' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            Pending UTR Verification
           </span>
-          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>
-            {totalCount} Verified
+          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: pendingCount > 0 ? '#d48806' : '#000648', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {pendingCount} On-Hold
           </div>
         </div>
 
         <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
           <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Average Fee Payment
+            Verified Transactions
           </span>
-          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>
-            ₹{avgAmount.toLocaleString('en-IN')}
+          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#15803d', marginTop: '2px' }}>
+            {verifiedCount} Approved
           </div>
         </div>
 
@@ -375,24 +410,77 @@ export default function PaymentsReceivedManager() {
         </div>
       </div>
 
-      {/* Filter & Search Bar */}
-      <div style={{ marginBottom: '20px', position: 'relative', maxWidth: '420px' }}>
-        <label htmlFor="search-payments-input" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>
-          Search Payments
-        </label>
-        <HiOutlineSearch size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-        <input
-          id="search-payments-input"
-          type="text"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          aria-label="Search payment records"
-          placeholder="Search by student name, UPI Txn ID, or phone..."
-          style={{
-            width: '100%', padding: '10px 14px 10px 42px', borderRadius: '10px',
-            border: '1.5px solid #cbd5e1', fontSize: '0.875rem', outline: 'none'
-          }}
-        />
+      {/* Filter Tabs & Search Bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', gap: '12px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            type="button"
+            onClick={() => setActiveTab('all')}
+            style={{
+              padding: '8px 16px', borderRadius: '8px', border: '1.5px solid #cbd5e1',
+              background: activeTab === 'all' ? '#000648' : '#ffffff',
+              color: activeTab === 'all' ? '#f2b733' : '#334155',
+              fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer'
+            }}
+          >
+            All Transactions ({paymentList.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('pending')}
+            style={{
+              padding: '8px 16px', borderRadius: '8px', border: activeTab === 'pending' ? '1.5px solid #d48806' : '1.5px solid #ffe58f',
+              background: activeTab === 'pending' ? '#d48806' : '#fffbe6',
+              color: activeTab === 'pending' ? '#ffffff' : '#d48806',
+              fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px'
+            }}
+          >
+            <span>⏳</span> Pending UTR ({pendingCount})
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('verified')}
+            style={{
+              padding: '8px 16px', borderRadius: '8px', border: activeTab === 'verified' ? '1.5px solid #166534' : '1.5px solid #bbf7d0',
+              background: activeTab === 'verified' ? '#166534' : '#f0fdf4',
+              color: activeTab === 'verified' ? '#ffffff' : '#166534',
+              fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer'
+            }}
+          >
+            ✔ Approved ({verifiedCount})
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('rejected')}
+            style={{
+              padding: '8px 16px', borderRadius: '8px', border: activeTab === 'rejected' ? '1.5px solid #dc2626' : '1.5px solid #fecaca',
+              background: activeTab === 'rejected' ? '#dc2626' : '#fef2f2',
+              color: activeTab === 'rejected' ? '#ffffff' : '#dc2626',
+              fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer'
+            }}
+          >
+            ✖ Rejected ({rejectedCount})
+          </button>
+        </div>
+
+        <div style={{ position: 'relative', width: '320px' }}>
+          <label htmlFor="search-payments-input" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>
+            Search Payments
+          </label>
+          <HiOutlineSearch size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+          <input
+            id="search-payments-input"
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            aria-label="Search payment records"
+            placeholder="Search by student name, UTR ID, or phone..."
+            style={{
+              width: '100%', padding: '9px 14px 9px 42px', borderRadius: '10px',
+              border: '1.5px solid #cbd5e1', fontSize: '0.85rem', outline: 'none'
+            }}
+          />
+        </div>
       </div>
 
       {/* Payments Table */}
@@ -405,11 +493,11 @@ export default function PaymentsReceivedManager() {
             <tr style={{ background: '#f8fafc', borderBottom: '1.5px solid #e2e8f0', color: '#000648', fontWeight: 800 }}>
               <th style={{ padding: '14px 18px' }}>Student Name</th>
               <th style={{ padding: '14px 18px' }}>Amount</th>
-              <th style={{ padding: '14px 18px' }}>UPI Txn / Ref ID</th>
-              <th style={{ padding: '14px 18px' }}>Payment Channel</th>
+              <th style={{ padding: '14px 18px' }}>12-Digit UTR / Order Ref</th>
+              <th style={{ padding: '14px 18px' }}>Status & Verification</th>
               <th style={{ padding: '14px 18px' }}>Course Title</th>
               <th style={{ padding: '14px 18px' }}>Date</th>
-              <th style={{ padding: '14px 18px', textAlign: 'right' }}>Actions</th>
+              <th style={{ padding: '14px 18px', textAlign: 'right' }}>Admin Controls</th>
             </tr>
           </thead>
           <tbody>
@@ -417,92 +505,132 @@ export default function PaymentsReceivedManager() {
               <tr>
                 <td colSpan={7} style={{ padding: '40px 32px', textAlign: 'center', color: '#64748b' }}>
                   <div style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-                    No Real Payments Recorded Yet
+                    No Transactions Found in "{activeTab.toUpperCase()}" Category
                   </div>
                   <div style={{ fontSize: '0.84rem', color: '#64748b' }}>
-                    When candidates complete checkout on the website, their verified transactions will appear here in real time.
+                    When candidates submit 12-digit UTR numbers on checkout, their transactions will appear here for verification.
                   </div>
                 </td>
               </tr>
             ) : (
-              filteredPayments.map((pay) => (
-                <tr key={pay.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                  <td style={{ padding: '14px 18px', fontWeight: 800, color: '#000648' }}>
-                    {pay.studentName}
-                    {pay.phone && <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>{pay.phone}</div>}
-                  </td>
-                  <td style={{ padding: '14px 18px', fontWeight: 900, color: '#15803d' }}>
-                    ₹{Number(pay.amount).toLocaleString('en-IN')}
-                  </td>
-                  <td style={{ padding: '14px 18px', fontFamily: 'monospace', fontSize: '0.8rem', color: '#334155', fontWeight: 700 }}>
-                    {pay.upiTransactionId}
-                  </td>
-                  <td style={{ padding: '14px 18px' }}>
-                    <span style={{ background: '#f1f5f9', color: '#000648', padding: '3px 8px', borderRadius: '6px', fontWeight: 700, fontSize: '0.75rem' }}>
-                      {pay.paymentMethod || 'Google Pay (UPI)'}
-                    </span>
-                  </td>
-                  <td style={{ padding: '14px 18px', color: '#475569', fontWeight: 600 }}>
-                    {pay.courseName || 'General Cohort'}
-                  </td>
-                  <td style={{ padding: '14px 18px', color: '#64748b', fontSize: '0.78rem' }}>
-                    {pay.paymentDate}
-                  </td>
-                  <td style={{ padding: '14px 18px', textAlign: 'right' }}>
-                    <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end' }}>
-                      <button
-                        type="button"
-                        onClick={() => setSelectedReceipt(pay)}
-                        aria-label={`View receipt for ${pay.studentName}`}
-                        title="View Official Digital Payment Receipt Modal"
-                        style={{ padding: '6px 10px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
-                      >
-                        <HiOutlineEye size={14} /> Receipt
-                      </button>
+              filteredPayments.map((pay) => {
+                const isPending = pay.status === 'PENDING_VERIFICATION' || pay.status === 'PENDING';
+                const isVerified = pay.status === 'VERIFIED' || pay.status === 'SUCCESSFUL' || !pay.status;
+                const isRejected = pay.status === 'REJECTED';
 
-                      <button
-                        type="button"
-                        onClick={() => downloadReceiptImage(pay, currentUpiVpa)}
-                        aria-label={`Download image receipt for ${pay.studentName}`}
-                        title="Download Receipt as Image (.png)"
-                        style={{ padding: '6px 10px', background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
-                      >
-                        <HiOutlinePhotograph size={14} /> Image
-                      </button>
+                return (
+                  <tr key={pay.id} style={{ borderBottom: '1px solid #f1f5f9', background: isPending ? '#fffdf5' : '#ffffff' }}>
+                    <td style={{ padding: '14px 18px', fontWeight: 800, color: '#000648' }}>
+                      {pay.studentName}
+                      {pay.phone && <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>{pay.phone}</div>}
+                    </td>
+                    <td style={{ padding: '14px 18px', fontWeight: 900, color: '#15803d' }}>
+                      ₹{Number(pay.amount).toLocaleString('en-IN')}
+                    </td>
+                    <td style={{ padding: '14px 18px', fontFamily: 'monospace', fontSize: '0.8rem', color: '#334155', fontWeight: 700 }}>
+                      <div>{pay.upiTransactionId}</div>
+                      {pay.orderRefId && <div style={{ fontSize: '0.7rem', color: '#64748b' }}>{pay.orderRefId}</div>}
+                    </td>
+                    <td style={{ padding: '14px 18px' }}>
+                      {isPending && (
+                        <span style={{ background: '#fffbe6', color: '#d48806', border: '1px solid #ffe58f', padding: '4px 10px', borderRadius: '50px', fontWeight: 800, fontSize: '0.73rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          ⏳ Pending Verification
+                        </span>
+                      )}
+                      {isVerified && (
+                        <span style={{ background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', padding: '4px 10px', borderRadius: '50px', fontWeight: 800, fontSize: '0.73rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          ✔ Approved / Verified
+                        </span>
+                      )}
+                      {isRejected && (
+                        <span style={{ background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', padding: '4px 10px', borderRadius: '50px', fontWeight: 800, fontSize: '0.73rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          ✖ Rejected
+                        </span>
+                      )}
+                    </td>
+                    <td style={{ padding: '14px 18px', color: '#475569', fontWeight: 600 }}>
+                      {pay.courseName || 'General Cohort'}
+                    </td>
+                    <td style={{ padding: '14px 18px', color: '#64748b', fontSize: '0.78rem' }}>
+                      {pay.paymentDate}
+                    </td>
+                    <td style={{ padding: '14px 18px', textAlign: 'right' }}>
+                      <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        {isPending && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => handleApproveUtr(pay)}
+                              title="Approve 12-Digit UTR and Mark Student Enrolled"
+                              style={{ padding: '6px 12px', background: '#166534', color: '#ffffff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 900, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                            >
+                              <HiCheck size={14} /> Approve
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleRejectUtr(pay)}
+                              title="Reject UTR Submission"
+                              style={{ padding: '6px 10px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '6px', cursor: 'pointer', fontWeight: 800, fontSize: '0.75rem' }}
+                            >
+                              Reject
+                            </button>
+                          </>
+                        )}
 
-                      <button
-                        type="button"
-                        onClick={() => printPdfReceipt(pay, currentUpiVpa)}
-                        aria-label={`Print PDF receipt for ${pay.studentName}`}
-                        title="Download / Print PDF Receipt"
-                        style={{ padding: '6px 10px', background: '#f1f5f9', color: '#000648', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
-                      >
-                        <HiOutlinePrinter size={14} /> PDF
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedReceipt(pay)}
+                          aria-label={`View receipt for ${pay.studentName}`}
+                          title="View Official Digital Payment Receipt Modal"
+                          style={{ padding: '6px 10px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        >
+                          <HiOutlineEye size={14} /> Receipt
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={() => handleShareSummary(pay)}
-                        aria-label={`Share payment report for ${pay.studentName}`}
-                        title="Copy payment summary report for WhatsApp/Email"
-                        style={{ padding: '6px 10px', background: copiedShareId === pay.id ? '#dcfce7' : '#f8fafc', color: copiedShareId === pay.id ? '#15803d' : '#475569', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
-                      >
-                        {copiedShareId === pay.id ? <HiCheck size={14} /> : <HiOutlineShare size={14} />}
-                      </button>
+                        <button
+                          type="button"
+                          onClick={() => downloadReceiptImage(pay, currentUpiVpa)}
+                          aria-label={`Download image receipt for ${pay.studentName}`}
+                          title="Download Receipt as Image (.png)"
+                          style={{ padding: '6px 10px', background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        >
+                          <HiOutlinePhotograph size={14} /> Image
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(pay.id, pay.studentName)}
-                        aria-label={`Delete payment record for ${pay.studentName}`}
-                        title="Delete Record"
-                        style={{ padding: '6px 8px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '6px', cursor: 'pointer' }}
-                      >
-                        <HiOutlineTrash size={14} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+                        <button
+                          type="button"
+                          onClick={() => handleShareSummary(pay)}
+                          aria-label={`Share payment report for ${pay.studentName}`}
+                          title="Copy payment summary report for WhatsApp/Email"
+                          style={{ padding: '6px 10px', background: copiedShareId === pay.id ? '#dcfce7' : '#f8fafc', color: copiedShareId === pay.id ? '#15803d' : '#475569', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        >
+                          {copiedShareId === pay.id ? <HiCheck size={14} /> : <HiOutlineShare size={14} />}
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => printPdfReceipt(pay, currentUpiVpa)}
+                          aria-label={`Print PDF receipt for ${pay.studentName}`}
+                          title="Download / Print PDF Receipt"
+                          style={{ padding: '6px 10px', background: '#f1f5f9', color: '#000648', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                        >
+                          <HiOutlinePrinter size={14} /> PDF
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(pay.id, pay.studentName)}
+                          aria-label={`Delete payment record for ${pay.studentName}`}
+                          title="Delete Record"
+                          style={{ padding: '6px 8px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '6px', cursor: 'pointer' }}
+                        >
+                          <HiOutlineTrash size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

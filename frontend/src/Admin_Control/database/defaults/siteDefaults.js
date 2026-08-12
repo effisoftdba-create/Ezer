@@ -76,9 +76,14 @@ export const defaultPaymentConfig = {
   discountBadge: '99% OFF SPECIAL',
   priceLabel: 'Full Course Access + Mentorship',
   enrollmentLabel: 'INSTANT COHORT ENROLLMENT',
+  integrationMode: 'direct_p2m', // 'direct_p2m' | 'gateway'
   upiVpa: 'ezerlearning@okaxis',
   upiMerchantName: 'EZER Learning Solutions Pvt. Ltd.',
+  mccCode: '8220', // Educational Services & Training
+  transactionNote: 'EZER Course Enrollment',
   upiQrImageUrl: 'images/payment/upi_qr_code.png',
+  utrRegex: '^[0-9]{12}$',
+  allowManualUtrSubmission: true,
   paymentMethods: [
     { id: 'upi', label: 'UPI / GooglePay / PhonePe / Paytm', subtitle: 'Instant QR Code Scan & Pay', enabled: true },
     { id: 'card', label: 'Credit Card / Debit Card', subtitle: 'Visa, MasterCard, RuPay, Amex', enabled: true }

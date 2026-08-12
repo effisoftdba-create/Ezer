@@ -133,16 +133,36 @@ export default function CoursePaymentManager() {
           </div>
         </div>
 
-        {/* UPI QR Code & Merchant Gateway Settings */}
+        {/* UPI Architecture & Integration Mode Settings */}
         <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '24px', boxShadow: '0 4px 14px rgba(0,6,72,0.03)' }}>
           <h3 style={{ margin: '0 0 16px 0', fontSize: '1.05rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <HiQrcode color="#000648" size={20} /> Official UPI QR Code & Merchant Config
+            <HiQrcode color="#000648" size={20} /> Official UPI QR Code, App Intents & Integration Protocol
           </h3>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+          <div style={{ background: '#f8fafc', border: '1px solid #cbd5e1', borderRadius: '12px', padding: '16px', marginBottom: '16px' }}>
+            <label htmlFor="integration_mode_select" style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '6px' }}>
+              UPI Integration Protocol Mode *
+            </label>
+            <select
+              id="integration_mode_select"
+              value={formData.integrationMode || 'direct_p2m'}
+              onChange={(e) => setFormData((prev) => ({ ...prev, integrationMode: e.target.value }))}
+              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #000648', fontSize: '0.9rem', fontWeight: 800, background: '#fff' }}
+            >
+              <option value="direct_p2m">Zero-Fee Direct Peer-to-Merchant (P2M) — Manual UTR Admin Verification Queue</option>
+              <option value="gateway">Automated Payment Gateway (Razorpay / PhonePe / Pine Labs Webhooks)</option>
+            </select>
+            <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '6px' }}>
+              {formData.integrationMode === 'gateway'
+                ? '⚡ Gateway Mode: Payments are verified via webhooks/signature. Instant enrollment.'
+                : '🛡️ Direct P2M Mode: 0% TDR fees. Student submits 12-digit UTR; order goes to On-Hold status awaiting Admin verification in Payments Received Manager.'}
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
             <div>
               <label htmlFor="upi_vpa_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                UPI ID / VPA Address *
+                UPI ID / Merchant VPA *
               </label>
               <input
                 id="upi_vpa_field"
@@ -156,7 +176,7 @@ export default function CoursePaymentManager() {
 
             <div>
               <label htmlFor="upi_merchant_name_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Merchant Beneficiary Name
+                Merchant Beneficiary Name (pn)
               </label>
               <input
                 id="upi_merchant_name_field"
@@ -169,16 +189,46 @@ export default function CoursePaymentManager() {
             </div>
 
             <div>
-              <label htmlFor="upi_qr_image_url_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                UPI QR Code Image URL / Asset Path
+              <label htmlFor="mcc_code_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                Merchant Category Code (MCC / mc)
               </label>
               <input
-                id="upi_qr_image_url_field"
+                id="mcc_code_field"
                 type="text"
-                value={formData.upiQrImageUrl || 'images/payment/upi_qr_code.png'}
-                onChange={(e) => setFormData((prev) => ({ ...prev, upiQrImageUrl: e.target.value }))}
-                placeholder="images/payment/upi_qr_code.png"
+                value={formData.mccCode || '8220'}
+                onChange={(e) => setFormData((prev) => ({ ...prev, mccCode: e.target.value }))}
+                placeholder="8220 (Education & Training)"
                 style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+              />
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+            <div>
+              <label htmlFor="transaction_note_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                UPI Transaction Note Template (tn)
+              </label>
+              <input
+                id="transaction_note_field"
+                type="text"
+                value={formData.transactionNote || 'EZER Course Enrollment'}
+                onChange={(e) => setFormData((prev) => ({ ...prev, transactionNote: e.target.value }))}
+                placeholder="EZER Course Enrollment"
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="utr_regex_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                UTR Validation Regex Rule
+              </label>
+              <input
+                id="utr_regex_field"
+                type="text"
+                value={formData.utrRegex || '^[0-9]{12}$'}
+                onChange={(e) => setFormData((prev) => ({ ...prev, utrRegex: e.target.value }))}
+                placeholder="^[0-9]{12}$ (12 Numerical Digits)"
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', fontFamily: 'monospace' }}
               />
             </div>
           </div>

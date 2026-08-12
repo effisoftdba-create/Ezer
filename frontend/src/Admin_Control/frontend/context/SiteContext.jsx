@@ -790,6 +790,42 @@ export function SiteProvider({ children }) {
     }
   }, [payments]);
 
+  const updatePaymentStatus = useCallback((paymentId, status, reviewNotes = '') => {
+    const updatedPayments = (payments || []).map((p) => {
+      if (p.id === paymentId || p.upiTransactionId === paymentId) {
+        return {
+          ...p,
+          status,
+          reviewNotes: reviewNotes || p.reviewNotes || '',
+          verifiedAt: new Date().toLocaleString()
+        };
+      }
+      return p;
+    });
+
+    dispatch({ type: 'SET_KEY', key: 'payments', value: updatedPayments });
+    saveCollectionArray('payments', updatedPayments);
+
+    const targetPay = (payments || []).find((p) => p.id === paymentId || p.upiTransactionId === paymentId);
+    if (targetPay && targetPay.upiTransactionId) {
+      const isApproved = status === 'VERIFIED' || status === 'SUCCESSFUL';
+      const updatedLeads = (leads || []).map((l) => {
+        if (l.transactionId === targetPay.upiTransactionId || (targetPay.email && l.email === targetPay.email)) {
+          return {
+            ...l,
+            paymentStatus: isApproved ? 'PAID' : 'PAYMENT_REJECTED',
+            status: isApproved ? 'Enrolled' : 'Payment Rejected'
+          };
+        }
+        return l;
+      });
+      dispatch({ type: 'SET_KEY', key: 'leads', value: updatedLeads });
+      saveCollectionArray('leads', updatedLeads);
+    }
+
+    triggerStateToast('SAVED');
+  }, [payments, leads]);
+
   const deletePayment = useCallback((paymentId) => {
     const updated = (payments || []).filter((p) => p.id !== paymentId);
     dispatch({ type: 'SET_KEY', key: 'payments', value: updated });
@@ -825,7 +861,7 @@ export function SiteProvider({ children }) {
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
-    payments, addPayment, deletePayment,
+    payments, addPayment, updatePaymentStatus, deletePayment,
     resetAllToDefaults
   }), [
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,
@@ -849,7 +885,7 @@ export function SiteProvider({ children }) {
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
-    payments, addPayment, deletePayment,
+    payments, addPayment, updatePaymentStatus, deletePayment,
     resetAllToDefaults
   ]);
 
