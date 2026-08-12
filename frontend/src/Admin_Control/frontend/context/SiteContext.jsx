@@ -138,6 +138,31 @@ export function SiteProvider({ children }) {
   useEffect(() => { safeSetStorage(STORAGE_ADMIN_USERS_KEY, adminUsers); }, [adminUsers]);
 
 
+  // Helper to handle authoritative real-time database snapshot updates across devices
+  const handleSyncCollection = (collectionName, items, dispatchKey, storageKey, defaultItems) => {
+    if (!Array.isArray(items)) return;
+
+    if (items.length > 0) {
+      // Live database snapshot is authoritative across all devices!
+      dispatch({ type: 'SET_KEY', key: dispatchKey, value: items });
+      safeSetStorage(storageKey, items);
+    } else {
+      // Seed default items once if database is completely empty on initial setup
+      const seedFlagKey = `ezer_seeded_${collectionName}`;
+      const isSeeded = localStorage.getItem(seedFlagKey);
+      if (!isSeeded && Array.isArray(defaultItems) && defaultItems.length > 0) {
+        localStorage.setItem(seedFlagKey, 'true');
+        saveCollectionArray(collectionName, defaultItems);
+        dispatch({ type: 'SET_KEY', key: dispatchKey, value: defaultItems });
+        safeSetStorage(storageKey, defaultItems);
+      } else {
+        // Honour empty state when items are intentionally deleted by admin
+        dispatch({ type: 'SET_KEY', key: dispatchKey, value: [] });
+        safeSetStorage(storageKey, []);
+      }
+    }
+  };
+
   // Firebase Real-time Firestore Subscriptions — Authoritative source of truth
   // Immediate subscription on mount for instant cross-device sync
   useEffect(() => {
@@ -145,20 +170,10 @@ export function SiteProvider({ children }) {
 
     try {
       unsubs.push(subscribeToCollection('courses', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'courses', value: merged });
-          safeSetStorage(STORAGE_COURSES_KEY, merged);
-        }
+        handleSyncCollection('courses', items, 'courses', STORAGE_COURSES_KEY, phase1Courses);
       }));
       unsubs.push(subscribeToCollection('heroSlides', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_SLIDES_KEY, defaultSlides) || defaultSlides;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'heroSlides', value: merged });
-          safeSetStorage(STORAGE_SLIDES_KEY, merged);
-        }
+        handleSyncCollection('heroSlides', items, 'heroSlides', STORAGE_SLIDES_KEY, defaultSlides);
       }));
       unsubs.push(subscribeToCollection('leads', (items) => {
         if (Array.isArray(items)) {
@@ -168,31 +183,19 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('blogs', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_BLOGS_KEY, defaultBlogs) || defaultBlogs;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'blogs', value: merged });
-          safeSetStorage(STORAGE_BLOGS_KEY, merged);
-        }
+        handleSyncCollection('blogs', items, 'blogs', STORAGE_BLOGS_KEY, defaultBlogs);
       }));
       unsubs.push(subscribeToCollection('ezerDefinition', (items) => {
         if (Array.isArray(items) && items.length > 0) {
           const mainDef = items.find((i) => i.id === 'main') || items[0];
           if (mainDef) {
-            const storedLocal = getStored(STORAGE_PLATFORM_KEY, defaultPlatformDef) || defaultPlatformDef;
-            const updated = { ...storedLocal, ...mainDef };
-            dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: updated });
-            safeSetStorage(STORAGE_PLATFORM_KEY, updated);
+            dispatch({ type: 'SET_KEY', key: 'ezerDefinition', value: mainDef });
+            safeSetStorage(STORAGE_PLATFORM_KEY, mainDef);
           }
         }
       }));
       unsubs.push(subscribeToCollection('executiveLeaders', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders) || defaultExecutiveLeaders;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: merged });
-          safeSetStorage(STORAGE_EXECUTIVE_LEADERS_KEY, merged);
-        }
+        handleSyncCollection('executiveLeaders', items, 'executiveLeaders', STORAGE_EXECUTIVE_LEADERS_KEY, defaultExecutiveLeaders);
       }));
       unsubs.push(subscribeToCollection('popupConfig', (items) => {
         if (Array.isArray(items) && items.length > 0) {
@@ -213,52 +216,22 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('seniorMentors', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_MENTORS_KEY, defaultSeniorMentors) || defaultSeniorMentors;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: merged });
-          safeSetStorage(STORAGE_MENTORS_KEY, merged);
-        }
+        handleSyncCollection('seniorMentors', items, 'seniorMentors', STORAGE_MENTORS_KEY, defaultSeniorMentors);
       }));
       unsubs.push(subscribeToCollection('writtenTestimonials', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials) || initialTestimonials;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: merged });
-          safeSetStorage(STORAGE_WRITTEN_TESTIMONIALS_KEY, merged);
-        }
+        handleSyncCollection('writtenTestimonials', items, 'writtenTestimonials', STORAGE_WRITTEN_TESTIMONIALS_KEY, initialTestimonials);
       }));
       unsubs.push(subscribeToCollection('videoTestimonials', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_VIDEOS_KEY, defaultVideoTestimonials) || defaultVideoTestimonials;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: merged });
-          safeSetStorage(STORAGE_VIDEOS_KEY, merged);
-        }
+        handleSyncCollection('videoTestimonials', items, 'videoTestimonials', STORAGE_VIDEOS_KEY, defaultVideoTestimonials);
       }));
       unsubs.push(subscribeToCollection('faqList', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_FAQS_KEY, generalFaqs) || generalFaqs;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'faqList', value: merged });
-          safeSetStorage(STORAGE_FAQS_KEY, merged);
-        }
+        handleSyncCollection('faqList', items, 'faqList', STORAGE_FAQS_KEY, generalFaqs);
       }));
       unsubs.push(subscribeToCollection('hiringPartners', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners) || defaultHiringPartners;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: merged });
-          safeSetStorage(STORAGE_HIRING_PARTNERS_KEY, merged);
-        }
+        handleSyncCollection('hiringPartners', items, 'hiringPartners', STORAGE_HIRING_PARTNERS_KEY, defaultHiringPartners);
       }));
       unsubs.push(subscribeToCollection('aboutVideos', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos) || defaultAboutVideos;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'aboutVideos', value: merged });
-          safeSetStorage(STORAGE_ABOUT_VIDEOS_KEY, merged);
-        }
+        handleSyncCollection('aboutVideos', items, 'aboutVideos', STORAGE_ABOUT_VIDEOS_KEY, defaultAboutVideos);
       }));
       unsubs.push(subscribeToCollection('payments', (items) => {
         if (Array.isArray(items)) {
@@ -268,20 +241,7 @@ export function SiteProvider({ children }) {
         }
       }));
       unsubs.push(subscribeToCollection('adminUsers', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_ADMIN_USERS_KEY, defaultAdminUsers) || defaultAdminUsers;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'adminUsers', value: merged });
-          safeSetStorage(STORAGE_ADMIN_USERS_KEY, merged);
-        }
-      }));
-      unsubs.push(subscribeToCollection('admin_users', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const storedLocal = getStored(STORAGE_ADMIN_USERS_KEY, defaultAdminUsers) || defaultAdminUsers;
-          const merged = mergeCollection(storedLocal, items, 'id');
-          dispatch({ type: 'SET_KEY', key: 'adminUsers', value: merged });
-          safeSetStorage(STORAGE_ADMIN_USERS_KEY, merged);
-        }
+        handleSyncCollection('adminUsers', items, 'adminUsers', STORAGE_ADMIN_USERS_KEY, defaultAdminUsers);
       }));
     } catch (err) {
       console.error('[SiteContext] Error initializing Firestore subscriptions:', err);
@@ -453,10 +413,17 @@ export function SiteProvider({ children }) {
 
   const deleteCourse = useCallback((id) => {
     const currentList = Array.isArray(courses) ? courses : (getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses);
+    const targetCourse = currentList.find((c) => c.id === id || c.slug === id);
     const updated = currentList.filter((c) => c.id !== id && c.slug !== id);
+
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
     safeSetStorage(STORAGE_COURSES_KEY, updated);
-    removeDocument('courses', String(id));
+
+    if (id) removeDocument('courses', String(id));
+    if (targetCourse) {
+      if (targetCourse.id && String(targetCourse.id) !== String(id)) removeDocument('courses', String(targetCourse.id));
+      if (targetCourse.slug && String(targetCourse.slug) !== String(id)) removeDocument('courses', String(targetCourse.slug));
+    }
     triggerStateToast('SAVED');
   }, [courses]);
 
