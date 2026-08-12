@@ -54,6 +54,23 @@ export function subscribeToCollection(collectionName, onUpdate) {
 
   let unsubFirestore = () => {};
   let unsubRealtime = () => {};
+  let lastJsonPayload = '';
+  let updateTimer = null;
+
+  const debouncedUpdate = (items) => {
+    try {
+      const jsonStr = JSON.stringify(items);
+      if (jsonStr === lastJsonPayload) return; // Prevent duplicate re-renders from dual DB snapshot firing!
+      lastJsonPayload = jsonStr;
+
+      if (updateTimer) clearTimeout(updateTimer);
+      updateTimer = setTimeout(() => {
+        onUpdate(items);
+      }, 16);
+    } catch (err) {
+      onUpdate(items);
+    }
+  };
 
   // 1. Primary: Firestore Listener
   if (db) {
@@ -67,7 +84,7 @@ export function subscribeToCollection(collectionName, onUpdate) {
               id: docItem.id,
               ...docItem.data()
             }));
-            onUpdate(items);
+            debouncedUpdate(items);
           }
         },
         (error) => {
@@ -99,7 +116,7 @@ export function subscribeToCollection(collectionName, onUpdate) {
               }));
             }
             if (items.length > 0) {
-              onUpdate(items);
+              debouncedUpdate(items);
             }
           }
         },
@@ -113,6 +130,7 @@ export function subscribeToCollection(collectionName, onUpdate) {
   }
 
   return () => {
+    if (updateTimer) clearTimeout(updateTimer);
     if (typeof unsubFirestore === 'function') unsubFirestore();
     if (typeof unsubRealtime === 'function') unsubRealtime();
   };
