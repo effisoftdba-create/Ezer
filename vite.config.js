@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   root: 'frontend',
   plugins: [react()],
-  base: '/',
+  base: '/Ezer/',
   server: {
     port: 3000,
     open: true,
