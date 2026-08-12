@@ -5,6 +5,7 @@ export default class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
     this.state = { hasError: false, error: null };
+    this.autoRecoverTimer = null;
   }
 
   static getDerivedStateFromError(error) {
@@ -13,9 +14,21 @@ export default class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('CRITICAL REACT ERROR CAUGHT BY ERROR BOUNDARY:', error, errorInfo);
+    // Auto-attempt instant recovery after 300ms for transient state sync pauses
+    if (this.autoRecoverTimer) clearTimeout(this.autoRecoverTimer);
+    this.autoRecoverTimer = setTimeout(() => {
+      if (this.state.hasError) {
+        this.setState({ hasError: false, error: null });
+      }
+    }, 500);
+  }
+
+  componentWillUnmount() {
+    if (this.autoRecoverTimer) clearTimeout(this.autoRecoverTimer);
   }
 
   handleTryRecover = () => {
+    if (this.autoRecoverTimer) clearTimeout(this.autoRecoverTimer);
     this.setState({ hasError: false, error: null });
   };
 

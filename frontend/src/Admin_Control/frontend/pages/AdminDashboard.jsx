@@ -97,7 +97,7 @@ class TabErrorBoundary extends React.Component {
 }
 
 export default function AdminDashboard() {
-  const currentUser = getCurrentAdminUser();
+  const currentUser = useMemo(() => getCurrentAdminUser(), []);
   const isSuperAdmin = !currentUser || currentUser.role === 'SUPER_ADMIN' || currentUser.allowedTabs === '*';
   const allowedTabsSet = useMemo(
     () => new Set(Array.isArray(currentUser?.allowedTabs) ? currentUser.allowedTabs : []),
