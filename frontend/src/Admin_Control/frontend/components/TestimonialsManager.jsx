@@ -36,6 +36,7 @@ export default function TestimonialsManager() {
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [formData, setFormData] = useState(DEFAULT_TESTIMONIAL_STATE);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleHeroSave = (e) => {
     e.preventDefault();
@@ -47,6 +48,7 @@ export default function TestimonialsManager() {
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData(DEFAULT_TESTIMONIAL_STATE);
+    setFormErrors({});
     setIsEditing(true);
   };
 
@@ -69,13 +71,22 @@ export default function TestimonialsManager() {
       mobilePosition: item.mobilePosition || item.position || '50% 50%',
       mobileZoom: item.mobileZoom || item.zoom || 1
     });
+    setFormErrors({});
     setIsEditing(true);
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.author?.trim() || !formData.role?.trim() || !formData.company?.trim() || !formData.track?.trim() || !formData.text?.trim()) {
-      alert('Please fill out all required fields: Author Name, Designation/Role, Company Name, Course Track, and Review Content.');
+    const errors = {};
+    if (!formData.author?.trim()) errors.author = true;
+    if (!formData.role?.trim()) errors.role = true;
+    if (!formData.company?.trim()) errors.company = true;
+    if (!formData.track?.trim()) errors.track = true;
+    if (!formData.text?.trim()) errors.text = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      alert('Please fill out all required fields highlighted in RED (including Firm / Company Name).');
       return;
     }
 
@@ -149,27 +160,45 @@ export default function TestimonialsManager() {
           Edit Testimonials Page Header
         </h3>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '16px', marginBottom: '12px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
           <div>
-            <label htmlFor="testi_hero_tag" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Header Tag</label>
+            <label htmlFor="testi_hero_tag" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              Badge Tagline
+            </label>
             <input
               id="testi_hero_tag"
               type="text"
-              value={heroFormData.tag}
+              value={heroFormData.tag || ''}
               onChange={(e) => setHeroFormData((prev) => ({ ...prev, tag: e.target.value }))}
               style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
             />
           </div>
+
           <div>
-            <label htmlFor="testi_hero_headline" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', display: 'block', marginBottom: '4px' }}>Headline</label>
+            <label htmlFor="testi_hero_headline" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              Headline
+            </label>
             <input
               id="testi_hero_headline"
               type="text"
-              value={heroFormData.headline}
+              value={heroFormData.headline || ''}
               onChange={(e) => setHeroFormData((prev) => ({ ...prev, headline: e.target.value }))}
               style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
             />
           </div>
+        </div>
+
+        <div style={{ marginBottom: '14px' }}>
+          <label htmlFor="testi_hero_sub" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+            Subheadline Description
+          </label>
+          <input
+            id="testi_hero_sub"
+            type="text"
+            value={heroFormData.sub || ''}
+            onChange={(e) => setHeroFormData((prev) => ({ ...prev, sub: e.target.value }))}
+            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+          />
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}>
@@ -189,6 +218,8 @@ export default function TestimonialsManager() {
         editingId={editingId}
         formData={formData}
         setFormData={setFormData}
+        formErrors={formErrors}
+        setFormErrors={setFormErrors}
         onSave={handleSave}
         onCancel={() => setIsEditing(false)}
         onOpenImagePicker={() => setIsImagePickerOpen(true)}

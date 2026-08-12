@@ -8,6 +8,8 @@ export default function TestimonialFormModal({
   editingId,
   formData,
   setFormData,
+  formErrors = {},
+  setFormErrors = () => {},
   onSave,
   onCancel,
   onOpenImagePicker
@@ -73,7 +75,7 @@ export default function TestimonialFormModal({
           {/* Author Name & Role */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
-              <label htmlFor="testi_author_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="testi_author_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.author ? '#ef4444' : '#334155', display: 'block', marginBottom: '4px' }}>
                 Alumni / Author Name *
               </label>
               <input
@@ -82,13 +84,22 @@ export default function TestimonialFormModal({
                 required
                 placeholder="e.g. Penumaka Gopi Kishore"
                 value={formData.author || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, author: e.target.value }))}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, author: e.target.value }));
+                  if (formErrors.author) setFormErrors((prev) => ({ ...prev, author: false }));
+                }}
+                style={{
+                  width: '100%', padding: '9px 12px', borderRadius: '8px',
+                  border: formErrors.author ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                  boxShadow: formErrors.author ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                  fontSize: '0.85rem'
+                }}
               />
+              {formErrors.author && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Author name is required</span>}
             </div>
 
             <div>
-              <label htmlFor="testi_role_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="testi_role_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.role ? '#ef4444' : '#334155', display: 'block', marginBottom: '4px' }}>
                 Current Designation & Role *
               </label>
               <input
@@ -97,16 +108,25 @@ export default function TestimonialFormModal({
                 required
                 placeholder="e.g. Full Stack QA Specialist"
                 value={formData.role || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, role: e.target.value }))}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, role: e.target.value }));
+                  if (formErrors.role) setFormErrors((prev) => ({ ...prev, role: false }));
+                }}
+                style={{
+                  width: '100%', padding: '9px 12px', borderRadius: '8px',
+                  border: formErrors.role ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                  boxShadow: formErrors.role ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                  fontSize: '0.85rem'
+                }}
               />
+              {formErrors.role && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Role is required</span>}
             </div>
           </div>
 
           {/* Firm / Company & Course Track */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
-              <label htmlFor="testi_company_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="testi_company_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.company ? '#ef4444' : '#334155', display: 'block', marginBottom: '4px' }}>
                 Firm / Company Name *
               </label>
               <input
@@ -115,13 +135,22 @@ export default function TestimonialFormModal({
                 required
                 placeholder="e.g. Pixis"
                 value={formData.company || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, company: e.target.value }))}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, company: e.target.value }));
+                  if (formErrors.company) setFormErrors((prev) => ({ ...prev, company: false }));
+                }}
+                style={{
+                  width: '100%', padding: '9px 12px', borderRadius: '8px',
+                  border: formErrors.company ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                  boxShadow: formErrors.company ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                  fontSize: '0.85rem'
+                }}
               />
+              {formErrors.company && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Company name is required</span>}
             </div>
 
             <div>
-              <label htmlFor="testi_track_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="testi_track_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.track ? '#ef4444' : '#334155', display: 'block', marginBottom: '4px' }}>
                 Course Track / Program Specialization *
               </label>
               <input
@@ -130,9 +159,18 @@ export default function TestimonialFormModal({
                 required
                 placeholder="e.g. Software Testing – Playwright"
                 value={formData.track || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, track: e.target.value }))}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, track: e.target.value }));
+                  if (formErrors.track) setFormErrors((prev) => ({ ...prev, track: false }));
+                }}
+                style={{
+                  width: '100%', padding: '9px 12px', borderRadius: '8px',
+                  border: formErrors.track ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                  boxShadow: formErrors.track ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                  fontSize: '0.85rem'
+                }}
               />
+              {formErrors.track && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Track is required</span>}
             </div>
           </div>
 
@@ -184,11 +222,9 @@ export default function TestimonialFormModal({
             </div>
           </div>
 
-
-
           {/* Review Text / Quote */}
           <div>
-            <label htmlFor="testi_text_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+            <label htmlFor="testi_text_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.text ? '#ef4444' : '#334155', display: 'block', marginBottom: '4px' }}>
               Testimonial Review Content / Quote *
             </label>
             <textarea
@@ -197,9 +233,18 @@ export default function TestimonialFormModal({
               required
               placeholder="Enter student's quote or career feedback..."
               value={formData.text || ''}
-              onChange={(e) => setFormData((prev) => ({ ...prev, text: e.target.value }))}
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', lineHeight: 1.5 }}
+              onChange={(e) => {
+                setFormData((prev) => ({ ...prev, text: e.target.value }));
+                if (formErrors.text) setFormErrors((prev) => ({ ...prev, text: false }));
+              }}
+              style={{
+                width: '100%', padding: '9px 12px', borderRadius: '8px',
+                border: formErrors.text ? '2px solid #ef4444' : '1.5px solid #cbd5e1',
+                boxShadow: formErrors.text ? '0 0 0 3px rgba(239, 68, 68, 0.2)' : 'none',
+                fontSize: '0.85rem', lineHeight: 1.5
+              }}
             />
+            {formErrors.text && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Review content is required</span>}
           </div>
 
           {/* Footer Buttons */}
