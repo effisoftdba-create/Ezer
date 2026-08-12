@@ -105,24 +105,20 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
           />
         </div>
 
-        {/* Audience Cards Track */}
+        {/* Audience Cards Grid */}
         <div
           ref={scrollTrackRef}
-          className="no-scrollbar"
           style={{
-            display: 'flex',
-            gap: '24px',
-            overflowX: 'auto',
-            scrollSnapType: 'x mandatory',
-            paddingBottom: '16px',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
+            gap: '20px',
+            width: '100%',
           }}
         >
           {cardsToRender.map((card) => (
             <div
               key={card.title}
               style={{
-                flex: '0 0 min(280px, 85vw)',
-                scrollSnapAlign: 'start',
                 background: '#ffffff',
                 borderRadius: '12px',
                 border: '1px solid #e2e8f0',

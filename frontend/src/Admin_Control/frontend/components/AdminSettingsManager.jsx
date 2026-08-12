@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import { getCurrentAdminUser } from '../utils/authService';
 import {
@@ -412,7 +413,7 @@ export default function AdminSettingsManager() {
       </div>
 
       {/* EDIT PERMISSIONS MODAL */}
-      {editingUser && (
+      {editingUser && typeof document !== 'undefined' && createPortal(
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,6,72,0.85)', backdropFilter: 'blur(6px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
           <div style={{ background: '#ffffff', borderRadius: '20px', padding: '24px', maxWidth: '600px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#000648', marginTop: 0 }}>
@@ -424,7 +425,7 @@ export default function AdminSettingsManager() {
                 const currentAllowed = Array.isArray(editingUser.allowedTabs) ? editingUser.allowedTabs : [];
                 const isChecked = currentAllowed.includes(mod.id);
                 return (
-                  <label key={mod.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.76rem', fontWeight: isChecked ? 800 : 500 }}>
+                  <label key={mod.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.76rem', fontWeight: isChecked ? 800 : 500, cursor: 'pointer' }}>
                     <input
                       type="checkbox"
                       checked={isChecked}
@@ -440,15 +441,16 @@ export default function AdminSettingsManager() {
             </div>
 
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}>
-              <button type="button" onClick={() => setEditingUser(null)} style={{ padding: '8px 16px', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontWeight: 800 }}>Cancel</button>
-              <button type="button" onClick={handleSaveEditPermissions} style={{ padding: '8px 16px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 900 }}>Save Changes</button>
+              <button type="button" onClick={() => setEditingUser(null)} style={{ padding: '8px 16px', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}>Cancel</button>
+              <button type="button" onClick={handleSaveEditPermissions} style={{ padding: '8px 16px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 900, cursor: 'pointer' }}>Save Changes</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* RESET PASSWORD MODAL */}
-      {resetPassUser && (
+      {resetPassUser && typeof document !== 'undefined' && createPortal(
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,6,72,0.85)', backdropFilter: 'blur(6px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
           <div style={{ background: '#ffffff', borderRadius: '20px', padding: '24px', maxWidth: '420px', width: '100%' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#000648', marginTop: 0 }}>
@@ -468,11 +470,12 @@ export default function AdminSettingsManager() {
               />
             </div>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-              <button type="button" onClick={() => setResetPassUser(null)} style={{ padding: '8px 16px', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontWeight: 800 }}>Cancel</button>
-              <button type="button" onClick={handleSaveResetPassword} style={{ padding: '8px 16px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 900 }}>Update Password</button>
+              <button type="button" onClick={() => setResetPassUser(null)} style={{ padding: '8px 16px', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}>Cancel</button>
+              <button type="button" onClick={handleSaveResetPassword} style={{ padding: '8px 16px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 900, cursor: 'pointer' }}>Update Password</button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

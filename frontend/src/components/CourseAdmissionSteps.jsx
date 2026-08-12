@@ -79,8 +79,8 @@ export default function CourseAdmissionSteps({ steps, title }) {
               className="timeline-line"
               style={{
                 position: 'absolute',
-                top: '20px',
-                bottom: '36px',
+                top: '24px',
+                bottom: '100px',
                 left: '50%',
                 width: '2px',
                 borderLeft: '2.5px dashed #f2b733',

@@ -102,7 +102,7 @@ export default function AdminLogin() {
             <HiOutlineMail size={18} />
           </div>
           <input
-            placeholder="effisoftdba@gmail.com"
+            placeholder="Enter your admin email"
             title="Email Address"
             name="email"
             type="email"
@@ -166,7 +166,7 @@ export default function AdminLogin() {
 
         <div className="separator">
           <span className="line"></span>
-          <span>PROTECTED ACCESS</span>
+          <span style={{ whiteSpace: 'nowrap', letterSpacing: '0.1em', fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '5px' }}>🔒 PROTECTED ACCESS</span>
           <span className="line"></span>
         </div>
 

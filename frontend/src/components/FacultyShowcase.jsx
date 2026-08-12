@@ -70,16 +70,13 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
         />
       </div>
 
-      {/* Horizontal Scroll Track */}
+      {/* Responsive Grid Track */}
       <div
         ref={sliderRef}
-        className="no-scrollbar"
         style={{
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
           gap: '24px',
-          overflowX: 'auto',
-          scrollSnapType: 'x mandatory',
-          paddingBottom: '16px',
           width: '100%',
           maxWidth: '100%',
         }}
@@ -88,8 +85,6 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
           <div
             key={prof.id || prof.name}
             style={{
-              flex: '0 0 min(330px, 85vw)',
-              scrollSnapAlign: 'start',
               background: '#ffffff',
               borderRadius: '16px',
               border: '2px solid #000638',
