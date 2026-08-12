@@ -45,6 +45,57 @@ import {
 
 
 
+class TabErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, info) {
+    console.warn('[Admin Tab Error Caught]:', error, info);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.tabId !== this.props.tabId && this.state.hasError) {
+      this.setState({ hasError: false, error: null });
+    }
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          background: '#ffffff', border: '1.5px solid #fecaca', borderRadius: '16px',
+          padding: '36px 24px', textAlign: 'center', margin: '20px 0',
+          boxShadow: '0 4px 12px rgba(220, 38, 38, 0.05)'
+        }}>
+          <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#dc2626', marginBottom: '8px' }}>
+            Notice: Unable to display section contents
+          </div>
+          <p style={{ fontSize: '0.82rem', color: '#64748b', marginBottom: '16px', maxWidth: '440px', margin: '0 auto 16px' }}>
+            A temporary data formatting glitch occurred. You can retry loading this section or select any other option from the sidebar navigation.
+          </p>
+          <button
+            type="button"
+            onClick={() => this.setState({ hasError: false, error: null })}
+            style={{
+              padding: '8px 20px', background: '#000648', color: '#f2b733',
+              border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.82rem', cursor: 'pointer'
+            }}
+          >
+            Retry Loading Section
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('leads');
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -71,7 +122,6 @@ export default function AdminDashboard() {
     resetToDefault
   } = useSiteData();
 
-
   const isAuth = isAuthenticated();
 
   useEffect(() => {
@@ -81,7 +131,6 @@ export default function AdminDashboard() {
     }
   }, [isAuth, navigate]);
 
-  // Reset main content scroll position on tab click/change
   useEffect(() => {
     if (mainRef.current) {
       mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
@@ -162,28 +211,29 @@ export default function AdminDashboard() {
         />
 
         <main ref={mainRef} key={activeTab} className="uipro-fade-in admin-main">
-          {activeTab === 'leads' && <LeadsManager onNavigateToPayments={() => setActiveTab('payments-received')} />}
-          {activeTab === 'payments-received' && <PaymentsReceivedManager />}
-          {activeTab === 'hero' && <HeroManager />}
-          {activeTab === 'partners' && <HiringPartnersManager />}
-          {activeTab === 'courses' && <CourseManager />}
-          {activeTab === 'payment' && <CoursePaymentManager />}
-          {activeTab === 'platform' && <PlatformManager />}
-          {activeTab === 'about-videos' && <AboutVideoManager />}
-          {activeTab === 'support' && <SupportCardsManager />}
-          {activeTab === 'executive' && <ExecutiveSection executiveLeaders={executiveLeaders} updateExecutiveLeader={updateExecutiveLeader} />}
-          {activeTab === 'blog' && <BlogManager initialSubTab="blogs" hideSubTabs={true} />}
-          {activeTab === 'achievements' && <BlogManager initialSubTab="achievements" hideSubTabs={true} />}
-          {activeTab === 'outcomes' && <GraduateOutcomesManager />}
-          {activeTab === 'mentors' && <SeniorMentorsManager />}
-          {activeTab === 'videos' && <VideoReviewsManager />}
-          {activeTab === 'testimonials' && <TestimonialsManager />}
-          {activeTab === 'popup' && <PopupManager />}
-          {activeTab === 'faq' && <FaqManager />}
-          {activeTab === 'contact' && <ContactInfoManager />}
+          <TabErrorBoundary tabId={activeTab}>
+            {activeTab === 'leads' && <LeadsManager onNavigateToPayments={() => setActiveTab('payments-received')} />}
+            {activeTab === 'payments-received' && <PaymentsReceivedManager />}
+            {activeTab === 'hero' && <HeroManager />}
+            {activeTab === 'partners' && <HiringPartnersManager />}
+            {activeTab === 'courses' && <CourseManager />}
+            {activeTab === 'payment' && <CoursePaymentManager />}
+            {activeTab === 'platform' && <PlatformManager />}
+            {activeTab === 'about-videos' && <AboutVideoManager />}
+            {activeTab === 'support' && <SupportCardsManager />}
+            {activeTab === 'executive' && <ExecutiveSection executiveLeaders={executiveLeaders} updateExecutiveLeader={updateExecutiveLeader} />}
+            {activeTab === 'blog' && <BlogManager initialSubTab="blogs" hideSubTabs={true} />}
+            {activeTab === 'achievements' && <BlogManager initialSubTab="achievements" hideSubTabs={true} />}
+            {activeTab === 'outcomes' && <GraduateOutcomesManager />}
+            {activeTab === 'mentors' && <SeniorMentorsManager />}
+            {activeTab === 'videos' && <VideoReviewsManager />}
+            {activeTab === 'testimonials' && <TestimonialsManager />}
+            {activeTab === 'popup' && <PopupManager />}
+            {activeTab === 'faq' && <FaqManager />}
+            {activeTab === 'contact' && <ContactInfoManager />}
+          </TabErrorBoundary>
         </main>
       </div>
     </div>
   );
-
 }
