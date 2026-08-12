@@ -58,7 +58,14 @@ export default function AdminSidebarNav({ tabs, activeTab, setActiveTab, isOpen,
 
   return (
     <>
-      {isOpen && <div className="admin-sidebar-backdrop" onClick={onClose} />}
+      {isOpen && (
+        <button
+          type="button"
+          className="admin-sidebar-backdrop"
+          onClick={onClose}
+          aria-label="Close navigation sidebar overlay"
+        />
+      )}
 
       <aside className={`admin-sidebar${isOpen ? ' is-open' : ''}`}>
         <div className="admin-sidebar-panel">

@@ -117,7 +117,7 @@ export default function AdminDashboard() {
 
   const tabs = [
     { id: 'leads', label: 'Lead Submissions', icon: HiOutlineMailOpen, count: (leads || []).length },
-    { id: 'payments-received', label: 'Payments Received & Receipts', icon: HiOutlineCurrencyRupee, count: (payments || []).length },
+    { id: 'payments-received', label: 'Payments Received', icon: HiOutlineCurrencyRupee, count: (payments || []).length },
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: (heroSlides || []).length },
     { id: 'partners', label: 'Hiring Partners & Logos', icon: HiOutlineOfficeBuilding, count: (hiringPartners || []).length },
     { id: 'courses', label: 'Course Catalog', icon: HiOutlineAcademicCap, count: (courses || []).length },

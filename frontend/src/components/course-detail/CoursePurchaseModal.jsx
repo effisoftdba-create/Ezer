@@ -695,20 +695,48 @@ export default function CoursePurchaseModal({ isOpen, onClose, course }) {
               <HiPhotograph size={18} /> Download Digital Receipt Image (.png)
             </button>
 
-            {/* Direct WhatsApp Group Button */}
-            <a
-              href="https://chat.whatsapp.com/EZERLearnersGroup"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
-                width: '100%', padding: '12px 18px', background: '#25D366', color: '#ffffff',
-                borderRadius: '50px', fontWeight: 900, fontSize: '0.9rem', textDecoration: 'none',
-                boxShadow: '0 6px 20px rgba(37, 211, 102, 0.35)'
-              }}
-            >
-              Join Official Student WhatsApp Group ↗
-            </a>
+            {/* Direct WhatsApp Group Button — Unlocked ONLY After Admin Approval */}
+            {(() => {
+              const currentRecord = (payments || []).find(
+                (p) => String(p.upiTransactionId || p.id || '').trim().toLowerCase() === String(receiptNumber || upiRefId || '').trim().toLowerCase()
+              );
+              const isApprovedByAdmin =
+                currentRecord?.status === 'VERIFIED' ||
+                currentRecord?.status === 'SUCCESSFUL' ||
+                integrationMode === 'gateway' ||
+                paymentMethod === 'card';
+
+              if (isApprovedByAdmin) {
+                return (
+                  <a
+                    href={waGroupUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                      width: '100%', padding: '12px 18px', background: '#25D366', color: '#ffffff',
+                      borderRadius: '50px', fontWeight: 900, fontSize: '0.9rem', textDecoration: 'none',
+                      boxShadow: '0 6px 20px rgba(37, 211, 102, 0.35)'
+                    }}
+                  >
+                    ✔ Admin Approved — Join Official Student WhatsApp Group ↗
+                  </a>
+                );
+              }
+
+              return (
+                <div style={{ background: '#fffbe6', border: '1.5px solid #ffe58f', borderRadius: '12px', padding: '14px 16px', textAlign: 'center', width: '100%' }}>
+                  <div style={{ fontSize: '0.88rem', fontWeight: 900, color: '#d48806', marginBottom: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                    <span>🔒</span> WhatsApp Group Link Locked (Awaiting Admin Approval)
+                  </div>
+                  <div style={{ fontSize: '0.78rem', color: '#8c6b00', fontWeight: 600, lineHeight: 1.4 }}>
+                    Your 12-digit UTR <span style={{ fontFamily: 'monospace', fontWeight: 800 }}>#{receiptNumber}</span> is queued in the Admin Verification Console.
+                    <br />
+                    <strong>Once the admin approves your payment in the admin panel, your official WhatsApp Group join link will automatically unlock.</strong>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>

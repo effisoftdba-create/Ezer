@@ -33,10 +33,10 @@ export default function LeadsManager({ onNavigateToPayments }) {
     [leadsList, selectedLeadId]
   );
 
-  // Filtered Leads
+  // Filtered Leads (Sorted Newest First)
   const filteredLeads = useMemo(() => {
     const term = searchTerm.toLowerCase().trim();
-    return leadsList.filter((lead) => {
+    const list = leadsList.filter((lead) => {
       let matchesStatus = true;
 
       if (filterStatus === 'New') {
@@ -51,6 +51,23 @@ export default function LeadsManager({ onNavigateToPayments }) {
 
       const haystack = `${lead.name || ''} ${lead.email || ''} ${lead.phone || ''} ${lead.city || ''} ${lead.course || ''} ${lead.otherCourseText || ''} ${lead.transactionId || ''}`.toLowerCase();
       return matchesStatus && haystack.includes(term);
+    });
+
+    return list.sort((a, b) => {
+      const getTimestamp = (item) => {
+        if (item.timestamp) return new Date(item.timestamp).getTime();
+        if (item.createdAt) return new Date(item.createdAt).getTime();
+        if (item.date) {
+          const parsed = new Date(item.date).getTime();
+          if (!isNaN(parsed)) return parsed;
+        }
+        const idNum = Number(String(item.id || '').replace(/\D/g, ''));
+        return isNaN(idNum) ? 0 : idNum;
+      };
+      const tA = getTimestamp(a);
+      const tB = getTimestamp(b);
+      if (tB !== tA) return tB - tA;
+      return String(b.id || '').localeCompare(String(a.id || ''));
     });
   }, [leadsList, filterStatus, searchTerm]);
 

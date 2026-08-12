@@ -285,6 +285,26 @@ export default function PaymentsReceivedManager() {
     return true;
   });
 
+  const sortedPayments = useMemo(() => {
+    return filteredPayments.toSorted((a, b) => {
+      const getTimestamp = (item) => {
+        if (item.timestamp) return new Date(item.timestamp).getTime();
+        if (item.createdAt) return new Date(item.createdAt).getTime();
+        if (item.submittedAt) return new Date(item.submittedAt).getTime();
+        if (item.paymentDate) {
+          const parsed = new Date(item.paymentDate).getTime();
+          if (!isNaN(parsed)) return parsed;
+        }
+        const idNum = Number(String(item.id || '').replace(/\D/g, ''));
+        return isNaN(idNum) ? 0 : idNum;
+      };
+      const tA = getTimestamp(a);
+      const tB = getTimestamp(b);
+      if (tB !== tA) return tB - tA;
+      return String(b.id || '').localeCompare(String(a.id || ''));
+    });
+  }, [filteredPayments]);
+
   const totalCollected = paymentList
     .filter((p) => p.status !== 'REJECTED')
     .reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
@@ -341,86 +361,81 @@ export default function PaymentsReceivedManager() {
       {/* Header Bar */}
       <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        marginBottom: '24px', paddingBottom: '16px', borderBottom: '1.5px solid #e2e8f0'
+        marginBottom: '20px', paddingBottom: '14px', borderBottom: '1.5px solid #e2e8f0'
       }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <HiOutlineCurrencyRupee size={26} color="#115DFC" />
-            Payments Received & Direct P2M Verification Queue
+          <h2 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#000648', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <HiOutlineCurrencyRupee size={24} color="#115DFC" />
+            Payments Received & Direct P2M Queue
           </h2>
-          <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Verify 12-digit student UTR reference numbers against bank statements, manage On-Hold orders, approve seats, and export receipts.
+          <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '4px 0 0 0' }}>
+            Verify candidate 12-digit UTR bank reference numbers, manage enrollment status, and issue digital receipts.
           </p>
         </div>
-
         <button
           type="button"
           onClick={() => setIsAddModalOpen(true)}
-          aria-label="Record new student payment"
           style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            padding: '10px 20px', background: '#000648', color: '#f2b733',
-            border: 'none', borderRadius: '10px', fontWeight: 800, fontSize: '0.875rem',
-            cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,6,72,0.15)'
+            padding: '8px 16px', background: '#000648', color: '#f2b733',
+            border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.82rem',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+            boxShadow: '0 4px 12px rgba(0,6,72,0.15)'
           }}
         >
-          <HiOutlinePlus size={18} /> Record New Payment
+          <HiOutlinePlus size={16} /> Record Direct Payment
         </button>
       </div>
 
-      {/* Overview Stat Cards — Single Compact Row */}
-      <div style={{
-        display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-        gap: '12px', marginBottom: '20px'
-      }}>
-        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
-          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+      {/* Metrics Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '12px', marginBottom: '20px' }}>
+        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '10px', padding: '10px 12px' }}>
+          <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Total Verified Revenue
           </span>
-          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>
+          <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>
             ₹{totalCollected.toLocaleString('en-IN')}
           </div>
         </div>
 
-        <div style={{ background: pendingCount > 0 ? '#fffbe6' : '#f8fafc', border: pendingCount > 0 ? '1.5px solid #ffe58f' : '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
-          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: pendingCount > 0 ? '#d48806' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+        <div style={{ background: pendingCount > 0 ? '#fffbe6' : '#f8fafc', border: pendingCount > 0 ? '1.5px solid #ffe58f' : '1.5px solid #cbd5e1', borderRadius: '10px', padding: '10px 12px' }}>
+          <span style={{ fontSize: '0.65rem', fontWeight: 800, color: pendingCount > 0 ? '#d48806' : '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Pending UTR Verification
           </span>
-          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: pendingCount > 0 ? '#d48806' : '#000648', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ fontSize: '1.15rem', fontWeight: 900, color: pendingCount > 0 ? '#d48806' : '#000648', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
             {pendingCount} On-Hold
           </div>
         </div>
 
-        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 14px' }}>
-          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+        <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '10px', padding: '10px 12px' }}>
+          <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Verified Transactions
           </span>
-          <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#15803d', marginTop: '2px' }}>
+          <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#15803d', marginTop: '2px' }}>
             {verifiedCount} Approved
           </div>
         </div>
 
-        <div style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: '12px', padding: '12px 14px' }}>
-          <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+        <div style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: '10px', padding: '10px 12px' }}>
+          <span style={{ fontSize: '0.65rem', fontWeight: 800, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
             Database Sync
           </span>
-          <div style={{ fontSize: '0.95rem', fontWeight: 900, color: '#15803d', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <HiOutlineCheckCircle size={16} /> Live Realtime Synced
+          <div style={{ fontSize: '0.85rem', fontWeight: 900, color: '#15803d', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <HiOutlineCheckCircle size={15} /> Live Realtime Synced
           </div>
         </div>
       </div>
 
       {/* Filter Tabs & Search Bar */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', gap: '12px', flexWrap: 'wrap' }}>
-        <div style={{ display: 'flex', gap: '8px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', gap: '12px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
           <button
             type="button"
             onClick={() => setActiveTab('all')}
             style={{
-              padding: '8px 16px', borderRadius: '8px', border: '1.5px solid #cbd5e1',
+              padding: '6px 12px', borderRadius: '6px', border: '1.5px solid #cbd5e1',
               background: activeTab === 'all' ? '#000648' : '#ffffff',
               color: activeTab === 'all' ? '#f2b733' : '#334155',
-              fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer'
+              fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer'
             }}
           >
             All Transactions ({paymentList.length})
@@ -429,10 +444,10 @@ export default function PaymentsReceivedManager() {
             type="button"
             onClick={() => setActiveTab('pending')}
             style={{
-              padding: '8px 16px', borderRadius: '8px', border: activeTab === 'pending' ? '1.5px solid #d48806' : '1.5px solid #ffe58f',
+              padding: '6px 12px', borderRadius: '6px', border: activeTab === 'pending' ? '1.5px solid #d48806' : '1.5px solid #ffe58f',
               background: activeTab === 'pending' ? '#d48806' : '#fffbe6',
               color: activeTab === 'pending' ? '#ffffff' : '#d48806',
-              fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px'
+              fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px'
             }}
           >
             <span>⏳</span> Pending UTR ({pendingCount})
@@ -441,10 +456,10 @@ export default function PaymentsReceivedManager() {
             type="button"
             onClick={() => setActiveTab('verified')}
             style={{
-              padding: '8px 16px', borderRadius: '8px', border: activeTab === 'verified' ? '1.5px solid #166534' : '1.5px solid #bbf7d0',
+              padding: '6px 12px', borderRadius: '6px', border: activeTab === 'verified' ? '1.5px solid #166534' : '1.5px solid #bbf7d0',
               background: activeTab === 'verified' ? '#166534' : '#f0fdf4',
               color: activeTab === 'verified' ? '#ffffff' : '#166534',
-              fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer'
+              fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer'
             }}
           >
             ✔ Approved ({verifiedCount})
@@ -453,124 +468,124 @@ export default function PaymentsReceivedManager() {
             type="button"
             onClick={() => setActiveTab('rejected')}
             style={{
-              padding: '8px 16px', borderRadius: '8px', border: activeTab === 'rejected' ? '1.5px solid #dc2626' : '1.5px solid #fecaca',
+              padding: '6px 12px', borderRadius: '6px', border: activeTab === 'rejected' ? '1.5px solid #dc2626' : '1.5px solid #fecaca',
               background: activeTab === 'rejected' ? '#dc2626' : '#fef2f2',
               color: activeTab === 'rejected' ? '#ffffff' : '#dc2626',
-              fontWeight: 800, fontSize: '0.8rem', cursor: 'pointer'
+              fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer'
             }}
           >
             ✖ Rejected ({rejectedCount})
           </button>
         </div>
 
-        <div style={{ position: 'relative', width: '320px' }}>
+        <div style={{ position: 'relative', width: '280px' }}>
           <label htmlFor="search-payments-input" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', border: 0 }}>
             Search Payments
           </label>
-          <HiOutlineSearch size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+          <HiOutlineSearch size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
           <input
             id="search-payments-input"
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             aria-label="Search payment records"
-            placeholder="Search by student name, UTR ID, or phone..."
+            placeholder="Search by student name, UTR ID..."
             style={{
-              width: '100%', padding: '9px 14px 9px 42px', borderRadius: '10px',
-              border: '1.5px solid #cbd5e1', fontSize: '0.85rem', outline: 'none'
+              width: '100%', padding: '8px 12px 8px 36px', borderRadius: '8px',
+              border: '1.5px solid #cbd5e1', fontSize: '0.8rem', outline: 'none'
             }}
           />
         </div>
       </div>
 
-      {/* Payments Table */}
+      {/* Payments Table Responsive Container */}
       <div style={{
-        background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px',
-        overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.02)'
+        background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px',
+        overflowX: 'auto', boxShadow: '0 4px 12px rgba(0,0,0,0.02)'
       }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
+        <table style={{ width: '100%', minWidth: '920px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.8rem' }}>
           <thead>
-            <tr style={{ background: '#f8fafc', borderBottom: '1.5px solid #e2e8f0', color: '#000648', fontWeight: 800 }}>
-              <th style={{ padding: '14px 18px' }}>Student Name</th>
-              <th style={{ padding: '14px 18px' }}>Amount</th>
-              <th style={{ padding: '14px 18px' }}>12-Digit UTR / Order Ref</th>
-              <th style={{ padding: '14px 18px' }}>Status & Verification</th>
-              <th style={{ padding: '14px 18px' }}>Course Title</th>
-              <th style={{ padding: '14px 18px' }}>Date</th>
-              <th style={{ padding: '14px 18px', textAlign: 'right' }}>Admin Controls</th>
+            <tr style={{ background: '#f8fafc', borderBottom: '1.5px solid #e2e8f0', color: '#000648', fontWeight: 800, fontSize: '0.75rem' }}>
+              <th style={{ padding: '10px 12px' }}>Student Name</th>
+              <th style={{ padding: '10px 12px' }}>Amount</th>
+              <th style={{ padding: '10px 12px' }}>12-Digit UTR / Order Ref</th>
+              <th style={{ padding: '10px 12px' }}>Status & Verification</th>
+              <th style={{ padding: '10px 12px' }}>Course Title</th>
+              <th style={{ padding: '10px 12px' }}>Date</th>
+              <th style={{ padding: '10px 12px', textAlign: 'right' }}>Admin Controls</th>
             </tr>
           </thead>
           <tbody>
-            {filteredPayments.length === 0 ? (
+            {sortedPayments.length === 0 ? (
               <tr>
-                <td colSpan={7} style={{ padding: '40px 32px', textAlign: 'center', color: '#64748b' }}>
-                  <div style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
+                <td colSpan={7} style={{ padding: '36px 24px', textAlign: 'center', color: '#64748b' }}>
+                  <div style={{ fontSize: '0.95rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
                     No Transactions Found in "{activeTab.toUpperCase()}" Category
                   </div>
-                  <div style={{ fontSize: '0.84rem', color: '#64748b' }}>
+                  <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
                     When candidates submit 12-digit UTR numbers on checkout, their transactions will appear here for verification.
                   </div>
                 </td>
               </tr>
             ) : (
-              filteredPayments.map((pay) => {
+              sortedPayments.map((pay) => {
                 const isPending = pay.status === 'PENDING_VERIFICATION' || pay.status === 'PENDING';
                 const isVerified = pay.status === 'VERIFIED' || pay.status === 'SUCCESSFUL' || !pay.status;
                 const isRejected = pay.status === 'REJECTED';
 
                 return (
                   <tr key={pay.id} style={{ borderBottom: '1px solid #f1f5f9', background: isPending ? '#fffdf5' : '#ffffff' }}>
-                    <td style={{ padding: '14px 18px', fontWeight: 800, color: '#000648' }}>
+                    <td style={{ padding: '10px 12px', fontWeight: 800, color: '#000648' }}>
                       {pay.studentName}
-                      {pay.phone && <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>{pay.phone}</div>}
+                      {pay.phone && <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 500 }}>{pay.phone}</div>}
                     </td>
-                    <td style={{ padding: '14px 18px', fontWeight: 900, color: '#15803d' }}>
+                    <td style={{ padding: '10px 12px', fontWeight: 900, color: '#15803d' }}>
                       ₹{Number(pay.amount).toLocaleString('en-IN')}
                     </td>
-                    <td style={{ padding: '14px 18px', fontFamily: 'monospace', fontSize: '0.8rem', color: '#334155', fontWeight: 700 }}>
+                    <td style={{ padding: '10px 12px', fontFamily: 'monospace', fontSize: '0.78rem', color: '#334155', fontWeight: 700 }}>
                       <div>{pay.upiTransactionId}</div>
-                      {pay.orderRefId && <div style={{ fontSize: '0.7rem', color: '#64748b' }}>{pay.orderRefId}</div>}
+                      {pay.orderRefId && <div style={{ fontSize: '0.68rem', color: '#64748b' }}>{pay.orderRefId}</div>}
                     </td>
-                    <td style={{ padding: '14px 18px' }}>
+                    <td style={{ padding: '10px 12px' }}>
                       {isPending && (
-                        <span style={{ background: '#fffbe6', color: '#d48806', border: '1px solid #ffe58f', padding: '4px 10px', borderRadius: '50px', fontWeight: 800, fontSize: '0.73rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          ⏳ Pending Verification
+                        <span style={{ background: '#fffbe6', color: '#d48806', border: '1px solid #ffe58f', padding: '3px 8px', borderRadius: '50px', fontWeight: 800, fontSize: '0.7rem', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                          ⏳ Pending Review
                         </span>
                       )}
                       {isVerified && (
-                        <span style={{ background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', padding: '4px 10px', borderRadius: '50px', fontWeight: 800, fontSize: '0.73rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          ✔ Approved / Verified
+                        <span style={{ background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', padding: '3px 8px', borderRadius: '50px', fontWeight: 800, fontSize: '0.7rem', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
+                          ✔ Approved
                         </span>
                       )}
                       {isRejected && (
-                        <span style={{ background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', padding: '4px 10px', borderRadius: '50px', fontWeight: 800, fontSize: '0.73rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <span style={{ background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', padding: '3px 8px', borderRadius: '50px', fontWeight: 800, fontSize: '0.7rem', display: 'inline-flex', alignItems: 'center', gap: '3px' }}>
                           ✖ Rejected
                         </span>
                       )}
                     </td>
-                    <td style={{ padding: '14px 18px', color: '#475569', fontWeight: 600 }}>
+                    <td style={{ padding: '10px 12px', color: '#475569', fontWeight: 600, fontSize: '0.78rem' }}>
                       {pay.courseName || 'General Cohort'}
                     </td>
-                    <td style={{ padding: '14px 18px', color: '#64748b', fontSize: '0.78rem' }}>
+                    <td style={{ padding: '10px 12px', color: '#64748b', fontSize: '0.74rem' }}>
                       {pay.paymentDate}
                     </td>
-                    <td style={{ padding: '14px 18px', textAlign: 'right' }}>
-                      <div style={{ display: 'flex', gap: '6px', justifyContent: 'flex-end', alignItems: 'center' }}>
+                    <td style={{ padding: '10px 12px', textAlign: 'right' }}>
+                      <div style={{ display: 'flex', gap: '4px', justifyContent: 'flex-end', alignItems: 'center' }}>
                         {isPending && (
                           <>
                             <button
                               type="button"
                               onClick={() => handleApproveUtr(pay)}
                               title="Approve 12-Digit UTR and Mark Student Enrolled"
-                              style={{ padding: '6px 12px', background: '#166534', color: '#ffffff', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 900, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                              style={{ padding: '5px 10px', background: '#166534', color: '#ffffff', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 900, fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px' }}
                             >
-                              <HiCheck size={14} /> Approve
+                              <HiCheck size={13} /> Approve
                             </button>
                             <button
                               type="button"
                               onClick={() => handleRejectUtr(pay)}
                               title="Reject UTR Submission"
-                              style={{ padding: '6px 10px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '6px', cursor: 'pointer', fontWeight: 800, fontSize: '0.75rem' }}
+                              style={{ padding: '5px 8px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '5px', cursor: 'pointer', fontWeight: 800, fontSize: '0.72rem' }}
                             >
                               Reject
                             </button>
@@ -582,9 +597,9 @@ export default function PaymentsReceivedManager() {
                           onClick={() => setSelectedReceipt(pay)}
                           aria-label={`View receipt for ${pay.studentName}`}
                           title="View Official Digital Payment Receipt Modal"
-                          style={{ padding: '6px 10px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                          style={{ padding: '4px 8px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 700, fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px' }}
                         >
-                          <HiOutlineEye size={14} /> Receipt
+                          <HiOutlineEye size={13} /> Receipt
                         </button>
 
                         <button
@@ -592,9 +607,9 @@ export default function PaymentsReceivedManager() {
                           onClick={() => downloadReceiptImage(pay, currentUpiVpa)}
                           aria-label={`Download image receipt for ${pay.studentName}`}
                           title="Download Receipt as Image (.png)"
-                          style={{ padding: '6px 10px', background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                          style={{ padding: '4px 8px', background: '#f0fdf4', color: '#166534', border: '1px solid #bbf7d0', borderRadius: '5px', cursor: 'pointer', fontWeight: 700, fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px' }}
                         >
-                          <HiOutlinePhotograph size={14} /> Image
+                          <HiOutlinePhotograph size={13} /> Image
                         </button>
 
                         <button
@@ -602,9 +617,9 @@ export default function PaymentsReceivedManager() {
                           onClick={() => handleShareSummary(pay)}
                           aria-label={`Share payment report for ${pay.studentName}`}
                           title="Copy payment summary report for WhatsApp/Email"
-                          style={{ padding: '6px 10px', background: copiedShareId === pay.id ? '#dcfce7' : '#f8fafc', color: copiedShareId === pay.id ? '#15803d' : '#475569', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                          style={{ padding: '4px 8px', background: copiedShareId === pay.id ? '#dcfce7' : '#f8fafc', color: copiedShareId === pay.id ? '#15803d' : '#475569', border: '1px solid #cbd5e1', borderRadius: '5px', cursor: 'pointer', fontWeight: 700, fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px' }}
                         >
-                          {copiedShareId === pay.id ? <HiCheck size={14} /> : <HiOutlineShare size={14} />}
+                          {copiedShareId === pay.id ? <HiCheck size={13} /> : <HiOutlineShare size={13} />}
                         </button>
 
                         <button
@@ -612,9 +627,9 @@ export default function PaymentsReceivedManager() {
                           onClick={() => printPdfReceipt(pay, currentUpiVpa)}
                           aria-label={`Print PDF receipt for ${pay.studentName}`}
                           title="Download / Print PDF Receipt"
-                          style={{ padding: '6px 10px', background: '#f1f5f9', color: '#000648', border: '1px solid #cbd5e1', borderRadius: '6px', cursor: 'pointer', fontWeight: 700, fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+                          style={{ padding: '4px 8px', background: '#f1f5f9', color: '#000648', border: '1px solid #cbd5e1', borderRadius: '5px', cursor: 'pointer', fontWeight: 700, fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px' }}
                         >
-                          <HiOutlinePrinter size={14} /> PDF
+                          <HiOutlinePrinter size={13} /> PDF
                         </button>
 
                         <button
@@ -622,9 +637,9 @@ export default function PaymentsReceivedManager() {
                           onClick={() => handleDelete(pay.id, pay.studentName)}
                           aria-label={`Delete payment record for ${pay.studentName}`}
                           title="Delete Record"
-                          style={{ padding: '6px 8px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '6px', cursor: 'pointer' }}
+                          style={{ padding: '4px 6px', background: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '5px', cursor: 'pointer' }}
                         >
-                          <HiOutlineTrash size={14} />
+                          <HiOutlineTrash size={13} />
                         </button>
                       </div>
                     </td>
