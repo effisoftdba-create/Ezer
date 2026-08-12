@@ -341,6 +341,20 @@ export default function CourseFormModal({
                   />
                 </div>
 
+                <div style={{ marginBottom: '14px' }}>
+                  <label htmlFor="course_tagline" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                    Course Tagline / Catchphrase
+                  </label>
+                  <input
+                    id="course_tagline"
+                    type="text"
+                    value={formData.tagline || ''}
+                    onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
+                    placeholder="e.g. Master Production Infrastructure & IT Support with Live Hands-on Labs"
+                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                  />
+                </div>
+
                 <div>
                   <label htmlFor="course_description" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
                     Course Overview & Subtitle

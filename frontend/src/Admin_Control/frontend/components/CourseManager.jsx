@@ -125,8 +125,8 @@ export default function CourseManager() {
         .replace(/[\s_]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-    if (!rawTitle || !formData.tagline?.trim() || !formData.description?.trim() || !formData.price?.trim()) {
-      alert('Please fill out all required fields: Course Title, Tagline, Overview Description, and Offer Price.');
+    if (!rawTitle || !formData.price?.trim()) {
+      alert('Please fill out Course Title and Cohort Enrollment Fee (₹).');
       return;
     }
 
@@ -154,10 +154,15 @@ export default function CourseManager() {
       };
     });
 
+    const taglineText = (formData.tagline || formData.description || `Master ${rawTitle} with live hands-on projects and placement support.`).trim();
+    const descText = (formData.description || formData.tagline || `Comprehensive training in ${rawTitle} with live interactive labs.`).trim();
+
     const payload = {
       ...formData,
       id: courseId,
       title: rawTitle,
+      tagline: taglineText,
+      description: descText,
       slug: computedSlug,
       hashLink: formData.hashLink || `#${computedSlug}_course`,
       position: formData.imagePosition,
