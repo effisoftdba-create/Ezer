@@ -267,6 +267,22 @@ export function SiteProvider({ children }) {
           safeSetStorage(STORAGE_PAYMENTS_KEY, freshPayments);
         }
       }));
+      unsubs.push(subscribeToCollection('adminUsers', (items) => {
+        if (Array.isArray(items) && items.length > 0) {
+          const storedLocal = getStored(STORAGE_ADMIN_USERS_KEY, defaultAdminUsers) || defaultAdminUsers;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'adminUsers', value: merged });
+          safeSetStorage(STORAGE_ADMIN_USERS_KEY, merged);
+        }
+      }));
+      unsubs.push(subscribeToCollection('admin_users', (items) => {
+        if (Array.isArray(items) && items.length > 0) {
+          const storedLocal = getStored(STORAGE_ADMIN_USERS_KEY, defaultAdminUsers) || defaultAdminUsers;
+          const merged = mergeCollection(storedLocal, items, 'id');
+          dispatch({ type: 'SET_KEY', key: 'adminUsers', value: merged });
+          safeSetStorage(STORAGE_ADMIN_USERS_KEY, merged);
+        }
+      }));
     } catch (err) {
       console.error('[SiteContext] Error initializing Firestore subscriptions:', err);
     }
@@ -821,22 +837,32 @@ export function SiteProvider({ children }) {
       status: 'ACTIVE',
       ...userObj
     };
-    dispatch({ type: 'ADD_ITEM', key: 'adminUsers', item: newUser });
+    const updated = [...(adminUsers || []), newUser];
+    dispatch({ type: 'SET_KEY', key: 'adminUsers', value: updated });
+    safeSetStorage(STORAGE_ADMIN_USERS_KEY, updated);
+    saveDocument('adminUsers', newUser.id, newUser);
     saveDocument('admin_users', newUser.id, newUser);
     triggerStateToast('SAVED');
-  }, []);
+  }, [adminUsers]);
 
   const updateAdminUser = useCallback((id, updatedData) => {
-    dispatch({ type: 'UPDATE_ITEM', key: 'adminUsers', id, updatedData });
+    const updated = (adminUsers || []).map((u) => (u.id === id ? { ...u, ...updatedData } : u));
+    dispatch({ type: 'SET_KEY', key: 'adminUsers', value: updated });
+    safeSetStorage(STORAGE_ADMIN_USERS_KEY, updated);
+    saveCollectionArray('adminUsers', updated);
+    saveDocument('adminUsers', id, updatedData);
     saveDocument('admin_users', id, updatedData);
     triggerStateToast('SAVED');
-  }, []);
+  }, [adminUsers]);
 
   const deleteAdminUser = useCallback((id) => {
-    dispatch({ type: 'DELETE_ITEM', key: 'adminUsers', id });
-    removeDocument('admin_users', id);
+    const updated = (adminUsers || []).filter((u) => u.id !== id);
+    dispatch({ type: 'SET_KEY', key: 'adminUsers', value: updated });
+    safeSetStorage(STORAGE_ADMIN_USERS_KEY, updated);
+    removeDocument('adminUsers', String(id));
+    removeDocument('admin_users', String(id));
     triggerStateToast('DELETED');
-  }, []);
+  }, [adminUsers]);
 
   const value = useMemo(() => ({
     heroSlides, updateHeroSlides, addHeroSlide, updateHeroSlide, deleteHeroSlide,

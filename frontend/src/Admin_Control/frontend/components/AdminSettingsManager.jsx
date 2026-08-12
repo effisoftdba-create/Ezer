@@ -238,6 +238,7 @@ export default function AdminSettingsManager() {
               <input
                 id="new_admin_email"
                 type="email"
+                autoComplete="username"
                 required
                 placeholder="e.g. counselor1@ezer.com"
                 value={form.email}
@@ -253,6 +254,7 @@ export default function AdminSettingsManager() {
               <input
                 id="new_admin_name"
                 type="text"
+                autoComplete="name"
                 required
                 placeholder="e.g. Ananya Sharma"
                 value={form.name}
