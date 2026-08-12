@@ -102,10 +102,11 @@ export default function AdminLogin() {
             <HiOutlineMail size={18} />
           </div>
           <input
-            placeholder="admin@ezer.com"
+            placeholder="effisoftdba@gmail.com"
             title="Email Address"
             name="email"
             type="email"
+            autoComplete="username"
             className="input_field"
             id="email_field"
             value={email}
@@ -125,6 +126,7 @@ export default function AdminLogin() {
             title="Password"
             name="password"
             type={showPassword ? 'text' : 'password'}
+            autoComplete="current-password"
             className="input_field"
             id="password_field"
             value={password}

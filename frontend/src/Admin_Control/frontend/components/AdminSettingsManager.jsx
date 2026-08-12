@@ -241,6 +241,7 @@ export default function AdminSettingsManager() {
                 <input
                   id="new_admin_password"
                   type={showPassword ? 'text' : 'password'}
+                  autoComplete="new-password"
                   required
                   placeholder="Set initial password"
                   value={form.password}
@@ -458,6 +459,7 @@ export default function AdminSettingsManager() {
               <input
                 id="reset_new_password_input"
                 type="text"
+                autoComplete="new-password"
                 required
                 placeholder="Enter new password"
                 value={newPasswordInput}
