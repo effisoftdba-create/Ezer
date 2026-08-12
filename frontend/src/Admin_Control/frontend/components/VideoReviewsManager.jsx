@@ -67,8 +67,8 @@ export default function VideoReviewsManager() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.embedUrl) {
-      alert('Learner Name and YouTube Video URL are required.');
+    if (!formData.name?.trim() || !formData.company?.trim() || !formData.title?.trim() || !formData.embedUrl?.trim()) {
+      alert('Please fill out all required fields: Learner Name, Company/Role, Review Title, and YouTube Video URL.');
       return;
     }
 

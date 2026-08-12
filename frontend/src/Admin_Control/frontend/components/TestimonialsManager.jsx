@@ -74,8 +74,8 @@ export default function TestimonialsManager() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.author || !formData.text) {
-      alert('Author name and review content are required.');
+    if (!formData.author?.trim() || !formData.role?.trim() || !formData.company?.trim() || !formData.track?.trim() || !formData.text?.trim()) {
+      alert('Please fill out all required fields: Author Name, Designation/Role, Company Name, Course Track, and Review Content.');
       return;
     }
 

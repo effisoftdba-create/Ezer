@@ -70,8 +70,8 @@ export default function SeniorMentorsManager() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.designation) {
-      alert('Mentor Name and Designation are required.');
+    if (!formData.name?.trim() || !formData.designation?.trim() || !formData.bio?.trim()) {
+      alert('Please fill out all required fields: Mentor Name, Designation & Firm, and Bio summary.');
       return;
     }
 

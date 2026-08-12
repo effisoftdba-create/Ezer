@@ -107,11 +107,12 @@ export default function TestimonialFormModal({
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
               <label htmlFor="testi_company_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Firm / Company Name
+                Firm / Company Name *
               </label>
               <input
                 id="testi_company_field"
                 type="text"
+                required
                 placeholder="e.g. Pixis"
                 value={formData.company || ''}
                 onChange={(e) => setFormData((prev) => ({ ...prev, company: e.target.value }))}

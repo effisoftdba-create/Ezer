@@ -125,8 +125,8 @@ export default function CourseManager() {
         .replace(/[\s_]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-    if (!rawTitle) {
-      alert('Course Title is required.');
+    if (!rawTitle || !formData.tagline?.trim() || !formData.description?.trim() || !formData.price?.trim()) {
+      alert('Please fill out all required fields: Course Title, Tagline, Overview Description, and Offer Price.');
       return;
     }
 

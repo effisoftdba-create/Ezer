@@ -97,7 +97,9 @@ export default function ArticleFormModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.title.trim()) return alert('Please enter article title');
+    if (!formData.title?.trim() || !formData.summary?.trim() || !formData.author?.trim()) {
+      return alert('Please fill out all required fields: Article Title, Summary & Key Takeaways, and Author Name.');
+    }
 
     const takeawaysArray = formData.takeawaysStr
       .split('\n')
