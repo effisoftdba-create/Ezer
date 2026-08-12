@@ -50,12 +50,14 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
 
   const handleEditClick = (ach) => {
     setEditingAchId(ach.id);
-    setAchTitle(ach.title || '');
-    setAchIssuer(ach.issuer || '');
-    setAchYear(ach.year || '2025');
-    setAchCategory(ach.category || 'Excellence Award');
-    setAchImage(ach.image || '');
-    setAchDesc(ach.description || '');
+    setAchForm({
+      title: ach.title || '',
+      issuer: ach.issuer || '',
+      year: ach.year || '',
+      category: ach.category || 'Excellence Award',
+      image: ach.image || '',
+      desc: ach.description || ''
+    });
     setIsEditing(true);
   };
 
@@ -65,11 +67,11 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
 
     const payload = {
       title: achTitle.trim(),
-      issuer: achIssuer.trim() || 'EZER Learning Solutions',
-      year: achYear.trim() || '2025',
+      issuer: achIssuer.trim(),
+      year: achYear.trim(),
       category: achCategory,
-      image: currentImage.trim(),
-      description: achDesc.trim() || 'Awarded for tech training excellence and verified student outcomes.'
+      image: currentImage ? currentImage.trim() : '',
+      description: achDesc.trim()
     };
 
     if (editingAchId && updateAchievement) {
