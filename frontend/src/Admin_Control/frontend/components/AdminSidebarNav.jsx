@@ -25,7 +25,7 @@ const CATEGORIES = [
   },
   {
     title: 'SYSTEM CONFIG',
-    ids: ['popup', 'faq', 'contact']
+    ids: ['popup', 'faq', 'contact', 'settings']
   }
 ];
 
@@ -45,10 +45,25 @@ export default function AdminSidebarNav({ tabs, activeTab, setActiveTab, isOpen,
   const normalizedQuery = query.trim().toLowerCase();
 
   const visibleCategories = useMemo(() => {
-    return CATEGORIES.map((cat) => ({
+    const categorizedIds = new Set(CATEGORIES.flatMap((c) => c.ids));
+    const list = CATEGORIES.map((cat) => ({
       ...cat,
       tabs: tabs.filter((t) => cat.ids.includes(t.id) && (!normalizedQuery || t.label.toLowerCase().includes(normalizedQuery)))
     })).filter((cat) => cat.tabs.length > 0);
+
+    const uncategorizedTabs = tabs.filter(
+      (t) => !categorizedIds.has(t.id) && (!normalizedQuery || t.label.toLowerCase().includes(normalizedQuery))
+    );
+
+    if (uncategorizedTabs.length > 0) {
+      list.push({
+        title: 'OTHER MODULES',
+        ids: uncategorizedTabs.map((t) => t.id),
+        tabs: uncategorizedTabs
+      });
+    }
+
+    return list;
   }, [tabs, normalizedQuery]);
 
   const handleSelect = (tabId) => {
