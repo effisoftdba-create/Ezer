@@ -144,12 +144,13 @@ export async function authenticateAdmin(email, password, customUsers = []) {
       const randomHex = Array.from(randomArray, (b) => b.toString(16).padStart(2, '0')).join('');
       const token = `ezer_token_${Date.now()}_${randomHex}`;
 
+      const isFullAdmin = foundUser.role === 'ADMIN' || foundUser.allowedTabs === '*';
       const sessionUser = {
         id: foundUser.id || `user-${Date.now()}`,
         email: foundUser.email,
         name: foundUser.name || foundUser.email.split('@')[0],
-        role: foundUser.role || 'SUB_ADMIN',
-        allowedTabs: Array.isArray(foundUser.allowedTabs) ? foundUser.allowedTabs : [],
+        role: foundUser.role || (isFullAdmin ? 'ADMIN' : 'STAFF'),
+        allowedTabs: isFullAdmin ? '*' : (Array.isArray(foundUser.allowedTabs) ? foundUser.allowedTabs : []),
         status: foundUser.status || 'ACTIVE'
       };
 

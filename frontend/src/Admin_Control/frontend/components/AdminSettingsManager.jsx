@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import { getCurrentAdminUser } from '../utils/authService';
@@ -44,10 +44,13 @@ export default function AdminSettingsManager() {
   const { adminUsers, addAdminUser, updateAdminUser, deleteAdminUser } = useSiteData();
   const currentLoggedUser = getCurrentAdminUser();
 
+  const isSuperAdmin = currentLoggedUser?.role === 'SUPER_ADMIN' || currentLoggedUser?.email === 'effisoftdba@gmail.com';
+
   const [form, setForm] = useState({
     email: '',
     name: '',
     password: '',
+    role: 'STAFF', // 'ADMIN' | 'STAFF'
     allowedTabs: ['leads', 'courses', 'blog']
   });
 
@@ -55,8 +58,23 @@ export default function AdminSettingsManager() {
   const [editingUser, setEditingUser] = useState(null);
   const [resetPassUser, setResetPassUser] = useState(null);
   const [newPasswordInput, setNewPasswordInput] = useState('');
+  const [revealedPassIds, setRevealedPassIds] = useState({});
 
-  const userList = Array.isArray(adminUsers) ? adminUsers : [];
+  // Filter visible users: Super Admin sees all accounts; Regular Admin/Staff NEVER see Super Admin!
+  const visibleUsers = useMemo(() => {
+    const list = Array.isArray(adminUsers) ? adminUsers : [];
+    if (isSuperAdmin) return list;
+    return list.filter((u) => u.email !== 'effisoftdba@gmail.com' && u.role !== 'SUPER_ADMIN');
+  }, [adminUsers, isSuperAdmin]);
+
+  const activeCount = visibleUsers.filter((u) => u.status !== 'DISABLED').length;
+
+  const toggleRevealPassword = (userId) => {
+    setRevealedPassIds((prev) => ({
+      ...prev,
+      [userId]: !prev[userId]
+    }));
+  };
 
   const handleToggleModule = (moduleId) => {
     setForm((prev) => {
@@ -85,18 +103,21 @@ export default function AdminSettingsManager() {
     }
 
     const emailClean = form.email.trim().toLowerCase();
-    const isDup = userList.some((u) => u.email.trim().toLowerCase() === emailClean);
+    const allUsers = Array.isArray(adminUsers) ? adminUsers : [];
+    const isDup = allUsers.some((u) => u.email.trim().toLowerCase() === emailClean);
     if (isDup || emailClean === 'effisoftdba@gmail.com') {
       alert(`User ID "${emailClean}" already exists. Please enter a unique email address.`);
       return;
     }
 
+    const isFullAdmin = form.role === 'ADMIN';
+
     addAdminUser({
       email: emailClean,
       name: form.name.trim(),
       password: form.password.trim(),
-      role: 'SUB_ADMIN',
-      allowedTabs: form.allowedTabs,
+      role: form.role, // 'ADMIN' or 'STAFF'
+      allowedTabs: isFullAdmin ? '*' : form.allowedTabs,
       status: 'ACTIVE'
     });
 
@@ -104,9 +125,10 @@ export default function AdminSettingsManager() {
       email: '',
       name: '',
       password: '',
+      role: 'STAFF',
       allowedTabs: ['leads', 'courses', 'blog']
     });
-    alert(`Admin account created for "${form.name.trim()}"!`);
+    alert(`${form.role === 'ADMIN' ? 'Admin' : 'Staff'} account created for "${form.name.trim()}"!`);
   };
 
   const handleToggleStatus = (user) => {
@@ -125,7 +147,7 @@ export default function AdminSettingsManager() {
       alert('Super Admin account cannot be deleted.');
       return;
     }
-    if (window.confirm(`Permanently delete admin account for "${user.name}" (${user.email})?`)) {
+    if (window.confirm(`Permanently delete account for "${user.name}" (${user.email})?`)) {
       deleteAdminUser(user.id);
     }
   };
@@ -133,7 +155,11 @@ export default function AdminSettingsManager() {
   const handleSaveEditPermissions = (e) => {
     e.preventDefault();
     if (!editingUser) return;
-    updateAdminUser(editingUser.id, { allowedTabs: editingUser.allowedTabs });
+    const isFullAdmin = editingUser.role === 'ADMIN';
+    updateAdminUser(editingUser.id, {
+      role: editingUser.role,
+      allowedTabs: isFullAdmin ? '*' : editingUser.allowedTabs
+    });
     setEditingUser(null);
     alert(`Access permissions updated for "${editingUser.name}"!`);
   };
@@ -165,14 +191,14 @@ export default function AdminSettingsManager() {
         </div>
       </div>
 
-      {/* Metrics Header */}
+      {/* Metrics Header (Only counts visible users - excludes Super Admin for regular admins) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '12px', marginBottom: '22px' }}>
         <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '12px', padding: '12px 16px' }}>
           <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-            Total Admin Accounts
+            Total Registered Accounts
           </span>
           <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', marginTop: '2px' }}>
-            {userList.length} User(s)
+            {visibleUsers.length} User(s)
           </div>
         </div>
 
@@ -182,7 +208,7 @@ export default function AdminSettingsManager() {
           </span>
           <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#15803d', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px' }}>
             <HiOutlineShieldCheck size={20} />
-            {userList.filter((u) => u.status !== 'DISABLED').length} Active
+            {activeCount} Active
           </div>
         </div>
 
@@ -196,13 +222,14 @@ export default function AdminSettingsManager() {
         </div>
       </div>
 
-      {/* CREATE NEW ADMIN ACCOUNT FORM */}
+      {/* CREATE NEW USER ACCOUNT FORM */}
       <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '24px', marginBottom: '28px', boxShadow: '0 4px 14px rgba(0,0,0,0.03)' }}>
         <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#000648', marginTop: 0, marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <HiOutlineUserAdd size={22} color="#000648" /> Create New Admin User Account
+          <HiOutlineUserAdd size={22} color="#000648" /> Create New Admin / Staff User Account
         </h3>
 
-        <form onSubmit={handleCreateUser} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <form onSubmit={handleCreateUser} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+          {/* Inputs Row */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px' }}>
             <div>
               <label htmlFor="new_admin_email" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
@@ -261,54 +288,126 @@ export default function AdminSettingsManager() {
             </div>
           </div>
 
-          {/* Module Permission Checkboxes Matrix */}
+          {/* Account Role Selector */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <span style={{ fontSize: '0.82rem', fontWeight: 900, color: '#000648' }}>
-                Select Accessible Admin Modules (Tick checkboxes to grant access) *
-              </span>
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <button
-                  type="button"
-                  onClick={handleSelectAll}
-                  style={{ background: '#e0e7ff', color: '#3730a3', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '0.72rem', fontWeight: 800, cursor: 'pointer' }}
-                >
-                  Select All
-                </button>
-                <button
-                  type="button"
-                  onClick={handleClearAll}
-                  style={{ background: '#f1f5f9', color: '#475569', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '0.72rem', fontWeight: 800, cursor: 'pointer' }}
-                >
-                  Clear All
-                </button>
-              </div>
+            <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
+              Assign Account Role *
             </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', maxWidth: '600px' }}>
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, role: 'ADMIN', allowedTabs: '*' })}
+                style={{
+                  padding: '12px 16px',
+                  borderRadius: '10px',
+                  border: form.role === 'ADMIN' ? '2px solid #000648' : '1.5px solid #cbd5e1',
+                  background: form.role === 'ADMIN' ? '#f0f4ff' : '#ffffff',
+                  color: '#000648',
+                  fontWeight: form.role === 'ADMIN' ? 900 : 700,
+                  fontSize: '0.84rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  textAlign: 'left'
+                }}
+              >
+                <span style={{ fontSize: '1.2rem' }}>👑</span>
+                <div>
+                  <div style={{ fontWeight: 900 }}>Admin Role</div>
+                  <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 500 }}>Full Access to All System Modules</div>
+                </div>
+              </button>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-              {MODULE_OPTIONS.map((mod) => {
-                const isChecked = Array.isArray(form.allowedTabs) && form.allowedTabs.includes(mod.id);
-                return (
-                  <label
-                    key={mod.id}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 10px',
-                      borderRadius: '8px', border: isChecked ? '1.5px solid #000648' : '1px solid #cbd5e1',
-                      background: isChecked ? '#f0f4ff' : '#ffffff', cursor: 'pointer', fontSize: '0.76rem', fontWeight: isChecked ? 800 : 600, color: '#000648'
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => handleToggleModule(mod.id)}
-                      style={{ width: '15px', height: '15px', accentColor: '#000648', cursor: 'pointer' }}
-                    />
-                    {mod.label}
-                  </label>
-                );
-              })}
+              <button
+                type="button"
+                onClick={() => setForm({ ...form, role: 'STAFF', allowedTabs: Array.isArray(form.allowedTabs) ? form.allowedTabs : ['leads', 'courses', 'blog'] })}
+                style={{
+                  padding: '12px 16px',
+                  borderRadius: '10px',
+                  border: form.role === 'STAFF' ? '2px solid #000648' : '1.5px solid #cbd5e1',
+                  background: form.role === 'STAFF' ? '#f0f4ff' : '#ffffff',
+                  color: '#000648',
+                  fontWeight: form.role === 'STAFF' ? 900 : 700,
+                  fontSize: '0.84rem',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  textAlign: 'left'
+                }}
+              >
+                <span style={{ fontSize: '1.2rem' }}>👥</span>
+                <div>
+                  <div style={{ fontWeight: 900 }}>Staff Role</div>
+                  <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 500 }}>Custom Selected Module Permissions</div>
+                </div>
+              </button>
             </div>
           </div>
+
+          {/* Module Permission Checkboxes (Only shown when STAFF role is selected) */}
+          {form.role === 'ADMIN' ? (
+            <div style={{ background: '#f0f4ff', border: '1.5px solid #c7d2fe', borderRadius: '12px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <HiOutlineShieldCheck size={22} color="#115DFC" />
+              <div>
+                <div style={{ fontSize: '0.84rem', fontWeight: 900, color: '#000648' }}>
+                  👑 Full Access Granted
+                </div>
+                <div style={{ fontSize: '0.76rem', color: '#475569' }}>
+                  Admin accounts automatically receive full access to all system modules and management panels.
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 900, color: '#000648' }}>
+                  Select Accessible Admin Modules for Staff User (Tick checkboxes to grant access) *
+                </span>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <button
+                    type="button"
+                    onClick={handleSelectAll}
+                    style={{ background: '#e0e7ff', color: '#3730a3', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '0.72rem', fontWeight: 800, cursor: 'pointer' }}
+                  >
+                    Select All
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleClearAll}
+                    style={{ background: '#f1f5f9', color: '#475569', border: 'none', borderRadius: '6px', padding: '4px 10px', fontSize: '0.72rem', fontWeight: 800, cursor: 'pointer' }}
+                  >
+                    Clear All
+                  </button>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                {MODULE_OPTIONS.map((mod) => {
+                  const isChecked = Array.isArray(form.allowedTabs) && form.allowedTabs.includes(mod.id);
+                  return (
+                    <label
+                      key={mod.id}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 10px',
+                        borderRadius: '8px', border: isChecked ? '1.5px solid #000648' : '1px solid #cbd5e1',
+                        background: isChecked ? '#f0f4ff' : '#ffffff', cursor: 'pointer', fontSize: '0.76rem', fontWeight: isChecked ? 800 : 600, color: '#000648'
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => handleToggleModule(mod.id)}
+                        style={{ width: '15px', height: '15px', accentColor: '#000648', cursor: 'pointer' }}
+                      />
+                      {mod.label}
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <button
             type="submit"
@@ -319,47 +418,93 @@ export default function AdminSettingsManager() {
               alignSelf: 'flex-start', boxShadow: '0 4px 14px rgba(0,6,72,0.2)'
             }}
           >
-            <HiOutlineUserAdd size={18} /> Create Admin Account & Assign Access
+            <HiOutlineUserAdd size={18} /> Create Account & Assign Access
           </button>
         </form>
       </div>
 
-      {/* EXISTING ADMIN USERS TABLE */}
+      {/* REGISTERED USERS TABLE */}
       <div style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', overflowX: 'auto', boxShadow: '0 4px 14px rgba(0,0,0,0.03)' }}>
         <div style={{ padding: '16px 20px', borderBottom: '1.5px solid #e2e8f0', background: '#f8fafc', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 900, color: '#000648', margin: 0 }}>
-            Registered Administrator Accounts ({userList.length})
+            Registered Administrator & Staff Accounts ({visibleUsers.length})
           </h3>
         </div>
 
-        <table style={{ width: '100%', minWidth: '850px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.82rem' }}>
+        <table style={{ width: '100%', minWidth: '920px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.82rem' }}>
           <thead>
             <tr style={{ background: '#f8fafc', borderBottom: '1.5px solid #e2e8f0', color: '#000648', fontWeight: 800, fontSize: '0.75rem' }}>
               <th style={{ padding: '12px 16px' }}>User ID / Email</th>
               <th style={{ padding: '12px 16px' }}>Name / Role</th>
               <th style={{ padding: '12px 16px' }}>Granted Modules Access</th>
+              <th style={{ padding: '12px 16px' }}>Password & Recovery</th>
               <th style={{ padding: '12px 16px' }}>Status</th>
               <th style={{ padding: '12px 16px', textAlign: 'right' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {userList.map((usr) => {
+            {visibleUsers.map((usr) => {
               const isSuper = usr.email === 'effisoftdba@gmail.com' || usr.role === 'SUPER_ADMIN';
-              const allowedList = usr.allowedTabs === '*' ? 'Full Access (All Modules)' : (Array.isArray(usr.allowedTabs) ? `${usr.allowedTabs.length} Modules Allowed` : 'No Access');
+              const isAdminRole = usr.role === 'ADMIN' || usr.allowedTabs === '*';
+              const isStaffRole = !isSuper && !isAdminRole;
+
+              const allowedList = (usr.allowedTabs === '*' || isAdminRole || isSuper)
+                ? 'Full Access (All Modules)'
+                : (Array.isArray(usr.allowedTabs) ? `${usr.allowedTabs.length} Modules Allowed` : 'No Access');
 
               return (
                 <tr key={usr.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                   <td style={{ padding: '12px 16px', fontWeight: 800, color: '#000648' }}>
                     {usr.email}
-                    {isSuper && <span style={{ marginLeft: '6px', background: '#f2b733', color: '#000648', fontSize: '0.65rem', fontWeight: 900, padding: '2px 6px', borderRadius: '4px' }}>SUPER ADMIN</span>}
+                    {isSuper && (
+                      <span style={{ marginLeft: '6px', background: '#f2b733', color: '#000648', fontSize: '0.65rem', fontWeight: 900, padding: '2px 6px', borderRadius: '4px' }}>
+                        SUPER ADMIN
+                      </span>
+                    )}
+                    {!isSuper && isAdminRole && (
+                      <span style={{ marginLeft: '6px', background: '#115DFC', color: '#ffffff', fontSize: '0.65rem', fontWeight: 900, padding: '2px 6px', borderRadius: '4px' }}>
+                        ADMIN
+                      </span>
+                    )}
+                    {!isSuper && isStaffRole && (
+                      <span style={{ marginLeft: '6px', background: '#475569', color: '#ffffff', fontSize: '0.65rem', fontWeight: 900, padding: '2px 6px', borderRadius: '4px' }}>
+                        STAFF
+                      </span>
+                    )}
                   </td>
                   <td style={{ padding: '12px 16px', fontWeight: 700, color: '#334155' }}>
                     {usr.name}
                   </td>
                   <td style={{ padding: '12px 16px', fontSize: '0.78rem', color: '#475569', fontWeight: 600 }}>
-                    <span style={{ background: isSuper ? '#f0f4ff' : '#f1f5f9', color: isSuper ? '#115DFC' : '#334155', padding: '3px 8px', borderRadius: '6px', fontWeight: 800 }}>
+                    <span style={{
+                      background: (isSuper || isAdminRole) ? '#f0f4ff' : '#f1f5f9',
+                      color: (isSuper || isAdminRole) ? '#115DFC' : '#334155',
+                      padding: '3px 8px', borderRadius: '6px', fontWeight: 800
+                    }}>
                       {allowedList}
                     </span>
+                  </td>
+                  <td style={{ padding: '12px 16px', fontFamily: 'monospace', fontSize: '0.78rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{
+                        background: revealedPassIds[usr.id] ? '#fffbe6' : '#f8fafc',
+                        border: revealedPassIds[usr.id] ? '1px solid #ffe58f' : '1px solid #cbd5e1',
+                        padding: '3px 8px', borderRadius: '6px',
+                        color: revealedPassIds[usr.id] ? '#d48806' : '#64748b',
+                        fontWeight: revealedPassIds[usr.id] ? 900 : 700,
+                        fontSize: '0.78rem'
+                      }}>
+                        {revealedPassIds[usr.id] ? (usr.password || 'N/A') : '••••••••'}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => toggleRevealPassword(usr.id)}
+                        title={revealedPassIds[usr.id] ? "Hide password" : "Show password for recovery"}
+                        style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', padding: '2px 4px' }}
+                      >
+                        {revealedPassIds[usr.id] ? <HiOutlineEyeOff size={15} /> : <HiOutlineEye size={15} />}
+                      </button>
+                    </div>
                   </td>
                   <td style={{ padding: '12px 16px' }}>
                     <button
@@ -380,10 +525,10 @@ export default function AdminSettingsManager() {
                       {!isSuper && (
                         <button
                           type="button"
-                          onClick={() => setEditingUser({ ...usr })}
+                          onClick={() => setEditingUser({ ...usr, role: usr.role || (usr.allowedTabs === '*' ? 'ADMIN' : 'STAFF') })}
                           style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', color: '#334155', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '3px' }}
                         >
-                          <HiOutlinePencilAlt size={14} /> Permissions
+                          <HiOutlinePencilAlt size={14} /> Edit Access
                         </button>
                       )}
                       <button
@@ -396,7 +541,7 @@ export default function AdminSettingsManager() {
                       {!isSuper && (
                         <button
                           type="button"
-                          aria-label={`Delete admin user ${usr.name}`}
+                          aria-label={`Delete user ${usr.name}`}
                           onClick={() => handleDeleteUser(usr)}
                           style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', fontWeight: 800, cursor: 'pointer' }}
                         >
@@ -412,33 +557,56 @@ export default function AdminSettingsManager() {
         </table>
       </div>
 
-      {/* EDIT PERMISSIONS MODAL */}
+      {/* EDIT PERMISSIONS & ROLE MODAL */}
       {editingUser && typeof document !== 'undefined' && createPortal(
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,6,72,0.85)', backdropFilter: 'blur(6px)', zIndex: 10000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
           <div style={{ background: '#ffffff', borderRadius: '20px', padding: '24px', maxWidth: '600px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#000648', marginTop: 0 }}>
-              Edit Access Permissions: {editingUser.name} ({editingUser.email})
+              Edit Access Permissions & Role: {editingUser.name} ({editingUser.email})
             </h3>
             
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', margin: '16px 0' }}>
-              {MODULE_OPTIONS.map((mod) => {
-                const currentAllowed = Array.isArray(editingUser.allowedTabs) ? editingUser.allowedTabs : [];
-                const isChecked = currentAllowed.includes(mod.id);
-                return (
-                  <label key={mod.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.76rem', fontWeight: isChecked ? 800 : 500, cursor: 'pointer' }}>
-                    <input
-                      type="checkbox"
-                      checked={isChecked}
-                      onChange={() => {
-                        const updated = isChecked ? currentAllowed.filter((id) => id !== mod.id) : [...currentAllowed, mod.id];
-                        setEditingUser({ ...editingUser, allowedTabs: updated });
-                      }}
-                    />
-                    {mod.label}
-                  </label>
-                );
-              })}
+            <div style={{ margin: '14px 0' }}>
+              <label htmlFor="editing_user_role_select" style={{ fontSize: '0.78rem', fontWeight: 800, display: 'block', marginBottom: '4px' }}>Role</label>
+              <select
+                id="editing_user_role_select"
+                aria-label="Edit User Role"
+                value={editingUser.role || 'STAFF'}
+                onChange={(e) => {
+                  const r = e.target.value;
+                  setEditingUser({
+                    ...editingUser,
+                    role: r,
+                    allowedTabs: r === 'ADMIN' ? '*' : (Array.isArray(editingUser.allowedTabs) ? editingUser.allowedTabs : ['leads'])
+                  });
+                }}
+                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontWeight: 800 }}
+              >
+                <option value="ADMIN">ADMIN (Full Access)</option>
+                <option value="STAFF">STAFF (Custom Module Access)</option>
+              </select>
             </div>
+
+            {editingUser.role === 'STAFF' && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '8px', margin: '16px 0' }}>
+                {MODULE_OPTIONS.map((mod) => {
+                  const currentAllowed = Array.isArray(editingUser.allowedTabs) ? editingUser.allowedTabs : [];
+                  const isChecked = currentAllowed.includes(mod.id);
+                  return (
+                    <label key={mod.id} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.76rem', fontWeight: isChecked ? 800 : 500, cursor: 'pointer' }}>
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => {
+                          const updated = isChecked ? currentAllowed.filter((id) => id !== mod.id) : [...currentAllowed, mod.id];
+                          setEditingUser({ ...editingUser, allowedTabs: updated });
+                        }}
+                      />
+                      {mod.label}
+                    </label>
+                  );
+                })}
+              </div>
+            )}
 
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', marginTop: '16px' }}>
               <button type="button" onClick={() => setEditingUser(null)} style={{ padding: '8px 16px', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}>Cancel</button>

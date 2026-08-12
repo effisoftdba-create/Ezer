@@ -242,6 +242,7 @@ export default function PaymentsReceivedManager() {
   const [selectedReceipt, setSelectedReceipt] = useState(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [copiedShareId, setCopiedShareId] = useState(null);
+  const [showComingSoon, setShowComingSoon] = useState(true);
 
   const [newPayForm, setNewPayForm] = useState({
     studentName: '',
@@ -357,6 +358,149 @@ export default function PaymentsReceivedManager() {
     setTimeout(() => setCopiedShareId(null), 2500);
   };
 
+  if (showComingSoon) {
+    return (
+      <div style={{ padding: '4px 0' }}>
+        {/* Header Bar */}
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          marginBottom: '20px', paddingBottom: '14px', borderBottom: '1.5px solid #e2e8f0', flexWrap: 'wrap', gap: '12px'
+        }}>
+          <div>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#000648', margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <HiOutlineCurrencyRupee size={24} color="#115DFC" />
+              Payments Received & Direct P2M Queue
+            </h2>
+            <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '4px 0 0 0' }}>
+              Verify candidate 12-digit UTR bank reference numbers, manage enrollment status, and issue digital receipts.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowComingSoon(false)}
+            style={{
+              padding: '7px 14px', background: '#f1f5f9', color: '#000648',
+              border: '1px solid #cbd5e1', borderRadius: '8px', fontWeight: 800, fontSize: '0.78rem',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px'
+            }}
+            title="Toggle developer preview mode"
+          >
+            <HiOutlineEye size={15} /> Switch to Developer Console
+          </button>
+        </div>
+
+        {/* Coming Soon Hero Container */}
+        <div style={{
+          background: 'linear-gradient(135deg, #000648 0%, #0b1742 50%, #060b24 100%)',
+          borderRadius: '20px',
+          padding: '48px 32px',
+          color: '#ffffff',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden',
+          boxShadow: '0 20px 40px rgba(0, 6, 72, 0.22)',
+          border: '1px solid rgba(255, 255, 255, 0.12)'
+        }}>
+          {/* Subtle ambient lighting */}
+          <div style={{
+            position: 'absolute', top: '-80px', right: '-80px', width: '280px', height: '280px',
+            background: 'radial-gradient(circle, rgba(242, 183, 51, 0.22) 0%, rgba(0,0,0,0) 70%)',
+            borderRadius: '50%', pointerEvents: 'none'
+          }} />
+          <div style={{
+            position: 'absolute', bottom: '-80px', left: '-80px', width: '280px', height: '280px',
+            background: 'radial-gradient(circle, rgba(17, 93, 252, 0.25) 0%, rgba(0,0,0,0) 70%)',
+            borderRadius: '50%', pointerEvents: 'none'
+          }} />
+
+          {/* Badge */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            background: 'rgba(242, 183, 51, 0.14)', border: '1px solid rgba(242, 183, 51, 0.35)',
+            color: '#f2b733', padding: '6px 18px', borderRadius: '50px',
+            fontSize: '0.75rem', fontWeight: 900, letterSpacing: '0.08em', textTransform: 'uppercase',
+            marginBottom: '24px'
+          }}>
+            <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', background: '#f2b733', boxShadow: '0 0 10px #f2b733' }} />
+            MODULE UNDER SCHEDULED DEPLOYMENT • COMING SOON
+          </div>
+
+          {/* Central Icon */}
+          <div style={{
+            width: '80px', height: '80px', margin: '0 auto 20px',
+            background: 'linear-gradient(135deg, #115DFC 0%, #000648 100%)',
+            borderRadius: '22px', border: '2px solid rgba(242, 183, 51, 0.4)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#f2b733', boxShadow: '0 12px 30px rgba(17, 93, 252, 0.4)'
+          }}>
+            <HiOutlineCurrencyRupee size={46} />
+          </div>
+
+          {/* Headline & Description */}
+          <h3 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#ffffff', margin: '0 0 12px 0', letterSpacing: '-0.02em' }}>
+            Automated Payments Received & Revenue Ledger
+          </h3>
+          <p style={{ fontSize: '0.92rem', color: '#94a3b8', maxWidth: '620px', margin: '0 auto 32px', lineHeight: 1.6 }}>
+            We are upgrading our real-time payment reconciliation gateway. This module will feature automated candidate 12-digit UTR bank reference verification, instant digital receipt dispatches, and multi-gateway accounting.
+          </p>
+
+          {/* Progress Bar */}
+          <div style={{ maxWidth: '460px', margin: '0 auto 36px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', padding: '14px 18px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', fontWeight: 800, color: '#cbd5e1', marginBottom: '8px' }}>
+              <span>Module Deployment Status</span>
+              <span style={{ color: '#f2b733' }}>85% Complete</span>
+            </div>
+            <div style={{ width: '100%', height: '8px', background: 'rgba(255,255,255,0.1)', borderRadius: '10px', overflow: 'hidden' }}>
+              <div style={{ width: '85%', height: '100%', background: 'linear-gradient(90deg, #115DFC, #f2b733)', borderRadius: '10px' }} />
+            </div>
+          </div>
+
+          {/* Feature Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px', textAlign: 'left' }}>
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '18px' }}>
+              <div style={{ fontSize: '1.2rem', marginBottom: '8px' }}>⚡</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 900, color: '#ffffff', marginBottom: '4px' }}>Instant UTR Matching</div>
+              <div style={{ fontSize: '0.76rem', color: '#94a3b8', lineHeight: 1.4 }}>Automated validation of candidate 12-digit bank reference numbers with instant status updates.</div>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '18px' }}>
+              <div style={{ fontSize: '1.2rem', marginBottom: '8px' }}>🧾</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 900, color: '#ffffff', marginBottom: '4px' }}>Digital Receipt Dispatch</div>
+              <div style={{ fontSize: '0.76rem', color: '#94a3b8', lineHeight: 1.4 }}>Automated PDF & PNG receipt generation delivered directly via WhatsApp & Email.</div>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '18px' }}>
+              <div style={{ fontSize: '1.2rem', marginBottom: '8px' }}>💳</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 900, color: '#ffffff', marginBottom: '4px' }}>Multi-Gateway Sync</div>
+              <div style={{ fontSize: '0.76rem', color: '#94a3b8', lineHeight: 1.4 }}>Seamless integration with UPI (GPay/PhonePe), Razorpay, Cashfree & Bank NEFT.</div>
+            </div>
+
+            <div style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '14px', padding: '18px' }}>
+              <div style={{ fontSize: '1.2rem', marginBottom: '8px' }}>📊</div>
+              <div style={{ fontSize: '0.88rem', fontWeight: 900, color: '#ffffff', marginBottom: '4px' }}>Real-time Revenue Audit</div>
+              <div style={{ fontSize: '0.76rem', color: '#94a3b8', lineHeight: 1.4 }}>Live financial breakdown by cohort, candidate, payment status, and verification date.</div>
+            </div>
+          </div>
+
+          {/* Action button */}
+          <div style={{ marginTop: '36px', display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              onClick={() => setShowComingSoon(false)}
+              style={{
+                padding: '11px 24px', background: '#f2b733', color: '#000648',
+                border: 'none', borderRadius: '10px', fontWeight: 900, fontSize: '0.85rem',
+                cursor: 'pointer', boxShadow: '0 4px 14px rgba(242, 183, 51, 0.3)'
+              }}
+            >
+              Access Developer Preview & Record Direct Payment
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
       {/* Header Bar */}
@@ -373,18 +517,31 @@ export default function PaymentsReceivedManager() {
             Verify candidate 12-digit UTR bank reference numbers, manage enrollment status, and issue digital receipts.
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => setIsAddModalOpen(true)}
-          style={{
-            padding: '8px 16px', background: '#000648', color: '#f2b733',
-            border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.82rem',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
-            boxShadow: '0 4px 12px rgba(0,6,72,0.15)'
-          }}
-        >
-          <HiOutlinePlus size={16} /> Record Direct Payment
-        </button>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button
+            type="button"
+            onClick={() => setShowComingSoon(true)}
+            style={{
+              padding: '8px 14px', background: '#f1f5f9', color: '#475569',
+              border: '1px solid #cbd5e1', borderRadius: '8px', fontWeight: 800, fontSize: '0.78rem',
+              cursor: 'pointer'
+            }}
+          >
+            Show Coming Soon Card
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            style={{
+              padding: '8px 16px', background: '#000648', color: '#f2b733',
+              border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.82rem',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px',
+              boxShadow: '0 4px 12px rgba(0,6,72,0.15)'
+            }}
+          >
+            <HiOutlinePlus size={16} /> Record Direct Payment
+          </button>
+        </div>
       </div>
 
       {/* Metrics Row */}

@@ -98,14 +98,16 @@ class TabErrorBoundary extends React.Component {
 
 export default function AdminDashboard() {
   const currentUser = useMemo(() => getCurrentAdminUser(), []);
-  const isSuperAdmin = !currentUser || currentUser.role === 'SUPER_ADMIN' || currentUser.allowedTabs === '*';
+  const isSuperAdmin = currentUser?.role === 'SUPER_ADMIN' || currentUser?.email === 'effisoftdba@gmail.com';
+  const hasFullAccess = !currentUser || isSuperAdmin || currentUser?.role === 'ADMIN' || currentUser?.allowedTabs === '*';
+  
   const allowedTabsSet = useMemo(
     () => new Set(Array.isArray(currentUser?.allowedTabs) ? currentUser.allowedTabs : []),
     [currentUser?.allowedTabs]
   );
 
   const [activeTab, setActiveTab] = useState(() => {
-    if (isSuperAdmin) return 'leads';
+    if (hasFullAccess) return 'leads';
     const firstAllowed = Array.from(allowedTabsSet)[0];
     return firstAllowed || 'leads';
   });
@@ -197,12 +199,19 @@ export default function AdminDashboard() {
     { id: 'popup', label: 'Lead Popup Modal', icon: HiOutlineTemplate },
     { id: 'faq', label: 'FAQ Manager', icon: HiOutlineQuestionMarkCircle, count: totalFaqs },
     { id: 'contact', label: 'Contact Details', icon: HiOutlinePhone },
-    { id: 'settings', label: 'Admin Settings & RBAC Users', icon: HiOutlineCog, count: (adminUsers || []).length }
+    {
+      id: 'settings',
+      label: 'Admin Settings & RBAC Users',
+      icon: HiOutlineCog,
+      count: isSuperAdmin
+        ? (adminUsers || []).length
+        : (adminUsers || []).filter((u) => u.email !== 'effisoftdba@gmail.com' && u.role !== 'SUPER_ADMIN').length
+    }
   ];
 
   // Dynamically filter tabs visible to current logged-in user based on RBAC permissions
   const tabs = allTabs.filter((tab) => {
-    if (isSuperAdmin) return true;
+    if (hasFullAccess) return true;
     return allowedTabsSet.has(tab.id);
   });
 
