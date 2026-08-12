@@ -394,6 +394,7 @@ export default function AdminSettingsManager() {
                       {!isSuper && (
                         <button
                           type="button"
+                          aria-label={`Delete admin user ${usr.name}`}
                           onClick={() => handleDeleteUser(usr)}
                           style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', fontWeight: 800, cursor: 'pointer' }}
                         >
