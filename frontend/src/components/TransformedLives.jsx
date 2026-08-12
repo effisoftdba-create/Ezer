@@ -14,6 +14,20 @@ export default function TransformedLives() {
 
   const displayList = (transformedLives && transformedLives.length > 0) ? transformedLives : [];
 
+  const cardWidthRef = React.useRef(315);
+
+  // Cache card width once on mount and on resize to avoid forced reflow on each scroll
+  useEffect(() => {
+    const updateCardWidth = () => {
+      if (sliderRef.current?.children[0]) {
+        cardWidthRef.current = sliderRef.current.children[0].offsetWidth + 20;
+      }
+    };
+    updateCardWidth();
+    window.addEventListener('resize', updateCardWidth, { passive: true });
+    return () => window.removeEventListener('resize', updateCardWidth);
+  }, []);
+
   // Auto Scroll Loop with Pause on Mouse Hover
   useEffect(() => {
     if (isHovered || !displayList.length) return;
@@ -21,8 +35,7 @@ export default function TransformedLives() {
       setActiveIndex((prev) => {
         const next = (prev + 1) % displayList.length;
         if (sliderRef.current) {
-          const cardWidth = sliderRef.current.children[0]?.offsetWidth ? (sliderRef.current.children[0].offsetWidth + 20) : 315;
-          sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
+          sliderRef.current.scrollTo({ left: next * cardWidthRef.current, behavior: 'smooth' });
         }
         return next;
       });
@@ -36,8 +49,7 @@ export default function TransformedLives() {
     const next = (activeIndex - 1 + displayList.length) % displayList.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      const cardWidth = sliderRef.current.children[0]?.offsetWidth ? (sliderRef.current.children[0].offsetWidth + 20) : 315;
-      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: next * cardWidthRef.current, behavior: 'smooth' });
     }
   };
 
@@ -46,16 +58,14 @@ export default function TransformedLives() {
     const next = (activeIndex + 1) % displayList.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      const cardWidth = sliderRef.current.children[0]?.offsetWidth ? (sliderRef.current.children[0].offsetWidth + 20) : 315;
-      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: next * cardWidthRef.current, behavior: 'smooth' });
     }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
     if (sliderRef.current) {
-      const cardWidth = sliderRef.current.children[0]?.offsetWidth ? (sliderRef.current.children[0].offsetWidth + 20) : 315;
-      sliderRef.current.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: idx * cardWidthRef.current, behavior: 'smooth' });
     }
   };
 
