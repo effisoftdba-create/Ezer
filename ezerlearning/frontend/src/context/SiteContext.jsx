@@ -117,8 +117,7 @@ export function SiteProvider({ children }) {
     if (!Array.isArray(items)) return;
 
     if (items.length > 0) {
-      const merged = mergeCollection(defaultItems, items);
-      dispatch({ type: 'SET_KEY', key: dispatchKey, value: merged });
+      dispatch({ type: 'SET_KEY', key: dispatchKey, value: items });
     } else {
       // Seed default items into Database ONCE if database collection is empty on initial setup
       if (Array.isArray(defaultItems) && defaultItems.length > 0) {
