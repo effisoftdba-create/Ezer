@@ -1,6 +1,0 @@
-{
-  "ignore": [
-    "firestore.rules",
-    "database.rules.json"
-  ]
-}

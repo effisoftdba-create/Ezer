@@ -1,0 +1,384 @@
+{
+  "families": [
+    "Jones",
+    "DM Sans",
+    "SFMono-Regular"
+  ],
+  "scale": {
+    "heading-1": {
+      "fontFamily": "Jones",
+      "fontSize": "4rem",
+      "fontWeight": "700",
+      "lineHeight": null,
+      "source": "css"
+    },
+    "heading-2": {
+      "fontFamily": "Jones",
+      "fontSize": "3.75rem",
+      "fontWeight": "700",
+      "lineHeight": null,
+      "source": "css"
+    },
+    "heading-3": {
+      "fontFamily": "Jones",
+      "fontSize": "55px",
+      "fontWeight": "700",
+      "lineHeight": null,
+      "source": "css"
+    },
+    "body": {
+      "fontFamily": "DM Sans",
+      "fontSize": "1rem",
+      "fontWeight": "400",
+      "lineHeight": null,
+      "source": "css"
+    },
+    "caption": {
+      "fontFamily": "DM Sans",
+      "fontSize": ".875rem",
+      "fontWeight": "400",
+      "lineHeight": null,
+      "source": "css"
+    },
+    "code": {
+      "fontFamily": "SFMono-Regular",
+      "fontSize": "14px",
+      "fontWeight": "400",
+      "lineHeight": null,
+      "source": "css"
+    }
+  },
+  "fontFaces": [
+    {
+      "family": "DM Sans",
+      "src": "https://www.guvi.in/assets/fonts/dm-sans/dm-sans-v6-latin-regular.woff2",
+      "format": "woff2",
+      "weight": "400"
+    },
+    {
+      "family": "DM Sans",
+      "src": "https://www.guvi.in/assets/fonts/dm-sans/dm-sans-v6-latin-500.woff2",
+      "format": "woff2",
+      "weight": "500"
+    },
+    {
+      "family": "DM Sans",
+      "src": "https://www.guvi.in/assets/fonts/dm-sans/dm-sans-v6-latin-700.woff2",
+      "format": "woff2",
+      "weight": "700"
+    },
+    {
+      "family": "Jones",
+      "src": "https://www.guvi.in/assets/fonts/jones/Jones-Light-subset.woff2",
+      "format": "woff2",
+      "weight": "400"
+    },
+    {
+      "family": "Jones",
+      "src": "https://www.guvi.in/assets/fonts/jones/Jones-Medium-subset.woff2",
+      "format": "woff2",
+      "weight": "500"
+    },
+    {
+      "family": "Jones",
+      "src": "https://www.guvi.in/assets/fonts/jones/Jones-Bold-subset.woff2",
+      "format": "woff2",
+      "weight": "700"
+    },
+    {
+      "family": "Jones",
+      "src": "https://www.guvi.in/assets/fonts/jones/Jones-ExtraBold-subset.woff2",
+      "format": "woff2",
+      "weight": "800"
+    },
+    {
+      "family": "Jones",
+      "src": "https://www.guvi.in/assets/fonts/jones/Jones-Black-subset.woff2",
+      "format": "woff2",
+      "weight": "900"
+    },
+    {
+      "family": "Wanted Sans",
+      "src": "https://www.guvi.in/assets/fonts/wanted-sans/WantedSans-Regular-subset.woff2",
+      "format": "woff2",
+      "weight": "400"
+    },
+    {
+      "family": "Wanted Sans",
+      "src": "https://www.guvi.in/assets/fonts/wanted-sans/WantedSans-Medium-subset.woff2",
+      "format": "woff2",
+      "weight": "500"
+    },
+    {
+      "family": "Wanted Sans",
+      "src": "https://www.guvi.in/assets/fonts/wanted-sans/WantedSans-SemiBold-subset.woff2",
+      "format": "woff2",
+      "weight": "600"
+    },
+    {
+      "family": "Wanted Sans",
+      "src": "https://www.guvi.in/assets/fonts/wanted-sans/WantedSans-Bold-subset.woff2",
+      "format": "woff2",
+      "weight": "700"
+    },
+    {
+      "family": "Wanted Sans",
+      "src": "https://www.guvi.in/assets/fonts/wanted-sans/WantedSans-ExtraBold-subset.woff2",
+      "format": "woff2",
+      "weight": "800"
+    },
+    {
+      "family": "Wanted Sans",
+      "src": "https://www.guvi.in/assets/fonts/wanted-sans/WantedSans-Black-subset.woff2",
+      "format": "woff2",
+      "weight": "900"
+    },
+    {
+      "family": "DM Sans",
+      "src": "https://fonts.gstatic.com/s/dmsans/v17/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAopxRSW3z.ttf",
+      "format": "truetype",
+      "weight": "400"
+    },
+    {
+      "family": "DM Sans",
+      "src": "https://fonts.gstatic.com/s/dmsans/v17/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAkJxRSW3z.ttf",
+      "format": "truetype",
+      "weight": "500"
+    },
+    {
+      "family": "DM Sans",
+      "src": "https://fonts.gstatic.com/s/dmsans/v17/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwAfJtRSW3z.ttf",
+      "format": "truetype",
+      "weight": "600"
+    },
+    {
+      "family": "DM Sans",
+      "src": "https://fonts.gstatic.com/s/dmsans/v17/rP2tp2ywxg089UriI5-g4vlH9VoD8CmcqZG40F9JadbnoEwARZtRSW3z.ttf",
+      "format": "truetype",
+      "weight": "700"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/regular/Inter-Regular.woff",
+      "format": "woff",
+      "weight": "400"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/regular/Inter-Regular.eot?#iefix",
+      "format": "embedded-opentype",
+      "weight": "400"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/regular/Inter-Regular.otf",
+      "format": "opentype",
+      "weight": "400"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/regular/Inter-Regular.ttf",
+      "format": "truetype",
+      "weight": "400"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/regular/Inter-Regular.svg#Inter-Regular",
+      "format": "svg",
+      "weight": "400"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/semibold/Inter-SemiBold.woff",
+      "format": "woff",
+      "weight": "600"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/semibold/Inter-SemiBold.eot?#iefix",
+      "format": "embedded-opentype",
+      "weight": "600"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/semibold/Inter-SemiBold.otf",
+      "format": "opentype",
+      "weight": "600"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/semibold/Inter-SemiBold.ttf",
+      "format": "truetype",
+      "weight": "600"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/semibold/Inter-SemiBold.svg#Inter-SemiBold",
+      "format": "svg",
+      "weight": "600"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/bold/Inter-Bold.woff",
+      "format": "woff",
+      "weight": "700"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/bold/Inter-Bold.eot?#iefix",
+      "format": "embedded-opentype",
+      "weight": "700"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/bold/Inter-Bold.otf",
+      "format": "opentype",
+      "weight": "700"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/bold/Inter-Bold.ttf",
+      "format": "truetype",
+      "weight": "700"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/bold/Inter-Bold.svg#Inter-Blod",
+      "format": "svg",
+      "weight": "700"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/medium/Inter-Medium.woff",
+      "format": "woff",
+      "weight": "500"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/medium/Inter-Medium.eot?#iefix",
+      "format": "embedded-opentype",
+      "weight": "500"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/medium/Inter-Medium.otf",
+      "format": "opentype",
+      "weight": "500"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/medium/Inter-Medium.ttf",
+      "format": "truetype",
+      "weight": "500"
+    },
+    {
+      "family": "Inter",
+      "src": "https://assets.swipepages.com/fonts/inter/medium/Inter-Medium.svg#Inter-Medium",
+      "format": "svg",
+      "weight": "500"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-800-ExtraBold.woff",
+      "format": "woff",
+      "weight": "800"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-800-ExtraBold.woff2",
+      "format": "woff2",
+      "weight": "800"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-800-ExtraBold.svg",
+      "format": "svg",
+      "weight": "800"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-800-ExtraBold.eot",
+      "format": "embedded-opentype",
+      "weight": "800"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-700-Bold.woff",
+      "format": "woff",
+      "weight": "700"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-700-Bold.woff2",
+      "format": "woff2",
+      "weight": "700"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-700-Bold.svg",
+      "format": "svg",
+      "weight": "700"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-700-Bold.eot",
+      "format": "embedded-opentype",
+      "weight": "700"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-500-Medium.woff",
+      "format": "woff",
+      "weight": "500"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-500-Medium.woff2",
+      "format": "woff2",
+      "weight": "500"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-500-Medium.svg",
+      "format": "svg",
+      "weight": "500"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-500-Medium.eot",
+      "format": "embedded-opentype",
+      "weight": "500"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-400-Regular.woff",
+      "format": "woff",
+      "weight": "400"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-400-Regular.woff2",
+      "format": "woff2",
+      "weight": "400"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-400-Regular.svg",
+      "format": "svg",
+      "weight": "400"
+    },
+    {
+      "family": "Jones",
+      "src": "https://studies-overseascom.swipepages.media/5fcde7acf64f9100108c719e/fonts/Jones-Normal-400-Regular.eot",
+      "format": "embedded-opentype",
+      "weight": "400"
+    }
+  ],
+  "rules": {
+    "maxSizesPerScreen": 4,
+    "headingWeightRange": "600-700",
+    "bodyWeight": 400,
+    "lineHeightBody": 1.5,
+    "lineHeightHeading": 1.2
+  }
+}
