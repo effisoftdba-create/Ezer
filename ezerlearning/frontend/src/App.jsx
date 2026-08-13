@@ -56,6 +56,9 @@ const StudentAdmissionPolicy = lazyRetry(() => import('./pages/StudentAdmissionP
 const Blog = lazyRetry(() => import('./pages/Blog'));
 const BlogDetail = lazyRetry(() => import('./pages/BlogDetail'));
 
+const AdminLogin = lazyRetry(() => import('./Admin_Control/frontend/pages/AdminLogin'));
+const AdminDashboard = lazyRetry(() => import('./Admin_Control/frontend/pages/AdminDashboard'));
+
 // Page Loading Fallback Spinner
 function PageLoader() {
   return (
