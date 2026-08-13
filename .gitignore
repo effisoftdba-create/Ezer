@@ -16,7 +16,7 @@ dist/
 .env
 .env.local
 
-# Reference & Design Documentation Assets (Ignored from Git / GitHub)
+# Internal Reference Docs & Assets (Ignored from GitHub)
 .agents/
 artifactor/
 references/
@@ -24,6 +24,12 @@ screens/
 screenshots/
 tokens/
 fonts/
-guvi-design/screens/
+guvi-design/
 guvi-design.skill
 *.docx
+CLAUDE.md
+DESIGN.md
+SKILL.md
+ezer.md
+skills-lock.json
+Ezer_Website/
