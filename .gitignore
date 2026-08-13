@@ -15,3 +15,15 @@ dist/
 # Environment Variables
 .env
 .env.local
+
+# Reference & Design Documentation Assets (Ignored from Git / GitHub)
+.agents/
+artifactor/
+references/
+screens/
+screenshots/
+tokens/
+fonts/
+guvi-design/screens/
+guvi-design.skill
+*.docx
