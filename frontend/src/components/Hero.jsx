@@ -75,13 +75,11 @@ export default function Hero({ onOpenDemoModal }) {
                   transition={{ duration: 0.3 }}
                   className="hero-animated-text-container"
                   style={{
-                    height: '235px',
-                    minHeight: '235px',
-                    maxHeight: '235px',
+                    minHeight: '200px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'flex-start',
-                    overflow: 'hidden'
+                    marginBottom: '16px',
                   }}
                 >
                   <h1
@@ -93,10 +91,6 @@ export default function Hero({ onOpenDemoModal }) {
                       marginBottom: '10px',
                       fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
                       letterSpacing: '-0.02em',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
                     }}
                   >
                     {currentSlide.headline ? (
@@ -142,10 +136,6 @@ export default function Hero({ onOpenDemoModal }) {
                       marginBottom: '0',
                       maxWidth: '560px',
                       fontWeight: 500,
-                      display: '-webkit-box',
-                      WebkitLineClamp: 3,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
                     }}
                   >
                     {currentSlide.sub}

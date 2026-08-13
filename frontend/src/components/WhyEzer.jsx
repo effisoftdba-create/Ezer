@@ -6,8 +6,8 @@ import {
   HiSparkles,
   HiCheckCircle
 } from 'react-icons/hi';
-import { useSiteData } from '../Admin_Control/context/SiteContext';
-import { resolveImageSrc } from '../utils/imageUtils';
+import { useSiteData } from '../Admin_Control/frontend/context/SiteContext';
+import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 
 import CarouselDotsNav from './CarouselDotsNav';
 
@@ -115,6 +115,7 @@ export default function WhyEzer() {
                 <img 
                   src={resolveImageSrc(r.image)} 
                   alt={r.title} 
+                  onError={handleImgError}
                   style={{
                     width: '100%',
                     height: '100%',

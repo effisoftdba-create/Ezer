@@ -26,8 +26,12 @@ app.use('/api/checkout', checkoutRoutes);
 // Global Error Handler Middleware
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log(`[EZER Backend API Server] Hardened backend running on http://localhost:${PORT}`);
-});
+// Only listen locally if not running as a Cloud Function or Vercel
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL && !process.env.FUNCTION_NAME && !process.env.K_SERVICE) {
+  app.listen(PORT, () => {
+    console.log(`[EZER Backend API Server] Hardened backend running on http://localhost:${PORT}`);
+  });
+}
 
 export default app;
+

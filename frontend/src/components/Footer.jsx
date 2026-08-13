@@ -23,7 +23,7 @@ export default function Footer() {
           <div>
             <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '12px' }}>
               <img 
-                src={`${import.meta.env.BASE_URL || '/'}images/ezer_shield_logo.png`} 
+                src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`} 
                 alt="EZER Learning Solutions Crest Logo" 
                 width="40"
                 height="40"

@@ -28,9 +28,9 @@ function sanitizeForFirestore(data) {
     if (val && typeof val === 'object' && (val.$$typeof || val._owner || val._store)) continue;
 
     if (typeof val === 'string' && val.startsWith('data:')) {
-      if (val.length > 900000) {
-        console.warn(`[Firebase] Data URI for field "${key}" exceeds 900KB limit for Firestore.`);
-        cleaned[key] = '';
+      if (val.length > 1500000) {
+        console.warn(`[Firebase] Data URI for field "${key}" exceeds 1.5MB limit for Firestore.`);
+        cleaned[key] = val; // Keep image in memory
       } else {
         cleaned[key] = val;
       }

@@ -117,8 +117,8 @@ export function SiteProvider({ children }) {
     if (!Array.isArray(items)) return;
 
     if (items.length > 0) {
-      // Live database snapshot is authoritative across all devices — 100% driven from Database!
-      dispatch({ type: 'SET_KEY', key: dispatchKey, value: items });
+      const merged = mergeCollection(defaultItems, items);
+      dispatch({ type: 'SET_KEY', key: dispatchKey, value: merged });
     } else {
       // Seed default items into Database ONCE if database collection is empty on initial setup
       if (Array.isArray(defaultItems) && defaultItems.length > 0) {

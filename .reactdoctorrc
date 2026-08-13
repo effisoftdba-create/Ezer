@@ -19,6 +19,8 @@
     "react-doctor/no-adjust-state-on-prop-change": "off",
     "no-derived-state": "off",
     "react-doctor/no-derived-state": "off",
+    "no-derived-state-effect": "off",
+    "react-doctor/no-derived-state-effect": "off",
     "html-no-nested-interactive": "off",
     "react-doctor/html-no-nested-interactive": "off",
     "click-events-have-key-events": "off",

@@ -17,8 +17,8 @@ export default function CarouselDotsNav({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: '8px',
-        margin: '12px auto 0',
+        gap: '6px',
+        margin: '8px auto 0',
         width: '100%',
         ...style
       }}
@@ -29,10 +29,10 @@ export default function CarouselDotsNav({
         onClick={onPrev}
         aria-label="Previous slide"
         style={{
-          width: '28px',
-          height: '28px',
-          minWidth: '28px',
-          minHeight: '28px',
+          width: '22px',
+          height: '22px',
+          minWidth: '22px',
+          minHeight: '22px',
           background: 'transparent',
           border: 'none',
           cursor: 'pointer',
@@ -46,20 +46,20 @@ export default function CarouselDotsNav({
       >
         <span
           style={{
-            width: '24px',
-            height: '24px',
+            width: '18px',
+            height: '18px',
             borderRadius: '50%',
-            border: '1.5px solid #000648',
+            border: '1.2px solid #000648',
             background: '#ffffff',
             color: '#000648',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 2px 4px rgba(0, 6, 72, 0.08)',
+            boxShadow: '0 1px 3px rgba(0, 6, 72, 0.08)',
             transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease'
           }}
         >
-          <HiChevronLeft size={13} />
+          <HiChevronLeft size={10} />
         </span>
       </button>
 
@@ -68,9 +68,9 @@ export default function CarouselDotsNav({
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: '4px',
+          gap: '3px',
           background: 'rgba(0, 6, 72, 0.05)',
-          padding: '4px 10px',
+          padding: '2px 7px',
           borderRadius: '50px',
           border: '1px solid rgba(0, 6, 72, 0.08)'
         }}
@@ -82,10 +82,10 @@ export default function CarouselDotsNav({
             onClick={() => onSelectIndex && onSelectIndex(i)}
             aria-label={`Go to slide ${i + 1}`}
             style={{
-              width: '20px',
-              height: '20px',
-              minWidth: '20px',
-              minHeight: '20px',
+              width: '14px',
+              height: '14px',
+              minWidth: '14px',
+              minHeight: '14px',
               border: 'none',
               background: 'transparent',
               cursor: 'pointer',
@@ -99,8 +99,8 @@ export default function CarouselDotsNav({
             <span
               style={{
                 display: 'block',
-                width: activeIndex === i ? '12px' : '5px',
-                height: '5px',
+                width: activeIndex === i ? '8px' : '4px',
+                height: '4px',
                 borderRadius: '50px',
                 background: activeIndex === i ? '#000648' : '#cbd5e1',
                 transition: 'width 0.25s ease, background-color 0.25s ease'
@@ -116,10 +116,10 @@ export default function CarouselDotsNav({
         onClick={onNext}
         aria-label="Next slide"
         style={{
-          width: '28px',
-          height: '28px',
-          minWidth: '28px',
-          minHeight: '28px',
+          width: '22px',
+          height: '22px',
+          minWidth: '22px',
+          minHeight: '22px',
           background: 'transparent',
           border: 'none',
           cursor: 'pointer',
@@ -133,20 +133,20 @@ export default function CarouselDotsNav({
       >
         <span
           style={{
-            width: '24px',
-            height: '24px',
+            width: '18px',
+            height: '18px',
             borderRadius: '50%',
-            border: '1.5px solid #000648',
+            border: '1.2px solid #000648',
             background: '#000648',
             color: '#ffffff',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 2px 6px rgba(0, 6, 72, 0.2)',
+            boxShadow: '0 1px 4px rgba(0, 6, 72, 0.2)',
             transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease'
           }}
         >
-          <HiChevronRight size={13} />
+          <HiChevronRight size={10} />
         </span>
       </button>
     </div>

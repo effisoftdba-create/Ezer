@@ -28,13 +28,17 @@ export function resolveImageSrc(urlStr) {
 
   const trimmed = String(urlStr).trim();
 
-  // 0. Auto-upgrade legacy low-res static paths to 1600px HD crystal clear Unsplash images
-  const cleanPathKey = trimmed.replace(/^\//, '');
-  if (HD_IMAGE_MAP[cleanPathKey]) {
-    return HD_IMAGE_MAP[cleanPathKey];
+  // 1. Data URIs (user uploaded custom base64 images) — return directly!
+  if (trimmed.startsWith('data:')) {
+    return trimmed;
   }
 
-  // 1. Convert raw or URL-encoded inline SVG strings to valid Data URIs
+  // 2. External HTTP / HTTPS links — return directly so all custom pasted image URLs display properly
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed;
+  }
+
+  // 3. Convert raw or URL-encoded inline SVG strings to valid Data URIs
   if (trimmed.startsWith('<svg') || trimmed.includes('<svg') || trimmed.startsWith('%3Csvg') || trimmed.includes('%3Csvg')) {
     let unencoded = trimmed;
     if (trimmed.includes('%3Csvg') || trimmed.includes('%20') || trimmed.includes('%22')) {
@@ -47,17 +51,13 @@ export function resolveImageSrc(urlStr) {
     return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(unencoded)}`;
   }
 
-  // 2. Data URIs
-  if (trimmed.startsWith('data:')) {
-    return trimmed;
+  // 4. Auto-upgrade legacy low-res static paths to 1600px HD crystal clear Unsplash images
+  const cleanPathKey = trimmed.replace(/^\//, '');
+  if (HD_IMAGE_MAP[cleanPathKey]) {
+    return HD_IMAGE_MAP[cleanPathKey];
   }
 
-  // 3. External HTTP / HTTPS links — return directly so all pasted image URLs display properly
-  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
-    return trimmed;
-  }
-
-  // 4. Local relative paths
+  // 5. Local relative paths
   const cleanPath = trimmed.replace(/^\//, '');
   const baseUrl = import.meta.env.BASE_URL || '/';
 
