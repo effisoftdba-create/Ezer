@@ -201,6 +201,15 @@ export function SiteProvider({ children }) {
       unsubs.push(subscribeToCollection('aboutVideos', (items) => {
         handleSyncCollection('aboutVideos', items, 'aboutVideos', defaultAboutVideos);
       }));
+      unsubs.push(subscribeToCollection('supportCards', (items) => {
+        handleSyncCollection('supportCards', items, 'supportCards', defaultSupportCards);
+      }));
+      unsubs.push(subscribeToCollection('transformedLives', (items) => {
+        handleSyncCollection('transformedLives', items, 'transformedLives', defaultTransformedLives);
+      }));
+      unsubs.push(subscribeToCollection('achievements', (items) => {
+        handleSyncCollection('achievements', items, 'achievements', defaultAchievements);
+      }));
       unsubs.push(subscribeToCollection('payments', (items) => {
         if (Array.isArray(items)) {
           const freshPayments = items.filter((p) => p && p.studentName && !['test', 'dummy', 'sample', 'test3'].some((t) => (p.studentName || '').toLowerCase().includes(t)));
