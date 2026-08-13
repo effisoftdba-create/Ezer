@@ -56,7 +56,7 @@ export default function PopupHeader({ onClose, overrideConfig }) {
             EZER
           </div>
           <div style={{ fontSize: '0.58rem', fontWeight: 800, color: '#f2b733', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px' }}>
-            Learning Solutions
+            Learning Solution
           </div>
         </div>
       </div>

@@ -71,7 +71,7 @@ export default function Navbar({ onOpenDemoModal }) {
                   EZER
                 </span>
                 <span style={{ fontSize: '0.58rem', fontWeight: 800, color: '#b45309', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap' }}>
-                  Learning Solutions
+                  Learning Solution
                 </span>
               </div>
             </Link>
