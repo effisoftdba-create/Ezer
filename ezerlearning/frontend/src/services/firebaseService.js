@@ -1,5 +1,58 @@
 import { db, getRealtimeDb, isFirebaseConfigured } from '../config/firebase';
-import { collection, doc, setDoc, deleteDoc, onSnapshot } from 'firebase/firestore';
+import { collection, doc, setDoc, deleteDoc, onSnapshot, getDocs } from 'firebase/firestore';
+
+/**
+ * Save collection array (Dual Firestore + Realtime DB Sync with Pruning)
+ */
+export async function saveCollectionArray(collectionName, itemsArray) {
+  if (!isFirebaseConfigured || !Array.isArray(itemsArray)) return false;
+  try {
+    const keepIds = new Set(
+      itemsArray.map((item) => String(item.id || item.slug || item.badge || item.title || ''))
+    );
+
+    // 1. Remove obsolete documents from Firestore collection
+    if (db) {
+      try {
+        const colRef = collection(db, collectionName);
+        const snapshot = await getDocs(colRef);
+        snapshot.docs.forEach(async (d) => {
+          const data = d.data();
+          const docId = String(d.id);
+          const docTitle = String(data?.title || '');
+          if (!keepIds.has(docId) && !keepIds.has(docTitle)) {
+            await deleteDoc(d.ref);
+          }
+        });
+      } catch (e) {
+        console.warn(`[Firestore Prune Notice] ${collectionName}:`, e.message || e);
+      }
+    }
+
+    // 2. Overwrite Realtime Database node so old items disappear
+    const rtdb = getRealtimeDb();
+    if (rtdb) {
+      try {
+        const dbRef = ref(rtdb, collectionName);
+        const cleanItems = sanitizeForFirestore(itemsArray);
+        await set(dbRef, cleanItems);
+      } catch (e) {
+        console.warn(`[RealtimeDB Overwrite Notice] ${collectionName}:`, e.message || e);
+      }
+    }
+
+    // 3. Save current items to Firestore
+    const savePromises = itemsArray.map((item) => {
+      const id = item.id || item.slug || item.badge || item.title || `item_${Date.now()}`;
+      return saveDocument(collectionName, id, item);
+    });
+    await Promise.all(savePromises);
+    return true;
+  } catch (err) {
+    console.error(`[Firebase] Save collection error for ${collectionName}:`, err);
+    return false;
+  }
+}
 import { ref, onValue, set, remove } from 'firebase/database';
 
 /**
@@ -211,23 +264,5 @@ export async function removeDocument(collectionName, docId) {
   }
 
   return removed;
-}
-
-/**
- * Save collection array
- */
-export async function saveCollectionArray(collectionName, itemsArray) {
-  if (!isFirebaseConfigured || !Array.isArray(itemsArray)) return false;
-  try {
-    const savePromises = itemsArray.map((item) => {
-      const id = item.id || item.slug || item.badge || item.title || `item_${Date.now()}`;
-      return saveDocument(collectionName, id, item);
-    });
-    await Promise.all(savePromises);
-    return true;
-  } catch (err) {
-    console.error(`[Firebase] Save collection error for ${collectionName}:`, err);
-    return false;
-  }
 }
 
