@@ -222,7 +222,7 @@ export default function TestimonialsGrid() {
                 background: '#ffffff',
                 borderRadius: '20px',
                 border: '1.5px solid #e2e8f0',
-                padding: '28px 24px',
+                padding: '24px 22px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -242,164 +242,170 @@ export default function TestimonialsGrid() {
               }}
             >
               <div>
-                {/* Header: Star Rating & Quote Icon */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  {/* Star Rating */}
-                  <div style={{ display: 'flex', gap: '3px', color: '#f59e0b' }}>
-                    {[...Array(item.rating)].map((_, i) => (
-                      <HiStar key={i} size={18} />
-                    ))}
+                {/* 1. TOP: Student Profile Header with Avatar, Name, Verified Tick, Role, & Course */}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '16px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1, minWidth: 0 }}>
+                    {/* Circular Avatar */}
+                    <div
+                      style={{
+                        width: '56px',
+                        height: '56px',
+                        borderRadius: '50%',
+                        padding: '2px',
+                        background: 'linear-gradient(135deg, #000648 0%, #115DFC 100%)',
+                        flexShrink: 0,
+                        boxShadow: '0 4px 12px rgba(0, 6, 72, 0.15)',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: '50%',
+                          overflow: 'hidden',
+                          background: '#000648',
+                          position: 'relative',
+                          isolation: 'isolate',
+                          WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+                          border: '2px solid #ffffff',
+                        }}
+                      >
+                        <img
+                          src={resolveImageSrc(item.avatar)}
+                          alt={item.author}
+                          loading="lazy"
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: item.fit || item.imageFit || 'cover',
+                            objectPosition: item.position || item.imagePosition || 'center 20%',
+                            transform: (item.zoom || item.imageZoom) && (item.zoom || item.imageZoom) !== 1
+                              ? `scale(${item.zoom || item.imageZoom})`
+                              : 'none',
+                            transformOrigin: item.position || item.imagePosition || 'center 20%',
+                            display: 'block',
+                          }}
+                          onError={(e) => {
+                            e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200';
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Name, Verified Tick, Role & Company */}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <h4
+                          style={{
+                            fontSize: '1.05rem',
+                            fontWeight: 900,
+                            color: '#000648',
+                            margin: 0,
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                          }}
+                        >
+                          {item.author}
+                        </h4>
+                        <HiCheckCircle size={17} color="#16a34a" title="Verified Alumni" style={{ flexShrink: 0 }} />
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: '0.8rem',
+                          color: '#475569',
+                          fontWeight: 700,
+                          marginTop: '2px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          flexWrap: 'wrap',
+                        }}
+                      >
+                        <span>{item.role}</span>
+                        {item.company && (
+                          <span
+                            style={{
+                              background: '#000648',
+                              color: '#f2b733',
+                              padding: '1px 7px',
+                              borderRadius: '4px',
+                              fontWeight: 800,
+                              fontSize: '0.72rem',
+                            }}
+                          >
+                            @{item.company}
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Quote Accent */}
+                  {/* Quote Accent Icon */}
                   <div
                     style={{
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '10px',
+                      width: '34px',
+                      height: '34px',
+                      borderRadius: '8px',
                       background: 'rgba(0, 6, 72, 0.05)',
                       color: '#000648',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      flexShrink: 0,
                     }}
                   >
-                    <FaQuoteLeft size={14} />
+                    <FaQuoteLeft size={13} />
                   </div>
                 </div>
 
-                {/* Review Text */}
+                {/* 2. MIDDLE: Star Rating & Track Badge */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
+                  {/* 5 Gold Stars */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#f59e0b' }}>
+                    {[...Array(item.rating || 5)].map((_, i) => (
+                      <HiStar key={i} size={18} />
+                    ))}
+                    <span style={{ fontSize: '0.78rem', fontWeight: 900, color: '#000648', marginLeft: '4px' }}>
+                      {(item.rating || 5).toFixed(1)}
+                    </span>
+                  </div>
+
+                  {/* Course Track Tag */}
+                  <div
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '5px',
+                      background: '#eff6ff',
+                      border: '1px solid #bfdbfe',
+                      color: '#1e40af',
+                      fontSize: '0.7rem',
+                      fontWeight: 800,
+                      padding: '3px 8px',
+                      borderRadius: '5px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.03em',
+                    }}
+                  >
+                    <HiAcademicCap size={13} />
+                    <span>{item.track}</span>
+                  </div>
+                </div>
+
+                {/* 3. BOTTOM: Detailed Testimonial Review Text */}
                 <p
                   style={{
-                    fontSize: '0.94rem',
+                    fontSize: '0.93rem',
                     color: '#334155',
                     lineHeight: 1.65,
-                    marginBottom: '20px',
-                    fontStyle: 'normal',
+                    margin: 0,
                     fontWeight: 500,
                   }}
                 >
                   "{item.text}"
                 </p>
-
-                {/* Course Track Tag */}
-                <div
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    background: '#eff6ff',
-                    border: '1px solid #bfdbfe',
-                    color: '#1e40af',
-                    fontSize: '0.72rem',
-                    fontWeight: 800,
-                    padding: '4px 10px',
-                    borderRadius: '6px',
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.04em',
-                    marginBottom: '18px',
-                  }}
-                >
-                  <HiAcademicCap size={14} />
-                  <span>{item.track}</span>
-                </div>
-              </div>
-
-              {/* Author Profile Footer */}
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '14px',
-                  paddingTop: '16px',
-                  borderTop: '1px solid #f1f5f9',
-                }}
-              >
-                {/* Avatar */}
-                <div
-                  style={{
-                    width: '52px',
-                    height: '52px',
-                    borderRadius: '50%',
-                    overflow: 'hidden',
-                    background: '#000648',
-                    border: '2px solid #000648',
-                    flexShrink: 0,
-                    position: 'relative',
-                  }}
-                >
-                  <img
-                    src={resolveImageSrc(item.avatar)}
-                    alt={item.author}
-                    loading="lazy"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: item.fit,
-                      objectPosition: item.position,
-                      transform: item.zoom !== 1 ? `scale(${item.zoom})` : 'none',
-                      transformOrigin: item.position,
-                      display: 'block',
-                    }}
-                    onError={(e) => {
-                      e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200';
-                    }}
-                  />
-                </div>
-
-                {/* Author Info */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <h4
-                      style={{
-                        margin: 0,
-                        fontSize: '0.96rem',
-                        fontWeight: 900,
-                        color: '#000648',
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      {item.author}
-                    </h4>
-                    <HiCheckCircle
-                      size={16}
-                      color="#16a34a"
-                      title="Verified EZER Alumni"
-                      style={{ flexShrink: 0 }}
-                    />
-                  </div>
-
-                  <div
-                    style={{
-                      fontSize: '0.78rem',
-                      color: '#475569',
-                      fontWeight: 700,
-                      marginTop: '2px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    <span>{item.role}</span>
-                    {item.company && (
-                      <span
-                        style={{
-                          background: 'rgba(0, 6, 72, 0.06)',
-                          color: '#000648',
-                          padding: '1px 6px',
-                          borderRadius: '4px',
-                          fontWeight: 800,
-                          fontSize: '0.74rem',
-                        }}
-                      >
-                        @{item.company}
-                      </span>
-                    )}
-                  </div>
-                </div>
               </div>
             </div>
           ))}

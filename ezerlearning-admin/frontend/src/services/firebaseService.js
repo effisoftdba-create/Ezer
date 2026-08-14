@@ -250,7 +250,15 @@ export async function saveCollectionArray(collectionName, itemsArray) {
   if (!isFirebaseConfigured || !Array.isArray(itemsArray)) return false;
   try {
     const cleanItemsArray = deduplicateCollectionItems(itemsArray);
-    const keepIds = new Set(cleanItemsArray.map((item) => String(item.id || item.slug || item.badge || item.title || '')));
+    const keepIds = new Set(cleanItemsArray.flatMap((item) => [
+      String(item.id || ''),
+      String(item.slug || ''),
+      String(item.badge || ''),
+      String(item.title || ''),
+      String(item.name || ''),
+      String(item.author || ''),
+      String(item.roleTag || '')
+    ].filter(Boolean)));
 
     // 1. Remove obsolete documents from Firestore collection
     if (db) {
@@ -263,7 +271,8 @@ export async function saveCollectionArray(collectionName, itemsArray) {
           const docId = String(d.id);
           const docTitle = String(data?.title || '');
           const docSlug = String(data?.slug || '');
-          if (!keepIds.has(docId) && !keepIds.has(docTitle) && !keepIds.has(docSlug)) {
+          const docName = String(data?.name || data?.author || '');
+          if (!keepIds.has(docId) && !keepIds.has(docTitle) && !keepIds.has(docSlug) && !keepIds.has(docName)) {
             prunePromises.push(deleteDoc(d.ref));
           }
         }

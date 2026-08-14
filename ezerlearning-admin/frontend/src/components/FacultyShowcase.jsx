@@ -146,39 +146,51 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
               <div>
                 {/* Profile Header Row */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '18px' }}>
-                  {/* Clean Framed Avatar Wrapper */}
+                  {/* Clean Framed Circular Avatar Wrapper */}
                   <div
                     style={{
-                      width: '68px',
-                      height: '68px',
-                      borderRadius: '16px',
-                      overflow: 'hidden',
-                      background: '#000648',
-                      border: '2px solid #000648',
+                      width: '66px',
+                      height: '66px',
+                      borderRadius: '50%',
+                      padding: '2.5px',
+                      background: 'linear-gradient(135deg, #000648 0%, #115DFC 100%)',
+                      boxShadow: '0 4px 14px rgba(0, 6, 72, 0.15)',
                       flexShrink: 0,
-                      position: 'relative',
-                      boxShadow: '0 4px 12px rgba(0, 6, 72, 0.15)',
                     }}
                   >
-                    <img
-                      src={resolveImageSrc(prof.image)}
-                      alt={mentorName}
-                      loading="lazy"
+                    <div
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: prof.fit || prof.imageFit || 'cover',
-                        objectPosition: prof.position || prof.imagePosition || 'center 20%',
-                        transform: (prof.zoom || prof.imageZoom) && (prof.zoom || prof.imageZoom) !== 1
-                          ? `scale(${prof.zoom || prof.imageZoom})`
-                          : 'none',
-                        transformOrigin: prof.position || prof.imagePosition || 'center 20%',
-                        display: 'block',
+                        borderRadius: '50%',
+                        overflow: 'hidden',
+                        background: '#000648',
+                        position: 'relative',
+                        isolation: 'isolate',
+                        WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+                        border: '2px solid #ffffff',
                       }}
-                      onError={(e) => {
-                        e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300';
-                      }}
-                    />
+                    >
+                      <img
+                        src={resolveImageSrc(prof.image)}
+                        alt={mentorName}
+                        loading="lazy"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: prof.fit || prof.imageFit || 'cover',
+                          objectPosition: prof.position || prof.imagePosition || 'center 20%',
+                          transform: (prof.zoom || prof.imageZoom) && (prof.zoom || prof.imageZoom) !== 1
+                            ? `scale(${prof.zoom || prof.imageZoom})`
+                            : 'none',
+                          transformOrigin: prof.position || prof.imagePosition || 'center 20%',
+                          display: 'block',
+                        }}
+                        onError={(e) => {
+                          e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300';
+                        }}
+                      />
+                    </div>
                   </div>
 
                   {/* Name & Role */}

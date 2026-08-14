@@ -310,8 +310,9 @@ export function SiteProvider({ children }) {
   }, [blogs]);
 
   const deleteBlog = useCallback((blogId) => {
-    const updated = (blogs || []).filter(b => b.id !== blogId);
+    const updated = (blogs || []).filter(b => b.id !== blogId && b.slug !== blogId);
     dispatch({ type: 'SET_KEY', key: 'blogs', value: updated });
+    saveCollectionArray('blogs', updated);
     removeDocument('blogs', String(blogId));
     triggerStateToast('SAVED');
   }, [blogs]);
@@ -340,6 +341,7 @@ export function SiteProvider({ children }) {
   const deleteAchievement = useCallback((achId) => {
     const updated = (achievements || []).filter(a => a.id !== achId);
     dispatch({ type: 'SET_KEY', key: 'achievements', value: updated });
+    saveCollectionArray('achievements', updated);
     removeDocument('achievements', String(achId));
     triggerStateToast('SAVED');
   }, [achievements]);
@@ -385,6 +387,7 @@ export function SiteProvider({ children }) {
   const deleteHeroSlide = useCallback((id) => {
     const updated = (heroSlides || []).filter((slide) => slide.id !== id && slide.badge !== id);
     dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
+    saveCollectionArray('heroSlides', updated);
     removeDocument('heroSlides', String(id));
     triggerStateToast('SAVED');
   }, [heroSlides]);
@@ -504,6 +507,7 @@ export function SiteProvider({ children }) {
   const deleteSupportCard = useCallback((id) => {
     const updated = (supportCards || []).filter((card) => card.id !== id && card.title !== id);
     dispatch({ type: 'SET_KEY', key: 'supportCards', value: updated });
+    saveCollectionArray('supportCards', updated);
     removeDocument('supportCards', String(id));
     triggerStateToast('SAVED');
   }, [supportCards]);
@@ -532,8 +536,9 @@ export function SiteProvider({ children }) {
   }, [transformedLives]);
 
   const deleteTransformedLife = useCallback((id) => {
-    const updated = (transformedLives || []).filter((life) => life.id !== id);
+    const updated = (transformedLives || []).filter((life) => life.id !== id && life.name !== id);
     dispatch({ type: 'SET_KEY', key: 'transformedLives', value: updated });
+    saveCollectionArray('transformedLives', updated);
     removeDocument('transformedLives', String(id));
     triggerStateToast('SAVED');
   }, [transformedLives]);
@@ -569,8 +574,9 @@ export function SiteProvider({ children }) {
   }, [seniorMentors]);
 
   const deleteSeniorMentor = useCallback((id) => {
-    const updated = (seniorMentors || []).filter((mentor) => mentor.id !== id);
+    const updated = (seniorMentors || []).filter((mentor) => mentor.id !== id && mentor.name !== id);
     dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: updated });
+    saveCollectionArray('seniorMentors', updated);
     removeDocument('seniorMentors', String(id));
     triggerStateToast('SAVED');
   }, [seniorMentors]);
@@ -606,8 +612,9 @@ export function SiteProvider({ children }) {
   }, [videoTestimonials]);
 
   const deleteVideoTestimonial = useCallback((id) => {
-    const updated = (videoTestimonials || []).filter((video) => video.id !== id);
+    const updated = (videoTestimonials || []).filter((video) => video.id !== id && video.name !== id && video.author !== id);
     dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: updated });
+    saveCollectionArray('videoTestimonials', updated);
     removeDocument('videoTestimonials', String(id));
     triggerStateToast('SAVED');
   }, [videoTestimonials]);
@@ -629,6 +636,7 @@ export function SiteProvider({ children }) {
     const testimonial = { id: `testi-${Date.now()}`, ...newTestimonial };
     const updated = [...(writtenTestimonials || []), testimonial];
     dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
+    saveCollectionArray('writtenTestimonials', updated);
     saveDocument('writtenTestimonials', testimonial.id, testimonial);
     triggerStateToast('SAVED');
   }, [writtenTestimonials]);
@@ -643,8 +651,9 @@ export function SiteProvider({ children }) {
   }, [writtenTestimonials]);
 
   const deleteWrittenTestimonial = useCallback((id) => {
-    const updated = (writtenTestimonials || []).filter((t) => t.id !== id && t.author !== id);
+    const updated = (writtenTestimonials || []).filter((t) => t.id !== id && t.author !== id && t.name !== id);
     dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
+    saveCollectionArray('writtenTestimonials', updated);
     removeDocument('writtenTestimonials', String(id));
     triggerStateToast('SAVED');
   }, [writtenTestimonials]);
@@ -751,6 +760,7 @@ export function SiteProvider({ children }) {
   const deleteLead = useCallback((leadId) => {
     const updated = (leads || []).filter(l => l.id !== leadId);
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
+    saveCollectionArray('leads', updated);
     removeDocument('leads', String(leadId));
     triggerStateToast('SAVED');
   }, [leads]);
@@ -759,6 +769,7 @@ export function SiteProvider({ children }) {
     const newPartner = { id: `partner-${Date.now()}`, ...partnerData };
     const updated = [...(hiringPartners || []), newPartner];
     dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: updated });
+    saveCollectionArray('hiringPartners', updated);
     saveDocument('hiringPartners', newPartner.id, newPartner);
     triggerStateToast('SAVED');
   }, [hiringPartners]);
@@ -771,8 +782,9 @@ export function SiteProvider({ children }) {
   }, [hiringPartners]);
 
   const deleteHiringPartner = useCallback((partnerId) => {
-    const updated = (hiringPartners || []).filter((p) => p.id !== partnerId);
+    const updated = (hiringPartners || []).filter((p) => p.id !== partnerId && p.name !== partnerId);
     dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: updated });
+    saveCollectionArray('hiringPartners', updated);
     removeDocument('hiringPartners', String(partnerId));
     triggerStateToast('SAVED');
   }, [hiringPartners]);
@@ -795,6 +807,7 @@ export function SiteProvider({ children }) {
     const newCard = { id: `showcase-${Date.now()}`, ...cardData };
     const updated = [...(aboutShowcaseCards || defaultAboutShowcaseCards), newCard];
     dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    saveCollectionArray('aboutShowcaseCards', updated);
     saveDocument('aboutShowcaseCards', newCard.id, newCard);
     triggerStateToast('SAVED');
   }, [aboutShowcaseCards]);
@@ -809,8 +822,9 @@ export function SiteProvider({ children }) {
 
   const deleteAboutShowcaseCard = useCallback((id) => {
     const baseList = Array.isArray(aboutShowcaseCards) && aboutShowcaseCards.length > 0 ? aboutShowcaseCards : defaultAboutShowcaseCards;
-    const updated = baseList.filter((c) => c.id !== id);
+    const updated = baseList.filter((c) => c.id !== id && c.title !== id);
     dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    saveCollectionArray('aboutShowcaseCards', updated);
     removeDocument('aboutShowcaseCards', String(id));
     triggerStateToast('SAVED');
   }, [aboutShowcaseCards]);
@@ -825,6 +839,7 @@ export function SiteProvider({ children }) {
     };
     const updated = [newPay, ...(payments || [])];
     dispatch({ type: 'SET_KEY', key: 'payments', value: updated });
+    saveCollectionArray('payments', updated);
     saveDocument('payments', newPay.id, newPay);
     if (!silent) {
       triggerStateToast('SAVED');
@@ -870,6 +885,7 @@ export function SiteProvider({ children }) {
   const deletePayment = useCallback((paymentId) => {
     const updated = (payments || []).filter((p) => p.id !== paymentId);
     dispatch({ type: 'SET_KEY', key: 'payments', value: updated });
+    saveCollectionArray('payments', updated);
     removeDocument('payments', String(paymentId));
     triggerStateToast('SAVED');
   }, [payments]);
