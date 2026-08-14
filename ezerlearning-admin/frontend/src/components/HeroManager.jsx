@@ -219,13 +219,19 @@ export default function HeroManager() {
               </div>
 
               <div>
-                <label htmlFor="hero_headline_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
-                  Headline Text *
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label htmlFor="hero_headline_input" style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648' }}>
+                    Headline Text *
+                  </label>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: (formData.headline?.length || 0) > 75 ? '#ef4444' : (formData.headline?.length || 0) >= 20 ? '#16a34a' : '#64748b' }}>
+                    {formData.headline?.length || 0} / 75 chars (Recommended: 20–65)
+                  </span>
+                </div>
                 <input
                   id="hero_headline_input"
                   type="text"
                   name="headline"
+                  maxLength={75}
                   placeholder="e.g. Learn Live. Build Real Skills. Get Placed."
                   value={formData.headline}
                   onChange={handleChange}
@@ -238,17 +244,26 @@ export default function HeroManager() {
                     fontWeight: 600
                   }}
                 />
+                <span style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginTop: '3px' }}>
+                  💡 Minimum 15 characters, maximum 75 characters. Keep punchy for high mobile impact.
+                </span>
                 {formErrors.headline && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Headline Text is required</span>}
               </div>
 
               <div>
-                <label htmlFor="hero_sub_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
-                  Sub-description Text *
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <label htmlFor="hero_sub_input" style={{ fontSize: '0.8rem', fontWeight: 800, color: '#000648' }}>
+                    Sub-description Text *
+                  </label>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: (formData.sub?.length || 0) > 250 ? '#ef4444' : (formData.sub?.length || 0) >= 60 ? '#16a34a' : '#64748b' }}>
+                    {formData.sub?.length || 0} / 250 chars (Recommended: 60–200)
+                  </span>
+                </div>
                 <textarea
                   id="hero_sub_input"
                   name="sub"
                   rows={3}
+                  maxLength={250}
                   placeholder="e.g. Live online classes led by working corporate professionals..."
                   value={formData.sub}
                   onChange={handleChange}
@@ -262,6 +277,9 @@ export default function HeroManager() {
                     resize: 'vertical'
                   }}
                 />
+                <span style={{ display: 'block', fontSize: '0.7rem', color: '#64748b', marginTop: '3px' }}>
+                  💡 Minimum 40 characters, maximum 250 characters. Balances perfectly on both desktop and phone screens.
+                </span>
                 {formErrors.sub && <span style={{ color: '#ef4444', fontSize: '0.72rem', fontWeight: 800, marginTop: '2px', display: 'block' }}>Sub-description Text is required</span>}
               </div>
 
