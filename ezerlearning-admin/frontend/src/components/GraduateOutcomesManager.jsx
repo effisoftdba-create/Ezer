@@ -23,11 +23,21 @@ export default function GraduateOutcomesManager() {
     deleteTransformedLife
   } = useSiteData();
 
-  const [headerFormData, setHeaderFormData] = useState(outcomesHeader || {
-    tag: 'CAREER PLACEMENT OUTCOMES',
-    headline: 'Our Graduates Get Hired by Leading Tech Firms',
-    sub: 'Join a community of engineers building impactful, high-growth software careers.'
+  const [headerFormData, setHeaderFormData] = useState({
+    tag: outcomesHeader?.tag || 'TRANSFORMED LIVES',
+    headline: outcomesHeader?.headline || outcomesHeader?.title || 'Our Graduates Get Hired by Leading Tech Firms',
+    sub: outcomesHeader?.sub || 'Hear directly from our learners who transitioned into high-paying IT roles.'
   });
+
+  useEffect(() => {
+    if (outcomesHeader) {
+      setHeaderFormData({
+        tag: outcomesHeader.tag || 'TRANSFORMED LIVES',
+        headline: outcomesHeader.headline || outcomesHeader.title || 'Our Graduates Get Hired by Leading Tech Firms',
+        sub: outcomesHeader.sub || 'Hear directly from our learners who transitioned into high-paying IT roles.'
+      });
+    }
+  }, [outcomesHeader]);
 
   const [saveHeaderSuccess, setSaveHeaderSuccess] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -37,7 +47,13 @@ export default function GraduateOutcomesManager() {
 
   const handleHeaderSave = (e) => {
     e.preventDefault();
-    updateOutcomesHeader(headerFormData);
+    const payload = {
+      tag: headerFormData.tag?.trim() || 'TRANSFORMED LIVES',
+      headline: headerFormData.headline?.trim() || 'Our Graduates Get Hired by Leading Tech Firms',
+      title: headerFormData.headline?.trim() || 'Our Graduates Get Hired by Leading Tech Firms',
+      sub: headerFormData.sub?.trim() || 'Hear directly from our learners who transitioned into high-paying IT roles.'
+    };
+    updateOutcomesHeader(payload);
     setSaveHeaderSuccess(true);
     setTimeout(() => setSaveHeaderSuccess(false), 3000);
   };
@@ -149,7 +165,7 @@ export default function GraduateOutcomesManager() {
             <input
               id="outcome_tag_field"
               type="text"
-              value={headerFormData.tag}
+              value={headerFormData.tag || ''}
               onChange={(e) => setHeaderFormData((prev) => ({ ...prev, tag: e.target.value }))}
               style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
             />
@@ -159,8 +175,8 @@ export default function GraduateOutcomesManager() {
             <input
               id="outcome_headline_field"
               type="text"
-              value={headerFormData.headline}
-              onChange={(e) => setHeaderFormData((prev) => ({ ...prev, headline: e.target.value }))}
+              value={headerFormData.headline || ''}
+              onChange={(e) => setHeaderFormData((prev) => ({ ...prev, headline: e.target.value, title: e.target.value }))}
               style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
             />
           </div>
@@ -171,7 +187,7 @@ export default function GraduateOutcomesManager() {
           <input
             id="outcome_sub_field"
             type="text"
-            value={headerFormData.sub}
+            value={headerFormData.sub || ''}
             onChange={(e) => setHeaderFormData((prev) => ({ ...prev, sub: e.target.value }))}
             style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
           />

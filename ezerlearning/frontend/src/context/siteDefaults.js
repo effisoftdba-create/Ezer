@@ -398,7 +398,8 @@ export const defaultTransformedLives = [
 
 export const defaultOutcomesHeader = {
   tag: 'TRANSFORMED LIVES',
-  title: 'Real Career Switches & Salary Hikes',
+  headline: 'Our Graduates Get Hired by Leading Tech Firms',
+  title: 'Our Graduates Get Hired by Leading Tech Firms',
   sub: 'Hear directly from our learners who transitioned into high-paying IT roles.'
 };
 

@@ -69,10 +69,10 @@ export default function TransformedLives() {
     }
   };
 
-  const headerData = outcomesHeader || {
-    tag: 'CAREER PLACEMENT OUTCOMES',
-    headline: 'Our Graduates Get Hired by Leading Tech Firms',
-    sub: 'Join a community of engineers building impactful, high-growth software careers.'
+  const headerData = {
+    tag: outcomesHeader?.tag || 'TRANSFORMED LIVES',
+    headline: outcomesHeader?.headline || outcomesHeader?.title || 'Our Graduates Get Hired by Leading Tech Firms',
+    sub: outcomesHeader?.sub || 'Hear directly from our learners who transitioned into high-paying IT roles.'
   };
 
   return (

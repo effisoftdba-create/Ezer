@@ -9,10 +9,10 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const displayStories = (transformedLives && transformedLives.length > 0) ? transformedLives : (propTransitions || []);
-  const headerData = outcomesHeader || {
-    tag: 'CAREER PLACEMENT OUTCOMES',
-    headline: 'Our Graduates Get Hired by Leading Tech Firms',
-    sub: 'Join a community of engineers building impactful, high-growth software careers.'
+  const headerData = {
+    tag: outcomesHeader?.tag || 'TRANSFORMED LIVES',
+    headline: outcomesHeader?.headline || outcomesHeader?.title || 'Our Graduates Get Hired by Leading Tech Firms',
+    sub: outcomesHeader?.sub || 'Hear directly from our learners who transitioned into high-paying IT roles.'
   };
 
   const handlePrev = () => {
