@@ -5,6 +5,8 @@ import { useSiteData } from '../../context/SiteContext';
 export default function ContactInfoCards() {
   const { contactInfo } = useSiteData();
 
+  const supportHours = contactInfo?.workingHours || contactInfo?.hours || 'Mon - Sat: 9:00 AM - 7:00 PM';
+
   const cards = [
     {
       title: 'Headquarters Location',
@@ -13,7 +15,7 @@ export default function ContactInfoCards() {
         <>
           <strong style={{ color: '#000648', display: 'block', marginBottom: '2px' }}>EZER Learning Solutions</strong>
           <span style={{ color: '#475569', fontSize: '0.88rem', lineHeight: 1.5 }}>
-            {(contactInfo.address || '').replace(/^EZER Learning Solutions\s*/i, '').replace(/^Ezer Learning Solutions\s*/i, '')}
+            {(contactInfo?.address || 'Plot No: 90, 3rd Cross Street, Phase-2, Thirumalai Nagar Annexe, Perungudi, Chennai - 600096, Tamil Nadu, India').replace(/^EZER Learning Solutions\s*/i, '').replace(/^Ezer Learning Solutions\s*/i, '')}
           </span>
         </>
       ),
@@ -23,9 +25,11 @@ export default function ContactInfoCards() {
       icon: <HiPhone />,
       content: (
         <>
-          Speak directly with a course counselor:<br />
-          <a href={`tel:${contactInfo.phone}`} style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginTop: '4px', display: 'inline-block' }}>
-            {contactInfo.phone}
+          <span style={{ color: '#64748b', fontSize: '0.82rem', display: 'block', marginBottom: '2px' }}>
+            Speak directly with a course counselor:
+          </span>
+          <a href={`tel:${contactInfo?.phone || '+91 98765 43210'}`} style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginTop: '2px', display: 'inline-block', textDecoration: 'none' }}>
+            {contactInfo?.phone || '+91 98765 43210'}
           </a>
         </>
       ),
@@ -35,19 +39,26 @@ export default function ContactInfoCards() {
       icon: <HiMail />,
       content: (
         <>
-          For corporate partnerships & admissions:<br />
-          <a href={`mailto:${contactInfo.email}`} style={{ fontSize: '0.95rem', fontWeight: 800, color: '#000648', marginTop: '4px', display: 'inline-block' }}>
-            {contactInfo.email}
+          <span style={{ color: '#64748b', fontSize: '0.82rem', display: 'block', marginBottom: '2px' }}>
+            For corporate partnerships & admissions:
+          </span>
+          <a href={`mailto:${contactInfo?.email || 'support@ezerlearning.com'}`} style={{ fontSize: '0.95rem', fontWeight: 800, color: '#000648', marginTop: '2px', display: 'inline-block', textDecoration: 'none' }}>
+            {contactInfo?.email || 'support@ezerlearning.com'}
           </a>
         </>
       ),
     },
     {
-      title: 'Advisory Desk Hours',
+      title: 'Support & Business Hours',
       icon: <HiClock />,
       content: (
         <>
-          {contactInfo.hours}
+          <span style={{ color: '#64748b', fontSize: '0.82rem', display: 'block', marginBottom: '2px' }}>
+            Advisory Desk & Student Support:
+          </span>
+          <span style={{ fontSize: '0.96rem', fontWeight: 800, color: '#000648', display: 'inline-block' }}>
+            {supportHours}
+          </span>
         </>
       ),
     },

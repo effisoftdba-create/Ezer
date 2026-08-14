@@ -11,9 +11,19 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
 
   const displayFaculty = (seniorMentors && seniorMentors.length > 0) ? seniorMentors : (propFaculty || []);
   const headerData = {
-    tag: mentorsHeader?.tag || 'EXPERT FACULTY',
-    headline: propTitle || mentorsHeader?.headline || mentorsHeader?.title || 'Learn Live From Working Corporate Professionals',
-    sub: mentorsHeader?.sub || 'Our instructors work at top tech firms, bringing real production scenarios into every live class.'
+    tag: (mentorsHeader?.tag && String(mentorsHeader.tag).trim()) ? mentorsHeader.tag : 'EXPERT FACULTY',
+    headline: (propTitle && String(propTitle).trim())
+      ? propTitle
+      : (mentorsHeader?.headline && String(mentorsHeader.headline).trim())
+        ? mentorsHeader.headline
+        : (mentorsHeader?.title && String(mentorsHeader.title).trim())
+          ? mentorsHeader.title
+          : 'Learn Live From Working Corporate Professionals',
+    sub: (mentorsHeader?.sub && String(mentorsHeader.sub).trim())
+      ? mentorsHeader.sub
+      : (mentorsHeader?.subtitle && String(mentorsHeader.subtitle).trim())
+        ? mentorsHeader.subtitle
+        : 'Our instructors work at top tech firms, bringing real production scenarios into every live class.'
   };
 
   if (!displayFaculty || displayFaculty.length === 0) return null;
@@ -44,44 +54,45 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
   };
 
   return (
-    <section style={{ margin: '32px 0 24px', width: '100%', maxWidth: '100%' }}>
+    <section style={{ margin: '36px 0 28px', width: '100%', maxWidth: '100%' }}>
       {/* Header */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '32px', width: '100%' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '28px', width: '100%' }}>
         <span
           style={{
             background: 'rgba(0, 6, 72, 0.06)',
             color: '#000648',
-            fontSize: '0.76rem',
+            fontSize: '0.78rem',
             fontWeight: 800,
-            padding: '5px 16px',
+            padding: '6px 18px',
             borderRadius: '50px',
             textTransform: 'uppercase',
             letterSpacing: '0.08em',
             display: 'inline-flex',
             alignItems: 'center',
             gap: '6px',
-            marginBottom: '10px',
+            marginBottom: '12px',
             border: '1.5px solid rgba(0, 6, 72, 0.12)'
           }}
         >
-          <HiAcademicCap size={15} color="#000648" />
+          <HiAcademicCap size={16} color="#000648" />
           <span>{headerData.tag}</span>
         </span>
 
-        <h3
+        <h2
           style={{
-            fontSize: 'clamp(1.6rem, 3vw, 2.3rem)',
+            fontSize: 'clamp(1.75rem, 3.2vw, 2.4rem)',
             fontWeight: 900,
             color: '#000648',
-            margin: '4px 0 10px 0',
+            margin: '0 0 10px 0',
             letterSpacing: '-0.02em',
-            fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif"
+            fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+            lineHeight: 1.25,
           }}
         >
           {headerData.headline}
-        </h3>
+        </h2>
 
-        <p style={{ color: '#475569', fontSize: '0.96rem', maxWidth: '680px', margin: '0 auto 16px', lineHeight: 1.6 }}>
+        <p style={{ color: '#475569', fontSize: '1rem', maxWidth: '680px', margin: '0 auto 16px', lineHeight: 1.6, fontWeight: 500 }}>
           {headerData.sub}
         </p>
 
