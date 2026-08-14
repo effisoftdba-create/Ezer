@@ -437,11 +437,42 @@ export const defaultBlogs = [
     title: 'EZER Learning Solutions Honored at EdTech Excellence Awards 2025',
     slug: 'ezer-honored-at-edtech-excellence-awards-2025',
     category: 'Company News',
-    author: 'EZER Editorial Team',
+    author: 'EZER Academic Board',
     date: 'July 28, 2025',
-    summary: 'EZER wins national recognition for native language IT education, outcome-driven mentorship, and outstanding placement metrics.',
+    readTime: '6 Min Read',
+    seoGeoAeoTag: 'Best AI & Full Stack IT Training Institute in Chennai India',
+    summary: 'EZER Learning Solutions receives national acclaim at the EdTech Excellence Awards 2025 for pioneering live native-language tech education, outcome-driven mentorship cohorts, and 12-month dedicated career placement support.',
     image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
-    content: 'We are thrilled to announce that EZER Learning Solutions has been awarded the EdTech Excellence & Innovation Award for 2025. This achievement reflects our commitment to democratizing tech education.',
+    content: 'We are thrilled to announce that EZER Learning Solutions has been awarded the EdTech Excellence & Innovation Award for 2025. This milestone underscores EZER’s mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.',
+    takeaways: [
+      'National recognition for democratizing practical tech training across India.',
+      'Pioneering native-language instruction (Tamil, Hindi, English) for accelerated software comprehension.',
+      'Over 10,000+ career switchers and non-IT graduates successfully placed in top IT firms.',
+      'Comprehensive 12-month placement assistance with mock technical interviews and resume preparation.'
+    ],
+    sections: [
+      {
+        id: 'sec-1',
+        title: '1. National Recognition for EdTech Innovation & Outcomes',
+        content: 'EZER Learning Solutions has been formally honored with the prestigious EdTech Excellence & Innovation Award 2025. This milestone underscores EZER’s unwavering mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.',
+        image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=1000',
+        caption: 'EZER Leadership receiving the EdTech Excellence & Innovation Award 2025.'
+      },
+      {
+        id: 'sec-2',
+        title: '2. Revolutionizing Tech Education with Native-Language Cohorts',
+        content: 'A cornerstone of EZER’s award-winning pedagogy is its dual-language learning framework. By delivering live, interactive instruction in Tamil, Hindi, and English alongside industry-standard coding labs, learners grasp complex data structures, cloud architectures, and full-stack engineering faster and with greater confidence.',
+        image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000',
+        caption: 'Interactive live cohort masterclasses with real-time mentor code reviews.'
+      },
+      {
+        id: 'sec-3',
+        title: '3. Proven 1-Year Dedicated Placement Support',
+        content: 'Beyond hands-on technical training, EZER provides learners with up to 12 months of structured placement support, including live corporate mentor sessions, portfolio reviews, mock coding assessments, and direct hiring drives with leading tech enterprises.',
+        image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000',
+        caption: 'Alumni career acceleration and corporate placement drive.'
+      }
+    ],
     featured: false
   },
   {
