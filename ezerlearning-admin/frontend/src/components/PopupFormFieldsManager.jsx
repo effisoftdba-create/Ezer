@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HiPlus, HiTrash, HiPencil, HiCheck, HiOutlineDocumentText } from 'react-icons/hi';
+import { HiPlus, HiTrash, HiPencil, HiCheck, HiOutlineDocumentText, HiRefresh } from 'react-icons/hi';
 import { useSiteData } from '../context/SiteContext';
 
 const DEFAULT_COURSE_LIST = [
@@ -7,7 +7,6 @@ const DEFAULT_COURSE_LIST = [
   'Full stack development with AI',
   'Data Analyst',
   'Cloud DevOps with AI',
-  'Cyber Security',
   'Spoken English (International standard)'
 ];
 
@@ -22,43 +21,66 @@ export default function PopupFormFieldsManager({ formData, setFormData }) {
     ? catalogCourses.flatMap((c) => (c && c.title ? [c.title] : []))
     : [];
 
-  // Merge custom courses, newly created catalog courses, and default 6 options into a unique list
-  const courses = Array.from(new Set([
-    ...(formData.coursesList || []),
-    ...catalogCourseTitles,
-    ...DEFAULT_COURSE_LIST
-  ]));
+  // Use explicit formData.coursesList if defined, otherwise default to active catalog course titles (or DEFAULT_COURSE_LIST)
+  const courses = Array.isArray(formData.coursesList) && formData.coursesList.length > 0
+    ? formData.coursesList
+    : (catalogCourseTitles.length > 0 ? catalogCourseTitles : DEFAULT_COURSE_LIST);
 
-  const countries = formData.countriesList || [
-    'India',
-    'United States',
-    'UAE',
-    'Singapore',
-    'Other'
-  ];
+  const countries = Array.isArray(formData.countriesList) && formData.countriesList.length > 0
+    ? formData.countriesList
+    : [
+      'India',
+      'United States',
+      'UAE',
+      'Singapore',
+      'Other'
+    ];
 
   const handleAddCourse = () => {
-    if (!newCourseInput.trim()) return;
+    const trimmed = newCourseInput.trim();
+    if (!trimmed) return;
+    if (courses.includes(trimmed)) {
+      alert('This course option is already in the list.');
+      return;
+    }
+    const updated = [...courses, trimmed];
     setFormData((prev) => ({
       ...prev,
-      coursesList: [...(prev.coursesList || courses), newCourseInput.trim()]
+      coursesList: updated
     }));
     setNewCourseInput('');
   };
 
   const handleDeleteCourse = (index) => {
+    const updated = courses.filter((_, idx) => idx !== index);
     setFormData((prev) => ({
       ...prev,
-      coursesList: (prev.coursesList || courses).filter((_, idx) => idx !== index)
+      coursesList: updated
     }));
+    if (editingCourseIdx === index) {
+      setEditingCourseIdx(null);
+    }
   };
 
   const handleSaveCourseEdit = (index) => {
-    if (!editingCourseValue.trim()) return;
-    const updated = [...(formData.coursesList || courses)];
-    updated[index] = editingCourseValue.trim();
+    const trimmed = editingCourseValue.trim();
+    if (!trimmed) return;
+    const updated = [...courses];
+    updated[index] = trimmed;
     setFormData((prev) => ({ ...prev, coursesList: updated }));
     setEditingCourseIdx(null);
+  };
+
+  const handleSyncFromCatalog = () => {
+    if (catalogCourseTitles.length === 0) {
+      alert('No courses found in Course Catalog to sync.');
+      return;
+    }
+    setFormData((prev) => ({
+      ...prev,
+      coursesList: [...catalogCourseTitles]
+    }));
+    alert(`Successfully synced ${catalogCourseTitles.length} active course(s) from Course Catalog! Remember to click "Save Popup Settings" to apply.`);
   };
 
   const handleAddCountry = () => {
@@ -192,10 +214,32 @@ export default function PopupFormFieldsManager({ formData, setFormData }) {
       </div>
 
       {/* MANAGER FOR TARGET COURSES DROPDOWN OPTIONS */}
-      <div style={{ marginBottom: '16px', background: '#f8fafc', padding: '12px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-        <label htmlFor="add_new_course_input" style={{ fontSize: '0.825rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '8px' }}>
-          Target Course Dropdown Options ({courses.length}) — Add / Edit / Delete
-        </label>
+      <div style={{ marginBottom: '16px', background: '#f8fafc', padding: '14px', borderRadius: '10px', border: '1.5px solid #cbd5e1' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '6px' }}>
+          <label htmlFor="add_new_course_input" style={{ fontSize: '0.825rem', fontWeight: 800, color: '#000648', margin: 0 }}>
+            Target Course Dropdown Options ({courses.length}) — Add / Edit / Delete
+          </label>
+          <button
+            type="button"
+            onClick={handleSyncFromCatalog}
+            title="Automatically reset and sync dropdown options with the active Course Catalog"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '4px',
+              padding: '4px 10px',
+              background: '#e0e7ff',
+              color: '#3730a3',
+              border: '1px solid #c7d2fe',
+              borderRadius: '6px',
+              fontSize: '0.725rem',
+              fontWeight: 800,
+              cursor: 'pointer'
+            }}
+          >
+            <HiRefresh size={13} /> ⚡ Auto-Sync from Course Catalog
+          </button>
+        </div>
 
         <div style={{ display: 'flex', gap: '6px', marginBottom: '10px' }}>
           <input

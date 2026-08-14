@@ -366,17 +366,45 @@ function SiteProvider({ children }) {
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
     safeSetStorage(STORAGE_COURSES_KEY, updated);
     saveDocument('courses', String(courseId), courseObj);
+
+    // Auto-sync new course title into popupConfig.coursesList
+    if (courseObj.title) {
+      const currentPopup = popupConfig || {};
+      const currentList = Array.isArray(currentPopup.coursesList)
+        ? currentPopup.coursesList
+        : (courses || []).map((c) => c.title).filter(Boolean);
+      if (!currentList.includes(courseObj.title)) {
+        const updatedPopup = { ...currentPopup, id: 'main', coursesList: [...currentList, courseObj.title] };
+        dispatch({ type: 'SET_KEY', key: 'popupConfig', value: updatedPopup });
+        saveDocument('popupConfig', 'main', updatedPopup);
+      }
+    }
+
     triggerStateToast('SAVED');
-  }, [courses]);
+  }, [courses, popupConfig]);
 
   const updateCourse = useCallback((id, updatedCourse) => {
     const currentList = Array.isArray(courses) ? courses : (getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses);
+    const oldCourse = currentList.find((c) => c.id === id || c.slug === id);
     const updated = currentList.map((c) => (c.id === id || c.slug === id ? { ...c, ...updatedCourse } : c));
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
     safeSetStorage(STORAGE_COURSES_KEY, updated);
     saveCollectionArray('courses', updated);
+
+    // Auto-update renamed course title in popupConfig.coursesList
+    if (oldCourse && updatedCourse.title && oldCourse.title !== updatedCourse.title) {
+      const currentPopup = popupConfig || {};
+      const currentList = Array.isArray(currentPopup.coursesList)
+        ? currentPopup.coursesList
+        : (courses || []).map((c) => c.title).filter(Boolean);
+      const updatedList = currentList.map((t) => (t === oldCourse.title ? updatedCourse.title : t));
+      const updatedPopup = { ...currentPopup, id: 'main', coursesList: updatedList };
+      dispatch({ type: 'SET_KEY', key: 'popupConfig', value: updatedPopup });
+      saveDocument('popupConfig', 'main', updatedPopup);
+    }
+
     triggerStateToast('SAVED');
-  }, [courses]);
+  }, [courses, popupConfig]);
 
   const deleteCourse = useCallback((id) => {
     const currentList = Array.isArray(courses) ? courses : (getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses);
@@ -390,9 +418,21 @@ function SiteProvider({ children }) {
     if (targetCourse) {
       if (targetCourse.id && String(targetCourse.id) !== String(id)) removeDocument('courses', String(targetCourse.id));
       if (targetCourse.slug && String(targetCourse.slug) !== String(id)) removeDocument('courses', String(targetCourse.slug));
+
+      // Auto-remove deleted course title from popupConfig.coursesList
+      if (targetCourse.title) {
+        const currentPopup = popupConfig || {};
+        const currentList = Array.isArray(currentPopup.coursesList)
+          ? currentPopup.coursesList
+          : (courses || []).map((c) => c.title).filter(Boolean);
+        const updatedList = currentList.filter((t) => t !== targetCourse.title);
+        const updatedPopup = { ...currentPopup, id: 'main', coursesList: updatedList };
+        dispatch({ type: 'SET_KEY', key: 'popupConfig', value: updatedPopup });
+        saveDocument('popupConfig', 'main', updatedPopup);
+      }
     }
     triggerStateToast('SAVED');
-  }, [courses]);
+  }, [courses, popupConfig]);
 
   const updateEzerDefinition = useCallback((def) => {
     const payload = { id: 'main', ...def };

@@ -66,10 +66,9 @@ export default function PopupFormFields({
     ? courses.flatMap((c) => (c && c.title ? [c.title] : []))
     : [];
 
-  const baseCourses = (config.coursesList && config.coursesList.length > 0) ? config.coursesList : DEFAULT_COURSE_LIST;
-
-  // Combine live catalog courses with config and default 6 options so all new courses automatically show in popup
-  const coursesArray = Array.from(new Set([...dynamicCatalogTitles, ...baseCourses, ...DEFAULT_COURSE_LIST]));
+  const coursesArray = (config.coursesList && config.coursesList.length > 0)
+    ? config.coursesList
+    : (dynamicCatalogTitles.length > 0 ? dynamicCatalogTitles : DEFAULT_COURSE_LIST);
 
   const countriesArray = (config.countriesList && config.countriesList.length > 0) ? config.countriesList : [
     'India',

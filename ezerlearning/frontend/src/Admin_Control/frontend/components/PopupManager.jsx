@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import PopupBannerPhotoControls from './PopupBannerPhotoControls';
@@ -30,10 +30,11 @@ export default function PopupManager() {
     courseLabel: 'Target Course*',
     termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.',
     coursesList: [
+      'AI/ML',
+      'Full stack development with AI',
+      'Data Analyst',
       'Cloud DevOps with AI',
-      'Software Testing – Playwright',
-      'AI & Machine Learning',
-      'IT Infrastructure & System Administration'
+      'Spoken English (International standard)'
     ],
     countriesList: [
       'India',
@@ -43,6 +44,15 @@ export default function PopupManager() {
       'Other'
     ]
   });
+
+  useEffect(() => {
+    if (popupConfig && Object.keys(popupConfig).length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        ...popupConfig
+      }));
+    }
+  }, [popupConfig]);
 
   const [pickerTarget, setPickerTarget] = useState(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
