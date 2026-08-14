@@ -69,11 +69,9 @@ export default function TransformedLives() {
     }
   };
 
-  const headerData = {
-    tag: outcomesHeader?.tag || 'TRANSFORMED LIVES',
-    headline: outcomesHeader?.headline || outcomesHeader?.title || 'Our Graduates Get Hired by Leading Tech Firms',
-    sub: outcomesHeader?.sub || 'Hear directly from our learners who transitioned into high-paying IT roles.'
-  };
+  const headerTag = (outcomesHeader?.tag || 'TRANSFORMED LIVES').trim() || 'TRANSFORMED LIVES';
+  const headerHeadline = (outcomesHeader?.headline || outcomesHeader?.title || 'Our Graduates Get Hired by Leading Tech Firms').trim() || 'Our Graduates Get Hired by Leading Tech Firms';
+  const headerSub = (outcomesHeader?.sub || 'Hear directly from our learners who transitioned into high-paying IT roles.').trim() || 'Hear directly from our learners who transitioned into high-paying IT roles.';
 
   return (
     <LazyMotion features={domAnimation}>
@@ -96,15 +94,15 @@ export default function TransformedLives() {
                 border: '1px solid rgba(0, 6, 56, 0.12)'
               }}
             >
-              {headerData.tag}
+              {headerTag}
             </span>
 
             <h2 style={{ color: '#000638', fontSize: 'clamp(1.6rem, 2.8vw, 2.3rem)', fontWeight: 900, marginBottom: '8px' }}>
-              {headerData.headline}
+              {headerHeadline}
             </h2>
 
             <p style={{ color: '#475569', fontSize: '0.94rem', maxWidth: '640px', margin: '0 auto' }}>
-              {headerData.sub}
+              {headerSub}
             </p>
           </div>
 
