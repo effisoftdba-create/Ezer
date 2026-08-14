@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import CarouselDotsNav from '../CarouselDotsNav';
 
 const DEFAULT_CAPSTONES = [
@@ -27,28 +27,44 @@ const DEFAULT_CAPSTONES = [
 
 export default function CapstoneProjectsSlider({ projects, courseTools }) {
   const displayProjects = (projects && projects.length > 0) ? projects : DEFAULT_CAPSTONES;
+  const sliderRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const handleScroll = (e) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    const cardWidth = (sliderRef.current?.children[0]?.offsetWidth || 340) + 24;
+    const newIdx = Math.round(scrollLeft / cardWidth);
+    if (newIdx !== activeIndex && newIdx >= 0 && newIdx < displayProjects.length) {
+      setActiveIndex(newIdx);
+    }
+  };
 
   const handlePrev = () => {
     if (!displayProjects.length) return;
     const next = (activeIndex - 1 + displayProjects.length) % displayProjects.length;
     setActiveIndex(next);
-    const el = document.getElementById('projects-slider-track');
-    if (el) el.scrollTo({ left: next * 340, behavior: 'smooth' });
+    if (sliderRef.current) {
+      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 340) + 24;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
+    }
   };
 
   const handleNext = () => {
     if (!displayProjects.length) return;
     const next = (activeIndex + 1) % displayProjects.length;
     setActiveIndex(next);
-    const el = document.getElementById('projects-slider-track');
-    if (el) el.scrollTo({ left: next * 340, behavior: 'smooth' });
+    if (sliderRef.current) {
+      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 340) + 24;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
+    }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
-    const el = document.getElementById('projects-slider-track');
-    if (el) el.scrollTo({ left: idx * 340, behavior: 'smooth' });
+    if (sliderRef.current) {
+      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 340) + 24;
+      sliderRef.current.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
+    }
   };
 
   if (!displayProjects || displayProjects.length === 0) return null;
@@ -79,6 +95,8 @@ export default function CapstoneProjectsSlider({ projects, courseTools }) {
         </div>
 
         <div
+          ref={sliderRef}
+          onScroll={handleScroll}
           id="projects-slider-track"
           className="no-scrollbar"
           style={{
@@ -86,7 +104,9 @@ export default function CapstoneProjectsSlider({ projects, courseTools }) {
             gap: '24px',
             overflowX: 'auto',
             scrollSnapType: 'x mandatory',
+            scrollBehavior: 'smooth',
             paddingBottom: '16px',
+            width: '100%',
           }}
         >
           {displayProjects.map((proj) => {

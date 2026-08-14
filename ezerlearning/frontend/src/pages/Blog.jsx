@@ -196,7 +196,19 @@ export default function Blog({ onOpenDemoModal }) {
             />
           </div>
 
-          <div id="articles-scroll-track" className="articles-scroll-track">
+          <div
+            id="articles-scroll-track"
+            className="articles-scroll-track"
+            onScroll={(e) => {
+              const scrollLeft = e.currentTarget.scrollLeft;
+              const cardWidth = 360;
+              const newIdx = Math.round(scrollLeft / cardWidth);
+              const list = articlesToDisplay || [];
+              if (newIdx !== articleActiveIdx && newIdx >= 0 && newIdx < list.length) {
+                setArticleActiveIdx(newIdx);
+              }
+            }}
+          >
             {(articlesToDisplay || []).map((blog) => (
               <article key={blog.id} className="magazine-horizontal-card">
                 <div className="card-image-box">
@@ -274,7 +286,19 @@ export default function Blog({ onOpenDemoModal }) {
           </div>
 
           {/* Horizontal Scroll Track */}
-          <div id="awards-scroll-track" className="awards-scroll-track">
+          <div
+            id="awards-scroll-track"
+            className="awards-scroll-track"
+            onScroll={(e) => {
+              const scrollLeft = e.currentTarget.scrollLeft;
+              const cardWidth = 340;
+              const newIdx = Math.round(scrollLeft / cardWidth);
+              const list = achievements || [];
+              if (newIdx !== awardActiveIdx && newIdx >= 0 && newIdx < list.length) {
+                setAwardActiveIdx(newIdx);
+              }
+            }}
+          >
             {(achievements || []).map((ach) => (
               <div key={ach.id} className="award-horizontal-card">
                 <div className="card-image-box">

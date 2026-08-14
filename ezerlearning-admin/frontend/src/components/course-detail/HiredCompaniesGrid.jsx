@@ -38,6 +38,15 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
     }
   };
 
+  const handleScroll = (e) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    const cardWidth = 320;
+    const newIdx = Math.round(scrollLeft / cardWidth);
+    if (newIdx !== activeIndex && newIdx >= 0 && newIdx < displayStories.length) {
+      setActiveIndex(newIdx);
+    }
+  };
+
   if (!displayStories || displayStories.length === 0) return null;
 
   return (
@@ -85,6 +94,7 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
           {/* Horizontal Slider Track */}
           <div
             ref={sliderRef}
+            onScroll={handleScroll}
             className="no-scrollbar"
             style={{
               display: 'flex',

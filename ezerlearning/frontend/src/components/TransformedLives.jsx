@@ -69,6 +69,15 @@ export default function TransformedLives() {
     }
   };
 
+  const handleScroll = (e) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    const cardWidth = cardWidthRef.current || 315;
+    const newIdx = Math.round(scrollLeft / cardWidth);
+    if (newIdx !== activeIndex && newIdx >= 0 && newIdx < displayList.length) {
+      setActiveIndex(newIdx);
+    }
+  };
+
   const headerTag = (outcomesHeader?.tag || 'TRANSFORMED LIVES').trim() || 'TRANSFORMED LIVES';
   const headerHeadline = (outcomesHeader?.headline || outcomesHeader?.title || 'Our Graduates Get Hired by Leading Tech Firms').trim() || 'Our Graduates Get Hired by Leading Tech Firms';
   const headerSub = (outcomesHeader?.sub || 'Hear directly from our learners who transitioned into high-paying IT roles.').trim() || 'Hear directly from our learners who transitioned into high-paying IT roles.';
@@ -122,6 +131,7 @@ export default function TransformedLives() {
             <div
               ref={sliderRef}
               className="no-scrollbar"
+              onScroll={handleScroll}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
               style={{

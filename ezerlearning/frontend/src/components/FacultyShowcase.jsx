@@ -28,12 +28,22 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
 
   if (!displayFaculty || displayFaculty.length === 0) return null;
 
+  const handleScroll = (e) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    const cardWidth = (sliderRef.current?.children[0]?.offsetWidth || 340) + 24;
+    const newIdx = Math.round(scrollLeft / cardWidth);
+    if (newIdx !== activeIndex && newIdx >= 0 && newIdx < displayFaculty.length) {
+      setActiveIndex(newIdx);
+    }
+  };
+
   const handlePrev = () => {
     if (!displayFaculty.length) return;
     const next = (activeIndex - 1 + displayFaculty.length) % displayFaculty.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 360, behavior: 'smooth' });
+      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 340) + 24;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -42,14 +52,16 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
     const next = (activeIndex + 1) % displayFaculty.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 360, behavior: 'smooth' });
+      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 340) + 24;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: idx * 360, behavior: 'smooth' });
+      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 340) + 24;
+      sliderRef.current.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -107,18 +119,20 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
         />
       </div>
 
-      {/* Modern Faculty Cards Grid */}
+      {/* Horizontal Right-Left Scrollable Track (Mobile & Desktop) */}
       <div
         ref={sliderRef}
+        onScroll={handleScroll}
         style={{
-          display: 'grid',
-          gridTemplateColumns: displayFaculty.length === 2
-            ? 'repeat(2, minmax(0, 1fr))'
-            : 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+          display: 'flex',
           gap: '24px',
+          overflowX: 'auto',
+          scrollSnapType: 'x mandatory',
+          scrollBehavior: 'smooth',
+          padding: '8px 4px 20px',
           width: '100%',
         }}
-        className="faculty-cards-grid"
+        className="no-scrollbar"
       >
         {displayFaculty.map((prof, pIdx) => {
           const mentorName = prof.name || 'Corporate Mentor';
@@ -132,6 +146,8 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
             <div
               key={prof.id || pIdx}
               style={{
+                flex: '0 0 min(350px, 86vw)',
+                scrollSnapAlign: 'start',
                 background: '#ffffff',
                 borderRadius: '20px',
                 border: '1.5px solid #e2e8f0',
@@ -301,14 +317,6 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
           );
         })}
       </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .faculty-cards-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

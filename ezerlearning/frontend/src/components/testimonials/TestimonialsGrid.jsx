@@ -57,12 +57,22 @@ export default function TestimonialsGrid() {
     });
   }, [normalizedList, selectedTrack, searchQuery]);
 
+  const handleScroll = (e) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    const cardWidth = (sliderRef.current?.children[0]?.offsetWidth || 370) + 24;
+    const newIdx = Math.round(scrollLeft / cardWidth);
+    if (newIdx !== activeIndex && newIdx >= 0 && newIdx < filteredList.length) {
+      setActiveIndex(newIdx);
+    }
+  };
+
   const handlePrev = () => {
     if (!filteredList.length) return;
     const next = (activeIndex - 1 + filteredList.length) % filteredList.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 380, behavior: 'smooth' });
+      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 370) + 24;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -71,14 +81,16 @@ export default function TestimonialsGrid() {
     const next = (activeIndex + 1) % filteredList.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 380, behavior: 'smooth' });
+      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 370) + 24;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: idx * 380, behavior: 'smooth' });
+      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 370) + 24;
+      sliderRef.current.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -94,8 +106,8 @@ export default function TestimonialsGrid() {
       }}
     >
       <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
-        {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+        {/* 1. Section Header Title & Subtitle */}
+        <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <div
             style={{
               display: 'inline-flex',
@@ -129,30 +141,18 @@ export default function TestimonialsGrid() {
           >
             Verified Stories From Real EZER Learners
           </h2>
-          <p style={{ color: '#475569', fontSize: '1.02rem', maxWidth: '680px', margin: '0 auto 20px', lineHeight: 1.6 }}>
+          <p style={{ color: '#475569', fontSize: '1.02rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6 }}>
             Browse authentic feedback, career journeys, and interview experiences shared by students across all course tracks.
           </p>
-
-          {/* Standardized Centered Navigation Controls */}
-          {filteredList.length > 0 && (
-            <CarouselDotsNav
-              totalItems={filteredList.length}
-              activeIndex={activeIndex}
-              onPrev={handlePrev}
-              onNext={handleNext}
-              onSelectIndex={handleSelect}
-              style={{ margin: '8px auto 0' }}
-            />
-          )}
         </div>
 
-        {/* Filter Bar & Search Box */}
+        {/* 2. Filter Bar & Search Box */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
             gap: '16px',
-            marginBottom: '28px',
+            marginBottom: '20px',
             alignItems: 'center',
           }}
         >
@@ -238,7 +238,20 @@ export default function TestimonialsGrid() {
           </div>
         </div>
 
-        {/* Results Counter */}
+        {/* 3. Centered < . . . > Dots Navigation (Placed AFTER Filters & Search) */}
+        {filteredList.length > 0 && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '18px' }}>
+            <CarouselDotsNav
+              totalItems={filteredList.length}
+              activeIndex={activeIndex}
+              onPrev={handlePrev}
+              onNext={handleNext}
+              onSelectIndex={handleSelect}
+            />
+          </div>
+        )}
+
+        {/* 4. Results Counter */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', padding: '0 4px' }}>
           <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#64748b' }}>
             Showing {filteredList.length} of {normalizedList.length} verified testimonials
@@ -258,9 +271,10 @@ export default function TestimonialsGrid() {
           )}
         </div>
 
-        {/* Right-Left Horizontal Scrollable Track */}
+        {/* 5. Right-Left Horizontal Scrollable Track (Swipe Synchronized with Dots) */}
         <div
           ref={sliderRef}
+          onScroll={handleScroll}
           style={{
             display: 'flex',
             gap: '24px',
@@ -301,7 +315,7 @@ export default function TestimonialsGrid() {
               }}
             >
               <div>
-                {/* 1. TOP: Student Profile Header with Avatar, Name, Verified Tick, Role, & Company */}
+                {/* TOP: Student Profile Header with Avatar, Name, Verified Tick, Role, & Company */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '16px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1, minWidth: 0 }}>
                     {/* Circular Avatar */}
@@ -422,7 +436,7 @@ export default function TestimonialsGrid() {
                   </div>
                 </div>
 
-                {/* 2. MIDDLE: Star Rating & Track Badge on a Single Stable Line */}
+                {/* MIDDLE: Star Rating & Track Badge on a Single Stable Line */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '14px', height: '28px' }}>
                   {/* 5 Gold Stars */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#f59e0b', flexShrink: 0 }}>
@@ -460,7 +474,7 @@ export default function TestimonialsGrid() {
                   </div>
                 </div>
 
-                {/* 3. BOTTOM: Detailed Testimonial Review Text */}
+                {/* BOTTOM: Detailed Testimonial Review Text */}
                 <p
                   style={{
                     fontSize: '0.93rem',
