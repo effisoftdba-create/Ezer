@@ -585,10 +585,10 @@ export default function AboutShowcaseManager() {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                   <label style={{ fontSize: '0.82rem', fontWeight: 800, color: '#000648', margin: 0 }}>
-                    ✨ Key Feature Bullet Points ({Array.isArray(card.points) ? card.points.length : 0})
+                    Key Feature Bullet Points ({Array.isArray(card.points) ? card.points.length : 0})
                   </label>
                   <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
-                    Click ✏️ to edit or 🗑️ to delete any bullet point
+                    Click Edit or Delete on any bullet point
                   </span>
                 </div>
 

@@ -248,7 +248,7 @@ export default function ImagePickerPreviewBox({
           >
             <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#000648', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <HiDeviceMobile color="#115DFC" size={16} /> Mobile Phone Screen (9:16)
+                <HiDeviceMobile color="#115DFC" size={16} /> Mobile View ({previewDims.label || currentRatio})
               </span>
               <span style={{ fontSize: '0.68rem', fontWeight: 700, color: '#115DFC', background: '#e0e7ff', padding: '1px 6px', borderRadius: '4px' }}>
                 Separate Mobile Zoom

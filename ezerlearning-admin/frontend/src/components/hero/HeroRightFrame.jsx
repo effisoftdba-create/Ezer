@@ -28,7 +28,8 @@ export default function HeroRightFrame({ currentSlide, safeActive }) {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '480px',
+        minHeight: isMobile ? 'unset' : '480px',
+        aspectRatio: isMobile ? '1 / 1' : 'unset',
         width: '100%',
         height: '100%',
       }}

@@ -79,7 +79,7 @@ export default function About({ onOpenDemoModal }) {
       <section style={{
         background: '#000648', padding: '72px 0 56px', color: '#fff', textAlign: 'center',
         backgroundImage: 'radial-gradient(ellipse at 50% 0%, rgba(242,183,51,0.14) 0%, transparent 65%)',
-        borderBottom: '3px solid #f2b733'
+        borderBottom: '1px solid rgba(255,255,255,0.1)'
       }}>
         <div className="container">
           <span style={{
@@ -121,7 +121,7 @@ export default function About({ onOpenDemoModal }) {
                 OUR PURPOSE
               </div>
               <h2 style={{ color: '#000648', fontSize: 'clamp(1.5rem, 2.5vw, 2rem)', fontWeight: 900, marginBottom: '14px' }}>
-                Meaning of <span style={{ color: '#000648', borderBottom: '3px solid #f2b733' }}>EZER</span>
+                Meaning of <span style={{ color: '#000648' }}>EZER</span>
               </h2>
               <p style={{ fontSize: '1.12rem', fontWeight: 800, color: '#000648', lineHeight: 1.5, marginBottom: '12px' }}>
                 Ezer means "Helper, Strength, and Support".
@@ -135,7 +135,7 @@ export default function About({ onOpenDemoModal }) {
       </section>
 
       {/* Vision & Mission Cards */}
-      <section style={{ padding: '64px 0', background: '#000648', color: '#ffffff', borderTop: '3px solid #f2b733' }}>
+      <section style={{ padding: '64px 0', background: '#000648', color: '#ffffff' }}>
         <div className="container">
           <div style={{ textAlign: 'center', marginBottom: '40px' }}>
             <span style={{
@@ -457,7 +457,7 @@ export default function About({ onOpenDemoModal }) {
                           textTransform: 'uppercase',
                         }}
                       >
-                        ✨ {card.badge}
+                        {card.badge}
                       </div>
                     )}
                   </div>
@@ -491,7 +491,6 @@ export default function About({ onOpenDemoModal }) {
                           width: 'fit-content',
                         }}
                       >
-                        <HiSparkles color="#f2b733" size={13} />
                         <span>{card.tag}</span>
                       </div>
                     )}

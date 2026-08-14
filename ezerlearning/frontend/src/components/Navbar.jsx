@@ -41,7 +41,6 @@ export default function Navbar({ onOpenDemoModal }) {
         style={{
           position: 'sticky', top: 0, zIndex: 1000,
           background: '#ffffff',
-          borderTop: '3.5px solid #f2b733',
           borderBottom: isScrolled ? '1px solid #e2e8f0' : '1px solid #f1f5f9',
           boxShadow: isScrolled ? '0 4px 24px rgba(0, 6, 72, 0.12)' : '0 2px 8px rgba(0,6,72,0.04)',
           transition: 'box-shadow 0.25s ease, border-bottom-color 0.25s ease',

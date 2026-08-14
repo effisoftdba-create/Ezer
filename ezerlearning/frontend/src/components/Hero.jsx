@@ -41,7 +41,7 @@ export default function Hero({ onOpenDemoModal }) {
           background: '#faf9f6',
           padding: '0',
           overflow: 'hidden',
-          borderBottom: '2px solid #f2b733',
+          borderBottom: '1px solid #e2e8f0',
         }}
       >
         <div style={{ width: '100%', maxWidth: '1440px', margin: '0 auto' }}>
@@ -384,8 +384,9 @@ export default function Hero({ onOpenDemoModal }) {
               order: 2 !important;
               width: 100% !important;
               aspect-ratio: 1 / 1 !important;
-              min-height: 280px !important;
-              max-height: 420px !important;
+              height: auto !important;
+              min-height: auto !important;
+              max-height: none !important;
             }
             .hero-badge-pill {
               top: 12px !important;
