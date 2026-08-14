@@ -540,8 +540,11 @@ export default function Blog({ onOpenDemoModal }) {
         .card-image-box {
           position: relative;
           width: 100%;
+          height: 180px;
+          min-height: 180px;
+          max-height: 180px;
           aspect-ratio: 16 / 9;
-          background: #000;
+          background: #000648;
           overflow: hidden;
         }
 

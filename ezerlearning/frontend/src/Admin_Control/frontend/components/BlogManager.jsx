@@ -4,6 +4,7 @@ import { useSiteData } from '../context/SiteContext';
 import { HiPlus, HiTrash, HiPencil, HiNewspaper, HiBadgeCheck, HiPhotograph, HiCalendar, HiX, HiSparkles } from 'react-icons/hi';
 import ImagePickerModal from './ImagePickerModal';
 import ArticleFormModal from './ArticleFormModal';
+import { resolveImageSrc } from '../../../utils/imageUtils';
 
 /* ────────────────────────────────────────────────────────────
    ACHIEVEMENT SECTION (Centered Portal Modal Form)
@@ -11,38 +12,62 @@ import ArticleFormModal from './ArticleFormModal';
 function AchievementSection({ achievements, addAchievement, updateAchievement, deleteAchievement, onOpenPicker, externalImage }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editingAchId, setEditingAchId] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [achForm, setAchForm] = useState({
     title: '',
     issuer: '',
     year: new Date().getFullYear().toString(),
     category: 'Excellence Award',
     image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
+    imagePosition: 'center center',
+    imageFit: 'cover',
+    imageZoom: 1,
     desc: ''
   });
 
   const achTitle = achForm.title;
-  const setAchTitle = (v) => setAchForm((prev) => ({ ...prev, title: v }));
+  const setAchTitle = (v) => {
+    setAchForm((prev) => ({ ...prev, title: v }));
+    if (formErrors.title) setFormErrors((prev) => ({ ...prev, title: false }));
+  };
   const achIssuer = achForm.issuer;
-  const setAchIssuer = (v) => setAchForm((prev) => ({ ...prev, issuer: v }));
+  const setAchIssuer = (v) => {
+    setAchForm((prev) => ({ ...prev, issuer: v }));
+    if (formErrors.issuer) setFormErrors((prev) => ({ ...prev, issuer: false }));
+  };
   const achYear = achForm.year;
-  const setAchYear = (v) => setAchForm((prev) => ({ ...prev, year: v }));
+  const setAchYear = (v) => {
+    setAchForm((prev) => ({ ...prev, year: v }));
+    if (formErrors.year) setFormErrors((prev) => ({ ...prev, year: false }));
+  };
   const achCategory = achForm.category;
   const setAchCategory = (v) => setAchForm((prev) => ({ ...prev, category: v }));
   const achImage = achForm.image;
-  const setAchImage = (v) => setAchForm((prev) => ({ ...prev, image: v }));
+  const setAchImage = (v) => {
+    setAchForm((prev) => ({ ...prev, image: v }));
+    if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
+  };
   const achDesc = achForm.desc;
-  const setAchDesc = (v) => setAchForm((prev) => ({ ...prev, desc: v }));
+  const setAchDesc = (v) => {
+    setAchForm((prev) => ({ ...prev, desc: v }));
+    if (formErrors.desc) setFormErrors((prev) => ({ ...prev, desc: false }));
+  };
 
   const currentImage = externalImage || achImage;
 
   const handleOpenAdd = () => {
     setEditingAchId(null);
+    setFormErrors({});
     setAchForm({
       title: '',
       issuer: '',
       year: new Date().getFullYear().toString(),
       category: 'Excellence Award',
       image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
+      imagePosition: 'center center',
+      imageFit: 'cover',
+      imageZoom: 1,
       desc: ''
     });
     setIsEditing(true);
@@ -50,12 +75,16 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
 
   const handleEditClick = (ach) => {
     setEditingAchId(ach.id);
+    setFormErrors({});
     setAchForm({
       title: ach.title || '',
       issuer: ach.issuer || '',
       year: ach.year || '',
       category: ach.category || 'Excellence Award',
       image: ach.image || '',
+      imagePosition: ach.imagePosition || ach.position || 'center center',
+      imageFit: ach.imageFit || ach.fit || 'cover',
+      imageZoom: ach.imageZoom || ach.zoom || 1,
       desc: ach.description || ''
     });
     setIsEditing(true);
@@ -63,19 +92,33 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
 
   const handleSubmitAchievement = (e) => {
     e.preventDefault();
-    if (!achTitle.trim()) return alert('Please enter achievement title');
+    const errors = {};
+    if (!achTitle.trim()) errors.title = true;
+    if (!achIssuer.trim()) errors.issuer = true;
+    if (!achYear.trim()) errors.year = true;
+    if (!currentImage?.trim()) errors.image = true;
+    if (!achDesc.trim()) errors.desc = true;
 
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors({});
     const payload = {
       title: achTitle.trim(),
       issuer: achIssuer.trim(),
       year: achYear.trim(),
       category: achCategory,
       image: currentImage ? currentImage.trim() : '',
+      imagePosition: achForm.imagePosition || 'center center',
+      imageFit: achForm.imageFit || 'cover',
+      imageZoom: achForm.imageZoom || 1,
       description: achDesc.trim()
     };
 
     if (editingAchId && updateAchievement) {
-      updateAchievement(editingAchId, payload);
+      updateAchievement(editingAchId, { ...payload, id: editingAchId });
     } else {
       addAchievement(payload);
     }
@@ -132,25 +175,75 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
             </div>
 
             <form onSubmit={handleSubmitAchievement} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {Object.keys(formErrors).length > 0 && (
+                <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 700 }}>
+                  ⚠️ Please fill in all required fields highlighted in red below before saving.
+                </div>
+              )}
+
               <div>
-                <label htmlFor="ach-title-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Award / Achievement Title *</label>
-                <input id="ach-title-input" type="text" placeholder="e.g. EdTech Excellence & Innovation Award 2025" value={achTitle} onChange={(e) => setAchTitle(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} required />
+                <label htmlFor="ach-title-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.title ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Award / Achievement Title *</label>
+                <input
+                  id="ach-title-input"
+                  type="text"
+                  placeholder="e.g. EdTech Excellence & Innovation Award 2025"
+                  value={achTitle}
+                  onChange={(e) => setAchTitle(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.title ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.title ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
+                />
+                {formErrors.title && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Award title is required</span>}
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: '14px' }}>
                 <div>
-                  <label htmlFor="ach-issuer-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Issuing Authority</label>
-                  <input id="ach-issuer-input" type="text" placeholder="e.g. National Skill Development Forum" value={achIssuer} onChange={(e) => setAchIssuer(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
+                  <label htmlFor="ach-issuer-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.issuer ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Issuing Authority *</label>
+                  <input
+                    id="ach-issuer-input"
+                    type="text"
+                    placeholder="e.g. National Skill Development Forum"
+                    value={achIssuer}
+                    onChange={(e) => setAchIssuer(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '9px 12px',
+                      borderRadius: '8px',
+                      border: formErrors.issuer ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors.issuer ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.85rem'
+                    }}
+                  />
+                  {formErrors.issuer && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Issuing authority is required</span>}
                 </div>
                 <div>
-                  <label htmlFor="ach-year-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Year</label>
-                  <input id="ach-year-input" type="text" value={achYear} onChange={(e) => setAchYear(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
+                  <label htmlFor="ach-year-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.year ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Year *</label>
+                  <input
+                    id="ach-year-input"
+                    type="text"
+                    value={achYear}
+                    onChange={(e) => setAchYear(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '9px 12px',
+                      borderRadius: '8px',
+                      border: formErrors.year ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors.year ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.85rem'
+                    }}
+                  />
+                  {formErrors.year && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Year is required</span>}
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '14px' }}>
                 <div>
-                  <label htmlFor="ach-category-select" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Category</label>
+                  <label htmlFor="ach-category-select" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Category *</label>
                   <select id="ach-category-select" value={achCategory} onChange={(e) => setAchCategory(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', background: '#fff' }}>
                     <option value="Excellence Award">Excellence Award</option>
                     <option value="Placement Award">Placement Award</option>
@@ -159,19 +252,76 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="ach-image-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Achievement Image URL</label>
+                  <label htmlFor="ach-image-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.image ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Achievement Image URL *</label>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <input id="ach-image-input" type="text" placeholder="https://images.unsplash.com/..." value={currentImage} onChange={(e) => setAchImage(e.target.value)} style={{ flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
-                    <button type="button" onClick={onOpenPicker} style={{ padding: '9px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
-                      <HiPhotograph size={15} /> Choose
+                    <input
+                      id="ach-image-input"
+                      type="text"
+                      placeholder="https://images.unsplash.com/..."
+                      value={currentImage}
+                      onChange={(e) => setAchImage(e.target.value)}
+                      style={{
+                        flex: 1,
+                        minWidth: 0,
+                        padding: '9px 12px',
+                        borderRadius: '8px',
+                        border: formErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                        background: formErrors.image ? '#fff5f5' : '#ffffff',
+                        fontSize: '0.85rem'
+                      }}
+                    />
+                    <button type="button" onClick={() => setIsPickerOpen(true)} style={{ padding: '9px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                      <HiPhotograph size={15} /> Crop / Select
                     </button>
                   </div>
+                  {formErrors.image && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Image URL is required</span>}
                 </div>
               </div>
 
+              {/* Live Preview Box */}
+              {currentImage && (
+                <div>
+                  <label style={{ fontSize: '0.74rem', fontWeight: 800, color: '#64748b', display: 'block', marginBottom: '4px' }}>Live Card Photo Preview (16:9 Aspect Ratio)</label>
+                  <div style={{ position: 'relative', width: '100%', height: '150px', background: '#000648', borderRadius: '10px', overflow: 'hidden', border: '1.5px solid #cbd5e1' }}>
+                    <img
+                      loading="lazy"
+                      src={resolveImageSrc(currentImage)}
+                      alt="Preview"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: achForm.imageFit || 'cover',
+                        objectPosition: achForm.imagePosition || 'center center',
+                        transform: (achForm.imageZoom || 1) !== 1 ? `scale(${achForm.imageZoom})` : 'none',
+                        transformOrigin: achForm.imagePosition || 'center center',
+                        display: 'block'
+                      }}
+                    />
+                    <span style={{ position: 'absolute', top: '8px', left: '8px', background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.7rem', padding: '3px 10px', borderRadius: '50px', border: '1px solid rgba(242,183,51,0.4)' }}>
+                      {achYear || '2025'} • {achCategory}
+                    </span>
+                  </div>
+                </div>
+              )}
+
               <div>
-                <label htmlFor="ach-desc-textarea" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Description</label>
-                <textarea id="ach-desc-textarea" rows={3} placeholder="Brief description of the award or achievement..." value={achDesc} onChange={(e) => setAchDesc(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
+                <label htmlFor="ach-desc-textarea" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.desc ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Description *</label>
+                <textarea
+                  id="ach-desc-textarea"
+                  rows={3}
+                  placeholder="Brief description of the award or achievement..."
+                  value={achDesc}
+                  onChange={(e) => setAchDesc(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.desc ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.desc ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
+                />
+                {formErrors.desc && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Description is required</span>}
               </div>
 
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>
@@ -182,6 +332,31 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
                   <HiBadgeCheck size={18} /> Save Honor / Award
                 </button>
               </div>
+
+              {isPickerOpen && (
+                <ImagePickerModal
+                  isOpen={isPickerOpen}
+                  onClose={() => setIsPickerOpen(false)}
+                  currentImage={currentImage}
+                  currentPosition={achForm.imagePosition}
+                  currentFit={achForm.imageFit}
+                  currentZoom={achForm.imageZoom || 1}
+                  onSelectImage={(url, pos, fit, zoom) => {
+                    setAchForm((prev) => ({
+                      ...prev,
+                      image: url,
+                      imagePosition: pos || prev.imagePosition || 'center center',
+                      imageFit: fit || prev.imageFit || 'cover',
+                      imageZoom: zoom || prev.imageZoom || 1
+                    }));
+                    if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
+                    setIsPickerOpen(false);
+                  }}
+                  targetArea="Award / Achievement Photo"
+                  aspectRatio="Landscape (16:9)"
+                  recommendedDimensions="800 x 450 px"
+                />
+              )}
             </form>
           </div>
         </div>,
@@ -191,9 +366,22 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '18px' }}>
         {(achievements || []).map((ach) => (
           <div key={ach.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-            <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
-              <img src={ach.image} alt={ach.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.7rem', padding: '3px 10px', borderRadius: '50px' }}>
+            <div style={{ position: 'relative', width: '100%', height: '175px', minHeight: '175px', maxHeight: '175px', background: '#000648', overflow: 'hidden' }}>
+              <img
+                loading="lazy"
+                src={resolveImageSrc(ach.image)}
+                alt={ach.title}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: ach.imageFit || ach.fit || 'cover',
+                  objectPosition: ach.imagePosition || ach.position || 'center center',
+                  transform: (ach.imageZoom || ach.zoom || 1) !== 1 ? `scale(${ach.imageZoom || ach.zoom})` : 'none',
+                  transformOrigin: ach.imagePosition || ach.position || 'center center',
+                  display: 'block'
+                }}
+              />
+              <span style={{ position: 'absolute', top: '10px', left: '10px', background: 'rgba(0, 6, 72, 0.92)', color: '#f2b733', fontWeight: 900, fontSize: '0.72rem', padding: '3px 12px', borderRadius: '50px', border: '1px solid rgba(242, 183, 51, 0.4)', backdropFilter: 'blur(4px)', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
                 {ach.year} • {ach.category}
               </span>
             </div>
