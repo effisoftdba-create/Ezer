@@ -168,34 +168,52 @@ export default function TransformedLives() {
                     }}
                   >
                     {/* Circle Avatar with Soft Glowing Gold Ring */}
-                    <div style={{ position: 'relative', display: 'inline-block', marginBottom: '12px' }}>
-                      <div 
+                    <div
+                      style={{
+                        width: '88px',
+                        height: '88px',
+                        borderRadius: '50%',
+                        padding: '3px',
+                        background: 'linear-gradient(135deg, #f2b733 0%, #ffd066 50%, #f2b733 100%)',
+                        boxShadow: '0 6px 18px rgba(242, 183, 51, 0.3)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginBottom: '14px',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <div
                         style={{
-                          padding: '3px',
+                          width: '100%',
+                          height: '100%',
                           borderRadius: '50%',
-                          background: 'linear-gradient(135deg, #f2b733 0%, #ffd066 50%, #f2b733 100%)',
-                          boxShadow: '0 8px 22px rgba(242, 183, 51, 0.35)',
-                          display: 'inline-block',
                           overflow: 'hidden',
-                          width: '90px',
-                          height: '90px'
+                          background: '#000648',
+                          position: 'relative',
+                          isolation: 'isolate',
+                          WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+                          border: '2px solid #ffffff',
                         }}
                       >
                         <img
                           src={resolveImageSrc(item.image)}
                           alt={item.name}
-                          width="84"
-                          height="84"
                           loading="lazy"
                           decoding="async"
                           style={{
-                            width: '84px', height: '84px', borderRadius: '50%',
+                            width: '100%',
+                            height: '100%',
                             objectFit: item.fit || item.imageFit || 'cover',
-                            objectPosition: item.position || item.imagePosition || 'center center',
-                            transform: (item.zoom || item.imageZoom) ? `scale(${item.zoom || item.imageZoom})` : 'none',
-                            transformOrigin: item.position || item.imagePosition || 'center center',
+                            objectPosition: item.position || item.imagePosition || 'center 20%',
+                            transform: (item.zoom || item.imageZoom) && (item.zoom || item.imageZoom) !== 1
+                              ? `scale(${item.zoom || item.imageZoom})`
+                              : 'none',
+                            transformOrigin: item.position || item.imagePosition || 'center 20%',
                             display: 'block',
-                            border: '2.5px solid #ffffff'
+                          }}
+                          onError={(e) => {
+                            e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300';
                           }}
                         />
                       </div>
