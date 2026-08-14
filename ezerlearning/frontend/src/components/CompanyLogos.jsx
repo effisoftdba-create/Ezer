@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LazyMotion, domAnimation, m, useReducedMotion } from 'framer-motion';
+import { HiOfficeBuilding } from 'react-icons/hi';
 import { useSiteData } from '../context/SiteContext';
 import { resolveImageSrc } from '../utils/imageUtils';
 
@@ -388,47 +389,111 @@ export default function CompanyLogos() {
           position: 'relative',
         }}
       >
+        {/* Centered, Highly Attractive Trust Header */}
         <div
           className="container"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: '20px',
-            flexWrap: 'wrap',
-            gap: '12px',
+            textAlign: 'center',
+            marginBottom: '28px',
+            padding: '0 16px',
           }}
         >
-          <div>
-            <span className="section-tag" style={{ fontSize: '0.68rem', padding: '3px 10px' }}>
-              Corporate Hiring Partners
-            </span>
-            <h2
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              padding: '6px 16px',
+              borderRadius: '9999px',
+              background: 'rgba(0, 6, 72, 0.05)',
+              border: '1px solid rgba(0, 6, 72, 0.12)',
+              color: '#000648',
+              fontSize: '0.78rem',
+              fontWeight: 800,
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+              marginBottom: '10px',
+            }}
+          >
+            <HiOfficeBuilding style={{ color: '#f2b733', fontSize: '1rem' }} />
+            <span>Corporate Hiring Partners</span>
+          </div>
+
+          <h2
+            style={{
+              fontSize: 'clamp(1.45rem, 2.8vw, 2.05rem)',
+              fontWeight: 900,
+              color: '#000648',
+              margin: '0 0 10px 0',
+              fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
+              letterSpacing: '-0.02em',
+              lineHeight: 1.22,
+            }}
+          >
+            Our Graduates Are Hired At{' '}
+            <span
               style={{
-                fontSize: '0.96rem',
-                fontWeight: 800,
-                color: '#000648',
-                marginTop: '4px',
-                letterSpacing: '-0.01em',
+                background: 'linear-gradient(135deg, #000648 0%, #1e3a8a 50%, #f2b733 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
               }}
             >
-              Our Graduates Are Hired At Top Global Technology Companies
-            </h2>
-          </div>
+              Top Global Technology Companies
+            </span>
+          </h2>
+
+          <p
+            style={{
+              fontSize: 'clamp(0.88rem, 1.05vw, 0.98rem)',
+              color: '#475569',
+              maxWidth: '680px',
+              margin: '0 auto',
+              lineHeight: 1.55,
+              fontWeight: 500,
+            }}
+          >
+            Join thousands of EZER learners placed at leading MNCs, product enterprises, and high-growth innovators with up to 1-year dedicated placement support.
+          </p>
         </div>
 
-        {/* 3-Row Infinite Ticker Container for PC View & Mobile */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', overflow: 'hidden' }}>
-          
-          {/* Row 1: Leftward Smooth Scroll */}
-          <MarqueeRow items={finalRow1} direction="left" duration={35} />
+        {/* 3-Row Infinite Ticker Container with smooth fade edges */}
+        <div style={{ position: 'relative', overflow: 'hidden' }}>
+          {/* Left and right fade overlays for smooth marquee appearance */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '80px',
+              height: '100%',
+              background: 'linear-gradient(90deg, #ffffff 0%, rgba(255,255,255,0) 100%)',
+              zIndex: 2,
+              pointerEvents: 'none',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              width: '80px',
+              height: '100%',
+              background: 'linear-gradient(270deg, #ffffff 0%, rgba(255,255,255,0) 100%)',
+              zIndex: 2,
+              pointerEvents: 'none',
+            }}
+          />
 
-          {/* Row 2: Rightward Smooth Scroll */}
-          <MarqueeRow items={finalRow2} direction="right" duration={38} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {/* Row 1: Leftward Smooth Scroll */}
+            <MarqueeRow items={finalRow1} direction="left" duration={35} />
 
-          {/* Row 3: Leftward Smooth Scroll */}
-          <MarqueeRow items={finalRow3} direction="left" duration={35} />
+            {/* Row 2: Rightward Smooth Scroll */}
+            <MarqueeRow items={finalRow2} direction="right" duration={38} />
 
+            {/* Row 3: Leftward Smooth Scroll */}
+            <MarqueeRow items={finalRow3} direction="left" duration={35} />
+          </div>
         </div>
       </section>
     </LazyMotion>
