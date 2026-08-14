@@ -1,58 +1,5 @@
 import { db, getRealtimeDb, isFirebaseConfigured } from '../config/firebase';
 import { collection, doc, setDoc, deleteDoc, onSnapshot, getDocs } from 'firebase/firestore';
-
-/**
- * Save collection array (Dual Firestore + Realtime DB Sync with Pruning)
- */
-export async function saveCollectionArray(collectionName, itemsArray) {
-  if (!isFirebaseConfigured || !Array.isArray(itemsArray)) return false;
-  try {
-    const keepIds = new Set(
-      itemsArray.map((item) => String(item.id || item.slug || item.badge || item.title || ''))
-    );
-
-    // 1. Remove obsolete documents from Firestore collection
-    if (db) {
-      try {
-        const colRef = collection(db, collectionName);
-        const snapshot = await getDocs(colRef);
-        snapshot.docs.forEach(async (d) => {
-          const data = d.data();
-          const docId = String(d.id);
-          const docTitle = String(data?.title || '');
-          if (!keepIds.has(docId) && !keepIds.has(docTitle)) {
-            await deleteDoc(d.ref);
-          }
-        });
-      } catch (e) {
-        console.warn(`[Firestore Prune Notice] ${collectionName}:`, e.message || e);
-      }
-    }
-
-    // 2. Overwrite Realtime Database node so old items disappear
-    const rtdb = getRealtimeDb();
-    if (rtdb) {
-      try {
-        const dbRef = ref(rtdb, collectionName);
-        const cleanItems = sanitizeForFirestore(itemsArray);
-        await set(dbRef, cleanItems);
-      } catch (e) {
-        console.warn(`[RealtimeDB Overwrite Notice] ${collectionName}:`, e.message || e);
-      }
-    }
-
-    // 3. Save current items to Firestore
-    const savePromises = itemsArray.map((item) => {
-      const id = item.id || item.slug || item.badge || item.title || `item_${Date.now()}`;
-      return saveDocument(collectionName, id, item);
-    });
-    await Promise.all(savePromises);
-    return true;
-  } catch (err) {
-    console.error(`[Firebase] Save collection error for ${collectionName}:`, err);
-    return false;
-  }
-}
 import { ref, onValue, set, remove } from 'firebase/database';
 
 /**
@@ -98,6 +45,28 @@ function sanitizeForFirestore(data) {
 }
 
 /**
+ * Helper to deduplicate array of collection items by unique identifier
+ */
+function deduplicateCollectionItems(items) {
+  if (!Array.isArray(items)) return [];
+  const map = new Map();
+  items.forEach((item) => {
+    if (!item) return;
+    const key = String(item.id || item.slug || item.badge || item.title || item.name || item.tag || '');
+    if (key) {
+      if (map.has(key)) {
+        map.set(key, { ...map.get(key), ...item, id: item.id || key });
+      } else {
+        map.set(key, { ...item, id: item.id || key });
+      }
+    } else {
+      map.set(String(Date.now() + Math.random()), item);
+    }
+  });
+  return Array.from(map.values());
+}
+
+/**
  * Real-time listener for Firestore and Realtime Database
  */
 export function subscribeToCollection(collectionName, onUpdate) {
@@ -112,7 +81,8 @@ export function subscribeToCollection(collectionName, onUpdate) {
 
   const debouncedUpdate = (items) => {
     try {
-      const jsonStr = JSON.stringify(items);
+      const cleanItems = deduplicateCollectionItems(items);
+      const jsonStr = JSON.stringify(cleanItems);
       if (jsonStr === lastJsonPayload) return; // Deduplicate dual DB snapshots
       lastJsonPayload = jsonStr;
 
@@ -123,13 +93,13 @@ export function subscribeToCollection(collectionName, onUpdate) {
 
       if (typeof requestAnimationFrame !== 'undefined') {
         rafId = requestAnimationFrame(() => {
-          onUpdate(items);
+          onUpdate(cleanItems);
         });
       } else {
-        rafId = setTimeout(() => onUpdate(items), 0);
+        rafId = setTimeout(() => onUpdate(cleanItems), 0);
       }
     } catch (err) {
-      onUpdate(items);
+      onUpdate(deduplicateCollectionItems(items));
     }
   };
 
@@ -171,10 +141,13 @@ export function subscribeToCollection(collectionName, onUpdate) {
             if (Array.isArray(val)) {
               items = val.filter(Boolean);
             } else if (typeof val === 'object') {
-              items = Object.keys(val).map((k) => ({
-                id: k,
-                ...(typeof val[k] === 'object' ? val[k] : { value: val[k] })
-              }));
+              items = Object.keys(val).map((k) => {
+                const itemData = typeof val[k] === 'object' ? val[k] : { value: val[k] };
+                return {
+                  ...itemData,
+                  id: itemData?.id || k
+                };
+              });
             }
             if (items.length > 0) {
               debouncedUpdate(items);
@@ -191,7 +164,10 @@ export function subscribeToCollection(collectionName, onUpdate) {
   }
 
   return () => {
-    if (updateTimer) clearTimeout(updateTimer);
+    if (rafId) {
+      if (typeof cancelAnimationFrame !== 'undefined') cancelAnimationFrame(rafId);
+      else clearTimeout(rafId);
+    }
     if (typeof unsubFirestore === 'function') unsubFirestore();
     if (typeof unsubRealtime === 'function') unsubRealtime();
   };
@@ -202,8 +178,8 @@ export function subscribeToCollection(collectionName, onUpdate) {
  */
 export async function saveDocument(collectionName, docId, data) {
   if (!isFirebaseConfigured) return false;
-  const cleanId = String(docId || `doc_${Date.now()}`);
-  const cleanData = sanitizeForFirestore({ ...data, updatedAt: new Date().toISOString() });
+  const cleanId = String(docId || (data && (data.id || data.slug || data.title)) || `doc_${Date.now()}`);
+  const cleanData = sanitizeForFirestore({ ...data, id: cleanId, updatedAt: new Date().toISOString() });
 
   let saved = false;
 
@@ -264,5 +240,68 @@ export async function removeDocument(collectionName, docId) {
   }
 
   return removed;
+}
+
+/**
+ * Save collection array (Dual Firestore + Realtime DB Sync with Clean Overwrite & Pruning)
+ */
+export async function saveCollectionArray(collectionName, itemsArray) {
+  if (!isFirebaseConfigured || !Array.isArray(itemsArray)) return false;
+  try {
+    const cleanItemsArray = deduplicateCollectionItems(itemsArray);
+    const keepIds = new Set(cleanItemsArray.map((item) => String(item.id || item.slug || item.badge || item.title || '')));
+
+    // 1. Remove obsolete documents from Firestore collection
+    if (db) {
+      try {
+        const colRef = collection(db, collectionName);
+        const snapshot = await getDocs(colRef);
+        const prunePromises = [];
+        for (const d of snapshot.docs) {
+          const data = d.data();
+          const docId = String(d.id);
+          const docTitle = String(data?.title || '');
+          const docSlug = String(data?.slug || '');
+          if (!keepIds.has(docId) && !keepIds.has(docTitle) && !keepIds.has(docSlug)) {
+            prunePromises.push(deleteDoc(d.ref));
+          }
+        }
+
+        if (prunePromises.length > 0) {
+          await Promise.all(prunePromises);
+        }
+      } catch (e) {
+        console.warn(`[Firestore Prune Notice] ${collectionName}:`, e.message || e);
+      }
+    }
+
+    // 2. Overwrite Realtime Database node cleanly so old items disappear
+    const rtdb = getRealtimeDb();
+    if (rtdb) {
+      try {
+        const dbRef = ref(rtdb, collectionName);
+        const cleanSanitized = sanitizeForFirestore(cleanItemsArray);
+        await set(dbRef, cleanSanitized);
+      } catch (e) {
+        console.warn(`[RealtimeDB Overwrite Notice] ${collectionName}:`, e.message || e);
+      }
+    }
+
+    // 3. Save each current item to Firestore
+    if (db) {
+      const savePromises = cleanItemsArray.map((item) => {
+        const id = String(item.id || item.slug || item.badge || item.title || `item_${Date.now()}`);
+        const docRef = doc(db, collectionName, id);
+        const cleanData = sanitizeForFirestore({ ...item, id, updatedAt: new Date().toISOString() });
+        return setDoc(docRef, cleanData, { merge: true });
+      });
+      await Promise.all(savePromises);
+    }
+
+    return true;
+  } catch (err) {
+    console.error(`[Firebase] Save collection error for ${collectionName}:`, err);
+    return false;
+  }
 }
 

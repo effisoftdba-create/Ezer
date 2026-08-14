@@ -184,6 +184,7 @@ export default function TestimonialsSliderTrack() {
                 }}
               >
                 <img
+                  loading="lazy"
                   src={current.image || current.avatar}
                   alt={`Portrait of ${current.name || current.author}`}
                   style={{

@@ -80,7 +80,7 @@ export default function VideoReviewsManager() {
     };
 
     if (editingId) {
-      updateVideoTestimonial(editingId, payload);
+      updateVideoTestimonial(editingId, { ...payload, id: editingId });
     } else {
       addVideoTestimonial(payload);
     }
@@ -290,7 +290,7 @@ export default function VideoReviewsManager() {
             }}
           >
             <div style={{ height: '140px', background: '#000648', position: 'relative' }}>
-              <img src={story.thumbnail} alt={story.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+              <img loading="lazy" src={story.thumbnail} alt={story.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
               <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <div style={{ width: '42px', height: '30px', background: '#ff0000', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>
                   <HiPlay size={20} />

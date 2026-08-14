@@ -766,7 +766,7 @@ export const phase1Courses = [
   }
 ];
 
-export const phase2Courses = [
+const phase2Courses = [
   {
     id: "software-testing-playwright",
     title: "Software Testing – Playwright",
@@ -787,6 +787,8 @@ export const phase2Courses = [
   }
 ];
 
-export function getCourseBySlug(slug) {
+function getCourseBySlug(slug) {
   return phase1Courses.find((c) => c.slug === slug);
 }
+
+export default phase1Courses;

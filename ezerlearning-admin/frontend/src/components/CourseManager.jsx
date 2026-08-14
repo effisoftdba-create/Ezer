@@ -268,6 +268,7 @@ export default function CourseManager() {
             <div>
               <div style={{ height: '175px', position: 'relative', overflow: 'hidden', background: '#ffffff' }}>
                 <img
+                  loading="lazy"
                   src={resolveImageSrc(c.image)}
                   alt={c.title}
                   style={{

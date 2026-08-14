@@ -109,7 +109,7 @@ export default function TestimonialsManager() {
     };
 
     if (editingId) {
-      updateWrittenTestimonial(editingId, payload);
+      updateWrittenTestimonial(editingId, { ...payload, id: editingId });
     } else {
       addWrittenTestimonial(payload);
     }
@@ -231,7 +231,7 @@ export default function TestimonialsManager() {
           <div key={item.id || item.author} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                <img src={resolveImageSrc(item.avatar || item.image)} alt={item.author || item.name} style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }} />
+                <img loading="lazy" src={resolveImageSrc(item.avatar || item.image)} alt={item.author || item.name} style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }} />
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, color: '#000648' }}>{item.author || item.name}</h4>
                   <div style={{ fontSize: '0.725rem', color: '#64748b', fontWeight: 600 }}>

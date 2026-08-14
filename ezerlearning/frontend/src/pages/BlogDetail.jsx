@@ -382,6 +382,7 @@ export default function BlogDetail({ onOpenDemoModal }) {
       <div style={{ maxWidth: '1280px', margin: '-35px auto 48px', padding: '0 24px', position: 'relative', zIndex: 10, width: '100%' }}>
         <div style={{ borderRadius: '28px', overflow: 'hidden', boxShadow: '0 25px 50px rgba(0,6,72,0.25)', border: '4px solid #ffffff' }}>
           <img
+            loading="lazy"
             src={resolveImageSrc(article.image)}
             alt={article.title}
             onError={handleImgError}
@@ -427,6 +428,7 @@ export default function BlogDetail({ onOpenDemoModal }) {
             {sec.image && (
               <figure style={{ margin: '28px 0 40px 0' }}>
                 <img
+                  loading="lazy"
                   src={sec.image}
                   alt={sec.title}
                   onError={handleImgError}

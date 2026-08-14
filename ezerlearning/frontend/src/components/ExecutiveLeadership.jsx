@@ -369,6 +369,7 @@ export default function ExecutiveLeadership() {
                       <div className="exec-card">
                         <div className="img-content">
                           <img
+                            loading="lazy"
                             src={resolveImageSrc(leader.image)}
                             alt={leader.name}
                             onError={handleImgError}
@@ -434,6 +435,7 @@ export default function ExecutiveLeadership() {
                       <div className="exec-card">
                         <div className="img-content">
                           <img
+                            loading="lazy"
                             src={resolveImageSrc(leader.image)}
                             alt={leader.name}
                             onError={handleImgError}

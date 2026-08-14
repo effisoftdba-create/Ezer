@@ -154,7 +154,7 @@ export default function HiringPartnersManager() {
     const finalData = { ...formData };
 
     if (editingId) {
-      updateHiringPartner(editingId, finalData);
+      updateHiringPartner(editingId, { ...finalData, id: editingId });
     } else {
       addHiringPartner(finalData);
     }
@@ -328,6 +328,7 @@ export default function HiringPartnersManager() {
                     </div>
                   ) : (
                     <img
+                      loading="lazy"
                       src={resolveImageSrc(partner.image)}
                       alt={partner.name}
                       onError={() => handleImageError(partner.id)}

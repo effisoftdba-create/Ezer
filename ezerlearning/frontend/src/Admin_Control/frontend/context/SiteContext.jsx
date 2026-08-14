@@ -83,7 +83,7 @@ function mergeCollection(defaults, firebaseItems, primaryKey = 'id') {
   return Array.from(itemMap.values());
 }
 
-export function SiteProvider({ children }) {
+function SiteProvider({ children }) {
   const [state, dispatch] = useReducer(siteReducer, null, getInitialState);
 
   const {
@@ -869,5 +869,3 @@ export function useSiteData() {
   }
   return context;
 }
-
-export default SiteProvider;

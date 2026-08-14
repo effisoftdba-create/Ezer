@@ -65,7 +65,7 @@ export default function HeroManager() {
     }
 
     if (editingId) {
-      updateHeroSlide(editingId, formData);
+      updateHeroSlide(editingId, { ...formData, id: editingId });
     } else {
       addHeroSlide(formData);
     }
@@ -301,6 +301,7 @@ export default function HeroManager() {
             >
               <div style={{ height: '95px', borderRadius: '8px', overflow: 'hidden', background: '#000648', position: 'relative' }}>
                 <img
+                  loading="lazy"
                   src={resolveImageSrc(slide.url || slide.image)}
                   alt={slide.headline || 'Hero Slide Image'}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}

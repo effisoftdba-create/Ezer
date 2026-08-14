@@ -85,6 +85,7 @@ export default function PlatformManager() {
                 }}
               >
                 <img 
+                  loading="lazy"
                   src={resolveImageSrc(formData.image)} 
                   alt={formData.headline} 
                   style={{

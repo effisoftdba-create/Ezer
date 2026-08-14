@@ -119,6 +119,7 @@ export default function Blog({ onOpenDemoModal }) {
         <div className="featured-cover-card">
           <div className="featured-cover-image">
             <img
+              loading="lazy"
               src={featuredCoverArticle.image}
               alt={featuredCoverArticle.title}
               onError={handleImgError}
@@ -171,6 +172,7 @@ export default function Blog({ onOpenDemoModal }) {
               <article key={blog.id} className="magazine-card">
                 <div className="card-image-box">
                   <img
+                    loading="lazy"
                     src={blog.image}
                     alt={blog.title}
                     onError={handleImgError}
@@ -248,6 +250,7 @@ export default function Blog({ onOpenDemoModal }) {
               <div key={ach.id} className="award-horizontal-card">
                 <div className="card-image-box">
                   <img
+                    loading="lazy"
                     src={ach.image}
                     alt={ach.title}
                     style={{

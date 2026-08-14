@@ -91,6 +91,7 @@ export default function VideoTestimonials() {
             ) : (
               <>
                 <img
+                  loading="lazy"
                   src={currentVideo.thumbnail}
                   alt={currentVideo.title}
                   style={{

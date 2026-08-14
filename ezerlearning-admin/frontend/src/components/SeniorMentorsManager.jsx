@@ -97,7 +97,7 @@ export default function SeniorMentorsManager() {
     };
 
     if (editingId) {
-      updateSeniorMentor(editingId, payload);
+      updateSeniorMentor(editingId, { ...payload, id: editingId });
     } else {
       addSeniorMentor(payload);
     }
@@ -211,7 +211,7 @@ export default function SeniorMentorsManager() {
           <div key={item.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                <img src={resolveImageSrc(item.image)} alt={item.name} style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #000648' }} />
+                <img loading="lazy" src={resolveImageSrc(item.image)} alt={item.name} style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #000648' }} />
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800, color: '#000648' }}>{item.name}</h4>
                   <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>{item.designation}</div>

@@ -75,7 +75,7 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
     };
 
     if (editingAchId && updateAchievement) {
-      updateAchievement(editingAchId, payload);
+      updateAchievement(editingAchId, { ...payload, id: editingAchId });
     } else {
       addAchievement(payload);
     }
@@ -192,7 +192,7 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
         {(achievements || []).map((ach) => (
           <div key={ach.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
             <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
-              <img src={ach.image} alt={ach.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img loading="lazy" src={ach.image} alt={ach.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.7rem', padding: '3px 10px', borderRadius: '50px' }}>
                 {ach.year} • {ach.category}
               </span>
@@ -308,7 +308,7 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
               }}
             >
               <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
-                <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img loading="lazy" src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px' }}>
                   {blog.category}
                 </span>
@@ -578,7 +578,7 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
         {(executiveLeaders || []).map((exec) => (
           <div key={exec.id || exec.roleTag} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }}>
             <div style={{ position: 'relative', height: '220px', background: '#000648' }}>
-              <img src={exec.image} alt={exec.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img loading="lazy" src={exec.image} alt={exec.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.72rem', padding: '4px 12px', borderRadius: '50px', border: '1px solid #f2b733' }}>
                 {exec.roleTag}
               </span>

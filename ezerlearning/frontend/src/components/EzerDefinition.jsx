@@ -50,6 +50,7 @@ function ExecutiveGlassStack({ leaders }) {
               title={`${exec.roleName || exec.roleTag} — ${exec.name}`}
             >
               <img
+                loading="lazy"
                 src={resolveImageSrc(exec.image)}
                 alt={exec.name || exec.roleTag}
                 style={{
@@ -157,6 +158,7 @@ export default function EzerDefinition() {
                 }}
               >
                 <img 
+                  loading="lazy"
                   src={resolveImageSrc(ezerDefinition.image)} 
                   alt={ezerDefinition.headline}
                   style={{

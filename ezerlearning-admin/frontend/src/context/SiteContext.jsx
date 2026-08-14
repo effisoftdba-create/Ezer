@@ -83,6 +83,24 @@ function mergeCollection(defaults, firebaseItems, primaryKey = 'id') {
   return Array.from(itemMap.values());
 }
 
+function mergeAdminUsers(items, defaults) {
+  if (!Array.isArray(defaults)) return items || [];
+  const map = new Map();
+  defaults.forEach((u) => {
+    if (u && u.email) map.set(u.email.toLowerCase(), u);
+  });
+  if (Array.isArray(items)) {
+    items.forEach((u) => {
+      if (u && u.email) {
+        const key = u.email.toLowerCase();
+        const existing = map.get(key) || {};
+        map.set(key, { ...existing, ...u });
+      }
+    });
+  }
+  return Array.from(map.values());
+}
+
 export function SiteProvider({ children }) {
   const [state, dispatch] = useReducer(siteReducer, null, getInitialState);
 
@@ -117,7 +135,12 @@ export function SiteProvider({ children }) {
     if (!Array.isArray(items)) return;
 
     if (items.length > 0) {
-      dispatch({ type: 'SET_KEY', key: dispatchKey, value: items });
+      if (dispatchKey === 'adminUsers') {
+        const merged = mergeAdminUsers(items, defaultAdminUsers);
+        dispatch({ type: 'SET_KEY', key: dispatchKey, value: merged });
+      } else {
+        dispatch({ type: 'SET_KEY', key: dispatchKey, value: items });
+      }
     } else {
       // Seed default items into Database ONCE if database collection is empty on initial setup
       if (Array.isArray(defaultItems) && defaultItems.length > 0) {

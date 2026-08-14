@@ -249,6 +249,7 @@ export default function CourseDetail({ onOpenDemoModal }) {
                   {/* Photo Header Container */}
                   <div style={{ position: 'relative', height: '180px', overflow: 'hidden', background: '#000648' }}>
                     <img
+                      loading="lazy"
                       src={coverImg}
                       alt={mod.title}
                       onError={handleImgError}

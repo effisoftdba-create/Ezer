@@ -79,7 +79,7 @@ export default function SupportCardsManager() {
     };
 
     if (editingId) {
-      updateSupportCard(editingId, payload);
+      updateSupportCard(editingId, { ...payload, id: editingId });
     } else {
       addSupportCard(payload);
     }
@@ -289,7 +289,7 @@ export default function SupportCardsManager() {
             }}
           >
             <div style={{ height: '130px', background: '#000648', position: 'relative' }}>
-              <img src={resolveImageSrc(card.image)} alt={card.title} style={{ width: '100%', height: '100%', objectFit: card.fit || 'cover', objectPosition: card.position || 'center center' }} />
+              <img loading="lazy" src={resolveImageSrc(card.image)} alt={card.title} style={{ width: '100%', height: '100%', objectFit: card.fit || 'cover', objectPosition: card.position || 'center center' }} />
               {card.subtitle && (
                 <div style={{ position: 'absolute', top: '8px', right: '8px', background: '#000648', color: '#f2b733', fontSize: '0.65rem', fontWeight: 800, padding: '3px 8px', borderRadius: '50px', border: '1px solid #f2b733' }}>
                   {card.subtitle}

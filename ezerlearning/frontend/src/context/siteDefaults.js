@@ -76,9 +76,30 @@ export const defaultAdminUsers = [
     email: 'effisoftdba@gmail.com',
     name: 'Effisoft Super Admin',
     role: 'SUPER_ADMIN',
+    password: 'dba@effisoft$123',
     allowedTabs: '*',
     status: 'ACTIVE',
-    createdAt: new Date().toISOString()
+    createdAt: '2026-01-01T00:00:00.000Z'
+  },
+  {
+    id: 'user-02',
+    email: 'admin@ezer.com',
+    name: 'Ezer Admin',
+    role: 'ADMIN',
+    password: 'admin@ezer$123',
+    allowedTabs: '*',
+    status: 'ACTIVE',
+    createdAt: '2026-01-01T00:00:00.000Z'
+  },
+  {
+    id: 'user-03',
+    email: 'staff@ezer.com',
+    name: 'Ezer Staff',
+    role: 'STAFF',
+    password: 'staff@ezer$123',
+    allowedTabs: ['leads', 'courses', 'blog'],
+    status: 'ACTIVE',
+    createdAt: '2026-01-01T00:00:00.000Z'
   }
 ];
 

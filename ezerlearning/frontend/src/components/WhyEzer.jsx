@@ -113,6 +113,7 @@ export default function WhyEzer() {
               {/* Image Banner Header */}
               <div style={{ height: '175px', overflow: 'hidden', position: 'relative', background: '#000648' }}>
                 <img 
+                  loading="lazy"
                   src={resolveImageSrc(r.image)} 
                   alt={r.title} 
                   onError={handleImgError}

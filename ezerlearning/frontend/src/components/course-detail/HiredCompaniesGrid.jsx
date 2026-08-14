@@ -142,6 +142,7 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
                       }}
                     >
                       <img
+                        loading="lazy"
                         src={resolveImageSrc(item.image)}
                         alt={item.name}
                         style={{

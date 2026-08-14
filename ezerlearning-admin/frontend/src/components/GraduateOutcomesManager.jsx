@@ -92,7 +92,7 @@ export default function GraduateOutcomesManager() {
     }
 
     if (editingId) {
-      updateTransformedLife(editingId, formData);
+      updateTransformedLife(editingId, { ...formData, id: editingId });
     } else {
       addTransformedLife(formData);
     }
@@ -207,7 +207,7 @@ export default function GraduateOutcomesManager() {
           <div key={item.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', padding: '16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                <img src={resolveImageSrc(item.image)} alt={item.name} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #000648' }} />
+                <img loading="lazy" src={resolveImageSrc(item.image)} alt={item.name} style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #000648' }} />
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800, color: '#000648' }}>{item.name}</h4>
                   <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#166534', background: '#dcfce7', padding: '1px 6px', borderRadius: '4px' }}>
