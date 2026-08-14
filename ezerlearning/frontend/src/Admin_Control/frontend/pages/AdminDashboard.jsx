@@ -9,6 +9,7 @@ import CourseManager from '../components/CourseManager';
 import CoursePaymentManager from '../components/CoursePaymentManager';
 import PaymentsReceivedManager from '../components/PaymentsReceivedManager';
 import PlatformManager from '../components/PlatformManager';
+import AboutPageManager from '../components/AboutPageManager';
 import AboutVideoManager from '../components/AboutVideoManager';
 import AboutShowcaseManager from '../components/AboutShowcaseManager';
 import SupportCardsManager from '../components/SupportCardsManager';
@@ -43,6 +44,7 @@ import {
   HiOutlineMailOpen,
   HiOutlineNewspaper,
   HiOutlineOfficeBuilding,
+  HiOutlineInformationCircle,
   HiOutlineCog
 } from 'react-icons/hi';
 
@@ -190,8 +192,7 @@ export default function AdminDashboard() {
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: (heroSlides || []).length },
     { id: 'partners', label: 'Hiring Partners & Logos', icon: HiOutlineOfficeBuilding, count: (hiringPartners || []).length },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSwitchHorizontal },
-    { id: 'about-videos', label: 'About Us Brand Videos (2 Links)', icon: HiOutlineVideoCamera },
-    { id: 'about-showcase', label: 'About Us Zig-Zag Story & Culture', icon: HiOutlinePhotograph, count: (aboutShowcaseCards || []).length },
+    { id: 'about-page', label: 'About Us Page Content', icon: HiOutlineInformationCircle, count: (aboutShowcaseCards || []).length },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
     { id: 'executive', label: 'Executive Board (CEO / Leaders)', icon: HiOutlineUserGroup, count: (executiveLeaders || []).length },
     { id: 'blog', label: 'Blog & Magazine Articles', icon: HiOutlineNewspaper, count: (blogs || []).length },
@@ -252,8 +253,9 @@ export default function AdminDashboard() {
             {activeTab === 'partners' && <HiringPartnersManager />}
             {activeTab === 'courses' && <CourseManager />}
             {activeTab === 'platform' && <PlatformManager />}
-            {activeTab === 'about-videos' && <AboutVideoManager />}
-            {activeTab === 'about-showcase' && <AboutShowcaseManager />}
+            {activeTab === 'about-page' && <AboutPageManager />}
+            {activeTab === 'about-videos' && <AboutPageManager initialSubTab="videos" />}
+            {activeTab === 'about-showcase' && <AboutPageManager initialSubTab="showcase" />}
             {activeTab === 'support' && <SupportCardsManager />}
             {activeTab === 'executive' && <ExecutiveSection executiveLeaders={executiveLeaders} updateExecutiveLeader={updateExecutiveLeader} />}
             {activeTab === 'blog' && <BlogManager initialSubTab="blogs" hideSubTabs={true} />}

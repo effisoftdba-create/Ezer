@@ -5,26 +5,18 @@ import { resolveImageSrc } from '../utils/imageUtils';
 import {
   HiPlus,
   HiTrash,
+  HiPencil,
   HiCheck,
+  HiX,
   HiPhotograph,
   HiSparkles,
-  HiOutlineBadgeCheck,
-  HiOutlineEye,
-  HiOutlinePencilAlt
+  HiOutlineCamera
 } from 'react-icons/hi';
-
-const DEFAULT_POINTS = [
-  'Live Industry-Standard Toolchains',
-  'Real Enterprise Project Simulation',
-  'Continuous Feedback on Code Quality'
-];
 
 export default function AboutShowcaseManager() {
   const {
     aboutShowcaseCards,
     updateAboutShowcaseCards,
-    addAboutShowcaseCard,
-    updateAboutShowcaseCard,
     deleteAboutShowcaseCard
   } = useSiteData();
 
@@ -32,6 +24,7 @@ export default function AboutShowcaseManager() {
   const [pickerTargetIdx, setPickerTargetIdx] = useState(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [newPointInputs, setNewPointInputs] = useState({});
+  const [editingPoint, setEditingPoint] = useState(null); // { cardIdx, pointIdx, text }
 
   useEffect(() => {
     if (Array.isArray(aboutShowcaseCards) && aboutShowcaseCards.length > 0) {
@@ -55,6 +48,28 @@ export default function AboutShowcaseManager() {
     setNewPointInputs((prev) => ({ ...prev, [cardIdx]: '' }));
   };
 
+  const handleStartEditPoint = (cardIdx, pointIdx, text) => {
+    setEditingPoint({ cardIdx, pointIdx, text });
+  };
+
+  const handleSaveEditPoint = () => {
+    if (!editingPoint) return;
+    const { cardIdx, pointIdx, text } = editingPoint;
+    const trimmed = (text || '').trim();
+    if (!trimmed) return;
+
+    const updated = [...cardsList];
+    const currentPoints = Array.isArray(updated[cardIdx].points) ? [...updated[cardIdx].points] : [];
+    currentPoints[pointIdx] = trimmed;
+    updated[cardIdx] = { ...updated[cardIdx], points: currentPoints };
+    setCardsList(updated);
+    setEditingPoint(null);
+  };
+
+  const handleCancelEditPoint = () => {
+    setEditingPoint(null);
+  };
+
   const handleDeletePoint = (cardIdx, pointIdx) => {
     const updated = [...cardsList];
     const currentPoints = Array.isArray(updated[cardIdx].points) ? updated[cardIdx].points : [];
@@ -63,6 +78,9 @@ export default function AboutShowcaseManager() {
       points: currentPoints.filter((_, idx) => idx !== pointIdx)
     };
     setCardsList(updated);
+    if (editingPoint && editingPoint.cardIdx === cardIdx && editingPoint.pointIdx === pointIdx) {
+      setEditingPoint(null);
+    }
   };
 
   const handleAddNewCard = () => {
@@ -121,7 +139,7 @@ export default function AboutShowcaseManager() {
         <div>
           <h2
             style={{
-              fontSize: '1.4rem',
+              fontSize: '1.35rem',
               fontWeight: 800,
               color: '#000648',
               margin: 0,
@@ -134,7 +152,7 @@ export default function AboutShowcaseManager() {
             About Us Zig-Zag Story & Culture Showcase Manager
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Customize the alternating zig-zag cards displayed below Core Objectives on the About Us page. Manage photos, tags, headlines, and bullet highlights.
+            Customize the alternating visual story cards on the About Us page. Click photos to select or upload, edit headlines, and add or modify key highlight points.
           </p>
         </div>
 
@@ -173,7 +191,8 @@ export default function AboutShowcaseManager() {
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              gap: '6px'
+              gap: '6px',
+              boxShadow: '0 2px 8px rgba(22, 101, 52, 0.25)'
             }}
           >
             <HiCheck size={16} /> Save All Changes
@@ -359,31 +378,50 @@ export default function AboutShowcaseManager() {
                 />
               </div>
 
-              {/* Photo & Position Controls */}
+              {/* Photo & Position Controls with Clickable Image Preview */}
               <div
                 style={{
                   background: '#f8fafc',
                   border: '1px solid #e2e8f0',
-                  borderRadius: '10px',
-                  padding: '14px',
+                  borderRadius: '12px',
+                  padding: '16px',
                   marginBottom: '16px'
                 }}
               >
-                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-                  📸 Card Photo & Position
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 800, color: '#000648', margin: 0 }}>
+                    📸 Card Photo & Position
+                  </label>
+                  <span style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 600 }}>
+                    💡 Tip: Click the image box directly to choose or upload a photo
+                  </span>
+                </div>
 
-                <div style={{ display: 'flex', gap: '14px', alignItems: 'center', flexWrap: 'wrap' }}>
-                  {/* Photo Preview Thumbnail */}
+                <div style={{ display: 'flex', gap: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+                  {/* Interactive Clickable Photo Thumbnail */}
                   <div
+                    onClick={() => setPickerTargetIdx(idx)}
+                    title="Click to Choose / Upload Photo"
                     style={{
-                      width: '120px',
-                      height: '80px',
-                      borderRadius: '8px',
+                      width: '140px',
+                      height: '92px',
+                      borderRadius: '10px',
                       overflow: 'hidden',
-                      border: '1.5px solid #cbd5e1',
+                      border: '2px dashed #115DFC',
                       background: '#000648',
-                      flexShrink: 0
+                      flexShrink: 0,
+                      position: 'relative',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 8px rgba(0, 6, 72, 0.08)',
+                      transition: 'transform 0.2s ease, border-color 0.2s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.02)';
+                      e.currentTarget.style.borderColor = '#f2b733';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1)';
+                      e.currentTarget.style.borderColor = '#115DFC';
                     }}
                   >
                     <img
@@ -393,17 +431,40 @@ export default function AboutShowcaseManager() {
                         width: '100%',
                         height: '100%',
                         objectFit: card.imageFit || 'cover',
-                        objectPosition: card.imagePosition || 'center center'
+                        objectPosition: card.imagePosition || 'center center',
+                        display: 'block'
                       }}
                       onError={(e) => {
                         e.target.src = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=900&h=600';
                       }}
                     />
+
+                    {/* Hover Camera Overlay */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'rgba(0, 6, 72, 0.55)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#ffffff',
+                        gap: '2px',
+                        fontSize: '0.68rem',
+                        fontWeight: 800,
+                        textAlign: 'center',
+                        padding: '4px'
+                      }}
+                    >
+                      <HiOutlineCamera size={20} color="#f2b733" />
+                      <span>Change Photo</span>
+                    </div>
                   </div>
 
                   {/* URL Input & Picker Button */}
-                  <div style={{ flex: 1, minWidth: '220px' }}>
-                    <div style={{ display: 'flex', gap: '6px', marginBottom: '8px' }}>
+                  <div style={{ flex: 1, minWidth: '240px' }}>
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
                       <input
                         type="text"
                         value={card.image || ''}
@@ -411,28 +472,31 @@ export default function AboutShowcaseManager() {
                         placeholder="Image URL or relative path..."
                         style={{
                           flex: 1,
-                          padding: '7px 10px',
+                          padding: '8px 12px',
                           borderRadius: '6px',
                           border: '1.5px solid #cbd5e1',
-                          fontSize: '0.8rem'
+                          fontSize: '0.82rem'
                         }}
                       />
                       <button
                         type="button"
                         onClick={() => setPickerTargetIdx(idx)}
                         style={{
-                          padding: '7px 12px',
+                          padding: '8px 14px',
                           background: '#000648',
                           color: '#f2b733',
                           border: 'none',
                           borderRadius: '6px',
-                          fontSize: '0.78rem',
+                          fontSize: '0.8rem',
                           fontWeight: 800,
                           cursor: 'pointer',
-                          whiteSpace: 'nowrap'
+                          whiteSpace: 'nowrap',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px'
                         }}
                       >
-                        Choose Photo
+                        <HiPhotograph size={15} /> Choose Photo
                       </button>
                     </div>
 
@@ -444,15 +508,17 @@ export default function AboutShowcaseManager() {
                           onChange={(e) => handleFieldChange(idx, 'imagePosition', e.target.value)}
                           style={{
                             width: '100%',
-                            padding: '5px 8px',
-                            borderRadius: '4px',
+                            padding: '6px 8px',
+                            borderRadius: '6px',
                             border: '1px solid #cbd5e1',
                             fontSize: '0.78rem'
                           }}
                         >
-                          <option value="center center">Center</option>
-                          <option value="center top">Top</option>
-                          <option value="center bottom">Bottom</option>
+                          <option value="center center">Center (Default)</option>
+                          <option value="center top">Top Focus</option>
+                          <option value="center bottom">Bottom Focus</option>
+                          <option value="left center">Left Focus</option>
+                          <option value="right center">Right Focus</option>
                         </select>
                       </div>
 
@@ -463,14 +529,14 @@ export default function AboutShowcaseManager() {
                           onChange={(e) => handleFieldChange(idx, 'imageFit', e.target.value)}
                           style={{
                             width: '100%',
-                            padding: '5px 8px',
-                            borderRadius: '4px',
+                            padding: '6px 8px',
+                            borderRadius: '6px',
                             border: '1px solid #cbd5e1',
                             fontSize: '0.78rem'
                           }}
                         >
-                          <option value="cover">Cover (Fill)</option>
-                          <option value="contain">Contain</option>
+                          <option value="cover">Cover (Fill Container)</option>
+                          <option value="contain">Contain (Full Image)</option>
                         </select>
                       </div>
                     </div>
@@ -478,58 +544,186 @@ export default function AboutShowcaseManager() {
                 </div>
               </div>
 
-              {/* Key Highlight Bullet Points */}
+              {/* Key Highlight Bullet Points with Inline Edit & Delete */}
               <div
                 style={{
                   background: '#f8fafc',
                   border: '1px solid #e2e8f0',
-                  borderRadius: '10px',
-                  padding: '14px'
+                  borderRadius: '12px',
+                  padding: '16px'
                 }}
               >
-                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#000648', marginBottom: '8px' }}>
-                  ✨ Key Feature Bullet Points ({Array.isArray(card.points) ? card.points.length : 0})
-                </label>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                  <label style={{ fontSize: '0.82rem', fontWeight: 800, color: '#000648', margin: 0 }}>
+                    ✨ Key Feature Bullet Points ({Array.isArray(card.points) ? card.points.length : 0})
+                  </label>
+                  <span style={{ fontSize: '0.72rem', color: '#64748b' }}>
+                    Click ✏️ to edit or 🗑️ to delete any bullet point
+                  </span>
+                </div>
 
-                {/* Existing Points */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '10px' }}>
-                  {(card.points || []).map((pt, pIdx) => (
-                    <div
-                      key={pIdx}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: '6px 10px',
-                        background: '#ffffff',
-                        border: '1px solid #e2e8f0',
-                        borderRadius: '6px',
-                        fontSize: '0.82rem'
-                      }}
-                    >
-                      <span style={{ color: '#334155', fontWeight: 600 }}>• {pt}</span>
-                      <button
-                        type="button"
-                        onClick={() => handleDeletePoint(idx, pIdx)}
+                {/* Existing Points List */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+                  {(card.points || []).map((pt, pIdx) => {
+                    const isEditing =
+                      editingPoint &&
+                      editingPoint.cardIdx === idx &&
+                      editingPoint.pointIdx === pIdx;
+
+                    if (isEditing) {
+                      return (
+                        <div
+                          key={pIdx}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            padding: '8px 10px',
+                            background: '#ffffff',
+                            border: '2px solid #115DFC',
+                            borderRadius: '8px',
+                            boxShadow: '0 2px 8px rgba(17, 93, 252, 0.1)'
+                          }}
+                        >
+                          <input
+                            type="text"
+                            value={editingPoint.text}
+                            onChange={(e) =>
+                              setEditingPoint((prev) => ({ ...prev, text: e.target.value }))
+                            }
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleSaveEditPoint();
+                              } else if (e.key === 'Escape') {
+                                handleCancelEditPoint();
+                              }
+                            }}
+                            autoFocus
+                            style={{
+                              flex: 1,
+                              border: 'none',
+                              outline: 'none',
+                              fontSize: '0.85rem',
+                              fontWeight: 600,
+                              color: '#000648'
+                            }}
+                          />
+
+                          <button
+                            type="button"
+                            onClick={handleSaveEditPoint}
+                            title="Save changes"
+                            style={{
+                              padding: '4px 10px',
+                              background: '#166534',
+                              color: '#ffffff',
+                              border: 'none',
+                              borderRadius: '6px',
+                              fontSize: '0.76rem',
+                              fontWeight: 800,
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px'
+                            }}
+                          >
+                            <HiCheck size={14} /> Save
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={handleCancelEditPoint}
+                            title="Cancel editing"
+                            style={{
+                              padding: '4px 8px',
+                              background: '#f1f5f9',
+                              color: '#64748b',
+                              border: '1px solid #cbd5e1',
+                              borderRadius: '6px',
+                              fontSize: '0.76rem',
+                              fontWeight: 700,
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <HiX size={14} />
+                          </button>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <div
+                        key={pIdx}
                         style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#dc2626',
-                          cursor: 'pointer',
-                          padding: '2px 4px'
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '8px 12px',
+                          background: '#ffffff',
+                          border: '1px solid #e2e8f0',
+                          borderRadius: '8px',
+                          fontSize: '0.84rem',
+                          gap: '10px'
                         }}
                       >
-                        <HiTrash size={14} />
-                      </button>
-                    </div>
-                  ))}
+                        <span style={{ color: '#1e293b', fontWeight: 600, flex: 1, lineHeight: 1.4 }}>
+                          • {pt}
+                        </span>
+
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0 }}>
+                          <button
+                            type="button"
+                            onClick={() => handleStartEditPoint(idx, pIdx, pt)}
+                            title="Edit bullet point"
+                            style={{
+                              padding: '4px 8px',
+                              background: '#eff6ff',
+                              border: '1px solid #bfdbfe',
+                              color: '#1d4ed8',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              fontSize: '0.74rem',
+                              fontWeight: 700
+                            }}
+                          >
+                            <HiPencil size={13} /> Edit
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => handleDeletePoint(idx, pIdx)}
+                            title="Delete bullet point"
+                            style={{
+                              padding: '4px 8px',
+                              background: '#fef2f2',
+                              border: '1px solid #fecaca',
+                              color: '#dc2626',
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              fontSize: '0.74rem',
+                              fontWeight: 700
+                            }}
+                          >
+                            <HiTrash size={13} /> Delete
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {/* Add New Point Input */}
-                <div style={{ display: 'flex', gap: '6px' }}>
+                <div style={{ display: 'flex', gap: '8px' }}>
                   <input
                     type="text"
-                    placeholder="Add bullet highlight point..."
+                    placeholder="Type new bullet highlight and click + Add Point..."
                     value={newPointInputs[idx] || ''}
                     onChange={(e) => setNewPointInputs((prev) => ({ ...prev, [idx]: e.target.value }))}
                     onKeyDown={(e) => {
@@ -540,24 +734,25 @@ export default function AboutShowcaseManager() {
                     }}
                     style={{
                       flex: 1,
-                      padding: '6px 10px',
+                      padding: '8px 12px',
                       borderRadius: '6px',
                       border: '1.5px solid #cbd5e1',
-                      fontSize: '0.8rem'
+                      fontSize: '0.82rem'
                     }}
                   />
                   <button
                     type="button"
                     onClick={() => handleAddPoint(idx)}
                     style={{
-                      padding: '6px 12px',
+                      padding: '8px 14px',
                       background: '#000648',
                       color: '#f2b733',
                       border: 'none',
                       borderRadius: '6px',
-                      fontSize: '0.78rem',
+                      fontSize: '0.8rem',
                       fontWeight: 800,
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap'
                     }}
                   >
                     + Add Point
@@ -593,8 +788,16 @@ export default function AboutShowcaseManager() {
       {/* Image Picker Modal */}
       {pickerTargetIdx !== null && (
         <ImagePickerModal
-          onSelect={(img) => {
+          aspectRatio="16:9"
+          currentImage={cardsList[pickerTargetIdx]?.image}
+          onSelect={(img, meta) => {
             handleFieldChange(pickerTargetIdx, 'image', img);
+            if (meta?.position) {
+              handleFieldChange(pickerTargetIdx, 'imagePosition', meta.position);
+            }
+            if (meta?.fit) {
+              handleFieldChange(pickerTargetIdx, 'imageFit', meta.fit);
+            }
             setPickerTargetIdx(null);
           }}
           onClose={() => setPickerTargetIdx(null)}
