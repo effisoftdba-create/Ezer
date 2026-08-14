@@ -36,6 +36,7 @@ const DEFAULT_ARTICLES = [
 export default function Blog({ onOpenDemoModal }) {
   const { blogs, achievements } = useSiteData();
   const [awardActiveIdx, setAwardActiveIdx] = useState(0);
+  const [articleActiveIdx, setArticleActiveIdx] = useState(0);
 
   const featuredCoverArticle = (blogs && Array.isArray(blogs) && (blogs.find(b => b && b.featured) || blogs[0])) || {
     id: 'blog-1',
@@ -158,18 +159,46 @@ export default function Blog({ onOpenDemoModal }) {
           </div>
         </div>
 
-        {/* SECTION 1: EDITORIAL TECH ARTICLES & GUIDES */}
+        {/* SECTION 1: EDITORIAL TECH ARTICLES & GUIDES (HORIZONTAL LEFT-RIGHT SCROLL CAROUSEL) */}
         <div style={{ marginBottom: '56px' }}>
-          <div className="section-header-bar">
+          <div className="section-header-bar" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '12px', marginBottom: '24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <HiNewspaper size={26} color="#000648" />
-              <h3 style={{ color: '#000648' }}>Editorial Tech Articles & Guides</h3>
+              <h3 style={{ color: '#000648', margin: 0, fontSize: '1.4rem', fontWeight: 900 }}>Editorial Tech Articles & Guides</h3>
             </div>
+
+            {/* Standardized Centered < . . . > Controls */}
+            <CarouselDotsNav
+              totalItems={(articlesToDisplay || []).length}
+              activeIndex={articleActiveIdx}
+              onPrev={() => {
+                const list = articlesToDisplay || [];
+                if (!list.length) return;
+                const next = (articleActiveIdx - 1 + list.length) % list.length;
+                setArticleActiveIdx(next);
+                const track = document.getElementById('articles-scroll-track');
+                if (track) track.scrollTo({ left: next * 360, behavior: 'smooth' });
+              }}
+              onNext={() => {
+                const list = articlesToDisplay || [];
+                if (!list.length) return;
+                const next = (articleActiveIdx + 1) % list.length;
+                setArticleActiveIdx(next);
+                const track = document.getElementById('articles-scroll-track');
+                if (track) track.scrollTo({ left: next * 360, behavior: 'smooth' });
+              }}
+              onSelectIndex={(idx) => {
+                setArticleActiveIdx(idx);
+                const track = document.getElementById('articles-scroll-track');
+                if (track) track.scrollTo({ left: idx * 360, behavior: 'smooth' });
+              }}
+              style={{ margin: '8px auto 0' }}
+            />
           </div>
 
-          <div className="articles-grid">
+          <div id="articles-scroll-track" className="articles-scroll-track">
             {(articlesToDisplay || []).map((blog) => (
-              <article key={blog.id} className="magazine-card">
+              <article key={blog.id} className="magazine-horizontal-card">
                 <div className="card-image-box">
                   <img
                     loading="lazy"
@@ -472,6 +501,52 @@ export default function Blog({ onOpenDemoModal }) {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
           gap: 28px;
+        }
+
+        /* HORIZONTAL SCROLL ARTICLES TRACK */
+        .articles-scroll-track {
+          display: flex;
+          gap: 24px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          padding: 8px 4px 20px;
+          scrollbar-width: thin;
+          scrollbar-color: #f2b733 #e2e8f0;
+        }
+
+        .articles-scroll-track::-webkit-scrollbar {
+          height: 6px;
+        }
+
+        .articles-scroll-track::-webkit-scrollbar-track {
+          background: #e2e8f0;
+          border-radius: 10px;
+        }
+
+        .articles-scroll-track::-webkit-scrollbar-thumb {
+          background: #f2b733;
+          border-radius: 10px;
+        }
+
+        .magazine-horizontal-card {
+          width: 350px;
+          min-width: 320px;
+          flex-shrink: 0;
+          scroll-snap-align: start;
+          background: #ffffff;
+          border-radius: 20px;
+          border: 1.5px solid #cbd5e1;
+          overflow: hidden;
+          box-shadow: 0 10px 30px rgba(0, 6, 72, 0.08);
+          transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .magazine-horizontal-card:hover {
+          transform: translateY(-6px);
+          border-color: #000648;
+          box-shadow: 0 18px 40px rgba(0, 6, 72, 0.18);
         }
 
         /* HORIZONTAL SCROLL CAROUSEL TRACK */
