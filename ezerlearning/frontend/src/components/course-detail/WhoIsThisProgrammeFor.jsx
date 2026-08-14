@@ -41,12 +41,24 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
     return item;
   }) : programAudienceData;
 
+  const handleScroll = (e) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    const firstChild = scrollTrackRef.current?.children[0];
+    const cardWidth = (firstChild?.offsetWidth || 280) + 20;
+    const newIdx = Math.round(scrollLeft / cardWidth);
+    if (newIdx !== activeIndex && newIdx >= 0 && newIdx < cardsToRender.length) {
+      setActiveIndex(newIdx);
+    }
+  };
+
   const handlePrev = () => {
     if (!cardsToRender.length) return;
     const next = (activeIndex - 1 + cardsToRender.length) % cardsToRender.length;
     setActiveIndex(next);
     if (scrollTrackRef.current) {
-      scrollTrackRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+      const firstChild = scrollTrackRef.current?.children[0];
+      const cardWidth = (firstChild?.offsetWidth || 280) + 20;
+      scrollTrackRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -55,14 +67,18 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
     const next = (activeIndex + 1) % cardsToRender.length;
     setActiveIndex(next);
     if (scrollTrackRef.current) {
-      scrollTrackRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+      const firstChild = scrollTrackRef.current?.children[0];
+      const cardWidth = (firstChild?.offsetWidth || 280) + 20;
+      scrollTrackRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
     if (scrollTrackRef.current) {
-      scrollTrackRef.current.scrollTo({ left: idx * 320, behavior: 'smooth' });
+      const firstChild = scrollTrackRef.current?.children[0];
+      const cardWidth = (firstChild?.offsetWidth || 280) + 20;
+      scrollTrackRef.current.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -83,14 +99,15 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
         }
         @media (max-width: 860px) {
           .who-is-it-for-track {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            padding-bottom: 12px;
+            display: flex !important;
+            overflow-x: auto !important;
+            scroll-snap-type: x mandatory !important;
+            padding-bottom: 16px !important;
+            scroll-behavior: smooth;
           }
           .who-is-it-for-track > div {
-            flex: 0 0 min(280px, 85vw);
-            scroll-snap-align: start;
+            flex: 0 0 min(290px, 85vw) !important;
+            scroll-snap-align: start !important;
           }
         }
       `}</style>
@@ -131,28 +148,33 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
           />
         </div>
 
-        {/* Audience Cards Track — Always 1 Single Line Row on Desktop */}
-        <div ref={scrollTrackRef} className="who-is-it-for-track no-scrollbar">
+        {/* Audience Cards Track — 1 Row Grid on Desktop & Horizontal Swipe Track on Mobile */}
+        <div
+          ref={scrollTrackRef}
+          onScroll={handleScroll}
+          className="who-is-it-for-track no-scrollbar"
+        >
           {cardsToRender.map((card) => (
             <div
               key={card.title}
               style={{
                 background: '#ffffff',
-                borderRadius: '12px',
-                border: '1px solid #e2e8f0',
+                borderRadius: '16px',
+                border: '1.5px solid #e2e8f0',
                 padding: '24px',
-                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.05)',
+                boxShadow: '0 4px 16px rgba(15, 23, 42, 0.05)',
                 display: 'flex',
                 flexDirection: 'column',
+                transition: 'transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease',
               }}
             >
               <div
                 style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '10px',
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '12px',
                   background: '#eff6ff',
-                  border: '1px solid #dbeafe',
+                  border: '1.5px solid #dbeafe',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -162,11 +184,11 @@ export default function WhoIsThisProgrammeFor({ audienceList }) {
                 {card.icon}
               </div>
 
-              <h3 style={{ fontSize: '1.02rem', fontWeight: 700, color: '#0f172a', marginBottom: '8px', lineHeight: 1.35 }}>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000648', marginBottom: '8px', lineHeight: 1.35 }}>
                 {card.title}
               </h3>
 
-              <p style={{ fontSize: '0.86rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>
+              <p style={{ fontSize: '0.88rem', color: '#475569', lineHeight: 1.55, margin: 0, fontWeight: 500 }}>
                 {card.desc}
               </p>
             </div>

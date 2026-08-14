@@ -277,12 +277,13 @@ export default function TestimonialsGrid() {
           onScroll={handleScroll}
           style={{
             display: 'flex',
-            gap: '24px',
+            gap: '18px',
             overflowX: 'auto',
             scrollSnapType: 'x mandatory',
             scrollBehavior: 'smooth',
-            padding: '12px 4px 24px',
+            padding: '12px 6px 24px',
             width: '100%',
+            boxSizing: 'border-box',
           }}
           className="no-scrollbar"
         >
@@ -290,18 +291,21 @@ export default function TestimonialsGrid() {
             <div
               key={item.id || idx}
               style={{
-                flex: '0 0 min(370px, 86vw)',
-                scrollSnapAlign: 'start',
+                flex: '0 0 min(350px, calc(100vw - 52px))',
+                width: 'min(350px, calc(100vw - 52px))',
+                maxWidth: '100%',
+                scrollSnapAlign: 'center',
                 background: '#ffffff',
                 borderRadius: '20px',
                 border: '1.5px solid #e2e8f0',
-                padding: '24px 22px',
+                padding: '22px 18px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 boxShadow: '0 4px 20px rgba(0, 6, 72, 0.05)',
                 transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
                 position: 'relative',
+                boxSizing: 'border-box',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = 'translateY(-4px)';
