@@ -11,7 +11,8 @@
     "dev": "vite",
     "build": "vite build",
     "build:cloudflare": "vite build --mode cloudflare",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "doctor": "npx react-doctor@latest"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -20,7 +21,6 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.6.2",
     "firebase": "^12.17.1",
-    "firebase-admin": "^12.7.0",
     "firebase-functions": "^6.0.1",
     "framer-motion": "^12.43.0",
     "react": "^18.3.1",

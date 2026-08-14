@@ -1,8 +1,125 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email in ['effisoftdba@gmail.com', 'admin@ezer.com', 'staff@ezer.com'] ||
+        request.auth.token.role in ['ADMIN', 'SUPER_ADMIN', 'STAFF'] ||
+        request.auth.token.admin == true
+      );
+    }
+
+    // Public website catalog & content (Public read bound by valid resource existence, admin write)
+    match /courses/{courseId} {
+      allow read: if resource.data.title is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /heroSlides/{slideId} {
+      allow read: if resource.data.headline is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /blogs/{blogId} {
+      allow read: if resource.data.title is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /achievements/{achId} {
+      allow read: if resource.data.title is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /executiveLeaders/{leaderId} {
+      allow read: if resource.data.name is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /seniorMentors/{mentorId} {
+      allow read: if resource.data.name is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /writtenTestimonials/{testimonialId} {
+      allow read: if resource.data.author is string || resource.data.name is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /videoTestimonials/{videoTestimonialId} {
+      allow read: if resource.data.title is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /faqList/{faqId} {
+      allow read: if resource.data.category is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /hiringPartners/{partnerId} {
+      allow read: if resource.data.name is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /aboutVideos/{videoId} {
+      allow read: if resource.data.title is string || resource.data.url is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /supportCards/{cardId} {
+      allow read: if resource.data.title is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /transformedLives/{lifeId} {
+      allow read: if resource.data.name is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /ezerDefinition/{defId} {
+      allow read: if resource.data.headline is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /popupConfig/{configId} {
+      allow read: if resource.data.title is string || resource.data.headline is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /contactInfo/{contactId} {
+      allow read: if resource.data.email is string || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /paymentConfig/{configId} {
+      allow read: if resource.data.enrollmentPrice is number || isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Lead intake
+    match /leads/{leadId} {
+      allow create: if request.resource.data.email is string || request.resource.data.phone is string;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Payments
+    match /payments/{paymentId} {
+      allow create: if request.resource.data.amount is number || request.resource.data.studentEmail is string;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Admin accounts
+    match /adminUsers/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
     }
   }
 }
