@@ -1,17 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { HiStar, HiUserGroup, HiArrowRight } from 'react-icons/hi';
 import { useSiteData } from '../../context/SiteContext';
 import { resolveImageSrc } from '../../utils/imageUtils';
 
 export default function TestimonialsHero({ onOpenDemoModal }) {
   const { testimonialsHero } = useSiteData();
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth <= 900);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 900);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const heroTag = testimonialsHero?.tag || testimonialsHero?.badge || 'STUDENT SUCCESS STORIES';
   const heroHeadline = testimonialsHero?.headline || 'Real Learners. Real High-Growth IT Careers.';
   const heroSub = testimonialsHero?.sub || 'Discover how EZER Learning Solutions empowers freshers, career switchers, and non-IT professionals to land high-growth tech roles through live online practical training and 12-month dedicated placement support.';
   const heroRating = testimonialsHero?.ratingBadge || '4.9/5 Rating (2,500+ Reviews)';
   const heroAssistance = testimonialsHero?.assistanceBadge || '12-Month Dedicated Placement Support';
-  const heroImage = testimonialsHero?.image || 'images/hero/hero_section_1.jpg';
+  const heroImage = testimonialsHero?.image || testimonialsHero?.url || 'images/hero/hero_section_1.jpg';
+
+  const imagePos = isMobile
+    ? (testimonialsHero?.mobilePosition || testimonialsHero?.position || testimonialsHero?.imagePosition || 'center 20%')
+    : (testimonialsHero?.position || testimonialsHero?.imagePosition || 'center 20%');
+  const imageFit = testimonialsHero?.fit || testimonialsHero?.imageFit || 'cover';
+  const imageZoom = isMobile
+    ? (testimonialsHero?.mobileZoom || testimonialsHero?.zoom || testimonialsHero?.imageZoom || 1)
+    : (testimonialsHero?.zoom || testimonialsHero?.imageZoom || 1);
 
   const scrollToReviews = () => {
     const el = document.getElementById('testimonials-grid-section');
@@ -186,7 +201,7 @@ export default function TestimonialsHero({ onOpenDemoModal }) {
             </div>
           </div>
 
-          {/* Right Visual Spotlight Frame - Crystal Clear (No blend, no overlays) */}
+          {/* Right Visual Spotlight Frame - Crystal Clear */}
           <div style={{ position: 'relative' }}>
             <div
               style={{
@@ -205,9 +220,12 @@ export default function TestimonialsHero({ onOpenDemoModal }) {
                 style={{
                   width: '100%',
                   height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: 'center 20%',
+                  objectFit: imageFit,
+                  objectPosition: imagePos,
+                  transform: imageZoom !== 1 ? `scale(${imageZoom})` : 'none',
+                  transformOrigin: imagePos,
                   display: 'block',
+                  transition: 'transform 0.2s ease, object-position 0.2s ease',
                 }}
               />
             </div>
