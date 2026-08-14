@@ -204,44 +204,53 @@ Tier 3: Direct Corporate Placement Drives & Priority Partner HR Referrals.`,
   },
 
   'ezer-honored-at-edtech-excellence-awards-2025': {
-    title: 'EZER Learning Solutions Awarded National EdTech Excellence & Innovation Honor',
-    category: 'National Recognition & Honors',
-    author: 'EZER Newsroom',
-    date: 'June 2026',
-    readTime: '6 Min Read',
-    seoGeoAeoTag: 'ISO 9001:2015 Certified IT Academy India | Verified National Skill Development Awards',
-    summary: 'EZER Learning Solutions receives prestigious national honors for outstanding career outcomes, native-language tech education, and 98.4% student satisfaction metrics.',
+    title: 'EZER Learning Solutions Honored at EdTech Excellence Awards 2025',
+    category: 'Career Guide & Company News',
+    author: 'EZER Academic Board',
+    date: 'August 2026 Edition',
+    readTime: '8 Min Read',
+    seoGeoAeoTag: 'Best AI & Full Stack IT Training Institute in Chennai India',
+    summary: 'EZER Learning Solutions receives national acclaim at the EdTech Excellence Awards 2025 for pioneering live native-language tech education, outcome-driven mentorship cohorts, and 12-month dedicated career placement support.',
     image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=1400',
     takeaways: [
-      'Recognized by National Skill Development Forum for native language tech upskilling.',
-      '10,000+ active learners across Tamil Nadu, Pan-India, and global NRI hubs.',
-      'ISO 9001:2015 certified quality standard for IT curriculum and placement processes.',
-      'Pioneering practical sandbox labs with live mentor assistance.'
+      'Degree requirements are giving way to practical proof-of-work in modern IT hiring.',
+      'National recognition for democratizing practical tech training and closing the skill gap across India.',
+      'Pioneering native-language instruction (Tamil, Hindi, English) for accelerated software comprehension.',
+      'Over 10,000+ career switchers and non-IT graduates successfully placed in leading tech firms.',
+      'Comprehensive 12-month placement assistance with mock technical interviews, resume preparation, and corporate drives.'
     ],
     sections: [
       {
-        title: "1. Celebrating National Recognition & Student Outcomes",
-        content: `EZER Learning Solutions was officially awarded the National EdTech Excellence Honor. This milestone recognizes our pioneering work in native language IT education, practical sandbox labs, and consistent corporate placement results.`,
-        image: "https://images.unsplash.com/photo-1531545514256-b1400bc00f31?auto=format&fit=crop&q=80&w=1000",
-        caption: "National Skill Development Forum Award presentation."
+        title: "1. National Recognition for EdTech Innovation & Practical Outcomes",
+        content: `EZER Learning Solutions has been formally honored with the prestigious EdTech Excellence & Innovation Award 2025. This milestone underscores EZER’s unwavering mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.
+
+The award jury recognized EZER's focus on demonstrable student outcomes, verified salary growth metrics, and high post-training job placement rates across top corporate tech employers.`,
+        image: "https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=1000",
+        caption: "EZER Leadership receiving the EdTech Excellence & Innovation Award 2025."
       },
       {
-        title: "2. Pan-India Educational Reach & Regional Cohort Success",
-        content: `With over 10,000+ active learners across Tamil Nadu, Karnataka, Telangana, Maharashtra, and global NRI communities, EZER continues to democratize high-quality tech education for aspirants from all backgrounds.`,
-        image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=1000",
-        caption: "Regional cohort graduation ceremony."
+        title: "2. Revolutionizing Tech Education with Native-Language Cohorts",
+        content: `A cornerstone of EZER’s award-winning pedagogy is its dual-language learning framework. By delivering live, interactive instruction in Tamil, Hindi, and English alongside industry-standard coding labs, learners grasp complex data structures, cloud architectures, and full-stack engineering faster and with greater confidence.
+
+Students master algorithmic logic in their native tongue before writing production code in English, eliminating psychological barriers and boosting interview readiness.`,
+        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000",
+        caption: "Interactive live cohort masterclasses with real-time mentor code reviews."
       },
       {
-        title: "3. Corporate HR Partnerships & 250+ Referral Network Expansion",
-        content: `Our corporate partner network has grown to include 250+ tech firms, IT services MNCs, and product startups actively seeking job-ready EZER graduates.`,
-        image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=1000",
-        caption: "Corporate HR partnership signing event."
+        title: "3. Hands-On Production Labs & Enterprise Portfolio Proof-of-Work",
+        content: `Rather than relying on passive video lectures, EZER's curriculum is anchored on live cloud-hosted sandboxes, microservice architectures, and automated testing pipelines. Students write production-ready code, deploy CI/CD workflows, and build verifiable GitHub repositories that demonstrate immediate enterprise value to hiring managers.
+
+Learners build complete full-stack applications with real databases, automated Playwright test suites, and Docker containerized deployments.`,
+        image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000",
+        caption: "Students collaborating on enterprise microservice infrastructure and live deployment pipelines."
       },
       {
-        title: "4. Future Roadmap: Expanding Native Language Tech Upskilling",
-        content: `Looking ahead, EZER plans to introduce advanced cohorts in Cyber Security, Cloud DevOps, and Data Science in additional regional languages, continuing our mission to empower every learner.`,
-        image: "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80&w=1000",
-        caption: "EZER academic team planning next-generation lab modules."
+        title: "4. 12-Month Dedicated Placement Assistance & Corporate Referral Ecosystem",
+        content: `Beyond technical mastery, EZER provides up to 12 months of post-completion placement assistance. This includes 1-on-1 resume optimization tailored for ATS filters, AI-assisted mock technical interviews, algorithmic coding drills, and direct recruitment pathways with 150+ corporate hiring partners across top tech firms.
+
+Our dedicated placement officers support each graduate until they secure a rewarding offer with benchmark industry packages.`,
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000",
+        caption: "Alumni career acceleration and dedicated corporate placement drive."
       }
     ]
   },
@@ -258,25 +267,25 @@ Tier 3: Direct Corporate Placement Drives & Priority Partner HR Referrals.`,
     takeaways: [
       'Demand for Cloud DevOps & Cyber Security engineers grew by 180% in 2026.',
       'Hands-on AWS sandboxes & Linux terminal labs prepare students for real incidents.',
-      'EZER graduates earn industry-recognized AWS & Ethical Hacking certifications.',
-      'Continuous 12-month placement assistance secures job offers with top IT firms.'
+      'EZER alumni land senior Cloud Associate & DevOps Engineer roles with ₹6-15 LPA packages.',
+      'Industry certifications (AWS SAA, CKA, CompTIA Security+) embedded into curriculum.'
     ],
     sections: [
       {
-        title: "1. The Surging Demand for Cloud Infrastructure & Security Pros",
-        content: `As enterprises migrate workloads to AWS, Azure, and Google Cloud, security vulnerabilities and container orchestration challenges have multiplied. Companies urgently seek engineers proficient in Docker, Kubernetes, Terraform, and defensive security.`,
-        image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1000",
-        caption: "Cloud security monitoring & threat detection sandbox lab."
-      },
-      {
-        title: "2. Hands-on Terminal Labs & Real-World AWS Project Architecture",
-        content: `EZER students practice live in isolated cloud sandboxes, deploying CI/CD pipelines, configuring IAM roles, and hardening Nginx servers against DDoS attacks.`,
+        title: "1. The Convergence of Cloud Infrastructure & DevSecOps",
+        content: `Modern tech corporations require engineers who can build secure, automated infrastructure using Infrastructure as Code (Terraform), Docker containers, and Kubernetes orchestration.`,
         image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1000",
-        caption: "Learners configuring cloud container pipelines in Linux CLI."
+        caption: "Cloud infrastructure automation and Kubernetes orchestration lab."
       },
       {
-        title: "3. Penetration Testing & Vulnerability Assessment Workflows",
-        content: `Our Ethical Hacking modules cover OWASP Top 10 vulnerabilities, Wireshark packet analysis, and Burp Suite penetration testing, preparing candidates for SOC Analyst and Security Engineer roles.`,
+        title: "2. Hands-On Cloud Sandboxes & Cyber Threat Mitigation Labs",
+        content: `Students configure production AWS environments (VPC, EC2, S3, IAM), implement automated CI/CD pipelines with GitHub Actions, and execute penetration testing scenarios using industry standard security tools.`,
+        image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=80&w=1000",
+        caption: "Hands-on cloud security terminal and threat simulation."
+      },
+      {
+        title: "3. Industry Certifications & Real-Time Incident Response",
+        content: `Our curriculum prepares graduates for high-value certifications like AWS Certified Solutions Architect and Certified Kubernetes Administrator (CKA), ensuring immediate credibility with enterprise hiring teams.`,
         image: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?auto=format&fit=crop&q=80&w=1000",
         caption: "Security lab executing vulnerability assessment scans."
       },
@@ -298,6 +307,18 @@ export default function BlogDetail({ onOpenDemoModal }) {
   const userBlog = (blogs || []).find((b) => b.slug === slug || b.id === slug);
   const baseArticle = ARTICLES_DATABASE[slug] || ARTICLES_DATABASE['how-non-it-professionals-transition-into-ai'];
 
+  const cleanSummary = (userBlog?.summary && userBlog.summary.trim().toLowerCase() !== 'testing')
+    ? userBlog.summary
+    : baseArticle.summary;
+
+  const cleanTakeaways = (Array.isArray(userBlog?.takeaways) && userBlog.takeaways.length > 1)
+    ? userBlog.takeaways
+    : baseArticle.takeaways;
+
+  const cleanSections = (Array.isArray(userBlog?.sections) && userBlog.sections.length >= 4)
+    ? userBlog.sections
+    : baseArticle.sections;
+
   const article = userBlog
     ? {
         title: userBlog.title || baseArticle.title,
@@ -306,14 +327,10 @@ export default function BlogDetail({ onOpenDemoModal }) {
         date: userBlog.date || baseArticle.date,
         readTime: userBlog.readTime || baseArticle.readTime,
         seoGeoAeoTag: userBlog.seoGeoAeoTag || baseArticle.seoGeoAeoTag,
-        summary: userBlog.summary || baseArticle.summary,
+        summary: cleanSummary,
         image: userBlog.image || baseArticle.image,
-        takeaways: Array.isArray(userBlog.takeaways) && userBlog.takeaways.length > 0
-          ? userBlog.takeaways
-          : baseArticle.takeaways,
-        sections: Array.isArray(userBlog.sections) && userBlog.sections.length > 0
-          ? userBlog.sections
-          : baseArticle.sections
+        takeaways: cleanTakeaways,
+        sections: cleanSections
       }
     : baseArticle;
 

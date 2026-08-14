@@ -521,7 +521,7 @@ export const defaultBlogs = [
     sections: [
       {
         id: 'sec-1',
-        title: '1. National Recognition for EdTech Innovation & Outcomes',
+        title: '1. National Recognition for EdTech Innovation & Practical Outcomes',
         content: 'EZER Learning Solutions has been formally honored with the prestigious EdTech Excellence & Innovation Award 2025. This milestone underscores EZER’s unwavering mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.',
         image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=1000',
         caption: 'EZER Leadership receiving the EdTech Excellence & Innovation Award 2025.'
@@ -535,10 +535,17 @@ export const defaultBlogs = [
       },
       {
         id: 'sec-3',
-        title: '3. Proven 1-Year Dedicated Placement Support',
-        content: 'Beyond hands-on technical training, EZER provides learners with up to 12 months of structured placement support, including live corporate mentor sessions, portfolio reviews, mock coding assessments, and direct hiring drives with leading tech enterprises.',
+        title: '3. Hands-On Production Labs & Enterprise Portfolio Proof-of-Work',
+        content: 'Rather than relying on passive video lectures, EZER’s curriculum is anchored on live cloud-hosted sandboxes, microservice architectures, and automated testing pipelines. Students write production-ready code, deploy CI/CD workflows, and build verifiable GitHub repositories that demonstrate immediate enterprise value to hiring managers.',
+        image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000',
+        caption: 'Students collaborating on enterprise microservice infrastructure and live deployment pipelines.'
+      },
+      {
+        id: 'sec-4',
+        title: '4. 12-Month Dedicated Placement Assistance & Corporate Referral Ecosystem',
+        content: 'Beyond technical mastery, EZER provides up to 12 months of post-completion placement assistance. This includes 1-on-1 resume optimization, AI-assisted mock technical interviews, algorithmic coding drills, and direct recruitment pathways with 150+ corporate hiring partners across top tech firms.',
         image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000',
-        caption: 'Alumni career acceleration and corporate placement drive.'
+        caption: 'Alumni career acceleration and dedicated corporate placement drive.'
       }
     ],
     featured: false

@@ -1,14 +1,17 @@
-import React, { useState, useMemo } from 'react';
-import { HiStar, HiCheckCircle, HiBriefcase, HiAcademicCap, HiSearch } from 'react-icons/hi';
+import React, { useState, useMemo, useRef } from 'react';
+import { HiStar, HiCheckCircle, HiAcademicCap, HiSearch } from 'react-icons/hi';
 import { FaQuoteLeft } from 'react-icons/fa';
 import { useSiteData } from '../../context/SiteContext';
 import { resolveImageSrc } from '../../utils/imageUtils';
 import { testimonials as defaultTestimonials } from '../../data/testimonials';
+import CarouselDotsNav from '../CarouselDotsNav';
 
 export default function TestimonialsGrid() {
   const { writtenTestimonials } = useSiteData();
   const [selectedTrack, setSelectedTrack] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const sliderRef = useRef(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   // Merge context data with default data if empty
   const rawList = Array.isArray(writtenTestimonials) && writtenTestimonials.length > 0
@@ -28,7 +31,7 @@ export default function TestimonialsGrid() {
       avatar: item.avatar || item.image || `https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200`,
       background: item.background || item.beforeRole || 'Career Transition',
       salaryHike: item.salaryHike || '160% Hike',
-      position: item.position || item.imagePosition || '50% 50%',
+      position: item.position || item.imagePosition || 'center 20%',
       zoom: item.zoom || item.imageZoom || 1,
       fit: item.fit || item.imageFit || 'cover',
     }));
@@ -54,6 +57,31 @@ export default function TestimonialsGrid() {
     });
   }, [normalizedList, selectedTrack, searchQuery]);
 
+  const handlePrev = () => {
+    if (!filteredList.length) return;
+    const next = (activeIndex - 1 + filteredList.length) % filteredList.length;
+    setActiveIndex(next);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: next * 380, behavior: 'smooth' });
+    }
+  };
+
+  const handleNext = () => {
+    if (!filteredList.length) return;
+    const next = (activeIndex + 1) % filteredList.length;
+    setActiveIndex(next);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: next * 380, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelect = (idx) => {
+    setActiveIndex(idx);
+    if (sliderRef.current) {
+      sliderRef.current.scrollTo({ left: idx * 380, behavior: 'smooth' });
+    }
+  };
+
   return (
     <section
       id="testimonials-grid-section"
@@ -67,7 +95,7 @@ export default function TestimonialsGrid() {
     >
       <div className="container" style={{ maxWidth: '1280px', margin: '0 auto', padding: '0 24px' }}>
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <div
             style={{
               display: 'inline-flex',
@@ -101,9 +129,21 @@ export default function TestimonialsGrid() {
           >
             Verified Stories From Real EZER Learners
           </h2>
-          <p style={{ color: '#475569', fontSize: '1.02rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.6 }}>
+          <p style={{ color: '#475569', fontSize: '1.02rem', maxWidth: '680px', margin: '0 auto 20px', lineHeight: 1.6 }}>
             Browse authentic feedback, career journeys, and interview experiences shared by students across all course tracks.
           </p>
+
+          {/* Standardized Centered Navigation Controls */}
+          {filteredList.length > 0 && (
+            <CarouselDotsNav
+              totalItems={filteredList.length}
+              activeIndex={activeIndex}
+              onPrev={handlePrev}
+              onNext={handleNext}
+              onSelectIndex={handleSelect}
+              style={{ margin: '8px auto 0' }}
+            />
+          )}
         </div>
 
         {/* Filter Bar & Search Box */}
@@ -112,7 +152,7 @@ export default function TestimonialsGrid() {
             display: 'flex',
             flexDirection: 'column',
             gap: '16px',
-            marginBottom: '36px',
+            marginBottom: '28px',
             alignItems: 'center',
           }}
         >
@@ -132,7 +172,11 @@ export default function TestimonialsGrid() {
                 <button
                   key={track}
                   type="button"
-                  onClick={() => setSelectedTrack(track)}
+                  onClick={() => {
+                    setSelectedTrack(track);
+                    setActiveIndex(0);
+                    if (sliderRef.current) sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+                  }}
                   style={{
                     padding: '8px 18px',
                     borderRadius: '50px',
@@ -174,7 +218,11 @@ export default function TestimonialsGrid() {
               type="text"
               placeholder="Search by student, company, or course..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setActiveIndex(0);
+                if (sliderRef.current) sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+              }}
               style={{
                 width: '100%',
                 padding: '10px 16px 10px 40px',
@@ -191,14 +239,18 @@ export default function TestimonialsGrid() {
         </div>
 
         {/* Results Counter */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', padding: '0 4px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', padding: '0 4px' }}>
           <span style={{ fontSize: '0.84rem', fontWeight: 800, color: '#64748b' }}>
             Showing {filteredList.length} of {normalizedList.length} verified testimonials
           </span>
           {searchQuery && (
             <button
               type="button"
-              onClick={() => setSearchQuery('')}
+              onClick={() => {
+                setSearchQuery('');
+                setActiveIndex(0);
+                if (sliderRef.current) sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+              }}
               style={{ fontSize: '0.8rem', color: '#115DFC', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer' }}
             >
               Clear Search
@@ -206,19 +258,26 @@ export default function TestimonialsGrid() {
           )}
         </div>
 
-        {/* Multi-Card Grid */}
+        {/* Right-Left Horizontal Scrollable Track */}
         <div
+          ref={sliderRef}
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+            display: 'flex',
             gap: '24px',
+            overflowX: 'auto',
+            scrollSnapType: 'x mandatory',
+            scrollBehavior: 'smooth',
+            padding: '12px 4px 24px',
+            width: '100%',
           }}
-          className="testimonials-cards-grid"
+          className="no-scrollbar"
         >
-          {filteredList.map((item) => (
+          {filteredList.map((item, idx) => (
             <div
-              key={item.id}
+              key={item.id || idx}
               style={{
+                flex: '0 0 min(370px, 86vw)',
+                scrollSnapAlign: 'start',
                 background: '#ffffff',
                 borderRadius: '20px',
                 border: '1.5px solid #e2e8f0',
@@ -242,7 +301,7 @@ export default function TestimonialsGrid() {
               }}
             >
               <div>
-                {/* 1. TOP: Student Profile Header with Avatar, Name, Verified Tick, Role, & Course */}
+                {/* 1. TOP: Student Profile Header with Avatar, Name, Verified Tick, Role, & Company */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '16px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flex: 1, minWidth: 0 }}>
                     {/* Circular Avatar */}
@@ -320,10 +379,12 @@ export default function TestimonialsGrid() {
                           display: 'flex',
                           alignItems: 'center',
                           gap: '4px',
-                          flexWrap: 'wrap',
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
                         }}
                       >
-                        <span>{item.role}</span>
+                        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.role}</span>
                         {item.company && (
                           <span
                             style={{
@@ -333,6 +394,7 @@ export default function TestimonialsGrid() {
                               borderRadius: '4px',
                               fontWeight: 800,
                               fontSize: '0.72rem',
+                              flexShrink: 0,
                             }}
                           >
                             @{item.company}
@@ -360,12 +422,12 @@ export default function TestimonialsGrid() {
                   </div>
                 </div>
 
-                {/* 2. MIDDLE: Star Rating & Track Badge */}
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '10px', marginBottom: '14px', flexWrap: 'wrap' }}>
+                {/* 2. MIDDLE: Star Rating & Track Badge on a Single Stable Line */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '14px', height: '28px' }}>
                   {/* 5 Gold Stars */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#f59e0b' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', color: '#f59e0b', flexShrink: 0 }}>
                     {[...Array(item.rating || 5)].map((_, i) => (
-                      <HiStar key={i} size={18} />
+                      <HiStar key={i} size={17} />
                     ))}
                     <span style={{ fontSize: '0.78rem', fontWeight: 900, color: '#000648', marginLeft: '4px' }}>
                       {(item.rating || 5).toFixed(1)}
@@ -387,10 +449,14 @@ export default function TestimonialsGrid() {
                       borderRadius: '5px',
                       textTransform: 'uppercase',
                       letterSpacing: '0.03em',
+                      maxWidth: '180px',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                     }}
                   >
-                    <HiAcademicCap size={13} />
-                    <span>{item.track}</span>
+                    <HiAcademicCap size={13} style={{ flexShrink: 0 }} />
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.track}</span>
                   </div>
                 </div>
 
@@ -402,6 +468,7 @@ export default function TestimonialsGrid() {
                     lineHeight: 1.65,
                     margin: 0,
                     fontWeight: 500,
+                    minHeight: '80px',
                   }}
                 >
                   "{item.text}"
@@ -430,6 +497,7 @@ export default function TestimonialsGrid() {
               onClick={() => {
                 setSelectedTrack('ALL');
                 setSearchQuery('');
+                setActiveIndex(0);
               }}
               style={{
                 padding: '8px 20px',
@@ -447,14 +515,6 @@ export default function TestimonialsGrid() {
           </div>
         )}
       </div>
-
-      <style>{`
-        @media (max-width: 768px) {
-          .testimonials-cards-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }
