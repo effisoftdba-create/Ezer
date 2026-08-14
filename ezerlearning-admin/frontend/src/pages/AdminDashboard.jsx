@@ -10,6 +10,7 @@ import CoursePaymentManager from '../components/CoursePaymentManager';
 import PaymentsReceivedManager from '../components/PaymentsReceivedManager';
 import PlatformManager from '../components/PlatformManager';
 import AboutVideoManager from '../components/AboutVideoManager';
+import AboutShowcaseManager from '../components/AboutShowcaseManager';
 import SupportCardsManager from '../components/SupportCardsManager';
 import GraduateOutcomesManager from '../components/GraduateOutcomesManager';
 import SeniorMentorsManager from '../components/SeniorMentorsManager';
@@ -131,6 +132,8 @@ export default function AdminDashboard() {
     achievements,
     executiveLeaders,
     hiringPartners,
+    aboutVideos,
+    aboutShowcaseCards,
     payments,
     adminUsers,
     updateExecutiveLeader,
@@ -188,6 +191,7 @@ export default function AdminDashboard() {
     { id: 'partners', label: 'Hiring Partners & Logos', icon: HiOutlineOfficeBuilding, count: (hiringPartners || []).length },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSwitchHorizontal },
     { id: 'about-videos', label: 'About Us Brand Videos (2 Links)', icon: HiOutlineVideoCamera },
+    { id: 'about-showcase', label: 'About Us Zig-Zag Story & Culture', icon: HiOutlinePhotograph, count: (aboutShowcaseCards || []).length },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
     { id: 'executive', label: 'Executive Board (CEO / Leaders)', icon: HiOutlineUserGroup, count: (executiveLeaders || []).length },
     { id: 'blog', label: 'Blog & Magazine Articles', icon: HiOutlineNewspaper, count: (blogs || []).length },
@@ -249,6 +253,7 @@ export default function AdminDashboard() {
             {activeTab === 'courses' && <CourseManager />}
             {activeTab === 'platform' && <PlatformManager />}
             {activeTab === 'about-videos' && <AboutVideoManager />}
+            {activeTab === 'about-showcase' && <AboutShowcaseManager />}
             {activeTab === 'support' && <SupportCardsManager />}
             {activeTab === 'executive' && <ExecutiveSection executiveLeaders={executiveLeaders} updateExecutiveLeader={updateExecutiveLeader} />}
             {activeTab === 'blog' && <BlogManager initialSubTab="blogs" hideSubTabs={true} />}

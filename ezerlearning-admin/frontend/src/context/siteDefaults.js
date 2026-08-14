@@ -184,6 +184,55 @@ export const defaultPopupConfig = {
 
 
 export const STORAGE_ABOUT_VIDEOS_KEY = 'ezer_about_videos:v20_two_videos';
+export const STORAGE_ABOUT_SHOWCASE_KEY = 'ezer_about_showcase:v1_zigzag';
+
+export const defaultAboutShowcaseCards = [
+  {
+    id: 'showcase-1',
+    tag: 'PRACTICAL LABS & CODE ENCLAVES',
+    title: 'Enterprise-Grade Practical Labs & Production Workspaces',
+    description: 'Our learners do not just watch lectures—they engineer scalable, enterprise-grade software architectures inside dedicated cloud sandboxes, mastering modern CI/CD pipelines and production-grade tools.',
+    badge: 'HANDS-ON SIMULATION',
+    image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=900&h=600',
+    imagePosition: 'center center',
+    imageFit: 'cover',
+    points: [
+      'Live Industry-Standard Toolchains (Docker, Kubernetes, AWS, Git)',
+      'Real Enterprise Project Simulation with Production Deployments',
+      'Continuous Feedback on Code Quality & Architecture'
+    ]
+  },
+  {
+    id: 'showcase-2',
+    tag: '1-ON-1 CORPORATE MENTORSHIP',
+    title: 'Collaborative Mentorship by Practicing Corporate Leaders',
+    description: 'Receive personalized technical guidance, pair programming sessions, and live architectural code reviews directly from Principal Engineers and Tech Leads working at premier global technology enterprises.',
+    badge: 'EXPERT GUIDANCE',
+    image: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=900&h=600',
+    imagePosition: 'center center',
+    imageFit: 'cover',
+    points: [
+      '1-on-1 Personalized Code Reviews & Pair Programming',
+      'Rigorous Technical & Behavioral Mock Interviews',
+      'Customized Career Roadmaps & Growth Checkpoints'
+    ]
+  },
+  {
+    id: 'showcase-3',
+    tag: 'CAREER ACCELERATION & RECRUITMENT',
+    title: 'Direct Placement Pipelines & Global Career Enablement',
+    description: 'We bridge the gap between skill acquisition and top-tier employment through structured recruitment drives, direct resume shortlisting with 250+ hiring partners, and up to 1-year dedicated placement assistance.',
+    badge: 'GLOBAL PLACEMENT',
+    image: 'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=900&h=600',
+    imagePosition: 'center center',
+    imageFit: 'cover',
+    points: [
+      '250+ Active Global Corporate Hiring Partners',
+      'Dedicated Placement Assistance & Job Search Support',
+      'Global Opportunities in India, UAE, and Singapore'
+    ]
+  }
+];
 
 export const defaultAboutVideos = [
   {
@@ -571,6 +620,7 @@ export function getInitialState() {
     hiringPartners: defaultHiringPartners,
     paymentConfig: defaultPaymentConfig,
     aboutVideos: defaultAboutVideos,
+    aboutShowcaseCards: defaultAboutShowcaseCards,
     payments: [],
     adminUsers: defaultAdminUsers
   };

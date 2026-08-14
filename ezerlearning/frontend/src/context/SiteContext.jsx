@@ -26,10 +26,12 @@ import {
   STORAGE_HIRING_PARTNERS_KEY,
   STORAGE_PAYMENT_CONFIG_KEY,
   STORAGE_ABOUT_VIDEOS_KEY,
+  STORAGE_ABOUT_SHOWCASE_KEY,
   STORAGE_PAYMENTS_KEY,
   STORAGE_ADMIN_USERS_KEY,
   defaultPaymentConfig,
   defaultAboutVideos,
+  defaultAboutShowcaseCards,
   defaultPayments,
   defaultAdminUsers,
 
@@ -126,6 +128,7 @@ export function SiteProvider({ children }) {
     hiringPartners,
     paymentConfig,
     aboutVideos,
+    aboutShowcaseCards,
     payments,
     adminUsers
   } = state;
@@ -222,6 +225,9 @@ export function SiteProvider({ children }) {
       }));
       unsubs.push(subscribeToCollection('aboutVideos', (items) => {
         handleSyncCollection('aboutVideos', items, 'aboutVideos', defaultAboutVideos);
+      }));
+      unsubs.push(subscribeToCollection('aboutShowcaseCards', (items) => {
+        handleSyncCollection('aboutShowcaseCards', items, 'aboutShowcaseCards', defaultAboutShowcaseCards);
       }));
       unsubs.push(subscribeToCollection('supportCards', (items) => {
         handleSyncCollection('supportCards', items, 'supportCards', defaultSupportCards);
@@ -778,6 +784,37 @@ export function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [aboutVideos]);
 
+  const updateAboutShowcaseCards = useCallback((cards) => {
+    const updated = Array.isArray(cards) ? cards : (aboutShowcaseCards || defaultAboutShowcaseCards);
+    dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    saveCollectionArray('aboutShowcaseCards', updated);
+    triggerStateToast('SAVED');
+  }, [aboutShowcaseCards]);
+
+  const addAboutShowcaseCard = useCallback((cardData) => {
+    const newCard = { id: `showcase-${Date.now()}`, ...cardData };
+    const updated = [...(aboutShowcaseCards || defaultAboutShowcaseCards), newCard];
+    dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    saveDocument('aboutShowcaseCards', newCard.id, newCard);
+    triggerStateToast('SAVED');
+  }, [aboutShowcaseCards]);
+
+  const updateAboutShowcaseCard = useCallback((id, updatedData) => {
+    const baseList = Array.isArray(aboutShowcaseCards) && aboutShowcaseCards.length > 0 ? aboutShowcaseCards : defaultAboutShowcaseCards;
+    const updated = baseList.map((c) => (c.id === id ? { ...c, ...updatedData } : c));
+    dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    saveCollectionArray('aboutShowcaseCards', updated);
+    triggerStateToast('SAVED');
+  }, [aboutShowcaseCards]);
+
+  const deleteAboutShowcaseCard = useCallback((id) => {
+    const baseList = Array.isArray(aboutShowcaseCards) && aboutShowcaseCards.length > 0 ? aboutShowcaseCards : defaultAboutShowcaseCards;
+    const updated = baseList.filter((c) => c.id !== id);
+    dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    removeDocument('aboutShowcaseCards', String(id));
+    triggerStateToast('SAVED');
+  }, [aboutShowcaseCards]);
+
   const addPayment = useCallback((paymentData, silent = false) => {
     const newPay = {
       id: `pay-${Date.now()}`,
@@ -899,6 +936,7 @@ export function SiteProvider({ children }) {
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
+    aboutShowcaseCards, updateAboutShowcaseCards, addAboutShowcaseCard, updateAboutShowcaseCard, deleteAboutShowcaseCard,
     payments, addPayment, updatePaymentStatus, deletePayment,
     adminUsers, addAdminUser, updateAdminUser, deleteAdminUser,
     resetAllToDefaults
@@ -924,6 +962,7 @@ export function SiteProvider({ children }) {
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
+    aboutShowcaseCards, updateAboutShowcaseCards, addAboutShowcaseCard, updateAboutShowcaseCard, deleteAboutShowcaseCard,
     payments, addPayment, updatePaymentStatus, deletePayment,
     adminUsers, addAdminUser, updateAdminUser, deleteAdminUser,
     resetAllToDefaults

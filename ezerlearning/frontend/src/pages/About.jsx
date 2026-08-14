@@ -3,13 +3,8 @@ import { HiCheckCircle, HiLightBulb, HiShieldCheck, HiHeart, HiAcademicCap, HiSp
 import CTABanner from '../components/CTABanner';
 import VideoPlayer from '../components/VideoPlayer';
 import { useSiteData } from '../context/SiteContext';
+import { defaultAboutShowcaseCards } from '../context/siteDefaults';
 import { resolveImageSrc } from '../utils/imageUtils';
-
-const gallery = [
-  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800&h=500',
-  'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&q=80&w=800&h=500',
-  'https://images.unsplash.com/photo-1573164713988-8665fc963095?auto=format&fit=crop&q=80&w=800&h=500',
-];
 
 const coreObjectives = [
   {
@@ -51,7 +46,11 @@ const coreObjectives = [
 ];
 
 export default function About({ onOpenDemoModal }) {
-  const { aboutVideos } = useSiteData() || {};
+  const { aboutVideos, aboutShowcaseCards } = useSiteData() || {};
+  const showcaseList = Array.isArray(aboutShowcaseCards) && aboutShowcaseCards.length > 0
+    ? aboutShowcaseCards
+    : defaultAboutShowcaseCards;
+
   const videoList = Array.isArray(aboutVideos) && aboutVideos.length >= 2
     ? aboutVideos
     : [
@@ -361,26 +360,197 @@ export default function About({ onOpenDemoModal }) {
         </div>
       </section>
 
-      {/* Image Gallery Showcase */}
-      <section style={{ padding: '48px 0 64px', background: '#f8fafc' }}>
+      {/* Zig-Zag Story & Culture Showcase Section */}
+      <section style={{ padding: '64px 0 80px', background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
         <div className="container">
-          <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '20px',
-          }}>
-            {gallery.map((src) => (
-              <div key={src} style={{ 
-                borderRadius: '16px', overflow: 'hidden', height: '220px', 
-                border: '1.5px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,6,72,0.06)' 
-              }}>
-                <img 
-                  src={src} 
-                  alt="EZER Learning Environment" 
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }} 
-                  loading="lazy"
-                />
-              </div>
-            ))}
+          <div style={{ textAlign: 'center', marginBottom: '44px' }}>
+            <span className="section-tag">
+              Why Learners Excel at EZER
+            </span>
+            <h2 style={{ color: '#000648', fontSize: 'clamp(1.7rem, 2.8vw, 2.3rem)', fontWeight: 900, marginTop: '8px', letterSpacing: '-0.02em' }}>
+              Inside The EZER Experience & Culture
+            </h2>
+            <p style={{ color: '#475569', fontSize: 'clamp(0.92rem, 1.1vw, 1.05rem)', maxWidth: '680px', margin: '8px auto 0', lineHeight: 1.6 }}>
+              Discover how our hands-on engineering pedagogy, dedicated corporate mentorship, and real cloud workspaces prepare you for top global tech roles.
+            </p>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+            {showcaseList.map((card, idx) => {
+              const isEven = idx % 2 === 0;
+              return (
+                <div
+                  key={card.id || idx}
+                  style={{
+                    background: '#ffffff',
+                    borderRadius: '24px',
+                    border: '1.5px solid #e2e8f0',
+                    boxShadow: '0 12px 36px rgba(0, 6, 72, 0.05)',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: isEven ? 'row' : 'row-reverse',
+                    alignItems: 'stretch',
+                    flexWrap: 'wrap',
+                    transition: 'transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 20px 48px rgba(0, 6, 72, 0.1)';
+                    e.currentTarget.style.borderColor = '#000648';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 12px 36px rgba(0, 6, 72, 0.05)';
+                    e.currentTarget.style.borderColor = '#e2e8f0';
+                  }}
+                >
+                  {/* Photo Column */}
+                  <div
+                    style={{
+                      flex: '1 1 360px',
+                      minHeight: '300px',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      background: '#000648',
+                    }}
+                  >
+                    <img
+                      src={resolveImageSrc(card.image || 'images/hero/hero_section_1.jpg')}
+                      alt={card.title || 'EZER Showcase'}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: card.imageFit || 'cover',
+                        objectPosition: card.imagePosition || 'center center',
+                        display: 'block',
+                        transition: 'transform 0.6s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'scale(1.04)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'scale(1)';
+                      }}
+                      onError={(e) => {
+                        e.target.src = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=900&h=600';
+                      }}
+                    />
+
+                    {/* Badge Overlay */}
+                    {card.badge && (
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '16px',
+                          left: isEven ? '16px' : 'auto',
+                          right: !isEven ? '16px' : 'auto',
+                          background: 'rgba(0, 6, 72, 0.9)',
+                          backdropFilter: 'blur(8px)',
+                          color: '#f2b733',
+                          border: '1px solid rgba(242, 183, 51, 0.4)',
+                          fontSize: '0.72rem',
+                          fontWeight: 900,
+                          letterSpacing: '0.08em',
+                          padding: '5px 14px',
+                          borderRadius: '50px',
+                          textTransform: 'uppercase',
+                        }}
+                      >
+                        ✨ {card.badge}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content Column */}
+                  <div
+                    style={{
+                      flex: '1 1 420px',
+                      padding: 'clamp(24px, 3.5vw, 40px)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    {card.tag && (
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          color: '#000648',
+                          background: 'rgba(0, 6, 72, 0.05)',
+                          border: '1px solid rgba(0, 6, 72, 0.1)',
+                          fontSize: '0.74rem',
+                          fontWeight: 800,
+                          letterSpacing: '0.08em',
+                          padding: '4px 12px',
+                          borderRadius: '50px',
+                          textTransform: 'uppercase',
+                          marginBottom: '12px',
+                          width: 'fit-content',
+                        }}
+                      >
+                        <HiSparkles color="#f2b733" size={13} />
+                        <span>{card.tag}</span>
+                      </div>
+                    )}
+
+                    <h3
+                      style={{
+                        fontSize: 'clamp(1.2rem, 1.8vw, 1.55rem)',
+                        fontWeight: 900,
+                        color: '#000648',
+                        margin: '0 0 12px 0',
+                        lineHeight: 1.3,
+                        fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
+                        letterSpacing: '-0.01em',
+                      }}
+                    >
+                      {card.title}
+                    </h3>
+
+                    <p
+                      style={{
+                        fontSize: '0.92rem',
+                        color: '#475569',
+                        lineHeight: 1.65,
+                        margin: '0 0 18px 0',
+                        fontWeight: 500,
+                      }}
+                    >
+                      {card.description}
+                    </p>
+
+                    {/* Bullet Highlights */}
+                    {Array.isArray(card.points) && card.points.length > 0 && (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {card.points.map((pt, pIdx) => (
+                          <div
+                            key={pIdx}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'flex-start',
+                              gap: '8px',
+                              fontSize: '0.86rem',
+                              color: '#1e293b',
+                              fontWeight: 600,
+                            }}
+                          >
+                            <HiCheckCircle
+                              color="#166534"
+                              size={17}
+                              style={{ flexShrink: 0, marginTop: '2px' }}
+                            />
+                            <span style={{ lineHeight: 1.45 }}>{pt}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
