@@ -397,8 +397,8 @@ export default function HeroManager() {
           }))
         }
         targetArea="Hero Slide Right Photo Frame"
-        aspectRatio="Square (1:1)"
-        recommendedDimensions="1000 x 1000 px"
+        aspectRatio="Hero Right Frame (4:3)"
+        recommendedDimensions="1200 x 900 px"
       />
     </div>
   );

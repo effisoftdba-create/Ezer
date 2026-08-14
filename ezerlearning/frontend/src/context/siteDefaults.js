@@ -433,9 +433,11 @@ export const defaultVideoTestimonials = videoStories || [];
 export const defaultTestimonialsHero = {
   tag: 'STUDENT SUCCESS STORIES',
   badge: 'STUDENT SUCCESS STORIES',
-  headline: 'Real Learners. Real IT Career Outcomes.',
-  sub: 'Discover how EZER Learning Solutions helps freshers and career switchers land high-growth tech jobs.',
-  image: 'images/hero/optimized/hero_section_1.jpg'
+  headline: 'Real Learners. Real High-Growth IT Careers.',
+  sub: 'Discover how EZER Learning Solutions helps freshers, career switchers, and non-IT professionals land high-growth tech roles with personalized live online training and 12-month placement support.',
+  image: 'images/hero/hero_section_1.jpg',
+  ratingBadge: '4.9/5 Rating (2,500+ Reviews)',
+  assistanceBadge: '12-Month Placement Support'
 };
 
 export const defaultContactInfo = {
