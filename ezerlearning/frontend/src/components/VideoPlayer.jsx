@@ -201,7 +201,7 @@ function VideoPlayerInner({ config, poster, title }) {
             src={config.src}
             title={title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-            referrerPolicy="no-referrer-when-downgrade"
+            referrerPolicy="strict-origin-when-cross-origin"
             style={{
               width: '100%',
               height: '100%',

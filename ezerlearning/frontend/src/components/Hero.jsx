@@ -66,180 +66,199 @@ export default function Hero({ onOpenDemoModal }) {
                 position: 'relative',
               }}
             >
-              <AnimatePresence mode="wait">
-                <m.div
-                  key={currentSlide.id || safeActive}
-                  initial={{ opacity: 0, x: -12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 12 }}
-                  transition={{ duration: 0.3 }}
-                  className="hero-animated-text-container"
+              <div className="hero-text-content-wrapper" style={{ width: '100%', maxWidth: '580px' }}>
+                <div
+                  className="hero-text-fixed-slot"
                   style={{
-                    minHeight: '200px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                    marginBottom: '16px',
+                    position: 'relative',
+                    minHeight: '235px',
+                    height: '235px',
+                    marginBottom: '20px',
                   }}
                 >
-                  <h1
-                    style={{
-                      fontSize: 'clamp(1.7rem, 3.2vw, 2.6rem)',
-                      fontWeight: 900,
-                      color: '#000648',
-                      lineHeight: 1.15,
-                      marginBottom: '10px',
-                      fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
-                      letterSpacing: '-0.02em',
-                    }}
-                  >
-                    {currentSlide.headline ? (
-                      <>
-                        <span style={{ color: '#000648' }}>
-                          {currentSlide.headline.split('. ')[0] || currentSlide.headline}
-                        </span>
-                        {currentSlide.headline.includes('. ') && (
-                          <span
-                            style={{
-                              display: 'block',
-                              background: 'linear-gradient(135deg, #f2b733 0%, #d9a02a 100%)',
-                              WebkitBackgroundClip: 'text',
-                              WebkitTextFillColor: 'transparent',
-                              fontWeight: 900
-                            }}
-                          >
-                            {currentSlide.headline.split('. ').slice(1).join('. ')}
-                          </span>
+                  <AnimatePresence mode="wait">
+                    <m.div
+                      key={currentSlide.id || safeActive}
+                      initial={{ opacity: 0, x: -12 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 12 }}
+                      transition={{ duration: 0.25 }}
+                      className="hero-animated-text-container"
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start',
+                      }}
+                    >
+                      <h1
+                        style={{
+                          fontSize: 'clamp(1.7rem, 3.2vw, 2.6rem)',
+                          fontWeight: 900,
+                          color: '#000648',
+                          lineHeight: 1.15,
+                          marginBottom: '10px',
+                          fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
+                          letterSpacing: '-0.02em',
+                        }}
+                      >
+                        {currentSlide.headline ? (
+                          <>
+                            <span style={{ color: '#000648' }}>
+                              {currentSlide.headline.split('. ')[0] || currentSlide.headline}
+                            </span>
+                            {currentSlide.headline.includes('. ') && (
+                              <span
+                                style={{
+                                  display: 'block',
+                                  background: 'linear-gradient(135deg, #f2b733 0%, #d9a02a 100%)',
+                                  WebkitBackgroundClip: 'text',
+                                  WebkitTextFillColor: 'transparent',
+                                  fontWeight: 900
+                                }}
+                              >
+                                {currentSlide.headline.split('. ').slice(1).join('. ')}
+                              </span>
+                            )}
+                          </>
+                        ) : (
+                          'Learn Live. Build Real Skills.'
                         )}
-                      </>
-                    ) : (
-                      'Learn Live. Build Real Skills.'
-                    )}
-                  </h1>
+                      </h1>
 
-                  <div
+                      <div
+                        style={{
+                          width: '64px',
+                          height: '4px',
+                          background: 'linear-gradient(90deg, #000648 0%, #f2b733 100%)',
+                          marginBottom: '10px',
+                          borderRadius: '4px',
+                          flexShrink: 0
+                        }}
+                      />
+
+                      <p
+                        style={{
+                          fontSize: 'clamp(0.88rem, 1.1vw, 0.98rem)',
+                          color: '#334155',
+                          lineHeight: 1.55,
+                          marginBottom: '0',
+                          maxWidth: '560px',
+                          fontWeight: 500,
+                          display: '-webkit-box',
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {currentSlide.sub}
+                      </p>
+                    </m.div>
+                  </AnimatePresence>
+                </div>
+
+                {/* Dual Matching Action Buttons */}
+                <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '24px' }} className="hero-action-buttons">
+                  <Link
+                    to="/courses"
+                    className="hero-btn-explore"
                     style={{
-                      width: '64px',
-                      height: '4px',
-                      background: 'linear-gradient(90deg, #000648 0%, #f2b733 100%)',
-                      marginBottom: '10px',
-                      borderRadius: '4px',
-                      flexShrink: 0
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      width: '220px',
+                      height: '52px',
+                      minHeight: '52px',
+                      maxHeight: '52px',
+                      boxSizing: 'border-box',
+                      padding: '0 24px',
+                      background: '#000638',
+                      color: '#ffffff',
+                      fontWeight: 800,
+                      fontSize: '0.88rem',
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      textDecoration: 'none',
+                      border: '1.5px solid #000638',
+                      borderRadius: '10px',
+                      boxShadow: '0 4px 14px rgba(0,6,56,0.25)',
+                      transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease',
                     }}
-                  />
-
-                  <p
-                    style={{
-                      fontSize: 'clamp(0.88rem, 1.1vw, 0.98rem)',
-                      color: '#334155',
-                      lineHeight: 1.55,
-                      marginBottom: '0',
-                      maxWidth: '560px',
-                      fontWeight: 500,
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#f2b733';
+                      e.currentTarget.style.color = '#000638';
+                      e.currentTarget.style.borderColor = '#f2b733';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#000638';
+                      e.currentTarget.style.color = '#ffffff';
+                      e.currentTarget.style.borderColor = '#000638';
                     }}
                   >
-                    {currentSlide.sub}
-                  </p>
-                </m.div>
-              </AnimatePresence>
+                    <span>Explore Courses</span>
+                    <HiArrowRight size={16} />
+                  </Link>
 
-              {/* Dual Matching Action Buttons */}
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '24px' }} className="hero-action-buttons">
-                <Link
-                  to="/courses"
-                  className="hero-btn-explore"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    width: '220px',
-                    height: '52px',
-                    minHeight: '52px',
-                    maxHeight: '52px',
-                    boxSizing: 'border-box',
-                    padding: '0 24px',
-                    background: '#000638',
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '0.88rem',
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    border: '1.5px solid #000638',
-                    borderRadius: '10px',
-                    boxShadow: '0 4px 14px rgba(0,6,56,0.25)',
-                    transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#f2b733';
-                    e.currentTarget.style.color = '#000638';
-                    e.currentTarget.style.borderColor = '#f2b733';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#000638';
-                    e.currentTarget.style.color = '#ffffff';
-                    e.currentTarget.style.borderColor = '#000638';
-                  }}
-                >
-                  <span>Explore Courses</span>
-                  <HiArrowRight size={16} />
-                </Link>
+                  <button
+                    type="button"
+                    onClick={onOpenDemoModal}
+                    className="hero-btn-demo"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                      width: '220px',
+                      height: '52px',
+                      minHeight: '52px',
+                      maxHeight: '52px',
+                      boxSizing: 'border-box',
+                      padding: '0 24px',
+                      background: '#f2b733',
+                      color: '#000648',
+                      fontWeight: 800,
+                      fontSize: '0.88rem',
+                      letterSpacing: '0.04em',
+                      textTransform: 'uppercase',
+                      cursor: 'pointer',
+                      border: '1.5px solid #f2b733',
+                      borderRadius: '10px',
+                      boxShadow: '0 4px 14px rgba(242, 183, 51, 0.35)',
+                      transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = '#000648';
+                      e.currentTarget.style.color = '#f2b733';
+                      e.currentTarget.style.borderColor = '#000648';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = '#f2b733';
+                      e.currentTarget.style.color = '#000648';
+                      e.currentTarget.style.borderColor = '#f2b733';
+                    }}
+                  >
+                    <span>Book Free Demo</span>
+                    <HiArrowRight size={16} />
+                  </button>
+                </div>
 
-                <button
-                  type="button"
-                  onClick={onOpenDemoModal}
-                  className="hero-btn-demo"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    width: '220px',
-                    height: '52px',
-                    minHeight: '52px',
-                    maxHeight: '52px',
-                    boxSizing: 'border-box',
-                    padding: '0 24px',
-                    background: '#f2b733',
-                    color: '#000648',
-                    fontWeight: 800,
-                    fontSize: '0.88rem',
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    border: '1.5px solid #f2b733',
-                    borderRadius: '10px',
-                    boxShadow: '0 4px 14px rgba(242, 183, 51, 0.35)',
-                    transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = '#000648';
-                    e.currentTarget.style.color = '#f2b733';
-                    e.currentTarget.style.borderColor = '#000648';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = '#f2b733';
-                    e.currentTarget.style.color = '#000648';
-                    e.currentTarget.style.borderColor = '#f2b733';
-                  }}
-                >
-                  <span>Book Free Demo</span>
-                  <HiArrowRight size={16} />
-                </button>
+                {/* Slide Pill Dots Nav */}
+                <HeroSlideNav
+                  slides={slides}
+                  safeActive={safeActive}
+                  handlePrev={handlePrev}
+                  handleNext={handleNext}
+                  setActive={setActive}
+                />
+
+                {/* Trust Signals Footer Grid */}
+                <HeroTrustGrid />
               </div>
-
-              {/* Slide Pill Dots Nav */}
-              <HeroSlideNav
-                slides={slides}
-                safeActive={safeActive}
-                handlePrev={handlePrev}
-                handleNext={handleNext}
-                setActive={setActive}
-              />
-
-              {/* Trust Signals Footer Grid */}
-              <HeroTrustGrid />
             </div>
 
             {/* RIGHT SIDE: PHOTO FRAME */}
@@ -251,8 +270,14 @@ export default function Hero({ onOpenDemoModal }) {
 
         <style>{`
           @media (max-width: 900px) {
-            .hero-animated-text-container {
+            .hero-text-fixed-slot {
+              height: auto !important;
               min-height: 240px !important;
+              position: relative !important;
+            }
+            .hero-animated-text-container {
+              position: relative !important;
+              height: auto !important;
             }
             .hero-split-container {
               grid-template-columns: 1fr !important;
@@ -277,6 +302,19 @@ export default function Hero({ onOpenDemoModal }) {
               background: rgba(0, 6, 56, 0.85) !important;
               backdrop-filter: blur(4px) !important;
               box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+            }
+          }
+          @media (max-width: 600px) {
+            .hero-text-fixed-slot {
+              min-height: 270px !important;
+            }
+            .hero-action-buttons {
+              flex-direction: column !important;
+              width: 100% !important;
+            }
+            .hero-btn-explore,
+            .hero-btn-demo {
+              width: 100% !important;
             }
           }
         `}</style>
