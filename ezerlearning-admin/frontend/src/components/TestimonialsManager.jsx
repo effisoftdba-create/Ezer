@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import TestimonialFormModal from './TestimonialFormModal';
