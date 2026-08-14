@@ -59,16 +59,19 @@ export default function CourseManager() {
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [formData, setFormData] = useState(DEFAULT_COURSE_STATE);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData(DEFAULT_COURSE_STATE);
+    setFormErrors({});
     setIsEditing(true);
     scrollToTop();
   };
 
   const handleOpenEdit = (course) => {
     setEditingId(course.id || course.slug);
+    setFormErrors({});
     const safeModulesStr = Array.isArray(course.curriculumModules)
       ? course.curriculumModules.flatMap((m) => {
           const val = typeof m === 'object' ? `${m.num || ''} ${m.title || ''}`.trim() : String(m).trim();
@@ -125,10 +128,20 @@ export default function CourseManager() {
         .replace(/[\s_]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
-    if (!rawTitle || !formData.price?.trim()) {
-      alert('Please fill out Course Title and Cohort Enrollment Fee (₹).');
+    const errors = {};
+    if (!rawTitle) errors.title = true;
+    if (!formData.price?.trim()) errors.price = true;
+    if (!formData.image?.trim()) errors.image = true;
+    if (!formData.duration?.trim()) errors.duration = true;
+    if (!formData.languages?.trim()) errors.languages = true;
+    if (!formData.tagline?.trim() && !formData.description?.trim()) errors.tagline = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
+
+    setFormErrors({});
 
     const courseId = editingId || computedSlug || `course-${Date.now()}`;
     const toolsArray = typeof formData.tools === 'string'
@@ -231,6 +244,8 @@ export default function CourseManager() {
         editingId={editingId}
         formData={formData}
         setFormData={setFormData}
+        formErrors={formErrors}
+        setFormErrors={setFormErrors}
         onSave={handleSave}
         onCancel={() => setIsEditing(false)}
         onOpenImagePicker={() => setIsImagePickerOpen(true)}

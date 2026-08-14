@@ -11,6 +11,7 @@ import ArticleFormModal from './ArticleFormModal';
 function AchievementSection({ achievements, addAchievement, updateAchievement, deleteAchievement, onOpenPicker, externalImage }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editingAchId, setEditingAchId] = useState(null);
+  const [formErrors, setFormErrors] = useState({});
   const [achForm, setAchForm] = useState({
     title: '',
     issuer: '',
@@ -21,22 +22,38 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
   });
 
   const achTitle = achForm.title;
-  const setAchTitle = (v) => setAchForm((prev) => ({ ...prev, title: v }));
+  const setAchTitle = (v) => {
+    setAchForm((prev) => ({ ...prev, title: v }));
+    if (formErrors.title) setFormErrors((prev) => ({ ...prev, title: false }));
+  };
   const achIssuer = achForm.issuer;
-  const setAchIssuer = (v) => setAchForm((prev) => ({ ...prev, issuer: v }));
+  const setAchIssuer = (v) => {
+    setAchForm((prev) => ({ ...prev, issuer: v }));
+    if (formErrors.issuer) setFormErrors((prev) => ({ ...prev, issuer: false }));
+  };
   const achYear = achForm.year;
-  const setAchYear = (v) => setAchForm((prev) => ({ ...prev, year: v }));
+  const setAchYear = (v) => {
+    setAchForm((prev) => ({ ...prev, year: v }));
+    if (formErrors.year) setFormErrors((prev) => ({ ...prev, year: false }));
+  };
   const achCategory = achForm.category;
   const setAchCategory = (v) => setAchForm((prev) => ({ ...prev, category: v }));
   const achImage = achForm.image;
-  const setAchImage = (v) => setAchForm((prev) => ({ ...prev, image: v }));
+  const setAchImage = (v) => {
+    setAchForm((prev) => ({ ...prev, image: v }));
+    if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
+  };
   const achDesc = achForm.desc;
-  const setAchDesc = (v) => setAchForm((prev) => ({ ...prev, desc: v }));
+  const setAchDesc = (v) => {
+    setAchForm((prev) => ({ ...prev, desc: v }));
+    if (formErrors.desc) setFormErrors((prev) => ({ ...prev, desc: false }));
+  };
 
   const currentImage = externalImage || achImage;
 
   const handleOpenAdd = () => {
     setEditingAchId(null);
+    setFormErrors({});
     setAchForm({
       title: '',
       issuer: '',
@@ -50,6 +67,7 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
 
   const handleEditClick = (ach) => {
     setEditingAchId(ach.id);
+    setFormErrors({});
     setAchForm({
       title: ach.title || '',
       issuer: ach.issuer || '',
@@ -63,8 +81,19 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
 
   const handleSubmitAchievement = (e) => {
     e.preventDefault();
-    if (!achTitle.trim()) return alert('Please enter achievement title');
+    const errors = {};
+    if (!achTitle.trim()) errors.title = true;
+    if (!achIssuer.trim()) errors.issuer = true;
+    if (!achYear.trim()) errors.year = true;
+    if (!currentImage?.trim()) errors.image = true;
+    if (!achDesc.trim()) errors.desc = true;
 
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors({});
     const payload = {
       title: achTitle.trim(),
       issuer: achIssuer.trim(),
@@ -132,25 +161,75 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
             </div>
 
             <form onSubmit={handleSubmitAchievement} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {Object.keys(formErrors).length > 0 && (
+                <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 700 }}>
+                  ⚠️ Please fill in all required fields highlighted in red below before saving.
+                </div>
+              )}
+
               <div>
-                <label htmlFor="ach-title-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Award / Achievement Title *</label>
-                <input id="ach-title-input" type="text" placeholder="e.g. EdTech Excellence & Innovation Award 2025" value={achTitle} onChange={(e) => setAchTitle(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} required />
+                <label htmlFor="ach-title-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.title ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Award / Achievement Title *</label>
+                <input
+                  id="ach-title-input"
+                  type="text"
+                  placeholder="e.g. EdTech Excellence & Innovation Award 2025"
+                  value={achTitle}
+                  onChange={(e) => setAchTitle(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.title ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.title ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
+                />
+                {formErrors.title && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Award title is required</span>}
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: '14px' }}>
                 <div>
-                  <label htmlFor="ach-issuer-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Issuing Authority</label>
-                  <input id="ach-issuer-input" type="text" placeholder="e.g. National Skill Development Forum" value={achIssuer} onChange={(e) => setAchIssuer(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
+                  <label htmlFor="ach-issuer-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.issuer ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Issuing Authority *</label>
+                  <input
+                    id="ach-issuer-input"
+                    type="text"
+                    placeholder="e.g. National Skill Development Forum"
+                    value={achIssuer}
+                    onChange={(e) => setAchIssuer(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '9px 12px',
+                      borderRadius: '8px',
+                      border: formErrors.issuer ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors.issuer ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.85rem'
+                    }}
+                  />
+                  {formErrors.issuer && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Issuing authority is required</span>}
                 </div>
                 <div>
-                  <label htmlFor="ach-year-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Year</label>
-                  <input id="ach-year-input" type="text" value={achYear} onChange={(e) => setAchYear(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
+                  <label htmlFor="ach-year-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.year ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Year *</label>
+                  <input
+                    id="ach-year-input"
+                    type="text"
+                    value={achYear}
+                    onChange={(e) => setAchYear(e.target.value)}
+                    style={{
+                      width: '100%',
+                      padding: '9px 12px',
+                      borderRadius: '8px',
+                      border: formErrors.year ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors.year ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.85rem'
+                    }}
+                  />
+                  {formErrors.year && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Year is required</span>}
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '14px' }}>
                 <div>
-                  <label htmlFor="ach-category-select" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Category</label>
+                  <label htmlFor="ach-category-select" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Category *</label>
                   <select id="ach-category-select" value={achCategory} onChange={(e) => setAchCategory(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', background: '#fff' }}>
                     <option value="Excellence Award">Excellence Award</option>
                     <option value="Placement Award">Placement Award</option>
@@ -159,19 +238,50 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="ach-image-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Achievement Image URL</label>
+                  <label htmlFor="ach-image-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.image ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Achievement Image URL *</label>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <input id="ach-image-input" type="text" placeholder="https://images.unsplash.com/..." value={currentImage} onChange={(e) => setAchImage(e.target.value)} style={{ flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
+                    <input
+                      id="ach-image-input"
+                      type="text"
+                      placeholder="https://images.unsplash.com/..."
+                      value={currentImage}
+                      onChange={(e) => setAchImage(e.target.value)}
+                      style={{
+                        flex: 1,
+                        minWidth: 0,
+                        padding: '9px 12px',
+                        borderRadius: '8px',
+                        border: formErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                        background: formErrors.image ? '#fff5f5' : '#ffffff',
+                        fontSize: '0.85rem'
+                      }}
+                    />
                     <button type="button" onClick={onOpenPicker} style={{ padding: '9px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
                       <HiPhotograph size={15} /> Choose
                     </button>
                   </div>
+                  {formErrors.image && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Image URL is required</span>}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="ach-desc-textarea" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Description</label>
-                <textarea id="ach-desc-textarea" rows={3} placeholder="Brief description of the award or achievement..." value={achDesc} onChange={(e) => setAchDesc(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
+                <label htmlFor="ach-desc-textarea" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.desc ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Description *</label>
+                <textarea
+                  id="ach-desc-textarea"
+                  rows={3}
+                  placeholder="Brief description of the award or achievement..."
+                  value={achDesc}
+                  onChange={(e) => setAchDesc(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.desc ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.desc ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
+                />
+                {formErrors.desc && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Description is required</span>}
               </div>
 
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>
@@ -252,11 +362,12 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
     if (payload.id) {
       updateBlog(payload.id, payload);
     } else {
+      const hasFeaturedAlready = (blogs || []).some((b) => b && b.featured);
       const newPayload = {
         ...payload,
         id: `blog-${Date.now()}`,
         date: payload.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        featured: true
+        featured: !hasFeaturedAlready // Only featured if it's the very first article and none exists
       };
       addBlog(newPayload);
     }
@@ -307,8 +418,19 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
                 position: 'relative'
               }}
             >
-              <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
-                <img loading="lazy" src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'relative', width: '100%', height: '210px', minHeight: '210px', maxHeight: '210px', aspectRatio: '16 / 9', overflow: 'hidden', background: '#0a0f2d', flexShrink: 0 }}>
+                <img
+                  loading="lazy"
+                  src={blog.image}
+                  alt={blog.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: blog.position || blog.imagePosition || 'center center',
+                    display: 'block'
+                  }}
+                />
                 <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px' }}>
                   {blog.category}
                 </span>
@@ -388,6 +510,7 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
    ──────────────────────────────────────────────────────────── */
 export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
   const [editingId, setEditingId] = useState(null);
+  const [execErrors, setExecErrors] = useState({});
   const [formData, setFormData] = useState({
     roleTag: 'CEO', roleName: 'Chief Executive Officer',
     name: '', image: '', bio: '',
@@ -401,6 +524,7 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
 
   const handleEdit = (exec) => {
     setEditingId(exec.id || exec.roleTag);
+    setExecErrors({});
     setFormData({
       roleTag: exec.roleTag || 'CEO',
       roleName: exec.roleName || 'Chief Executive Officer',
@@ -418,11 +542,27 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.image.trim()) {
-      alert('Executive Name and Photo URL are required.');
+    const errors = {};
+    if (!formData.roleTag?.trim()) errors.roleTag = true;
+    if (!formData.roleName?.trim()) errors.roleName = true;
+    if (!formData.name?.trim()) errors.name = true;
+    if (!formData.image?.trim()) errors.image = true;
+    if (!formData.bio?.trim()) errors.bio = true;
+
+    if (Object.keys(errors).length > 0) {
+      setExecErrors(errors);
       return;
     }
-    updateExecutiveLeader(editingId, formData);
+
+    setExecErrors({});
+    updateExecutiveLeader(editingId, {
+      ...formData,
+      roleTag: formData.roleTag.trim(),
+      roleName: formData.roleName.trim(),
+      name: formData.name.trim(),
+      image: formData.image.trim(),
+      bio: formData.bio.trim()
+    });
     setEditingId(null);
   };
 
@@ -472,18 +612,75 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
             </div>
 
             <form onSubmit={handleSave} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {Object.keys(execErrors).length > 0 && (
+                <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 700 }}>
+                  ⚠️ Please fill in all required fields highlighted in red below before saving.
+                </div>
+              )}
+
               <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr 1fr', gap: '12px' }}>
                 <div>
-                  <label htmlFor="exec_role_tag" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Role Tag*</label>
-                  <input id="exec_role_tag" type="text" value={formData.roleTag} onChange={(e) => setFormData((prev) => ({ ...prev, roleTag: e.target.value }))} style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
+                  <label htmlFor="exec_role_tag" style={{ fontSize: '0.75rem', fontWeight: 800, color: execErrors.roleTag ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Role Tag *</label>
+                  <input
+                    id="exec_role_tag"
+                    type="text"
+                    value={formData.roleTag}
+                    onChange={(e) => {
+                      setFormData((prev) => ({ ...prev, roleTag: e.target.value }));
+                      if (execErrors.roleTag) setExecErrors((prev) => ({ ...prev, roleTag: false }));
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '8px 10px',
+                      borderRadius: '6px',
+                      border: execErrors.roleTag ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: execErrors.roleTag ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.84rem'
+                    }}
+                  />
+                  {execErrors.roleTag && <span style={{ color: '#dc2626', fontSize: '0.7rem', fontWeight: 700, marginTop: '2px', display: 'block' }}>Required</span>}
                 </div>
                 <div>
-                  <label htmlFor="exec_role_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Full Role Name*</label>
-                  <input id="exec_role_name" type="text" value={formData.roleName} onChange={(e) => setFormData((prev) => ({ ...prev, roleName: e.target.value }))} style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
+                  <label htmlFor="exec_role_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: execErrors.roleName ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Full Role Name *</label>
+                  <input
+                    id="exec_role_name"
+                    type="text"
+                    value={formData.roleName}
+                    onChange={(e) => {
+                      setFormData((prev) => ({ ...prev, roleName: e.target.value }));
+                      if (execErrors.roleName) setExecErrors((prev) => ({ ...prev, roleName: false }));
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '8px 10px',
+                      borderRadius: '6px',
+                      border: execErrors.roleName ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: execErrors.roleName ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.84rem'
+                    }}
+                  />
+                  {execErrors.roleName && <span style={{ color: '#dc2626', fontSize: '0.7rem', fontWeight: 700, marginTop: '2px', display: 'block' }}>Required</span>}
                 </div>
                 <div>
-                  <label htmlFor="exec_officer_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Executive Name*</label>
-                  <input id="exec_officer_name" type="text" value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
+                  <label htmlFor="exec_officer_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: execErrors.name ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Executive Name *</label>
+                  <input
+                    id="exec_officer_name"
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => {
+                      setFormData((prev) => ({ ...prev, name: e.target.value }));
+                      if (execErrors.name) setExecErrors((prev) => ({ ...prev, name: false }));
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '8px 10px',
+                      borderRadius: '6px',
+                      border: execErrors.name ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: execErrors.name ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.84rem'
+                    }}
+                  />
+                  {execErrors.name && <span style={{ color: '#dc2626', fontSize: '0.7rem', fontWeight: 700, marginTop: '2px', display: 'block' }}>Required</span>}
                 </div>
               </div>
 
@@ -499,9 +696,26 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
               </div>
 
               <div>
-                <label htmlFor="exec_photo_url" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Photo Source / URL</label>
+                <label htmlFor="exec_photo_url" style={{ fontSize: '0.75rem', fontWeight: 800, color: execErrors.image ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Photo Source / URL *</label>
                 <div style={{ display: 'flex', gap: '8px' }}>
-                  <input id="exec_photo_url" type="text" value={formData.image} onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))} style={{ flex: 1, minWidth: 0, padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
+                  <input
+                    id="exec_photo_url"
+                    type="text"
+                    value={formData.image}
+                    onChange={(e) => {
+                      setFormData((prev) => ({ ...prev, image: e.target.value }));
+                      if (execErrors.image) setExecErrors((prev) => ({ ...prev, image: false }));
+                    }}
+                    style={{
+                      flex: 1,
+                      minWidth: 0,
+                      padding: '8px 10px',
+                      borderRadius: '6px',
+                      border: execErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: execErrors.image ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.84rem'
+                    }}
+                  />
                   <button type="button" onClick={() => setPickerOpen(true)} style={{ padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                     Choose Photo
                   </button>
@@ -529,11 +743,30 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                     ↺ Reset Alignment
                   </button>
                 </div>
+                {execErrors.image && <span style={{ color: '#dc2626', fontSize: '0.7rem', fontWeight: 700, marginTop: '2px', display: 'block' }}>Photo URL is required</span>}
               </div>
 
               <div>
-                <label htmlFor="exec_bio" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Leadership Bio</label>
-                <textarea id="exec_bio" rows={3} value={formData.bio} onChange={(e) => setFormData((prev) => ({ ...prev, bio: e.target.value }))} placeholder="Brief leadership bio..." style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} />
+                <label htmlFor="exec_bio" style={{ fontSize: '0.75rem', fontWeight: 800, color: execErrors.bio ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Leadership Bio *</label>
+                <textarea
+                  id="exec_bio"
+                  rows={3}
+                  value={formData.bio}
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, bio: e.target.value }));
+                    if (execErrors.bio) setExecErrors((prev) => ({ ...prev, bio: false }));
+                  }}
+                  placeholder="Brief leadership bio..."
+                  style={{
+                    width: '100%',
+                    padding: '8px 10px',
+                    borderRadius: '6px',
+                    border: execErrors.bio ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: execErrors.bio ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.84rem'
+                  }}
+                />
+                {execErrors.bio && <span style={{ color: '#dc2626', fontSize: '0.7rem', fontWeight: 700, marginTop: '2px', display: 'block' }}>Leadership bio is required</span>}
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>

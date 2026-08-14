@@ -31,6 +31,7 @@ export default function AboutVideoManager() {
 
   const [videoList, setVideoList] = useState(initialList);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleChange = (targetId, field, value) => {
     const updated = videoList.map((item, idx) => {
@@ -40,10 +41,29 @@ export default function AboutVideoManager() {
       return item;
     });
     setVideoList(updated);
+    const errKey = `${targetId}_${field}`;
+    if (formErrors[errKey]) {
+      setFormErrors((prev) => ({ ...prev, [errKey]: false }));
+    }
   };
 
   const handleSave = (e) => {
     e.preventDefault();
+    const errors = {};
+    videoList.slice(0, 2).forEach((vid, idx) => {
+      const key = vid.id || `slot_${idx}`;
+      if (!vid.tag?.trim()) errors[`${key}_tag`] = true;
+      if (!vid.videoUrl?.trim()) errors[`${key}_videoUrl`] = true;
+      if (!vid.title?.trim()) errors[`${key}_title`] = true;
+      if (!vid.description?.trim()) errors[`${key}_description`] = true;
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors({});
     updateAboutVideos(videoList);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
@@ -78,8 +98,15 @@ export default function AboutVideoManager() {
       )}
 
       <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
-        {videoList.slice(0, 2).map((vid) => {
-          const videoSlotKey = String(vid.id || vid.tag || vid.title || vid.videoUrl || 'video-slot-key');
+        {Object.keys(formErrors).length > 0 && (
+          <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 800 }}>
+            ⚠️ Please fill in all required fields highlighted in red below before saving.
+          </div>
+        )}
+
+        {videoList.slice(0, 2).map((vid, idx) => {
+          const videoSlotKey = String(vid.id || vid.tag || vid.title || vid.videoUrl || `video-slot-${idx}`);
+          const key = vid.id || `slot_${idx}`;
           return (
             <div
               key={videoSlotKey}
@@ -103,7 +130,7 @@ export default function AboutVideoManager() {
               {/* Inputs Grid */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                 <div>
-                  <label htmlFor={`vid_tag_${vid.id || vid.tag}`} style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  <label htmlFor={`vid_tag_${vid.id || vid.tag}`} style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: formErrors[`${key}_tag`] ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                     Section Badge / Tag *
                   </label>
                   <input
@@ -112,13 +139,20 @@ export default function AboutVideoManager() {
                     value={vid.tag || ''}
                     onChange={(e) => handleChange(vid.id, 'tag', e.target.value)}
                     placeholder="e.g. VIDEO SHOWCASE 01"
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                    required
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: formErrors[`${key}_tag`] ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors[`${key}_tag`] ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.85rem'
+                    }}
                   />
+                  {formErrors[`${key}_tag`] && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Tag is required</span>}
                 </div>
 
                 <div>
-                  <label htmlFor={`vid_url_${vid.id || vid.tag}`} style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  <label htmlFor={`vid_url_${vid.id || vid.tag}`} style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: formErrors[`${key}_videoUrl`] ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                     Video URL (YouTube or Google Drive) *
                   </label>
                   <input
@@ -127,14 +161,21 @@ export default function AboutVideoManager() {
                     value={vid.videoUrl || ''}
                     onChange={(e) => handleChange(vid.id, 'videoUrl', e.target.value)}
                     placeholder="https://www.youtube.com/watch?v=... or https://drive.google.com/file/d/..."
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                    required
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: formErrors[`${key}_videoUrl`] ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors[`${key}_videoUrl`] ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.85rem'
+                    }}
                   />
+                  {formErrors[`${key}_videoUrl`] && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Video URL is required</span>}
                 </div>
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <label htmlFor={`vid_title_${vid.id || vid.tag}`} style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                <label htmlFor={`vid_title_${vid.id || vid.tag}`} style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: formErrors[`${key}_title`] ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                   Video Section Title *
                 </label>
                 <input
@@ -143,13 +184,20 @@ export default function AboutVideoManager() {
                   value={vid.title || ''}
                   onChange={(e) => handleChange(vid.id, 'title', e.target.value)}
                   placeholder="e.g. Platform & Learning Methodology in Action"
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                  required
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: formErrors[`${key}_title`] ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors[`${key}_title`] ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
                 />
+                {formErrors[`${key}_title`] && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Title is required</span>}
               </div>
 
               <div style={{ marginBottom: '20px' }}>
-                <label htmlFor={`vid_desc_${vid.id || vid.tag}`} style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                <label htmlFor={`vid_desc_${vid.id || vid.tag}`} style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: formErrors[`${key}_description`] ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                   Video Subtitle / Description Text *
                 </label>
                 <textarea
@@ -158,9 +206,16 @@ export default function AboutVideoManager() {
                   value={vid.description || ''}
                   onChange={(e) => handleChange(vid.id, 'description', e.target.value)}
                   placeholder="Detailed explanation of what learners see in this video..."
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                  required
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: formErrors[`${key}_description`] ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors[`${key}_description`] ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
                 />
+                {formErrors[`${key}_description`] && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Description is required</span>}
               </div>
 
               {/* Live Video Player Preview */}

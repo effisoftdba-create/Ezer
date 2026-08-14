@@ -25,12 +25,14 @@ export default function TestimonialsManager() {
     deleteWrittenTestimonial
   } = useSiteData();
 
-  const [heroFormData, setHeroFormData] = useState(testimonialsHero || {
-    tag: 'ALUMNI SUCCESS & REVIEWS',
-    headline: 'Proven Outcomes & Real Alumni Stories',
-    sub: 'Explore career switch journeys from our graduates who secured engineering roles.'
+  const [heroFormData, setHeroFormData] = useState({
+    tag: testimonialsHero?.tag || testimonialsHero?.badge || 'STUDENT SUCCESS STORIES',
+    badge: testimonialsHero?.badge || testimonialsHero?.tag || 'STUDENT SUCCESS STORIES',
+    headline: testimonialsHero?.headline || 'Real Learners. Real IT Career Outcomes.',
+    sub: testimonialsHero?.sub || 'Discover how EZER Learning Solutions helps freshers and career switchers land high-growth tech jobs.'
   });
 
+  const [heroFormErrors, setHeroFormErrors] = useState({});
   const [saveHeroSuccess, setSaveHeroSuccess] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -38,9 +40,38 @@ export default function TestimonialsManager() {
   const [formData, setFormData] = useState(DEFAULT_TESTIMONIAL_STATE);
   const [formErrors, setFormErrors] = useState({});
 
+  useEffect(() => {
+    if (testimonialsHero) {
+      setHeroFormData({
+        tag: testimonialsHero.tag || testimonialsHero.badge || 'STUDENT SUCCESS STORIES',
+        badge: testimonialsHero.badge || testimonialsHero.tag || 'STUDENT SUCCESS STORIES',
+        headline: testimonialsHero.headline || 'Real Learners. Real IT Career Outcomes.',
+        sub: testimonialsHero.sub || 'Discover how EZER Learning Solutions helps freshers and career switchers land high-growth tech jobs.'
+      });
+    }
+  }, [testimonialsHero]);
+
   const handleHeroSave = (e) => {
     e.preventDefault();
-    updateTestimonialsHero(heroFormData);
+    const errors = {};
+    if (!heroFormData.tag?.trim()) errors.tag = true;
+    if (!heroFormData.headline?.trim()) errors.headline = true;
+    if (!heroFormData.sub?.trim()) errors.sub = true;
+
+    if (Object.keys(errors).length > 0) {
+      setHeroFormErrors(errors);
+      return;
+    }
+
+    setHeroFormErrors({});
+    const payload = {
+      ...heroFormData,
+      tag: heroFormData.tag.trim(),
+      badge: heroFormData.tag.trim(),
+      headline: heroFormData.headline.trim(),
+      sub: heroFormData.sub.trim()
+    };
+    updateTestimonialsHero(payload);
     setSaveHeroSuccess(true);
     setTimeout(() => setSaveHeroSuccess(false), 3000);
   };
@@ -160,45 +191,85 @@ export default function TestimonialsManager() {
           Edit Testimonials Page Header
         </h3>
 
+        {Object.keys(heroFormErrors).length > 0 && (
+          <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 700, marginBottom: '14px' }}>
+            ⚠️ Please fill in all required header fields highlighted in red below before saving.
+          </div>
+        )}
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px', marginBottom: '14px' }}>
           <div>
-            <label htmlFor="testi_hero_tag" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-              Badge Tagline
+            <label htmlFor="testi_hero_tag" style={{ fontSize: '0.78rem', fontWeight: 800, color: heroFormErrors.tag ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+              Badge Tagline *
             </label>
             <input
               id="testi_hero_tag"
               type="text"
               value={heroFormData.tag || ''}
-              onChange={(e) => setHeroFormData((prev) => ({ ...prev, tag: e.target.value }))}
-              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+              onChange={(e) => {
+                const val = e.target.value;
+                setHeroFormData((prev) => ({ ...prev, tag: val, badge: val }));
+                if (heroFormErrors.tag) setHeroFormErrors((prev) => ({ ...prev, tag: false }));
+              }}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                border: heroFormErrors.tag ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                background: heroFormErrors.tag ? '#fff5f5' : '#ffffff',
+                fontSize: '0.85rem'
+              }}
             />
+            {heroFormErrors.tag && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Badge tagline is required</span>}
           </div>
 
           <div>
-            <label htmlFor="testi_hero_headline" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-              Headline
+            <label htmlFor="testi_hero_headline" style={{ fontSize: '0.78rem', fontWeight: 800, color: heroFormErrors.headline ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+              Headline *
             </label>
             <input
               id="testi_hero_headline"
               type="text"
               value={heroFormData.headline || ''}
-              onChange={(e) => setHeroFormData((prev) => ({ ...prev, headline: e.target.value }))}
-              style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+              onChange={(e) => {
+                setHeroFormData((prev) => ({ ...prev, headline: e.target.value }));
+                if (heroFormErrors.headline) setHeroFormErrors((prev) => ({ ...prev, headline: false }));
+              }}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                borderRadius: '8px',
+                border: heroFormErrors.headline ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                background: heroFormErrors.headline ? '#fff5f5' : '#ffffff',
+                fontSize: '0.85rem'
+              }}
             />
+            {heroFormErrors.headline && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Headline is required</span>}
           </div>
         </div>
 
         <div style={{ marginBottom: '14px' }}>
-          <label htmlFor="testi_hero_sub" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-            Subheadline Description
+          <label htmlFor="testi_hero_sub" style={{ fontSize: '0.78rem', fontWeight: 800, color: heroFormErrors.sub ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+            Subheadline Description *
           </label>
           <input
             id="testi_hero_sub"
             type="text"
             value={heroFormData.sub || ''}
-            onChange={(e) => setHeroFormData((prev) => ({ ...prev, sub: e.target.value }))}
-            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+            onChange={(e) => {
+              setHeroFormData((prev) => ({ ...prev, sub: e.target.value }));
+              if (heroFormErrors.sub) setHeroFormErrors((prev) => ({ ...prev, sub: false }));
+            }}
+            style={{
+              width: '100%',
+              padding: '8px 12px',
+              borderRadius: '8px',
+              border: heroFormErrors.sub ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+              background: heroFormErrors.sub ? '#fff5f5' : '#ffffff',
+              fontSize: '0.85rem'
+            }}
           />
+          {heroFormErrors.sub && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Subheadline description is required</span>}
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '12px' }}>

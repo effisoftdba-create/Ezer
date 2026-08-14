@@ -34,6 +34,7 @@ export default function SeniorMentorsManager() {
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [formData, setFormData] = useState(DEFAULT_MENTOR_STATE);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleHeaderSave = (e) => {
     e.preventDefault();
@@ -45,11 +46,13 @@ export default function SeniorMentorsManager() {
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData(DEFAULT_MENTOR_STATE);
+    setFormErrors({});
     setIsEditing(true);
   };
 
   const handleOpenEdit = (item) => {
     setEditingId(item.id);
+    setFormErrors({});
     setFormData({
       name: item.name || '',
       designation: item.designation || '',
@@ -70,21 +73,28 @@ export default function SeniorMentorsManager() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.name?.trim() || !formData.designation?.trim() || !formData.bio?.trim()) {
-      alert('Please fill out all required fields: Mentor Name, Designation & Firm, and Bio summary.');
+    const errors = {};
+    if (!formData.name?.trim()) errors.name = true;
+    if (!formData.designation?.trim()) errors.designation = true;
+    if (!formData.image?.trim()) errors.image = true;
+    if (!formData.bio?.trim()) errors.bio = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
 
+    setFormErrors({});
     const tagList = formData.tags
       .split(',')
       .map((t) => t.trim())
       .filter(Boolean);
 
     const payload = {
-      name: formData.name,
-      designation: formData.designation,
-      image: formData.image,
-      bio: formData.bio,
+      name: formData.name.trim(),
+      designation: formData.designation.trim(),
+      image: formData.image.trim(),
+      bio: formData.bio.trim(),
       tags: tagList,
       position: formData.position || '50% 50%',
       imagePosition: formData.position || '50% 50%',
@@ -97,7 +107,7 @@ export default function SeniorMentorsManager() {
     };
 
     if (editingId) {
-      updateSeniorMentor(editingId, payload);
+      updateSeniorMentor(editingId, { ...payload, id: editingId });
     } else {
       addSeniorMentor(payload);
     }
@@ -200,6 +210,8 @@ export default function SeniorMentorsManager() {
         editingId={editingId}
         formData={formData}
         setFormData={setFormData}
+        formErrors={formErrors}
+        setFormErrors={setFormErrors}
         onSave={handleSave}
         onCancel={() => setIsEditing(false)}
         onOpenImagePicker={() => setIsImagePickerOpen(true)}

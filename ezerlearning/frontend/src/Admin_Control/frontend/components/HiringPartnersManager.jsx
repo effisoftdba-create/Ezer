@@ -94,6 +94,7 @@ export default function HiringPartnersManager() {
   });
 
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
   const filteredPartners = safePartners.filter((partner) => {
     const matchesSearch = (partner.name || '').toLowerCase().includes(searchTerm.toLowerCase());
@@ -109,6 +110,7 @@ export default function HiringPartnersManager() {
 
   const handleOpenAddModal = () => {
     setEditingId(null);
+    setFormErrors({});
     setFormData({
       name: '',
       image: '',
@@ -123,6 +125,7 @@ export default function HiringPartnersManager() {
 
   const handleOpenEditModal = (partner) => {
     setEditingId(partner.id);
+    setFormErrors({});
     setFormData({
       name: partner.name || '',
       image: partner.image || '',
@@ -143,18 +146,27 @@ export default function HiringPartnersManager() {
       imagePosition: 'center center',
       imageFit: 'contain'
     }));
+    if (formErrors.name || formErrors.image) {
+      setFormErrors((prev) => ({ ...prev, name: false, image: false }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name.trim()) return;
+    const errors = {};
+    if (!formData.name?.trim()) errors.name = true;
+    if (!formData.image?.trim()) errors.image = true;
 
-    // Save image exactly as selected — no silent background removal.
-    // Users can manually trigger background removal via the image picker if needed.
-    const finalData = { ...formData };
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors({});
+    const finalData = { ...formData, name: formData.name.trim() };
 
     if (editingId) {
-      updateHiringPartner(editingId, finalData);
+      updateHiringPartner(editingId, { ...finalData, id: editingId });
     } else {
       addHiringPartner(finalData);
     }
@@ -415,19 +427,35 @@ export default function HiringPartnersManager() {
             </div>
 
             <form onSubmit={handleSubmit} style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px', flex: 1 }}>
+              {Object.keys(formErrors).length > 0 && (
+                <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 800 }}>
+                  ⚠️ Please fill in all required fields highlighted in red below before saving.
+                </div>
+              )}
+
               <div>
-                <label htmlFor="modal_company_name" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                  Company Name*
+                <label htmlFor="modal_company_name" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.name ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+                  Company Name *
                 </label>
                 <input
                   id="modal_company_name"
                   type="text"
                   placeholder="e.g. TCS, Infosys, Zoho, Nvidia..."
                   value={formData.name}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                  required
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, name: e.target.value }));
+                    if (formErrors.name) setFormErrors((prev) => ({ ...prev, name: false }));
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.name ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.name ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
                 />
+                {formErrors.name && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Company name is required</span>}
               </div>
 
               <div>
@@ -453,8 +481,8 @@ export default function HiringPartnersManager() {
               </div>
 
               <div>
-                <label htmlFor="modal_company_logo" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                  Company Logo Image Source or SVG*
+                <label htmlFor="modal_company_logo" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.image ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+                  Company Logo Image Source or SVG *
                 </label>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <input
@@ -462,8 +490,18 @@ export default function HiringPartnersManager() {
                     type="text"
                     placeholder="https://... image link or SVG code"
                     value={formData.image}
-                    onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))}
-                    style={{ flex: 1, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.82rem' }}
+                    onChange={(e) => {
+                      setFormData((prev) => ({ ...prev, image: e.target.value }));
+                      if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '9px 12px',
+                      borderRadius: '8px',
+                      border: formErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors.image ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.82rem'
+                    }}
                   />
                   <button
                     type="button"
@@ -477,6 +515,7 @@ export default function HiringPartnersManager() {
                     <HiPhotograph size={14} /> Crop & Align
                   </button>
                 </div>
+                {formErrors.image && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Company logo URL or SVG is required</span>}
               </div>
 
               <div>

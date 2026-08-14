@@ -8,14 +8,20 @@ export default function CoursePaymentManager() {
   const [comingSoonNotice, setComingSoonNotice] = useState(
     paymentConfig?.comingSoonNotice || 'Admissions Opening Soon — VIP Priority Cohort Waitlist Active'
   );
+  const [hasError, setHasError] = useState(false);
 
   const waitlistLeads = (leads || []).filter((l) => l.status === 'VIP Waitlist' || l.paymentStatus === 'VIP_WAITLIST');
 
   const handleSaveConfig = (e) => {
     e.preventDefault();
+    if (!comingSoonNotice?.trim()) {
+      setHasError(true);
+      return;
+    }
+    setHasError(false);
     updatePaymentConfig({
       ...paymentConfig,
-      comingSoonNotice
+      comingSoonNotice: comingSoonNotice.trim()
     });
     setSavedSuccess(true);
     setTimeout(() => setSavedSuccess(false), 3000);
@@ -78,19 +84,36 @@ export default function CoursePaymentManager() {
           <HiOutlineSparkles size={20} color="#115DFC" /> Customize Public Coming Soon Headline
         </h4>
 
+        {hasError && (
+          <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', marginBottom: '14px', fontSize: '0.82rem', fontWeight: 800 }}>
+            ⚠️ Please enter the announcement text before saving.
+          </div>
+        )}
+
         <form onSubmit={handleSaveConfig} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <div>
-            <label htmlFor="coming_soon_notice_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
-              Public Modal Banner Announcement
+            <label htmlFor="coming_soon_notice_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: hasError ? '#dc2626' : '#000648', display: 'block', marginBottom: '4px' }}>
+              Public Modal Banner Announcement *
             </label>
             <input
               id="coming_soon_notice_input"
               type="text"
-              required
               value={comingSoonNotice}
-              onChange={(e) => setComingSoonNotice(e.target.value)}
-              style={{ width: '100%', padding: '11px 14px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.9rem', outline: 'none' }}
+              onChange={(e) => {
+                setComingSoonNotice(e.target.value);
+                if (hasError) setHasError(false);
+              }}
+              style={{
+                width: '100%',
+                padding: '11px 14px',
+                borderRadius: '8px',
+                border: hasError ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                background: hasError ? '#fff5f5' : '#ffffff',
+                fontSize: '0.9rem',
+                outline: 'none'
+              }}
             />
+            {hasError && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Announcement text is required</span>}
           </div>
 
           <button

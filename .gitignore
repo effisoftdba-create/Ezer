@@ -33,3 +33,6 @@ SKILL.md
 ezer.md
 skills-lock.json
 Ezer_Website/
+.wrangler/
+*/.wrangler/
+Ezer-1/

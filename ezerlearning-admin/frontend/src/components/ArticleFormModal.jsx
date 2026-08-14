@@ -32,6 +32,7 @@ export default function ArticleFormModal({
 
   const [pickerOpen, setPickerOpen] = useState(false);
   const [activeImageTarget, setActiveImageTarget] = useState(null); // null for cover image, or index for section image
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     if (editingArticle) {
@@ -64,10 +65,43 @@ export default function ArticleFormModal({
         takeawaysStr: existingTakeaways,
         sections: existingSections
       });
+      setFormErrors({});
     }
   }, [editingArticle]);
 
   if (!isOpen) return null;
+
+  const handleLoadProfessionalTemplate = () => {
+    setFormData({
+      title: 'How Non-IT Professionals Are Transitioning Into AI & Software Development in 2026',
+      slug: 'how-non-it-professionals-transition-into-ai',
+      category: 'Career Guide',
+      author: 'EZER Academic Board',
+      date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
+      readTime: '8 Min Read',
+      seoGeoAeoTag: 'Best AI & Full Stack IT Training Institute in Chennai India',
+      summary: 'Discover the exact step-by-step roadmap used by non-tech switchers to master Full Stack AI engineering, bridge foundational skill gaps, and secure high-growth roles in premier corporate enterprises.',
+      image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1400',
+      takeawaysStr: 'Degree requirements are giving way to practical proof-of-work and deployed cloud projects.\nNative language explanation (Tamil/Hindi) accelerates comprehension of complex algorithms.\nAI Copilot tooling increases junior developer productivity by over 40% in enterprise environments.\n1-on-1 industry mentor guidance and live mock interviews build unmatched corporate interview confidence.',
+      sections: [
+        {
+          id: 'sec-1',
+          title: '1. Introduction & Industry Landscape',
+          content: 'The technology landscape is undergoing a monumental paradigm shift. Enterprise hiring managers in India, Singapore, and the UAE are actively pivoting towards proof-of-work hiring. Aspirants from non-IT backgrounds—including BPO executives, mechanical engineers, and commerce graduates—are breaking into high-paying engineering roles by mastering modern full-stack architectures and AI integrations.',
+          image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000',
+          caption: 'Interactive native-language cohort masterclass with live mentor code reviews.'
+        },
+        {
+          id: 'sec-2',
+          title: '2. Breaking Down the Skill Transition Blueprint',
+          content: 'The fastest path from non-tech to job-ready is structured hands-on lab simulation. Rather than spending months on abstract theoretical lectures, modern cohorts build production-grade microservices with Docker, Kubernetes, and Cloud CI/CD pipelines from week one.',
+          image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000',
+          caption: 'Live production sandbox environments with automated CI/CD pipeline deployments.'
+        }
+      ]
+    });
+    setFormErrors({});
+  };
 
   const handleAddSection = () => {
     setFormData((prev) => ({
@@ -98,10 +132,20 @@ export default function ArticleFormModal({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.title?.trim() || !formData.summary?.trim() || !formData.author?.trim()) {
-      return alert('Please fill out all required fields: Article Title, Summary & Key Takeaways, and Author Name.');
+    const errors = {};
+    if (!formData.title?.trim()) errors.title = true;
+    if (!formData.author?.trim()) errors.author = true;
+    if (!formData.seoGeoAeoTag?.trim()) errors.seoGeoAeoTag = true;
+    if (!formData.image?.trim()) errors.image = true;
+    if (!formData.summary?.trim()) errors.summary = true;
+    if (!formData.takeawaysStr?.trim()) errors.takeawaysStr = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
     }
 
+    setFormErrors({});
     const takeawaysArray = formData.takeawaysStr
       .split('\n')
       .map((line) => line.replace(/^[\s•*-]+/, '').trim())
@@ -144,38 +188,68 @@ export default function ArticleFormModal({
             <h3 style={{ margin: '2px 0 0 0', fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
               {editingArticle ? `Edit Article: ${formData.title}` : 'Create & Publish New Magazine Article'}
             </h3>
-
           </div>
 
-          <button
-            type="button"
-            aria-label="Close article edit modal"
-            onClick={onClose}
-            style={{ background: 'rgba(255,255,255,0.12)', border: 'none', cursor: 'pointer', color: '#ffffff', width: '34px', height: '34px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <HiX size={20} />
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <button
+              type="button"
+              onClick={handleLoadProfessionalTemplate}
+              title="Load professional editorial cover story template"
+              style={{
+                padding: '6px 14px', background: 'rgba(242, 183, 51, 0.15)',
+                border: '1.5px solid #f2b733', color: '#f2b733',
+                borderRadius: '8px', fontWeight: 800, fontSize: '0.76rem',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px'
+              }}
+            >
+              <HiSparkles size={14} /> Restore Editorial Template
+            </button>
+            <button
+              type="button"
+              aria-label="Close article edit modal"
+              onClick={onClose}
+              style={{ background: 'rgba(255,255,255,0.12)', border: 'none', cursor: 'pointer', color: '#ffffff', width: '34px', height: '34px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <HiX size={20} />
+            </button>
+          </div>
         </div>
 
         {/* Scrollable Form Body */}
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, overflow: 'hidden' }}>
           <div style={{ padding: '24px', overflowY: 'auto', flexGrow: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
             
+            {Object.keys(formErrors).length > 0 && (
+              <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '12px 16px', borderRadius: '10px', fontSize: '0.84rem', fontWeight: 800 }}>
+                ⚠️ Please fill in all required fields highlighted in red below before publishing or saving.
+              </div>
+            )}
+
             {/* Basic Metadata */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px 180px', gap: '14px' }}>
               <div>
-                <label htmlFor="art_title_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                <label htmlFor="art_title_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.title ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
                   Article Headline Title *
                 </label>
                 <input
                   id="art_title_input"
                   type="text"
-                  required
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, title: e.target.value });
+                    if (formErrors.title) setFormErrors((prev) => ({ ...prev, title: false }));
+                  }}
                   placeholder="e.g. How Non-IT Professionals Are Transitioning Into AI in 2026"
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.86rem' }}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.title ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.title ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.86rem'
+                  }}
                 />
+                {formErrors.title && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Article title is required</span>}
               </div>
 
               <div>
@@ -198,88 +272,141 @@ export default function ArticleFormModal({
               </div>
 
               <div>
-                <label htmlFor="art_author_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                  Author
+                <label htmlFor="art_author_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.author ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+                  Author *
                 </label>
                 <input
                   id="art_author_input"
                   type="text"
                   value={formData.author}
-                  onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.86rem' }}
+                  onChange={(e) => {
+                    setFormData({ ...formData, author: e.target.value });
+                    if (formErrors.author) setFormErrors((prev) => ({ ...prev, author: false }));
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.author ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.author ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.86rem'
+                  }}
                 />
+                {formErrors.author && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Author is required</span>}
               </div>
             </div>
 
             {/* SEO & Cover Image */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
               <div>
-                <label htmlFor="art_seo_tag" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                <label htmlFor="art_seo_tag" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.seoGeoAeoTag ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
                   SEO / GEO / AEO Location Keyword Tag *
                 </label>
                 <input
                   id="art_seo_tag"
                   type="text"
-                  required
                   value={formData.seoGeoAeoTag}
-                  onChange={(e) => setFormData({ ...formData, seoGeoAeoTag: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, seoGeoAeoTag: e.target.value });
+                    if (formErrors.seoGeoAeoTag) setFormErrors((prev) => ({ ...prev, seoGeoAeoTag: false }));
+                  }}
                   placeholder="e.g. Best AI & Full Stack IT Training Institute in Chennai India"
-                  style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.86rem' }}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.seoGeoAeoTag ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.seoGeoAeoTag ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.86rem'
+                  }}
                 />
+                {formErrors.seoGeoAeoTag && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>SEO keyword tag is required</span>}
               </div>
 
               <div>
-                <label htmlFor="art_cover_image" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+                <label htmlFor="art_cover_image" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.image ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
                   Main Banner Cover Photo URL *
                 </label>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <input
                     id="art_cover_image"
                     type="text"
-                    required
                     value={formData.image}
-                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-                    style={{ flex: 1, padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.86rem' }}
+                    onChange={(e) => {
+                      setFormData({ ...formData, image: e.target.value });
+                      if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
+                    }}
+                    style={{
+                      flex: 1,
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: formErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors.image ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.86rem'
+                    }}
                   />
                   <button
                     type="button"
                     onClick={() => { setActiveImageTarget(null); setPickerOpen(true); }}
-                    style={{ padding: '10px 14px', background: '#115DFC', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', fontSize: '0.82rem' }}
+                    style={{ padding: '10px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', fontSize: '0.82rem' }}
                   >
                     <HiPhotograph size={16} /> Choose
                   </button>
                 </div>
+                {formErrors.image && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Cover photo URL is required</span>}
               </div>
             </div>
 
             {/* Excerpt Summary */}
             <div>
-              <label htmlFor="art_summary" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Article Excerpt Summary (Displayed on Magazine Cards)
+              <label htmlFor="art_summary" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.summary ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+                Article Excerpt Summary (Displayed on Magazine Cards) *
               </label>
               <textarea
                 id="art_summary"
                 rows={2}
                 value={formData.summary}
-                onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, summary: e.target.value });
+                  if (formErrors.summary) setFormErrors((prev) => ({ ...prev, summary: false }));
+                }}
                 placeholder="High-level overview summary..."
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.86rem' }}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  borderRadius: '8px',
+                  border: formErrors.summary ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                  background: formErrors.summary ? '#fff5f5' : '#ffffff',
+                  fontSize: '0.86rem'
+                }}
               />
+              {formErrors.summary && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Summary is required</span>}
             </div>
 
             {/* Key Takeaways */}
             <div>
-              <label htmlFor="art_takeaways" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-                Executive Key Takeaways (One Bullet Point per Line)
+              <label htmlFor="art_takeaways" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.takeawaysStr ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+                Executive Key Takeaways (One Bullet Point per Line) *
               </label>
               <textarea
                 id="art_takeaways"
                 rows={3}
                 value={formData.takeawaysStr}
-                onChange={(e) => setFormData({ ...formData, takeawaysStr: e.target.value })}
+                onChange={(e) => {
+                  setFormData({ ...formData, takeawaysStr: e.target.value });
+                  if (formErrors.takeawaysStr) setFormErrors((prev) => ({ ...prev, takeawaysStr: false }));
+                }}
                 placeholder="Degree requirements are giving way to practical capstone proof-of-work.&#10;Native language instruction accelerates technical mastery by 3x."
-                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.86rem' }}
+                style={{
+                  width: '100%',
+                  padding: '10px 12px',
+                  borderRadius: '8px',
+                  border: formErrors.takeawaysStr ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                  background: formErrors.takeawaysStr ? '#fff5f5' : '#ffffff',
+                  fontSize: '0.86rem'
+                }}
               />
+              {formErrors.takeawaysStr && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Key takeaways are required</span>}
             </div>
 
             {/* Custom Multi-Section Content Blocks */}

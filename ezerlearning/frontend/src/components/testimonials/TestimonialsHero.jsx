@@ -27,7 +27,7 @@ export default function TestimonialsHero({ onOpenDemoModal }) {
         >
           {/* Left Copy Column */}
           <div>
-            {Boolean(testimonialsHero?.tag?.trim()) && (
+            {Boolean((testimonialsHero?.tag || testimonialsHero?.badge || 'STUDENT SUCCESS STORIES').trim()) && (
               <span
                 style={{
                   background: 'rgba(242, 183, 51, 0.15)',
@@ -43,7 +43,7 @@ export default function TestimonialsHero({ onOpenDemoModal }) {
                   marginBottom: '16px',
                 }}
               >
-                {testimonialsHero.tag}
+                {testimonialsHero?.tag || testimonialsHero?.badge || 'STUDENT SUCCESS STORIES'}
               </span>
             )}
             <h1 style={{ color: '#ffffff', marginBottom: '16px', fontSize: 'clamp(1.75rem, 3.2vw, 2.5rem)', fontWeight: 900, lineHeight: 1.15 }}>

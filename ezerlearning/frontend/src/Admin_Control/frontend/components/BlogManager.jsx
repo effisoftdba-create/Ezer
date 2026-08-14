@@ -252,11 +252,12 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
     if (payload.id) {
       updateBlog(payload.id, payload);
     } else {
+      const hasFeaturedAlready = (blogs || []).some((b) => b && b.featured);
       const newPayload = {
         ...payload,
         id: `blog-${Date.now()}`,
         date: payload.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        featured: true
+        featured: !hasFeaturedAlready // Only featured if it's the very first article and none exists
       };
       addBlog(newPayload);
     }
@@ -307,8 +308,19 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
                 position: 'relative'
               }}
             >
-              <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
-                <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <div style={{ position: 'relative', width: '100%', height: '210px', minHeight: '210px', maxHeight: '210px', aspectRatio: '16 / 9', overflow: 'hidden', background: '#0a0f2d', flexShrink: 0 }}>
+                <img
+                  loading="lazy"
+                  src={blog.image}
+                  alt={blog.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: blog.position || blog.imagePosition || 'center center',
+                    display: 'block'
+                  }}
+                />
                 <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px' }}>
                   {blog.category}
                 </span>

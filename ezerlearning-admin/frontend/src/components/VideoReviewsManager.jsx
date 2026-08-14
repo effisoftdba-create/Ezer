@@ -43,15 +43,18 @@ export default function VideoReviewsManager() {
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
 
   const [formData, setFormData] = useState(DEFAULT_VIDEO_STATE);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData(DEFAULT_VIDEO_STATE);
+    setFormErrors({});
     setIsEditing(true);
   };
 
   const handleOpenEdit = (video) => {
     setEditingId(video.id);
+    setFormErrors({});
     setFormData({
       title: video.title || '',
       name: video.name || '',
@@ -67,15 +70,23 @@ export default function VideoReviewsManager() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    if (!formData.name?.trim() || !formData.company?.trim() || !formData.title?.trim() || !formData.embedUrl?.trim()) {
-      alert('Please fill out all required fields: Learner Name, Company/Role, Review Title, and YouTube Video URL.');
+    const errors = {};
+    if (!formData.embedUrl?.trim()) errors.embedUrl = true;
+    if (!formData.name?.trim()) errors.name = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
 
-    const cleanEmbedUrl = formatYouTubeEmbedUrl(formData.embedUrl);
+    setFormErrors({});
+    const cleanEmbedUrl = formatYouTubeEmbedUrl(formData.embedUrl.trim());
 
     const payload = {
       ...formData,
+      name: formData.name.trim(),
+      company: (formData.company || '').trim(),
+      title: (formData.title || '').trim(),
       embedUrl: cleanEmbedUrl
     };
 
@@ -166,35 +177,61 @@ export default function VideoReviewsManager() {
             </div>
 
             <form onSubmit={handleSave} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {Object.keys(formErrors).length > 0 && (
+                <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 800 }}>
+                  ⚠️ Please fill in all required fields highlighted in red below before saving.
+                </div>
+              )}
+
               <div>
-                <label htmlFor="youtube_url_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                <label htmlFor="youtube_url_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.embedUrl ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                   YouTube Video Link *
                 </label>
                 <input
                   id="youtube_url_input"
                   type="text"
                   value={formData.embedUrl}
-                  onChange={(e) => setFormData({ ...formData, embedUrl: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, embedUrl: e.target.value });
+                    if (formErrors.embedUrl) setFormErrors((prev) => ({ ...prev, embedUrl: false }));
+                  }}
                   placeholder="e.g. https://www.youtube.com/watch?v=hQcFE0RD0cQ or https://youtu.be/hQcFE0RD0cQ"
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                  required
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.embedUrl ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.embedUrl ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
                 />
+                {formErrors.embedUrl && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>YouTube URL is required</span>}
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                 <div>
-                  <label htmlFor="video_learner_name" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  <label htmlFor="video_learner_name" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.name ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                     Learner Full Name *
                   </label>
                   <input
                     id="video_learner_name"
                     type="text"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, name: e.target.value });
+                      if (formErrors.name) setFormErrors((prev) => ({ ...prev, name: false }));
+                    }}
                     placeholder="e.g. Mohammed Esa Khan J"
-                    style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                    required
+                    style={{
+                      width: '100%',
+                      padding: '9px 12px',
+                      borderRadius: '8px',
+                      border: formErrors.name ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors.name ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.85rem'
+                    }}
                   />
+                  {formErrors.name && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Learner name is required</span>}
                 </div>
 
                 <div>

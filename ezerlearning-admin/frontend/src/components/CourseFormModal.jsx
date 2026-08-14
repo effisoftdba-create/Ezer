@@ -23,6 +23,8 @@ export default function CourseFormModal({
   editingId,
   formData,
   setFormData,
+  formErrors = {},
+  setFormErrors = () => {},
   onSave,
   onCancel,
   onOpenImagePicker
@@ -41,6 +43,7 @@ export default function CourseFormModal({
       slug: nextSlug,
       hashLink: isAutoSynced ? `#${nextSlug}_course` : prev.hashLink
     }));
+    if (formErrors.title) setFormErrors((prev) => ({ ...prev, title: false }));
   };
 
   if (!isEditing) return null;
@@ -131,7 +134,6 @@ export default function CourseFormModal({
             <h3 style={{ margin: '2px 0 0 0', fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', display: 'flex', alignItems: 'center', gap: '8px' }}>
               {editingId ? `Editing Program: ${formData.title || 'Course'}` : 'Add New Course Program & Page Sections'}
             </h3>
-
           </div>
 
           <button
@@ -148,37 +150,49 @@ export default function CourseFormModal({
         <form onSubmit={onSave} style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, overflow: 'hidden' }}>
           
           {/* Navigation Tabs Header */}
-          <div style={{ padding: '16px 24px 0', background: '#f8fafc', borderBottom: '2px solid #e2e8f0', flexShrink: 0 }}>
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              {TABS.map((tab) => (
-                <button
-                  key={tab.id}
-                  type="button"
-                  onClick={() => setActiveTab(tab.id)}
-                  style={{
-                    padding: '10px 18px',
-                    border: 'none',
-                    borderBottom: activeTab === tab.id ? '3px solid #000648' : '3px solid transparent',
-                    background: activeTab === tab.id ? '#ffffff' : 'transparent',
-                    color: activeTab === tab.id ? '#000648' : '#64748b',
-                    fontWeight: activeTab === tab.id ? 900 : 700,
-                    cursor: 'pointer',
-                    borderRadius: '8px 8px 0 0',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    fontSize: '0.88rem'
-                  }}
-                >
-                  {tab.icon}
-                  {tab.label}
-                </button>
-              ))}
-            </div>
+          <div style={{
+            display: 'flex',
+            borderBottom: '1.5px solid #e2e8f0',
+            background: '#f8fafc',
+            padding: '0 24px',
+            gap: '8px',
+            flexShrink: 0,
+            overflowX: 'auto'
+          }}>
+            {TABS.map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveTab(tab.id)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '14px 18px',
+                  background: 'none',
+                  border: 'none',
+                  borderBottom: activeTab === tab.id ? '3px solid #000648' : '3px solid transparent',
+                  color: activeTab === tab.id ? '#000648' : '#64748b',
+                  fontWeight: activeTab === tab.id ? 800 : 600,
+                  fontSize: '0.85rem',
+                  cursor: 'pointer',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            ))}
           </div>
 
           {/* Scrollable Body */}
           <div style={{ padding: '24px', overflowY: 'auto', flexGrow: 1, background: '#ffffff' }}>
+            
+            {Object.keys(formErrors).length > 0 && (
+              <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '12px 16px', borderRadius: '10px', fontSize: '0.84rem', fontWeight: 800, marginBottom: '20px' }}>
+                ⚠️ Please fill in all required fields highlighted in red below before saving the course.
+              </div>
+            )}
             
             {/* TAB 1: BASIC INFO */}
             {activeTab === 'basic' && (
@@ -188,7 +202,7 @@ export default function CourseFormModal({
                     <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#000648', marginBottom: '6px' }}>
                       Card Cover Preview
                     </span>
-                    <div style={{ width: '100%', height: '110px', borderRadius: '12px', overflow: 'hidden', border: '1.5px solid #cbd5e1', position: 'relative', background: '#000' }}>
+                    <div style={{ width: '100%', height: '110px', borderRadius: '12px', overflow: 'hidden', border: formErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1', position: 'relative', background: '#000' }}>
                       <img
                         src={formData.image}
                         alt="Preview"
@@ -198,44 +212,61 @@ export default function CourseFormModal({
                   </div>
 
                   <div>
-                    <label htmlFor="course_form_image" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-                      Program Cover Photo URL / Image
+                    <label htmlFor="course_form_image" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: formErrors.image ? '#dc2626' : '#334155', marginBottom: '4px' }}>
+                      Program Cover Photo URL / Image *
                     </label>
                     <div style={{ display: 'flex', gap: '8px' }}>
                       <input
                         id="course_form_image"
                         type="text"
                         value={formData.image || ''}
-                        onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                        onChange={(e) => {
+                          setFormData({ ...formData, image: e.target.value });
+                          if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
+                        }}
                         placeholder="Image URL or local asset"
-                        style={{ flex: 1, padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                        required
+                        style={{
+                          flex: 1,
+                          padding: '10px 12px',
+                          borderRadius: '8px',
+                          border: formErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                          background: formErrors.image ? '#fff5f5' : '#ffffff',
+                          fontSize: '0.85rem'
+                        }}
                       />
                       <button
                         type="button"
                         onClick={onOpenImagePicker}
-                        style={{ padding: '10px 16px', background: '#115DFC', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem' }}
+                        style={{ padding: '10px 16px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem' }}
                       >
                         <HiPhotograph size={16} /> Choose
                       </button>
                     </div>
+                    {formErrors.image && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Cover photo is required</span>}
                   </div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 0.8fr', gap: '14px', marginBottom: '14px' }}>
                   <div>
-                    <label htmlFor="course_title" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                    <label htmlFor="course_title" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.title ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                       Course Title *
                     </label>
                     <input
                       id="course_title"
                       type="text"
-                      required
                       value={formData.title || ''}
                       onChange={(e) => handleTitleChange(e.target.value)}
                       placeholder="e.g. Full Stack Development with AI"
-                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                      style={{
+                        width: '100%',
+                        padding: '10px 12px',
+                        borderRadius: '8px',
+                        border: formErrors.title ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                        background: formErrors.title ? '#fff5f5' : '#ffffff',
+                        fontSize: '0.85rem'
+                      }}
                     />
+                    {formErrors.title && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Course title is required</span>}
                   </div>
 
                   <div>
@@ -245,7 +276,6 @@ export default function CourseFormModal({
                     <input
                       id="course_slug"
                       type="text"
-                      required
                       value={formData.slug || ''}
                       onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                       placeholder="e.g. fullstack-ai-development"
@@ -270,46 +300,80 @@ export default function CourseFormModal({
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '14px', marginBottom: '14px' }}>
                   <div>
-                    <label htmlFor="course_price" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                    <label htmlFor="course_price" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.price ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                       Cohort Enrollment Fee (₹) *
                     </label>
                     <input
                       id="course_price"
                       type="text"
-                      required
                       value={formData.price || ''}
-                      onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, price: e.target.value });
+                        if (formErrors.price) setFormErrors((prev) => ({ ...prev, price: false }));
+                      }}
                       placeholder="e.g. ₹9"
-                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 800, color: '#166534' }}
+                      style={{
+                        width: '100%',
+                        padding: '10px 12px',
+                        borderRadius: '8px',
+                        border: formErrors.price ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                        background: formErrors.price ? '#fff5f5' : '#ffffff',
+                        fontSize: '0.85rem',
+                        fontWeight: 800,
+                        color: '#166534'
+                      }}
                     />
+                    {formErrors.price && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Fee is required</span>}
                   </div>
 
                   <div>
-                    <label htmlFor="course_duration" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
-                      Program Duration
+                    <label htmlFor="course_duration" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.duration ? '#dc2626' : '#334155', marginBottom: '4px' }}>
+                      Program Duration *
                     </label>
                     <input
                       id="course_duration"
                       type="text"
                       value={formData.duration || ''}
-                      onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, duration: e.target.value });
+                        if (formErrors.duration) setFormErrors((prev) => ({ ...prev, duration: false }));
+                      }}
                       placeholder="e.g. 4 Months"
-                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                      style={{
+                        width: '100%',
+                        padding: '10px 12px',
+                        borderRadius: '8px',
+                        border: formErrors.duration ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                        background: formErrors.duration ? '#fff5f5' : '#ffffff',
+                        fontSize: '0.85rem'
+                      }}
                     />
+                    {formErrors.duration && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Duration is required</span>}
                   </div>
 
                   <div>
-                    <label htmlFor="course_languages" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
-                      Teaching Languages
+                    <label htmlFor="course_languages" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.languages ? '#dc2626' : '#334155', marginBottom: '4px' }}>
+                      Teaching Languages *
                     </label>
                     <input
                       id="course_languages"
                       type="text"
                       value={formData.languages || ''}
-                      onChange={(e) => setFormData({ ...formData, languages: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, languages: e.target.value });
+                        if (formErrors.languages) setFormErrors((prev) => ({ ...prev, languages: false }));
+                      }}
                       placeholder="e.g. Tamil, English, Hindi"
-                      style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                      style={{
+                        width: '100%',
+                        padding: '10px 12px',
+                        borderRadius: '8px',
+                        border: formErrors.languages ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                        background: formErrors.languages ? '#fff5f5' : '#ffffff',
+                        fontSize: '0.85rem'
+                      }}
                     />
+                    {formErrors.languages && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Languages are required</span>}
                   </div>
                 </div>
 
@@ -342,17 +406,28 @@ export default function CourseFormModal({
                 </div>
 
                 <div style={{ marginBottom: '14px' }}>
-                  <label htmlFor="course_tagline" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
-                    Course Tagline / Catchphrase
+                  <label htmlFor="course_tagline" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.tagline ? '#dc2626' : '#334155', marginBottom: '4px' }}>
+                    Course Tagline / Catchphrase *
                   </label>
                   <input
                     id="course_tagline"
                     type="text"
                     value={formData.tagline || ''}
-                    onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, tagline: e.target.value });
+                      if (formErrors.tagline) setFormErrors((prev) => ({ ...prev, tagline: false }));
+                    }}
                     placeholder="e.g. Master Production Infrastructure & IT Support with Live Hands-on Labs"
-                    style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: formErrors.tagline ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                      background: formErrors.tagline ? '#fff5f5' : '#ffffff',
+                      fontSize: '0.85rem'
+                    }}
                   />
+                  {formErrors.tagline && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Tagline is required</span>}
                 </div>
 
                 <div>

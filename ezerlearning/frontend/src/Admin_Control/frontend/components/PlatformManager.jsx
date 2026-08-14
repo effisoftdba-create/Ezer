@@ -29,9 +29,22 @@ export default function PlatformManager() {
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [videoSaveSuccess, setVideoSaveSuccess] = useState(false);
+  const [formErrors, setFormErrors] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const errors = {};
+    if (!formData.image?.trim()) errors.image = true;
+    if (!formData.tag?.trim()) errors.tag = true;
+    if (!formData.headline?.trim()) errors.headline = true;
+    if (!formData.description?.trim()) errors.description = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors({});
     updateEzerDefinition(formData);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
@@ -63,6 +76,12 @@ export default function PlatformManager() {
         </div>
       )}
 
+      {Object.keys(formErrors).length > 0 && (
+        <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', marginBottom: '20px', fontSize: '0.82rem', fontWeight: 800 }}>
+          ⚠️ Please fill in all required fields highlighted in red below before saving.
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} style={{
         background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px',
         padding: '24px', boxShadow: '0 4px 14px rgba(0,0,0,0.02)'
@@ -85,6 +104,7 @@ export default function PlatformManager() {
                 }}
               >
                 <img 
+                  loading="lazy"
                   src={resolveImageSrc(formData.image)} 
                   alt={formData.headline} 
                   style={{
@@ -104,18 +124,27 @@ export default function PlatformManager() {
           </div>
 
           <div>
-            <label htmlFor="platform_photo_url" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}>
-              Section Photo Source / URL
+            <label htmlFor="platform_photo_url" style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: formErrors.image ? '#dc2626' : '#334155', marginBottom: '6px' }}>
+              Section Photo Source / URL *
             </label>
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '4px' }}>
               <input
                 id="platform_photo_url"
                 type="text"
-                value={formData.image}
-                onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+                value={formData.image || ''}
+                onChange={(e) => {
+                  setFormData({ ...formData, image: e.target.value });
+                  if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
+                }}
                 placeholder="Image URL or local path"
-                style={{ flex: 1, padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
-                required
+                style={{
+                  flex: 1,
+                  padding: '10px 12px',
+                  borderRadius: '8px',
+                  border: formErrors.image ? '2px solid #dc2626' : '1px solid #cbd5e1',
+                  background: formErrors.image ? '#fff5f5' : '#ffffff',
+                  fontSize: '0.875rem'
+                }}
               />
               <button
                 type="button"
@@ -129,6 +158,7 @@ export default function PlatformManager() {
                 <HiPhotograph size={16} /> Choose Photo
               </button>
             </div>
+            {formErrors.image && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, display: 'block', marginBottom: '8px' }}>Photo URL is required</span>}
             <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0, lineHeight: 1.4 }}>
               Click <strong>Choose Photo</strong> to select, zoom, or align your picture matching the live website display.
             </p>
@@ -137,18 +167,28 @@ export default function PlatformManager() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
           <div>
-            <label htmlFor="platform_tag_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-              Section Tag / Badge
+            <label htmlFor="platform_tag_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: formErrors.tag ? '#dc2626' : '#334155', marginBottom: '4px' }}>
+              Section Tag / Badge *
             </label>
             <input
               id="platform_tag_input"
               type="text"
-              value={formData.tag}
-              onChange={(e) => setFormData({ ...formData, tag: e.target.value })}
+              value={formData.tag || ''}
+              onChange={(e) => {
+                setFormData({ ...formData, tag: e.target.value });
+                if (formErrors.tag) setFormErrors((prev) => ({ ...prev, tag: false }));
+              }}
               placeholder="e.g. Empowering Career Switchers"
-              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
-              required
+              style={{
+                width: '100%',
+                padding: '10px 12px',
+                borderRadius: '8px',
+                border: formErrors.tag ? '2px solid #dc2626' : '1px solid #cbd5e1',
+                background: formErrors.tag ? '#fff5f5' : '#ffffff',
+                fontSize: '0.875rem'
+              }}
             />
+            {formErrors.tag && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Tag is required</span>}
           </div>
 
           <div>
@@ -158,43 +198,62 @@ export default function PlatformManager() {
             <input
               id="platform_acronym_input"
               type="text"
-              value={formData.acronymText}
+              value={formData.acronymText || ''}
               onChange={(e) => setFormData({ ...formData, acronymText: e.target.value })}
               placeholder="e.g. EZER — Empowering Zero-to-Hero Education..."
               style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
-              required
             />
           </div>
         </div>
 
         <div style={{ marginBottom: '16px' }}>
-          <label htmlFor="platform_headline_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-            Main Section Headline
+          <label htmlFor="platform_headline_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: formErrors.headline ? '#dc2626' : '#334155', marginBottom: '4px' }}>
+            Main Section Headline *
           </label>
           <input
             id="platform_headline_input"
             type="text"
-            value={formData.headline}
-            onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
+            value={formData.headline || ''}
+            onChange={(e) => {
+              setFormData({ ...formData, headline: e.target.value });
+              if (formErrors.headline) setFormErrors((prev) => ({ ...prev, headline: false }));
+            }}
             placeholder="e.g. Leading EdTech Platform for Learning in Native Languages..."
-            style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
-            required
+            style={{
+              width: '100%',
+              padding: '10px 12px',
+              borderRadius: '8px',
+              border: formErrors.headline ? '2px solid #dc2626' : '1px solid #cbd5e1',
+              background: formErrors.headline ? '#fff5f5' : '#ffffff',
+              fontSize: '0.875rem'
+            }}
           />
+          {formErrors.headline && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Headline is required</span>}
         </div>
 
         <div style={{ marginBottom: '20px' }}>
-          <label htmlFor="platform_description_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '4px' }}>
-            Full Description Text
+          <label htmlFor="platform_description_input" style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: formErrors.description ? '#dc2626' : '#334155', marginBottom: '4px' }}>
+            Full Description Text *
           </label>
           <textarea
             id="platform_description_input"
             rows={3}
-            value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            value={formData.description || ''}
+            onChange={(e) => {
+              setFormData({ ...formData, description: e.target.value });
+              if (formErrors.description) setFormErrors((prev) => ({ ...prev, description: false }));
+            }}
             placeholder="Detailed description of EZER Learning Solution..."
-            style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.875rem' }}
-            required
+            style={{
+              width: '100%',
+              padding: '10px 12px',
+              borderRadius: '8px',
+              border: formErrors.description ? '2px solid #dc2626' : '1px solid #cbd5e1',
+              background: formErrors.description ? '#fff5f5' : '#ffffff',
+              fontSize: '0.875rem'
+            }}
           />
+          {formErrors.description && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Description is required</span>}
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>

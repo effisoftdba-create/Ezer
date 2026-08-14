@@ -20,11 +20,13 @@ export default function AboutShowcaseManager() {
     deleteAboutShowcaseCard
   } = useSiteData();
 
-  const [cardsList, setCardsList] = useState([]);
+  const [cardsList, setCardsList] = useState(aboutShowcaseCards || []);
   const [pickerTargetIdx, setPickerTargetIdx] = useState(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [newPointInputs, setNewPointInputs] = useState({});
   const [editingPoint, setEditingPoint] = useState(null); // { cardIdx, pointIdx, text }
+  const [imagePickerConfig, setImagePickerConfig] = useState(null); // { cardIdx }
+  const [formErrors, setFormErrors] = useState({});
 
   useEffect(() => {
     if (Array.isArray(aboutShowcaseCards) && aboutShowcaseCards.length > 0) {
@@ -36,6 +38,10 @@ export default function AboutShowcaseManager() {
     const updated = [...cardsList];
     updated[index] = { ...updated[index], [field]: value };
     setCardsList(updated);
+    const errKey = `${index}_${field}`;
+    if (formErrors[errKey]) {
+      setFormErrors((prev) => ({ ...prev, [errKey]: false }));
+    }
   };
 
   const handleAddPoint = (cardIdx) => {
@@ -116,6 +122,19 @@ export default function AboutShowcaseManager() {
 
   const handleSaveAll = (e) => {
     if (e) e.preventDefault();
+    const errors = {};
+    cardsList.forEach((card, idx) => {
+      if (!card.title?.trim()) errors[`${idx}_title`] = true;
+      if (!card.description?.trim()) errors[`${idx}_description`] = true;
+      if (!card.image?.trim()) errors[`${idx}_image`] = true;
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    setFormErrors({});
     updateAboutShowcaseCards(cardsList);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3500);
@@ -216,6 +235,12 @@ export default function AboutShowcaseManager() {
           }}
         >
           <HiCheck size={18} /> About Us Story Cards saved successfully! Changes are now live on the website.
+        </div>
+      )}
+
+      {Object.keys(formErrors).length > 0 && (
+        <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '12px 16px', borderRadius: '8px', marginBottom: '20px', fontSize: '0.85rem', fontWeight: 800 }}>
+          ⚠️ Please fill in all required fields highlighted in red below before saving.
         </div>
       )}
 
@@ -339,8 +364,8 @@ export default function AboutShowcaseManager() {
 
               {/* Main Headline & Description */}
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-                  Headline Title
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors[`${idx}_title`] ? '#dc2626' : '#000648', marginBottom: '4px' }}>
+                  Headline Title *
                 </label>
                 <input
                   type="text"
@@ -351,16 +376,18 @@ export default function AboutShowcaseManager() {
                     width: '100%',
                     padding: '8px 12px',
                     borderRadius: '6px',
-                    border: '1.5px solid #cbd5e1',
+                    border: formErrors[`${idx}_title`] ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors[`${idx}_title`] ? '#fff5f5' : '#ffffff',
                     fontSize: '0.9rem',
                     fontWeight: 700
                   }}
                 />
+                {formErrors[`${idx}_title`] && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Headline title is required</span>}
               </div>
 
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#000648', marginBottom: '4px' }}>
-                  Detailed Description
+                <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors[`${idx}_description`] ? '#dc2626' : '#000648', marginBottom: '4px' }}>
+                  Detailed Description *
                 </label>
                 <textarea
                   rows={3}
@@ -371,11 +398,13 @@ export default function AboutShowcaseManager() {
                     width: '100%',
                     padding: '8px 12px',
                     borderRadius: '6px',
-                    border: '1.5px solid #cbd5e1',
+                    border: formErrors[`${idx}_description`] ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors[`${idx}_description`] ? '#fff5f5' : '#ffffff',
                     fontSize: '0.85rem',
                     lineHeight: 1.5
                   }}
                 />
+                {formErrors[`${idx}_description`] && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Detailed description is required</span>}
               </div>
 
               {/* Photo & Position Controls with Clickable Image Preview */}
@@ -389,8 +418,8 @@ export default function AboutShowcaseManager() {
                 }}
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                  <label style={{ fontSize: '0.82rem', fontWeight: 800, color: '#000648', margin: 0 }}>
-                    📸 Card Photo & Position
+                  <label style={{ fontSize: '0.82rem', fontWeight: 800, color: formErrors[`${idx}_image`] ? '#dc2626' : '#000648', margin: 0 }}>
+                    📸 Card Photo & Position *
                   </label>
                   <span style={{ fontSize: '0.74rem', color: '#64748b', fontWeight: 600 }}>
                     💡 Tip: Click the image box directly to choose or upload a photo
@@ -407,7 +436,7 @@ export default function AboutShowcaseManager() {
                       height: '92px',
                       borderRadius: '10px',
                       overflow: 'hidden',
-                      border: '2px dashed #115DFC',
+                      border: formErrors[`${idx}_image`] ? '2px solid #dc2626' : '2px dashed #115DFC',
                       background: '#000648',
                       flexShrink: 0,
                       position: 'relative',
@@ -421,7 +450,7 @@ export default function AboutShowcaseManager() {
                     }}
                     onMouseLeave={(e) => {
                       e.currentTarget.style.transform = 'scale(1)';
-                      e.currentTarget.style.borderColor = '#115DFC';
+                      e.currentTarget.style.borderColor = formErrors[`${idx}_image`] ? '#dc2626' : '#115DFC';
                     }}
                   >
                     <img
@@ -474,7 +503,8 @@ export default function AboutShowcaseManager() {
                           flex: 1,
                           padding: '8px 12px',
                           borderRadius: '6px',
-                          border: '1.5px solid #cbd5e1',
+                          border: formErrors[`${idx}_image`] ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                          background: formErrors[`${idx}_image`] ? '#fff5f5' : '#ffffff',
                           fontSize: '0.82rem'
                         }}
                       />

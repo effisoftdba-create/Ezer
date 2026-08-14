@@ -8,6 +8,8 @@ export default function SeniorMentorFormModal({
   editingId,
   formData,
   setFormData,
+  formErrors = {},
+  setFormErrors = () => {},
   onSave,
   onCancel,
   onOpenImagePicker
@@ -70,50 +72,88 @@ export default function SeniorMentorFormModal({
 
         {/* Body Form */}
         <form onSubmit={onSave} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {Object.keys(formErrors).length > 0 && (
+            <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 800 }}>
+              ⚠️ Please fill in all required fields highlighted in red below before saving.
+            </div>
+          )}
+
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>
-              <label htmlFor="mentor_name_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="mentor_name_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.name ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
                 Mentor Full Name *
               </label>
               <input
                 id="mentor_name_field"
                 type="text"
-                required
                 placeholder="e.g. Vignesh Waran"
                 value={formData.name || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, name: e.target.value }));
+                  if (formErrors.name) setFormErrors((prev) => ({ ...prev, name: false }));
+                }}
+                style={{
+                  width: '100%',
+                  padding: '9px 12px',
+                  borderRadius: '8px',
+                  border: formErrors.name ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                  background: formErrors.name ? '#fff5f5' : '#ffffff',
+                  fontSize: '0.85rem'
+                }}
               />
+              {formErrors.name && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Mentor name is required</span>}
             </div>
 
             <div>
-              <label htmlFor="mentor_designation_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="mentor_designation_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.designation ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
                 Designation & Current Firm *
               </label>
               <input
                 id="mentor_designation_field"
                 type="text"
-                required
                 placeholder="e.g. Principal Cloud Architect @ TechCorp"
                 value={formData.designation || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, designation: e.target.value }))}
-                style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, designation: e.target.value }));
+                  if (formErrors.designation) setFormErrors((prev) => ({ ...prev, designation: false }));
+                }}
+                style={{
+                  width: '100%',
+                  padding: '9px 12px',
+                  borderRadius: '8px',
+                  border: formErrors.designation ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                  background: formErrors.designation ? '#fff5f5' : '#ffffff',
+                  fontSize: '0.85rem'
+                }}
               />
+              {formErrors.designation && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Designation is required</span>}
             </div>
           </div>
 
           <div>
-            <label htmlFor="mentor_bio_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-              Industry Bio & Experience Overview
+            <label htmlFor="mentor_bio_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.bio ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+              Industry Bio & Experience Overview *
             </label>
             <textarea
               id="mentor_bio_field"
               rows={3}
               placeholder="Overview of corporate expertise..."
               value={formData.bio || ''}
-              onChange={(e) => setFormData((prev) => ({ ...prev, bio: e.target.value }))}
-              style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', lineHeight: 1.5 }}
+              onChange={(e) => {
+                setFormData((prev) => ({ ...prev, bio: e.target.value }));
+                if (formErrors.bio) setFormErrors((prev) => ({ ...prev, bio: false }));
+              }}
+              style={{
+                width: '100%',
+                padding: '9px 12px',
+                borderRadius: '8px',
+                border: formErrors.bio ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                background: formErrors.bio ? '#fff5f5' : '#ffffff',
+                fontSize: '0.85rem',
+                lineHeight: 1.5
+              }}
             />
+            {formErrors.bio && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Bio is required</span>}
           </div>
 
           <div>
@@ -131,8 +171,8 @@ export default function SeniorMentorFormModal({
           </div>
 
           <div>
-            <label htmlFor="mentor_photo_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>
-              Mentor Profile Picture (Rec. Square 1:1)
+            <label htmlFor="mentor_photo_field" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.image ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+              Mentor Profile Picture (Rec. Square 1:1) *
             </label>
             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
               {formData.image && (
@@ -145,19 +185,32 @@ export default function SeniorMentorFormModal({
               <input
                 id="mentor_photo_field"
                 type="text"
-                placeholder="https://..."
+                placeholder="https://images.unsplash.com/..."
                 value={formData.image || ''}
-                onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))}
-                style={{ flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, image: e.target.value }));
+                  if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
+                }}
+                style={{
+                  flex: 1,
+                  minWidth: 0,
+                  padding: '9px 12px',
+                  borderRadius: '8px',
+                  border: formErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                  background: formErrors.image ? '#fff5f5' : '#ffffff',
+                  fontSize: '0.85rem'
+                }}
               />
               <button
                 type="button"
                 onClick={onOpenImagePicker}
+                aria-label="Choose mentor photo"
                 style={{ padding: '9px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', whiteSpace: 'nowrap', flexShrink: 0 }}
               >
-                <HiPhotograph size={15} /> Choose Image
+                <HiPhotograph size={15} /> Choose
               </button>
             </div>
+            {formErrors.image && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Profile picture is required</span>}
           </div>
 
           {/* Footer Buttons */}

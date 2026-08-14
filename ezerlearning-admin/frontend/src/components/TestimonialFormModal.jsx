@@ -72,6 +72,11 @@ export default function TestimonialFormModal({
 
         {/* Body Form */}
         <form onSubmit={onSave} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          {Object.keys(formErrors).length > 0 && (
+            <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 700 }}>
+              ⚠️ Please fill in all required fields highlighted in red below before saving.
+            </div>
+          )}
           {/* Author Name & Role */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
             <div>

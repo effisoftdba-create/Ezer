@@ -11,27 +11,36 @@ export default function FaqManager() {
   const [editingItemIdx, setEditingItemIdx] = useState(null);
 
   const [formData, setFormData] = useState({ q: '', a: '' });
+  const [formErrors, setFormErrors] = useState({});
 
   const currentCategory = faqList[selectedCategoryIdx] || faqList[0] || { category: 'Program', items: [] };
 
   const handleOpenAdd = () => {
     setEditingItemIdx(null);
     setFormData({ q: '', a: '' });
+    setFormErrors({});
     setIsEditingItem(true);
   };
 
   const handleOpenEdit = (idx, item) => {
     setEditingItemIdx(idx);
     setFormData({ q: item.q || '', a: item.a || '' });
+    setFormErrors({});
     setIsEditingItem(true);
   };
 
   const handleSaveItem = (e) => {
     e.preventDefault();
-    if (!formData.q || !formData.a) {
-      alert('Question and Answer are required.');
+    const errors = {};
+    if (!formData.q?.trim()) errors.q = true;
+    if (!formData.a?.trim()) errors.a = true;
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
+
+    setFormErrors({});
 
     const updatedFaqList = [...faqList];
     const categoryObj = { ...updatedFaqList[selectedCategoryIdx] };
@@ -157,34 +166,60 @@ export default function FaqManager() {
             </div>
 
             <form onSubmit={handleSaveItem} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {Object.keys(formErrors).length > 0 && (
+                <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 800 }}>
+                  ⚠️ Please fill in all required fields highlighted in red below before saving.
+                </div>
+              )}
+
               <div>
-                <label htmlFor="faq_question_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                <label htmlFor="faq_question_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.q ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                   Question Title *
                 </label>
                 <input
                   id="faq_question_input"
                   type="text"
                   value={formData.q}
-                  onChange={(e) => setFormData({ ...formData, q: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, q: e.target.value });
+                    if (formErrors.q) setFormErrors((prev) => ({ ...prev, q: false }));
+                  }}
                   placeholder="e.g. What is EZER Learning Solution's core difference?"
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                  required
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.q ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.q ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
                 />
+                {formErrors.q && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Question title is required</span>}
               </div>
 
               <div>
-                <label htmlFor="faq_answer_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                <label htmlFor="faq_answer_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.a ? '#dc2626' : '#334155', marginBottom: '4px' }}>
                   Answer Description *
                 </label>
                 <textarea
                   id="faq_answer_input"
                   rows={4}
                   value={formData.a}
-                  onChange={(e) => setFormData({ ...formData, a: e.target.value })}
+                  onChange={(e) => {
+                    setFormData({ ...formData, a: e.target.value });
+                    if (formErrors.a) setFormErrors((prev) => ({ ...prev, a: false }));
+                  }}
                   placeholder="Detailed answer text..."
-                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
-                  required
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    borderRadius: '8px',
+                    border: formErrors.a ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
+                    background: formErrors.a ? '#fff5f5' : '#ffffff',
+                    fontSize: '0.85rem'
+                  }}
                 />
+                {formErrors.a && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Answer description is required</span>}
               </div>
 
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>

@@ -431,6 +431,7 @@ export const defaultMentorsHeader = {
 
 export const defaultVideoTestimonials = videoStories || [];
 export const defaultTestimonialsHero = {
+  tag: 'STUDENT SUCCESS STORIES',
   badge: 'STUDENT SUCCESS STORIES',
   headline: 'Real Learners. Real IT Career Outcomes.',
   sub: 'Discover how EZER Learning Solutions helps freshers and career switchers land high-growth tech jobs.',
