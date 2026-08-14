@@ -49,7 +49,7 @@ export default function Hero({ onOpenDemoModal }) {
             className="hero-split-container"
             style={{
               display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
+              gridTemplateColumns: '1.08fr 0.92fr',
               alignItems: 'stretch',
             }}
           >
@@ -57,7 +57,7 @@ export default function Hero({ onOpenDemoModal }) {
             <div
               className="hero-left-text-column"
               style={{
-                padding: 'clamp(24px, 3.5vw, 44px) clamp(20px, 3.5vw, 48px)',
+                padding: 'clamp(36px, 4.5vw, 56px) clamp(28px, 4vw, 56px)',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
@@ -65,23 +65,23 @@ export default function Hero({ onOpenDemoModal }) {
                 position: 'relative',
               }}
             >
-              <div className="hero-text-content-wrapper" style={{ width: '100%', maxWidth: '580px' }}>
+              <div className="hero-text-content-wrapper" style={{ width: '100%', maxWidth: '600px' }}>
                 <div
                   className="hero-text-fixed-slot"
                   style={{
                     position: 'relative',
-                    minHeight: '195px',
-                    height: '195px',
-                    marginBottom: '16px',
+                    minHeight: '220px',
+                    height: '220px',
+                    marginBottom: '22px',
                   }}
                 >
                   <AnimatePresence mode="wait">
                     <m.div
                       key={currentSlide.id || safeActive}
-                      initial={{ opacity: 0, x: -12 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 12 }}
-                      transition={{ duration: 0.25 }}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -8 }}
+                      transition={{ duration: 0.28, ease: 'easeOut' }}
                       className="hero-animated-text-container"
                       style={{
                         position: 'absolute',
@@ -97,13 +97,13 @@ export default function Hero({ onOpenDemoModal }) {
                       <h1
                         className="hero-headline-title"
                         style={{
-                          fontSize: 'clamp(1.65rem, 2.9vw, 2.45rem)',
+                          fontSize: 'clamp(1.95rem, 3.2vw, 2.75rem)',
                           fontWeight: 900,
                           color: '#000648',
                           lineHeight: 1.15,
-                          marginBottom: '8px',
+                          marginBottom: '10px',
                           fontFamily: "'Plus Jakarta Sans', 'Inter', system-ui, sans-serif",
-                          letterSpacing: '-0.02em',
+                          letterSpacing: '-0.025em',
                         }}
                       >
                         {currentSlide.headline ? (
@@ -115,6 +115,7 @@ export default function Hero({ onOpenDemoModal }) {
                               <span
                                 style={{
                                   display: 'block',
+                                  marginTop: '4px',
                                   background: 'linear-gradient(135deg, #f2b733 0%, #d9a02a 100%)',
                                   WebkitBackgroundClip: 'text',
                                   WebkitTextFillColor: 'transparent',
@@ -133,10 +134,10 @@ export default function Hero({ onOpenDemoModal }) {
                       <div
                         className="hero-divider-bar"
                         style={{
-                          width: '56px',
+                          width: '64px',
                           height: '4px',
                           background: 'linear-gradient(90deg, #000648 0%, #f2b733 100%)',
-                          marginBottom: '8px',
+                          marginBottom: '12px',
                           borderRadius: '4px',
                           flexShrink: 0
                         }}
@@ -145,11 +146,11 @@ export default function Hero({ onOpenDemoModal }) {
                       <p
                         className="hero-sub-description"
                         style={{
-                          fontSize: 'clamp(0.86rem, 1.05vw, 0.95rem)',
+                          fontSize: 'clamp(0.92rem, 1.1vw, 1.02rem)',
                           color: '#334155',
-                          lineHeight: 1.5,
+                          lineHeight: 1.6,
                           marginBottom: '0',
-                          maxWidth: '560px',
+                          maxWidth: '570px',
                           fontWeight: 500,
                           display: '-webkit-box',
                           WebkitLineClamp: 3,
@@ -163,89 +164,24 @@ export default function Hero({ onOpenDemoModal }) {
                   </AnimatePresence>
                 </div>
 
-                {/* Dual Matching Action Buttons */}
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '18px' }} className="hero-action-buttons">
+                {/* Dual Matching Animated Action Buttons */}
+                <div className="hero-action-buttons">
                   <Link
                     to="/courses"
-                    className="hero-btn-explore"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                      width: '210px',
-                      height: '50px',
-                      minHeight: '50px',
-                      maxHeight: '50px',
-                      boxSizing: 'border-box',
-                      padding: '0 20px',
-                      background: '#000638',
-                      color: '#ffffff',
-                      fontWeight: 800,
-                      fontSize: '0.86rem',
-                      letterSpacing: '0.04em',
-                      textTransform: 'uppercase',
-                      textDecoration: 'none',
-                      border: '1.5px solid #000638',
-                      borderRadius: '10px',
-                      boxShadow: '0 4px 14px rgba(0,6,56,0.25)',
-                      transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#f2b733';
-                      e.currentTarget.style.color = '#000638';
-                      e.currentTarget.style.borderColor = '#f2b733';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#000638';
-                      e.currentTarget.style.color = '#ffffff';
-                      e.currentTarget.style.borderColor = '#000638';
-                    }}
+                    className="hero-btn-explore hero-animated-btn"
                   >
                     <span>Explore Courses</span>
-                    <HiArrowRight size={16} />
+                    <HiArrowRight className="hero-btn-arrow-icon" size={17} />
                   </Link>
 
                   <button
                     type="button"
                     onClick={onOpenDemoModal}
-                    className="hero-btn-demo"
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '8px',
-                      width: '210px',
-                      height: '50px',
-                      minHeight: '50px',
-                      maxHeight: '50px',
-                      boxSizing: 'border-box',
-                      padding: '0 20px',
-                      background: '#f2b733',
-                      color: '#000648',
-                      fontWeight: 800,
-                      fontSize: '0.86rem',
-                      letterSpacing: '0.04em',
-                      textTransform: 'uppercase',
-                      cursor: 'pointer',
-                      border: '1.5px solid #f2b733',
-                      borderRadius: '10px',
-                      boxShadow: '0 4px 14px rgba(242, 183, 51, 0.35)',
-                      transition: 'background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#000648';
-                      e.currentTarget.style.color = '#f2b733';
-                      e.currentTarget.style.borderColor = '#000648';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#f2b733';
-                      e.currentTarget.style.color = '#000648';
-                      e.currentTarget.style.borderColor = '#f2b733';
-                    }}
+                    className="hero-btn-demo hero-animated-btn"
                   >
+                    <span className="hero-btn-shimmer-sweep" />
                     <span>Book Free Demo</span>
-                    <HiArrowRight size={16} />
+                    <HiArrowRight className="hero-btn-arrow-icon" size={17} />
                   </button>
                 </div>
 
@@ -272,11 +208,124 @@ export default function Hero({ onOpenDemoModal }) {
 
         <style>{`
           .hero-main-section {
-            min-height: 480px;
+            min-height: 500px;
           }
           .hero-split-container {
-            min-height: 480px;
+            min-height: 500px;
           }
+
+          /* Button Styling & Rich Animations */
+          .hero-action-buttons {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-bottom: 22px;
+          }
+
+          .hero-animated-btn {
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            width: 220px;
+            height: 52px;
+            min-height: 52px;
+            max-height: 52px;
+            box-sizing: border-box;
+            padding: 0 24px;
+            font-weight: 800;
+            font-size: 0.88rem;
+            letter-spacing: '0.04em';
+            text-transform: uppercase;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+
+          .hero-btn-arrow-icon {
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+          }
+
+          .hero-animated-btn:hover .hero-btn-arrow-icon {
+            transform: translateX(5px);
+          }
+
+          .hero-animated-btn:active {
+            transform: scale(0.97) !important;
+          }
+
+          /* Explore Courses Button */
+          .hero-btn-explore {
+            background: #000638;
+            color: #ffffff;
+            border: 1.5px solid #000638;
+            box-shadow: 0 4px 14px rgba(0, 6, 56, 0.22);
+          }
+
+          .hero-btn-explore:hover {
+            background: #000a58;
+            border-color: #f2b733;
+            color: #f2b733;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(0, 6, 72, 0.32);
+          }
+
+          /* Book Free Demo Button (Primary Vibrant Pulse + Shimmer) */
+          .hero-btn-demo {
+            background: linear-gradient(135deg, #f2b733 0%, #e5a822 100%);
+            color: #000648;
+            border: 1.5px solid #f2b733;
+            box-shadow: 0 4px 16px rgba(242, 183, 51, 0.4);
+            animation: heroDemoPulse 3s infinite ease-in-out;
+          }
+
+          .hero-btn-demo:hover {
+            background: linear-gradient(135deg, #f7c34d 0%, #f2b733 100%);
+            border-color: #000648;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(242, 183, 51, 0.55);
+          }
+
+          /* Light Shimmer Sweep Animation */
+          .hero-btn-shimmer-sweep {
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 80%;
+            height: 100%;
+            background: linear-gradient(
+              90deg,
+              transparent 0%,
+              rgba(255, 255, 255, 0.45) 50%,
+              transparent 100%
+            );
+            transform: skewX(-22deg);
+            animation: heroShimmerSweep 4.5s infinite;
+            pointer-events: none;
+          }
+
+          @keyframes heroDemoPulse {
+            0%, 100% {
+              box-shadow: 0 4px 16px rgba(242, 183, 51, 0.38);
+            }
+            50% {
+              box-shadow: 0 4px 24px rgba(242, 183, 51, 0.65), 0 0 0 4px rgba(242, 183, 51, 0.18);
+            }
+          }
+
+          @keyframes heroShimmerSweep {
+            0%, 65% {
+              left: -120%;
+            }
+            100% {
+              left: 180%;
+            }
+          }
+
           @media (max-width: 900px) {
             .hero-main-section {
               min-height: auto !important;
@@ -289,7 +338,7 @@ export default function Hero({ onOpenDemoModal }) {
             }
             .hero-left-text-column {
               order: 1 !important;
-              padding: 20px 16px 14px !important;
+              padding: 28px 22px 20px !important;
               min-height: auto !important;
               justify-content: flex-start !important;
             }
@@ -299,7 +348,7 @@ export default function Hero({ onOpenDemoModal }) {
             .hero-text-fixed-slot {
               height: auto !important;
               min-height: auto !important;
-              margin-bottom: 14px !important;
+              margin-bottom: 20px !important;
               position: relative !important;
             }
             .hero-animated-text-container {
@@ -308,62 +357,65 @@ export default function Hero({ onOpenDemoModal }) {
               min-height: auto !important;
             }
             .hero-headline-title {
-              font-size: clamp(1.4rem, 5.8vw, 1.85rem) !important;
-              line-height: 1.2 !important;
-              margin-bottom: 6px !important;
+              font-size: clamp(1.75rem, 6.2vw, 2.25rem) !important;
+              line-height: 1.18 !important;
+              margin-bottom: 10px !important;
             }
             .hero-divider-bar {
-              margin-bottom: 8px !important;
+              margin-bottom: 12px !important;
+              width: 56px !important;
             }
             .hero-sub-description {
-              font-size: 0.86rem !important;
-              line-height: 1.45 !important;
+              font-size: 0.92rem !important;
+              line-height: 1.55 !important;
               -webkit-line-clamp: 4 !important;
             }
             .hero-action-buttons {
-              gap: 8px !important;
-              margin-bottom: 14px !important;
+              gap: 12px !important;
+              margin-bottom: 20px !important;
             }
-            .hero-btn-explore,
-            .hero-btn-demo {
-              height: 46px !important;
-              min-height: 46px !important;
-              max-height: 46px !important;
-              font-size: 0.82rem !important;
-              padding: 0 16px !important;
+            .hero-animated-btn {
+              height: 50px !important;
+              min-height: 50px !important;
+              max-height: 50px !important;
+              font-size: 0.86rem !important;
             }
             .hero-right-photo-column {
               order: 2 !important;
               width: 100% !important;
               aspect-ratio: 1 / 1 !important;
-              min-height: 260px !important;
-              max-height: 380px !important;
+              min-height: 280px !important;
+              max-height: 420px !important;
             }
             .hero-badge-pill {
-              top: 10px !important;
-              right: 10px !important;
-              padding: 3px 10px !important;
-              font-size: 0.62rem !important;
-              background: rgba(0, 6, 56, 0.85) !important;
+              top: 12px !important;
+              right: 12px !important;
+              padding: 4px 12px !important;
+              font-size: 0.65rem !important;
+              background: rgba(0, 6, 56, 0.88) !important;
               backdrop-filter: blur(4px) !important;
               box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
             }
           }
+
           @media (max-width: 600px) {
             .hero-left-text-column {
-              padding: 16px 14px 12px !important;
+              padding: 24px 18px 18px !important;
+            }
+            .hero-headline-title {
+              font-size: 1.82rem !important;
+              line-height: 1.18 !important;
             }
             .hero-text-fixed-slot {
-              margin-bottom: 10px !important;
+              margin-bottom: 18px !important;
             }
             .hero-action-buttons {
               flex-direction: column !important;
               width: 100% !important;
-              gap: 8px !important;
-              margin-bottom: 12px !important;
+              gap: 10px !important;
+              margin-bottom: 18px !important;
             }
-            .hero-btn-explore,
-            .hero-btn-demo {
+            .hero-animated-btn {
               width: 100% !important;
             }
           }
