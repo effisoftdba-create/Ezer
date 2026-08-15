@@ -116,7 +116,27 @@ export default function CourseManager() {
           ? course.tools.split(',').map((t) => t.trim()).filter(Boolean)
           : (defaultCourseData.tools || ['Python', 'TensorFlow', 'PyTorch', 'Scikit-Learn']));
 
-    const sourceProjects = (Array.isArray(course.projects) && course.projects.length > 0)
+    const STALE_PROJECT_TITLES = [
+      'predictive customer churn analytics',
+      'computer vision automated medical image diagnostics',
+      'real-time house price prediction api',
+      'customer segmentation engine using k-means',
+      'interactive streamlit ai web app',
+      'multi-cloud automated infrastructure sandbox',
+      'playwright e2e test automation framework',
+      'enterprise ai customer rag engine',
+      'multi-region aws vpc infrastructure automation',
+      'new capstone project'
+    ];
+
+    const isProjectsStale = !Array.isArray(course.projects) || 
+      course.projects.length === 0 || 
+      course.projects.some((p) => {
+        const title = (typeof p === 'string' ? p : (p?.title || '')).toLowerCase();
+        return STALE_PROJECT_TITLES.some((stale) => title.includes(stale));
+      });
+
+    const sourceProjects = (!isProjectsStale && Array.isArray(course.projects) && course.projects.length > 0)
       ? course.projects
       : (defaultProjects.length > 0 ? defaultProjects : DEFAULT_COURSE_STATE.projectsList);
 
