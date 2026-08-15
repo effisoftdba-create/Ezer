@@ -18,12 +18,24 @@ export default function WhyEzer() {
 
   const cardsList = supportCards || [];
 
+  const handleScroll = (e) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    const firstChild = sliderRef.current?.children[0];
+    const cardWidth = (firstChild?.offsetWidth || 310) + 24;
+    const newIdx = Math.round(scrollLeft / cardWidth);
+    if (newIdx !== activeIndex && newIdx >= 0 && newIdx < cardsList.length) {
+      setActiveIndex(newIdx);
+    }
+  };
+
   const handlePrev = () => {
     if (!cardsList.length) return;
     const next = (activeIndex - 1 + cardsList.length) % cardsList.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+      const firstChild = sliderRef.current?.children[0];
+      const cardWidth = (firstChild?.offsetWidth || 310) + 24;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -32,14 +44,18 @@ export default function WhyEzer() {
     const next = (activeIndex + 1) % cardsList.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+      const firstChild = sliderRef.current?.children[0];
+      const cardWidth = (firstChild?.offsetWidth || 310) + 24;
+      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
     }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: idx * 340, behavior: 'smooth' });
+      const firstChild = sliderRef.current?.children[0];
+      const cardWidth = (firstChild?.offsetWidth || 310) + 24;
+      sliderRef.current.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
     }
   };
 
@@ -77,6 +93,7 @@ export default function WhyEzer() {
         {/* Single-Line Horizontal Scroll Track */}
         <div
           ref={sliderRef}
+          onScroll={handleScroll}
           className="no-scrollbar"
           style={{
             display: 'flex',

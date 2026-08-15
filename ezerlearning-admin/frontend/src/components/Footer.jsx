@@ -25,18 +25,18 @@ export default function Footer() {
               <img 
                 src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`} 
                 alt="EZER Learning Solution Crest Logo" 
-                width="40"
-                height="40"
+                width="42"
+                height="42"
                 loading="lazy"
                 decoding="async"
-                style={{ height: '40px', width: 'auto', objectFit: 'contain', flexShrink: 0, mixBlendMode: 'screen' }} 
+                style={{ height: '42px', width: 'auto', objectFit: 'contain', flexShrink: 0, mixBlendMode: 'screen' }} 
               />
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span style={{ fontSize: '1.25rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                <span style={{ fontSize: '1.35rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
                   EZER
                 </span>
-                <span style={{ fontSize: '0.6rem', fontWeight: 800, color: '#f2b733', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap' }}>
-                  Learning Solution
+                <span style={{ fontSize: '0.56rem', fontWeight: 900, color: '#f2b733', letterSpacing: '0.27em', textTransform: 'uppercase', marginTop: '3px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
+                  LEARNING SOLUTION
                 </span>
               </div>
             </Link>

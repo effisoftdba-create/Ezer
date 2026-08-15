@@ -121,8 +121,8 @@ export default function CourseHeroHeader({ course, onOpenDemoModal, onOpenPurcha
         <button
           type="button"
           onClick={() => onOpenDemoModal(course.title)}
-          className="btn btn-primary btn-lg"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, borderRadius: '50px' }}
+          className="btn btn-glow-pulse btn-lg"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800, borderRadius: '50px', padding: '12px 24px' }}
         >
           <HiCalendar size={18} /> Schedule Demo Class
         </button>

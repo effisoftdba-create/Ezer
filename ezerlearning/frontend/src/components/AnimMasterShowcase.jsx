@@ -176,12 +176,11 @@ export default function AnimMasterShowcase({
               whileTap={shouldReduceMotion ? {} : { scale: 0.96 }}
               type="button"
               onClick={onOpenDemoModal}
+              className="btn-glow-pulse"
               style={{
-                background: '#f2b733', color: '#000648',
                 padding: '14px 32px', borderRadius: '10px',
                 fontSize: '0.94rem', fontWeight: 900, border: 'none',
                 cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '10px',
-                boxShadow: '0 6px 20px rgba(242, 183, 51, 0.4)'
               }}
             >
               Experience Live Cohort Demo <HiArrowRight size={18} />

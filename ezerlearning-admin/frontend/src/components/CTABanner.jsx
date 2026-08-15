@@ -18,7 +18,7 @@ export default function CTABanner({ onOpenDemoModal }) {
         <button 
           type="button" 
           onClick={onOpenDemoModal} 
-          className="btn btn-primary"
+          className="btn btn-glow-pulse"
           style={{
             padding: '12px 28px', borderRadius: '8px',
             fontSize: '0.88rem', fontWeight: 800,

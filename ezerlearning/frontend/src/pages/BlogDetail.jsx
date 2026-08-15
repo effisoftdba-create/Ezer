@@ -482,7 +482,8 @@ export default function BlogDetail({ onOpenDemoModal }) {
           <button
             type="button"
             onClick={() => onOpenDemoModal(article.title)}
-            style={{ padding: '16px 36px', borderRadius: '50px', background: '#f2b733', color: '#000648', fontWeight: 900, fontSize: '1rem', border: 'none', cursor: 'pointer', boxShadow: '0 6px 24px rgba(242,183,51,0.4)' }}
+            className="btn-glow-pulse"
+            style={{ padding: '16px 36px', borderRadius: '50px', fontWeight: 900, fontSize: '1rem', border: 'none', cursor: 'pointer' }}
           >
             BOOK FREE COUNSELING CALL →
           </button>

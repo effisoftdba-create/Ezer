@@ -50,27 +50,27 @@ export default function Navbar({ onOpenDemoModal }) {
 
           {/* Animated Brand Crest Logo */}
           <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
               <img 
                 src={`${import.meta.env.BASE_URL || '/'}images/ezer_shield_logo.png`} 
                 alt="EZER Learning Solutions Crest Logo" 
-                width="40"
-                height="40"
+                width="42"
+                height="42"
                 decoding="async"
                 style={{
-                  height: '38px',
-                  width: '38px',
+                  height: '42px',
+                  width: '42px',
                   objectFit: 'contain',
                   flexShrink: 0
                 }} 
               />
 
               <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#000648', letterSpacing: '-0.02em', lineHeight: 1 }}>
+                <span style={{ fontSize: '1.35rem', fontWeight: 900, color: '#000648', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
                   EZER
                 </span>
-                <span style={{ fontSize: '0.58rem', fontWeight: 800, color: '#b45309', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap' }}>
-                  Learning Solution
+                <span style={{ fontSize: '0.56rem', fontWeight: 900, color: '#f2b733', letterSpacing: '0.27em', textTransform: 'uppercase', marginTop: '3px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
+                  LEARNING SOLUTION
                 </span>
               </div>
             </Link>
@@ -88,15 +88,15 @@ export default function Navbar({ onOpenDemoModal }) {
                     onMouseLeave={() => setDropdownOpen(false)}
                   >
                     <Link to={link.path} style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '4px',
                       color: isActive ? '#000648' : '#334155',
-                      fontWeight: isActive ? 800 : 600, fontSize: '0.86rem',
-                      display: 'flex', alignItems: 'center', gap: '4px',
-                      borderBottom: isActive ? '2px solid #f2b733' : '2px solid transparent',
-                      padding: '8px 0', transition: 'color 0.15s ease, border-bottom-color 0.15s ease',
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = '#000648'; }}
-                    onMouseLeave={(e) => { if(!isActive) e.currentTarget.style.color = '#334155'; }}
-                    >
+                      fontWeight: isActive ? 800 : 600,
+                      fontSize: '0.9rem',
+                      textDecoration: 'none',
+                      padding: '8px 0',
+                      transition: 'color 0.2s ease',
+                      borderBottom: isActive ? '2px solid #000648' : '2px solid transparent',
+                    }}>
                       {link.name}
                       <HiChevronDown size={14} style={{
                         transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)',
@@ -195,34 +195,22 @@ export default function Navbar({ onOpenDemoModal }) {
           </nav>
 
           {/* Right Actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-            <m.button 
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.98 }}
-              type="button" 
-              onClick={onOpenDemoModal} 
-              className="hidden-mobile"
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <m.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              type="button"
+              onClick={onOpenDemoModal}
+              className="btn btn-glow-pulse desktop-nav"
               style={{
-                padding: '10px 20px',
-                fontSize: '0.82rem',
-                fontWeight: 800,
                 borderRadius: '8px',
+                fontWeight: 800,
+                fontSize: '0.82rem',
+                padding: '9px 18px',
                 cursor: 'pointer',
                 background: '#f2b733',
                 color: '#000648',
-                border: '1.5px solid #f2b733',
-                boxShadow: '0 4px 14px rgba(242, 183, 51, 0.3)',
-                transition: 'background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#000648';
-                e.currentTarget.style.color = '#f2b733';
-                e.currentTarget.style.borderColor = '#000648';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#f2b733';
-                e.currentTarget.style.color = '#000648';
-                e.currentTarget.style.borderColor = '#f2b733';
+                border: 'none',
               }}
             >
               Book Free Demo Class
@@ -281,7 +269,7 @@ export default function Navbar({ onOpenDemoModal }) {
               <button 
                 type="button" 
                 onClick={() => { setMobileMenuOpen(false); onOpenDemoModal(); }}
-                className="btn btn-primary"
+                className="btn btn-glow-pulse"
                 style={{ width: '100%', marginTop: '6px', padding: '12px', borderRadius: '8px', fontWeight: 800, fontSize: '0.88rem' }}
               >
                 Book Free Demo Class

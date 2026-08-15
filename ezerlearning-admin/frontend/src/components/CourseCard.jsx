@@ -136,27 +136,13 @@ export default function CourseCard({ course, onOpenDemoModal }) {
             </button>
             
             <Link 
-              to={`/courses/${course.slug}${hashAnchor}`} 
+              to={`/courses/${course.slug || course.id || course._id}${hashAnchor}`}
+              className="btn-glow-pulse"
               style={{
                 flex: 1.1, padding: '10px 0', borderRadius: '8px',
                 fontSize: '0.86rem', fontWeight: 900, textAlign: 'center',
-                background: '#000648', color: '#f2b733',
-                border: '1.5px solid #000648', textDecoration: 'none',
+                textDecoration: 'none',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '4px',
-                boxShadow: '0 4px 12px rgba(0, 6, 72, 0.2)',
-                transition: 'background-color 0.2s ease, color 0.2s ease, transform 0.2s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#f2b733';
-                e.currentTarget.style.color = '#000648';
-                e.currentTarget.style.borderColor = '#f2b733';
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = '#000648';
-                e.currentTarget.style.color = '#f2b733';
-                e.currentTarget.style.borderColor = '#000648';
-                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
               Know More <HiArrowRight size={14} />

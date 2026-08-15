@@ -45,18 +45,18 @@ export default function PopupHeader({ onClose, overrideConfig }) {
           src={resolveImageSrc('images/logo_white_border.png')}
           alt="EZER Crest Logo"
           style={{
-            height: '40px',
+            height: '42px',
             width: 'auto',
             objectFit: 'contain',
             mixBlendMode: 'screen'
           }}
         />
         <div style={{ textAlign: 'left' }}>
-          <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.02em', lineHeight: 1 }}>
+          <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
             EZER
           </div>
-          <div style={{ fontSize: '0.58rem', fontWeight: 800, color: '#f2b733', letterSpacing: '0.12em', textTransform: 'uppercase', marginTop: '2px' }}>
-            Learning Solution
+          <div style={{ fontSize: '0.56rem', fontWeight: 900, color: '#f2b733', letterSpacing: '0.27em', textTransform: 'uppercase', marginTop: '3px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
+            LEARNING SOLUTION
           </div>
         </div>
       </div>
