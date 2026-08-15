@@ -50,29 +50,21 @@ export default function Navbar({ onOpenDemoModal }) {
 
           {/* Animated Brand Crest Logo */}
           <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
               <img 
-                src={`${import.meta.env.BASE_URL || '/'}images/ezer_shield_logo.png`} 
-                alt="EZER Learning Solution Crest Logo" 
-                width="44"
-                height="44"
+                src={`${import.meta.env.BASE_URL || '/'}images/ezer_full_logo_light.png`} 
+                alt="EZER Learning Solution Logo" 
+                width="168"
+                height="50"
                 decoding="async"
                 style={{
-                  height: '44px',
+                  height: '46px',
                   width: 'auto',
                   objectFit: 'contain',
-                  flexShrink: 0
+                  flexShrink: 0,
+                  display: 'block'
                 }} 
               />
-
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#000648', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
-                  EZER
-                </span>
-                <span style={{ fontSize: '0.56rem', fontWeight: 900, color: '#000648', letterSpacing: '0.28em', textTransform: 'uppercase', marginTop: '4px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
-                  LEARNING SOLUTION
-                </span>
-              </div>
             </Link>
           </div>
 

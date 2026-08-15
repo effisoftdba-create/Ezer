@@ -21,24 +21,16 @@ export default function Footer() {
         }}>
           {/* Brand */}
           <div>
-            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', textDecoration: 'none', marginBottom: '12px' }}>
+            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none', marginBottom: '14px' }}>
               <img 
-                src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`} 
-                alt="EZER Learning Solution Crest Logo" 
-                width="44"
-                height="44"
+                src={`${import.meta.env.BASE_URL || '/'}images/ezer_full_logo_dark.png`} 
+                alt="EZER Learning Solution Logo" 
+                width="175"
+                height="52"
                 loading="lazy"
                 decoding="async"
-                style={{ height: '44px', width: 'auto', objectFit: 'contain', flexShrink: 0, filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35))' }} 
+                style={{ height: '48px', width: 'auto', objectFit: 'contain', flexShrink: 0, display: 'block', filter: 'drop-shadow(0 2px 10px rgba(0, 0, 0, 0.4))' }} 
               />
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span style={{ fontSize: '1.4rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
-                  EZER
-                </span>
-                <span style={{ fontSize: '0.56rem', fontWeight: 900, color: '#f2b733', letterSpacing: '0.28em', textTransform: 'uppercase', marginTop: '4px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
-                  LEARNING SOLUTION
-                </span>
-              </div>
             </Link>
 
             <p style={{ fontSize: '0.78rem', lineHeight: 1.55, color: '#cbd5e1', marginBottom: '14px', maxWidth: '320px' }}>

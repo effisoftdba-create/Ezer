@@ -25,16 +25,12 @@ export default function AdminHeaderNav({ handleReset, handleLogout, onMenuClick 
       <div className="admin-header-brand">
         <Link to="/" className="admin-header-brand-link" title="EZER Learning Solution">
           <img
-            src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`}
-            alt="EZER Learning Solution Crest Logo"
-            width="42"
-            height="42"
+            src={`${import.meta.env.BASE_URL || '/'}images/ezer_full_logo_dark.png`}
+            alt="EZER Learning Solution Logo"
+            width="155"
+            height="46"
             className="admin-header-crest"
           />
-          <div className="admin-header-brand-labels">
-            <span className="admin-brand-name">EZER</span>
-            <span className="admin-brand-tag">LEARNING SOLUTION</span>
-          </div>
         </Link>
 
         <div className="admin-header-divider" />
