@@ -25,12 +25,27 @@ export default function TrendingSkills({ onOpenDemoModal }) {
 
   const filtered = getFilteredCourses();
 
+  const getCardStep = () => {
+    if (!sliderRef.current) return 340;
+    const firstChild = sliderRef.current.firstElementChild;
+    return (firstChild?.offsetWidth || 320) + 20;
+  };
+
+  const handleScroll = (e) => {
+    const scrollLeft = e.currentTarget.scrollLeft;
+    const step = getCardStep();
+    const newIdx = Math.round(scrollLeft / step);
+    if (newIdx !== activeIndex && newIdx >= 0 && newIdx < filtered.length) {
+      setActiveIndex(newIdx);
+    }
+  };
+
   const handlePrev = () => {
     if (!filtered.length) return;
     const next = (activeIndex - 1 + filtered.length) % filtered.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: next * getCardStep(), behavior: 'smooth' });
     }
   };
 
@@ -39,14 +54,14 @@ export default function TrendingSkills({ onOpenDemoModal }) {
     const next = (activeIndex + 1) % filtered.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: next * getCardStep(), behavior: 'smooth' });
     }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: idx * 340, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: idx * getCardStep(), behavior: 'smooth' });
     }
   };
 
@@ -120,6 +135,7 @@ export default function TrendingSkills({ onOpenDemoModal }) {
         {filtered.length > 0 ? (
           <div
             ref={sliderRef}
+            onScroll={handleScroll}
             className="no-scrollbar"
             style={{
               display: 'flex',

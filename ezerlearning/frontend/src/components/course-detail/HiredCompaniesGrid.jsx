@@ -13,12 +13,18 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
   const headerHeadline = (outcomesHeader?.headline || outcomesHeader?.title || 'Our Graduates Get Hired by Leading Tech Firms').trim() || 'Our Graduates Get Hired by Leading Tech Firms';
   const headerSub = (outcomesHeader?.sub || 'Hear directly from our learners who transitioned into high-paying IT roles.').trim() || 'Hear directly from our learners who transitioned into high-paying IT roles.';
 
+  const getCardStep = () => {
+    if (!sliderRef.current) return 340;
+    const firstChild = sliderRef.current.firstElementChild;
+    return (firstChild?.offsetWidth || 320) + 20;
+  };
+
   const handlePrev = () => {
     if (!displayStories.length) return;
     const next = (activeIndex - 1 + displayStories.length) % displayStories.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: next * getCardStep(), behavior: 'smooth' });
     }
   };
 
@@ -27,21 +33,21 @@ export default function HiredCompaniesGrid({ transitions: propTransitions }) {
     const next = (activeIndex + 1) % displayStories.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: next * 320, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: next * getCardStep(), behavior: 'smooth' });
     }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
     if (sliderRef.current) {
-      sliderRef.current.scrollTo({ left: idx * 320, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: idx * getCardStep(), behavior: 'smooth' });
     }
   };
 
   const handleScroll = (e) => {
     const scrollLeft = e.currentTarget.scrollLeft;
-    const cardWidth = 320;
-    const newIdx = Math.round(scrollLeft / cardWidth);
+    const step = getCardStep();
+    const newIdx = Math.round(scrollLeft / step);
     if (newIdx !== activeIndex && newIdx >= 0 && newIdx < displayStories.length) {
       setActiveIndex(newIdx);
     }
