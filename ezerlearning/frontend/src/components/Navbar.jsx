@@ -54,11 +54,11 @@ export default function Navbar({ onOpenDemoModal }) {
               <img 
                 src={`${import.meta.env.BASE_URL || '/'}images/ezer_full_logo_light.png`} 
                 alt="EZER Learning Solution Logo" 
-                width="168"
-                height="50"
+                width="132"
+                height="35"
                 decoding="async"
                 style={{
-                  height: '46px',
+                  height: '35px',
                   width: 'auto',
                   objectFit: 'contain',
                   flexShrink: 0,

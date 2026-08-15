@@ -25,11 +25,11 @@ export default function Footer() {
               <img 
                 src={`${import.meta.env.BASE_URL || '/'}images/ezer_full_logo_dark.png`} 
                 alt="EZER Learning Solution Logo" 
-                width="175"
-                height="52"
+                width="135"
+                height="36"
                 loading="lazy"
                 decoding="async"
-                style={{ height: '48px', width: 'auto', objectFit: 'contain', flexShrink: 0, display: 'block', filter: 'drop-shadow(0 2px 10px rgba(0, 0, 0, 0.4))' }} 
+                style={{ height: '36px', width: 'auto', objectFit: 'contain', flexShrink: 0, display: 'block', filter: 'drop-shadow(0 2px 10px rgba(0, 0, 0, 0.4))' }} 
               />
             </Link>
 

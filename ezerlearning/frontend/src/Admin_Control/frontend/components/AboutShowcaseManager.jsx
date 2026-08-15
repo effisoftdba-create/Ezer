@@ -818,19 +818,36 @@ export default function AboutShowcaseManager() {
       {/* Image Picker Modal */}
       {pickerTargetIdx !== null && (
         <ImagePickerModal
-          aspectRatio="16:9"
-          currentImage={cardsList[pickerTargetIdx]?.image}
-          onSelect={(img, meta) => {
-            handleFieldChange(pickerTargetIdx, 'image', img);
-            if (meta?.position) {
-              handleFieldChange(pickerTargetIdx, 'imagePosition', meta.position);
+          isOpen={pickerTargetIdx !== null}
+          onClose={() => setPickerTargetIdx(null)}
+          currentImage={cardsList[pickerTargetIdx]?.image || ''}
+          currentPosition={cardsList[pickerTargetIdx]?.imagePosition || '50% 50%'}
+          currentFit={cardsList[pickerTargetIdx]?.imageFit || 'cover'}
+          currentZoom={cardsList[pickerTargetIdx]?.imageZoom || 1}
+          currentMobilePosition={cardsList[pickerTargetIdx]?.mobileImagePosition || cardsList[pickerTargetIdx]?.imagePosition || '50% 50%'}
+          currentMobileZoom={cardsList[pickerTargetIdx]?.mobileImageZoom || 1}
+          onSelectImage={(url, position, fit, zoom, mobileOpts) => {
+            handleFieldChange(pickerTargetIdx, 'image', url);
+            if (position) {
+              handleFieldChange(pickerTargetIdx, 'imagePosition', position);
             }
-            if (meta?.fit) {
-              handleFieldChange(pickerTargetIdx, 'imageFit', meta.fit);
+            if (fit) {
+              handleFieldChange(pickerTargetIdx, 'imageFit', fit);
+            }
+            if (zoom) {
+              handleFieldChange(pickerTargetIdx, 'imageZoom', zoom);
+            }
+            if (mobileOpts?.mobilePosition) {
+              handleFieldChange(pickerTargetIdx, 'mobileImagePosition', mobileOpts.mobilePosition);
+            }
+            if (mobileOpts?.mobileZoom) {
+              handleFieldChange(pickerTargetIdx, 'mobileImageZoom', mobileOpts.mobileZoom);
             }
             setPickerTargetIdx(null);
           }}
-          onClose={() => setPickerTargetIdx(null)}
+          targetArea="About Us Story Card Photo"
+          aspectRatio="Story Card (16:9)"
+          recommendedDimensions="900 x 600 px"
         />
       )}
     </div>

@@ -40,22 +40,22 @@ export default function PopupHeader({ onClose, overrideConfig }) {
       )}
 
       {/* Brand Logo & Name */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '8px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
         <img
           src={resolveImageSrc('images/logo_white_border.png')}
           alt="EZER Crest Logo"
           style={{
-            height: '42px',
+            height: '32px',
             width: 'auto',
             objectFit: 'contain',
             mixBlendMode: 'screen'
           }}
         />
         <div style={{ textAlign: 'left' }}>
-          <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
+          <div style={{ fontSize: '1.15rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
             EZER
           </div>
-          <div style={{ fontSize: '0.56rem', fontWeight: 900, color: '#f2b733', letterSpacing: '0.27em', textTransform: 'uppercase', marginTop: '3px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
+          <div style={{ fontSize: '0.52rem', fontWeight: 900, color: '#f2b733', letterSpacing: '0.25em', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
             LEARNING SOLUTION
           </div>
         </div>

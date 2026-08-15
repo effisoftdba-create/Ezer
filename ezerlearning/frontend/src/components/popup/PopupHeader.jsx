@@ -40,14 +40,14 @@ export default function PopupHeader({ onClose, overrideConfig }) {
       )}
 
       {/* Brand Logo & Name */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '8px' }}>
         <img
           src={resolveImageSrc('images/ezer_full_logo_dark.png')}
           alt="EZER Learning Solution Logo"
-          width="165"
-          height="48"
+          width="130"
+          height="34"
           style={{
-            height: '46px',
+            height: '34px',
             width: 'auto',
             objectFit: 'contain',
             filter: 'drop-shadow(0 2px 10px rgba(0, 0, 0, 0.4))',
