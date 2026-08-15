@@ -485,13 +485,17 @@ export default function AboutShowcaseManager() {
                     }}
                   >
                     <img
-                      src={resolveImageSrc(card.image || 'images/hero/hero_section_1.jpg')}
+                      src={resolveImageSrc(card.image || card.url || 'images/hero/hero_section_1.jpg')}
                       alt={card.title || 'Story Image'}
                       style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
                         width: '100%',
                         height: '100%',
-                        objectFit: card.imageFit || 'cover',
-                        objectPosition: card.imagePosition || 'center center',
+                        objectFit: card.imageFit || card.fit || 'cover',
+                        objectPosition: card.imagePosition || card.position || 'center center',
+                        transform: (card.imageZoom || card.zoom) && (card.imageZoom || card.zoom) !== 1 ? `scale(${card.imageZoom || card.zoom})` : 'none',
                         display: 'block'
                       }}
                       onError={(e) => {

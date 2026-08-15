@@ -407,8 +407,8 @@ export default function About({ onOpenDemoModal }) {
                   {/* Photo Column */}
                   <div
                     style={{
-                      flex: '1 1 360px',
-                      minHeight: '300px',
+                      flex: '1 1 380px',
+                      minHeight: '280px',
                       position: 'relative',
                       overflow: 'hidden',
                       background: '#000648',
@@ -419,6 +419,9 @@ export default function About({ onOpenDemoModal }) {
                       alt={card.title || 'EZER Showcase'}
                       loading="lazy"
                       style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
                         width: '100%',
                         height: '100%',
                         objectFit: card.imageFit || card.fit || 'cover',
