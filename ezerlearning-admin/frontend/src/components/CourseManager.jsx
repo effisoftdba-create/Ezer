@@ -5,6 +5,7 @@ import CourseFormModal from './CourseFormModal';
 import { HiPlus, HiTrash, HiPencil, HiSearch } from 'react-icons/hi';
 import { resolveImageSrc } from '../utils/imageUtils';
 import { cleanModuleTitle } from '../utils/courseUtils';
+import { getCourseBySlug } from '../data/courses';
 
 const DEFAULT_COURSE_STATE = {
   title: '',
@@ -74,22 +75,39 @@ export default function CourseManager() {
     setEditingId(course.id || course.slug);
     setFormErrors({});
 
-    const safeCurriculumModules = Array.isArray(course.curriculumModules)
-      ? course.curriculumModules.map((m, idx) => {
-          const rawTitle = typeof m === 'object' ? m.title : String(m);
-          const cleanedTitle = cleanModuleTitle(rawTitle);
-          return {
-            id: (typeof m === 'object' && m.id) ? m.id : `mod-${idx}`,
-            num: (typeof m === 'object' && m.num) ? m.num : (idx < 9 ? `0${idx + 1}` : `${idx + 1}`),
-            title: cleanedTitle || `Module ${idx + 1}`,
-            badge: (typeof m === 'object' && m.badge) ? m.badge : `MODULE ${idx + 1}`,
-            image: (typeof m === 'object' && m.image) ? m.image : '',
-            topics: (typeof m === 'object' && Array.isArray(m.topics))
-              ? m.topics
-              : (typeof m?.topics === 'string' ? m.topics.split('\n').map((t) => t.trim()).filter(Boolean) : ['Hands-on Lab Exercises', 'Live Industry Scenarios'])
-          };
-        })
-      : [];
+    const defaultCourseData = getCourseBySlug(course.slug || course.id) || {};
+    const defaultModules = defaultCourseData.curriculumModules || [];
+
+    // Check if the current course has valid custom curriculum modules or if it has stale placeholder topics
+    const hasStaleOrEmptyTopics = !Array.isArray(course.curriculumModules) || 
+      course.curriculumModules.length === 0 || 
+      course.curriculumModules.every((m) => !m.topics || m.topics.length <= 2 && m.topics.includes('Hands-on Lab Exercises'));
+
+    const sourceModules = (!hasStaleOrEmptyTopics && course.curriculumModules.length > 0)
+      ? course.curriculumModules
+      : defaultModules;
+
+    const safeCurriculumModules = sourceModules.map((m, idx) => {
+      const rawTitle = typeof m === 'object' ? m.title : String(m);
+      const cleanedTitle = cleanModuleTitle(rawTitle);
+      const defMod = defaultModules[idx] || {};
+      const defTopics = Array.isArray(defMod.topics) ? defMod.topics : ['Hands-on Lab Exercises', 'Live Industry Scenarios'];
+
+      const currentTopics = (typeof m === 'object' && Array.isArray(m.topics) && m.topics.length > 0 && !m.topics.includes('Hands-on Lab Exercises'))
+        ? m.topics
+        : (typeof m?.topics === 'string' && !m.topics.includes('Hands-on Lab Exercises')
+            ? m.topics.split('\n').map((t) => t.trim()).filter(Boolean)
+            : defTopics);
+
+      return {
+        id: (typeof m === 'object' && m.id) ? m.id : `mod-${idx}`,
+        num: (typeof m === 'object' && m.num) ? m.num : (defMod.num || (idx < 9 ? `0${idx + 1}` : `${idx + 1}`)),
+        title: cleanedTitle || defMod.title || `Module ${idx + 1}`,
+        badge: (typeof m === 'object' && m.badge && !m.badge.startsWith('MODULE ')) ? m.badge : (defMod.badge || `MODULE ${idx + 1}`),
+        image: (typeof m === 'object' && m.image) ? m.image : (defMod.image || ''),
+        topics: currentTopics
+      };
+    });
 
     setFormData({
       title: course.title || '',

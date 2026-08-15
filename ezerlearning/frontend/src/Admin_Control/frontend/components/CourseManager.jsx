@@ -5,6 +5,7 @@ import CourseFormModal from './CourseFormModal';
 import { HiPlus, HiTrash, HiPencil, HiSearch } from 'react-icons/hi';
 import { resolveImageSrc } from '../utils/imageUtils';
 import { cleanModuleTitle } from '../utils/courseUtils';
+import { getCourseBySlug } from '../../../data/courses';
 
 const DEFAULT_COURSE_STATE = {
   title: '',
@@ -74,22 +75,39 @@ export default function CourseManager() {
     setEditingId(course.id || course.slug);
     setFormErrors({});
 
-    const safeCurriculumModules = Array.isArray(course.curriculumModules)
-      ? course.curriculumModules.map((m, idx) => {
-          const rawTitle = typeof m === 'object' ? m.title : String(m);
-          const cleanedTitle = cleanModuleTitle(rawTitle);
-          return {
-            id: (typeof m === 'object' && m.id) ? m.id : `mod-${idx}`,
-            num: (typeof m === 'object' && m.num) ? m.num : (idx < 9 ? `0${idx + 1}` : `${idx + 1}`),
-            title: cleanedTitle || `Module ${idx + 1}`,
-            badge: (typeof m === 'object' && m.badge) ? m.badge : `MODULE ${idx + 1}`,
-            image: (typeof m === 'object' && m.image) ? m.image : '',
-            topics: (typeof m === 'object' && Array.isArray(m.topics))
-              ? m.topics
-              : (typeof m?.topics === 'string' ? m.topics.split('\n').map((t) => t.trim()).filter(Boolean) : ['Hands-on Lab Exercises', 'Live Industry Scenarios'])
-          };
-        })
-      : [];
+    const defaultCourseData = getCourseBySlug(course.slug || course.id) || {};
+    const defaultModules = defaultCourseData.curriculumModules || [];
+
+    // Check if the current course has valid custom curriculum modules or if it has stale placeholder topics
+    const hasStaleOrEmptyTopics = !Array.isArray(course.curriculumModules) || 
+      course.curriculumModules.length === 0 || 
+      course.curriculumModules.every((m) => !m.topics || m.topics.length <= 2 && m.topics.includes('Hands-on Lab Exercises'));
+
+    const sourceModules = (!hasStaleOrEmptyTopics && course.curriculumModules.length > 0)
+      ? course.curriculumModules
+      : defaultModules;
+
+    const safeCurriculumModules = sourceModules.map((m, idx) => {
+      const rawTitle = typeof m === 'object' ? m.title : String(m);
+      const cleanedTitle = cleanModuleTitle(rawTitle);
+      const defMod = defaultModules[idx] || {};
+      const defTopics = Array.isArray(defMod.topics) ? defMod.topics : ['Hands-on Lab Exercises', 'Live Industry Scenarios'];
+
+      const currentTopics = (typeof m === 'object' && Array.isArray(m.topics) && m.topics.length > 0 && !m.topics.includes('Hands-on Lab Exercises'))
+        ? m.topics
+        : (typeof m?.topics === 'string' && !m.topics.includes('Hands-on Lab Exercises')
+            ? m.topics.split('\n').map((t) => t.trim()).filter(Boolean)
+            : defTopics);
+
+      return {
+        id: (typeof m === 'object' && m.id) ? m.id : `mod-${idx}`,
+        num: (typeof m === 'object' && m.num) ? m.num : (defMod.num || (idx < 9 ? `0${idx + 1}` : `${idx + 1}`)),
+        title: cleanedTitle || defMod.title || `Module ${idx + 1}`,
+        badge: (typeof m === 'object' && m.badge && !m.badge.startsWith('MODULE ')) ? m.badge : (defMod.badge || `MODULE ${idx + 1}`),
+        image: (typeof m === 'object' && m.image) ? m.image : (defMod.image || ''),
+        topics: currentTopics
+      };
+    });
 
     setFormData({
       title: course.title || '',
@@ -116,9 +134,9 @@ export default function CourseManager() {
       originalPrice: course.originalPrice || '₹42,000',
       hashLink: course.hashLink || `#${(course.title || 'course').replace(/[^a-zA-Z0-9]/g, '')}_course`,
       tools: Array.isArray(course.tools) ? course.tools.join(', ') : (course.tools || ''),
-      projectsList: Array.isArray(course.projects) ? course.projects : (DEFAULT_COURSE_STATE.projectsList),
-      whoIsItForList: Array.isArray(course.whoIsItFor) ? course.whoIsItFor : (DEFAULT_COURSE_STATE.whoIsItForList),
-      admissionStepsList: Array.isArray(course.admissionSteps) ? course.admissionSteps : (DEFAULT_COURSE_STATE.admissionStepsList),
+      projectsList: Array.isArray(course.projects) && course.projects.length > 0 ? course.projects : (defaultCourseData.projects || DEFAULT_COURSE_STATE.projectsList),
+      whoIsItForList: Array.isArray(course.whoIsItFor) && course.whoIsItFor.length > 0 ? course.whoIsItFor : (defaultCourseData.whoIsItFor || DEFAULT_COURSE_STATE.whoIsItForList),
+      admissionStepsList: Array.isArray(course.admissionSteps) && course.admissionSteps.length > 0 ? course.admissionSteps : (defaultCourseData.admissionSteps || DEFAULT_COURSE_STATE.admissionStepsList),
       curriculumModulesList: safeCurriculumModules
     });
     setIsEditing(true);
@@ -136,14 +154,13 @@ export default function CourseManager() {
       .replace(/^-+|-+$/g, '') ||
       rawTitle
         .toLowerCase()
+        .trim()
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/[\s_]+/g, '-')
         .replace(/^-+|-+$/g, '');
 
     const errors = {};
     if (!rawTitle) errors.title = true;
-    if (!formData.price?.trim()) errors.price = true;
-    if (!formData.image?.trim()) errors.image = true;
     if (!formData.duration?.trim()) errors.duration = true;
     if (!formData.languages?.trim()) errors.languages = true;
     if (!formData.tagline?.trim() && !formData.description?.trim()) errors.tagline = true;
@@ -221,43 +238,163 @@ export default function CourseManager() {
     }
   };
 
-  const safeCourses = Array.isArray(courses) ? courses : [];
-  const filteredCourses = safeCourses.filter((c) => {
-    const titleMatch = (c.title || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const slugMatch = (c.slug || '').toLowerCase().includes(searchTerm.toLowerCase());
-    return titleMatch || slugMatch;
-  });
+  const filteredCourses = (courses || []).filter((c) =>
+    (c.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (c.tagline || '').toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div>
-      <div style={{
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        marginBottom: '24px', paddingBottom: '16px', borderBottom: '1.5px solid #e2e8f0'
-      }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px', flexWrap: 'wrap', gap: '16px' }}>
         <div>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000648', margin: 0 }}>
-            Course Catalog & Complete Page Manager
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#000648', margin: '0 0 4px 0' }}>
+            Course Program Management
           </h2>
-          <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Edit catalog cards, capstones, 6 admission steps, and audience profiles for all course pages.
+          <p style={{ margin: 0, fontSize: '0.85rem', color: '#64748b' }}>
+            Configure live cohort syllabi, tuition fees, capstone projects, curriculum modules, and admission steps.
           </p>
         </div>
-
         <button
-          type="button"
           onClick={handleOpenAdd}
           style={{
-            display: 'inline-flex', alignItems: 'center', gap: '8px',
-            padding: '10px 20px', background: '#000648', color: '#f2b733',
-            borderRadius: '10px', fontWeight: 800, border: 'none', cursor: 'pointer',
-            fontSize: '0.875rem'
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            background: '#000648',
+            color: '#f2b733',
+            border: 'none',
+            padding: '10px 20px',
+            borderRadius: '10px',
+            fontWeight: 800,
+            fontSize: '0.9rem',
+            cursor: 'pointer'
           }}
         >
           <HiPlus size={18} /> Add New Course
         </button>
       </div>
 
-      {/* Course Form Modal */}
+      <div style={{ position: 'relative', marginBottom: '20px' }}>
+        <HiSearch size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+        <input
+          type="text"
+          placeholder="Search courses by title or tagline..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: '100%',
+            padding: '10px 14px 10px 42px',
+            borderRadius: '10px',
+            border: '1.5px solid #cbd5e1',
+            fontSize: '0.9rem',
+            background: '#ffffff'
+          }}
+        />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '20px' }}>
+        {filteredCourses.map((c) => (
+          <div
+            key={c.id || c.slug}
+            style={{
+              background: '#ffffff',
+              borderRadius: '14px',
+              border: '1.5px solid #e2e8f0',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
+            }}
+          >
+            <div>
+              <div style={{ height: '140px', background: '#000648', position: 'relative', overflow: 'hidden' }}>
+                <img
+                  src={resolveImageSrc(c.image)}
+                  alt={c.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: c.fit || c.imageFit || 'cover',
+                    objectPosition: c.position || c.imagePosition || 'center center',
+                    transform: `scale(${c.zoom || c.imageZoom || 1})`
+                  }}
+                  onError={(e) => { e.target.src = resolveImageSrc('images/hero/cloud_deveops.png'); }}
+                />
+                <span style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '10px',
+                  background: '#f2b733',
+                  color: '#000648',
+                  padding: '3px 10px',
+                  borderRadius: '20px',
+                  fontSize: '0.72rem',
+                  fontWeight: 800
+                }}>
+                  {c.badge || 'Live Cohort'}
+                </span>
+              </div>
+              <div style={{ padding: '16px' }}>
+                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.1rem', fontWeight: 800, color: '#000648' }}>
+                  {c.title}
+                </h3>
+                <p style={{ margin: '0 0 12px 0', fontSize: '0.8rem', color: '#64748b', lineClamp: 2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                  {c.tagline || c.description}
+                </p>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '0.75rem', background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px', color: '#475569', fontWeight: 600 }}>
+                    ⏱ {c.duration || '3 Months'}
+                  </span>
+                  <span style={{ fontSize: '0.75rem', background: '#f1f5f9', padding: '2px 8px', borderRadius: '4px', color: '#475569', fontWeight: 600 }}>
+                    💰 {c.price || c.fee || '₹29,999'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ padding: '12px 16px', background: '#f8fafc', borderTop: '1px solid #e2e8f0', display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
+              <button
+                onClick={() => handleOpenEdit(c)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  background: '#f8fafc',
+                  border: '1px solid #cbd5e1',
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  color: '#000648',
+                  cursor: 'pointer'
+                }}
+              >
+                <HiPencil size={14} /> Edit
+              </button>
+              <button
+                onClick={() => handleDelete(c.id || c.slug, c.title)}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  background: '#fff1f2',
+                  border: '1px solid #fecdd3',
+                  padding: '6px 12px',
+                  borderRadius: '6px',
+                  fontSize: '0.8rem',
+                  fontWeight: 700,
+                  color: '#e11d48',
+                  cursor: 'pointer'
+                }}
+              >
+                <HiTrash size={14} /> Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
       <CourseFormModal
         isEditing={isEditing}
         editingId={editingId}
@@ -270,108 +407,14 @@ export default function CourseManager() {
         onOpenImagePicker={() => setIsImagePickerOpen(true)}
       />
 
-      {/* Search Input */}
-      <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <label htmlFor="course_search_input" style={{ fontSize: '0.75rem', fontWeight: 700, color: '#475569', display: 'none' }}>
-          Filter Course Catalog
-        </label>
-        <div style={{ position: 'relative', flex: 1, maxWidth: '400px' }}>
-          <HiSearch size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-          <input
-            id="course_search_input"
-            type="text"
-            aria-label="Search catalog by title or slug"
-            placeholder="Search catalog by title or slug..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              width: '100%', padding: '10px 14px 10px 38px', borderRadius: '8px',
-              border: '1.5px solid #cbd5e1', fontSize: '0.875rem', outline: 'none'
-            }}
-          />
-        </div>
-        <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>
-          Showing {filteredCourses.length} of {courses.length} courses
-        </span>
-      </div>
-
-      {/* Courses Cards Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
-        {filteredCourses.map((c) => (
-          <div key={c.id || c.slug} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-            <div>
-              <div style={{ height: '175px', position: 'relative', overflow: 'hidden', background: '#ffffff' }}>
-                <img
-                  loading="lazy"
-                  src={resolveImageSrc(c.image)}
-                  alt={c.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: c.fit || c.imageFit || 'cover',
-                    objectPosition: c.position || c.imagePosition || 'center center'
-                  }}
-                />
-                <span style={{ position: 'absolute', top: '10px', right: '10px', background: '#000648', color: '#f2b733', padding: '3px 8px', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 800 }}>
-                  {c.badge || 'Popular'}
-                </span>
-              </div>
-
-              <div style={{ padding: '16px' }}>
-                <h4 style={{ margin: '0 0 6px 0', fontSize: '1rem', fontWeight: 800, color: '#000648' }}>{c.title}</h4>
-                <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b', lineHeight: 1.4 }}>{c.tagline || c.description}</p>
-                <div style={{ marginTop: '8px', fontSize: '0.75rem', fontWeight: 700, color: '#000648' }}>
-                  Duration: {c.duration} | Languages: {c.languages}
-                </div>
-              </div>
-            </div>
-
-            <div style={{ padding: '12px 16px', borderTop: '1px solid #f1f5f9', display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
-              <button
-                type="button"
-                onClick={() => handleOpenEdit(c)}
-                style={{ padding: '6px 12px', background: '#f1f5f9', border: '1px solid #cbd5e1', color: '#000648', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}
-              >
-                <HiPencil size={14} /> Edit Course Sections
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDelete(c.id || c.slug, c.title)}
-                style={{ padding: '6px 12px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', cursor: 'pointer', fontSize: '0.75rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}
-              >
-                <HiTrash size={14} /> Delete
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
       <ImagePickerModal
         isOpen={isImagePickerOpen}
         onClose={() => setIsImagePickerOpen(false)}
-        currentImage={formData.image}
-        currentPosition={formData.position || formData.imagePosition}
-        currentFit={formData.fit || formData.imageFit}
-        currentZoom={formData.zoom || formData.imageZoom || 1}
-        currentMobilePosition={formData.mobilePosition}
-        currentMobileZoom={formData.mobileZoom || 1}
-        onSelectImage={(url, pos, fit, zoom, mobileOpts) => {
-          setFormData((prev) => ({
-            ...prev,
-            image: url,
-            position: pos || '50% 50%',
-            imagePosition: pos || '50% 50%',
-            fit: fit || 'cover',
-            imageFit: fit || 'cover',
-            zoom: zoom || 1,
-            imageZoom: zoom || 1,
-            mobilePosition: mobileOpts?.mobilePosition || pos || '50% 50%',
-            mobileZoom: mobileOpts?.mobileZoom || zoom || 1
-          }));
+        onSelectImage={(url) => {
+          setFormData((prev) => ({ ...prev, image: url }));
+          setIsImagePickerOpen(false);
         }}
-        targetArea="Course Card Banner"
-        aspectRatio="Rectangle / Landscape (16:9)"
-        recommendedDimensions="1200 x 675 px"
+        currentImage={formData.image}
       />
     </div>
   );
