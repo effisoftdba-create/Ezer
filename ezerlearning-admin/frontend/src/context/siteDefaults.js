@@ -10,7 +10,7 @@ export const defaultSlides = [
     id: 'slide-1',
     url: 'images/hero/hero_section_1.jpg',
     headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
-    sub: "EZER Learning Solutions is India's top tech-driven platform delivering live online, job-oriented IT courses. Learn from corporate tech practitioners with hands-on labs, 12-month placement assistance, and 3-year community access.",
+    sub: "EZER Learning Solution is India's top tech-driven platform delivering live online, job-oriented IT courses. Learn from corporate tech practitioners with hands-on labs, 12-month placement assistance, and 3-year community access.",
     badge: 'Empowering Career Switchers',
     position: 'center center',
     fit: 'cover',
@@ -47,7 +47,7 @@ export const defaultSlides = [
     zoom: 1
   },
 ];
-export const STORAGE_COURSES_KEY = 'ezer_courses:v18_clean_image_paths';
+export const STORAGE_COURSES_KEY = 'ezer_courses:v19_detailed_curriculum_modules';
 export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v18_clean_image_paths';
 export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v18_clean_image_paths';
 export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v18_clean_image_paths';
@@ -111,7 +111,7 @@ export const defaultPaymentConfig = {
   enrollmentLabel: 'INSTANT COHORT ENROLLMENT',
   integrationMode: 'direct_p2m', // 'direct_p2m' | 'gateway'
   upiVpa: 'ezerlearning@okaxis',
-  upiMerchantName: 'EZER Learning Solutions Pvt. Ltd.',
+  upiMerchantName: 'EZER Learning Solution Pvt. Ltd.',
   mccCode: '8220', // Educational Services & Training
   transactionNote: 'EZER Course Enrollment',
   upiQrImageUrl: 'images/payment/upi_qr_code.png',
@@ -122,7 +122,7 @@ export const defaultPaymentConfig = {
     { id: 'card', label: 'Credit Card / Debit Card', subtitle: 'Visa, MasterCard, RuPay, Amex', enabled: true }
   ],
   payButtonLabel: 'Pay & Unlock Course',
-  successMessage: 'Welcome to EZER Learning Solutions!',
+  successMessage: 'Welcome to EZER Learning Solution!',
   successSubtext: 'Your seat has been locked successfully.'
 };
 
@@ -163,7 +163,7 @@ export const defaultPopupConfig = {
   phoneLabel: 'Mobile Number*',
   countryLabel: 'Country',
   courseLabel: 'Target Course*',
-  termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.',
+  termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solution.',
   coursesList: [
     'AI/ML',
     'Full stack development with AI',
@@ -256,7 +256,7 @@ export const defaultAboutVideos = [
 export const defaultPlatformDef = {
   tag: 'Empowering Career Switchers',
   headline: 'Leading EdTech Platform for Learning in Native Languages & Real IT Skills.',
-  description: "EZER Learning Solutions is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses. Taught by corporate-experienced IT professionals, EZER offers personalized live online training, hands-on labs, 12-month placement support, and up to 3 years of community access.",
+  description: "EZER Learning Solution is India's top tech-driven EdTech platform delivering live online, practical, job-oriented IT courses. Taught by corporate-experienced IT professionals, EZER offers personalized live online training, hands-on labs, 12-month placement support, and up to 3 years of community access.",
   image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=700&h=800',
   acronymText: '"Helper, Strength, and Support" — acting as a dependable support system that helps students, aspirants, and professionals become job-ready and corporate-relevant.',
   highlights: [
@@ -435,14 +435,14 @@ export const defaultTestimonialsHero = {
   tag: 'STUDENT SUCCESS STORIES',
   badge: 'STUDENT SUCCESS STORIES',
   headline: 'Real Learners. Real IT Career Outcomes.',
-  sub: 'Discover how EZER Learning Solutions helps freshers and career switchers land high-growth tech jobs.',
+  sub: 'Discover how EZER Learning Solution helps freshers and career switchers land high-growth tech jobs.',
   image: 'images/hero/optimized/hero_section_1.jpg'
 };
 
 export const defaultContactInfo = {
   email: 'support@ezerlearning.com',
   phone: '+91 98765 43210',
-  address: 'Ezer Learning Solutions\nPlot No: 90, 3rd Cross Street, Phase-2, Thirumalai Nagar Annexe, Perungudi, Chennai - 600096, Tamil Nadu, India',
+  address: 'EZER Learning Solution\nPlot No: 90, 3rd Cross Street, Phase-2, Thirumalai Nagar Annexe, Perungudi, Chennai - 600096, Tamil Nadu, India',
   whatsapp: '+91 98765 43210',
   whatsappGroupUrl: 'https://chat.whatsapp.com/EZERStudentCohortOfficial',
   workingHours: 'Mon - Sat: 9:00 AM - 7:00 PM'
@@ -479,7 +479,7 @@ export const defaultAchievements = [
   {
     id: 'ach-4',
     title: '10,000+ Students Upskilled Milestone',
-    issuer: 'EZER Learning Solutions Foundation',
+    issuer: 'EZER Learning Solution Foundation',
     year: '2025',
     category: 'Milestone Honor',
     image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800',
@@ -502,16 +502,16 @@ export const defaultBlogs = [
   },
   {
     id: 'blog-2',
-    title: 'EZER Learning Solutions Honored at EdTech Excellence Awards 2025',
+    title: 'EZER Learning Solution Honored at EdTech Excellence Awards 2025',
     slug: 'ezer-honored-at-edtech-excellence-awards-2025',
     category: 'Company News',
     author: 'EZER Academic Board',
     date: 'July 28, 2025',
     readTime: '6 Min Read',
     seoGeoAeoTag: 'Best AI & Full Stack IT Training Institute in Chennai India',
-    summary: 'EZER Learning Solutions receives national acclaim at the EdTech Excellence Awards 2025 for pioneering live native-language tech education, outcome-driven mentorship cohorts, and 12-month dedicated career placement support.',
+    summary: 'EZER Learning Solution receives national acclaim at the EdTech Excellence Awards 2025 for pioneering live native-language tech education, outcome-driven mentorship cohorts, and 12-month dedicated career placement support.',
     image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
-    content: 'We are thrilled to announce that EZER Learning Solutions has been awarded the EdTech Excellence & Innovation Award for 2025. This milestone underscores EZER’s mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.',
+    content: 'We are thrilled to announce that EZER Learning Solution has been awarded the EdTech Excellence & Innovation Award for 2025. This milestone underscores EZER’s mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.',
     takeaways: [
       'National recognition for democratizing practical tech training across India.',
       'Pioneering native-language instruction (Tamil, Hindi, English) for accelerated software comprehension.',
@@ -522,7 +522,7 @@ export const defaultBlogs = [
       {
         id: 'sec-1',
         title: '1. National Recognition for EdTech Innovation & Practical Outcomes',
-        content: 'EZER Learning Solutions has been formally honored with the prestigious EdTech Excellence & Innovation Award 2025. This milestone underscores EZER’s unwavering mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.',
+        content: 'EZER Learning Solution has been formally honored with the prestigious EdTech Excellence & Innovation Award 2025. This milestone underscores EZER’s unwavering mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.',
         image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=1000',
         caption: 'EZER Leadership receiving the EdTech Excellence & Innovation Award 2025.'
       },

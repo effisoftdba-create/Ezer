@@ -93,8 +93,9 @@ export default function CourseDetail({ onOpenDemoModal }) {
   const activeVideoUrl = course.videoUrl || 'https://www.youtube.com/watch?v=aircAruvnKk';
 
   // Modules List for Admin-driven Detailed Breakdown (Cleaned & Sanitized)
-  const rawModules = Array.isArray(course.curriculumModules) && course.curriculumModules.length > 0
-    ? course.curriculumModules
+  const defaultCourseData = getCourseBySlug(slug) || {};
+  const defaultModules = Array.isArray(defaultCourseData.curriculumModules) && defaultCourseData.curriculumModules.length > 0
+    ? defaultCourseData.curriculumModules
     : [
         {
           num: "01",
@@ -112,6 +113,10 @@ export default function CourseDetail({ onOpenDemoModal }) {
           topics: ["Live Industry Capstone Build", "CI/CD & Cloud Deployment", "Mock Technical Interviews", "12-Month Placement Support"]
         }
       ];
+
+  const rawModules = (Array.isArray(course.curriculumModules) && course.curriculumModules.length > 0 && !course.curriculumModules.every((m) => !m.topics || m.topics.length <= 2 && m.topics.includes('Hands-on Lab Exercises')))
+    ? course.curriculumModules
+    : defaultModules;
 
   const modulesList = rawModules.map((m, idx) => ({
     ...m,

@@ -1,7 +1,7 @@
-import { phase1Courses } from '../data/courses';
-import { testimonials as initialTestimonials, videoStories } from '../data/testimonials';
-import { generalFaqs } from '../data/faq';
-import productionData from '../data/productionData.json';
+import { phase1Courses } from '../../../data/courses';
+import { testimonials as initialTestimonials, videoStories } from '../../../data/testimonials';
+import { generalFaqs } from '../../../data/faq';
+import productionData from '../../../data/productionData.json';
 
 export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v18_clean_image_paths';
 

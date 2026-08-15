@@ -76,6 +76,12 @@ function mergeCollection(defaults, firebaseItems, primaryKey = 'id') {
       if (!merged.imageFit && existing.imageFit) merged.imageFit = existing.imageFit;
       if (!merged.zoom && existing.zoom) merged.zoom = existing.zoom;
       if (!merged.imageZoom && existing.imageZoom) merged.imageZoom = existing.imageZoom;
+
+      // Smart curriculum preservation: if remote item has empty or placeholder generic topics, keep the rich syllabus from defaults
+      if (existing.curriculumModules && (!merged.curriculumModules || merged.curriculumModules.length === 0 || merged.curriculumModules.every((m) => !m.topics || m.topics.length <= 2 && m.topics.includes('Hands-on Lab Exercises')))) {
+        merged.curriculumModules = existing.curriculumModules;
+      }
+
       itemMap.set(key, merged);
     } else {
       itemMap.set(String(Date.now() + Math.random()), fbItem);
@@ -833,7 +839,7 @@ export function SiteProvider({ children }) {
     const newPay = {
       id: `pay-${Date.now()}`,
       status: 'SUCCESSFUL',
-      paidTo: 'EZER Learning Solutions Pvt Ltd',
+      paidTo: 'EZER Learning Solution Pvt Ltd',
       paymentDate: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }),
       ...paymentData
     };

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
-import { triggerStateToast } from '../../../utils/toastService';
-import { batchFetchRelatedData } from '../../../utils/dbQueries';
+import { triggerStateToast } from '../utils/toastService';
+import { batchFetchRelatedData } from '../utils/dbQueries';
 import { phase1Courses } from '../../../data/courses';
 import { testimonials as initialTestimonials } from '../../../data/testimonials';
 import { generalFaqs } from '../../../data/faq';
@@ -26,10 +26,12 @@ import {
   STORAGE_HIRING_PARTNERS_KEY,
   STORAGE_PAYMENT_CONFIG_KEY,
   STORAGE_ABOUT_VIDEOS_KEY,
+  STORAGE_ABOUT_SHOWCASE_KEY,
   STORAGE_PAYMENTS_KEY,
   STORAGE_ADMIN_USERS_KEY,
   defaultPaymentConfig,
   defaultAboutVideos,
+  defaultAboutShowcaseCards,
   defaultPayments,
   defaultAdminUsers,
 
@@ -47,7 +49,7 @@ import {
   getInitialState,
   siteReducer,
   safeSetStorage
-} from '../../database/defaults/siteDefaults';
+} from './siteDefaults';
 
 import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../../../services/firebaseService';
 
@@ -74,6 +76,12 @@ function mergeCollection(defaults, firebaseItems, primaryKey = 'id') {
       if (!merged.imageFit && existing.imageFit) merged.imageFit = existing.imageFit;
       if (!merged.zoom && existing.zoom) merged.zoom = existing.zoom;
       if (!merged.imageZoom && existing.imageZoom) merged.imageZoom = existing.imageZoom;
+
+      // Smart curriculum preservation: if remote item has empty or placeholder generic topics, keep the rich syllabus from defaults
+      if (existing.curriculumModules && (!merged.curriculumModules || merged.curriculumModules.length === 0 || merged.curriculumModules.every((m) => !m.topics || m.topics.length <= 2 && m.topics.includes('Hands-on Lab Exercises')))) {
+        merged.curriculumModules = existing.curriculumModules;
+      }
+
       itemMap.set(key, merged);
     } else {
       itemMap.set(String(Date.now() + Math.random()), fbItem);
@@ -83,7 +91,25 @@ function mergeCollection(defaults, firebaseItems, primaryKey = 'id') {
   return Array.from(itemMap.values());
 }
 
-function SiteProvider({ children }) {
+function mergeAdminUsers(items, defaults) {
+  if (!Array.isArray(defaults)) return items || [];
+  const map = new Map();
+  defaults.forEach((u) => {
+    if (u && u.email) map.set(u.email.toLowerCase(), u);
+  });
+  if (Array.isArray(items)) {
+    items.forEach((u) => {
+      if (u && u.email) {
+        const key = u.email.toLowerCase();
+        const existing = map.get(key) || {};
+        map.set(key, { ...existing, ...u });
+      }
+    });
+  }
+  return Array.from(map.values());
+}
+
+export function SiteProvider({ children }) {
   const [state, dispatch] = useReducer(siteReducer, null, getInitialState);
 
   const {
@@ -108,6 +134,7 @@ function SiteProvider({ children }) {
     hiringPartners,
     paymentConfig,
     aboutVideos,
+    aboutShowcaseCards,
     payments,
     adminUsers
   } = state;
@@ -117,8 +144,12 @@ function SiteProvider({ children }) {
     if (!Array.isArray(items)) return;
 
     if (items.length > 0) {
-      const merged = mergeCollection(defaultItems, items);
-      dispatch({ type: 'SET_KEY', key: dispatchKey, value: merged });
+      if (dispatchKey === 'adminUsers') {
+        const merged = mergeAdminUsers(items, defaultAdminUsers);
+        dispatch({ type: 'SET_KEY', key: dispatchKey, value: merged });
+      } else {
+        dispatch({ type: 'SET_KEY', key: dispatchKey, value: items });
+      }
     } else {
       // Seed default items into Database ONCE if database collection is empty on initial setup
       if (Array.isArray(defaultItems) && defaultItems.length > 0) {
@@ -201,6 +232,18 @@ function SiteProvider({ children }) {
       unsubs.push(subscribeToCollection('aboutVideos', (items) => {
         handleSyncCollection('aboutVideos', items, 'aboutVideos', defaultAboutVideos);
       }));
+      unsubs.push(subscribeToCollection('aboutShowcaseCards', (items) => {
+        handleSyncCollection('aboutShowcaseCards', items, 'aboutShowcaseCards', defaultAboutShowcaseCards);
+      }));
+      unsubs.push(subscribeToCollection('supportCards', (items) => {
+        handleSyncCollection('supportCards', items, 'supportCards', defaultSupportCards);
+      }));
+      unsubs.push(subscribeToCollection('transformedLives', (items) => {
+        handleSyncCollection('transformedLives', items, 'transformedLives', defaultTransformedLives);
+      }));
+      unsubs.push(subscribeToCollection('achievements', (items) => {
+        handleSyncCollection('achievements', items, 'achievements', defaultAchievements);
+      }));
       unsubs.push(subscribeToCollection('payments', (items) => {
         if (Array.isArray(items)) {
           const freshPayments = items.filter((p) => p && p.studentName && !['test', 'dummy', 'sample', 'test3'].some((t) => (p.studentName || '').toLowerCase().includes(t)));
@@ -273,8 +316,9 @@ function SiteProvider({ children }) {
   }, [blogs]);
 
   const deleteBlog = useCallback((blogId) => {
-    const updated = (blogs || []).filter(b => b.id !== blogId);
+    const updated = (blogs || []).filter(b => b.id !== blogId && b.slug !== blogId);
     dispatch({ type: 'SET_KEY', key: 'blogs', value: updated });
+    saveCollectionArray('blogs', updated);
     removeDocument('blogs', String(blogId));
     triggerStateToast('SAVED');
   }, [blogs]);
@@ -303,6 +347,7 @@ function SiteProvider({ children }) {
   const deleteAchievement = useCallback((achId) => {
     const updated = (achievements || []).filter(a => a.id !== achId);
     dispatch({ type: 'SET_KEY', key: 'achievements', value: updated });
+    saveCollectionArray('achievements', updated);
     removeDocument('achievements', String(achId));
     triggerStateToast('SAVED');
   }, [achievements]);
@@ -348,6 +393,7 @@ function SiteProvider({ children }) {
   const deleteHeroSlide = useCallback((id) => {
     const updated = (heroSlides || []).filter((slide) => slide.id !== id && slide.badge !== id);
     dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
+    saveCollectionArray('heroSlides', updated);
     removeDocument('heroSlides', String(id));
     triggerStateToast('SAVED');
   }, [heroSlides]);
@@ -467,6 +513,7 @@ function SiteProvider({ children }) {
   const deleteSupportCard = useCallback((id) => {
     const updated = (supportCards || []).filter((card) => card.id !== id && card.title !== id);
     dispatch({ type: 'SET_KEY', key: 'supportCards', value: updated });
+    saveCollectionArray('supportCards', updated);
     removeDocument('supportCards', String(id));
     triggerStateToast('SAVED');
   }, [supportCards]);
@@ -495,8 +542,9 @@ function SiteProvider({ children }) {
   }, [transformedLives]);
 
   const deleteTransformedLife = useCallback((id) => {
-    const updated = (transformedLives || []).filter((life) => life.id !== id);
+    const updated = (transformedLives || []).filter((life) => life.id !== id && life.name !== id);
     dispatch({ type: 'SET_KEY', key: 'transformedLives', value: updated });
+    saveCollectionArray('transformedLives', updated);
     removeDocument('transformedLives', String(id));
     triggerStateToast('SAVED');
   }, [transformedLives]);
@@ -532,8 +580,9 @@ function SiteProvider({ children }) {
   }, [seniorMentors]);
 
   const deleteSeniorMentor = useCallback((id) => {
-    const updated = (seniorMentors || []).filter((mentor) => mentor.id !== id);
+    const updated = (seniorMentors || []).filter((mentor) => mentor.id !== id && mentor.name !== id);
     dispatch({ type: 'SET_KEY', key: 'seniorMentors', value: updated });
+    saveCollectionArray('seniorMentors', updated);
     removeDocument('seniorMentors', String(id));
     triggerStateToast('SAVED');
   }, [seniorMentors]);
@@ -569,8 +618,9 @@ function SiteProvider({ children }) {
   }, [videoTestimonials]);
 
   const deleteVideoTestimonial = useCallback((id) => {
-    const updated = (videoTestimonials || []).filter((video) => video.id !== id);
+    const updated = (videoTestimonials || []).filter((video) => video.id !== id && video.name !== id && video.author !== id);
     dispatch({ type: 'SET_KEY', key: 'videoTestimonials', value: updated });
+    saveCollectionArray('videoTestimonials', updated);
     removeDocument('videoTestimonials', String(id));
     triggerStateToast('SAVED');
   }, [videoTestimonials]);
@@ -592,6 +642,7 @@ function SiteProvider({ children }) {
     const testimonial = { id: `testi-${Date.now()}`, ...newTestimonial };
     const updated = [...(writtenTestimonials || []), testimonial];
     dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
+    saveCollectionArray('writtenTestimonials', updated);
     saveDocument('writtenTestimonials', testimonial.id, testimonial);
     triggerStateToast('SAVED');
   }, [writtenTestimonials]);
@@ -606,8 +657,9 @@ function SiteProvider({ children }) {
   }, [writtenTestimonials]);
 
   const deleteWrittenTestimonial = useCallback((id) => {
-    const updated = (writtenTestimonials || []).filter((t) => t.id !== id && t.author !== id);
+    const updated = (writtenTestimonials || []).filter((t) => t.id !== id && t.author !== id && t.name !== id);
     dispatch({ type: 'SET_KEY', key: 'writtenTestimonials', value: updated });
+    saveCollectionArray('writtenTestimonials', updated);
     removeDocument('writtenTestimonials', String(id));
     triggerStateToast('SAVED');
   }, [writtenTestimonials]);
@@ -714,6 +766,7 @@ function SiteProvider({ children }) {
   const deleteLead = useCallback((leadId) => {
     const updated = (leads || []).filter(l => l.id !== leadId);
     dispatch({ type: 'SET_KEY', key: 'leads', value: updated });
+    saveCollectionArray('leads', updated);
     removeDocument('leads', String(leadId));
     triggerStateToast('SAVED');
   }, [leads]);
@@ -722,6 +775,7 @@ function SiteProvider({ children }) {
     const newPartner = { id: `partner-${Date.now()}`, ...partnerData };
     const updated = [...(hiringPartners || []), newPartner];
     dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: updated });
+    saveCollectionArray('hiringPartners', updated);
     saveDocument('hiringPartners', newPartner.id, newPartner);
     triggerStateToast('SAVED');
   }, [hiringPartners]);
@@ -734,8 +788,9 @@ function SiteProvider({ children }) {
   }, [hiringPartners]);
 
   const deleteHiringPartner = useCallback((partnerId) => {
-    const updated = (hiringPartners || []).filter((p) => p.id !== partnerId);
+    const updated = (hiringPartners || []).filter((p) => p.id !== partnerId && p.name !== partnerId);
     dispatch({ type: 'SET_KEY', key: 'hiringPartners', value: updated });
+    saveCollectionArray('hiringPartners', updated);
     removeDocument('hiringPartners', String(partnerId));
     triggerStateToast('SAVED');
   }, [hiringPartners]);
@@ -747,16 +802,50 @@ function SiteProvider({ children }) {
     triggerStateToast('SAVED');
   }, [aboutVideos]);
 
+  const updateAboutShowcaseCards = useCallback((cards) => {
+    const updated = Array.isArray(cards) ? cards : (aboutShowcaseCards || defaultAboutShowcaseCards);
+    dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    saveCollectionArray('aboutShowcaseCards', updated);
+    triggerStateToast('SAVED');
+  }, [aboutShowcaseCards]);
+
+  const addAboutShowcaseCard = useCallback((cardData) => {
+    const newCard = { id: `showcase-${Date.now()}`, ...cardData };
+    const updated = [...(aboutShowcaseCards || defaultAboutShowcaseCards), newCard];
+    dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    saveCollectionArray('aboutShowcaseCards', updated);
+    saveDocument('aboutShowcaseCards', newCard.id, newCard);
+    triggerStateToast('SAVED');
+  }, [aboutShowcaseCards]);
+
+  const updateAboutShowcaseCard = useCallback((id, updatedData) => {
+    const baseList = Array.isArray(aboutShowcaseCards) && aboutShowcaseCards.length > 0 ? aboutShowcaseCards : defaultAboutShowcaseCards;
+    const updated = baseList.map((c) => (c.id === id ? { ...c, ...updatedData } : c));
+    dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    saveCollectionArray('aboutShowcaseCards', updated);
+    triggerStateToast('SAVED');
+  }, [aboutShowcaseCards]);
+
+  const deleteAboutShowcaseCard = useCallback((id) => {
+    const baseList = Array.isArray(aboutShowcaseCards) && aboutShowcaseCards.length > 0 ? aboutShowcaseCards : defaultAboutShowcaseCards;
+    const updated = baseList.filter((c) => c.id !== id && c.title !== id);
+    dispatch({ type: 'SET_KEY', key: 'aboutShowcaseCards', value: updated });
+    saveCollectionArray('aboutShowcaseCards', updated);
+    removeDocument('aboutShowcaseCards', String(id));
+    triggerStateToast('SAVED');
+  }, [aboutShowcaseCards]);
+
   const addPayment = useCallback((paymentData, silent = false) => {
     const newPay = {
       id: `pay-${Date.now()}`,
       status: 'SUCCESSFUL',
-      paidTo: 'EZER Learning Solutions Pvt Ltd',
+      paidTo: 'EZER Learning Solution Pvt Ltd',
       paymentDate: new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }),
       ...paymentData
     };
     const updated = [newPay, ...(payments || [])];
     dispatch({ type: 'SET_KEY', key: 'payments', value: updated });
+    saveCollectionArray('payments', updated);
     saveDocument('payments', newPay.id, newPay);
     if (!silent) {
       triggerStateToast('SAVED');
@@ -802,6 +891,7 @@ function SiteProvider({ children }) {
   const deletePayment = useCallback((paymentId) => {
     const updated = (payments || []).filter((p) => p.id !== paymentId);
     dispatch({ type: 'SET_KEY', key: 'payments', value: updated });
+    saveCollectionArray('payments', updated);
     removeDocument('payments', String(paymentId));
     triggerStateToast('SAVED');
   }, [payments]);
@@ -868,6 +958,7 @@ function SiteProvider({ children }) {
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
+    aboutShowcaseCards, updateAboutShowcaseCards, addAboutShowcaseCard, updateAboutShowcaseCard, deleteAboutShowcaseCard,
     payments, addPayment, updatePaymentStatus, deletePayment,
     adminUsers, addAdminUser, updateAdminUser, deleteAdminUser,
     resetAllToDefaults
@@ -893,6 +984,7 @@ function SiteProvider({ children }) {
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
+    aboutShowcaseCards, updateAboutShowcaseCards, addAboutShowcaseCard, updateAboutShowcaseCard, deleteAboutShowcaseCard,
     payments, addPayment, updatePaymentStatus, deletePayment,
     adminUsers, addAdminUser, updateAdminUser, deleteAdminUser,
     resetAllToDefaults
@@ -909,3 +1001,5 @@ export function useSiteData() {
   }
   return context;
 }
+
+export default SiteProvider;
