@@ -35,13 +35,44 @@ export default function AboutShowcaseManager() {
   }, [aboutShowcaseCards]);
 
   const handleFieldChange = (index, field, value) => {
-    const updated = [...cardsList];
-    updated[index] = { ...updated[index], [field]: value };
-    setCardsList(updated);
+    setCardsList((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      if (field === 'image') updated[index].url = value;
+      if (field === 'imagePosition') updated[index].position = value;
+      if (field === 'imageFit') updated[index].fit = value;
+      if (field === 'imageZoom') updated[index].zoom = value;
+      return updated;
+    });
     const errKey = `${index}_${field}`;
     if (formErrors[errKey]) {
       setFormErrors((prev) => ({ ...prev, [errKey]: false }));
     }
+  };
+
+  const handleSelectImage = (index, url, position, fit, zoom, mobileOpts) => {
+    setCardsList((prev) => {
+      const updated = [...prev];
+      const target = updated[index] || {};
+      updated[index] = {
+        ...target,
+        image: url,
+        url: url,
+        imagePosition: position || target.imagePosition || target.position || 'center center',
+        position: position || target.position || target.imagePosition || 'center center',
+        imageFit: fit || target.imageFit || target.fit || 'cover',
+        fit: fit || target.fit || target.imageFit || 'cover',
+        imageZoom: zoom || target.imageZoom || target.zoom || 1,
+        zoom: zoom || target.zoom || target.imageZoom || 1,
+        mobileImagePosition: mobileOpts?.mobilePosition || target.mobileImagePosition || target.mobilePosition || position || 'center center',
+        mobilePosition: mobileOpts?.mobilePosition || target.mobilePosition || target.mobileImagePosition || position || 'center center',
+        mobileImageZoom: mobileOpts?.mobileZoom || target.mobileImageZoom || target.mobileZoom || zoom || 1,
+        mobileZoom: mobileOpts?.mobileZoom || target.mobileZoom || target.mobileImageZoom || zoom || 1
+      };
+      return updated;
+    });
+    setFormErrors((prev) => ({ ...prev, [`${index}_image`]: false }));
+    setPickerTargetIdx(null);
   };
 
   const handleAddPoint = (cardIdx) => {
@@ -827,23 +858,7 @@ export default function AboutShowcaseManager() {
           currentMobilePosition={cardsList[pickerTargetIdx]?.mobileImagePosition || cardsList[pickerTargetIdx]?.imagePosition || '50% 50%'}
           currentMobileZoom={cardsList[pickerTargetIdx]?.mobileImageZoom || 1}
           onSelectImage={(url, position, fit, zoom, mobileOpts) => {
-            handleFieldChange(pickerTargetIdx, 'image', url);
-            if (position) {
-              handleFieldChange(pickerTargetIdx, 'imagePosition', position);
-            }
-            if (fit) {
-              handleFieldChange(pickerTargetIdx, 'imageFit', fit);
-            }
-            if (zoom) {
-              handleFieldChange(pickerTargetIdx, 'imageZoom', zoom);
-            }
-            if (mobileOpts?.mobilePosition) {
-              handleFieldChange(pickerTargetIdx, 'mobileImagePosition', mobileOpts.mobilePosition);
-            }
-            if (mobileOpts?.mobileZoom) {
-              handleFieldChange(pickerTargetIdx, 'mobileImageZoom', mobileOpts.mobileZoom);
-            }
-            setPickerTargetIdx(null);
+            handleSelectImage(pickerTargetIdx, url, position, fit, zoom, mobileOpts);
           }}
           targetArea="About Us Story Card Photo"
           aspectRatio="Story Card (16:9)"

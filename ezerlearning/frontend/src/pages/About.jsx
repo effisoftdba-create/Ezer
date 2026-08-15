@@ -415,22 +415,25 @@ export default function About({ onOpenDemoModal }) {
                     }}
                   >
                     <img
-                      src={resolveImageSrc(card.image || 'images/hero/hero_section_1.jpg')}
+                      src={resolveImageSrc(card.image || card.url || 'images/hero/hero_section_1.jpg')}
                       alt={card.title || 'EZER Showcase'}
                       loading="lazy"
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: card.imageFit || 'cover',
-                        objectPosition: card.imagePosition || 'center center',
+                        objectFit: card.imageFit || card.fit || 'cover',
+                        objectPosition: card.imagePosition || card.position || 'center center',
+                        transform: (card.imageZoom || card.zoom) && (card.imageZoom || card.zoom) !== 1 ? `scale(${card.imageZoom || card.zoom})` : undefined,
                         display: 'block',
                         transition: 'transform 0.6s ease',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'scale(1.04)';
+                        const zoomVal = card.imageZoom || card.zoom || 1;
+                        e.currentTarget.style.transform = `scale(${zoomVal * 1.04})`;
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'scale(1)';
+                        const zoomVal = card.imageZoom || card.zoom || 1;
+                        e.currentTarget.style.transform = zoomVal !== 1 ? `scale(${zoomVal})` : 'none';
                       }}
                       onError={(e) => {
                         e.target.src = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=900&h=600';
