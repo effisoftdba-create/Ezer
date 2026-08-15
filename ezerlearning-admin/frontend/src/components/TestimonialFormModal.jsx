@@ -4,6 +4,7 @@ import { HiX, HiCheck, HiPhotograph, HiStar } from 'react-icons/hi';
 import { resolveImageSrc } from '../utils/imageUtils';
 
 export default function TestimonialFormModal({
+  isOpen,
   isEditing,
   editingId,
   formData,
@@ -11,16 +12,29 @@ export default function TestimonialFormModal({
   formErrors = {},
   setFormErrors = () => {},
   onSave,
+  handleSave,
   onCancel,
+  onClose,
   onOpenImagePicker
 }) {
-  if (!isEditing) return null;
+  const showModal = Boolean(isOpen ?? isEditing);
+  if (!showModal) return null;
+
+  const handleClose = () => {
+    if (typeof onCancel === 'function') onCancel();
+    else if (typeof onClose === 'function') onClose();
+  };
+
+  const handleSubmit = (e) => {
+    if (typeof onSave === 'function') onSave(e);
+    else if (typeof handleSave === 'function') handleSave(e);
+  };
 
   const modalContent = (
     <div
       role="presentation"
       onClick={(e) => {
-        if (e.target === e.currentTarget) onCancel();
+        if (e.target === e.currentTarget) handleClose();
       }}
       style={{
         position: 'fixed',
@@ -62,7 +76,7 @@ export default function TestimonialFormModal({
           </div>
           <button
             type="button"
-            onClick={onCancel}
+            onClick={handleClose}
             aria-label="Close modal button"
             style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#ffffff', width: '32px', height: '32px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
@@ -71,7 +85,7 @@ export default function TestimonialFormModal({
         </div>
 
         {/* Body Form */}
-        <form onSubmit={onSave} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <form onSubmit={handleSubmit} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
           {Object.keys(formErrors).length > 0 && (
             <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 700 }}>
               ⚠️ Please fill in all required fields highlighted in red below before saving.
@@ -256,7 +270,7 @@ export default function TestimonialFormModal({
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>
             <button
               type="button"
-              onClick={onCancel}
+              onClick={handleClose}
               style={{ padding: '9px 18px', background: '#f1f5f9', color: '#475569', border: '1px solid #cbd5e1', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}
             >
               Cancel

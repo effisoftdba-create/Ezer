@@ -270,6 +270,38 @@ export function SiteProvider({ children }) {
       unsubs.push(subscribeToCollection('achievements', (items) => {
         handleSyncCollection('achievements', items, 'achievements', defaultAchievements);
       }));
+      unsubs.push(subscribeToCollection('testimonialsHero', (items) => {
+        if (Array.isArray(items) && items.length > 0) {
+          const mainHero = items.find((i) => i.id === 'main') || items[0];
+          if (mainHero) {
+            dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: mainHero });
+          }
+        }
+      }));
+      unsubs.push(subscribeToCollection('outcomesHeader', (items) => {
+        if (Array.isArray(items) && items.length > 0) {
+          const mainHeader = items.find((i) => i.id === 'main') || items[0];
+          if (mainHeader) {
+            dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: mainHeader });
+          }
+        }
+      }));
+      unsubs.push(subscribeToCollection('mentorsHeader', (items) => {
+        if (Array.isArray(items) && items.length > 0) {
+          const mainHeader = items.find((i) => i.id === 'main') || items[0];
+          if (mainHeader) {
+            dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: mainHeader });
+          }
+        }
+      }));
+      unsubs.push(subscribeToCollection('paymentConfig', (items) => {
+        if (Array.isArray(items) && items.length > 0) {
+          const mainConfig = items.find((i) => i.id === 'main') || items[0];
+          if (mainConfig) {
+            dispatch({ type: 'SET_KEY', key: 'paymentConfig', value: mainConfig });
+          }
+        }
+      }));
       unsubs.push(subscribeToCollection('payments', (items) => {
         if (Array.isArray(items)) {
           const freshPayments = items.filter((p) => p && p.studentName && !['test', 'dummy', 'sample', 'test3'].some((t) => (p.studentName || '').toLowerCase().includes(t)));

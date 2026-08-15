@@ -491,12 +491,15 @@ export default function TestimonialsManager() {
       {isEditing && (
         <TestimonialFormModal
           isOpen={isEditing}
+          isEditing={isEditing}
           onClose={() => setIsEditing(false)}
+          onCancel={() => setIsEditing(false)}
           formData={formData}
           setFormData={setFormData}
           formErrors={formErrors}
           setFormErrors={setFormErrors}
           handleSave={handleSave}
+          onSave={handleSave}
           editingId={editingId}
           onOpenImagePicker={() => setIsImagePickerOpen(true)}
         />
@@ -507,6 +510,26 @@ export default function TestimonialsManager() {
         <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 800, color: '#000648' }}>
           Student Written Reviews ({writtenTestimonials?.length || 0})
         </h3>
+        <button
+          type="button"
+          onClick={handleOpenAdd}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '8px 16px',
+            background: '#000648',
+            color: '#f2b733',
+            borderRadius: '8px',
+            fontWeight: 800,
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '0.82rem',
+            boxShadow: '0 2px 8px rgba(0,6,72,0.15)'
+          }}
+        >
+          <HiPlus size={16} /> Add New Review
+        </button>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '18px' }}>
