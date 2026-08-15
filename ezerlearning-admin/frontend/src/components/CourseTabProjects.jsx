@@ -1,6 +1,18 @@
 import React from 'react';
 import { getCourseBySlug } from '../data/courses';
 
+function isOutdatedProjects(projects, defaultCourseId) {
+  if (!Array.isArray(projects) || projects.length === 0) return true;
+  return projects.some((p) => {
+    const title = (typeof p === 'string' ? p : (p.title || '')).toLowerCase();
+    return title.includes('multi-cloud automated infrastructure sandbox') ||
+           title.includes('playwright e2e test automation framework') ||
+           title.includes('enterprise ai customer rag engine') ||
+           title.includes('multi-region aws vpc') ||
+           (p.tools && Array.isArray(p.tools) && p.tools.includes('AWS') && p.tools.includes('Docker') && defaultCourseId === 'ai-ml');
+  });
+}
+
 export default function CourseTabProjects({ formData, setFormData }) {
   const defaultCourse = getCourseBySlug(formData.slug || formData.id || formData.title) || {};
   const defaultProjects = Array.isArray(defaultCourse.projects) ? defaultCourse.projects : [];
@@ -11,9 +23,9 @@ export default function CourseTabProjects({ formData, setFormData }) {
         ? formData.tools.split(',').map((t) => t.trim()).filter(Boolean) 
         : (defaultCourse.tools || ['Python', 'TensorFlow', 'PyTorch', 'Scikit-Learn']));
 
-  const rawList = (Array.isArray(formData.projectsList) && formData.projectsList.length > 0)
-    ? formData.projectsList
-    : defaultProjects;
+  const rawList = (isOutdatedProjects(formData.projectsList, defaultCourse.id) && defaultProjects.length > 0)
+    ? defaultProjects
+    : (Array.isArray(formData.projectsList) && formData.projectsList.length > 0 ? formData.projectsList : defaultProjects);
 
   const projects = rawList.map((p, idx) => {
     if (typeof p === 'string') {

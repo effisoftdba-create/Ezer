@@ -55,6 +55,29 @@ import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocumen
 
 const SiteContext = createContext();
 
+function isGenericOrOutdatedCurriculum(modules) {
+  if (!Array.isArray(modules) || modules.length === 0) return true;
+  return modules.some((m) => {
+    const title = (m && m.title ? m.title : '').toLowerCase();
+    return title.includes('foundations & core architecture') || 
+           title.includes('advanced practical engineering') ||
+           title.includes('capstone project & placement preparation') ||
+           (m.topics && m.topics.includes('Environment Setup & Tooling')) ||
+           (m.topics && m.topics.includes('Hands-on Lab Exercises'));
+  });
+}
+
+function isGenericOrOutdatedProjects(projects) {
+  if (!Array.isArray(projects) || projects.length === 0) return true;
+  return projects.some((p) => {
+    const title = (typeof p === 'string' ? p : (p.title || '')).toLowerCase();
+    return title.includes('multi-cloud automated infrastructure sandbox') ||
+           title.includes('playwright e2e test automation framework') ||
+           title.includes('enterprise ai customer rag engine') ||
+           title.includes('multi-region aws vpc');
+  });
+}
+
 function mergeCollection(defaults, firebaseItems, primaryKey = 'id') {
   if (!Array.isArray(firebaseItems) || firebaseItems.length === 0) return defaults || [];
   if (!Array.isArray(defaults) || defaults.length === 0) return firebaseItems;
@@ -77,9 +100,12 @@ function mergeCollection(defaults, firebaseItems, primaryKey = 'id') {
       if (!merged.zoom && existing.zoom) merged.zoom = existing.zoom;
       if (!merged.imageZoom && existing.imageZoom) merged.imageZoom = existing.imageZoom;
 
-      // Smart curriculum preservation: if remote item has empty or placeholder generic topics, keep the rich syllabus from defaults
-      if (existing.curriculumModules && (!merged.curriculumModules || merged.curriculumModules.length === 0 || merged.curriculumModules.every((m) => !m.topics || m.topics.length <= 2 && m.topics.includes('Hands-on Lab Exercises')))) {
+      // Smart curriculum & projects preservation: if remote item has empty or placeholder generic topics, keep the rich syllabus from defaults
+      if (existing.curriculumModules && (!merged.curriculumModules || isGenericOrOutdatedCurriculum(merged.curriculumModules))) {
         merged.curriculumModules = existing.curriculumModules;
+      }
+      if (existing.projects && (!merged.projects || isGenericOrOutdatedProjects(merged.projects))) {
+        merged.projects = existing.projects;
       }
 
       itemMap.set(key, merged);

@@ -12,63 +12,38 @@ const DEFAULT_MODULE_IMAGES = [
   "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600"
 ];
 
+function isOutdatedCurriculum(modules) {
+  if (!Array.isArray(modules) || modules.length === 0) return true;
+  return modules.some((m) => {
+    const title = (m && m.title ? m.title : '').toLowerCase();
+    return title.includes('foundations & core architecture') || 
+           title.includes('advanced practical engineering') ||
+           title.includes('capstone project & placement preparation') ||
+           (m.topics && m.topics.includes('Environment Setup & Tooling')) ||
+           (m.topics && m.topics.includes('Hands-on Lab Exercises'));
+  });
+}
+
 export default function CourseTabCurriculum({ formData, setFormData }) {
   const defaultCourse = getCourseBySlug(formData.slug || formData.id || formData.title) || {};
   const defaultModules = Array.isArray(defaultCourse.curriculumModules) && defaultCourse.curriculumModules.length > 0
     ? defaultCourse.curriculumModules
-    : [
-        {
-          num: "01",
-          title: "Foundations & Core Architecture",
-          badge: "CORE FOUNDATIONS",
-          image: DEFAULT_MODULE_IMAGES[0],
-          topics: [
-            "Environment Setup & Tooling",
-            "Core Fundamentals & Architecture",
-            "Hands-on Practical Exercises",
-            "Real-World Best Practices"
-          ]
-        },
-        {
-          num: "02",
-          title: "Advanced Practical Engineering & Implementation",
-          badge: "ADVANCED IMPLEMENTATION",
-          image: DEFAULT_MODULE_IMAGES[1],
-          topics: [
-            "Building Production Modules",
-            "Debugging & Error Handling",
-            "Performance Optimization",
-            "Code Reviews & Mentorship"
-          ]
-        },
-        {
-          num: "03",
-          title: "Capstone Project & Placement Preparation",
-          badge: "CAPSTONE & CAREER",
-          image: DEFAULT_MODULE_IMAGES[2],
-          topics: [
-            "Live Industry Capstone Build",
-            "CI/CD & Cloud Deployment",
-            "Mock Technical Interviews",
-            "12-Month Placement Support"
-          ]
-        }
-      ];
+    : [];
 
-  const rawList = (Array.isArray(formData.curriculumModulesList) && formData.curriculumModulesList.length > 0)
-    ? formData.curriculumModulesList
-    : defaultModules;
+  const rawList = (isOutdatedCurriculum(formData.curriculumModulesList) && defaultModules.length > 0)
+    ? defaultModules
+    : (Array.isArray(formData.curriculumModulesList) && formData.curriculumModulesList.length > 0 ? formData.curriculumModulesList : defaultModules);
 
   const modules = rawList.map((m, idx) => {
     const rawTitle = typeof m === 'object' ? m.title : String(m);
     const cleanedTitle = cleanModuleTitle(rawTitle);
     const defMod = defaultModules[idx] || {};
     const num = (typeof m === 'object' && m.num) ? m.num : (defMod.num || (idx < 9 ? `0${idx + 1}` : `${idx + 1}`));
-    const badge = (typeof m === 'object' && m.badge) ? m.badge : (defMod.badge || `MODULE ${idx + 1}`);
+    const badge = (typeof m === 'object' && m.badge && !m.badge.startsWith('MODULE ')) ? m.badge : (defMod.badge || `MODULE ${idx + 1}`);
     const image = (typeof m === 'object' && m.image) ? m.image : (defMod.image || DEFAULT_MODULE_IMAGES[idx % DEFAULT_MODULE_IMAGES.length]);
-    const topics = (typeof m === 'object' && Array.isArray(m.topics))
+    const topics = (typeof m === 'object' && Array.isArray(m.topics) && m.topics.length > 0 && !m.topics.includes('Hands-on Lab Exercises') && !m.topics.includes('Environment Setup & Tooling'))
       ? m.topics
-      : (typeof m?.topics === 'string'
+      : (typeof m?.topics === 'string' && !m.topics.includes('Hands-on Lab Exercises') && !m.topics.includes('Environment Setup & Tooling')
           ? m.topics.split('\n').map((t) => t.trim()).filter(Boolean)
           : (defMod.topics || ['Hands-on Lab Exercises', 'Live Industry Scenarios']));
 

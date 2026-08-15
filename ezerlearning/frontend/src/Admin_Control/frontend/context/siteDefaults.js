@@ -47,7 +47,7 @@ export const defaultSlides = [
     zoom: 1
   },
 ];
-export const STORAGE_COURSES_KEY = 'ezer_courses:v19_detailed_curriculum_modules';
+export const STORAGE_COURSES_KEY = 'ezer_courses:v20_master_sync_curriculum_projects';
 export const STORAGE_PLATFORM_KEY = 'ezer_platform_def:v18_clean_image_paths';
 export const STORAGE_SUPPORT_CARDS_KEY = 'ezer_support_cards:v18_clean_image_paths';
 export const STORAGE_TRANSFORMED_KEY = 'ezer_transformed_lives:v18_clean_image_paths';
