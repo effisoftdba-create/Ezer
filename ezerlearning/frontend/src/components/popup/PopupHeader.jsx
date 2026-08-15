@@ -43,19 +43,21 @@ export default function PopupHeader({ onClose, overrideConfig }) {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '8px' }}>
         <img
           src={resolveImageSrc('images/logo_white_border.png')}
-          alt="EZER Crest Logo"
+          alt="EZER Learning Solution Crest Logo"
+          width="44"
+          height="44"
           style={{
-            height: '42px',
+            height: '44px',
             width: 'auto',
             objectFit: 'contain',
-            mixBlendMode: 'screen'
+            filter: 'drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35))'
           }}
         />
         <div style={{ textAlign: 'left' }}>
-          <div style={{ fontSize: '1.35rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
+          <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
             EZER
           </div>
-          <div style={{ fontSize: '0.56rem', fontWeight: 900, color: '#f2b733', letterSpacing: '0.27em', textTransform: 'uppercase', marginTop: '3px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
+          <div style={{ fontSize: '0.56rem', fontWeight: 900, color: '#f2b733', letterSpacing: '0.28em', textTransform: 'uppercase', marginTop: '4px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
             LEARNING SOLUTION
           </div>
         </div>

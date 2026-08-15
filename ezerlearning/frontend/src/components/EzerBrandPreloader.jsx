@@ -116,17 +116,20 @@ export default function EzerBrandPreloader() {
       <div className="ezer-preloader-card">
         <div className="ezer-preloader-border" />
         <div className="ezer-preloader-content">
-          <svg
+          <img
+            src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`}
+            alt="EZER Learning Solution Crest"
+            width="56"
+            height="56"
             className="ezer-preloader-logo"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#f2b733"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-          </svg>
+            style={{
+              height: '56px',
+              width: 'auto',
+              objectFit: 'contain',
+              marginBottom: '10px',
+              filter: 'drop-shadow(0 0 12px rgba(242, 183, 51, 0.6))'
+            }}
+          />
           <div className="ezer-preloader-title">EZER LEARNING</div>
           <div className="ezer-preloader-subtitle">Helper, Strength, and Support</div>
         </div>

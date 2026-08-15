@@ -23,7 +23,22 @@ export default function AdminHeaderNav({ handleReset, handleLogout, onMenuClick 
 
       {/* Brand & Status Mark */}
       <div className="admin-header-brand">
-        <div className="admin-header-logo">EZ</div>
+        <Link to="/" className="admin-header-brand-link" title="EZER Learning Solution">
+          <img
+            src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`}
+            alt="EZER Learning Solution Crest Logo"
+            width="42"
+            height="42"
+            className="admin-header-crest"
+          />
+          <div className="admin-header-brand-labels">
+            <span className="admin-brand-name">EZER</span>
+            <span className="admin-brand-tag">LEARNING SOLUTION</span>
+          </div>
+        </Link>
+
+        <div className="admin-header-divider" />
+
         <div className="admin-header-text">
           <h1 className="admin-header-title">Admin Control Panel</h1>
           <div className="admin-header-subtitle">
