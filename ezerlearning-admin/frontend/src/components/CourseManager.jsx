@@ -75,8 +75,9 @@ export default function CourseManager() {
     setEditingId(course.id || course.slug);
     setFormErrors({});
 
-    const defaultCourseData = getCourseBySlug(course.slug || course.id) || {};
-    const defaultModules = defaultCourseData.curriculumModules || [];
+    const defaultCourseData = getCourseBySlug(course.slug || course.id || course.title) || {};
+    const defaultModules = Array.isArray(defaultCourseData.curriculumModules) ? defaultCourseData.curriculumModules : [];
+    const defaultProjects = Array.isArray(defaultCourseData.projects) ? defaultCourseData.projects : [];
 
     // Check if the current course has valid custom curriculum modules or if it has stale placeholder topics
     const hasStaleOrEmptyTopics = !Array.isArray(course.curriculumModules) || 
@@ -109,6 +110,45 @@ export default function CourseManager() {
       };
     });
 
+    const courseTools = Array.isArray(course.tools)
+      ? course.tools
+      : (typeof course.tools === 'string' && course.tools.trim()
+          ? course.tools.split(',').map((t) => t.trim()).filter(Boolean)
+          : (defaultCourseData.tools || ['Python', 'TensorFlow', 'PyTorch', 'Scikit-Learn']));
+
+    const sourceProjects = (Array.isArray(course.projects) && course.projects.length > 0)
+      ? course.projects
+      : (defaultProjects.length > 0 ? defaultProjects : DEFAULT_COURSE_STATE.projectsList);
+
+    const safeProjectsList = sourceProjects.map((p, idx) => {
+      if (typeof p === 'string') {
+        return {
+          id: `proj-${idx}`,
+          title: p,
+          desc: 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.',
+          category: 'Capstone Project',
+          tools: courseTools.slice(0, 4)
+        };
+      }
+      return {
+        id: p.id || `proj-${idx}`,
+        title: p.title || `Capstone Project #${idx + 1}`,
+        desc: p.desc || p.description || 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.',
+        category: p.category || 'Capstone Project',
+        tools: Array.isArray(p.tools) 
+          ? p.tools 
+          : (typeof p.tools === 'string' && p.tools.trim() ? p.tools.split(',').map((t) => t.trim()).filter(Boolean) : courseTools.slice(0, 4))
+      };
+    });
+
+    const sourceWhoIsItFor = (Array.isArray(course.whoIsItFor) && course.whoIsItFor.length > 0)
+      ? course.whoIsItFor
+      : (defaultCourseData.whoIsItFor || DEFAULT_COURSE_STATE.whoIsItForList);
+
+    const sourceAdmissionSteps = (Array.isArray(course.admissionSteps) && course.admissionSteps.length > 0)
+      ? course.admissionSteps
+      : (defaultCourseData.admissionSteps || DEFAULT_COURSE_STATE.admissionStepsList);
+
     setFormData({
       title: course.title || '',
       slug: course.slug || '',
@@ -133,10 +173,10 @@ export default function CourseManager() {
       price: course.price || '₹9',
       originalPrice: course.originalPrice || '₹42,000',
       hashLink: course.hashLink || `#${(course.title || 'course').replace(/[^a-zA-Z0-9]/g, '')}_course`,
-      tools: Array.isArray(course.tools) ? course.tools.join(', ') : (course.tools || ''),
-      projectsList: Array.isArray(course.projects) ? course.projects : (DEFAULT_COURSE_STATE.projectsList),
-      whoIsItForList: Array.isArray(course.whoIsItFor) ? course.whoIsItFor : (DEFAULT_COURSE_STATE.whoIsItForList),
-      admissionStepsList: Array.isArray(course.admissionSteps) ? course.admissionSteps : (DEFAULT_COURSE_STATE.admissionStepsList),
+      tools: courseTools.join(', '),
+      projectsList: safeProjectsList,
+      whoIsItForList: sourceWhoIsItFor,
+      admissionStepsList: sourceAdmissionSteps,
       curriculumModulesList: safeCurriculumModules
     });
     setIsEditing(true);
@@ -160,8 +200,6 @@ export default function CourseManager() {
 
     const errors = {};
     if (!rawTitle) errors.title = true;
-    if (!formData.price?.trim()) errors.price = true;
-    if (!formData.image?.trim()) errors.image = true;
     if (!formData.duration?.trim()) errors.duration = true;
     if (!formData.languages?.trim()) errors.languages = true;
     if (!formData.tagline?.trim() && !formData.description?.trim()) errors.tagline = true;
@@ -193,13 +231,25 @@ export default function CourseManager() {
       };
     });
 
-    const normalizedProjects = (formData.projectsList || []).map((p) => {
-      if (typeof p === 'string') return p;
+    const normalizedProjects = (formData.projectsList || []).map((p, idx) => {
+      if (typeof p === 'string') {
+        return {
+          id: `proj-${idx}`,
+          title: p,
+          desc: 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.',
+          category: 'Capstone Project',
+          tools: toolsArray.slice(0, 4)
+        };
+      }
       const toolsArr = typeof p.tools === 'string'
         ? p.tools.split(',').map((t) => t.trim()).filter(Boolean)
-        : (Array.isArray(p.tools) ? p.tools : []);
+        : (Array.isArray(p.tools) ? p.tools : toolsArray.slice(0, 4));
       return {
         ...p,
+        id: p.id || `proj-${idx}`,
+        title: p.title || `Capstone Project #${idx + 1}`,
+        desc: p.desc || p.description || 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.',
+        category: p.category || 'Capstone Project',
         tools: toolsArr
       };
     });

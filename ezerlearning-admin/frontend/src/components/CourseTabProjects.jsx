@@ -1,59 +1,88 @@
 import React from 'react';
+import { getCourseBySlug } from '../data/courses';
 
 export default function CourseTabProjects({ formData, setFormData }) {
-  const handleAddProject = () => {
-    const list = formData.projectsList || [];
-    setFormData((prev) => ({
-      ...prev,
-      projectsList: [
-        ...list,
-        {
-          id: `proj-${Date.now()}`,
-          title: 'New Capstone Project',
-          desc: 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors.',
-          category: 'Hands-On Capstone',
-          tools: ['AWS', 'Docker', 'Linux']
-        }
-      ]
-    }));
-  };
+  const defaultCourse = getCourseBySlug(formData.slug || formData.id || formData.title) || {};
+  const defaultProjects = Array.isArray(defaultCourse.projects) ? defaultCourse.projects : [];
+  
+  const courseTools = Array.isArray(formData.tools) 
+    ? formData.tools 
+    : (typeof formData.tools === 'string' && formData.tools.trim() 
+        ? formData.tools.split(',').map((t) => t.trim()).filter(Boolean) 
+        : (defaultCourse.tools || ['Python', 'TensorFlow', 'PyTorch', 'Scikit-Learn']));
 
-  const handleUpdateProjectField = (targetKey, field, val) => {
-    const list = (formData.projectsList || []).map((p, index) => {
-      const isTarget = typeof p === 'string' ? index === targetKey : p.id === targetKey || index === targetKey;
-      if (!isTarget) return p;
+  const rawList = (Array.isArray(formData.projectsList) && formData.projectsList.length > 0)
+    ? formData.projectsList
+    : defaultProjects;
 
-      let baseObj = typeof p === 'string'
-        ? { id: `proj-${index}`, title: p, desc: '', category: 'Capstone Project', tools: [] }
-        : { ...p };
-
-      baseObj[field] = val;
-      return baseObj;
-    });
-    setFormData((prev) => ({ ...prev, projectsList: list }));
-  };
-
-  const handleDeleteProject = (targetKey) => {
-    const list = (formData.projectsList || []).filter((p, index) => {
-      if (typeof p === 'string') return index !== targetKey;
-      return p.id !== targetKey && index !== targetKey;
-    });
-    setFormData((prev) => ({ ...prev, projectsList: list }));
-  };
-
-  const projects = (formData.projectsList || []).map((p, idx) => {
+  const projects = rawList.map((p, idx) => {
     if (typeof p === 'string') {
       return {
         id: `proj-str-${idx}`,
         origIdx: idx,
         title: p,
-        desc: 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors.',
+        desc: 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.',
         category: 'Capstone Project',
-        tools: ['AWS', 'Docker']
+        tools: courseTools.slice(0, 4)
       };
     }
-    return { ...p, origIdx: idx };
+    return {
+      ...p,
+      origIdx: idx,
+      id: p.id || `proj-${idx}`,
+      title: p.title || `Capstone Project #${idx + 1}`,
+      desc: p.desc || p.description || 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.',
+      category: p.category || 'Capstone Project',
+      tools: Array.isArray(p.tools) 
+        ? p.tools 
+        : (typeof p.tools === 'string' && p.tools.trim() ? p.tools.split(',').map((t) => t.trim()).filter(Boolean) : courseTools.slice(0, 4))
+    };
   });
+
+  const handleAddProject = () => {
+    const nextIdx = projects.length;
+    const newProj = {
+      id: `proj-${Date.now()}`,
+      title: `New Capstone Project #${nextIdx + 1}`,
+      desc: 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.',
+      category: 'Capstone Project',
+      tools: courseTools.slice(0, 4)
+    };
+
+    setFormData((prev) => ({
+      ...prev,
+      projectsList: [...projects, newProj]
+    }));
+  };
+
+  const handleUpdateProjectField = (targetKey, field, val) => {
+    const list = projects.map((p, index) => {
+      const isTarget = typeof p === 'string' ? index === targetKey : p.id === targetKey || index === targetKey || p.origIdx === targetKey;
+      if (!isTarget) return p;
+
+      let baseObj = typeof p === 'string'
+        ? { id: `proj-${index}`, title: p, desc: 'Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness.', category: 'Capstone Project', tools: courseTools.slice(0, 4) }
+        : { ...p };
+
+      if (field === 'tools') {
+        baseObj[field] = typeof val === 'string' ? val.split(',').map((t) => t.trim()).filter(Boolean) : (Array.isArray(val) ? val : []);
+      } else {
+        baseObj[field] = val;
+      }
+      return baseObj;
+    });
+
+    setFormData((prev) => ({ ...prev, projectsList: list }));
+  };
+
+  const handleDeleteProject = (targetKey) => {
+    const list = projects.filter((p, index) => {
+      if (typeof p === 'string') return index !== targetKey;
+      return p.id !== targetKey && index !== targetKey && p.origIdx !== targetKey;
+    });
+
+    setFormData((prev) => ({ ...prev, projectsList: list }));
+  };
 
   return (
     <div>
@@ -69,7 +98,16 @@ export default function CourseTabProjects({ formData, setFormData }) {
         <button
           type="button"
           onClick={handleAddProject}
-          style={{ padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 800, cursor: 'pointer' }}
+          style={{
+            padding: '8px 14px',
+            background: '#000648',
+            color: '#f2b733',
+            border: 'none',
+            borderRadius: '8px',
+            fontSize: '0.82rem',
+            fontWeight: 800,
+            cursor: 'pointer'
+          }}
         >
           + Add Capstone Project Card
         </button>
@@ -102,67 +140,69 @@ export default function CourseTabProjects({ formData, setFormData }) {
                 <button
                   type="button"
                   onClick={() => handleDeleteProject(keyIdentifier)}
-                  style={{ padding: '4px 10px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: '#ef4444',
+                    cursor: 'pointer',
+                    fontSize: '0.8rem',
+                    fontWeight: 700
+                  }}
                 >
                   Remove Project
                 </button>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 200px', gap: '12px' }}>
                 <div>
-                  <label htmlFor={`cap_title_${proj.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
                     Project Title *
                   </label>
                   <input
-                    id={`cap_title_${proj.id}`}
                     type="text"
                     value={proj.title || ''}
                     onChange={(e) => handleUpdateProjectField(keyIdentifier, 'title', e.target.value)}
-                    placeholder="e.g. Multi-Cloud Automated Infrastructure Sandbox"
-                    style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
+                    placeholder="e.g. Customer Churn Prediction & Retention Modeling System"
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', fontWeight: 700 }}
                   />
                 </div>
-
                 <div>
-                  <label htmlFor={`cap_cat_${proj.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
                     Category Badge Tag
                   </label>
                   <input
-                    id={`cap_cat_${proj.id}`}
                     type="text"
-                    value={proj.category || ''}
+                    value={proj.category || 'Capstone Project'}
                     onChange={(e) => handleUpdateProjectField(keyIdentifier, 'category', e.target.value)}
-                    placeholder="e.g. Cloud & DevOps Capstone"
-                    style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
+                    placeholder="Capstone Project"
+                    style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor={`cap_desc_${proj.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
                   Project Inner Description Content *
                 </label>
                 <textarea
-                  id={`cap_desc_${proj.id}`}
                   rows={2}
-                  value={proj.desc || proj.description || ''}
+                  value={proj.desc || ''}
                   onChange={(e) => handleUpdateProjectField(keyIdentifier, 'desc', e.target.value)}
-                  placeholder="Design and provision multi-region infrastructure on AWS and Azure using Terraform modules..."
-                  style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
+                  placeholder="Build end-to-end production lab infrastructure evaluated by senior corporate mentors for portfolio readiness."
+                  style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.82rem', lineHeight: 1.4 }}
                 />
               </div>
 
               <div>
-                <label htmlFor={`cap_tools_${proj.id}`} style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#475569', marginBottom: '4px' }}>
                   Technologies & Tools (Comma Separated)
                 </label>
                 <input
-                  id={`cap_tools_${proj.id}`}
                   type="text"
                   value={toolsStr}
                   onChange={(e) => handleUpdateProjectField(keyIdentifier, 'tools', e.target.value)}
-                  placeholder="e.g. AWS, Terraform, Kubernetes, Docker"
-                  style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }}
+                  placeholder="Python, TensorFlow, PyTorch, Scikit-Learn"
+                  style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.82rem' }}
                 />
               </div>
             </div>

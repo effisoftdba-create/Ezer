@@ -1451,7 +1451,14 @@ export const phase2Courses = [];
 
 export function getCourseBySlug(slug) {
   if (!slug) return null;
-  const cleanSlug = String(slug).toLowerCase().trim().replace(/^#/, '').replace(/_course$/, '');
+  const raw = String(slug).toLowerCase().trim().replace(/^#/, '').replace(/_course$/, '');
+  const normalized = raw.replace(/[^a-z0-9]/g, '');
   const all = [...phase1Courses, ...phase2Courses];
-  return all.find(c => c.slug === cleanSlug || c.id === cleanSlug || c.slug === slug || c.id === slug) || null;
+  return all.find(c => {
+    const cSlugNorm = (c.slug || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const cIdNorm = (c.id || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const cTitleNorm = (c.title || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    return c.slug === slug || c.id === slug || c.slug === raw || c.id === raw || 
+           cSlugNorm === normalized || cIdNorm === normalized || cTitleNorm === normalized;
+  }) || null;
 }
