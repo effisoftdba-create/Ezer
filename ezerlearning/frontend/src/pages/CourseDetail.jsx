@@ -5,6 +5,7 @@ import { LazyMotion, domAnimation, m } from 'framer-motion';
 import { getCourseBySlug } from '../data/courses';
 import { useSiteData } from '../context/SiteContext';
 import { handleImgError, resolveImageSrc } from '../utils/imageUtils';
+import { cleanModuleTitle } from '../utils/courseUtils';
 
 import VideoPlayer from '../components/VideoPlayer';
 import PaymentCard from '../components/PaymentCard';
@@ -91,24 +92,32 @@ export default function CourseDetail({ onOpenDemoModal }) {
   // Active YouTube video URL fallback
   const activeVideoUrl = course.videoUrl || 'https://www.youtube.com/watch?v=aircAruvnKk';
 
-  // Modules List for Admin-driven Detailed Breakdown
-  const modulesList = course.curriculumModules || [
-    {
-      num: "01",
-      title: "Foundations & Core Architecture",
-      topics: ["Environment Setup & Tooling", "Core Fundamentals", "Hands-on Practical Exercises", "Real-World Best Practices"]
-    },
-    {
-      num: "02",
-      title: "Advanced Practical Engineering & Implementation",
-      topics: ["Building Production Modules", "Debugging & Error Handling", "Performance Optimization", "Code Reviews & Mentorship"]
-    },
-    {
-      num: "03",
-      title: "Capstone Project & Placement Preparation",
-      topics: ["Live Industry Capstone Build", "CI/CD & Cloud Deployment", "Mock Technical Interviews", "12-Month Placement Support"]
-    }
-  ];
+  // Modules List for Admin-driven Detailed Breakdown (Cleaned & Sanitized)
+  const rawModules = Array.isArray(course.curriculumModules) && course.curriculumModules.length > 0
+    ? course.curriculumModules
+    : [
+        {
+          num: "01",
+          title: "Foundations & Core Architecture",
+          topics: ["Environment Setup & Tooling", "Core Fundamentals", "Hands-on Practical Exercises", "Real-World Best Practices"]
+        },
+        {
+          num: "02",
+          title: "Advanced Practical Engineering & Implementation",
+          topics: ["Building Production Modules", "Debugging & Error Handling", "Performance Optimization", "Code Reviews & Mentorship"]
+        },
+        {
+          num: "03",
+          title: "Capstone Project & Placement Preparation",
+          topics: ["Live Industry Capstone Build", "CI/CD & Cloud Deployment", "Mock Technical Interviews", "12-Month Placement Support"]
+        }
+      ];
+
+  const modulesList = rawModules.map((m, idx) => ({
+    ...m,
+    num: m.num || (idx < 9 ? `0${idx + 1}` : `${idx + 1}`),
+    title: cleanModuleTitle(m.title) || `Module ${idx + 1}`
+  }));
 
   return (
     <LazyMotion features={domAnimation}>

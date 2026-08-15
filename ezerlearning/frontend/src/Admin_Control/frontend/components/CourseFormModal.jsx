@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import { HiX, HiCheck, HiPhotograph, HiBookOpen, HiLightningBolt, HiUserGroup, HiAcademicCap, HiSparkles } from 'react-icons/hi';
+import { HiX, HiCheck, HiPhotograph, HiBookOpen, HiLightningBolt, HiUserGroup, HiAcademicCap, HiSparkles, HiViewGrid } from 'react-icons/hi';
 import CourseTabProjects from './CourseTabProjects';
 import CourseTabSteps from './CourseTabSteps';
+import CourseTabCurriculum from './CourseTabCurriculum';
 
 const TABS = [
   { id: 'basic', label: 'Basic Info & Banner', icon: <HiBookOpen size={16} /> },
+  { id: 'curriculum', label: 'Curriculum & Modules', icon: <HiViewGrid size={16} /> },
   { id: 'capstones', label: 'Capstone Projects', icon: <HiLightningBolt size={16} /> },
   { id: 'steps', label: '6 Program Steps', icon: <HiAcademicCap size={16} /> },
   { id: 'audience', label: 'Who is this For?', icon: <HiUserGroup size={16} /> },
@@ -193,7 +195,7 @@ export default function CourseFormModal({
                 ⚠️ Please fill in all required fields highlighted in red below before saving the course.
               </div>
             )}
-
+            
             {/* TAB 1: BASIC INFO */}
             {activeTab === 'basic' && (
               <div>
@@ -446,7 +448,12 @@ export default function CourseFormModal({
               </div>
             )}
 
-            {/* TAB 2: CAPSTONE PROJECTS */}
+            {/* TAB 2: CURRICULUM MODULES */}
+            {activeTab === 'curriculum' && (
+              <CourseTabCurriculum formData={formData} setFormData={setFormData} />
+            )}
+
+            {/* TAB 3: CAPSTONE PROJECTS */}
             {activeTab === 'capstones' && (
               <CourseTabProjects formData={formData} setFormData={setFormData} />
             )}

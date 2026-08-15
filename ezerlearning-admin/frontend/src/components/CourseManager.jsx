@@ -4,6 +4,7 @@ import ImagePickerModal from './ImagePickerModal';
 import CourseFormModal from './CourseFormModal';
 import { HiPlus, HiTrash, HiPencil, HiSearch } from 'react-icons/hi';
 import { resolveImageSrc } from '../utils/imageUtils';
+import { cleanModuleTitle } from '../utils/courseUtils';
 
 const DEFAULT_COURSE_STATE = {
   title: '',
@@ -42,7 +43,7 @@ const DEFAULT_COURSE_STATE = {
     { step: '05', title: 'LMS Access & Lab Setup', desc: 'Get full access to live cloud sandboxes & repos.' },
     { step: '06', title: 'Live Cohort & Placement Support', desc: 'Start live classes and unlock placement support.' }
   ],
-  modulesStr: '01: Cloud Architecture, 02: Containerization with Docker, 03: Kubernetes & CI/CD Pipelines'
+  curriculumModulesList: []
 };
 
 function scrollToTop() {
@@ -72,12 +73,23 @@ export default function CourseManager() {
   const handleOpenEdit = (course) => {
     setEditingId(course.id || course.slug);
     setFormErrors({});
-    const safeModulesStr = Array.isArray(course.curriculumModules)
-      ? course.curriculumModules.flatMap((m) => {
-          const val = typeof m === 'object' ? `${m.num || ''} ${m.title || ''}`.trim() : String(m).trim();
-          return val ? [val] : [];
-        }).join(', ')
-      : '';
+
+    const safeCurriculumModules = Array.isArray(course.curriculumModules)
+      ? course.curriculumModules.map((m, idx) => {
+          const rawTitle = typeof m === 'object' ? m.title : String(m);
+          const cleanedTitle = cleanModuleTitle(rawTitle);
+          return {
+            id: (typeof m === 'object' && m.id) ? m.id : `mod-${idx}`,
+            num: (typeof m === 'object' && m.num) ? m.num : (idx < 9 ? `0${idx + 1}` : `${idx + 1}`),
+            title: cleanedTitle || `Module ${idx + 1}`,
+            badge: (typeof m === 'object' && m.badge) ? m.badge : `MODULE ${idx + 1}`,
+            image: (typeof m === 'object' && m.image) ? m.image : '',
+            topics: (typeof m === 'object' && Array.isArray(m.topics))
+              ? m.topics
+              : (typeof m?.topics === 'string' ? m.topics.split('\n').map((t) => t.trim()).filter(Boolean) : ['Hands-on Lab Exercises', 'Live Industry Scenarios'])
+          };
+        })
+      : [];
 
     setFormData({
       title: course.title || '',
@@ -107,7 +119,7 @@ export default function CourseManager() {
       projectsList: Array.isArray(course.projects) ? course.projects : (DEFAULT_COURSE_STATE.projectsList),
       whoIsItForList: Array.isArray(course.whoIsItFor) ? course.whoIsItFor : (DEFAULT_COURSE_STATE.whoIsItForList),
       admissionStepsList: Array.isArray(course.admissionSteps) ? course.admissionSteps : (DEFAULT_COURSE_STATE.admissionStepsList),
-      modulesStr: safeModulesStr
+      curriculumModulesList: safeCurriculumModules
     });
     setIsEditing(true);
     scrollToTop();
@@ -148,13 +160,20 @@ export default function CourseManager() {
       ? formData.tools.split(',').map((t) => t.trim()).filter(Boolean)
       : (Array.isArray(formData.tools) ? formData.tools : ['AWS', 'Docker']);
 
-    const modulesArray = typeof formData.modulesStr === 'string'
-      ? formData.modulesStr.split(',').map((m, idx) => ({
-          num: `0${idx + 1}`,
-          title: m.trim(),
-          topics: ['Hands-on Lab Exercises', 'Live Industry Scenarios']
-        })).filter((m) => m.title)
-      : [];
+    const normalizedModules = (formData.curriculumModulesList || []).map((m, idx) => {
+      const rawTitle = typeof m === 'object' ? m.title : String(m);
+      const cleanedTitle = cleanModuleTitle(rawTitle);
+      return {
+        id: (typeof m === 'object' && m.id) ? m.id : `mod-${idx}`,
+        num: (typeof m === 'object' && m.num) ? m.num : (idx < 9 ? `0${idx + 1}` : `${idx + 1}`),
+        title: cleanedTitle || `Module ${idx + 1}`,
+        badge: (typeof m === 'object' && m.badge) ? m.badge : `MODULE ${idx + 1}`,
+        image: (typeof m === 'object' && m.image) ? m.image : '',
+        topics: (typeof m === 'object' && Array.isArray(m.topics))
+          ? m.topics
+          : (typeof m?.topics === 'string' ? m.topics.split('\n').map((t) => t.trim()).filter(Boolean) : ['Hands-on Lab Exercises', 'Live Industry Scenarios'])
+      };
+    });
 
     const normalizedProjects = (formData.projectsList || []).map((p) => {
       if (typeof p === 'string') return p;
@@ -184,7 +203,7 @@ export default function CourseManager() {
       projects: normalizedProjects,
       whoIsItFor: formData.whoIsItForList || [],
       admissionSteps: formData.admissionStepsList || [],
-      curriculumModules: modulesArray.length > 0 ? modulesArray : [{ num: '01', title: 'Fundamentals', topics: ['Core Concepts'] }]
+      curriculumModules: normalizedModules.length > 0 ? normalizedModules : [{ num: '01', title: 'Fundamentals & Core Concepts', badge: 'MODULE 1', topics: ['Core Concepts', 'Hands-on Labs'] }]
     };
 
     if (editingId) {
