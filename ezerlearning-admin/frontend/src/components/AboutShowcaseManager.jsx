@@ -35,15 +35,17 @@ export default function AboutShowcaseManager() {
   }, [aboutShowcaseCards]);
 
   const handleFieldChange = (index, field, value) => {
-    setCardsList((prev) => {
-      const updated = [...prev];
-      updated[index] = { ...updated[index], [field]: value };
-      if (field === 'image') updated[index].url = value;
-      if (field === 'imagePosition') updated[index].position = value;
-      if (field === 'imageFit') updated[index].fit = value;
-      if (field === 'imageZoom') updated[index].zoom = value;
-      return updated;
-    });
+    setCardsList((prev) =>
+      prev.map((card, i) => {
+        if (i !== index) return card;
+        const updated = { ...card, [field]: value };
+        if (field === 'image') updated.url = value;
+        if (field === 'imagePosition') updated.position = value;
+        if (field === 'imageFit') updated.fit = value;
+        if (field === 'imageZoom') updated.zoom = value;
+        return updated;
+      })
+    );
     const errKey = `${index}_${field}`;
     if (formErrors[errKey]) {
       setFormErrors((prev) => ({ ...prev, [errKey]: false }));
@@ -51,26 +53,26 @@ export default function AboutShowcaseManager() {
   };
 
   const handleSelectImage = (index, url, position, fit, zoom, mobileOpts) => {
-    setCardsList((prev) => {
-      const updated = [...prev];
-      const target = updated[index] || {};
-      updated[index] = {
-        ...target,
-        image: url,
-        url: url,
-        imagePosition: position || target.imagePosition || target.position || 'center center',
-        position: position || target.position || target.imagePosition || 'center center',
-        imageFit: fit || target.imageFit || target.fit || 'cover',
-        fit: fit || target.fit || target.imageFit || 'cover',
-        imageZoom: zoom || target.imageZoom || target.zoom || 1,
-        zoom: zoom || target.zoom || target.imageZoom || 1,
-        mobileImagePosition: mobileOpts?.mobilePosition || target.mobileImagePosition || target.mobilePosition || position || 'center center',
-        mobilePosition: mobileOpts?.mobilePosition || target.mobilePosition || target.mobileImagePosition || position || 'center center',
-        mobileImageZoom: mobileOpts?.mobileZoom || target.mobileImageZoom || target.mobileZoom || zoom || 1,
-        mobileZoom: mobileOpts?.mobileZoom || target.mobileZoom || target.mobileImageZoom || zoom || 1
-      };
-      return updated;
-    });
+    setCardsList((prev) =>
+      prev.map((target, i) => {
+        if (i !== index) return target;
+        return {
+          ...target,
+          image: url,
+          url: url,
+          imagePosition: position || target.imagePosition || target.position || 'center center',
+          position: position || target.position || target.imagePosition || 'center center',
+          imageFit: fit || target.imageFit || target.fit || 'cover',
+          fit: fit || target.fit || target.imageFit || 'cover',
+          imageZoom: zoom || target.imageZoom || target.zoom || 1,
+          zoom: zoom || target.zoom || target.imageZoom || 1,
+          mobileImagePosition: mobileOpts?.mobilePosition || target.mobileImagePosition || target.mobilePosition || position || 'center center',
+          mobilePosition: mobileOpts?.mobilePosition || target.mobilePosition || target.mobileImagePosition || position || 'center center',
+          mobileImageZoom: mobileOpts?.mobileZoom || target.mobileImageZoom || target.mobileZoom || zoom || 1,
+          mobileZoom: mobileOpts?.mobileZoom || target.mobileZoom || target.mobileImageZoom || zoom || 1
+        };
+      })
+    );
     setFormErrors((prev) => ({ ...prev, [`${index}_image`]: false }));
     setPickerTargetIdx(null);
   };
@@ -78,10 +80,13 @@ export default function AboutShowcaseManager() {
   const handleAddPoint = (cardIdx) => {
     const text = (newPointInputs[cardIdx] || '').trim();
     if (!text) return;
-    const updated = [...cardsList];
-    const currentPoints = Array.isArray(updated[cardIdx].points) ? updated[cardIdx].points : [];
-    updated[cardIdx] = { ...updated[cardIdx], points: [...currentPoints, text] };
-    setCardsList(updated);
+    setCardsList((prev) =>
+      prev.map((card, i) => {
+        if (i !== cardIdx) return card;
+        const currentPoints = Array.isArray(card.points) ? card.points : [];
+        return { ...card, points: [...currentPoints, text] };
+      })
+    );
     setNewPointInputs((prev) => ({ ...prev, [cardIdx]: '' }));
   };
 
@@ -95,11 +100,14 @@ export default function AboutShowcaseManager() {
     const trimmed = (text || '').trim();
     if (!trimmed) return;
 
-    const updated = [...cardsList];
-    const currentPoints = Array.isArray(updated[cardIdx].points) ? [...updated[cardIdx].points] : [];
-    currentPoints[pointIdx] = trimmed;
-    updated[cardIdx] = { ...updated[cardIdx], points: currentPoints };
-    setCardsList(updated);
+    setCardsList((prev) =>
+      prev.map((card, i) => {
+        if (i !== cardIdx) return card;
+        const currentPoints = Array.isArray(card.points) ? [...card.points] : [];
+        currentPoints[pointIdx] = trimmed;
+        return { ...card, points: currentPoints };
+      })
+    );
     setEditingPoint(null);
   };
 
@@ -108,13 +116,16 @@ export default function AboutShowcaseManager() {
   };
 
   const handleDeletePoint = (cardIdx, pointIdx) => {
-    const updated = [...cardsList];
-    const currentPoints = Array.isArray(updated[cardIdx].points) ? updated[cardIdx].points : [];
-    updated[cardIdx] = {
-      ...updated[cardIdx],
-      points: currentPoints.filter((_, idx) => idx !== pointIdx)
-    };
-    setCardsList(updated);
+    setCardsList((prev) =>
+      prev.map((card, i) => {
+        if (i !== cardIdx) return card;
+        const currentPoints = Array.isArray(card.points) ? card.points : [];
+        return {
+          ...card,
+          points: currentPoints.filter((_, idx) => idx !== pointIdx)
+        };
+      })
+    );
     if (editingPoint && editingPoint.cardIdx === cardIdx && editingPoint.pointIdx === pointIdx) {
       setEditingPoint(null);
     }

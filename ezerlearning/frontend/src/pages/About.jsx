@@ -47,6 +47,14 @@ const coreObjectives = [
 
 export default function About({ onOpenDemoModal }) {
   const { aboutVideos, aboutShowcaseCards } = useSiteData() || {};
+  const [isMobile, setIsMobile] = React.useState(() => typeof window !== 'undefined' && window.innerWidth <= 900);
+
+  React.useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 900);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const showcaseList = Array.isArray(aboutShowcaseCards) && aboutShowcaseCards.length > 0
     ? aboutShowcaseCards
     : defaultAboutShowcaseCards;
@@ -378,6 +386,14 @@ export default function About({ onOpenDemoModal }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
             {showcaseList.map((card, idx) => {
               const isEven = idx % 2 === 0;
+              const cardImagePos = isMobile
+                ? (card.mobileImagePosition || card.mobilePosition || card.imagePosition || card.position || 'center center')
+                : (card.imagePosition || card.position || 'center center');
+              const cardImageZoom = isMobile
+                ? (card.mobileImageZoom || card.mobileZoom || card.imageZoom || card.zoom || 1)
+                : (card.imageZoom || card.zoom || 1);
+              const cardImageFit = card.imageFit || card.fit || 'cover';
+
               return (
                 <div
                   key={card.id || idx}
@@ -407,8 +423,10 @@ export default function About({ onOpenDemoModal }) {
                   {/* Photo Column */}
                   <div
                     style={{
-                      flex: '1 1 380px',
-                      minHeight: '280px',
+                      flex: isMobile ? '1 1 100%' : '1 1 380px',
+                      width: isMobile ? '100%' : 'auto',
+                      aspectRatio: isMobile ? '16 / 9' : 'unset',
+                      minHeight: isMobile ? 'unset' : '280px',
                       position: 'relative',
                       overflow: 'hidden',
                       background: '#000648',
@@ -424,19 +442,22 @@ export default function About({ onOpenDemoModal }) {
                         left: 0,
                         width: '100%',
                         height: '100%',
-                        objectFit: card.imageFit || card.fit || 'cover',
-                        objectPosition: card.imagePosition || card.position || 'center center',
-                        transform: (card.imageZoom || card.zoom) && (card.imageZoom || card.zoom) !== 1 ? `scale(${card.imageZoom || card.zoom})` : undefined,
+                        objectFit: cardImageFit,
+                        objectPosition: cardImagePos,
+                        transform: cardImageZoom && cardImageZoom !== 1 ? `scale(${cardImageZoom})` : undefined,
+                        transformOrigin: cardImagePos,
                         display: 'block',
-                        transition: 'transform 0.6s ease',
+                        transition: isMobile ? 'none' : 'transform 0.6s ease',
                       }}
                       onMouseEnter={(e) => {
-                        const zoomVal = card.imageZoom || card.zoom || 1;
-                        e.currentTarget.style.transform = `scale(${zoomVal * 1.04})`;
+                        if (!isMobile) {
+                          e.currentTarget.style.transform = `scale(${cardImageZoom * 1.04})`;
+                        }
                       }}
                       onMouseLeave={(e) => {
-                        const zoomVal = card.imageZoom || card.zoom || 1;
-                        e.currentTarget.style.transform = zoomVal !== 1 ? `scale(${zoomVal})` : 'none';
+                        if (!isMobile) {
+                          e.currentTarget.style.transform = cardImageZoom !== 1 ? `scale(${cardImageZoom})` : 'none';
+                        }
                       }}
                       onError={(e) => {
                         e.target.src = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=900&h=600';
