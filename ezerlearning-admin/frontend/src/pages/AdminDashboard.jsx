@@ -26,7 +26,7 @@ import AdminHeaderNav from '../components/AdminHeaderNav';
 import AdminSidebarNav from '../components/AdminSidebarNav';
 import './AdminDashboard.css';
 
-import UIStateDisplay, { STATE_TYPES } from '../../../components/UIStateDisplay';
+import UIStateDisplay, { STATE_TYPES } from '../components/UIStateDisplay';
 import {
   HiOutlinePhotograph,
   HiOutlineAcademicCap,

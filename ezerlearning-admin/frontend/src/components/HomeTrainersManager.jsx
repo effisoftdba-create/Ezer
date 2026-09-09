@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import { HiPlus, HiTrash, HiPencil, HiX } from 'react-icons/hi';
-import { resolveImageSrc } from '../../../utils/imageUtils';
+import { resolveImageSrc } from '../utils/imageUtils';
 
 const DEFAULT_TRAINER_FORM = {
   name: '',

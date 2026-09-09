@@ -116,6 +116,9 @@ export function subscribeToCollection(collectionName, onUpdate) {
               ...docItem.data()
             }));
             debouncedUpdate(items);
+          } else {
+            // Snapshot empty: pass empty array so SiteContext default seed/fallback triggers
+            debouncedUpdate([]);
           }
         },
         (error) => {
@@ -155,6 +158,10 @@ export function subscribeToCollection(collectionName, onUpdate) {
           }
         },
         (err) => {
+          // Suppress repetitive permission_denied noise when RTDB rules are being configured
+          if (err && (err.code === 'PERMISSION_DENIED' || String(err.message || '').includes('permission_denied'))) {
+            return;
+          }
           console.warn(`[RealtimeDB Listener Notice] ${collectionName}:`, err.message || err);
         }
       );
@@ -181,32 +188,35 @@ export async function saveDocument(collectionName, docId, data) {
   const cleanId = String(docId || (data && (data.id || data.slug || data.title)) || `doc_${Date.now()}`);
   const cleanData = sanitizeForFirestore({ ...data, id: cleanId, updatedAt: new Date().toISOString() });
 
-  let saved = false;
+  let firestoreSaved = false;
+  let rtdbSaved = false;
 
-  // 1. Firestore
+  // 1. Firestore (Primary)
   if (db) {
     try {
       const docRef = doc(db, collectionName, cleanId);
       await setDoc(docRef, cleanData, { merge: true });
-      saved = true;
+      firestoreSaved = true;
     } catch (err) {
       console.warn(`[Firestore Save Notice] ${collectionName}/${cleanId}:`, err.message || err);
     }
   }
 
-  // 2. Realtime Database
+  // 2. Realtime Database (Secondary Sync)
   const rtdb = getRealtimeDb();
   if (rtdb) {
     try {
       const itemRef = ref(rtdb, `${collectionName}/${cleanId}`);
       await set(itemRef, cleanData);
-      saved = true;
+      rtdbSaved = true;
     } catch (err) {
-      console.warn(`[RealtimeDB Save Notice] ${collectionName}/${cleanId}:`, err.message || err);
+      if (!String(err?.message || '').includes('permission_denied')) {
+        console.warn(`[RealtimeDB Save Notice] ${collectionName}/${cleanId}:`, err.message || err);
+      }
     }
   }
 
-  return saved;
+  return firestoreSaved || rtdbSaved;
 }
 
 /**
@@ -235,7 +245,9 @@ export async function removeDocument(collectionName, docId) {
       await remove(itemRef);
       removed = true;
     } catch (err) {
-      console.warn(`[RealtimeDB Delete Notice] ${collectionName}/${cleanId}:`, err.message || err);
+      if (!String(err?.message || '').includes('permission_denied')) {
+        console.warn(`[RealtimeDB Delete Notice] ${collectionName}/${cleanId}:`, err.message || err);
+      }
     }
   }
 
@@ -258,6 +270,9 @@ export async function saveCollectionArray(collectionName, itemsArray) {
       String(item.author || ''),
       String(item.roleTag || '')
     ].filter(Boolean)));
+
+    let firestoreSaved = false;
+    let rtdbSaved = false;
 
     // 1. Remove obsolete documents from Firestore collection
     if (db) {
@@ -291,23 +306,31 @@ export async function saveCollectionArray(collectionName, itemsArray) {
         const dbRef = ref(rtdb, collectionName);
         const cleanSanitized = sanitizeForFirestore(cleanItemsArray);
         await set(dbRef, cleanSanitized);
+        rtdbSaved = true;
       } catch (e) {
-        console.warn(`[RealtimeDB Overwrite Notice] ${collectionName}:`, e.message || e);
+        if (!String(e?.message || '').includes('permission_denied')) {
+          console.warn(`[RealtimeDB Overwrite Notice] ${collectionName}:`, e.message || e);
+        }
       }
     }
 
     // 3. Save each current item to Firestore
     if (db) {
-      const savePromises = cleanItemsArray.map((item) => {
-        const id = String(item.id || item.slug || item.badge || item.title || `item_${Date.now()}`);
-        const docRef = doc(db, collectionName, id);
-        const cleanData = sanitizeForFirestore({ ...item, id, updatedAt: new Date().toISOString() });
-        return setDoc(docRef, cleanData, { merge: true });
-      });
-      await Promise.all(savePromises);
+      try {
+        const savePromises = cleanItemsArray.map((item) => {
+          const id = String(item.id || item.slug || item.badge || item.title || `item_${Date.now()}`);
+          const docRef = doc(db, collectionName, id);
+          const cleanData = sanitizeForFirestore({ ...item, id, updatedAt: new Date().toISOString() });
+          return setDoc(docRef, cleanData, { merge: true });
+        });
+        await Promise.all(savePromises);
+        firestoreSaved = true;
+      } catch (e) {
+        console.warn(`[Firestore Save Collection Notice] ${collectionName}:`, e.message || e);
+      }
     }
 
-    return true;
+    return firestoreSaved || rtdbSaved;
   } catch (err) {
     console.error(`[Firebase] Save collection error for ${collectionName}:`, err);
     return false;

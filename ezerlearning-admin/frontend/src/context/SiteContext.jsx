@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
 import { triggerStateToast } from '../utils/toastService';
 import { batchFetchRelatedData } from '../utils/dbQueries';
-import { phase1Courses } from '../../../data/courses';
-import { testimonials as initialTestimonials } from '../../../data/testimonials';
-import { generalFaqs } from '../../../data/faq';
+import { phase1Courses } from '../data/courses';
+import { testimonials as initialTestimonials } from '../data/testimonials';
+import { generalFaqs } from '../data/faq';
 import {
   STORAGE_SLIDES_KEY,
   STORAGE_COURSES_KEY,
@@ -52,7 +52,7 @@ import {
   safeSetStorage
 } from './siteDefaults';
 
-import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../../../services/firebaseService';
+import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../services/firebaseService';
 
 const SiteContext = createContext();
 

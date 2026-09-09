@@ -6,6 +6,7 @@ import CompanyLogos from '../components/CompanyLogos';
 import WhyEzer from '../components/WhyEzer';
 import AnimMasterShowcase from '../components/AnimMasterShowcase';
 import EzerDefinition from '../components/EzerDefinition';
+import ExecutiveLeadership from '../components/ExecutiveLeadership';
 import TrainersShowcase from '../components/TrainersShowcase';
 import TransformedLives from '../components/TransformedLives';
 import VideoTestimonials from '../components/VideoTestimonials';
@@ -21,6 +22,7 @@ export default function Home({ onOpenDemoModal }) {
       <WhyEzer />
       <AnimMasterShowcase onOpenDemoModal={onOpenDemoModal} />
       <EzerDefinition />
+      <ExecutiveLeadership />
       <TrainersShowcase />
       <TransformedLives />
       <VideoTestimonials />

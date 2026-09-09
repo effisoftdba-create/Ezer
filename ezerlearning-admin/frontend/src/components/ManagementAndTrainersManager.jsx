@@ -4,7 +4,7 @@ import { useSiteData } from '../context/SiteContext';
 import { defaultExecutiveLeaders, defaultHomeTrainers } from '../context/siteDefaults';
 import ImagePickerModal from './ImagePickerModal';
 import { HiPlus, HiTrash, HiPencil, HiX, HiAcademicCap, HiUserGroup } from 'react-icons/hi';
-import { resolveImageSrc } from '../../../utils/imageUtils';
+import { resolveImageSrc } from '../utils/imageUtils';
 
 export default function ManagementAndTrainersManager({ initialScroll }) {
   const {
