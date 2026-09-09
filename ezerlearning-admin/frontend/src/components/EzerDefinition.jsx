@@ -2,7 +2,7 @@ import React from 'react';
 import { HiSparkles, HiCheckCircle, HiGlobeAlt } from 'react-icons/hi';
 import { useSiteData } from '../context/SiteContext';
 import { resolveImageSrc } from '../utils/imageUtils';
-import ExecutiveLeadership from './ExecutiveLeadership';
+
 
 function ExecutiveGlassStack({ leaders }) {
   return (
@@ -50,6 +50,7 @@ function ExecutiveGlassStack({ leaders }) {
               title={`${exec.roleName || exec.roleTag} — ${exec.name}`}
             >
               <img
+                loading="lazy"
                 src={resolveImageSrc(exec.image)}
                 alt={exec.name || exec.roleTag}
                 style={{
@@ -106,8 +107,7 @@ export default function EzerDefinition() {
       ];
 
   return (
-    <>
-      <section 
+    <section 
         id="ezer-definition"
         style={{
           padding: '36px 0',
@@ -157,6 +157,7 @@ export default function EzerDefinition() {
                 }}
               >
                 <img 
+                  loading="lazy"
                   src={resolveImageSrc(ezerDefinition.image)} 
                   alt={ezerDefinition.headline}
                   style={{
@@ -371,9 +372,5 @@ export default function EzerDefinition() {
           }
         `}</style>
       </section>
-
-      {/* EXECUTIVE LEADERSHIP BOARD EMBEDDED INSIDE EZER DEFINITION */}
-      <ExecutiveLeadership />
-    </>
   );
 }
