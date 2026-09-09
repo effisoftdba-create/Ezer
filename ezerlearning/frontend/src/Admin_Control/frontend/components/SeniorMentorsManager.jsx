@@ -34,7 +34,6 @@ export default function SeniorMentorsManager() {
   const [editingId, setEditingId] = useState(null);
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
   const [formData, setFormData] = useState(DEFAULT_MENTOR_STATE);
-  const [formErrors, setFormErrors] = useState({});
 
   const handleHeaderSave = (e) => {
     e.preventDefault();
@@ -46,16 +45,14 @@ export default function SeniorMentorsManager() {
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData(DEFAULT_MENTOR_STATE);
-    setFormErrors({});
     setIsEditing(true);
   };
 
   const handleOpenEdit = (item) => {
     setEditingId(item.id);
-    setFormErrors({});
     setFormData({
       name: item.name || '',
-      designation: item.designation || '',
+      designation: item.designation || [item.role, item.company].filter(Boolean).join(' @ ') || '',
       image: item.image || '',
       bio: item.bio || item.experience || '',
       tags: Array.isArray(item.tags) ? item.tags.join(', ') : item.tags || '',
@@ -73,28 +70,21 @@ export default function SeniorMentorsManager() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    const errors = {};
-    if (!formData.name?.trim()) errors.name = true;
-    if (!formData.designation?.trim()) errors.designation = true;
-    if (!formData.image?.trim()) errors.image = true;
-    if (!formData.bio?.trim()) errors.bio = true;
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
+    if (!formData.name?.trim() || !formData.designation?.trim() || !formData.bio?.trim()) {
+      alert('Please fill out all required fields: Mentor Name, Designation & Firm, and Bio summary.');
       return;
     }
 
-    setFormErrors({});
     const tagList = formData.tags
       .split(',')
       .map((t) => t.trim())
       .filter(Boolean);
 
     const payload = {
-      name: formData.name.trim(),
-      designation: formData.designation.trim(),
-      image: formData.image.trim(),
-      bio: formData.bio.trim(),
+      name: formData.name,
+      designation: formData.designation,
+      image: formData.image,
+      bio: formData.bio,
       tags: tagList,
       position: formData.position || '50% 50%',
       imagePosition: formData.position || '50% 50%',
@@ -107,7 +97,7 @@ export default function SeniorMentorsManager() {
     };
 
     if (editingId) {
-      updateSeniorMentor(editingId, { ...payload, id: editingId });
+      updateSeniorMentor(editingId, payload);
     } else {
       addSeniorMentor(payload);
     }
@@ -129,10 +119,10 @@ export default function SeniorMentorsManager() {
       }}>
         <div>
           <h2 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000648', margin: 0 }}>
-            Senior Mentors & Faculty Manager
+            Expert Trainers & Senior Mentors Manager
           </h2>
           <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '4px 0 0 0' }}>
-            Update the instructor showcase section and senior mentors profiles.
+            Add, edit, or delete corporate trainer profiles displayed on the Home Page and Course pages with photos, bios, and skill badges.
           </p>
         </div>
 
@@ -210,8 +200,6 @@ export default function SeniorMentorsManager() {
         editingId={editingId}
         formData={formData}
         setFormData={setFormData}
-        formErrors={formErrors}
-        setFormErrors={setFormErrors}
         onSave={handleSave}
         onCancel={() => setIsEditing(false)}
         onOpenImagePicker={() => setIsImagePickerOpen(true)}
@@ -226,12 +214,14 @@ export default function SeniorMentorsManager() {
                 <img src={resolveImageSrc(item.image)} alt={item.name} style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #000648' }} />
                 <div>
                   <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800, color: '#000648' }}>{item.name}</h4>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b' }}>{item.designation}</div>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#115DFC' }}>
+                    {item.designation || [item.role, item.company].filter(Boolean).join(' @ ') || 'Corporate Technical Lead'}
+                  </div>
                 </div>
               </div>
 
               <p style={{ fontSize: '0.8rem', color: '#475569', lineHeight: 1.4, margin: '0 0 10px 0' }}>
-                {item.bio}
+                {item.bio || item.experience || ''}
               </p>
 
               <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>

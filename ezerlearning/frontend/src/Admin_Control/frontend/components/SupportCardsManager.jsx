@@ -23,18 +23,15 @@ export default function SupportCardsManager() {
   const [isImagePickerOpen, setIsImagePickerOpen] = useState(false);
 
   const [formData, setFormData] = useState(DEFAULT_CARD_STATE);
-  const [formErrors, setFormErrors] = useState({});
 
   const handleOpenAdd = () => {
     setEditingId(null);
     setFormData(DEFAULT_CARD_STATE);
-    setFormErrors({});
     setIsEditing(true);
   };
 
   const handleOpenEdit = (card) => {
     setEditingId(card.id || card.title);
-    setFormErrors({});
     setFormData({
       title: card.title || '',
       subtitle: card.subtitle || '',
@@ -55,17 +52,10 @@ export default function SupportCardsManager() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    const errors = {};
-    if (!formData.title?.trim()) errors.title = true;
-    if (!formData.desc?.trim()) errors.desc = true;
-    if (!formData.image?.trim()) errors.image = true;
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
+    if (!formData.title) {
+      alert('Card Title is required.');
       return;
     }
-
-    setFormErrors({});
 
     const bulletList = formData.bullets
       .split('\n')
@@ -73,11 +63,11 @@ export default function SupportCardsManager() {
       .filter(Boolean);
 
     const payload = {
-      title: formData.title.trim(),
-      subtitle: (formData.subtitle || '').trim(),
-      desc: formData.desc.trim(),
+      title: formData.title,
+      subtitle: formData.subtitle,
+      desc: formData.desc,
       bullets: bulletList,
-      image: formData.image.trim(),
+      image: formData.image,
       position: formData.position || '50% 50%',
       imagePosition: formData.position || '50% 50%',
       fit: formData.fit || 'cover',
@@ -89,7 +79,7 @@ export default function SupportCardsManager() {
     };
 
     if (editingId) {
-      updateSupportCard(editingId, { ...payload, id: editingId });
+      updateSupportCard(editingId, payload);
     } else {
       addSupportCard(payload);
     }
@@ -175,15 +165,9 @@ export default function SupportCardsManager() {
             </div>
 
             <form onSubmit={handleSave} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {Object.keys(formErrors).length > 0 && (
-                <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 800 }}>
-                  ⚠️ Please fill in all required fields highlighted in red below before saving.
-                </div>
-              )}
-
               <div>
-                <label htmlFor="support_card_image_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.image ? '#dc2626' : '#334155', marginBottom: '4px' }}>
-                  Card Banner Photo Source / URL *
+                <label htmlFor="support_card_image_input" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
+                  Card Banner Photo Source / URL
                 </label>
                 <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   {formData.image && (
@@ -197,20 +181,10 @@ export default function SupportCardsManager() {
                     id="support_card_image_input"
                     type="text"
                     value={formData.image}
-                    onChange={(e) => {
-                      setFormData({ ...formData, image: e.target.value });
-                      if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
-                    }}
+                    onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                     placeholder="Image path or URL"
-                    style={{
-                      flex: 1,
-                      minWidth: 0,
-                      padding: '9px 12px',
-                      borderRadius: '8px',
-                      border: formErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                      background: formErrors.image ? '#fff5f5' : '#ffffff',
-                      fontSize: '0.85rem'
-                    }}
+                    style={{ flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                    required
                   />
                   <button
                     type="button"
@@ -221,33 +195,22 @@ export default function SupportCardsManager() {
                     <HiPhotograph size={15} /> Choose Photo
                   </button>
                 </div>
-                {formErrors.image && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Photo URL is required</span>}
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px' }}>
                 <div>
-                  <label htmlFor="support_card_title" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.title ? '#dc2626' : '#334155', marginBottom: '4px' }}>
+                  <label htmlFor="support_card_title" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
                     Card Title *
                   </label>
                   <input
                     id="support_card_title"
                     type="text"
                     value={formData.title}
-                    onChange={(e) => {
-                      setFormData({ ...formData, title: e.target.value });
-                      if (formErrors.title) setFormErrors((prev) => ({ ...prev, title: false }));
-                    }}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                     placeholder="e.g. Pre-Employment Support"
-                    style={{
-                      width: '100%',
-                      padding: '9px 12px',
-                      borderRadius: '8px',
-                      border: formErrors.title ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                      background: formErrors.title ? '#fff5f5' : '#ffffff',
-                      fontSize: '0.85rem'
-                    }}
+                    style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                    required
                   />
-                  {formErrors.title && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Card title is required</span>}
                 </div>
 
                 <div>
@@ -266,28 +229,18 @@ export default function SupportCardsManager() {
               </div>
 
               <div>
-                <label htmlFor="support_card_desc" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: formErrors.desc ? '#dc2626' : '#334155', marginBottom: '4px' }}>
+                <label htmlFor="support_card_desc" style={{ display: 'block', fontSize: '0.78rem', fontWeight: 800, color: '#334155', marginBottom: '4px' }}>
                   Description Text *
                 </label>
                 <textarea
                   id="support_card_desc"
                   rows={2}
                   value={formData.desc}
-                  onChange={(e) => {
-                    setFormData({ ...formData, desc: e.target.value });
-                    if (formErrors.desc) setFormErrors((prev) => ({ ...prev, desc: false }));
-                  }}
+                  onChange={(e) => setFormData({ ...formData, desc: e.target.value })}
                   placeholder="Detailed explanation..."
-                  style={{
-                    width: '100%',
-                    padding: '9px 12px',
-                    borderRadius: '8px',
-                    border: formErrors.desc ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                    background: formErrors.desc ? '#fff5f5' : '#ffffff',
-                    fontSize: '0.85rem'
-                  }}
+                  style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }}
+                  required
                 />
-                {formErrors.desc && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Description is required</span>}
               </div>
 
               <div>
