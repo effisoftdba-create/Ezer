@@ -1,49 +1,30 @@
-import React, { useRef, useState } from 'react';
-import { HiAcademicCap, HiCheckCircle, HiBriefcase } from 'react-icons/hi';
-import { useSiteData } from '../context/SiteContext';
+import React, { useRef } from 'react';
+import { HiAcademicCap, HiChevronLeft, HiChevronRight } from 'react-icons/hi';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc } from '../utils/imageUtils';
+
 import CarouselDotsNav from './CarouselDotsNav';
 
 export default function FacultyShowcase({ faculty: propFaculty, title: propTitle }) {
   const { seniorMentors, mentorsHeader } = useSiteData();
   const sliderRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = React.useState(0);
 
-  const displayFaculty = (seniorMentors && seniorMentors.length > 0) ? seniorMentors : (propFaculty || []);
-  const headerData = {
-    tag: (mentorsHeader?.tag && String(mentorsHeader.tag).trim()) ? mentorsHeader.tag : 'EXPERT FACULTY',
-    headline: (propTitle && String(propTitle).trim())
-      ? propTitle
-      : (mentorsHeader?.headline && String(mentorsHeader.headline).trim())
-        ? mentorsHeader.headline
-        : (mentorsHeader?.title && String(mentorsHeader.title).trim())
-          ? mentorsHeader.title
-          : 'Learn Live From Working Corporate Professionals',
-    sub: (mentorsHeader?.sub && String(mentorsHeader.sub).trim())
-      ? mentorsHeader.sub
-      : (mentorsHeader?.subtitle && String(mentorsHeader.subtitle).trim())
-        ? mentorsHeader.subtitle
-        : 'Our instructors work at top tech firms, bringing real production scenarios into every live class.'
+  const displayFaculty = (propFaculty && propFaculty.length > 0) ? propFaculty : ((seniorMentors && seniorMentors.length > 0) ? seniorMentors : []);
+  const headerData = mentorsHeader || {
+    tag: 'SENIOR MENTORS',
+    headline: propTitle || 'Learn Directly From Senior Engineers & Academic Mentors',
+    sub: 'Gain real-world insights from instructors with years of industry tenure across top technology firms.'
   };
 
   if (!displayFaculty || displayFaculty.length === 0) return null;
-
-  const handleScroll = (e) => {
-    const scrollLeft = e.currentTarget.scrollLeft;
-    const cardWidth = (sliderRef.current?.children[0]?.offsetWidth || 340) + 24;
-    const newIdx = Math.round(scrollLeft / cardWidth);
-    if (newIdx !== activeIndex && newIdx >= 0 && newIdx < displayFaculty.length) {
-      setActiveIndex(newIdx);
-    }
-  };
 
   const handlePrev = () => {
     if (!displayFaculty.length) return;
     const next = (activeIndex - 1 + displayFaculty.length) % displayFaculty.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 340) + 24;
-      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
     }
   };
 
@@ -52,270 +33,121 @@ export default function FacultyShowcase({ faculty: propFaculty, title: propTitle
     const next = (activeIndex + 1) % displayFaculty.length;
     setActiveIndex(next);
     if (sliderRef.current) {
-      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 340) + 24;
-      sliderRef.current.scrollTo({ left: next * cardWidth, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: next * 340, behavior: 'smooth' });
     }
   };
 
   const handleSelect = (idx) => {
     setActiveIndex(idx);
     if (sliderRef.current) {
-      const cardWidth = (sliderRef.current.children[0]?.offsetWidth || 340) + 24;
-      sliderRef.current.scrollTo({ left: idx * cardWidth, behavior: 'smooth' });
+      sliderRef.current.scrollTo({ left: idx * 340, behavior: 'smooth' });
     }
   };
 
   return (
-    <section style={{ margin: '36px 0 28px', width: '100%', maxWidth: '100%' }}>
-      {/* Header */}
+    <section style={{ margin: '20px 0', width: '100%', maxWidth: '100%' }}>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '28px', width: '100%' }}>
-        <span
-          style={{
-            background: 'rgba(0, 6, 72, 0.06)',
-            color: '#000648',
-            fontSize: '0.78rem',
-            fontWeight: 800,
-            padding: '6px 18px',
-            borderRadius: '50px',
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            marginBottom: '12px',
-            border: '1.5px solid rgba(0, 6, 72, 0.12)'
-          }}
-        >
-          <HiAcademicCap size={16} color="#000648" />
-          <span>{headerData.tag}</span>
-        </span>
+        <div>
+          <span className="section-tag" style={{ background: 'rgba(0, 6, 56, 0.06)', color: '#000638', border: '1px solid rgba(0, 6, 56, 0.12)' }}>
+            <HiAcademicCap size={14} color="#000638" /> {headerData.tag || 'Senior Mentors'}
+          </span>
+          <h3 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.25rem)', fontWeight: 900, color: '#000638', marginTop: '8px', marginBottom: '6px' }}>
+            {propTitle || headerData.headline}
+          </h3>
+          <p style={{ color: '#475569', fontSize: '0.95rem', maxWidth: '680px', margin: '0 auto' }}>
+            {headerData.sub}
+          </p>
+        </div>
 
-        <h2
-          style={{
-            fontSize: 'clamp(1.75rem, 3.2vw, 2.4rem)',
-            fontWeight: 900,
-            color: '#000648',
-            margin: '0 0 10px 0',
-            letterSpacing: '-0.02em',
-            fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif",
-            lineHeight: 1.25,
-          }}
-        >
-          {headerData.headline}
-        </h2>
-
-        <p style={{ color: '#475569', fontSize: '1rem', maxWidth: '680px', margin: '0 auto 16px', lineHeight: 1.6, fontWeight: 500 }}>
-          {headerData.sub}
-        </p>
-
-        {/* Standardized Centered Navigation Controls */}
+        {/* Standardized Centered < . . . > Controls */}
         <CarouselDotsNav
           totalItems={displayFaculty.length}
           activeIndex={activeIndex}
           onPrev={handlePrev}
           onNext={handleNext}
           onSelectIndex={handleSelect}
-          style={{ margin: '8px auto 0' }}
+          style={{ margin: '16px auto 0' }}
         />
       </div>
 
-      {/* Horizontal Right-Left Scrollable Track (Mobile & Desktop) */}
+      {/* Responsive Grid Track */}
       <div
         ref={sliderRef}
-        onScroll={handleScroll}
         style={{
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: displayFaculty.length === 2 ? 'repeat(2, minmax(0, 1fr))' : 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
           gap: '24px',
-          overflowX: 'auto',
-          scrollSnapType: 'x mandatory',
-          scrollBehavior: 'smooth',
-          padding: '8px 4px 20px',
           width: '100%',
         }}
-        className="no-scrollbar"
       >
-        {displayFaculty.map((prof, pIdx) => {
-          const mentorName = prof.name || 'Corporate Mentor';
-          const mentorRole = prof.designation || prof.role || 'Principal Lead';
-          const mentorCompany = prof.company || '';
-          const mentorExp = prof.exp || prof.experience || '';
-          const mentorBio = prof.bio || prof.desc || prof.description || 'Senior industry practitioner specializing in production tech architectures and student mentorship.';
-          const mentorTags = Array.isArray(prof.tags) ? prof.tags : (prof.tags ? String(prof.tags).split(',').map(t => t.trim()) : []);
-
-          return (
-            <div
-              key={prof.id || pIdx}
-              style={{
-                flex: '0 0 min(350px, 86vw)',
-                scrollSnapAlign: 'start',
-                background: '#ffffff',
-                borderRadius: '20px',
-                border: '1.5px solid #e2e8f0',
-                padding: '24px',
-                boxShadow: '0 4px 20px rgba(0, 6, 72, 0.05)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
-                position: 'relative',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 6, 72, 0.12)';
-                e.currentTarget.style.borderColor = '#000648';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0, 6, 72, 0.05)';
-                e.currentTarget.style.borderColor = '#e2e8f0';
-              }}
-            >
+        {displayFaculty.map((prof) => (
+          <div
+            key={prof.id || prof.name}
+            style={{
+              background: '#ffffff',
+              borderRadius: '16px',
+              border: '2px solid #000638',
+              padding: '24px',
+              boxShadow: '0 8px 24px rgba(0, 6, 56, 0.08)',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+              <img
+                src={resolveImageSrc(prof.image)}
+                alt={prof.name}
+                width="64"
+                height="64"
+                loading="lazy"
+                decoding="async"
+                style={{
+                  width: '64px',
+                  height: '64px',
+                  borderRadius: '50%',
+                  objectFit: prof.fit || prof.imageFit || 'cover',
+                  objectPosition: prof.position || prof.imagePosition || 'center center',
+                  transform: (prof.zoom || prof.imageZoom) && (prof.zoom || prof.imageZoom) !== 1 ? `scale(${prof.zoom || prof.imageZoom})` : 'none',
+                  transformOrigin: prof.position || prof.imagePosition || 'center center',
+                  border: '3px solid #f2b733',
+                  boxShadow: '0 4px 10px rgba(242, 183, 51, 0.3)'
+                }}
+              />
               <div>
-                {/* Profile Header Row */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '18px' }}>
-                  {/* Clean Framed Circular Avatar Wrapper */}
-                  <div
+                <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#000638', marginBottom: '3px' }}>
+                  {prof.name}
+                </h4>
+                <div style={{ fontSize: '0.8rem', color: '#115DFC', fontWeight: 800 }}>
+                  {prof.designation || prof.role}
+                </div>
+              </div>
+            </div>
+
+            <p style={{ fontSize: '0.86rem', color: '#475569', lineHeight: 1.55, margin: 0, flexGrow: 1 }}>
+              {prof.bio || prof.experience}
+            </p>
+
+            {prof.tags && prof.tags.length > 0 && (
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '16px', paddingTop: '12px', borderTop: '1px solid #f1f5f9' }}>
+                {prof.tags.map((tag) => (
+                  <span
+                    key={tag}
                     style={{
-                      width: '66px',
-                      height: '66px',
-                      borderRadius: '50%',
-                      padding: '2.5px',
-                      background: 'linear-gradient(135deg, #000648 0%, #115DFC 100%)',
-                      boxShadow: '0 4px 14px rgba(0, 6, 72, 0.15)',
-                      flexShrink: 0,
+                      fontSize: '0.7rem',
+                      fontWeight: 800,
+                      background: 'rgba(0, 6, 56, 0.06)',
+                      color: '#000638',
+                      padding: '3px 9px',
+                      borderRadius: '50px'
                     }}
                   >
-                    <div
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        borderRadius: '50%',
-                        overflow: 'hidden',
-                        background: '#000648',
-                        position: 'relative',
-                        isolation: 'isolate',
-                        WebkitMaskImage: '-webkit-radial-gradient(white, black)',
-                        border: '2px solid #ffffff',
-                      }}
-                    >
-                      <img
-                        src={resolveImageSrc(prof.image)}
-                        alt={mentorName}
-                        loading="lazy"
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: prof.fit || prof.imageFit || 'cover',
-                          objectPosition: prof.position || prof.imagePosition || 'center 20%',
-                          transform: (prof.zoom || prof.imageZoom) && (prof.zoom || prof.imageZoom) !== 1
-                            ? `scale(${prof.zoom || prof.imageZoom})`
-                            : 'none',
-                          transformOrigin: prof.position || prof.imagePosition || 'center 20%',
-                          display: 'block',
-                        }}
-                        onError={(e) => {
-                          e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300';
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Name & Role */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <h4
-                        style={{
-                          fontSize: '1.08rem',
-                          fontWeight: 900,
-                          color: '#000648',
-                          margin: 0,
-                          whiteSpace: 'nowrap',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                        }}
-                      >
-                        {mentorName}
-                      </h4>
-                      <HiCheckCircle size={16} color="#16a34a" title="Verified Practitioner" style={{ flexShrink: 0 }} />
-                    </div>
-
-                    <div
-                      style={{
-                        fontSize: '0.82rem',
-                        color: '#115DFC',
-                        fontWeight: 800,
-                        marginTop: '3px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px',
-                        flexWrap: 'wrap',
-                      }}
-                    >
-                      <span>{mentorRole}</span>
-                      {mentorCompany && (
-                        <span
-                          style={{
-                            background: 'rgba(0, 6, 72, 0.06)',
-                            color: '#000648',
-                            padding: '1px 6px',
-                            borderRadius: '4px',
-                            fontWeight: 800,
-                            fontSize: '0.74rem',
-                          }}
-                        >
-                          @{mentorCompany}
-                        </span>
-                      )}
-                    </div>
-
-                    {mentorExp && (
-                      <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginTop: '2px' }}>
-                        ⭐ {mentorExp}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Mentor Bio */}
-                <p style={{ fontSize: '0.88rem', color: '#334155', lineHeight: 1.62, margin: 0, fontWeight: 500 }}>
-                  {mentorBio}
-                </p>
+                    {tag}
+                  </span>
+                ))}
               </div>
-
-              {/* Skills & Expertise Chips Footer */}
-              {mentorTags.length > 0 && (
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: '6px',
-                    flexWrap: 'wrap',
-                    marginTop: '18px',
-                    paddingTop: '14px',
-                    borderTop: '1px solid #f1f5f9',
-                  }}
-                >
-                  {mentorTags.map((tag, tIdx) => (
-                    <span
-                      key={tIdx}
-                      style={{
-                        fontSize: '0.72rem',
-                        fontWeight: 800,
-                        background: '#eff6ff',
-                        border: '1px solid #dbeafe',
-                        color: '#1e40af',
-                        padding: '3px 10px',
-                        borderRadius: '6px',
-                        letterSpacing: '0.02em',
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
+            )}
+          </div>
+        ))}
       </div>
     </section>
   );

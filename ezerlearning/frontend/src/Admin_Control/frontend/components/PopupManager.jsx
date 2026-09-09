@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSiteData } from '../context/SiteContext';
 import ImagePickerModal from './ImagePickerModal';
 import PopupBannerPhotoControls from './PopupBannerPhotoControls';
@@ -30,11 +30,10 @@ export default function PopupManager() {
     courseLabel: 'Target Course*',
     termsLabel: 'I hereby accept and agree to the terms and conditions and privacy policy of EZER Learning Solutions.',
     coursesList: [
-      'AI/ML',
-      'Full stack development with AI',
-      'Data Analyst',
       'Cloud DevOps with AI',
-      'Spoken English (International standard)'
+      'Software Testing – Playwright',
+      'AI & Machine Learning',
+      'IT Infrastructure & System Administration'
     ],
     countriesList: [
       'India',
@@ -45,19 +44,9 @@ export default function PopupManager() {
     ]
   });
 
-  useEffect(() => {
-    if (popupConfig && Object.keys(popupConfig).length > 0) {
-      setFormData((prev) => ({
-        ...prev,
-        ...popupConfig
-      }));
-    }
-  }, [popupConfig]);
-
   const [pickerTarget, setPickerTarget] = useState(null);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [showCodeModal, setShowCodeModal] = useState(false);
-  const [formErrors, setFormErrors] = useState({});
 
   const [previewFormData, setPreviewFormData] = useState({
     name: '',
@@ -72,15 +61,6 @@ export default function PopupManager() {
 
   const handleSave = (e) => {
     e.preventDefault();
-    const errors = {};
-    if (!formData.title?.trim()) errors.title = true;
-
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    setFormErrors({});
     updatePopupConfig(formData);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3500);
@@ -123,12 +103,6 @@ export default function PopupManager() {
         </div>
       </div>
 
-      {Object.keys(formErrors).length > 0 && (
-        <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', marginBottom: '20px', fontSize: '0.82rem', fontWeight: 800 }}>
-          ⚠️ Please fill in all required fields highlighted in red below before saving.
-        </div>
-      )}
-
       <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '24px', alignItems: 'start' }}>
         
         {/* LEFT COLUMN: EDITOR FORM */}
@@ -142,28 +116,18 @@ export default function PopupManager() {
 
 
           <div style={{ marginBottom: '16px' }}>
-            <label htmlFor="popup_title_input" style={{ fontSize: '0.8rem', fontWeight: 700, color: formErrors.title ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>
+            <label htmlFor="popup_title_input" style={{ fontSize: '0.8rem', fontWeight: 700, color: '#334155', display: 'block', marginBottom: '4px' }}>
               Popup Headline Title *
             </label>
             <input
               id="popup_title_input"
               type="text"
-              value={formData.title || ''}
-              onChange={(e) => {
-                setFormData((prev) => ({ ...prev, title: e.target.value }));
-                if (formErrors.title) setFormErrors((prev) => ({ ...prev, title: false }));
-              }}
+              required
+              value={formData.title}
+              onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
               placeholder="e.g. Register For Free Demo"
-              style={{
-                width: '100%',
-                padding: '10px 12px',
-                borderRadius: '8px',
-                border: formErrors.title ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                background: formErrors.title ? '#fff5f5' : '#ffffff',
-                fontSize: '0.875rem'
-              }}
+              style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.875rem' }}
             />
-            {formErrors.title && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Popup title is required</span>}
           </div>
 
           <div style={{ marginBottom: '16px' }}>

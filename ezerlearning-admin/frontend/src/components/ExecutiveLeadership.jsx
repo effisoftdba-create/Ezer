@@ -1,475 +1,347 @@
+import React from 'react';
 import { LazyMotion, domAnimation, m } from 'framer-motion';
-import { useSiteData } from '../context/SiteContext';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 import { resolveImageSrc, handleImgError } from '../utils/imageUtils';
 
 export default function ExecutiveLeadership() {
   const { executiveLeaders } = useSiteData();
 
+  const fallbackLeaders = [
+    {
+      id: 'exec-1',
+      roleTag: 'FOUNDER • Managing Director',
+      roleName: 'Managing Director',
+      name: 'Vivekkumar S',
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600&h=600',
+      tagline: 'From Problem to Solution',
+      headline: 'Building Skills. Shaping Careers. Creating Futures',
+      bio: 'Building industry-ready talent through practical, career-focused IT education, while empowering learners with the skills and confidence to succeed in the IT industry.'
+    },
+    {
+      id: 'exec-2',
+      roleTag: 'Co- Founder • Executive Director',
+      roleName: 'Executive Director',
+      name: 'Vignesh B',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600&h=600',
+      tagline: 'From Learning to Career',
+      headline: 'Building industry-ready talent for high-growth technology careers.',
+      bio: 'A seasoned IT expert with over 10 years of experience in IT Infrastructure and Technical Support. His commitment to quality and innovation is the cornerstone of our success.'
+    },
+    {
+      id: 'exec-3',
+      roleTag: 'CMTO • Chief Marketing & Technology Officer',
+      roleName: 'Chief Marketing & Technology Officer',
+      name: 'Mr. Jeeva T',
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600&h=600',
+      tagline: 'Marketing & Technology Innovation for Ezer',
+      headline: 'Driving Ezer’s growth through marketing, technology & innovation',
+      bio: 'An accomplished Digital Marketing Strategist and Technical Expert with 5+ years of experience in driving digital growth, brand visibility and innovative technical solutions.'
+    }
+  ];
+
   const leaders = (executiveLeaders && executiveLeaders.length > 0)
     ? executiveLeaders
-    : [
-      {
-        id: 'exec-1',
-        roleTag: 'CEO',
-        roleName: 'Chief Executive Officer',
-        name: 'Dr. Subramanian R',
-        image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=700&h=700',
-        tagline: 'From problem to solution.',
-        headline: 'A creative and strategic transformation partner for bold businesses.',
-        bio: 'Visionary Leader driving native language tech education, corporate placement partnerships, and pan-India EdTech growth.'
-      },
-      {
-        id: 'exec-2',
-        roleTag: 'CFO',
-        roleName: 'Chief Financial Officer',
-        name: 'Meenakshi Sundaram',
-        image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&q=80&w=700&h=700',
-        tagline: 'Financial integrity & student affordability.',
-        headline: 'Pioneering accessible scholarship funds for high-growth tech careers.',
-        bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.'
-      },
-      {
-        id: 'exec-3',
-        roleTag: 'CMTO',
-        roleName: 'Chief Marketing Technology Officer',
-        name: 'Anand Kumar K',
-        image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=700&h=700',
-        tagline: 'Curriculum innovation & hands-on labs.',
-        headline: 'Architecting AI-integrated practical capstones for production readiness.',
-        bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.'
-      }
-    ];
+    : fallbackLeaders;
 
   return (
     <LazyMotion features={domAnimation}>
-    <section
-      className="exec-section-compact"
-      style={{
-        position: 'relative',
-        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #f1f5f9 100%)',
-        color: '#000648',
-        padding: '36px 20px',
-        borderTop: '3px solid #f2b733',
-        borderBottom: '3px solid #f2b733',
-        overflow: 'hidden'
-      }}
-    >
-      <style>{`
-        @media (max-width: 768px) {
-          .exec-section-compact {
-            padding: 20px 12px !important;
+      <section
+        id="management-leadership"
+        className="exec-section-compact"
+        style={{
+          position: 'relative',
+          background: 'linear-gradient(135deg, #f8fafc 0%, #eef2f6 50%, #f8fafc 100%)',
+          color: '#000648',
+          padding: '48px 20px',
+          borderTop: '3px solid #f2b733',
+          borderBottom: '3px solid #f2b733',
+          overflow: 'hidden'
+        }}
+      >
+        <style>{`
+          /* Golden Ambient Background Glows */
+          .mgmt-bg-glow-1 {
+            position: absolute;
+            top: 5%;
+            left: 5%;
+            width: 320px;
+            height: 320px;
+            background: radial-gradient(circle, rgba(242,183,51,0.15) 0%, rgba(248,155,41,0) 70%);
+            filter: blur(50px);
+            pointer-events: none;
           }
-          .zigzag-exec-row {
-            margin-bottom: 20px !important;
-            padding: 20px 14px !important;
+
+          .mgmt-bg-glow-2 {
+            position: absolute;
+            bottom: 5%;
+            right: 5%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(17,93,252,0.12) 0%, rgba(0,6,72,0) 70%);
+            filter: blur(60px);
+            pointer-events: none;
           }
-        }
 
-        /* Golden Ambient Background Accents */
-        .exec-bg-glow-1 {
-          position: absolute;
-          top: 10%;
-          left: 5%;
-          width: 350px;
-          height: 350px;
-          background: radial-gradient(circle, rgba(242,183,51,0.18) 0%, rgba(248,155,41,0) 70%);
-          filter: blur(50px);
-          pointer-events: none;
-        }
-
-        .exec-bg-glow-2 {
-          position: absolute;
-          bottom: 10%;
-          right: 5%;
-          width: 400px;
-          height: 400px;
-          background: radial-gradient(circle, rgba(217,119,6,0.18) 0%, rgba(0,6,72,0) 70%);
-          filter: blur(60px);
-          pointer-events: none;
-        }
-
-        /* Zig-Zag Card Grid Layout */
-        .zigzag-exec-row {
-          display: grid;
-          grid-template-columns: 340px 1fr;
-          gap: 36px;
-          align-items: center;
-          background: #ffffff;
-          border-radius: 24px;
-          padding: 32px;
-          margin-bottom: 24px;
-          border: 1.5px solid #cbd5e1;
-          box-shadow: 0 15px 40px rgba(0, 6, 72, 0.07);
-          transition: transform 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .zigzag-exec-row.reverse {
-          grid-template-columns: 1fr 340px;
-        }
-
-        .zigzag-exec-row:hover {
-          transform: translateY(-4px);
-          border-color: #f2b733;
-          box-shadow: 0 25px 50px rgba(0, 6, 72, 0.12);
-        }
-
-        /* Glowing Image Card Container Style */
-        .exec-card-container {
-          width: 100%;
-          maxWidth: 340px;
-          height: 360px;
-          position: relative;
-          border-radius: 20px;
-          margin: 0 auto;
-        }
-
-        .exec-card-container::before {
-          content: "";
-          z-index: 1;
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(-45deg, #f2b733 0%, #f89b29 50%, #d97706 100%);
-          transform: translate3d(0, 0, 0) scale(0.96);
-          filter: blur(22px);
-          border-radius: 20px;
-          opacity: 0.85;
-          transition: opacity 0.5s ease, filter 0.5s ease;
-        }
-
-        .exec-card-container:hover::before {
-          opacity: 1;
-          filter: blur(28px);
-        }
-
-        .exec-card {
-          position: relative;
-          z-index: 2;
-          width: 100%;
-          height: 100%;
-          border-radius: 20px;
-          overflow: hidden;
-          border: 2px solid #f2b733;
-          background: #000648;
-          box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
-        }
-
-        .exec-card .img-content {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          background: #000;
-          overflow: hidden;
-        }
-
-        .exec-card .img-content img {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: block;
-          transition: transform 0.4s cubic-bezier(0.23, 1, 0.320, 1), object-position 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-        }
-
-        .exec-card:hover .img-content img {
-          filter: brightness(1.08);
-        }
-
-        .exec-card .card-hover-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          gap: 10px;
-          color: #ffffff;
-          padding: 24px;
-          background: rgba(0, 6, 72, 0.88);
-          backdrop-filter: blur(8px);
-          border-radius: 20px;
-          opacity: 0;
-          pointer-events: none;
-          transform: translateY(40px);
-          transition: all 0.6s cubic-bezier(0.23, 1, 0.320, 1);
-        }
-
-        .exec-card .card-hover-overlay .heading {
-          font-size: 1.4rem;
-          font-weight: 900;
-          color: #f2b733;
-        }
-
-        .exec-card .card-hover-overlay .sub-heading {
-          font-size: 0.82rem;
-          font-weight: 800;
-          color: #60a5fa;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-        }
-
-        .exec-card:hover .card-hover-overlay {
-          opacity: 1;
-          transform: translateY(0);
-          pointer-events: auto;
-        }
-
-        /* Editorial Content Box */
-        .zigzag-content-box {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        }
-
-        .zigzag-role-badge {
-          display: inline-block;
-          align-self: flex-start;
-          background: #000648;
-          color: #f2b733;
-          border: 1.5px solid #000648;
-          padding: 4px 16px;
-          borderRadius: 50px;
-          font-weight: 900;
-          font-size: 0.78rem;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          margin-bottom: 14px;
-        }
-
-        .zigzag-tagline {
-          font-size: 1.05rem;
-          color: #d97706;
-          font-weight: 700;
-          font-style: italic;
-          margin-bottom: 12px;
-          letter-spacing: -0.01em;
-        }
-
-        .zigzag-headline {
-          font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
-          font-size: clamp(1.8rem, 3.2vw, 2.5rem);
-          font-weight: 900;
-          color: #000648;
-          line-height: 1.15;
-          margin: 0 0 20px 0;
-          letter-spacing: -0.025em;
-        }
-
-        .zigzag-officer-name {
-          font-size: 1.2rem;
-          font-weight: 900;
-          color: #000648;
-          margin-bottom: 4px;
-        }
-
-        .zigzag-officer-role {
-          font-size: 0.84rem;
-          font-weight: 800;
-          color: #115DFC;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          margin-bottom: 14px;
-        }
-
-        .zigzag-bio {
-          font-size: 0.96rem;
-          color: #475569;
-          line-height: 1.65;
-          margin: 0;
-          max-width: 660px;
-        }
-
-        @media (max-width: 900px) {
-          .zigzag-exec-row, .zigzag-exec-row.reverse {
-            grid-template-columns: 1fr;
-            padding: 28px 20px;
-            gap: 28px;
+          /* Compact Unified Grid */
+          .mgmt-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            align-items: stretch;
           }
-          .zigzag-exec-row.reverse .exec-card-container {
-            order: -1;
+
+          @media (max-width: 1024px) {
+            .mgmt-cards-grid {
+              grid-template-columns: repeat(2, 1fr);
+            }
           }
-        }
-      `}</style>
 
-      {/* Glow Effects */}
-      <div className="exec-bg-glow-1" />
-      <div className="exec-bg-glow-2" />
+          @media (max-width: 680px) {
+            .mgmt-cards-grid {
+              grid-template-columns: 1fr;
+              gap: 20px;
+            }
+          }
 
-      <div className="container" style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 3 }}>
+          /* Management Profile Card */
+          .mgmt-card {
+            background: #ffffff;
+            border-radius: 20px;
+            border: 1.5px solid #e2e8f0;
+            padding: 28px 24px;
+            box-shadow: 0 10px 30px rgba(0, 6, 72, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+          }
 
-        {/* Header Section */}
-        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-          <span
-            style={{
-              display: 'inline-block',
-              background: '#f2b733',
-              color: '#000648',
-              padding: '6px 24px',
-              borderRadius: '50px',
-              fontWeight: 900,
-              fontSize: '0.8rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.12em',
-              marginBottom: '14px',
-              boxShadow: '0 4px 20px rgba(242,183,51,0.3)'
-            }}
-          >
-            EXECUTIVE LEADERSHIP BOARD
-          </span>
+          .mgmt-card:hover {
+            transform: translateY(-5px);
+            border-color: #f2b733;
+            box-shadow: 0 20px 40px rgba(0, 6, 72, 0.12);
+          }
 
-          <h2
-            style={{
-              fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
-              fontWeight: 900,
-              color: '#000648',
-              lineHeight: 1.15,
-              marginBottom: '12px',
-              letterSpacing: '-0.02em'
-            }}
-          >
-            Guided by Corporate Visionaries & EdTech Pioneers
-          </h2>
+          /* Circular Profile Picture with Gold Ring */
+          .mgmt-avatar-frame {
+            width: 125px;
+            height: 125px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, #f2b733 0%, #f89b29 50%, #d97706 100%);
+            box-shadow: 0 8px 24px rgba(242, 183, 51, 0.35);
+            margin-bottom: 18px;
+            flex-shrink: 0;
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+          }
 
-          <p
-            style={{
-              fontSize: '1.05rem',
-              color: '#475569',
-              maxWidth: '740px',
-              margin: '0 auto',
-              lineHeight: 1.6
-            }}
-          >
-            Our executive board brings decades of technology leadership, corporate partnerships, and native-language education models to empower every learner.
-          </p>
+          .mgmt-card:hover .mgmt-avatar-frame {
+            transform: scale(1.04);
+            box-shadow: 0 12px 30px rgba(242, 183, 51, 0.48);
+          }
+
+          .mgmt-avatar-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #000648;
+            position: relative;
+          }
+
+          .mgmt-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+          }
+
+          .mgmt-role-badge {
+            display: inline-block;
+            background: #000648;
+            color: #f2b733;
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 0.74rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+            border: 1px solid rgba(242, 183, 51, 0.4);
+            max-width: 95%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .mgmt-tagline {
+            font-size: 0.88rem;
+            color: #d97706;
+            font-weight: 700;
+            font-style: italic;
+            margin-bottom: 8px;
+            line-height: 1.35;
+          }
+
+          .mgmt-headline {
+            font-size: 1.08rem;
+            font-weight: 900;
+            color: #000648;
+            line-height: 1.35;
+            margin: 0 0 14px 0;
+            letter-spacing: -0.015em;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .mgmt-name {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: #000648;
+            margin: 0 0 4px 0;
+          }
+
+          .mgmt-role-name {
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #115DFC;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 14px;
+          }
+
+          .mgmt-bio {
+            font-size: 0.88rem;
+            color: #475569;
+            line-height: 1.6;
+            margin: 0;
+            flex-grow: 1;
+          }
+        `}</style>
+
+        {/* Ambient Glows */}
+        <div className="mgmt-bg-glow-1" />
+        <div className="mgmt-bg-glow-2" />
+
+        <div className="container" style={{ maxWidth: '1240px', margin: '0 auto', position: 'relative', zIndex: 3 }}>
+          {/* Section Header */}
+          <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <span
+              style={{
+                display: 'inline-block',
+                background: '#f2b733',
+                color: '#000648',
+                padding: '6px 24px',
+                borderRadius: '50px',
+                fontWeight: 900,
+                fontSize: '0.8rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.12em',
+                marginBottom: '12px',
+                boxShadow: '0 4px 18px rgba(242,183,51,0.35)'
+              }}
+            >
+              Our Management & Leadership Team
+            </span>
+
+            <h2
+              style={{
+                fontSize: 'clamp(1.9rem, 3.4vw, 2.8rem)',
+                fontWeight: 900,
+                color: '#000648',
+                lineHeight: 1.2,
+                marginBottom: '10px',
+                letterSpacing: '-0.02em'
+              }}
+            >
+              Guided by Corporate Visionaries & EdTech Pioneers
+            </h2>
+
+            <p
+              style={{
+                fontSize: '1rem',
+                color: '#475569',
+                maxWidth: '720px',
+                margin: '0 auto',
+                lineHeight: 1.6
+              }}
+            >
+              Our management team brings decades of technology leadership, corporate partnerships, and practical education models to empower every learner.
+            </p>
+          </div>
+
+          {/* Compact 3-Column Grid */}
+          <div className="mgmt-cards-grid">
+            {leaders.map((leader, idx) => {
+              const roleBadgeText = leader.roleTag || leader.roleName || 'EXECUTIVE LEADER';
+              const designationText = leader.roleName || leader.roleTag || 'Executive Officer';
+
+              return (
+                <m.div
+                  key={leader.id || leader.roleTag || idx}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: idx * 0.1 }}
+                  className="mgmt-card"
+                >
+                  {/* Circular Profile Picture with Gold Ring */}
+                  <div className="mgmt-avatar-frame">
+                    <div className="mgmt-avatar-inner">
+                      <img
+                        src={resolveImageSrc(leader.image)}
+                        alt={leader.name}
+                        onError={handleImgError}
+                        className="mgmt-avatar-img"
+                        style={{
+                          objectPosition: leader.imagePosition || leader.position || 'center top',
+                          objectFit: leader.imageFit || leader.fit || 'cover',
+                          transform: (leader.imageZoom || leader.zoom || 1) !== 1 ? `scale(${leader.imageZoom || leader.zoom})` : 'none'
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Role Badge */}
+                  <span className="mgmt-role-badge">
+                    {roleBadgeText}
+                  </span>
+
+                  {/* Tagline & Card Headline */}
+                  {leader.tagline && (
+                    <div className="mgmt-tagline">
+                      "{leader.tagline}"
+                    </div>
+                  )}
+
+                  {leader.headline && (
+                    <h3 className="mgmt-headline">
+                      {leader.headline}
+                    </h3>
+                  )}
+
+                  {/* Leader Name & Designation */}
+                  <h4 className="mgmt-name">
+                    {leader.name}
+                  </h4>
+                  <div className="mgmt-role-name">
+                    {designationText}
+                  </div>
+
+                  {/* Bio Description */}
+                  <p className="mgmt-bio">
+                    {leader.bio}
+                  </p>
+                </m.div>
+              );
+            })}
+          </div>
         </div>
-
-        {/* Zig-Zag Executive Rows */}
-        <div>
-          {leaders.map((leader, idx) => {
-            const isReverse = idx % 2 === 1;
-
-            return (
-              <m.div
-                key={leader.id || leader.roleTag || (leader.name ? leader.name.toLowerCase().replace(/[^a-z0-9]/g, '') : 'executive')}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.12 }}
-                className={`zigzag-exec-row ${isReverse ? 'reverse' : ''}`}
-              >
-                {/* Order image / content based on reverse zig-zag */}
-                {!isReverse ? (
-                  <>
-                    {/* Glowing Image Card Container */}
-                    <div className="exec-card-container">
-                      <div className="exec-card">
-                        <div className="img-content">
-                          <img
-                            src={resolveImageSrc(leader.image)}
-                            alt={leader.name}
-                            onError={handleImgError}
-                            style={{
-                              position: 'absolute',
-                              top: 0,
-                              left: 0,
-                              width: '100%',
-                              height: '100%',
-                              display: 'block',
-                              objectPosition: leader.imagePosition || leader.position || 'center top',
-                              objectFit: leader.imageFit || leader.fit || 'cover',
-                              transform: (leader.imageZoom || leader.zoom || 1) !== 1 ? `scale(${leader.imageZoom || leader.zoom})` : 'none',
-                              transformOrigin: leader.imagePosition || leader.position || 'center top'
-                            }}
-                          />
-
-                        </div>
-                        <div className="card-hover-overlay">
-                          <div className="heading">{leader.name}</div>
-                          <div className="sub-heading">{leader.roleName || leader.roleTag}</div>
-                          <p style={{ fontSize: '0.8rem', color: '#e2e8f0', margin: '6px 0 0 0', lineHeight: 1.4 }}>
-                            {leader.bio}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Editorial Content Box */}
-                    <div className="zigzag-content-box">
-                      <span className="zigzag-role-badge">{leader.roleTag} • {leader.roleName}</span>
-                      {leader.tagline && <span className="zigzag-tagline">{leader.tagline}</span>}
-
-                      <h3 className="zigzag-headline">
-                        {leader.headline || 'A creative and strategic transformation partner for bold businesses.'}
-                      </h3>
-
-                      <div className="zigzag-officer-name">{leader.name}</div>
-                      <div className="zigzag-officer-role">{leader.roleName}</div>
-
-                      <p className="zigzag-bio">{leader.bio}</p>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    {/* Editorial Content Box (Left side for odd index) */}
-                    <div className="zigzag-content-box">
-                      <span className="zigzag-role-badge">{leader.roleTag} • {leader.roleName}</span>
-                      {leader.tagline && <span className="zigzag-tagline">{leader.tagline}</span>}
-
-                      <h3 className="zigzag-headline">
-                        {leader.headline || 'Pioneering accessible scholarship funds for high-growth tech careers.'}
-                      </h3>
-
-                      <div className="zigzag-officer-name">{leader.name}</div>
-                      <div className="zigzag-officer-role">{leader.roleName}</div>
-
-                      <p className="zigzag-bio">{leader.bio}</p>
-                    </div>
-
-                    {/* Glowing Image Card Container (Right side for odd index) */}
-                    <div className="exec-card-container">
-                      <div className="exec-card">
-                        <div className="img-content">
-                          <img
-                            src={resolveImageSrc(leader.image)}
-                            alt={leader.name}
-                            onError={handleImgError}
-                            style={{
-                              position: 'absolute',
-                              top: 0,
-                              left: 0,
-                              width: '100%',
-                              height: '100%',
-                              display: 'block',
-                              objectPosition: leader.imagePosition || leader.position || 'center top',
-                              objectFit: leader.imageFit || leader.fit || 'cover',
-                              transform: (leader.imageZoom || leader.zoom || 1) !== 1 ? `scale(${leader.imageZoom || leader.zoom})` : 'none',
-                              transformOrigin: leader.imagePosition || leader.position || 'center top'
-                            }}
-                          />
-
-                        </div>
-                        <div className="card-hover-overlay">
-                          <div className="heading">{leader.name}</div>
-                          <div className="sub-heading">{leader.roleName || leader.roleTag}</div>
-                          <p style={{ fontSize: '0.8rem', color: '#e2e8f0', margin: '6px 0 0 0', lineHeight: 1.4 }}>
-                            {leader.bio}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </m.div>
-            );
-          })}
-        </div>
-
-      </div>
-    </section>
+      </section>
     </LazyMotion>
   );
 }

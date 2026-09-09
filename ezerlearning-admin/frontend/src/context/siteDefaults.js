@@ -1,7 +1,7 @@
-import { phase1Courses } from '../data/courses';
-import { testimonials as initialTestimonials, videoStories } from '../data/testimonials';
-import { generalFaqs } from '../data/faq';
-import productionData from '../data/productionData.json';
+import { phase1Courses } from '../../../data/courses';
+import { testimonials as initialTestimonials, videoStories } from '../../../data/testimonials';
+import { generalFaqs } from '../../../data/faq';
+import productionData from '../../../data/productionData.json';
 
 export const STORAGE_SLIDES_KEY = 'ezer_hero_slides:v18_clean_image_paths';
 
@@ -407,36 +407,164 @@ export const defaultSeniorMentors = [
   {
     id: 'm-1',
     name: 'Arun Kumar S',
+    designation: 'Principal Cloud Architect @ AWS / TechCorp',
     role: 'Principal Cloud Architect',
     company: 'Ex-Google / AWS Lead',
     exp: '12+ Yrs Exp',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300&h=300',
-    bio: 'Multi-cloud architect & DevOps mentor who has trained over 2,500+ successful tech professionals.'
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: '11+ years designing multi-cloud architectures across AWS and Azure. Mentored 2,500+ engineers into high-paying DevOps and Cloud roles.',
+    tags: ['AWS Certified', 'Kubernetes Lead', 'Multi-Cloud DevOps'],
+    position: '50% 50%',
+    fit: 'cover',
+    zoom: 1
   },
   {
     id: 'm-2',
     name: 'Pradeep Rajan',
+    designation: 'Senior Staff Full-Stack Engineer @ Global Tech',
     role: 'Senior Staff Full-Stack Engineer',
     company: 'Ex-Zoho / Global Tech Lead',
     exp: '10+ Yrs Exp',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300&h=300',
-    bio: 'Specialist in React, Node.js, Next.js and AI Copilot workflow automation.'
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: 'Specialist in React, Node.js, Next.js and AI Copilot workflow automation with production-scale distributed microservices.',
+    tags: ['React 19', 'Next.js', 'System Architecture'],
+    position: '50% 50%',
+    fit: 'cover',
+    zoom: 1
+  },
+  {
+    id: 'm-3',
+    name: 'Divya Bharathi M',
+    designation: 'Principal AI & Machine Learning Lead',
+    role: 'Principal AI/ML Specialist',
+    company: 'Ex-Microsoft / AI Research',
+    exp: '9+ Yrs Exp',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: 'Pioneering generative AI capstones, LLM fine-tuning, and practical machine learning deployment across enterprise pipelines.',
+    tags: ['GenAI & LLMs', 'PyTorch Lead', 'Enterprise MLOps'],
+    position: '50% 50%',
+    fit: 'cover',
+    zoom: 1
+  },
+  {
+    id: 'm-4',
+    name: 'Rajesh Kannan',
+    designation: 'Senior Director of Data Engineering',
+    role: 'Data Platform Architect',
+    company: 'Ex-PayPal / Big Data Architect',
+    exp: '13+ Yrs Exp',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: 'Architect of high-throughput real-time streaming architectures, Apache Spark pipelines, and data warehouse infrastructure.',
+    tags: ['Apache Spark', 'Kafka Streaming', 'Snowflake DBA'],
+    position: '50% 50%',
+    fit: 'cover',
+    zoom: 1
   }
 ];
 
 export const defaultMentorsHeader = {
-  tag: 'EXPERT FACULTY',
-  title: 'Learn Live From Working Corporate Professionals',
-  sub: 'Our instructors work at top tech firms, bringing real production scenarios into every live class.'
+  tag: 'EXPERT INDUSTRY TRAINERS',
+  headline: 'Learn Live From Seasoned Tech Leaders & Corporate Mentors',
+  sub: 'Gain production-grade engineering insights from instructors with proven tenure across top global technology firms.'
 };
+
+export const defaultHomeTrainers = [
+  {
+    id: 'ht-1',
+    name: 'Princy Julite',
+    roleTag: 'SENIOR ENGLISH TRAINER',
+    designation: 'Senior English Trainer | EZER Learning Solution',
+    role: 'Senior English Language Trainer',
+    company: 'EZER Learning Solution',
+    exp: '12+ Yrs Exp',
+    headline: 'Mastering Spoken & Professional Corporate Communication',
+    tagline: 'Fluency & Professional Confidence',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: 'Experienced English Language Trainer with 10+ years of expertise in spoken English, communication skills, grammar, pronunciation, and professional communication. Passionate about helping learners build confidence and communicate effectively in academic and professional environments.',
+    tags: ['Spoken English', 'Business English', 'Grammar & Fluency', 'Interview Prep'],
+    position: '50% 50%',
+    fit: 'cover',
+    zoom: 1
+  },
+  {
+    id: 'ht-2',
+    name: 'Pradeep Rajan',
+    roleTag: 'STAFF FULL-STACK LEAD',
+    designation: 'Senior Staff Full-Stack Engineer @ Ex-Zoho / Global Tech Lead',
+    role: 'Senior Staff Full-Stack Engineer',
+    company: 'Ex-Zoho / Global Tech Lead',
+    exp: '10+ Yrs Exp',
+    headline: 'Full-Stack Architecture & AI Copilot Workflows',
+    tagline: 'Production-Scale Distributed Systems',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: 'Specialist in React, Node.js, Next.js and AI Copilot workflow automation. Deep expertise in production-scale distributed microservices and front-end performance tuning.',
+    tags: ['React 19', 'Next.js', 'System Architecture', 'Node.js Microservices'],
+    position: '50% 50%',
+    fit: 'cover',
+    zoom: 1
+  },
+  {
+    id: 'ht-3',
+    name: 'Arun Kumar S',
+    roleTag: 'PRINCIPAL CLOUD ARCHITECT',
+    designation: 'Principal Cloud Architect @ AWS / TechCorp',
+    role: 'Principal Cloud Architect',
+    company: 'Ex-Google / AWS Lead',
+    exp: '12+ Yrs Exp',
+    headline: 'Multi-Cloud Deployments & Kubernetes Clusters',
+    tagline: 'Resilient Cloud Infrastructures',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: '11+ years designing multi-cloud architectures across AWS and Azure. Mentored 2,500+ engineers into high-paying DevOps and Cloud Engineering roles.',
+    tags: ['AWS Certified', 'Kubernetes Lead', 'Multi-Cloud DevOps', 'Terraform IaC'],
+    position: '50% 50%',
+    fit: 'cover',
+    zoom: 1
+  },
+  {
+    id: 'ht-4',
+    name: 'Divya Bharathi M',
+    roleTag: 'PRINCIPAL AI/ML SPECIALIST',
+    designation: 'Principal AI & Machine Learning Lead',
+    role: 'Principal AI/ML Specialist',
+    company: 'Ex-Microsoft / AI Research',
+    exp: '9+ Yrs Exp',
+    headline: 'Generative AI, Large Language Models & MLOps',
+    tagline: 'Applied AI & Practical Deep Learning',
+    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: 'Pioneering generative AI capstones, LLM fine-tuning, and practical machine learning deployment across enterprise production pipelines.',
+    tags: ['GenAI & LLMs', 'PyTorch Lead', 'Enterprise MLOps', 'Prompt Engineering'],
+    position: '50% 50%',
+    fit: 'cover',
+    zoom: 1
+  },
+  {
+    id: 'ht-5',
+    name: 'Rajesh Kannan',
+    roleTag: 'DATA PLATFORM ARCHITECT',
+    designation: 'Senior Director of Data Engineering',
+    role: 'Data Platform Architect',
+    company: 'Ex-PayPal / Big Data Architect',
+    exp: '13+ Yrs Exp',
+    headline: 'Real-Time Streaming & Enterprise Data Warehousing',
+    tagline: 'High-Throughput Distributed Data',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: 'Architect of high-throughput real-time streaming architectures, Apache Spark pipelines, and cloud data warehouse infrastructure.',
+    tags: ['Apache Spark', 'Kafka Streaming', 'Snowflake DBA', 'Data Modeling'],
+    position: '50% 50%',
+    fit: 'cover',
+    zoom: 1
+  }
+];
 
 export const defaultVideoTestimonials = videoStories || [];
 export const defaultTestimonialsHero = {
   tag: 'STUDENT SUCCESS STORIES',
   badge: 'STUDENT SUCCESS STORIES',
-  headline: 'Real Learners. Real IT Career Outcomes.',
-  sub: 'Discover how EZER Learning Solution helps freshers and career switchers land high-growth tech jobs.',
-  image: 'images/hero/optimized/hero_section_1.jpg'
+  headline: 'Real Learners. Real High-Growth IT Careers.',
+  sub: 'Discover how EZER Learning Solution helps freshers, career switchers, and non-IT professionals land high-growth tech roles with personalized live online training and 12-month placement support.',
+  image: 'images/hero/hero_section_1.jpg',
+  ratingBadge: '4.9/5 Rating (2,500+ Reviews)',
+  assistanceBadge: '12-Month Placement Support'
 };
 
 export const defaultContactInfo = {
@@ -589,13 +717,13 @@ export function safeSetStorage(key, val) {
 export const defaultExecutiveLeaders = [
   {
     id: 'exec-1',
-    roleTag: 'CEO',
-    roleName: 'Chief Executive Officer',
-    name: 'Dr. Subramanian R',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=700&h=700',
-    tagline: 'From problem to solution.',
-    headline: 'A creative and strategic transformation partner for bold businesses.',
-    bio: 'Visionary Leader driving native language tech education, corporate placement partnerships, and pan-India EdTech growth.',
+    roleTag: 'FOUNDER • MANAGING DIRECTOR',
+    roleName: 'MANAGING DIRECTOR',
+    name: 'Vivekkumar S',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=700&h=700',
+    tagline: 'From Problem to Solution',
+    headline: 'Building Skills. Shaping Careers. Creating Futures',
+    bio: 'Building industry-ready talent through practical, career-focused IT education, while empowering learners with the skills and confidence to succeed in the IT industry.',
     imagePosition: 'center top',
     position: 'center top',
     imageFit: 'cover',
@@ -605,13 +733,13 @@ export const defaultExecutiveLeaders = [
   },
   {
     id: 'exec-2',
-    roleTag: 'CFO',
-    roleName: 'Chief Financial Officer',
-    name: 'Meenakshi Sundaram',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=700',
-    tagline: 'Financial integrity & student affordability.',
-    headline: 'Pioneering accessible scholarship funds for high-growth tech careers.',
-    bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.',
+    roleTag: 'CO-FOUNDER • EXECUTIVE DIRECTOR',
+    roleName: 'EXECUTIVE DIRECTOR',
+    name: 'Vignesh B',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=700&h=700',
+    tagline: 'From Learning to Career',
+    headline: 'Building industry-ready talent for high-growth technology careers.',
+    bio: 'A seasoned IT expert with over 10 years of experience in IT Infrastructure and Technical Support. His commitment to quality and innovation is the cornerstone of our success.',
     imagePosition: 'center top',
     position: 'center top',
     imageFit: 'cover',
@@ -621,13 +749,13 @@ export const defaultExecutiveLeaders = [
   },
   {
     id: 'exec-3',
-    roleTag: 'CMTO',
-    roleName: 'Chief Marketing Technology Officer',
-    name: 'Anand Kumar K',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=700&h=700',
-    tagline: 'Curriculum innovation & hands-on labs.',
-    headline: 'Architecting AI-integrated practical capstones for production readiness.',
-    bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.',
+    roleTag: 'CMTO • CHIEF MARKETING & TECHNOLOGY OFFICER',
+    roleName: 'CHIEF MARKETING & TECHNOLOGY OFFICER',
+    name: 'Mr. Jeeva T',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=700&h=700',
+    tagline: 'Marketing & Technology Innovation for Ezer',
+    headline: 'Driving Ezer’s growth through marketing, technology & innovation',
+    bio: 'An accomplished Digital Marketing Strategist and Technical Expert with 5+ years of experience in driving digital growth, brand visibility and innovative technical solutions.',
     imagePosition: 'center top',
     position: 'center top',
     imageFit: 'cover',
@@ -646,6 +774,7 @@ export function getInitialState() {
     transformedLives: defaultTransformedLives,
     outcomesHeader: defaultOutcomesHeader,
     seniorMentors: defaultSeniorMentors,
+    homeTrainers: defaultHomeTrainers,
     mentorsHeader: defaultMentorsHeader,
     videoTestimonials: defaultVideoTestimonials,
     testimonialsHero: defaultTestimonialsHero,

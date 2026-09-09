@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useReducer, useEffect, useMemo, useCallback } from 'react';
 import { triggerStateToast } from '../utils/toastService';
 import { batchFetchRelatedData } from '../utils/dbQueries';
-import { phase1Courses } from '../data/courses';
-import { testimonials as initialTestimonials } from '../data/testimonials';
-import { generalFaqs } from '../data/faq';
+import { phase1Courses } from '../../../data/courses';
+import { testimonials as initialTestimonials } from '../../../data/testimonials';
+import { generalFaqs } from '../../../data/faq';
 import {
   STORAGE_SLIDES_KEY,
   STORAGE_COURSES_KEY,
@@ -42,6 +42,7 @@ import {
   defaultSupportCards,
   defaultTransformedLives,
   defaultSeniorMentors,
+  defaultHomeTrainers,
   defaultVideoTestimonials,
   defaultBlogs,
   defaultAchievements,
@@ -51,7 +52,7 @@ import {
   safeSetStorage
 } from './siteDefaults';
 
-import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../services/firebaseService';
+import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../../../services/firebaseService';
 
 const SiteContext = createContext();
 
@@ -146,6 +147,7 @@ export function SiteProvider({ children }) {
     transformedLives,
     outcomesHeader,
     seniorMentors,
+    homeTrainers,
     mentorsHeader,
     videoTestimonials,
     testimonialsHero,
@@ -243,6 +245,9 @@ export function SiteProvider({ children }) {
       unsubs.push(subscribeToCollection('seniorMentors', (items) => {
         handleSyncCollection('seniorMentors', items, 'seniorMentors', defaultSeniorMentors);
       }));
+      unsubs.push(subscribeToCollection('homeTrainers', (items) => {
+        handleSyncCollection('homeTrainers', items, 'homeTrainers', defaultHomeTrainers);
+      }));
       unsubs.push(subscribeToCollection('writtenTestimonials', (items) => {
         handleSyncCollection('writtenTestimonials', items, 'writtenTestimonials', initialTestimonials);
       }));
@@ -269,38 +274,6 @@ export function SiteProvider({ children }) {
       }));
       unsubs.push(subscribeToCollection('achievements', (items) => {
         handleSyncCollection('achievements', items, 'achievements', defaultAchievements);
-      }));
-      unsubs.push(subscribeToCollection('testimonialsHero', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const mainHero = items.find((i) => i.id === 'main') || items[0];
-          if (mainHero) {
-            dispatch({ type: 'SET_KEY', key: 'testimonialsHero', value: mainHero });
-          }
-        }
-      }));
-      unsubs.push(subscribeToCollection('outcomesHeader', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const mainHeader = items.find((i) => i.id === 'main') || items[0];
-          if (mainHeader) {
-            dispatch({ type: 'SET_KEY', key: 'outcomesHeader', value: mainHeader });
-          }
-        }
-      }));
-      unsubs.push(subscribeToCollection('mentorsHeader', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const mainHeader = items.find((i) => i.id === 'main') || items[0];
-          if (mainHeader) {
-            dispatch({ type: 'SET_KEY', key: 'mentorsHeader', value: mainHeader });
-          }
-        }
-      }));
-      unsubs.push(subscribeToCollection('paymentConfig', (items) => {
-        if (Array.isArray(items) && items.length > 0) {
-          const mainConfig = items.find((i) => i.id === 'main') || items[0];
-          if (mainConfig) {
-            dispatch({ type: 'SET_KEY', key: 'paymentConfig', value: mainConfig });
-          }
-        }
       }));
       unsubs.push(subscribeToCollection('payments', (items) => {
         if (Array.isArray(items)) {
@@ -351,6 +324,81 @@ export function SiteProvider({ children }) {
     saveCollectionArray('executiveLeaders', updated);
     triggerStateToast('SAVED');
   }, [executiveLeaders]);
+
+  const addExecutiveLeader = useCallback((newLeader) => {
+    const baseList = (executiveLeaders && executiveLeaders.length > 0) ? executiveLeaders : defaultExecutiveLeaders;
+    const leader = {
+      id: `exec-${Date.now()}`,
+      position: 'center top',
+      imagePosition: 'center top',
+      fit: 'cover',
+      imageFit: 'cover',
+      zoom: 1,
+      imageZoom: 1,
+      ...newLeader
+    };
+    const updated = [...baseList, leader];
+    dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: updated });
+    saveCollectionArray('executiveLeaders', updated);
+    saveDocument('executiveLeaders', leader.id, leader);
+    triggerStateToast('SAVED');
+  }, [executiveLeaders]);
+
+  const deleteExecutiveLeader = useCallback((id) => {
+    const baseList = (executiveLeaders && executiveLeaders.length > 0) ? executiveLeaders : defaultExecutiveLeaders;
+    const updated = baseList.filter((l) => l.id !== id && l.roleTag !== id);
+    dispatch({ type: 'SET_KEY', key: 'executiveLeaders', value: updated });
+    saveCollectionArray('executiveLeaders', updated);
+    removeDocument('executiveLeaders', String(id));
+    triggerStateToast('SAVED');
+  }, [executiveLeaders]);
+
+  const updateHomeTrainers = useCallback((newTrainers) => {
+    dispatch({ type: 'SET_KEY', key: 'homeTrainers', value: newTrainers });
+    saveCollectionArray('homeTrainers', newTrainers);
+    triggerStateToast('SAVED');
+  }, []);
+
+  const updateHomeTrainer = useCallback((id, updatedData) => {
+    const baseList = (homeTrainers && homeTrainers.length > 0) ? homeTrainers : defaultHomeTrainers;
+    const updated = baseList.map((t) => {
+      if (t.id === id || t.roleTag === id || t.name === id) {
+        return { ...t, ...updatedData };
+      }
+      return t;
+    });
+    dispatch({ type: 'SET_KEY', key: 'homeTrainers', value: updated });
+    saveCollectionArray('homeTrainers', updated);
+    triggerStateToast('SAVED');
+  }, [homeTrainers]);
+
+  const addHomeTrainer = useCallback((newTrainer) => {
+    const baseList = (homeTrainers && homeTrainers.length > 0) ? homeTrainers : defaultHomeTrainers;
+    const trainer = {
+      id: `trn-${Date.now()}`,
+      position: 'center center',
+      imagePosition: 'center center',
+      fit: 'cover',
+      imageFit: 'cover',
+      zoom: 1,
+      imageZoom: 1,
+      ...newTrainer
+    };
+    const updated = [...baseList, trainer];
+    dispatch({ type: 'SET_KEY', key: 'homeTrainers', value: updated });
+    saveCollectionArray('homeTrainers', updated);
+    saveDocument('homeTrainers', trainer.id, trainer);
+    triggerStateToast('SAVED');
+  }, [homeTrainers]);
+
+  const deleteHomeTrainer = useCallback((id) => {
+    const baseList = (homeTrainers && homeTrainers.length > 0) ? homeTrainers : defaultHomeTrainers;
+    const updated = baseList.filter((t) => t.id !== id && t.roleTag !== id && t.name !== id);
+    dispatch({ type: 'SET_KEY', key: 'homeTrainers', value: updated });
+    saveCollectionArray('homeTrainers', updated);
+    removeDocument('homeTrainers', String(id));
+    triggerStateToast('SAVED');
+  }, [homeTrainers]);
 
   const updateBlogs = useCallback((newBlogs) => {
     dispatch({ type: 'SET_KEY', key: 'blogs', value: newBlogs });
@@ -1002,6 +1050,7 @@ export function SiteProvider({ children }) {
     transformedLives, updateTransformedLives, addTransformedLife, updateTransformedLife, deleteTransformedLife,
     outcomesHeader, updateOutcomesHeader,
     seniorMentors, updateSeniorMentors, addSeniorMentor, updateSeniorMentor, deleteSeniorMentor,
+    homeTrainers, updateHomeTrainers, addHomeTrainer, updateHomeTrainer, deleteHomeTrainer,
     mentorsHeader, updateMentorsHeader,
     videoTestimonials, updateVideoTestimonials, addVideoTestimonial, updateVideoTestimonial, deleteVideoTestimonial,
     testimonialsHero, updateTestimonialsHero,
@@ -1012,7 +1061,7 @@ export function SiteProvider({ children }) {
     leads, addLead, updateLeadStatus, addLeadComment, updateLeadDetails, deleteLead,
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
-    executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
+    executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader, addExecutiveLeader, deleteExecutiveLeader,
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,
@@ -1028,6 +1077,7 @@ export function SiteProvider({ children }) {
     transformedLives, updateTransformedLives, addTransformedLife, updateTransformedLife, deleteTransformedLife,
     outcomesHeader, updateOutcomesHeader,
     seniorMentors, updateSeniorMentors, addSeniorMentor, updateSeniorMentor, deleteSeniorMentor,
+    homeTrainers, updateHomeTrainers, addHomeTrainer, updateHomeTrainer, deleteHomeTrainer,
     mentorsHeader, updateMentorsHeader,
     videoTestimonials, updateVideoTestimonials, addVideoTestimonial, updateVideoTestimonial, deleteVideoTestimonial,
     testimonialsHero, updateTestimonialsHero,
@@ -1038,7 +1088,7 @@ export function SiteProvider({ children }) {
     leads, addLead, updateLeadStatus, addLeadComment, updateLeadDetails, deleteLead,
     blogs, updateBlogs, addBlog, updateBlog, deleteBlog,
     achievements, updateAchievements, addAchievement, updateAchievement, deleteAchievement,
-    executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader,
+    executiveLeaders, updateExecutiveLeaders, updateExecutiveLeader, addExecutiveLeader, deleteExecutiveLeader,
     hiringPartners, addHiringPartner, updateHiringPartner, deleteHiringPartner,
     paymentConfig, updatePaymentConfig,
     aboutVideos, updateAboutVideos,

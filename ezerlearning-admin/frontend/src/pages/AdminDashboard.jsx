@@ -9,12 +9,11 @@ import CourseManager from '../components/CourseManager';
 import CoursePaymentManager from '../components/CoursePaymentManager';
 import PaymentsReceivedManager from '../components/PaymentsReceivedManager';
 import PlatformManager from '../components/PlatformManager';
-import AboutPageManager from '../components/AboutPageManager';
 import AboutVideoManager from '../components/AboutVideoManager';
-import AboutShowcaseManager from '../components/AboutShowcaseManager';
 import SupportCardsManager from '../components/SupportCardsManager';
 import GraduateOutcomesManager from '../components/GraduateOutcomesManager';
 import SeniorMentorsManager from '../components/SeniorMentorsManager';
+import ManagementAndTrainersManager from '../components/ManagementAndTrainersManager';
 import VideoReviewsManager from '../components/VideoReviewsManager';
 import TestimonialsManager from '../components/TestimonialsManager';
 import FaqManager from '../components/FaqManager';
@@ -27,7 +26,7 @@ import AdminHeaderNav from '../components/AdminHeaderNav';
 import AdminSidebarNav from '../components/AdminSidebarNav';
 import './AdminDashboard.css';
 
-import UIStateDisplay, { STATE_TYPES } from '../components/UIStateDisplay';
+import UIStateDisplay, { STATE_TYPES } from '../../../components/UIStateDisplay';
 import {
   HiOutlinePhotograph,
   HiOutlineAcademicCap,
@@ -44,7 +43,6 @@ import {
   HiOutlineMailOpen,
   HiOutlineNewspaper,
   HiOutlineOfficeBuilding,
-  HiOutlineInformationCircle,
   HiOutlineCog
 } from 'react-icons/hi';
 
@@ -125,6 +123,7 @@ export default function AdminDashboard() {
     supportCards,
     transformedLives,
     seniorMentors,
+    homeTrainers,
     videoTestimonials,
     writtenTestimonials,
     faqList,
@@ -134,11 +133,11 @@ export default function AdminDashboard() {
     achievements,
     executiveLeaders,
     hiringPartners,
-    aboutVideos,
-    aboutShowcaseCards,
     payments,
     adminUsers,
     updateExecutiveLeader,
+    addExecutiveLeader,
+    deleteExecutiveLeader,
     resetToDefault
   } = useSiteData();
 
@@ -192,13 +191,13 @@ export default function AdminDashboard() {
     { id: 'hero', label: 'Hero Slider', icon: HiOutlinePhotograph, count: (heroSlides || []).length },
     { id: 'partners', label: 'Hiring Partners & Logos', icon: HiOutlineOfficeBuilding, count: (hiringPartners || []).length },
     { id: 'platform', label: 'Empowering Switchers', icon: HiOutlineSwitchHorizontal },
-    { id: 'about-page', label: 'About Us Page Content', icon: HiOutlineInformationCircle, count: (aboutShowcaseCards || []).length },
+    { id: 'about-videos', label: 'About Us Brand Videos (2 Links)', icon: HiOutlineVideoCamera },
     { id: 'support', label: 'Why EZER Support', icon: HiOutlineBadgeCheck, count: (supportCards || []).length },
-    { id: 'executive', label: 'Executive Board (CEO / Leaders)', icon: HiOutlineUserGroup, count: (executiveLeaders || []).length },
+    { id: 'executive', label: 'Our Management & Leadership Team', icon: HiOutlineUserGroup, count: ((executiveLeaders || []).length + (homeTrainers || []).length) },
     { id: 'blog', label: 'Blog & Magazine Articles', icon: HiOutlineNewspaper, count: (blogs || []).length },
     { id: 'achievements', label: 'EZER Awards & Honors', icon: HiOutlineBadgeCheck, count: (achievements || []).length },
     { id: 'outcomes', label: 'Graduate Outcomes', icon: HiOutlineUserGroup, count: (transformedLives || []).length },
-    { id: 'mentors', label: 'Senior Mentors', icon: HiOutlineUser, count: (seniorMentors || []).length },
+    { id: 'mentors', label: 'Expert Trainers & Mentors', icon: HiOutlineUser, count: (seniorMentors || []).length },
     { id: 'videos', label: 'Video Reviews', icon: HiOutlineVideoCamera, count: (videoTestimonials || []).length },
     { id: 'testimonials', label: 'Testimonials Page', icon: HiOutlineChatAlt, count: (writtenTestimonials || []).length },
     { id: 'popup', label: 'Lead Popup Modal', icon: HiOutlineTemplate },
@@ -253,11 +252,10 @@ export default function AdminDashboard() {
             {activeTab === 'partners' && <HiringPartnersManager />}
             {activeTab === 'courses' && <CourseManager />}
             {activeTab === 'platform' && <PlatformManager />}
-            {activeTab === 'about-page' && <AboutPageManager />}
-            {activeTab === 'about-videos' && <AboutPageManager initialSubTab="videos" />}
-            {activeTab === 'about-showcase' && <AboutPageManager initialSubTab="showcase" />}
+            {activeTab === 'about-videos' && <AboutVideoManager />}
             {activeTab === 'support' && <SupportCardsManager />}
-            {activeTab === 'executive' && <ExecutiveSection executiveLeaders={executiveLeaders} updateExecutiveLeader={updateExecutiveLeader} />}
+            {activeTab === 'executive' && <ManagementAndTrainersManager />}
+            {activeTab === 'home-trainers' && <ManagementAndTrainersManager initialScroll="trainers" />}
             {activeTab === 'blog' && <BlogManager initialSubTab="blogs" hideSubTabs={true} />}
             {activeTab === 'achievements' && <BlogManager initialSubTab="achievements" hideSubTabs={true} />}
             {activeTab === 'outcomes' && <GraduateOutcomesManager />}

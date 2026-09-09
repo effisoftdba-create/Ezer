@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube, FaTwitter } from 'react-icons/fa';
 import { HiMail, HiPhone, HiLocationMarker } from 'react-icons/hi';
+import { useSiteData } from '../Admin_Control/context/SiteContext';
 
 const socialLinks = [
   { name: 'Facebook', Icon: FaFacebook, url: '#' },
@@ -12,6 +13,11 @@ const socialLinks = [
 ];
 
 export default function Footer() {
+  const { contactInfo } = useSiteData();
+  const phone = contactInfo?.phone || '+91 98765 43210';
+  const email = contactInfo?.email || 'info@ezerlearning.com';
+  const address = contactInfo?.address || 'Plot No: 90, 3rd Cross Street, Phase-2, Thirumalai Nagar Annexe, Perungudi, Chennai - 600096, Tamil Nadu, India';
+
   return (
     <footer style={{ background: '#000648', color: '#fff', paddingTop: '36px', paddingBottom: '16px', borderTop: '1px solid rgba(242, 183, 51, 0.3)', contain: 'layout style' }}>
       <div className="container">
@@ -21,24 +27,16 @@ export default function Footer() {
         }}>
           {/* Brand */}
           <div>
-            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '12px' }}>
+            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none', marginBottom: '14px' }}>
               <img 
-                src={`${import.meta.env.BASE_URL || '/'}images/logo_white_border.png`} 
-                alt="EZER Learning Solution Crest Logo" 
-                width="34"
-                height="34"
+                src={`${import.meta.env.BASE_URL || '/'}images/ezer_full_logo_dark.png`} 
+                alt="EZER Learning Solution Logo" 
+                width="175"
+                height="52"
                 loading="lazy"
                 decoding="async"
-                style={{ height: '34px', width: 'auto', objectFit: 'contain', flexShrink: 0, mixBlendMode: 'screen' }} 
+                style={{ height: '48px', width: 'auto', objectFit: 'contain', flexShrink: 0, display: 'block', filter: 'drop-shadow(0 2px 10px rgba(0, 0, 0, 0.4))' }} 
               />
-              <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#ffffff', letterSpacing: '0.04em', lineHeight: 1, fontFamily: "'Plus Jakarta Sans', system-ui, sans-serif" }}>
-                  EZER
-                </span>
-                <span style={{ fontSize: '0.52rem', fontWeight: 900, color: '#f2b733', letterSpacing: '0.25em', textTransform: 'uppercase', marginTop: '2px', whiteSpace: 'nowrap', lineHeight: 1, display: 'block' }}>
-                  LEARNING SOLUTION
-                </span>
-              </div>
             </Link>
 
             <p style={{ fontSize: '0.78rem', lineHeight: 1.55, color: '#cbd5e1', marginBottom: '14px', maxWidth: '320px' }}>
@@ -196,24 +194,24 @@ export default function Footer() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.78rem', color: '#cbd5e1' }}>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-start' }}>
                 <HiLocationMarker style={{ color: '#f2b733', flexShrink: 0, marginTop: '2px' }} size={15} />
-                <span>Plot No: 90, 3rd Cross Street, Phase-2, Thirumalai Nagar Annexe, Perungudi, Chennai - 600096, Tamil Nadu, India</span>
+                <span>{address}</span>
               </div>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <HiPhone style={{ color: '#f2b733', flexShrink: 0 }} size={15} />
-                <a href="tel:+919876543210" style={{ color: '#cbd5e1', textDecoration: 'none' }}
+                <a href={`tel:${phone.replace(/\s+/g, '')}`} style={{ color: '#cbd5e1', textDecoration: 'none' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
-                  +91 98765 43210
+                  {phone}
                 </a>
               </div>
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <HiMail style={{ color: '#f2b733', flexShrink: 0 }} size={15} />
-                <a href="mailto:info@ezerlearning.com" style={{ color: '#cbd5e1', textDecoration: 'none' }}
+                <a href={`mailto:${email}`} style={{ color: '#cbd5e1', textDecoration: 'none' }}
                   onMouseEnter={(e) => e.currentTarget.style.color = '#f2b733'}
                   onMouseLeave={(e) => e.currentTarget.style.color = '#cbd5e1'}
                 >
-                  info@ezerlearning.com
+                  {email}
                 </a>
               </div>
             </div>

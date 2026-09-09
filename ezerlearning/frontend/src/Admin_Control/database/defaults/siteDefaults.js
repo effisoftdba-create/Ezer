@@ -328,8 +328,7 @@ export const defaultTransformedLives = [
 
 export const defaultOutcomesHeader = {
   tag: 'TRANSFORMED LIVES',
-  headline: 'Our Graduates Get Hired by Leading Tech Firms',
-  title: 'Our Graduates Get Hired by Leading Tech Firms',
+  title: 'Real Career Switches & Salary Hikes',
   sub: 'Hear directly from our learners who transitioned into high-paying IT roles.'
 };
 
@@ -360,16 +359,39 @@ export const defaultMentorsHeader = {
   sub: 'Our instructors work at top tech firms, bringing real production scenarios into every live class.'
 };
 
-export const defaultVideoTestimonials = videoStories || [];
+export const defaultHomeTrainers = [
+  {
+    id: 'ht-1',
+    name: 'Princy Julite',
+    roleTag: 'SENIOR ENGLISH TRAINER',
+    designation: 'Senior English Trainer | EZER Learning Solution',
+    role: 'Senior English Language Trainer',
+    company: 'EZER Learning Solution',
+    exp: '12+ Yrs Exp',
+    headline: 'Mastering Spoken & Professional Corporate Communication',
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: 'Experienced English Language Trainer with 10+ years of expertise in spoken English, communication skills, grammar, pronunciation, and professional communication.'
+  },
+  {
+    id: 'ht-2',
+    name: 'Pradeep Rajan',
+    roleTag: 'STAFF FULL-STACK LEAD',
+    designation: 'Senior Staff Full-Stack Engineer @ Ex-Zoho / Global Tech Lead',
+    role: 'Senior Staff Full-Stack Engineer',
+    company: 'Ex-Zoho / Global Tech Lead',
+    exp: '10+ Yrs Exp',
+    headline: 'Full-Stack Architecture & AI Copilot Workflows',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400&h=400',
+    bio: 'Specialist in React, Node.js, Next.js and AI Copilot workflow automation.'
+  }
+];
 
+export const defaultVideoTestimonials = videoStories || [];
 export const defaultTestimonialsHero = {
-  tag: 'STUDENT SUCCESS STORIES',
   badge: 'STUDENT SUCCESS STORIES',
-  headline: 'Real Learners. Real High-Growth IT Careers.',
-  sub: 'Discover how EZER Learning Solution helps freshers, career switchers, and non-IT professionals land high-growth tech roles with personalized live online training and 12-month placement support.',
-  image: 'images/hero/hero_section_1.jpg',
-  ratingBadge: '4.9/5 Rating (2,500+ Reviews)',
-  assistanceBadge: '12-Month Placement Support'
+  headline: 'Real Learners. Real IT Career Outcomes.',
+  sub: 'Discover how EZER Learning Solution helps freshers and career switchers land high-growth tech jobs.',
+  image: 'images/hero/optimized/hero_section_1.jpg'
 };
 
 export const defaultContactInfo = {
@@ -438,49 +460,11 @@ export const defaultBlogs = [
     title: 'EZER Learning Solution Honored at EdTech Excellence Awards 2025',
     slug: 'ezer-honored-at-edtech-excellence-awards-2025',
     category: 'Company News',
-    author: 'EZER Academic Board',
+    author: 'EZER Editorial Team',
     date: 'July 28, 2025',
-    readTime: '6 Min Read',
-    seoGeoAeoTag: 'Best AI & Full Stack IT Training Institute in Chennai India',
-    summary: 'EZER Learning Solution receives national acclaim at the EdTech Excellence Awards 2025 for pioneering live native-language tech education, outcome-driven mentorship cohorts, and 12-month dedicated career placement support.',
+    summary: 'EZER wins national recognition for native language IT education, outcome-driven mentorship, and outstanding placement metrics.',
     image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
-    content: 'We are thrilled to announce that EZER Learning Solution has been awarded the EdTech Excellence & Innovation Award for 2025. This milestone underscores EZER’s mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.',
-    takeaways: [
-      'National recognition for democratizing practical tech training across India.',
-      'Pioneering native-language instruction (Tamil, Hindi, English) for accelerated software comprehension.',
-      'Over 10,000+ career switchers and non-IT graduates successfully placed in top IT firms.',
-      'Comprehensive 12-month placement assistance with mock technical interviews and resume preparation.'
-    ],
-    sections: [
-      {
-        id: 'sec-1',
-        title: '1. National Recognition for EdTech Innovation & Practical Outcomes',
-        content: 'EZER Learning Solution has been formally honored with the prestigious EdTech Excellence & Innovation Award 2025. This milestone underscores EZER’s unwavering mission to bridge the digital skills divide by empowering freshers, non-IT candidates, and career switchers to transition into high-growth software engineering, cloud DevOps, and AI automation careers.',
-        image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=1000',
-        caption: 'EZER Leadership receiving the EdTech Excellence & Innovation Award 2025.'
-      },
-      {
-        id: 'sec-2',
-        title: '2. Revolutionizing Tech Education with Native-Language Cohorts',
-        content: 'A cornerstone of EZER’s award-winning pedagogy is its dual-language learning framework. By delivering live, interactive instruction in Tamil, Hindi, and English alongside industry-standard coding labs, learners grasp complex data structures, cloud architectures, and full-stack engineering faster and with greater confidence.',
-        image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&q=80&w=1000',
-        caption: 'Interactive live cohort masterclasses with real-time mentor code reviews.'
-      },
-      {
-        id: 'sec-3',
-        title: '3. Hands-On Production Labs & Enterprise Portfolio Proof-of-Work',
-        content: 'Rather than relying on passive video lectures, EZER’s curriculum is anchored on live cloud-hosted sandboxes, microservice architectures, and automated testing pipelines. Students write production-ready code, deploy CI/CD workflows, and build verifiable GitHub repositories that demonstrate immediate enterprise value to hiring managers.',
-        image: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=1000',
-        caption: 'Students collaborating on enterprise microservice infrastructure and live deployment pipelines.'
-      },
-      {
-        id: 'sec-4',
-        title: '4. 12-Month Dedicated Placement Assistance & Corporate Referral Ecosystem',
-        content: 'Beyond technical mastery, EZER provides up to 12 months of post-completion placement assistance. This includes 1-on-1 resume optimization, AI-assisted mock technical interviews, algorithmic coding drills, and direct recruitment pathways with 150+ corporate hiring partners across top tech firms.',
-        image: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1000',
-        caption: 'Alumni career acceleration and dedicated corporate placement drive.'
-      }
-    ],
+    content: 'We are thrilled to announce that EZER Learning Solution has been awarded the EdTech Excellence & Innovation Award for 2025. This achievement reflects our commitment to democratizing tech education.',
     featured: false
   },
   {
@@ -522,13 +506,13 @@ export function safeSetStorage(key, val) {
 export const defaultExecutiveLeaders = [
   {
     id: 'exec-1',
-    roleTag: 'CEO',
-    roleName: 'Chief Executive Officer',
-    name: 'Dr. Subramanian R',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=700&h=700',
-    tagline: 'From problem to solution.',
-    headline: 'A creative and strategic transformation partner for bold businesses.',
-    bio: 'Visionary Leader driving native language tech education, corporate placement partnerships, and pan-India EdTech growth.',
+    roleTag: 'FOUNDER • MANAGING DIRECTOR',
+    roleName: 'MANAGING DIRECTOR',
+    name: 'Vivekkumar S',
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=700&h=700',
+    tagline: 'From Problem to Solution',
+    headline: 'Building Skills. Shaping Careers. Creating Futures',
+    bio: 'Building industry-ready talent through practical, career-focused IT education, while empowering learners with the skills and confidence to succeed in the IT industry.',
     imagePosition: 'center top',
     position: 'center top',
     imageFit: 'cover',
@@ -538,13 +522,13 @@ export const defaultExecutiveLeaders = [
   },
   {
     id: 'exec-2',
-    roleTag: 'CFO',
-    roleName: 'Chief Financial Officer',
-    name: 'Meenakshi Sundaram',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=700&h=700',
-    tagline: 'Financial integrity & student affordability.',
-    headline: 'Pioneering accessible scholarship funds for high-growth tech careers.',
-    bio: 'Strategic Financial Lead overseeing student scholarship funds and affordable learning models.',
+    roleTag: 'CO-FOUNDER • EXECUTIVE DIRECTOR',
+    roleName: 'EXECUTIVE DIRECTOR',
+    name: 'Vignesh B',
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=700&h=700',
+    tagline: 'From Learning to Career',
+    headline: 'Building industry-ready talent for high-growth technology careers.',
+    bio: 'A seasoned IT expert with over 10 years of experience in IT Infrastructure and Technical Support. His commitment to quality and innovation is the cornerstone of our success.',
     imagePosition: 'center top',
     position: 'center top',
     imageFit: 'cover',
@@ -554,15 +538,108 @@ export const defaultExecutiveLeaders = [
   },
   {
     id: 'exec-3',
-    roleTag: 'CMTO',
-    roleName: 'Chief Marketing Technology Officer',
-    name: 'Anand Kumar K',
-    image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=700&h=700',
-    tagline: 'Curriculum innovation & hands-on labs.',
-    headline: 'Architecting AI-integrated practical capstones for production readiness.',
-    bio: 'Pioneer of AI-integrated lab curriculums and corporate technical readiness standards.',
+    roleTag: 'CMTO • CHIEF MARKETING & TECHNOLOGY OFFICER',
+    roleName: 'CHIEF MARKETING & TECHNOLOGY OFFICER',
+    name: 'Mr. Jeeva T',
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=700&h=700',
+    tagline: 'Marketing & Technology Innovation for Ezer',
+    headline: 'Driving Ezer’s growth through marketing, technology & innovation',
+    bio: 'An accomplished Digital Marketing Strategist and Technical Expert with 5+ years of experience in driving digital growth, brand visibility and innovative technical solutions.',
     imagePosition: 'center top',
     position: 'center top',
+    imageFit: 'cover',
+    fit: 'cover',
+    imageZoom: 1,
+    zoom: 1
+  }
+];
+
+export const defaultHomeTrainers = [
+  {
+    id: 'trn-1',
+    roleTag: 'SENIOR ENGLISH TRAINER',
+    name: 'Princy Julite',
+    designation: 'SENIOR ENGLISH TRAINER | EZER LEARNING SOLUTION',
+    tagline: 'Fluency & Professional Confidence',
+    headline: 'Mastering Spoken & Professional Corporate Communication',
+    exp: '12+ Yrs Exp',
+    bio: 'Experienced English Language Trainer with 10+ years of expertise in spoken English, communication skills, grammar, pronunciation, and professional communication. Passionate about helping learners build confidence and communicate effectively in academic and professional environments.',
+    tags: ['Spoken English', 'Business English', 'Grammar & Fluency', 'Interview Prep'],
+    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=600&h=600',
+    imagePosition: 'center center',
+    position: 'center center',
+    imageFit: 'cover',
+    fit: 'cover',
+    imageZoom: 1,
+    zoom: 1
+  },
+  {
+    id: 'trn-2',
+    roleTag: 'STAFF FULL-STACK LEAD',
+    name: 'Pradeep Rajan',
+    designation: 'SENIOR STAFF FULL-STACK ENGINEER @ EX-ZOHO / GLOBAL TECH LEAD',
+    tagline: 'Production-Scale Distributed Systems',
+    headline: 'Full-Stack Architecture & AI Copilot Workflows',
+    exp: '10+ Yrs Exp',
+    bio: 'Specialist in React, Node.js, Next.js and AI Copilot workflow automation. Deep expertise in production-scale distributed microservices and front-end performance tuning.',
+    tags: ['React 19', 'Next.js', 'System Architecture', 'Node.js Microservices'],
+    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=600&h=600',
+    imagePosition: 'center center',
+    position: 'center center',
+    imageFit: 'cover',
+    fit: 'cover',
+    imageZoom: 1,
+    zoom: 1
+  },
+  {
+    id: 'trn-3',
+    roleTag: 'PRINCIPAL CLOUD ARCHITECT',
+    name: 'Arun Kumar S',
+    designation: 'PRINCIPAL CLOUD ARCHITECT @ AWS / TECHCORP',
+    tagline: 'Resilient Cloud Infrastructures',
+    headline: 'Multi-Cloud Deployments & Kubernetes Clusters',
+    exp: '11+ Yrs Exp',
+    bio: '11+ years designing multi-cloud architectures across AWS and Azure. Mentored 2,500+ engineers into high-paying DevOps and Cloud Engineering roles.',
+    tags: ['AWS Certified', 'Kubernetes Lead', 'Multi-Cloud DevOps', 'Terraform IaC'],
+    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600&h=600',
+    imagePosition: 'center center',
+    position: 'center center',
+    imageFit: 'cover',
+    fit: 'cover',
+    imageZoom: 1,
+    zoom: 1
+  },
+  {
+    id: 'trn-4',
+    roleTag: 'PRINCIPAL AI & ML ARCHITECT',
+    name: 'Divya Bharathi',
+    designation: 'PRINCIPAL AI SCIENTIST @ COGNITIVE LABS',
+    tagline: 'Applied AI & Neural Architecture',
+    headline: 'Generative AI Models & Real-time LLM Pipelines',
+    exp: '9+ Yrs Exp',
+    bio: 'Pioneering hands-on training in Generative AI, LLM fine-tuning, and scalable deep learning deployments for enterprise production workloads.',
+    tags: ['GenAI & LLMs', 'PyTorch', 'Enterprise MLOps', 'LangChain'],
+    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=600&h=600',
+    imagePosition: 'center center',
+    position: 'center center',
+    imageFit: 'cover',
+    fit: 'cover',
+    imageZoom: 1,
+    zoom: 1
+  },
+  {
+    id: 'trn-5',
+    roleTag: 'HEAD OF DATA ENGINEERING',
+    name: 'Karthik Raman',
+    designation: 'DIRECTOR OF BIG DATA @ SCALE ANALYTICS',
+    tagline: 'Petabyte Data Infrastructures',
+    headline: 'Real-time Streaming & Lakehouse Architectures',
+    exp: '13+ Yrs Exp',
+    bio: 'Architecting modern petabyte-scale data pipelines with Apache Spark, Snowflake, and Databricks with an obsession for performance.',
+    tags: ['Apache Spark', 'Databricks', 'Snowflake', 'Kafka Streams'],
+    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=600&h=600',
+    imagePosition: 'center center',
+    position: 'center center',
     imageFit: 'cover',
     fit: 'cover',
     imageZoom: 1,
@@ -579,6 +656,7 @@ export function getInitialState() {
     transformedLives: defaultTransformedLives,
     outcomesHeader: defaultOutcomesHeader,
     seniorMentors: defaultSeniorMentors,
+    homeTrainers: defaultHomeTrainers,
     mentorsHeader: defaultMentorsHeader,
     videoTestimonials: defaultVideoTestimonials,
     testimonialsHero: defaultTestimonialsHero,

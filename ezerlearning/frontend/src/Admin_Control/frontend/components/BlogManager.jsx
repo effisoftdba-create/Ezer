@@ -4,7 +4,6 @@ import { useSiteData } from '../context/SiteContext';
 import { HiPlus, HiTrash, HiPencil, HiNewspaper, HiBadgeCheck, HiPhotograph, HiCalendar, HiX, HiSparkles } from 'react-icons/hi';
 import ImagePickerModal from './ImagePickerModal';
 import ArticleFormModal from './ArticleFormModal';
-import { resolveImageSrc } from '../../../utils/imageUtils';
 
 /* ────────────────────────────────────────────────────────────
    ACHIEVEMENT SECTION (Centered Portal Modal Form)
@@ -12,62 +11,38 @@ import { resolveImageSrc } from '../../../utils/imageUtils';
 function AchievementSection({ achievements, addAchievement, updateAchievement, deleteAchievement, onOpenPicker, externalImage }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editingAchId, setEditingAchId] = useState(null);
-  const [formErrors, setFormErrors] = useState({});
-  const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [achForm, setAchForm] = useState({
     title: '',
     issuer: '',
     year: new Date().getFullYear().toString(),
     category: 'Excellence Award',
     image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
-    imagePosition: 'center center',
-    imageFit: 'cover',
-    imageZoom: 1,
     desc: ''
   });
 
   const achTitle = achForm.title;
-  const setAchTitle = (v) => {
-    setAchForm((prev) => ({ ...prev, title: v }));
-    if (formErrors.title) setFormErrors((prev) => ({ ...prev, title: false }));
-  };
+  const setAchTitle = (v) => setAchForm((prev) => ({ ...prev, title: v }));
   const achIssuer = achForm.issuer;
-  const setAchIssuer = (v) => {
-    setAchForm((prev) => ({ ...prev, issuer: v }));
-    if (formErrors.issuer) setFormErrors((prev) => ({ ...prev, issuer: false }));
-  };
+  const setAchIssuer = (v) => setAchForm((prev) => ({ ...prev, issuer: v }));
   const achYear = achForm.year;
-  const setAchYear = (v) => {
-    setAchForm((prev) => ({ ...prev, year: v }));
-    if (formErrors.year) setFormErrors((prev) => ({ ...prev, year: false }));
-  };
+  const setAchYear = (v) => setAchForm((prev) => ({ ...prev, year: v }));
   const achCategory = achForm.category;
   const setAchCategory = (v) => setAchForm((prev) => ({ ...prev, category: v }));
   const achImage = achForm.image;
-  const setAchImage = (v) => {
-    setAchForm((prev) => ({ ...prev, image: v }));
-    if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
-  };
+  const setAchImage = (v) => setAchForm((prev) => ({ ...prev, image: v }));
   const achDesc = achForm.desc;
-  const setAchDesc = (v) => {
-    setAchForm((prev) => ({ ...prev, desc: v }));
-    if (formErrors.desc) setFormErrors((prev) => ({ ...prev, desc: false }));
-  };
+  const setAchDesc = (v) => setAchForm((prev) => ({ ...prev, desc: v }));
 
   const currentImage = externalImage || achImage;
 
   const handleOpenAdd = () => {
     setEditingAchId(null);
-    setFormErrors({});
     setAchForm({
       title: '',
       issuer: '',
       year: new Date().getFullYear().toString(),
       category: 'Excellence Award',
       image: 'https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&q=80&w=800',
-      imagePosition: 'center center',
-      imageFit: 'cover',
-      imageZoom: 1,
       desc: ''
     });
     setIsEditing(true);
@@ -75,16 +50,12 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
 
   const handleEditClick = (ach) => {
     setEditingAchId(ach.id);
-    setFormErrors({});
     setAchForm({
       title: ach.title || '',
       issuer: ach.issuer || '',
       year: ach.year || '',
       category: ach.category || 'Excellence Award',
       image: ach.image || '',
-      imagePosition: ach.imagePosition || ach.position || 'center center',
-      imageFit: ach.imageFit || ach.fit || 'cover',
-      imageZoom: ach.imageZoom || ach.zoom || 1,
       desc: ach.description || ''
     });
     setIsEditing(true);
@@ -92,33 +63,19 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
 
   const handleSubmitAchievement = (e) => {
     e.preventDefault();
-    const errors = {};
-    if (!achTitle.trim()) errors.title = true;
-    if (!achIssuer.trim()) errors.issuer = true;
-    if (!achYear.trim()) errors.year = true;
-    if (!currentImage?.trim()) errors.image = true;
-    if (!achDesc.trim()) errors.desc = true;
+    if (!achTitle.trim()) return alert('Please enter achievement title');
 
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    }
-
-    setFormErrors({});
     const payload = {
       title: achTitle.trim(),
       issuer: achIssuer.trim(),
       year: achYear.trim(),
       category: achCategory,
       image: currentImage ? currentImage.trim() : '',
-      imagePosition: achForm.imagePosition || 'center center',
-      imageFit: achForm.imageFit || 'cover',
-      imageZoom: achForm.imageZoom || 1,
       description: achDesc.trim()
     };
 
     if (editingAchId && updateAchievement) {
-      updateAchievement(editingAchId, { ...payload, id: editingAchId });
+      updateAchievement(editingAchId, payload);
     } else {
       addAchievement(payload);
     }
@@ -175,75 +132,25 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
             </div>
 
             <form onSubmit={handleSubmitAchievement} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {Object.keys(formErrors).length > 0 && (
-                <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 700 }}>
-                  ⚠️ Please fill in all required fields highlighted in red below before saving.
-                </div>
-              )}
-
               <div>
-                <label htmlFor="ach-title-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.title ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Award / Achievement Title *</label>
-                <input
-                  id="ach-title-input"
-                  type="text"
-                  placeholder="e.g. EdTech Excellence & Innovation Award 2025"
-                  value={achTitle}
-                  onChange={(e) => setAchTitle(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '9px 12px',
-                    borderRadius: '8px',
-                    border: formErrors.title ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                    background: formErrors.title ? '#fff5f5' : '#ffffff',
-                    fontSize: '0.85rem'
-                  }}
-                />
-                {formErrors.title && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Award title is required</span>}
+                <label htmlFor="ach-title-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Award / Achievement Title *</label>
+                <input id="ach-title-input" type="text" placeholder="e.g. EdTech Excellence & Innovation Award 2025" value={achTitle} onChange={(e) => setAchTitle(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} required />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 120px', gap: '14px' }}>
                 <div>
-                  <label htmlFor="ach-issuer-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.issuer ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Issuing Authority *</label>
-                  <input
-                    id="ach-issuer-input"
-                    type="text"
-                    placeholder="e.g. National Skill Development Forum"
-                    value={achIssuer}
-                    onChange={(e) => setAchIssuer(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '9px 12px',
-                      borderRadius: '8px',
-                      border: formErrors.issuer ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                      background: formErrors.issuer ? '#fff5f5' : '#ffffff',
-                      fontSize: '0.85rem'
-                    }}
-                  />
-                  {formErrors.issuer && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Issuing authority is required</span>}
+                  <label htmlFor="ach-issuer-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Issuing Authority</label>
+                  <input id="ach-issuer-input" type="text" placeholder="e.g. National Skill Development Forum" value={achIssuer} onChange={(e) => setAchIssuer(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
                 </div>
                 <div>
-                  <label htmlFor="ach-year-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.year ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Year *</label>
-                  <input
-                    id="ach-year-input"
-                    type="text"
-                    value={achYear}
-                    onChange={(e) => setAchYear(e.target.value)}
-                    style={{
-                      width: '100%',
-                      padding: '9px 12px',
-                      borderRadius: '8px',
-                      border: formErrors.year ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                      background: formErrors.year ? '#fff5f5' : '#ffffff',
-                      fontSize: '0.85rem'
-                    }}
-                  />
-                  {formErrors.year && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Year is required</span>}
+                  <label htmlFor="ach-year-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Year</label>
+                  <input id="ach-year-input" type="text" value={achYear} onChange={(e) => setAchYear(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '160px 1fr', gap: '14px' }}>
                 <div>
-                  <label htmlFor="ach-category-select" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Category *</label>
+                  <label htmlFor="ach-category-select" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Category</label>
                   <select id="ach-category-select" value={achCategory} onChange={(e) => setAchCategory(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem', background: '#fff' }}>
                     <option value="Excellence Award">Excellence Award</option>
                     <option value="Placement Award">Placement Award</option>
@@ -252,76 +159,19 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="ach-image-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.image ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Achievement Image URL *</label>
+                  <label htmlFor="ach-image-input" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Achievement Image URL</label>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <input
-                      id="ach-image-input"
-                      type="text"
-                      placeholder="https://images.unsplash.com/..."
-                      value={currentImage}
-                      onChange={(e) => setAchImage(e.target.value)}
-                      style={{
-                        flex: 1,
-                        minWidth: 0,
-                        padding: '9px 12px',
-                        borderRadius: '8px',
-                        border: formErrors.image ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                        background: formErrors.image ? '#fff5f5' : '#ffffff',
-                        fontSize: '0.85rem'
-                      }}
-                    />
-                    <button type="button" onClick={() => setIsPickerOpen(true)} style={{ padding: '9px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
-                      <HiPhotograph size={15} /> Crop / Select
+                    <input id="ach-image-input" type="text" placeholder="https://images.unsplash.com/..." value={currentImage} onChange={(e) => setAchImage(e.target.value)} style={{ flex: 1, minWidth: 0, padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
+                    <button type="button" onClick={onOpenPicker} style={{ padding: '9px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}>
+                      <HiPhotograph size={15} /> Choose
                     </button>
                   </div>
-                  {formErrors.image && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Image URL is required</span>}
                 </div>
               </div>
 
-              {/* Live Preview Box */}
-              {currentImage && (
-                <div>
-                  <label style={{ fontSize: '0.74rem', fontWeight: 800, color: '#64748b', display: 'block', marginBottom: '4px' }}>Live Card Photo Preview (16:9 Aspect Ratio)</label>
-                  <div style={{ position: 'relative', width: '100%', height: '150px', background: '#000648', borderRadius: '10px', overflow: 'hidden', border: '1.5px solid #cbd5e1' }}>
-                    <img
-                      loading="lazy"
-                      src={resolveImageSrc(currentImage)}
-                      alt="Preview"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: achForm.imageFit || 'cover',
-                        objectPosition: achForm.imagePosition || 'center center',
-                        transform: (achForm.imageZoom || 1) !== 1 ? `scale(${achForm.imageZoom})` : 'none',
-                        transformOrigin: achForm.imagePosition || 'center center',
-                        display: 'block'
-                      }}
-                    />
-                    <span style={{ position: 'absolute', top: '8px', left: '8px', background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.7rem', padding: '3px 10px', borderRadius: '50px', border: '1px solid rgba(242,183,51,0.4)' }}>
-                      {achYear || '2025'} • {achCategory}
-                    </span>
-                  </div>
-                </div>
-              )}
-
               <div>
-                <label htmlFor="ach-desc-textarea" style={{ fontSize: '0.78rem', fontWeight: 800, color: formErrors.desc ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>Description *</label>
-                <textarea
-                  id="ach-desc-textarea"
-                  rows={3}
-                  placeholder="Brief description of the award or achievement..."
-                  value={achDesc}
-                  onChange={(e) => setAchDesc(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '9px 12px',
-                    borderRadius: '8px',
-                    border: formErrors.desc ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                    background: formErrors.desc ? '#fff5f5' : '#ffffff',
-                    fontSize: '0.85rem'
-                  }}
-                />
-                {formErrors.desc && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Description is required</span>}
+                <label htmlFor="ach-desc-textarea" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Description</label>
+                <textarea id="ach-desc-textarea" rows={3} placeholder="Brief description of the award or achievement..." value={achDesc} onChange={(e) => setAchDesc(e.target.value)} style={{ width: '100%', padding: '9px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.85rem' }} />
               </div>
 
               <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', paddingTop: '12px', borderTop: '1px solid #e2e8f0', marginTop: '4px' }}>
@@ -332,31 +182,6 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
                   <HiBadgeCheck size={18} /> Save Honor / Award
                 </button>
               </div>
-
-              {isPickerOpen && (
-                <ImagePickerModal
-                  isOpen={isPickerOpen}
-                  onClose={() => setIsPickerOpen(false)}
-                  currentImage={currentImage}
-                  currentPosition={achForm.imagePosition}
-                  currentFit={achForm.imageFit}
-                  currentZoom={achForm.imageZoom || 1}
-                  onSelectImage={(url, pos, fit, zoom) => {
-                    setAchForm((prev) => ({
-                      ...prev,
-                      image: url,
-                      imagePosition: pos || prev.imagePosition || 'center center',
-                      imageFit: fit || prev.imageFit || 'cover',
-                      imageZoom: zoom || prev.imageZoom || 1
-                    }));
-                    if (formErrors.image) setFormErrors((prev) => ({ ...prev, image: false }));
-                    setIsPickerOpen(false);
-                  }}
-                  targetArea="Award / Achievement Photo"
-                  aspectRatio="Landscape (16:9)"
-                  recommendedDimensions="800 x 450 px"
-                />
-              )}
             </form>
           </div>
         </div>,
@@ -366,22 +191,9 @@ function AchievementSection({ achievements, addAchievement, updateAchievement, d
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '18px' }}>
         {(achievements || []).map((ach) => (
           <div key={ach.id} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-            <div style={{ position: 'relative', width: '100%', height: '175px', minHeight: '175px', maxHeight: '175px', background: '#000648', overflow: 'hidden' }}>
-              <img
-                loading="lazy"
-                src={resolveImageSrc(ach.image)}
-                alt={ach.title}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: ach.imageFit || ach.fit || 'cover',
-                  objectPosition: ach.imagePosition || ach.position || 'center center',
-                  transform: (ach.imageZoom || ach.zoom || 1) !== 1 ? `scale(${ach.imageZoom || ach.zoom})` : 'none',
-                  transformOrigin: ach.imagePosition || ach.position || 'center center',
-                  display: 'block'
-                }}
-              />
-              <span style={{ position: 'absolute', top: '10px', left: '10px', background: 'rgba(0, 6, 72, 0.92)', color: '#f2b733', fontWeight: 900, fontSize: '0.72rem', padding: '3px 12px', borderRadius: '50px', border: '1px solid rgba(242, 183, 51, 0.4)', backdropFilter: 'blur(4px)', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
+              <img src={ach.image} alt={ach.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.7rem', padding: '3px 10px', borderRadius: '50px' }}>
                 {ach.year} • {ach.category}
               </span>
             </div>
@@ -440,12 +252,11 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
     if (payload.id) {
       updateBlog(payload.id, payload);
     } else {
-      const hasFeaturedAlready = (blogs || []).some((b) => b && b.featured);
       const newPayload = {
         ...payload,
         id: `blog-${Date.now()}`,
         date: payload.date || new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        featured: !hasFeaturedAlready // Only featured if it's the very first article and none exists
+        featured: true
       };
       addBlog(newPayload);
     }
@@ -496,19 +307,8 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
                 position: 'relative'
               }}
             >
-              <div style={{ position: 'relative', width: '100%', height: '210px', minHeight: '210px', maxHeight: '210px', aspectRatio: '16 / 9', overflow: 'hidden', background: '#0a0f2d', flexShrink: 0 }}>
-                <img
-                  loading="lazy"
-                  src={blog.image}
-                  alt={blog.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: blog.position || blog.imagePosition || 'center center',
-                    display: 'block'
-                  }}
-                />
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 9', background: '#000' }}>
+                <img src={blog.image} alt={blog.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontSize: '0.7rem', fontWeight: 900, padding: '3px 10px', borderRadius: '50px' }}>
                   {blog.category}
                 </span>
@@ -586,29 +386,55 @@ function BlogSection({ blogs, addBlog, updateBlog, deleteBlog }) {
 /* ────────────────────────────────────────────────────────────
    EXECUTIVE SECTION — CEO Editorial Card Style with tagline/headline
    ──────────────────────────────────────────────────────────── */
-export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
+export function ExecutiveSection({ executiveLeaders: propLeaders, updateExecutiveLeader: propUpdate, addExecutiveLeader: propAdd, deleteExecutiveLeader: propDelete }) {
+  const siteData = useSiteData();
+  const executiveLeaders = propLeaders || siteData?.executiveLeaders || [];
+  const updateExecutiveLeader = propUpdate || siteData?.updateExecutiveLeader;
+  const addExecutiveLeader = propAdd || siteData?.addExecutiveLeader;
+  const deleteExecutiveLeader = propDelete || siteData?.deleteExecutiveLeader;
+
   const [editingId, setEditingId] = useState(null);
   const [formData, setFormData] = useState({
-    roleTag: 'CEO', roleName: 'Chief Executive Officer',
-    name: '', image: '', bio: '',
-    tagline: 'From problem to solution.',
-    headline: 'A creative and strategic transformation partner for bold businesses.',
+    roleTag: 'FOUNDER • MANAGING DIRECTOR',
+    roleName: 'MANAGING DIRECTOR',
+    name: '',
+    image: '',
+    bio: '',
+    tagline: 'From Problem to Solution',
+    headline: 'Building Skills. Shaping Careers. Creating Futures',
     imagePosition: 'center top',
     imageFit: 'cover',
     imageTransform: 'none'
   });
   const [pickerOpen, setPickerOpen] = useState(false);
 
+  const handleAddNew = () => {
+    setEditingId('new');
+    setFormData({
+      roleTag: 'BOARD MEMBER',
+      roleName: 'DIRECTOR',
+      name: '',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=700&h=700',
+      bio: '',
+      tagline: 'Empowering future tech leaders.',
+      headline: 'Transforming technical education for high-growth careers.',
+      imagePosition: 'center top',
+      imageFit: 'cover',
+      imageZoom: 1,
+      imageTransform: 'none'
+    });
+  };
+
   const handleEdit = (exec) => {
     setEditingId(exec.id || exec.roleTag);
     setFormData({
-      roleTag: exec.roleTag || 'CEO',
-      roleName: exec.roleName || 'Chief Executive Officer',
+      roleTag: exec.roleTag || 'EXECUTIVE',
+      roleName: exec.roleName || 'Director',
       name: exec.name || '',
       image: exec.image || '',
       bio: exec.bio || '',
-      tagline: exec.tagline || 'From problem to solution.',
-      headline: exec.headline || 'A creative and strategic transformation partner for bold businesses.',
+      tagline: exec.tagline || 'From Problem to Solution',
+      headline: exec.headline || 'Building Skills. Shaping Careers. Creating Futures',
       imagePosition: exec.imagePosition || exec.position || 'center top',
       imageFit: exec.imageFit || exec.fit || 'cover',
       imageZoom: exec.imageZoom || exec.zoom || 1,
@@ -622,19 +448,44 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
       alert('Executive Name and Photo URL are required.');
       return;
     }
-    updateExecutiveLeader(editingId, formData);
+    if (editingId && editingId !== 'new') {
+      if (updateExecutiveLeader) updateExecutiveLeader(editingId, formData);
+    } else {
+      if (addExecutiveLeader) addExecutiveLeader(formData);
+    }
     setEditingId(null);
+  };
+
+  const handleDelete = (exec) => {
+    if (window.confirm(`Are you sure you want to remove ${exec.name} from the executive leadership board?`)) {
+      if (deleteExecutiveLeader) deleteExecutiveLeader(exec.id || exec.roleTag);
+    }
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <div style={{ background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '20px' }}>
-        <h3 style={{ fontSize: '1rem', fontWeight: 800, color: '#000648', marginBottom: '4px', margin: 0 }}>
-          Executive Leadership Board (CEO, CFO, CMTO)
-        </h3>
-        <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '4px 0 0 0' }}>
-          Click "Edit Executive Photo & Role" on any board member card to update their editorial photos, headlines, and leadership bio.
-        </p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc', border: '1.5px solid #cbd5e1', borderRadius: '14px', padding: '20px', flexWrap: 'wrap', gap: '14px' }}>
+        <div>
+          <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#000648', marginBottom: '4px', margin: 0 }}>
+            Our Management & Leadership Team
+          </h3>
+          <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '4px 0 0 0' }}>
+            Create, edit, or remove management & leadership profiles, circular photos, taglines, and bios for the Home page.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleAddNew}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            padding: '10px 20px', background: '#000648', color: '#f2b733',
+            borderRadius: '10px', fontWeight: 800, border: 'none', cursor: 'pointer',
+            fontSize: '0.875rem'
+          }}
+        >
+          <HiPlus size={18} /> Add Leadership Member
+        </button>
       </div>
 
       {/* Executive Modal Portal */}
@@ -656,9 +507,9 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
           }}>
             <div style={{ background: '#000648', padding: '16px 20px', color: '#ffffff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <div>
-                <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.08em' }}>EXECUTIVE BOARD EDITOR</span>
+                <span style={{ fontSize: '0.7rem', fontWeight: 900, color: '#f2b733', textTransform: 'uppercase', letterSpacing: '0.08em' }}>MANAGEMENT & LEADERSHIP EDITOR</span>
                 <h3 style={{ margin: '2px 0 0 0', fontSize: '1.1rem', fontWeight: 900, color: '#ffffff' }}>
-                  Editing: {formData.roleTag} ({formData.roleName})
+                  {editingId === 'new' ? 'Add New Leadership Member' : `Editing: ${formData.roleTag || formData.roleName} (${formData.name})`}
                 </h3>
               </div>
               <button
@@ -672,34 +523,34 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
             </div>
 
             <form onSubmit={handleSave} style={{ padding: '20px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '100px 1fr 1fr', gap: '12px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', gap: '12px' }}>
                 <div>
-                  <label htmlFor="exec_role_tag" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Role Tag*</label>
-                  <input id="exec_role_tag" type="text" value={formData.roleTag} onChange={(e) => setFormData((prev) => ({ ...prev, roleTag: e.target.value }))} style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
+                  <label htmlFor="exec_role_tag" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Role Badge / Tag*</label>
+                  <input id="exec_role_tag" type="text" value={formData.roleTag} onChange={(e) => setFormData((prev) => ({ ...prev, roleTag: e.target.value }))} placeholder="e.g. FOUNDER • Managing Director" style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
                 </div>
                 <div>
-                  <label htmlFor="exec_role_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Full Role Name*</label>
-                  <input id="exec_role_name" type="text" value={formData.roleName} onChange={(e) => setFormData((prev) => ({ ...prev, roleName: e.target.value }))} style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
+                  <label htmlFor="exec_role_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Designation / Title*</label>
+                  <input id="exec_role_name" type="text" value={formData.roleName} onChange={(e) => setFormData((prev) => ({ ...prev, roleName: e.target.value }))} placeholder="e.g. Managing Director" style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
                 </div>
                 <div>
-                  <label htmlFor="exec_officer_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Executive Name*</label>
-                  <input id="exec_officer_name" type="text" value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
+                  <label htmlFor="exec_officer_name" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Full Name*</label>
+                  <input id="exec_officer_name" type="text" value={formData.name} onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))} placeholder="e.g. Vivekkumar S" style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div>
                   <label htmlFor="exec_tagline" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Editorial Tagline</label>
-                  <input id="exec_tagline" type="text" value={formData.tagline} onChange={(e) => setFormData((prev) => ({ ...prev, tagline: e.target.value }))} placeholder="e.g. From problem to solution." style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} />
+                  <input id="exec_tagline" type="text" value={formData.tagline} onChange={(e) => setFormData((prev) => ({ ...prev, tagline: e.target.value }))} placeholder="e.g. From Problem to Solution" style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} />
                 </div>
                 <div>
-                  <label htmlFor="exec_headline" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Serif Headline</label>
-                  <input id="exec_headline" type="text" value={formData.headline} onChange={(e) => setFormData((prev) => ({ ...prev, headline: e.target.value }))} placeholder="e.g. A creative partner..." style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} />
+                  <label htmlFor="exec_headline" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Card Headline</label>
+                  <input id="exec_headline" type="text" value={formData.headline} onChange={(e) => setFormData((prev) => ({ ...prev, headline: e.target.value }))} placeholder="e.g. Building Skills. Shaping Careers..." style={{ width: '100%', padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="exec_photo_url" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Photo Source / URL</label>
+                <label htmlFor="exec_photo_url" style={{ fontSize: '0.75rem', fontWeight: 800, color: '#334155', display: 'block', marginBottom: '4px' }}>Photo Source / URL*</label>
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <input id="exec_photo_url" type="text" value={formData.image} onChange={(e) => setFormData((prev) => ({ ...prev, image: e.target.value }))} style={{ flex: 1, minWidth: 0, padding: '8px 10px', borderRadius: '6px', border: '1.5px solid #cbd5e1', fontSize: '0.84rem' }} required />
                   <button type="button" onClick={() => setPickerOpen(true)} style={{ padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', whiteSpace: 'nowrap' }}>
@@ -741,7 +592,7 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                   Cancel
                 </button>
                 <button type="submit" style={{ padding: '8px 20px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 900, fontSize: '0.84rem', cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,6,72,0.2)' }}>
-                  Save Executive Details
+                  Save Leadership Details
                 </button>
               </div>
 
@@ -763,9 +614,9 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
                     }));
                     setPickerOpen(false);
                   }}
-                  targetArea={`Executive Photo (${formData.roleTag})`}
-                  aspectRatio="Portrait (340:360)"
-                  recommendedDimensions="700 x 740 px"
+                  targetArea={`Leadership Photo (${formData.roleTag || formData.name})`}
+                  aspectRatio="Square (1:1)"
+                  recommendedDimensions="500 x 500 px"
                 />
               )}
             </form>
@@ -774,29 +625,47 @@ export function ExecutiveSection({ executiveLeaders, updateExecutiveLeader }) {
         document.body
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '18px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
         {(executiveLeaders || []).map((exec) => (
-          <div key={exec.id || exec.roleTag} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 12px rgba(0,0,0,0.04)' }}>
-            <div style={{ position: 'relative', height: '220px', background: '#000648' }}>
-              <img src={exec.image} alt={exec.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <span style={{ position: 'absolute', top: '10px', left: '10px', background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.72rem', padding: '4px 12px', borderRadius: '50px', border: '1px solid #f2b733' }}>
-                {exec.roleTag}
-              </span>
+          <div key={exec.id || exec.roleTag} style={{ background: '#ffffff', border: '1.5px solid #e2e8f0', borderRadius: '16px', padding: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', justifyContent: 'space-between', boxShadow: '0 6px 18px rgba(0,0,0,0.04)', position: 'relative' }}>
+            {/* Role Badge */}
+            <span style={{ background: '#000648', color: '#f2b733', fontWeight: 900, fontSize: '0.7rem', padding: '4px 12px', borderRadius: '50px', border: '1px solid rgba(242, 183, 51, 0.4)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '14px', maxWidth: '95%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {exec.roleTag || exec.roleName || 'LEADERSHIP'}
+            </span>
+
+            {/* Circular Profile Avatar with Gold Ring */}
+            <div style={{ width: '110px', height: '110px', borderRadius: '50%', padding: '3px', background: 'linear-gradient(135deg, #f2b733 0%, #f89b29 50%, #d97706 100%)', boxShadow: '0 6px 18px rgba(242, 183, 51, 0.35)', marginBottom: '14px', flexShrink: 0 }}>
+              <img
+                src={exec.image}
+                alt={exec.name}
+                style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', display: 'block' }}
+              />
             </div>
 
-            <div style={{ padding: '14px', flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <h4 style={{ margin: '0 0 2px 0', fontSize: '1rem', fontWeight: 900, color: '#000648' }}>{exec.name}</h4>
-                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#115DFC', marginBottom: '4px' }}>{exec.roleName}</div>
-                {exec.tagline && <div style={{ fontSize: '0.72rem', color: '#64748b', fontStyle: 'italic' }}>{exec.tagline}</div>}
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%' }}>
+              <h4 style={{ margin: '0 0 2px 0', fontSize: '1.1rem', fontWeight: 900, color: '#000648' }}>{exec.name}</h4>
+              <div style={{ fontSize: '0.78rem', fontWeight: 800, color: '#115DFC', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '6px' }}>
+                {exec.roleName || exec.roleTag}
               </div>
+              {exec.tagline && <div style={{ fontSize: '0.76rem', color: '#d97706', fontStyle: 'italic', fontWeight: 700, marginBottom: '6px' }}>"{exec.tagline}"</div>}
+              {exec.headline && <div style={{ fontSize: '0.84rem', color: '#000648', fontWeight: 800, marginBottom: '8px' }}>{exec.headline}</div>}
+              {exec.bio && <p style={{ fontSize: '0.78rem', color: '#475569', lineHeight: 1.45, margin: '0 0 14px 0' }}>{exec.bio.length > 130 ? `${exec.bio.slice(0, 130)}...` : exec.bio}</p>}
+            </div>
 
+            <div style={{ display: 'flex', gap: '8px', width: '100%', paddingTop: '12px', borderTop: '1px solid #f1f5f9' }}>
               <button
                 type="button"
                 onClick={() => handleEdit(exec)}
-                style={{ marginTop: '10px', padding: '8px 14px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '6px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer' }}
+                style={{ flex: 1, padding: '8px 12px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}
               >
-                Edit Executive Photo & Role
+                <HiPencil size={14} /> Edit
+              </button>
+              <button
+                type="button"
+                onClick={() => handleDelete(exec)}
+                style={{ padding: '8px 14px', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', borderRadius: '8px', fontWeight: 800, fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px' }}
+              >
+                <HiTrash size={14} /> Delete
               </button>
             </div>
           </div>

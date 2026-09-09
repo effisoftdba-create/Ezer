@@ -25,9 +25,10 @@ const MODULE_OPTIONS = [
   { id: 'hero', label: 'Hero Slider', category: 'Homepage & Branding' },
   { id: 'partners', label: 'Hiring Partners & Logos', category: 'Homepage & Branding' },
   { id: 'platform', label: 'Empowering Switchers', category: 'Homepage & Branding' },
-  { id: 'about-page', label: 'About Us Page Content', category: 'Homepage & Branding' },
+  { id: 'about-videos', label: 'About Us Brand Videos', category: 'Homepage & Branding' },
   { id: 'support', label: 'Why EZER Support', category: 'Homepage & Branding' },
-  { id: 'executive', label: 'Executive Board (CEO / Leaders)', category: 'Corporate & Editorial' },
+  { id: 'executive', label: 'Our Management & Leadership Team', category: 'Corporate & Editorial' },
+  { id: 'home-trainers', label: 'Home Page Trainers (Expert Trainers)', category: 'Reviews & Social Proof' },
   { id: 'blog', label: 'Blog & Magazine Articles', category: 'Corporate & Editorial' },
   { id: 'achievements', label: 'EZER Awards & Honors', category: 'Corporate & Editorial' },
   { id: 'outcomes', label: 'Graduate Outcomes', category: 'Reviews & Social Proof' },
@@ -59,8 +60,6 @@ export default function AdminSettingsManager() {
   const [resetPassUser, setResetPassUser] = useState(null);
   const [newPasswordInput, setNewPasswordInput] = useState('');
   const [revealedPassIds, setRevealedPassIds] = useState({});
-  const [createErrors, setCreateErrors] = useState({});
-  const [resetPassError, setResetPassError] = useState(false);
 
   // Filter visible users: Super Admin sees all accounts; Regular Admin/Staff NEVER see Super Admin!
   const visibleUsers = useMemo(() => {
@@ -99,17 +98,11 @@ export default function AdminSettingsManager() {
 
   const handleCreateUser = (e) => {
     e.preventDefault();
-    const errors = {};
-    if (!form.email?.trim()) errors.email = true;
-    if (!form.name?.trim()) errors.name = true;
-    if (!form.password?.trim()) errors.password = true;
-
-    if (Object.keys(errors).length > 0) {
-      setCreateErrors(errors);
+    if (!form.email || !form.name || !form.password) {
+      alert('Please fill out User ID / Email, Full Name, and Password.');
       return;
     }
 
-    setCreateErrors({});
     const emailClean = form.email.trim().toLowerCase();
     const allUsers = Array.isArray(adminUsers) ? adminUsers : [];
     const isDup = allUsers.some((u) => u.email.trim().toLowerCase() === emailClean);
@@ -174,12 +167,7 @@ export default function AdminSettingsManager() {
 
   const handleSaveResetPassword = (e) => {
     e.preventDefault();
-    if (!newPasswordInput?.trim()) {
-      setResetPassError(true);
-      return;
-    }
-    setResetPassError(false);
-    if (!resetPassUser) return;
+    if (!resetPassUser || !newPasswordInput) return;
     updateAdminUser(resetPassUser.id, { password: newPasswordInput.trim() });
     setResetPassUser(null);
     setNewPasswordInput('');
@@ -242,70 +230,42 @@ export default function AdminSettingsManager() {
         </h3>
 
         <form onSubmit={handleCreateUser} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          {Object.keys(createErrors).length > 0 && (
-            <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.82rem', fontWeight: 800 }}>
-              ⚠️ Please fill in all required fields highlighted in red below before saving.
-            </div>
-          )}
-
           {/* Inputs Row */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px' }}>
             <div>
-              <label htmlFor="new_admin_email" style={{ fontSize: '0.78rem', fontWeight: 800, color: createErrors.email ? '#dc2626' : '#000648', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="new_admin_email" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
                 User ID / Login Email *
               </label>
               <input
                 id="new_admin_email"
                 type="email"
                 autoComplete="username"
+                required
                 placeholder="e.g. counselor1@ezer.com"
                 value={form.email}
-                onChange={(e) => {
-                  setForm({ ...form, email: e.target.value });
-                  if (createErrors.email) setCreateErrors((prev) => ({ ...prev, email: false }));
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  borderRadius: '8px',
-                  border: createErrors.email ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                  background: createErrors.email ? '#fff5f5' : '#ffffff',
-                  fontSize: '0.88rem',
-                  outline: 'none'
-                }}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.88rem', outline: 'none' }}
               />
-              {createErrors.email && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Email is required</span>}
             </div>
 
             <div>
-              <label htmlFor="new_admin_name" style={{ fontSize: '0.78rem', fontWeight: 800, color: createErrors.name ? '#dc2626' : '#000648', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="new_admin_name" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
                 Full Name / Username *
               </label>
               <input
                 id="new_admin_name"
                 type="text"
                 autoComplete="name"
+                required
                 placeholder="e.g. Ananya Sharma"
                 value={form.name}
-                onChange={(e) => {
-                  setForm({ ...form, name: e.target.value });
-                  if (createErrors.name) setCreateErrors((prev) => ({ ...prev, name: false }));
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  borderRadius: '8px',
-                  border: createErrors.name ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                  background: createErrors.name ? '#fff5f5' : '#ffffff',
-                  fontSize: '0.88rem',
-                  outline: 'none'
-                }}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.88rem', outline: 'none' }}
               />
-              {createErrors.name && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Full Name is required</span>}
             </div>
 
             <div>
-              <label htmlFor="new_admin_password" style={{ fontSize: '0.78rem', fontWeight: 800, color: createErrors.password ? '#dc2626' : '#000648', display: 'block', marginBottom: '4px' }}>
+              <label htmlFor="new_admin_password" style={{ fontSize: '0.78rem', fontWeight: 800, color: '#000648', display: 'block', marginBottom: '4px' }}>
                 Login Password *
               </label>
               <div style={{ position: 'relative' }}>
@@ -313,21 +273,11 @@ export default function AdminSettingsManager() {
                   id="new_admin_password"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="new-password"
+                  required
                   placeholder="Set initial password"
                   value={form.password}
-                  onChange={(e) => {
-                    setForm({ ...form, password: e.target.value });
-                    if (createErrors.password) setCreateErrors((prev) => ({ ...prev, password: false }));
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '10px 36px 10px 12px',
-                    borderRadius: '8px',
-                    border: createErrors.password ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                    background: createErrors.password ? '#fff5f5' : '#ffffff',
-                    fontSize: '0.88rem',
-                    outline: 'none'
-                  }}
+                  onChange={(e) => setForm({ ...form, password: e.target.value })}
+                  style={{ width: '100%', padding: '10px 36px 10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.88rem', outline: 'none' }}
                 />
                 <button
                   type="button"
@@ -338,7 +288,6 @@ export default function AdminSettingsManager() {
                   {showPassword ? <HiOutlineEyeOff size={16} /> : <HiOutlineEye size={16} />}
                 </button>
               </div>
-              {createErrors.password && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Password is required</span>}
             </div>
           </div>
 
@@ -678,36 +627,21 @@ export default function AdminSettingsManager() {
             <h3 style={{ fontSize: '1.1rem', fontWeight: 900, color: '#000648', marginTop: 0 }}>
               Reset Password for {resetPassUser.name}
             </h3>
-            {resetPassError && (
-              <div style={{ background: '#fef2f2', border: '1.5px solid #f87171', color: '#b91c1c', padding: '8px 12px', borderRadius: '8px', marginBottom: '12px', fontSize: '0.8rem', fontWeight: 800 }}>
-                ⚠️ Please enter a new password.
-              </div>
-            )}
             <div style={{ margin: '14px 0' }}>
-              <label htmlFor="reset_new_password_input" style={{ fontSize: '0.78rem', fontWeight: 800, color: resetPassError ? '#dc2626' : '#334155', display: 'block', marginBottom: '4px' }}>New Password *</label>
+              <label htmlFor="reset_new_password_input" style={{ fontSize: '0.78rem', fontWeight: 800, display: 'block', marginBottom: '4px' }}>New Password *</label>
               <input
                 id="reset_new_password_input"
                 type="text"
                 autoComplete="new-password"
+                required
                 placeholder="Enter new password"
                 value={newPasswordInput}
-                onChange={(e) => {
-                  setNewPasswordInput(e.target.value);
-                  if (resetPassError) setResetPassError(false);
-                }}
-                style={{
-                  width: '100%',
-                  padding: '10px 12px',
-                  borderRadius: '8px',
-                  border: resetPassError ? '2px solid #dc2626' : '1.5px solid #cbd5e1',
-                  background: resetPassError ? '#fff5f5' : '#ffffff',
-                  fontSize: '0.88rem'
-                }}
+                onChange={(e) => setNewPasswordInput(e.target.value)}
+                style={{ width: '100%', padding: '10px 12px', borderRadius: '8px', border: '1.5px solid #cbd5e1', fontSize: '0.88rem' }}
               />
-              {resetPassError && <span style={{ color: '#dc2626', fontSize: '0.72rem', fontWeight: 700, marginTop: '3px', display: 'block' }}>Password is required</span>}
             </div>
             <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-              <button type="button" onClick={() => { setResetPassUser(null); setResetPassError(false); }} style={{ padding: '8px 16px', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}>Cancel</button>
+              <button type="button" onClick={() => setResetPassUser(null)} style={{ padding: '8px 16px', background: '#f1f5f9', border: 'none', borderRadius: '8px', fontWeight: 800, cursor: 'pointer' }}>Cancel</button>
               <button type="button" onClick={handleSaveResetPassword} style={{ padding: '8px 16px', background: '#000648', color: '#f2b733', border: 'none', borderRadius: '8px', fontWeight: 900, cursor: 'pointer' }}>Update Password</button>
             </div>
           </div>
