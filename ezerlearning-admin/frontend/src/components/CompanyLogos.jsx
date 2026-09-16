@@ -189,22 +189,22 @@ const baseLogosRow3 = [
 ];
 
 const BRAND_SVGS = {
-  'tcs': '<svg viewBox="0 0 190 50" style="height:28px"><path d="M10 12 L45 12 M27.5 12 L27.5 40" stroke="#000648" stroke-width="6" stroke-linecap="square"/><text x="50" y="38" font-family="sans-serif" font-size="30" font-weight="900" fill="#000648" letter-spacing="-0.5px">TCS</text><rect x="115" y="16" width="3" height="24" fill="#f2b733"/><text x="126" y="36" font-family="sans-serif" font-size="16" font-weight="900" fill="#000648" letter-spacing="1px">TATA</text></svg>',
-  'infosys': '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#006699" letter-spacing="-1px">Infosys</text></svg>',
-  'wipro': '<svg viewBox="0 0 150 50" style="height:28px"><circle cx="16" cy="18" r="5" fill="#e42528"/><circle cx="28" cy="18" r="5" fill="#f2b733"/><circle cx="16" cy="30" r="5" fill="#006699"/><circle cx="28" cy="30" r="5" fill="#0dba4b"/><text x="42" y="36" font-family="sans-serif" font-size="28" font-weight="900" fill="#000648">wipro</text></svg>',
-  'hcl': '<svg viewBox="0 0 170 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#00529b">HCL</text><text x="80" y="36" font-family="sans-serif" font-size="24" font-weight="800" fill="#f2b733">Tech</text></svg>',
-  'hcltech': '<svg viewBox="0 0 170 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#00529b">HCL</text><text x="80" y="36" font-family="sans-serif" font-size="24" font-weight="800" fill="#f2b733">Tech</text></svg>',
-  'zoho': '<svg viewBox="0 0 160 50" style="height:28px"><rect x="4" y="10" width="28" height="28" rx="6" fill="#e42528"/><text x="11" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">Z</text><rect x="36" y="10" width="28" height="28" rx="6" fill="#006699"/><text x="42" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">O</text><rect x="68" y="10" width="28" height="28" rx="6" fill="#0dba4b"/><text x="74" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">H</text><rect x="100" y="10" width="28" height="28" rx="6" fill="#f2b733"/><text x="106" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#000648">O</text></svg>',
-  'capgemini': '<svg viewBox="0 0 190 50" style="height:28px"><path d="M12 25 C12 15, 25 10, 25 25 C25 40, 38 35, 38 25" stroke="#0070ad" stroke-width="5" fill="none" stroke-linecap="round"/><text x="48" y="34" font-family="sans-serif" font-size="26" font-weight="900" fill="#0070ad">Capgemini</text></svg>',
-  'accenture': '<svg viewBox="0 0 180 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="28" font-weight="900" fill="#000648">accenture</text><path d="M136 12 L150 22 L136 32" stroke="#a100ff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  'cognizant': '<svg viewBox="0 0 170 50" style="height:28px"><text x="5" y="35" font-family="sans-serif" font-size="27" font-weight="900" fill="#0033a0">Cognizant</text></svg>',
+  'tcs': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 50" style="height:28px"><path d="M10 12 L45 12 M27.5 12 L27.5 40" stroke="#000648" stroke-width="6" stroke-linecap="square"/><text x="50" y="38" font-family="sans-serif" font-size="30" font-weight="900" fill="#000648" letter-spacing="-0.5px">TCS</text><rect x="115" y="16" width="3" height="24" fill="#f2b733"/><text x="126" y="36" font-family="sans-serif" font-size="16" font-weight="900" fill="#000648" letter-spacing="1px">TATA</text></svg>',
+  'infosys': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#006699" letter-spacing="-1px">Infosys</text></svg>',
+  'wipro': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 50" style="height:28px"><circle cx="16" cy="18" r="5" fill="#e42528"/><circle cx="28" cy="18" r="5" fill="#f2b733"/><circle cx="16" cy="30" r="5" fill="#006699"/><circle cx="28" cy="30" r="5" fill="#0dba4b"/><text x="42" y="36" font-family="sans-serif" font-size="28" font-weight="900" fill="#000648">wipro</text></svg>',
+  'hcl': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#00529b">HCL</text><text x="80" y="36" font-family="sans-serif" font-size="24" font-weight="800" fill="#f2b733">Tech</text></svg>',
+  'hcltech': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#00529b">HCL</text><text x="80" y="36" font-family="sans-serif" font-size="24" font-weight="800" fill="#f2b733">Tech</text></svg>',
+  'zoho': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 50" style="height:28px"><rect x="4" y="10" width="28" height="28" rx="6" fill="#e42528"/><text x="11" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">Z</text><rect x="36" y="10" width="28" height="28" rx="6" fill="#006699"/><text x="42" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">O</text><rect x="68" y="10" width="28" height="28" rx="6" fill="#0dba4b"/><text x="74" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#fff">H</text><rect x="100" y="10" width="28" height="28" rx="6" fill="#f2b733"/><text x="106" y="32" font-family="sans-serif" font-size="20" font-weight="900" fill="#000648">O</text></svg>',
+  'capgemini': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 50" style="height:28px"><path d="M12 25 C12 15, 25 10, 25 25 C25 40, 38 35, 38 25" stroke="#0070ad" stroke-width="5" fill="none" stroke-linecap="round"/><text x="48" y="34" font-family="sans-serif" font-size="26" font-weight="900" fill="#0070ad">Capgemini</text></svg>',
+  'accenture': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="28" font-weight="900" fill="#000648">accenture</text><path d="M136 12 L150 22 L136 32" stroke="#a100ff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  'cognizant': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 50" style="height:28px"><text x="5" y="35" font-family="sans-serif" font-size="27" font-weight="900" fill="#0033a0">Cognizant</text></svg>',
   'amazon': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" style="height:28px"><text x="5" y="24" font-family="sans-serif" font-size="24" font-weight="900" fill="#000648">amazon</text><path d="M10 30 Q 50 38, 90 28" fill="none" stroke="#ff9900" stroke-width="3" stroke-linecap="round"/><path d="M86 25 L93 28 L89 33" fill="none" stroke="#ff9900" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-  'google': '<svg viewBox="0 0 150 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">G</text><text x="34" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">o</text><text x="56" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#FBBC05">o</text><text x="78" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">g</text><text x="100" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#34A853">l</text><text x="110" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">e</text></svg>',
-  'microsoft': '<svg viewBox="0 0 170 50" style="height:28px"><rect x="5" y="10" width="13" height="13" fill="#f25022"/><rect x="21" y="10" width="13" height="13" fill="#7fba00"/><rect x="5" y="26" width="13" height="13" fill="#00a4ef"/><rect x="21" y="26" width="13" height="13" fill="#ffb900"/><text x="42" y="34" font-family="sans-serif" font-size="26" font-weight="800" fill="#475569">Microsoft</text></svg>',
-  'ibm': '<svg viewBox="0 0 130 50" style="height:28px"><text x="5" y="36" font-family="monospace" font-size="36" font-weight="900" fill="#052FAD" letter-spacing="2px">IBM</text></svg>',
-  'freshworks': '<svg viewBox="0 0 180 50" style="height:28px"><circle cx="18" cy="25" r="12" fill="#ff5a5f"/><text x="36" y="34" font-family="sans-serif" font-size="24" font-weight="900" fill="#000648">freshworks</text></svg>',
-  'l&t': '<svg viewBox="0 0 160 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#0033a0">L&T</text><text x="70" y="36" font-family="sans-serif" font-size="22" font-weight="800" fill="#f2b733">Tech</text></svg>',
-  'tech mahindra': '<svg viewBox="0 0 210 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#e42528">Tech</text><text x="75" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#000648">Mahindra</text></svg>'
+  'google': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">G</text><text x="34" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">o</text><text x="56" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#FBBC05">o</text><text x="78" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#4285F4">g</text><text x="100" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#34A853">l</text><text x="110" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#EA4335">e</text></svg>',
+  'microsoft': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 170 50" style="height:28px"><rect x="5" y="10" width="13" height="13" fill="#f25022"/><rect x="21" y="10" width="13" height="13" fill="#7fba00"/><rect x="5" y="26" width="13" height="13" fill="#00a4ef"/><rect x="21" y="26" width="13" height="13" fill="#ffb900"/><text x="42" y="34" font-family="sans-serif" font-size="26" font-weight="800" fill="#475569">Microsoft</text></svg>',
+  'ibm': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 50" style="height:28px"><text x="5" y="36" font-family="monospace" font-size="36" font-weight="900" fill="#052FAD" letter-spacing="2px">IBM</text></svg>',
+  'freshworks': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 50" style="height:28px"><circle cx="18" cy="25" r="12" fill="#ff5a5f"/><text x="36" y="34" font-family="sans-serif" font-size="24" font-weight="900" fill="#000648">freshworks</text></svg>',
+  'l&t': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="32" font-weight="900" fill="#0033a0">L&T</text><text x="70" y="36" font-family="sans-serif" font-size="22" font-weight="800" fill="#f2b733">Tech</text></svg>',
+  'tech mahindra': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 50" style="height:28px"><text x="5" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#e42528">Tech</text><text x="75" y="36" font-family="sans-serif" font-size="26" font-weight="900" fill="#000648">Mahindra</text></svg>'
 };
 
 function LogoCard({ logo }) {
@@ -217,37 +217,58 @@ function LogoCard({ logo }) {
     if (lowerName.includes(key)) matchedSvg = BRAND_SVGS[key];
   });
 
-  // Determine source image to render
-  let renderSrc = null;
-  let cleanSvgHtml = '';
+  // Extract inline SVG markup or external image URL
+  let inlineSvg = null;
+  let renderImgSrc = null;
 
-  if (!logo.icon && !imgError && rawImg) {
-    if (rawImg.startsWith('data:image/')) {
-      // Direct Data URI (SVG or raster) — never re-encode or prepend prefix
-      renderSrc = rawImg;
-    } else if (rawImg.startsWith('<svg')) {
-      // Inline raw SVG string
-      cleanSvgHtml = rawImg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '');
-      renderSrc = `data:image/svg+xml;utf8,${encodeURIComponent(cleanSvgHtml)}`;
-    } else if (rawImg.startsWith('%3Csvg') || rawImg.startsWith('%3csvg')) {
-      // URL-encoded SVG
-      try {
-        const decoded = decodeURIComponent(rawImg);
-        cleanSvgHtml = decoded.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '');
-        renderSrc = `data:image/svg+xml;utf8,${encodeURIComponent(cleanSvgHtml)}`;
-      } catch {
-        renderSrc = null;
+  if (logo.icon) {
+    // JSX icon (hardcoded presets)
+  } else if (rawImg) {
+    if (rawImg.includes('<svg') || rawImg.includes('%3Csvg') || rawImg.includes('%3csvg') || rawImg.startsWith('data:image/svg+xml')) {
+      let svgStr = rawImg;
+      if (svgStr.startsWith('data:image/svg+xml')) {
+        const commaIdx = svgStr.indexOf(',');
+        if (commaIdx !== -1) {
+          const payload = svgStr.slice(commaIdx + 1);
+          try {
+            if (svgStr.includes(';base64')) {
+              svgStr = atob(payload);
+            } else {
+              svgStr = decodeURIComponent(payload);
+            }
+          } catch {
+            svgStr = matchedSvg || '';
+          }
+        }
+      } else if (svgStr.startsWith('%3Csvg') || svgStr.startsWith('%3csvg')) {
+        try {
+          svgStr = decodeURIComponent(svgStr);
+        } catch {
+          svgStr = matchedSvg || '';
+        }
       }
-    } else {
-      // Normal URL or relative path
-      renderSrc = resolveImageSrc(rawImg);
+
+      if (svgStr && svgStr.includes('<svg')) {
+        let clean = svgStr.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '');
+        if (!clean.includes('xmlns=')) {
+          clean = clean.replace(/<svg\b/i, '<svg xmlns="http://www.w3.org/2000/svg"');
+        }
+        inlineSvg = clean;
+      }
+    } else if (rawImg.startsWith('data:image/') || rawImg.startsWith('http://') || rawImg.startsWith('https://') || rawImg.startsWith('/') || rawImg.startsWith('images/') || rawImg.length > 5) {
+      renderImgSrc = resolveImageSrc(rawImg);
     }
   }
 
-  // Fallback to matchedSvg if error or no source
-  if ((!renderSrc || imgError) && matchedSvg) {
-    cleanSvgHtml = matchedSvg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '');
-    renderSrc = `data:image/svg+xml;utf8,${encodeURIComponent(cleanSvgHtml)}`;
+  // Fallback to matched brand SVG if image is missing, errored, or unresolved
+  if ((!inlineSvg && !renderImgSrc) || imgError) {
+    if (matchedSvg) {
+      let clean = matchedSvg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '');
+      if (!clean.includes('xmlns=')) {
+        clean = clean.replace(/<svg\b/i, '<svg xmlns="http://www.w3.org/2000/svg"');
+      }
+      inlineSvg = clean;
+    }
   }
 
   return (
@@ -275,10 +296,25 @@ function LogoCard({ logo }) {
     >
       {logo.icon ? (
         logo.icon
-      ) : renderSrc ? (
+      ) : inlineSvg ? (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            maxWidth: '148px',
+            maxHeight: '32px',
+            width: '100%',
+            overflow: 'hidden',
+            transform: (logo.imageZoom && logo.imageZoom !== 1) ? `scale(${Math.min(logo.imageZoom, 1.15)})` : 'none',
+            transformOrigin: 'center center'
+          }}
+          dangerouslySetInnerHTML={{ __html: inlineSvg }}
+        />
+      ) : renderImgSrc && !imgError ? (
         <img
-          src={renderSrc}
-          alt={logo.name || 'Hiring Partner Logo'}
+          src={renderImgSrc}
+          alt={logo.name || 'Hiring Partner'}
           onError={() => setImgError(true)}
           width="140"
           height="28"
