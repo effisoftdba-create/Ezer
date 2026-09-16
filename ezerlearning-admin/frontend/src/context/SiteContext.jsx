@@ -469,6 +469,7 @@ export function SiteProvider({ children }) {
     const updated = [...(heroSlides || []), slide];
     dispatch({ type: 'SET_KEY', key: 'heroSlides', value: updated });
     saveDocument('heroSlides', slide.id, slide);
+    saveCollectionArray('heroSlides', updated);
     triggerStateToast('SAVED');
   }, [heroSlides]);
 

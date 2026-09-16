@@ -19,6 +19,18 @@ const HD_IMAGE_MAP = {
   'images/hero/Spoken_english.png': 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=85&w=1600',
   'images/hero/here_section_2.webp': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=85&w=1600',
   'images/hero/optimized/hero_section_1.jpg': 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=85&w=1600',
+
+  // Program course image aliases & variations
+  'images/hero/ai.jpeg': 'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/full-stack-dev.jpeg': 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/cloud_deveops.png': 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/cloud_devops.png': 'https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/cyber.jpeg': 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/cybersecurity.jpeg': 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/spoken-english.jpg': 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/spoken_english.jpg': 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/software_testing_playwright.jpg': 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=85&w=1600',
+  'images/hero/it_admin.jpg': 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=85&w=1600',
 };
 
 export function resolveImageSrc(urlStr) {
@@ -39,7 +51,7 @@ export function resolveImageSrc(urlStr) {
   }
 
   // 3. Convert raw or URL-encoded inline SVG strings to valid Data URIs
-  if (trimmed.startsWith('<svg') || trimmed.includes('<svg') || trimmed.startsWith('%3Csvg') || trimmed.includes('%3Csvg')) {
+  if (!trimmed.startsWith('data:') && (trimmed.startsWith('<svg') || trimmed.includes('<svg') || trimmed.startsWith('%3Csvg') || trimmed.includes('%3Csvg'))) {
     let unencoded = trimmed;
     if (trimmed.includes('%3Csvg') || trimmed.includes('%20') || trimmed.includes('%22')) {
       try {
@@ -72,13 +84,12 @@ export function resolveImageSrc(urlStr) {
 }
 
 /**
- * Global Image Error Handler - Automatically replaces missing/broken images with high-res Unsplash tech covers
+ * Global Image Error Handler - Uses clean deterministic fallback to prevent random jumping
  */
 export function handleImgError(e) {
   if (!e || !e.target) return;
   e.target.onerror = null; // prevent infinite loop if fallback fails
-  const randomFallback = TECH_FALLBACK_IMAGES[Math.floor(Math.random() * TECH_FALLBACK_IMAGES.length)];
-  e.target.src = randomFallback;
+  e.target.src = TECH_FALLBACK_IMAGES[0];
 }
 
 /**

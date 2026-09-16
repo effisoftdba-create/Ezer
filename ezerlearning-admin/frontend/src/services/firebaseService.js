@@ -67,6 +67,16 @@ function deduplicateCollectionItems(items) {
   return Array.from(map.values());
 }
 
+const RTDB_COLLECTION_ALIASES = {
+  heroSlides: ['heroSlider', 'heroSlides'],
+  homeTrainers: ['teamTrainers', 'homeTrainers'],
+  seniorMentors: ['teamTrainers', 'seniorMentors'],
+  transformedLives: ['transformations', 'transformedLives'],
+  aboutVideos: ['aboutHero', 'aboutVideos'],
+  aboutShowcaseCards: ['aboutValuesCards', 'aboutShowcaseCards'],
+  supportCards: ['opportunite', 'supportCards']
+};
+
 /**
  * Real-time listener for Firestore and Realtime Database
  */
@@ -80,11 +90,55 @@ export function subscribeToCollection(collectionName, onUpdate) {
   let lastJsonPayload = '';
   let rafId = null;
 
-  const debouncedUpdate = (items) => {
+  let firestoreItems = null;
+  let realtimeItems = null;
+
+  const emitMerged = () => {
     try {
-      const cleanItems = deduplicateCollectionItems(items);
+      let combined = [];
+
+      if (Array.isArray(firestoreItems) && Array.isArray(realtimeItems)) {
+        if (firestoreItems.length === 0 && realtimeItems.length > 0) {
+          combined = realtimeItems;
+        } else if (realtimeItems.length === 0 && firestoreItems.length > 0) {
+          combined = firestoreItems;
+        } else {
+          // Authoritative merge: preserve all unique items from both databases
+          const map = new Map();
+          firestoreItems.forEach((item) => {
+            if (!item) return;
+            const k = String(item.id || item.slug || item.badge || item.title || item.name || '');
+            if (k) map.set(k, item);
+          });
+
+          realtimeItems.forEach((item) => {
+            if (!item) return;
+            const k = String(item.id || item.slug || item.badge || item.title || item.name || '');
+            if (k) {
+              if (!map.has(k)) {
+                map.set(k, item);
+              } else {
+                const existing = map.get(k);
+                if (item.updatedAt && (!existing.updatedAt || new Date(item.updatedAt) > new Date(existing.updatedAt))) {
+                  map.set(k, { ...existing, ...item });
+                }
+              }
+            }
+          });
+
+          combined = Array.from(map.values());
+        }
+      } else if (Array.isArray(firestoreItems)) {
+        combined = firestoreItems;
+      } else if (Array.isArray(realtimeItems)) {
+        combined = realtimeItems;
+      } else {
+        return;
+      }
+
+      const cleanItems = deduplicateCollectionItems(combined);
       const jsonStr = JSON.stringify(cleanItems);
-      if (jsonStr === lastJsonPayload) return; // Deduplicate dual DB snapshots
+      if (jsonStr === lastJsonPayload) return;
       lastJsonPayload = jsonStr;
 
       if (rafId) {
@@ -100,7 +154,11 @@ export function subscribeToCollection(collectionName, onUpdate) {
         rafId = setTimeout(() => onUpdate(cleanItems), 0);
       }
     } catch (err) {
-      onUpdate(deduplicateCollectionItems(items));
+      if (Array.isArray(firestoreItems) && firestoreItems.length > 0) {
+        onUpdate(deduplicateCollectionItems(firestoreItems));
+      } else if (Array.isArray(realtimeItems)) {
+        onUpdate(deduplicateCollectionItems(realtimeItems));
+      }
     }
   };
 
@@ -112,15 +170,14 @@ export function subscribeToCollection(collectionName, onUpdate) {
         colRef,
         (snapshot) => {
           if (!snapshot.empty) {
-            const items = snapshot.docs.map((docItem) => ({
+            firestoreItems = snapshot.docs.map((docItem) => ({
               id: docItem.id,
               ...docItem.data()
             }));
-            debouncedUpdate(items);
           } else {
-            // Snapshot empty: pass empty array so SiteContext default seed/fallback triggers
-            debouncedUpdate([]);
+            firestoreItems = [];
           }
+          emitMerged();
         },
         (error) => {
           console.warn(`[Firestore Listener Notice] ${collectionName}:`, error.message || error);
@@ -131,11 +188,14 @@ export function subscribeToCollection(collectionName, onUpdate) {
     }
   }
 
-  // 2. Secondary Dual Sync: Realtime Database Listener
+  // 2. Secondary Dual Sync: Realtime Database Listener (with alias fallback)
   const rtdb = getRealtimeDb();
   if (rtdb) {
+    const aliasList = RTDB_COLLECTION_ALIASES[collectionName] || [collectionName];
+    const rtdbKey = aliasList[0] || collectionName;
+
     try {
-      const dbRef = ref(rtdb, collectionName);
+      const dbRef = ref(rtdb, rtdbKey);
       unsubRealtime = onValue(
         dbRef,
         (snapshot) => {
@@ -154,7 +214,8 @@ export function subscribeToCollection(collectionName, onUpdate) {
               });
             }
             if (items.length > 0) {
-              debouncedUpdate(items);
+              realtimeItems = items;
+              emitMerged();
             }
           }
         },
@@ -182,7 +243,7 @@ export function subscribeToCollection(collectionName, onUpdate) {
 }
 
 /**
- * Save document (Dual Firestore + Realtime DB Sync)
+ * Save document (Dual Firestore + Realtime DB Sync with alias support)
  */
 export async function saveDocument(collectionName, docId, data) {
   if (!isFirebaseConfigured) return false;
@@ -203,16 +264,19 @@ export async function saveDocument(collectionName, docId, data) {
     }
   }
 
-  // 2. Realtime Database (Secondary Sync)
+  // 2. Realtime Database (Secondary Sync with aliases)
   const rtdb = getRealtimeDb();
   if (rtdb) {
-    try {
-      const itemRef = ref(rtdb, `${collectionName}/${cleanId}`);
-      await set(itemRef, cleanData);
-      rtdbSaved = true;
-    } catch (err) {
-      if (!String(err?.message || '').includes('permission_denied')) {
-        console.warn(`[RealtimeDB Save Notice] ${collectionName}/${cleanId}:`, err.message || err);
+    const aliasList = Array.from(new Set([collectionName, ...(RTDB_COLLECTION_ALIASES[collectionName] || [])]));
+    for (const nodeKey of aliasList) {
+      try {
+        const itemRef = ref(rtdb, `${nodeKey}/${cleanId}`);
+        await set(itemRef, cleanData);
+        rtdbSaved = true;
+      } catch (err) {
+        if (!String(err?.message || '').includes('permission_denied')) {
+          console.warn(`[RealtimeDB Save Notice] ${nodeKey}/${cleanId}:`, err.message || err);
+        }
       }
     }
   }
@@ -241,13 +305,16 @@ export async function removeDocument(collectionName, docId) {
 
   const rtdb = getRealtimeDb();
   if (rtdb) {
-    try {
-      const itemRef = ref(rtdb, `${collectionName}/${cleanId}`);
-      await remove(itemRef);
-      removed = true;
-    } catch (err) {
-      if (!String(err?.message || '').includes('permission_denied')) {
-        console.warn(`[RealtimeDB Delete Notice] ${collectionName}/${cleanId}:`, err.message || err);
+    const aliasList = Array.from(new Set([collectionName, ...(RTDB_COLLECTION_ALIASES[collectionName] || [])]));
+    for (const nodeKey of aliasList) {
+      try {
+        const itemRef = ref(rtdb, `${nodeKey}/${cleanId}`);
+        await remove(itemRef);
+        removed = true;
+      } catch (err) {
+        if (!String(err?.message || '').includes('permission_denied')) {
+          console.warn(`[RealtimeDB Delete Notice] ${nodeKey}/${cleanId}:`, err.message || err);
+        }
       }
     }
   }
@@ -300,17 +367,20 @@ export async function saveCollectionArray(collectionName, itemsArray) {
       }
     }
 
-    // 2. Overwrite Realtime Database node cleanly so old items disappear
+    // 2. Overwrite Realtime Database node cleanly so old items disappear (syncing to all aliases)
     const rtdb = getRealtimeDb();
     if (rtdb) {
-      try {
-        const dbRef = ref(rtdb, collectionName);
-        const cleanSanitized = sanitizeForFirestore(cleanItemsArray);
-        await set(dbRef, cleanSanitized);
-        rtdbSaved = true;
-      } catch (e) {
-        if (!String(e?.message || '').includes('permission_denied')) {
-          console.warn(`[RealtimeDB Overwrite Notice] ${collectionName}:`, e.message || e);
+      const aliasList = Array.from(new Set([collectionName, ...(RTDB_COLLECTION_ALIASES[collectionName] || [])]));
+      const cleanSanitized = sanitizeForFirestore(cleanItemsArray);
+      for (const nodeKey of aliasList) {
+        try {
+          const dbRef = ref(rtdb, nodeKey);
+          await set(dbRef, cleanSanitized);
+          rtdbSaved = true;
+        } catch (e) {
+          if (!String(e?.message || '').includes('permission_denied')) {
+            console.warn(`[RealtimeDB Overwrite Notice] ${nodeKey}:`, e.message || e);
+          }
         }
       }
     }

@@ -211,46 +211,44 @@ function LogoCard({ logo }) {
   const [imgError, setImgError] = useState(false);
   const rawImg = String(logo.image || '').trim();
 
-  // Check all SVG forms: plain SVG string, URL-encoded SVG data URI, or %3Csvg encoded
-  const isSvgStr = rawImg.startsWith('<svg') || rawImg.includes('%3Csvg') || rawImg.includes('%3csvg');
-  const isSvgDataUri = rawImg.startsWith('data:image/svg+xml');
-
   const lowerName = (logo.name || '').toLowerCase();
   let matchedSvg = null;
   Object.keys(BRAND_SVGS).forEach((key) => {
     if (lowerName.includes(key)) matchedSvg = BRAND_SVGS[key];
   });
 
-  let renderSvg = null;
-  let renderImgSrc = null;
+  // Determine source image to render
+  let renderSrc = null;
+  let cleanSvgHtml = '';
 
-  if (logo.icon) {
-    // JSX icon (hardcoded base logos) — rendered directly below
-  } else if (isSvgStr) {
-    // Plain SVG string or %3Csvg URL-encoded
-    renderSvg = rawImg.startsWith('<svg') ? rawImg : decodeURIComponent(rawImg);
-  } else if (isSvgDataUri) {
-    // data:image/svg+xml;charset=utf-8,... — decode the SVG content
-    try {
-      const svgContent = rawImg.startsWith('data:image/svg+xml;base64,')
-        ? atob(rawImg.split(',')[1])
-        : decodeURIComponent(rawImg.split(',')[1] || '');
-      renderSvg = svgContent || null;
-    } catch {
-      renderSvg = matchedSvg;
+  if (!logo.icon && !imgError && rawImg) {
+    if (rawImg.startsWith('data:image/')) {
+      // Direct Data URI (SVG or raster) — never re-encode or prepend prefix
+      renderSrc = rawImg;
+    } else if (rawImg.startsWith('<svg')) {
+      // Inline raw SVG string
+      cleanSvgHtml = rawImg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '');
+      renderSrc = `data:image/svg+xml;utf8,${encodeURIComponent(cleanSvgHtml)}`;
+    } else if (rawImg.startsWith('%3Csvg') || rawImg.startsWith('%3csvg')) {
+      // URL-encoded SVG
+      try {
+        const decoded = decodeURIComponent(rawImg);
+        cleanSvgHtml = decoded.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '');
+        renderSrc = `data:image/svg+xml;utf8,${encodeURIComponent(cleanSvgHtml)}`;
+      } catch {
+        renderSrc = null;
+      }
+    } else {
+      // Normal URL or relative path
+      renderSrc = resolveImageSrc(rawImg);
     }
-  } else if (!rawImg || imgError) {
-    // No image or broken image — use brand name lookup
-    renderSvg = matchedSvg;
-  } else {
-    // Has a URL — try to render as an image
-    renderImgSrc = rawImg;
   }
 
-  // Final fallback: if still no renderSvg and no renderImgSrc, use brand name lookup
-  const cleanSvgHtml = typeof renderSvg === 'string'
-    ? renderSvg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '')
-    : '';
+  // Fallback to matchedSvg if error or no source
+  if ((!renderSrc || imgError) && matchedSvg) {
+    cleanSvgHtml = matchedSvg.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '').replace(/on\w+="[^"]*"/gi, '');
+    renderSrc = `data:image/svg+xml;utf8,${encodeURIComponent(cleanSvgHtml)}`;
+  }
 
   return (
     <m.div
@@ -277,31 +275,21 @@ function LogoCard({ logo }) {
     >
       {logo.icon ? (
         logo.icon
-      ) : cleanSvgHtml ? (
+      ) : renderSrc ? (
         <img
-          src={`data:image/svg+xml;utf8,${encodeURIComponent(cleanSvgHtml)}`}
+          src={renderSrc}
           alt={logo.name || 'Hiring Partner Logo'}
-          width="140"
-          height="28"
-          loading="lazy"
-          decoding="async"
-          style={{ maxHeight: '28px', maxWidth: '148px', objectFit: 'contain' }}
-        />
-      ) : renderImgSrc ? (
-        <img
-          src={resolveImageSrc(renderImgSrc)}
-          alt={logo.name || 'Hiring Partner'}
           onError={() => setImgError(true)}
           width="140"
           height="28"
           loading="lazy"
           decoding="async"
           style={{
-            maxHeight: '34px',
-            maxWidth: '150px',
+            maxHeight: '32px',
+            maxWidth: '148px',
             width: 'auto',
             height: 'auto',
-            objectFit: 'contain',
+            objectFit: logo.imageFit || 'contain',
             objectPosition: logo.imagePosition || 'center center',
             transform: (logo.imageZoom && logo.imageZoom !== 1) ? `scale(${Math.min(logo.imageZoom, 1.15)})` : 'none',
             transformOrigin: 'center center',
@@ -309,14 +297,12 @@ function LogoCard({ logo }) {
           }}
         />
       ) : (
-        // Last resort: show company name as text
         <span style={{ fontSize: '13px', fontWeight: 700, color: '#000648', textAlign: 'center', letterSpacing: '-0.3px' }}>
           {logo.name || ''}
         </span>
       )}
     </m.div>
   );
-
 }
 
 

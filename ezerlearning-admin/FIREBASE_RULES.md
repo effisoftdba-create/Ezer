@@ -17,6 +17,10 @@ Copy and paste these rules into your [Firebase Console > Realtime Database > Rul
       ".read": true,
       ".write": true
     },
+    "heroSlider": {
+      ".read": true,
+      ".write": true
+    },
     "leads": {
       ".read": true,
       ".write": true
@@ -41,11 +45,23 @@ Copy and paste these rules into your [Firebase Console > Realtime Database > Rul
       ".read": true,
       ".write": true
     },
+    "teamTrainers": {
+      ".read": true,
+      ".write": true
+    },
+    "trainers": {
+      ".read": true,
+      ".write": true
+    },
     "writtenTestimonials": {
       ".read": true,
       ".write": true
     },
     "videoTestimonials": {
+      ".read": true,
+      ".write": true
+    },
+    "testimonials": {
       ".read": true,
       ".write": true
     },
@@ -61,7 +77,15 @@ Copy and paste these rules into your [Firebase Console > Realtime Database > Rul
       ".read": true,
       ".write": true
     },
+    "aboutHero": {
+      ".read": true,
+      ".write": true
+    },
     "aboutShowcaseCards": {
+      ".read": true,
+      ".write": true
+    },
+    "aboutValuesCards": {
       ".read": true,
       ".write": true
     },
@@ -69,7 +93,15 @@ Copy and paste these rules into your [Firebase Console > Realtime Database > Rul
       ".read": true,
       ".write": true
     },
+    "opportunite": {
+      ".read": true,
+      ".write": true
+    },
     "transformedLives": {
+      ".read": true,
+      ".write": true
+    },
+    "transformations": {
       ".read": true,
       ".write": true
     },
@@ -94,6 +126,22 @@ Copy and paste these rules into your [Firebase Console > Realtime Database > Rul
       ".write": true
     },
     "paymentConfig": {
+      ".read": true,
+      ".write": true
+    },
+    "bannerImages": {
+      ".read": true,
+      ".write": true
+    },
+    "mediaUrls": {
+      ".read": true,
+      ".write": true
+    },
+    "siteContent": {
+      ".read": true,
+      ".write": true
+    },
+    "values": {
       ".read": true,
       ".write": true
     }
