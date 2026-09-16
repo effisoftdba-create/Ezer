@@ -45,25 +45,125 @@ function sanitizeForFirestore(data) {
 }
 
 /**
- * Helper to deduplicate array of collection items by unique identifier
+ * Extract canonical unique business key for items to prevent duplicate reflection
  */
-function deduplicateCollectionItems(items) {
+export function getCollectionItemKey(item, collectionName = '') {
+  if (!item || typeof item !== 'object') return '';
+
+  const rawTitle = String(item.title || '').trim().toLowerCase();
+  const rawSlug = String(item.slug || '').trim().toLowerCase();
+  const rawName = String(item.name || item.author || item.fullName || item.studentName || '').trim().toLowerCase();
+  const rawHeadline = String(item.headline || '').trim().toLowerCase();
+  const rawQuestion = String(item.question || '').trim().toLowerCase();
+  const rawUrl = String(item.url || item.image || '').trim().toLowerCase();
+
+  const normTitle = rawTitle.replace(/[^a-z0-9]/g, '');
+  const normSlug = rawSlug.replace(/[^a-z0-9]/g, '');
+  const normName = rawName.replace(/[^a-z0-9]/g, '');
+
+  if (collectionName === 'courses') {
+    const key = normSlug || normTitle;
+    if (key) {
+      if (key.includes('devops') || key.includes('cloud')) return 'course_cloud_devops';
+      if (key.includes('playwright') || key.includes('softwaretesting') || key.includes('testing')) return 'course_testing_playwright';
+      if (key === 'aiml' || key.includes('machinelearning') || key.includes('aimachinelearning')) return 'course_ai_ml';
+      if (key.includes('infrastructure') || key.includes('sysadmin') || key.includes('itinfra')) return 'course_it_infra';
+      if (key.includes('fullstack') || key.includes('fullstackdev')) return 'course_full_stack';
+      if (key.includes('dataanal') || key.includes('dataengineering')) return 'course_data_analytics';
+      if (key.includes('spokenenglish') || key.includes('english')) return 'course_spoken_english';
+      if (key.includes('cyber') || key.includes('ethicalhacking')) return 'course_cyber_security';
+      return `course_${key}`;
+    }
+  }
+
+  if (collectionName === 'heroSlides') {
+    if (rawUrl) return `slide_${rawUrl.split('?')[0].replace(/[^a-z0-9]/g, '')}`;
+    if (rawHeadline) return `slide_${rawHeadline.slice(0, 35).replace(/[^a-z0-9]/g, '')}`;
+  }
+
+  if (collectionName === 'homeTrainers' || collectionName === 'seniorMentors' || collectionName === 'executiveLeaders') {
+    if (normName) return `trainer_${normName}`;
+  }
+
+  if (collectionName === 'writtenTestimonials' || collectionName === 'videoTestimonials') {
+    if (normName) return `testi_${normName}`;
+  }
+
+  if (collectionName === 'faqList') {
+    if (rawQuestion) return `faq_${rawQuestion.slice(0, 40).replace(/[^a-z0-9]/g, '')}`;
+  }
+
+  if (collectionName === 'blogs') {
+    if (normSlug) return `blog_${normSlug}`;
+    if (normTitle) return `blog_${normTitle}`;
+  }
+
+  if (collectionName === 'hiringPartners') {
+    if (normName) return `partner_${normName}`;
+  }
+
+  if (collectionName === 'supportCards') {
+    if (normTitle) return `support_${normTitle}`;
+  }
+
+  if (collectionName === 'transformedLives') {
+    if (normName) return `trans_${normName}`;
+  }
+
+  if (collectionName === 'achievements') {
+    if (normTitle) return `achieve_${normTitle}`;
+  }
+
+  return String(item.id || normSlug || normTitle || normName || '');
+}
+
+/**
+ * Robust deduplication of collection items by canonical business identity.
+ * Merges duplicate entries so no detailed syllabus, tools or data are lost.
+ */
+export function deduplicateCollectionItems(items, collectionName = '') {
   if (!Array.isArray(items)) return [];
   const map = new Map();
+
   items.forEach((item) => {
     if (!item) return;
-    const key = String(item.id || item.slug || item.badge || item.title || item.name || item.tag || '');
-    if (key) {
-      if (map.has(key)) {
-        // Merge with existing so properties are preserved without duplicating
-        map.set(key, { ...map.get(key), ...item, id: item.id || key });
-      } else {
-        map.set(key, { ...item, id: item.id || key });
-      }
+    const key = getCollectionItemKey(item, collectionName) || String(item.id || '');
+    if (!key) return;
+
+    if (!map.has(key)) {
+      map.set(key, { ...item });
     } else {
-      map.set(String(Date.now() + Math.random()), item);
+      const existing = map.get(key);
+      const isNewer = item.updatedAt && (!existing.updatedAt || new Date(item.updatedAt) > new Date(existing.updatedAt));
+      const base = isNewer ? { ...existing, ...item } : { ...item, ...existing };
+
+      // Preserve rich curriculum modules if present
+      if (Array.isArray(existing.curriculumModules) && existing.curriculumModules.length > (item.curriculumModules?.length || 0)) {
+        base.curriculumModules = existing.curriculumModules;
+      } else if (Array.isArray(item.curriculumModules) && item.curriculumModules.length > (existing.curriculumModules?.length || 0)) {
+        base.curriculumModules = item.curriculumModules;
+      }
+
+      // Preserve tools, projects, whoIsItFor
+      if (Array.isArray(existing.tools) && existing.tools.length > (item.tools?.length || 0)) {
+        base.tools = existing.tools;
+      }
+      if (Array.isArray(existing.whoIsItFor) && existing.whoIsItFor.length > (item.whoIsItFor?.length || 0)) {
+        base.whoIsItFor = existing.whoIsItFor;
+      }
+      if (Array.isArray(existing.projects) && existing.projects.length > (item.projects?.length || 0)) {
+        base.projects = existing.projects;
+      }
+
+      // Preserve image and positioning
+      if (!base.image && (existing.image || item.image)) base.image = existing.image || item.image;
+      if (!base.imageFit && (existing.imageFit || item.imageFit)) base.imageFit = existing.imageFit || item.imageFit;
+      if (!base.imagePosition && (existing.imagePosition || item.imagePosition)) base.imagePosition = existing.imagePosition || item.imagePosition;
+
+      map.set(key, base);
     }
   });
+
   return Array.from(map.values());
 }
 
@@ -78,7 +178,9 @@ const RTDB_COLLECTION_ALIASES = {
 };
 
 /**
- * Real-time listener for Firestore and Realtime Database
+ * Real-time listener for Cloud Firestore (Single Authoritative Source).
+ * Realtime Database is only used as a fallback if Firestore is unavailable.
+ * Dual-listener concurrent execution is strictly disabled to prevent duplication.
  */
 export function subscribeToCollection(collectionName, onUpdate) {
   if (!isFirebaseConfigured) {
@@ -89,108 +191,34 @@ export function subscribeToCollection(collectionName, onUpdate) {
   let unsubRealtime = () => {};
   let lastJsonPayload = '';
   let rafId = null;
+  let isFirestoreActive = false;
 
-  let firestoreItems = null;
-  let realtimeItems = null;
+  const emitClean = (items) => {
+    if (!Array.isArray(items)) return;
+    const cleanItems = deduplicateCollectionItems(items, collectionName);
+    const jsonStr = JSON.stringify(cleanItems);
+    if (jsonStr === lastJsonPayload) return;
+    lastJsonPayload = jsonStr;
 
-  const emitMerged = () => {
-    try {
-      let combined = [];
+    if (rafId) {
+      if (typeof cancelAnimationFrame !== 'undefined') cancelAnimationFrame(rafId);
+      else clearTimeout(rafId);
+    }
 
-      if (Array.isArray(firestoreItems) && Array.isArray(realtimeItems)) {
-        if (firestoreItems.length === 0 && realtimeItems.length > 0) {
-          combined = realtimeItems;
-        } else if (realtimeItems.length === 0 && firestoreItems.length > 0) {
-          combined = firestoreItems;
-        } else {
-          // Authoritative merge: preserve all unique items from both databases
-          const map = new Map();
-          firestoreItems.forEach((item) => {
-            if (!item) return;
-            const k = String(item.id || item.slug || item.badge || item.title || item.name || '');
-            if (k) map.set(k, item);
-          });
-
-          realtimeItems.forEach((item) => {
-            if (!item) return;
-            const k = String(item.id || item.slug || item.badge || item.title || item.name || '');
-            if (k) {
-              if (!map.has(k)) {
-                map.set(k, item);
-              } else {
-                const existing = map.get(k);
-                if (item.updatedAt && (!existing.updatedAt || new Date(item.updatedAt) > new Date(existing.updatedAt))) {
-                  map.set(k, { ...existing, ...item });
-                }
-              }
-            }
-          });
-
-          combined = Array.from(map.values());
-        }
-      } else if (Array.isArray(firestoreItems)) {
-        combined = firestoreItems;
-      } else if (Array.isArray(realtimeItems)) {
-        combined = realtimeItems;
-      } else {
-        return;
-      }
-
-      const cleanItems = deduplicateCollectionItems(combined);
-      const jsonStr = JSON.stringify(cleanItems);
-      if (jsonStr === lastJsonPayload) return;
-      lastJsonPayload = jsonStr;
-
-      if (rafId) {
-        if (typeof cancelAnimationFrame !== 'undefined') cancelAnimationFrame(rafId);
-        else clearTimeout(rafId);
-      }
-
-      if (typeof requestAnimationFrame !== 'undefined') {
-        rafId = requestAnimationFrame(() => {
-          onUpdate(cleanItems);
-        });
-      } else {
-        rafId = setTimeout(() => onUpdate(cleanItems), 0);
-      }
-    } catch (err) {
-      if (Array.isArray(firestoreItems) && firestoreItems.length > 0) {
-        onUpdate(deduplicateCollectionItems(firestoreItems));
-      } else if (Array.isArray(realtimeItems)) {
-        onUpdate(deduplicateCollectionItems(realtimeItems));
-      }
+    if (typeof requestAnimationFrame !== 'undefined') {
+      rafId = requestAnimationFrame(() => {
+        onUpdate(cleanItems);
+      });
+    } else {
+      rafId = setTimeout(() => onUpdate(cleanItems), 0);
     }
   };
 
-  // 1. Primary: Firestore Listener
-  if (db) {
-    try {
-      const colRef = collection(db, collectionName);
-      unsubFirestore = onSnapshot(
-        colRef,
-        (snapshot) => {
-          if (!snapshot.empty) {
-            firestoreItems = snapshot.docs.map((docItem) => ({
-              id: docItem.id,
-              ...docItem.data()
-            }));
-          } else {
-            firestoreItems = [];
-          }
-          emitMerged();
-        },
-        (error) => {
-          console.warn(`[Firestore Listener Notice] ${collectionName}:`, error.message || error);
-        }
-      );
-    } catch (err) {
-      console.warn(`[Firestore Subscription Error] ${collectionName}:`, err);
-    }
-  }
+  const startRealtimeFallback = () => {
+    if (isFirestoreActive) return;
+    const rtdb = getRealtimeDb();
+    if (!rtdb) return;
 
-  // 2. Secondary Dual Sync: Realtime Database Listener (with alias fallback)
-  const rtdb = getRealtimeDb();
-  if (rtdb) {
     const aliasList = RTDB_COLLECTION_ALIASES[collectionName] || [collectionName];
     const rtdbKey = aliasList[0] || collectionName;
 
@@ -199,6 +227,7 @@ export function subscribeToCollection(collectionName, onUpdate) {
       unsubRealtime = onValue(
         dbRef,
         (snapshot) => {
+          if (isFirestoreActive) return;
           const val = snapshot.val();
           if (val) {
             let items = [];
@@ -214,22 +243,59 @@ export function subscribeToCollection(collectionName, onUpdate) {
               });
             }
             if (items.length > 0) {
-              realtimeItems = items;
-              emitMerged();
+              emitClean(items);
             }
           }
         },
         (err) => {
-          // Suppress repetitive permission_denied noise when RTDB rules are being configured
           if (err && (err.code === 'PERMISSION_DENIED' || String(err.message || '').includes('permission_denied'))) {
             return;
           }
-          console.warn(`[RealtimeDB Listener Notice] ${collectionName}:`, err.message || err);
+          console.warn(`[RealtimeDB Fallback Notice] ${collectionName}:`, err.message || err);
         }
       );
     } catch (err) {
-      console.warn(`[RealtimeDB Subscription Error] ${collectionName}:`, err);
+      console.warn(`[RealtimeDB Fallback Error] ${collectionName}:`, err);
     }
+  };
+
+  // 1. Primary Authoritative Listener: Cloud Firestore
+  if (db) {
+    try {
+      const colRef = collection(db, collectionName);
+      unsubFirestore = onSnapshot(
+        colRef,
+        (snapshot) => {
+          isFirestoreActive = true;
+          // Shut down any fallback listener immediately
+          if (typeof unsubRealtime === 'function') {
+            unsubRealtime();
+            unsubRealtime = () => {};
+          }
+
+          if (!snapshot.empty) {
+            const items = snapshot.docs.map((docItem) => ({
+              id: docItem.id,
+              ...docItem.data()
+            }));
+            emitClean(items);
+          } else {
+            emitClean([]);
+          }
+        },
+        (error) => {
+          console.warn(`[Firestore Listener Notice] ${collectionName}:`, error.message || error);
+          if (!isFirestoreActive) {
+            startRealtimeFallback();
+          }
+        }
+      );
+    } catch (err) {
+      console.warn(`[Firestore Subscription Error] ${collectionName}:`, err);
+      startRealtimeFallback();
+    }
+  } else {
+    startRealtimeFallback();
   }
 
   return () => {
@@ -328,7 +394,7 @@ export async function removeDocument(collectionName, docId) {
 export async function saveCollectionArray(collectionName, itemsArray) {
   if (!isFirebaseConfigured || !Array.isArray(itemsArray)) return false;
   try {
-    const cleanItemsArray = deduplicateCollectionItems(itemsArray);
+    const cleanItemsArray = deduplicateCollectionItems(itemsArray, collectionName);
     const keepIds = new Set(cleanItemsArray.flatMap((item) => [
       String(item.id || ''),
       String(item.slug || ''),
@@ -342,20 +408,29 @@ export async function saveCollectionArray(collectionName, itemsArray) {
     let firestoreSaved = false;
     let rtdbSaved = false;
 
-    // 1. Remove obsolete documents from Firestore collection
+    // 1. Remove obsolete or duplicate documents from Firestore collection
     if (db) {
       try {
         const colRef = collection(db, collectionName);
         const snapshot = await getDocs(colRef);
         const prunePromises = [];
+        const seenKeysInFirestore = new Set();
+
         for (const d of snapshot.docs) {
           const data = d.data();
+          const docItem = { id: d.id, ...data };
+          const itemKey = getCollectionItemKey(docItem, collectionName);
           const docId = String(d.id);
           const docTitle = String(data?.title || '');
           const docSlug = String(data?.slug || '');
           const docName = String(data?.name || data?.author || '');
-          if (!keepIds.has(docId) && !keepIds.has(docTitle) && !keepIds.has(docSlug) && !keepIds.has(docName)) {
+
+          const isKeep = keepIds.has(docId) || keepIds.has(docTitle) || keepIds.has(docSlug) || keepIds.has(docName);
+
+          if (!isKeep || (itemKey && seenKeysInFirestore.has(itemKey))) {
             prunePromises.push(deleteDoc(d.ref));
+          } else if (itemKey) {
+            seenKeysInFirestore.add(itemKey);
           }
         }
 

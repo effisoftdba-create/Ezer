@@ -52,7 +52,7 @@ import {
   safeSetStorage
 } from './siteDefaults';
 
-import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument } from '../../../services/firebaseService';
+import { subscribeToCollection, saveCollectionArray, saveDocument, removeDocument, deduplicateCollectionItems } from '../../../services/firebaseService';
 
 const SiteContext = createContext();
 
@@ -171,18 +171,21 @@ export function SiteProvider({ children }) {
   const handleSyncCollection = (collectionName, items, dispatchKey, defaultItems) => {
     if (!Array.isArray(items)) return;
 
-    if (items.length > 0) {
+    const cleanItems = deduplicateCollectionItems(items, collectionName);
+
+    if (cleanItems.length > 0) {
       if (dispatchKey === 'adminUsers') {
-        const merged = mergeAdminUsers(items, defaultAdminUsers);
+        const merged = mergeAdminUsers(cleanItems, defaultAdminUsers);
         dispatch({ type: 'SET_KEY', key: dispatchKey, value: merged });
       } else {
-        dispatch({ type: 'SET_KEY', key: dispatchKey, value: items });
+        dispatch({ type: 'SET_KEY', key: dispatchKey, value: cleanItems });
       }
     } else {
       // Seed default items into Database ONCE if database collection is empty on initial setup
       if (Array.isArray(defaultItems) && defaultItems.length > 0) {
-        saveCollectionArray(collectionName, defaultItems);
-        dispatch({ type: 'SET_KEY', key: dispatchKey, value: defaultItems });
+        const cleanDefaults = deduplicateCollectionItems(defaultItems, collectionName);
+        saveCollectionArray(collectionName, cleanDefaults);
+        dispatch({ type: 'SET_KEY', key: dispatchKey, value: cleanDefaults });
       } else {
         dispatch({ type: 'SET_KEY', key: dispatchKey, value: [] });
       }
@@ -506,8 +509,9 @@ export function SiteProvider({ children }) {
   }, [heroSlides]);
 
   const updateCourses = useCallback((newCourses) => {
-    dispatch({ type: 'SET_KEY', key: 'courses', value: newCourses });
-    saveCollectionArray('courses', newCourses);
+    const clean = deduplicateCollectionItems(newCourses, 'courses');
+    dispatch({ type: 'SET_KEY', key: 'courses', value: clean });
+    saveCollectionArray('courses', clean);
     triggerStateToast('SAVED');
   }, []);
 
@@ -515,10 +519,10 @@ export function SiteProvider({ children }) {
     const courseId = newCourse.id || newCourse.slug || `course-${Date.now()}`;
     const courseObj = { ...newCourse, id: courseId };
     const currentList = Array.isArray(courses) ? courses : (getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses);
-    const updated = [courseObj, ...currentList.filter((c) => c.id !== courseId && c.slug !== courseObj.slug)];
+    const updated = deduplicateCollectionItems([courseObj, ...currentList], 'courses');
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
     safeSetStorage(STORAGE_COURSES_KEY, updated);
-    saveDocument('courses', String(courseId), courseObj);
+    saveCollectionArray('courses', updated);
 
     // Auto-sync new course title into popupConfig.coursesList
     if (courseObj.title) {
@@ -539,7 +543,10 @@ export function SiteProvider({ children }) {
   const updateCourse = useCallback((id, updatedCourse) => {
     const currentList = Array.isArray(courses) ? courses : (getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses);
     const oldCourse = currentList.find((c) => c.id === id || c.slug === id);
-    const updated = currentList.map((c) => (c.id === id || c.slug === id ? { ...c, ...updatedCourse } : c));
+    const updated = deduplicateCollectionItems(
+      currentList.map((c) => (c.id === id || c.slug === id ? { ...c, ...updatedCourse } : c)),
+      'courses'
+    );
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
     safeSetStorage(STORAGE_COURSES_KEY, updated);
     saveCollectionArray('courses', updated);
@@ -562,10 +569,14 @@ export function SiteProvider({ children }) {
   const deleteCourse = useCallback((id) => {
     const currentList = Array.isArray(courses) ? courses : (getStored(STORAGE_COURSES_KEY, phase1Courses) || phase1Courses);
     const targetCourse = currentList.find((c) => c.id === id || c.slug === id);
-    const updated = currentList.filter((c) => c.id !== id && c.slug !== id);
+    const updated = deduplicateCollectionItems(
+      currentList.filter((c) => c.id !== id && c.slug !== id),
+      'courses'
+    );
 
     dispatch({ type: 'SET_KEY', key: 'courses', value: updated });
     safeSetStorage(STORAGE_COURSES_KEY, updated);
+    saveCollectionArray('courses', updated);
 
     if (id) removeDocument('courses', String(id));
     if (targetCourse) {
